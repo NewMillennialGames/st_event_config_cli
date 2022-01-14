@@ -2,8 +2,8 @@ part of EventOutput;
 
 class UiCfg {
   //
-  SectionComponent sectionComponent;
-  Map<RuleType, List<BaseRule>> rulesByType;
+  RuleType ruleType;
+  List<BaseRule> rulesForType;
   //
-  UiCfg(this.sectionComponent, this.rulesByType);
+  UiCfg(this.ruleType, this.rulesForType);
 }

@@ -21,10 +21,26 @@ abstract class BaseRule {
         return FilterRule();
     }
   }
+
+  factory BaseRule.filter() => FilterRule();
+  factory BaseRule.format() => FormatRule();
+  factory BaseRule.group() => GroupRule();
+  factory BaseRule.navigate() => NavigateRule();
+  factory BaseRule.show() => NavigateRule();
+  factory BaseRule.sort() => NavigateRule();
 }
 
-class SortRule extends BaseRule {}
-
-class FilterRule extends BaseRule {}
+class FilterRule extends BaseRule {
+  //
+  factory FilterRule() {}
+}
 
 class FormatRule extends BaseRule {}
+
+class GroupRule extends BaseRule {}
+
+class NavigateRule extends BaseRule {}
+
+class ShowRule extends BaseRule {}
+
+class SortRule extends BaseRule {}

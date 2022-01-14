@@ -14,4 +14,8 @@ class Question {
 
     return UserResponse();
   }
+
+  static List<Question> loadForSection(AppSection appSection) {
+    return [];
+  }
 }

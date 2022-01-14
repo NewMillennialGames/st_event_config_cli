@@ -8,3 +8,8 @@ enum RuleType {
   show,
   navigate,
 }
+
+extension RuleTypeExt1 on RuleType {
+  //
+
+}
