@@ -1,6 +1,8 @@
 library EventCfgModels;
 
 import "dart:io";
+//
+import '../config/questions.dart';
 import '../enums/all.dart';
 import 'package:json_annotation/json_annotation.dart';
 //

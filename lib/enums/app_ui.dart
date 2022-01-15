@@ -10,36 +10,37 @@ part of EventCfgEnums;
 */
 
 enum AppSection {
+  eventConfiguration,
   eventSelection,
+  poolSelection,
   marketView,
-  social,
+  socialPools,
   news,
   leaderboard,
   portfolio,
   trading,
-  research,
+  marketResearch,
 }
 
 extension AppSectionExt1 on AppSection {
   //
-  bool get isConfigureable => [
-        AppSection.marketView,
-        AppSection.leaderboard,
-        AppSection.portfolio,
-        AppSection.research,
-      ].contains(this);
   String get includeStr => 'Configure ${this.name} section of app?';
+  bool get isConfigureable => this.applicableComponents.length > 0;
 
   List<UiComponent> get applicableComponents {
     // customize this list to control what sections
     // of the screen can be customized for
     // THIS SECTION of the app
     switch (this) {
+      case AppSection.eventConfiguration:
+        return [];
       case AppSection.eventSelection:
         return [UiComponent.header, UiComponent.banner];
+      case AppSection.poolSelection:
+        return [];
       case AppSection.marketView:
         return [UiComponent.filterBar1, UiComponent.tableView];
-      case AppSection.social:
+      case AppSection.socialPools:
         return [];
       case AppSection.news:
         return [UiComponent.header, UiComponent.banner];
@@ -49,7 +50,7 @@ extension AppSectionExt1 on AppSection {
         return [UiComponent.header, UiComponent.banner];
       case AppSection.trading:
         return [UiComponent.header, UiComponent.banner];
-      case AppSection.research:
+      case AppSection.marketResearch:
         return [UiComponent.header, UiComponent.banner];
     }
   }
@@ -72,6 +73,8 @@ extension UiComponentExt1 on UiComponent {
   //
   String includeStr(AppSection section) =>
       'On Section ${section.name}, do you want to configure the ${this.name}?';
+
+  bool get isConfigureable => this.applicableRuleTypes.length > 0;
 
   List<RuleType> get applicableRuleTypes {
     // customize this list to control what customization
@@ -98,3 +101,13 @@ extension UiComponentExt1 on UiComponent {
     }
   }
 }
+
+
+
+// [
+//         AppSection.eventConfiguration,
+//         AppSection.marketView,
+//         AppSection.leaderboard,
+//         AppSection.portfolio,
+//         AppSection.marketResearch,
+//       ].contains(this) &&

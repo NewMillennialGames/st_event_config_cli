@@ -6,7 +6,7 @@ abstract class BaseRule {
   BaseRule._();
 
   factory BaseRule.filter(
-    EvRecordType recType,
+    DbRowType recType,
     String propertyName,
     int listIdx, {
     bool sortDescending = true,
@@ -33,7 +33,7 @@ class FilterRule extends BaseRule {
   //
   // final int filterListIdx;
   // final UiComponentSlotName property;
-  EvRecordType recType;
+  DbRowType recType;
   String propertyName;
   int listIdx;
   bool sortDescending = true;

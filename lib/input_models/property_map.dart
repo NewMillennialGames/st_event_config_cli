@@ -2,9 +2,13 @@ part of EventCfgModels;
 
 class PropertyMap {
   //
-  EvRecordType recType;
+  DbRowType recType;
   UiComponentSlotName property;
   String propertyName;
 
-  PropertyMap(this.recType, this.property, this.propertyName);
+  PropertyMap(
+    this.recType,
+    this.property,
+    this.propertyName,
+  );
 }

@@ -8,7 +8,12 @@ class Dialoger {
     _tree.loadDialog();
   }
 
-  String _summaryOfUserAnswers = '';
+  List<UserResponse> _getPriorAnswerCallback() {
+    // used when a question needs to review prior
+    // answers to configure itself
+    return _tree.priorAnswers;
+  }
+
   //
   String loopUntilComplete() {
     //
@@ -21,14 +26,14 @@ class Dialoger {
         while (_quest != null) {
           // UserResponse answer = _quest.askAndWait();
           // _tree._collectAnswer(answer);
-          _quest.askAndWait();
+          _quest.askAndWait(_getPriorAnswerCallback);
           _quest = section.getNextQuestion();
         }
       }
-
       section = _tree._getNextSection();
     }
-
+    String _summaryOfUserAnswers =
+        _tree.priorAnswers.map((r) => r.toString()).toString();
     return _summaryOfUserAnswers;
   }
 }

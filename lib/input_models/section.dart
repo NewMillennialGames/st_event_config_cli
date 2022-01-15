@@ -13,15 +13,24 @@ class DialogSectionCfg {
   int get order => appSection.index;
   String get name => appSection.name;
 
+  List<UserResponse> get priorAnswers {
+    return _questions
+        .sublist(0, currQuestIdx - 1)
+        .map((q) => q.response)
+        .toList();
+  }
+
   void loadQuestions() {
     //
-    _questions = Question.loadForSection(appSection);
+    _questions = loadQuestionsForSection(appSection);
   }
 
   bool askIfNeeded() {
+    if (!appSection.isConfigureable) return false;
+
     print(appSection.includeStr + '(enter y/yes or n/no)');
     var userResp = stdin.readLineSync() ?? 'Y';
-    print("you entered is: $userResp");
+    print("askIfNeeded got: $userResp");
     return userResp.toUpperCase().startsWith('Y');
   }
 

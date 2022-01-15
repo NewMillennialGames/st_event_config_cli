@@ -8,30 +8,36 @@ enum EvType {
 
 enum EvDuration {
   // cadence of competitions
-  game, // aka once
+  oneGame, // aka once
   tournament, // short period
   season, // long period
   ongoing, // unending
 }
 
 // type of gameplay
-enum EvCompetitionType {
+enum EvEliminationStrategy {
   // how do you get promoted or eliminated
   singleGame,
   bestOfN,
   roundRobin,
   singleElim,
   doubeElim,
-  general,
+  audienceVote,
 }
 
 // define assets
 enum EvCompetitorType {
   // EvCompetitionStyle will tell you how they face-off each other
   team,
-  teamMember, // aka player
-  solo,
+  teamPlayer, // aka player
+  soloPlayer,
   other,
+}
+
+enum EvOpponentType {
+  sameAsCompetitorType,
+  field,
+  personalBest,
 }
 
 // enum EvStyling { sortKey, groupKey, bannerUrl, assetIconUrlTemplate }

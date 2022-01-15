@@ -7,7 +7,7 @@ part of EventCfgModels;
 // **************************************************************************
 
 FilterRule _$FilterRuleFromJson(Map<String, dynamic> json) => FilterRule(
-      $enumDecode(_$EvRecordTypeEnumMap, json['recType']),
+      $enumDecode(_$DbRowTypeEnumMap, json['recType']),
       json['propertyName'] as String,
       listIdx: json['listIdx'] as int? ?? 1,
       sortDescending: json['sortDescending'] as bool? ?? true,
@@ -15,19 +15,19 @@ FilterRule _$FilterRuleFromJson(Map<String, dynamic> json) => FilterRule(
 
 Map<String, dynamic> _$FilterRuleToJson(FilterRule instance) =>
     <String, dynamic>{
-      'recType': _$EvRecordTypeEnumMap[instance.recType],
+      'recType': _$DbRowTypeEnumMap[instance.recType],
       'propertyName': instance.propertyName,
       'listIdx': instance.listIdx,
       'sortDescending': instance.sortDescending,
     };
 
-const _$EvRecordTypeEnumMap = {
-  EvRecordType.assetTeamMember: 'assetTeamMember',
-  EvRecordType.assetTeam: 'assetTeam',
-  EvRecordType.assetSolo: 'assetSolo',
-  EvRecordType.game: 'game',
-  EvRecordType.competition: 'competition',
-  EvRecordType.event: 'event',
+const _$DbRowTypeEnumMap = {
+  DbRowType.asset: 'asset',
+  DbRowType.player: 'player',
+  DbRowType.team: 'team',
+  DbRowType.game: 'game',
+  DbRowType.competition: 'competition',
+  DbRowType.event: 'event',
 };
 
 FormatRule _$FormatRuleFromJson(Map<String, dynamic> json) => FormatRule();

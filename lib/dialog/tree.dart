@@ -5,6 +5,16 @@ class DialogTree {
   List<DialogSectionCfg> _sections = [];
   DialogTree();
 
+  List<UserResponse> get priorAnswers {
+    // TODO
+    List<UserResponse> lst = [];
+    for (DialogSectionCfg s in _sections) {
+      //
+      lst.addAll(s.priorAnswers);
+    }
+    return lst;
+  }
+
   void loadDialog() {
     //
     _sections = _loadAppUiSections();

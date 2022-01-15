@@ -2,6 +2,8 @@ library ConfigDialog;
 
 import "dart:io";
 //
+import 'package:eventconfig/output_results/all.dart';
+
 import '../input_models/all.dart';
 import '../enums/all.dart';
 
