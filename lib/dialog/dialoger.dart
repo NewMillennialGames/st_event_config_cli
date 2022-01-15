@@ -19,8 +19,9 @@ class Dialoger {
       if (doSection) {
         Question? _quest = section.getNextQuestion();
         while (_quest != null) {
-          UserResponse answer = _quest.askAndWait();
-          _tree._collectAnswer(answer);
+          // UserResponse answer = _quest.askAndWait();
+          // _tree._collectAnswer(answer);
+          _quest.askAndWait();
           _quest = section.getNextQuestion();
         }
       }

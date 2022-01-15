@@ -1,18 +1,20 @@
 part of EventCfgModels;
 
-class Question {
+class Question<T> {
   String quest;
   int order;
+  late UserResponse<T> response;
 
   Question(this.order, this.quest);
 
-  UserResponse askAndWait() {
+  void askAndWait() {
     print(quest);
     var userResp = stdin.readLineSync() ?? '-1';
     int answerIdx = int.parse(userResp);
     print("number you entered is: $answerIdx");
 
-    return UserResponse();
+    var answer = answerIdx as T;
+    response = UserResponse<T>(answer);
   }
 
   static List<Question> loadForSection(AppSection appSection) {

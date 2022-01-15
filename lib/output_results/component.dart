@@ -1,4 +1,4 @@
-part of EventOutput;
+part of EvTemplateOutput;
 
 class ComponentCfg {
   // ComponentRules
