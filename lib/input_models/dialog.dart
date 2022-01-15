@@ -1,1 +1,1 @@
-part of EventCfgModels;
+part of CfgInputModels;

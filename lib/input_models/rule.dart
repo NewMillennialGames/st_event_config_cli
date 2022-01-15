@@ -1,4 +1,4 @@
-part of EventCfgModels;
+part of CfgInputModels;
 
 abstract class BaseRule {
   //

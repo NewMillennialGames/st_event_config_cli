@@ -1,4 +1,4 @@
-part of EventCfgModels;
+part of CfgInputModels;
 
 class DialogSectionCfg {
   //
@@ -14,9 +14,11 @@ class DialogSectionCfg {
   String get name => appSection.name;
 
   List<UserResponse> get priorAnswers {
+    // skip questions where user-response is null
     return _questions
         .sublist(0, currQuestIdx - 1)
         .map((q) => q.response)
+        .whereType<UserResponse>()
         .toList();
   }
 

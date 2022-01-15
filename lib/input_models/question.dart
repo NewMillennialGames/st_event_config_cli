@@ -1,4 +1,4 @@
-part of EventCfgModels;
+part of CfgInputModels;
 
 typedef CastIdxToTyp<AnsTyp, InputTyp> = AnsTyp Function(InputTyp idx);
 // to load prior answers for some questions
@@ -15,16 +15,18 @@ class Qb<AnsTyp, ConvertTyp> {
   CastIdxToTyp<AnsTyp, ConvertTyp>? castFunc;
   int defaultAnswerIdx;
   bool dynamicFromPriorState;
+  bool generatesMoreQuestions = false;
   bool shouldSkip = false;
 
   Qb(
     this.section,
-    this.question, [
+    this.question,
     this.answerChoices,
-    this.castFunc,
+    this.castFunc, {
     this.defaultAnswerIdx = 1,
     this.dynamicFromPriorState = false,
-  ]);
+    this.generatesMoreQuestions = false,
+  });
 
   void deriveFromPriorAnswers(List<UserResponse> answers) {
     /* 
@@ -37,20 +39,29 @@ class Qb<AnsTyp, ConvertTyp> {
 }
 
 class Question<AnsTyp, ConvertTyp> {
-  int order;
+  int questionId;
   Qb<AnsTyp, ConvertTyp> _quest;
-  late UserResponse<AnsTyp> response;
+  UserResponse<AnsTyp>? response;
 
-  Question(this.order, this._quest);
+  Question(
+    this.questionId,
+    this._quest,
+  );
   // getters
   String get question => _quest.question;
   AppSection get section => _quest.section;
   List<String>? get choices => _quest.answerChoices?.toList();
   CastIdxToTyp<AnsTyp, ConvertTyp>? get castFunc => _quest.castFunc;
 
-  void askAndWait(PriorAnswersCallback? getPriorAnswersList) {
+  // building other questions based on prior answers
+  bool get generatesScreenComponentQuestions =>
+      _quest.generatesMoreQuestions && AnsTyp is List<UiComponent>;
+  bool get generatesRuleTypeQuestions =>
+      _quest.generatesMoreQuestions && AnsTyp is List<RuleType>;
+
+  void askAndWait(Dialoger dialoger) {
     //
-    _configSelfIfNecessary(getPriorAnswersList);
+    _configSelfIfNecessary(dialoger.getPriorAnswerCallback);
     print(question);
     String? userResp = stdin.readLineSync();
     int answerIdx = -1;
@@ -71,18 +82,37 @@ class Question<AnsTyp, ConvertTyp> {
 
     // verify we got a value
     if (answer == null) {
-      print('answer was null on $question');
+      print('answer was null on $questionId: $question');
       return;
     }
-    this.response = UserResponse<AnsTyp>([answer]);
+
+    this.response = UserResponse<AnsTyp>(answer);
+    // if (answer is Iterable) {
+    //   this.response = UserResponse<AnsTyp>(answer);
+    // } else {
+    //   this.response = UserResponse<AnsTyp>(answer);
+    // }
+
+    if (this.generatesScreenComponentQuestions) {
+      dialoger.generateAssociatedUiComponentQuestions(
+        section,
+        this.response as UserResponse<List<UiComponent>>,
+      );
+    } else if (this.generatesRuleTypeQuestions) {
+      // FIXME
+      dialoger.generateAssociatedUiRuleTypeQuestions(
+        UiComponent.banner,
+        this.response as UserResponse<List<RuleType>>,
+      );
+    }
   }
 
-  void _configSelfIfNecessary(PriorAnswersCallback? getPriorAnswersList) {
+  void _configSelfIfNecessary(PriorAnswersCallback getPriorAnswersList) {
     // some questions are based on what answers came before
     if (_quest.dynamicFromPriorState) {
       assert(getPriorAnswersList != null,
           'this question needs to examine prior answers to decide what to ask');
-      _quest.deriveFromPriorAnswers(getPriorAnswersList!());
+      _quest.deriveFromPriorAnswers(getPriorAnswersList());
     }
   }
 

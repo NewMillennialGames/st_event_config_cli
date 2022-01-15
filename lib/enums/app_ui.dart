@@ -35,11 +35,13 @@ extension AppSectionExt1 on AppSection {
     List<int> providedIdxs =
         commaLstOfInts.split(",").map((e) => int.tryParse(e) ?? -1).toList();
     //
-    Map<int, UiComponent> modfiedIndexes = {};
+    Map<int, UiComponent> idxToModifiableUic = {};
     int tempIdx = 0;
-    this.applicableComponents.forEach((uic) => modfiedIndexes[++tempIdx] = uic);
-    modfiedIndexes.removeWhere((idx, uic) => !providedIdxs.contains(idx));
-    return modfiedIndexes.values.toList();
+    this
+        .applicableComponents
+        .forEach((uic) => idxToModifiableUic[++tempIdx] = uic);
+    idxToModifiableUic.removeWhere((idx, uic) => !providedIdxs.contains(idx));
+    return idxToModifiableUic.values.toList();
   }
 
   List<UiComponent> get applicableComponents {
@@ -115,9 +117,24 @@ extension UiComponentExt1 on UiComponent {
         return [];
     }
   }
+
+  //
+  List<RuleType> convertIdxsToRuleList(String commaLstOfInts) {
+    // since we dont show EVERY RuleType, the choice indexes are offset
+    // need to fix that
+    List<int> providedIdxs =
+        commaLstOfInts.split(",").map((e) => int.tryParse(e) ?? -1).toList();
+    //
+    Map<int, RuleType> idxToModifiableRuleTyps = {};
+    int tempIdx = 0;
+    this
+        .applicableRuleTypes
+        .forEach((rt) => idxToModifiableRuleTyps[++tempIdx] = rt);
+    idxToModifiableRuleTyps
+        .removeWhere((idx, uic) => !providedIdxs.contains(idx));
+    return idxToModifiableRuleTyps.values.toList();
+  }
 }
-
-
 
 // [
 //         AppSection.eventConfiguration,

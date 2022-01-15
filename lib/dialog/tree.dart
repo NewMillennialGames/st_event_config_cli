@@ -40,5 +40,9 @@ class DialogTree {
     //
   }
 
-  void _collectAnswer(UserResponse answer) {}
+  void insertNewQuestions(int currQuestIdx, List<Question> includedQuestions) {
+    //
+  }
+
+  // void _collectAnswer(UserResponse answer) {}
 }

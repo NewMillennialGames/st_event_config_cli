@@ -1,4 +1,4 @@
-part of EvTemplateOutput;
+part of CfgOutputModels;
 
 class ComponentCfg {
   // ComponentRules
