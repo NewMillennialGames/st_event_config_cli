@@ -1,17 +1,18 @@
 part of EventCfgModels;
 
-typedef CastIdxToTyp<T> = T Function(int idx);
+typedef CastIdxToTyp<AnsTyp, InputTyp> = AnsTyp Function(InputTyp idx);
 // to load prior answers for some questions
 typedef PriorAnswersCallback = List<UserResponse> Function();
 
-class Qb<T> {
+class Qb<AnsTyp, ConvertTyp> {
   // Qb == question body
   // simple class to hold question data
   // T == data-type of user response
+  // ConvertTyp in [int, string]
   AppSection section;
   String question;
   Iterable<String>? answerChoices;
-  CastIdxToTyp<T>? castFunc;
+  CastIdxToTyp<AnsTyp, ConvertTyp>? castFunc;
   int defaultAnswerIdx;
   bool dynamicFromPriorState;
   bool shouldSkip = false;
@@ -35,17 +36,17 @@ class Qb<T> {
   }
 }
 
-class Question<T> {
+class Question<AnsTyp, ConvertTyp> {
   int order;
-  Qb<T> _quest;
-  late UserResponse<T> response;
+  Qb<AnsTyp, ConvertTyp> _quest;
+  late UserResponse<AnsTyp> response;
 
   Question(this.order, this._quest);
   // getters
   String get question => _quest.question;
   AppSection get section => _quest.section;
   List<String>? get choices => _quest.answerChoices?.toList();
-  CastIdxToTyp<T>? get castFunc => _quest.castFunc;
+  CastIdxToTyp<AnsTyp, ConvertTyp>? get castFunc => _quest.castFunc;
 
   void askAndWait(PriorAnswersCallback? getPriorAnswersList) {
     //
@@ -61,10 +62,19 @@ class Question<T> {
     }
     print("You entered: $answerIdx (idx) and $userResp (val)");
 
-    T? answer = _castResponseToAnswer(answerIdx, userResp ?? '');
+    AnsTyp? answer;
+    if (ConvertTyp is int) {
+      answer = _castResponseToAnswer(answerIdx as ConvertTyp);
+    } else if (ConvertTyp is String) {
+      answer = _castResponseToAnswer(userResp as ConvertTyp);
+    }
+
     // verify we got a value
-    if (answer == null) return;
-    this.response = UserResponse<T>([answer]);
+    if (answer == null) {
+      print('answer was null on $question');
+      return;
+    }
+    this.response = UserResponse<AnsTyp>([answer]);
   }
 
   void _configSelfIfNecessary(PriorAnswersCallback? getPriorAnswersList) {
@@ -76,18 +86,29 @@ class Question<T> {
     }
   }
 
-  T? _castResponseToAnswer(int answerIdx, String userResp) {
-    T? answer;
-    if (castFunc != null) {
-      answer = castFunc!(answerIdx);
-    } else if (T.runtimeType == String) {
-      if (choices != null) {
-        answer = choices![answerIdx] as T;
+  AnsTyp? _castResponseToAnswer(ConvertTyp convertibleVal) {
+    // ConvertTyp must be either String or int
+    // AnsTyp is typically a string or whatever returned from: castFunc()
+    if (convertibleVal is String) {
+      if (this.castFunc != null) {
+        return castFunc!(convertibleVal);
       } else {
-        answer = userResp as T;
+        return convertibleVal as AnsTyp?;
       }
+    }
+
+    assert(convertibleVal is int, 'wtf?');
+
+    AnsTyp? answer;
+    if (castFunc != null) {
+      answer = castFunc!(convertibleVal);
     } else {
-      answer = answerIdx as T;
+      int answerIdx = convertibleVal as int;
+      if (choices != null) {
+        answer = choices![answerIdx] as AnsTyp;
+      } else {
+        answer = convertibleVal as AnsTyp;
+      }
     }
     return answer;
   }

@@ -10,6 +10,7 @@ part of EventCfgEnums;
 */
 
 enum AppSection {
+  // major screens or app-areas that user may wish to configure
   eventConfiguration,
   eventSelection,
   poolSelection,
@@ -24,12 +25,26 @@ enum AppSection {
 
 extension AppSectionExt1 on AppSection {
   //
-  String get includeStr => 'Configure ${this.name} section of app?';
+  String get includeStr =>
+      'Configure ${this.name} section of app? (enter comma delimited list of Idx of UI components to config)';
   bool get isConfigureable => this.applicableComponents.length > 0;
+
+  List<UiComponent> convertIdxsToComponentList(String commaLstOfInts) {
+    // since we dont show EVERY UiComponent, the choice indexes are offset
+    // need to fix that
+    List<int> providedIdxs =
+        commaLstOfInts.split(",").map((e) => int.tryParse(e) ?? -1).toList();
+    //
+    Map<int, UiComponent> modfiedIndexes = {};
+    int tempIdx = 0;
+    this.applicableComponents.forEach((uic) => modfiedIndexes[++tempIdx] = uic);
+    modfiedIndexes.removeWhere((idx, uic) => !providedIdxs.contains(idx));
+    return modfiedIndexes.values.toList();
+  }
 
   List<UiComponent> get applicableComponents {
     // customize this list to control what sections
-    // of the screen can be customized for
+    // of each screen can be customized for
     // THIS SECTION of the app
     switch (this) {
       case AppSection.eventConfiguration:

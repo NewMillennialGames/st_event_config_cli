@@ -10,39 +10,39 @@ List<Question> loadQuestionsForSection(AppSection appSection) {
 // accumulate configuration data
 final List<Qb> _questData = [
   // eventConfiguration questions
-  Qb<String>(
+  Qb<String, String>(
     AppSection.eventConfiguration,
     'Enter Event Template Name',
   ),
-  Qb<String>(
+  Qb<String, String>(
     AppSection.eventConfiguration,
     'Enter Event Template Descrip',
   ),
-  Qb<EvType>(
+  Qb<EvType, int>(
     AppSection.eventConfiguration,
     'Select Event Type',
     EvType.values.map((e) => e.name),
     (i) => EvType.values[i],
   ),
-  Qb<EvCompetitorType>(
+  Qb<EvCompetitorType, int>(
     AppSection.eventConfiguration,
     'Whos competing .. what will be traded',
     EvCompetitorType.values.map((e) => e.name),
     (i) => EvCompetitorType.values[i],
   ),
-  Qb<EvOpponentType>(
+  Qb<EvOpponentType, int>(
     AppSection.eventConfiguration,
     'Who are they playing against',
     EvOpponentType.values.map((e) => e.name),
     (i) => EvOpponentType.values[i],
   ),
-  Qb<EvDuration>(
+  Qb<EvDuration, int>(
     AppSection.eventConfiguration,
     'How long will event last',
     EvDuration.values.map((e) => e.name),
     (i) => EvDuration.values[i],
   ),
-  Qb<EvEliminationStrategy>(
+  Qb<EvEliminationStrategy, int>(
     AppSection.eventConfiguration,
     'How does elimination work',
     EvEliminationStrategy.values.map((e) => e.name),
@@ -50,11 +50,27 @@ final List<Qb> _questData = [
   ),
 
   if (AppSection.eventSelection.isConfigureable)
-    Qb<List<int>>(
+    Qb<List<UiComponent>, String>(
       AppSection.eventSelection,
       AppSection.eventSelection.includeStr,
       AppSection.eventSelection.applicableComponents.map((e) => e.name),
-      // (commaLstOfInts) => commaLstOfInts.,
+      AppSection.eventSelection.convertIdxsToComponentList,
+    ),
+
+  if (AppSection.poolSelection.isConfigureable)
+    Qb<List<UiComponent>, String>(
+      AppSection.poolSelection,
+      AppSection.poolSelection.includeStr,
+      AppSection.poolSelection.applicableComponents.map((e) => e.name),
+      AppSection.poolSelection.convertIdxsToComponentList,
+    ),
+
+  if (AppSection.marketView.isConfigureable)
+    Qb<List<UiComponent>, String>(
+      AppSection.marketView,
+      AppSection.marketView.includeStr,
+      AppSection.marketView.applicableComponents.map((e) => e.name),
+      AppSection.marketView.convertIdxsToComponentList,
     ),
 ];
 
