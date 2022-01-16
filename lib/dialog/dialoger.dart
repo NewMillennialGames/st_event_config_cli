@@ -53,7 +53,8 @@ class Dialoger {
     UserResponse<List<RuleType>> response,
   ) {
     //
-    var includedQuestions = loadAddlRuleQuestions(uiComp, response);
+    var includedQuestions =
+        loadAddlRuleQuestions(_tree.currentSectiontype, uiComp, response);
     _tree.insertNewQuestions(currQuestIdx, includedQuestions);
   }
 }

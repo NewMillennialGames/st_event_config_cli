@@ -1,23 +1,37 @@
 import '../enums/all.dart';
 import '../input_models/all.dart';
-// import '../config/questions.dart';
 
 List<Question> loadAddlSectionQuestions(
   AppSection section,
   UserResponse<List<UiComponent>> response,
 ) {
-  List<Question> lst = [];
+  List<Qb> newQuestions = _questData[section] ?? [];
+  newQuestions = newQuestions.where((qb) => qb.section == section).toList();
+  if (newQuestions.length < 1) return [];
 
+  List<Question> lst = [];
+  for (Qb q in newQuestions) {
+    lst.add(Question(0, q));
+  }
   return lst;
 }
 
 //
 List<Question> loadAddlRuleQuestions(
+  AppSection section,
   UiComponent uiComp,
   UserResponse<List<RuleType>> response,
 ) {
-  List<Question> lst = [];
+  List<Qb> newQuestions = _questData[section] ?? [];
+  newQuestions = newQuestions
+      .where((qb) => qb.uiComp != null && qb.uiComp == uiComp)
+      .toList();
+  if (newQuestions.length < 1) return [];
 
+  List<Question> lst = [];
+  for (Qb q in newQuestions) {
+    lst.add(Question(0, q));
+  }
   return lst;
 }
 

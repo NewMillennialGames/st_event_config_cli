@@ -16,6 +16,7 @@ class Qb<AnsTyp, ConvertTyp> {
   int defaultAnswerIdx;
   bool dynamicFromPriorState;
   bool generatesMoreQuestions = false;
+  UiComponent? uiComp;
   bool shouldSkip = false;
 
   Qb(
@@ -26,6 +27,7 @@ class Qb<AnsTyp, ConvertTyp> {
     this.defaultAnswerIdx = 1,
     this.dynamicFromPriorState = false,
     this.generatesMoreQuestions = false,
+    this.uiComp,
   });
 
   void deriveFromPriorAnswers(List<UserResponse> answers) {

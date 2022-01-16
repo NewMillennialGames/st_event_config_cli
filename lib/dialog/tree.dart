@@ -3,7 +3,14 @@ part of ConfigDialog;
 class DialogTree {
   //
   List<DialogSectionCfg> _sections = [];
+  int currSectionIdx = -1;
+
+  // constructor
   DialogTree();
+
+  //
+  DialogSectionCfg get currentSectionCfg => _sections[currSectionIdx];
+  AppSection get currentSectiontype => currentSectionCfg.appSection;
 
   List<UserResponse> get priorAnswers {
     // TODO
@@ -38,11 +45,16 @@ class DialogTree {
 
   DialogSectionCfg? _getNextSection() {
     //
+    ++currSectionIdx;
+    if (currSectionIdx - 1 > _sections.length) return null;
+    return _sections[currSectionIdx];
   }
 
-  void insertNewQuestions(int currQuestIdx, List<Question> includedQuestions) {
+  void insertNewQuestions(
+    int currQuestIdx,
+    List<Question> newQuestions,
+  ) {
     //
+    currentSectionCfg.appendQuestions(currQuestIdx, newQuestions);
   }
-
-  // void _collectAnswer(UserResponse answer) {}
 }

@@ -27,6 +27,10 @@ class DialogSectionCfg {
     _questions = loadQuestionsForSection(appSection);
   }
 
+  void appendQuestions(int idx, List<Question> newQuestions) {
+    _questions.addAll(newQuestions);
+  }
+
   bool askIfNeeded() {
     if (!appSection.isConfigureable) return false;
 
