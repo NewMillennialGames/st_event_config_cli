@@ -50,7 +50,7 @@ class Dialoger {
 
   void generateAssociatedUiRuleTypeQuestions(
     UiComponent uiComp,
-    UserResponse<List<RuleType>> response,
+    UserResponse<List<VisualRuleType>> response,
   ) {
     //
     var includedQuestions =

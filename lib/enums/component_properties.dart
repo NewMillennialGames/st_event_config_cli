@@ -15,3 +15,9 @@ enum UiComponentSlotName {
   startTime,
   bannerUrl,
 }
+
+enum MenuSortOrGroupIndex {
+  first,
+  second,
+  third,
+}

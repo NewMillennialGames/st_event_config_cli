@@ -3,7 +3,7 @@ part of CfgOutputModels;
 class ComponentCfg {
   // ComponentRules
   UiComponent sectionComponent;
-  Map<RuleType, UiCfg> uiCfgByApplicableRules;
+  Map<VisualRuleType, UiCfg> uiCfgByApplicableRules;
 
   ComponentCfg(this.sectionComponent, this.uiCfgByApplicableRules);
 }

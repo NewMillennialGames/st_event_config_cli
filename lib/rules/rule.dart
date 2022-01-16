@@ -8,24 +8,25 @@ abstract class BaseRule {
   factory BaseRule.filter(
     DbRowType recType,
     String propertyName,
-    int listIdx, {
+    MenuSortOrGroupIndex menuIdx, {
     bool sortDescending = true,
   }) =>
       FilterRule(
         recType,
         propertyName,
-        listIdx: listIdx,
+        menuIdx: menuIdx,
         sortDescending: sortDescending,
       );
   factory BaseRule.format() => FormatRule();
   factory BaseRule.group() => GroupRule();
-  factory BaseRule.navigate() => NavigateRule();
-  factory BaseRule.show() => NavigateRule();
-  factory BaseRule.sort() => NavigateRule();
+  factory BaseRule.show() => ShowRule();
+  factory BaseRule.sort() => SortRule();
+
+  // factory BaseRule.navigate() => NavigateRule();
 
   // interface
-  RuleType get ruleType;
-  Map<RuleType, String> getEncodedRule();
+  VisualRuleType get ruleType;
+  Map<VisualRuleType, String> getEncodedRule();
 }
 
 @JsonSerializable()
@@ -33,24 +34,24 @@ class FilterRule extends BaseRule {
   //
   // final int filterListIdx;
   // final UiComponentSlotName property;
-  DbRowType recType;
+  DbRowType rowType;
+  MenuSortOrGroupIndex menuIdx;
   String propertyName;
-  int listIdx;
   bool sortDescending = true;
 
   FilterRule(
-    this.recType,
+    this.rowType,
     this.propertyName, {
-    this.listIdx = 1,
+    this.menuIdx = MenuSortOrGroupIndex.first,
     this.sortDescending = true,
-  }) : super._() {}
+  }) : super._();
 
   //
-  RuleType get ruleType => RuleType.filter;
+  VisualRuleType get ruleType => VisualRuleType.filter;
 
   //
   @override
-  Map<RuleType, String> getEncodedRule() {
+  Map<VisualRuleType, String> getEncodedRule() {
     return {};
   }
 
@@ -65,11 +66,11 @@ class FormatRule extends BaseRule {
   FormatRule() : super._() {}
 
   //
-  RuleType get ruleType => RuleType.format;
+  VisualRuleType get ruleType => VisualRuleType.format;
 
   //
   @override
-  Map<RuleType, String> getEncodedRule() {
+  Map<VisualRuleType, String> getEncodedRule() {
     return {};
   }
 }
@@ -80,24 +81,10 @@ class GroupRule extends BaseRule {
   GroupRule() : super._() {}
 
   //
-  RuleType get ruleType => RuleType.group;
+  VisualRuleType get ruleType => VisualRuleType.group;
   //
   @override
-  Map<RuleType, String> getEncodedRule() {
-    return {};
-  }
-}
-
-@JsonSerializable()
-class NavigateRule extends BaseRule {
-  //
-  NavigateRule() : super._() {}
-
-  //
-  RuleType get ruleType => RuleType.navigate;
-  //
-  @override
-  Map<RuleType, String> getEncodedRule() {
+  Map<VisualRuleType, String> getEncodedRule() {
     return {};
   }
 }
@@ -108,10 +95,10 @@ class ShowRule extends BaseRule {
   ShowRule() : super._() {}
 
   //
-  RuleType get ruleType => RuleType.show;
+  VisualRuleType get ruleType => VisualRuleType.show;
   //
   @override
-  Map<RuleType, String> getEncodedRule() {
+  Map<VisualRuleType, String> getEncodedRule() {
     return {};
   }
 }
@@ -122,15 +109,28 @@ class SortRule extends BaseRule {
   SortRule() : super._() {}
 
   //
-  RuleType get ruleType => RuleType.sort;
+  VisualRuleType get ruleType => VisualRuleType.sort;
   //
   @override
-  Map<RuleType, String> getEncodedRule() {
+  Map<VisualRuleType, String> getEncodedRule() {
     return {};
   }
 }
 
 
+// @JsonSerializable()
+// class NavigateRule extends BaseRule {
+//   //
+//   NavigateRule() : super._() {}
+
+//   //
+//   BehaviorRuleType get ruleType => BehaviorRuleType.navigate;
+//   //
+//   @override
+//   Map<VisualRuleType, String> getEncodedRule() {
+//     return {};
+//   }
+// }
 
 
   //   static BaseRule getRule(RuleType typ) {

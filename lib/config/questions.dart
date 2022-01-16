@@ -26,118 +26,109 @@ final List<Qb> _questData = [
     of my Qb.castFunc code
   */
   Qb<String, String>(
-    AppSection.eventConfiguration,
+    QuestionQuantifier.eventLevel(),
     'Enter Event Template Name',
     null,
     null,
   ),
   Qb<String, String>(
-    AppSection.eventConfiguration,
+    QuestionQuantifier.eventLevel(),
     'Enter Event Template Descrip',
     null,
     null,
   ),
   Qb<EvType, int>(
-    AppSection.eventConfiguration,
+    QuestionQuantifier.eventLevel(),
     'Select Event Type',
     EvType.values.map((e) => e.name),
     (i) => EvType.values[i],
   ),
   Qb<EvCompetitorType, int>(
-    AppSection.eventConfiguration,
+    QuestionQuantifier.eventLevel(),
     'Whos competing .. what will be traded',
     EvCompetitorType.values.map((e) => e.name),
     (i) => EvCompetitorType.values[i],
   ),
   Qb<EvOpponentType, int>(
-    AppSection.eventConfiguration,
+    QuestionQuantifier.eventLevel(),
     'Who are they playing against',
     EvOpponentType.values.map((e) => e.name),
     (i) => EvOpponentType.values[i],
   ),
   Qb<EvDuration, int>(
-    AppSection.eventConfiguration,
+    QuestionQuantifier.eventLevel(),
     'How long will event last',
     EvDuration.values.map((e) => e.name),
     (i) => EvDuration.values[i],
   ),
   Qb<EvEliminationStrategy, int>(
-    AppSection.eventConfiguration,
+    QuestionQuantifier.eventLevel(),
     'How does elimination work',
     EvEliminationStrategy.values.map((e) => e.name),
     (i) => EvEliminationStrategy.values[i],
   ),
   if (AppSection.eventSelection.isConfigureable)
     Qb<List<UiComponent>, String>(
-      AppSection.eventSelection,
+      QuestionQuantifier.appSectionLevel(AppSection.eventSelection),
       AppSection.eventSelection.includeStr,
       AppSection.eventSelection.applicableComponents.map((e) => e.name),
       AppSection.eventSelection.convertIdxsToComponentList,
-      generatesMoreQuestions: true,
     ),
   if (AppSection.poolSelection.isConfigureable)
     Qb<List<UiComponent>, String>(
-      AppSection.poolSelection,
+      QuestionQuantifier.appSectionLevel(AppSection.poolSelection),
       AppSection.poolSelection.includeStr,
       AppSection.poolSelection.applicableComponents.map((e) => e.name),
       AppSection.poolSelection.convertIdxsToComponentList,
-      generatesMoreQuestions: true,
     ),
   if (AppSection.marketView.isConfigureable)
     Qb<List<UiComponent>, String>(
-      AppSection.marketView,
+      QuestionQuantifier.appSectionLevel(AppSection.marketView),
       AppSection.marketView.includeStr,
       AppSection.marketView.applicableComponents.map((e) => e.name),
       AppSection.marketView.convertIdxsToComponentList,
-      generatesMoreQuestions: true,
     ),
   if (AppSection.socialPools.isConfigureable)
     Qb<List<UiComponent>, String>(
-      AppSection.socialPools,
+      QuestionQuantifier.appSectionLevel(AppSection.socialPools),
       AppSection.socialPools.includeStr,
       AppSection.socialPools.applicableComponents.map((e) => e.name),
       AppSection.socialPools.convertIdxsToComponentList,
-      generatesMoreQuestions: true,
     ),
   if (AppSection.news.isConfigureable)
     Qb<List<UiComponent>, String>(
-      AppSection.news,
+      QuestionQuantifier.appSectionLevel(AppSection.news),
       AppSection.news.includeStr,
       AppSection.news.applicableComponents.map((e) => e.name),
       AppSection.news.convertIdxsToComponentList,
-      generatesMoreQuestions: true,
     ),
   if (AppSection.leaderboard.isConfigureable)
     Qb<List<UiComponent>, String>(
-      AppSection.leaderboard,
+      QuestionQuantifier.appSectionLevel(AppSection.leaderboard),
       AppSection.leaderboard.includeStr,
       AppSection.leaderboard.applicableComponents.map((e) => e.name),
       AppSection.leaderboard.convertIdxsToComponentList,
-      generatesMoreQuestions: true,
     ),
   if (AppSection.portfolio.isConfigureable)
     Qb<List<UiComponent>, String>(
-      AppSection.portfolio,
+      QuestionQuantifier.appSectionLevel(AppSection.portfolio),
       AppSection.portfolio.includeStr,
       AppSection.portfolio.applicableComponents.map((e) => e.name),
       AppSection.portfolio.convertIdxsToComponentList,
-      generatesMoreQuestions: true,
     ),
   if (AppSection.trading.isConfigureable)
     Qb<List<UiComponent>, String>(
-      AppSection.trading,
+      QuestionQuantifier.appSectionLevel(AppSection.trading),
       AppSection.trading.includeStr,
       AppSection.trading.applicableComponents.map((e) => e.name),
       AppSection.trading.convertIdxsToComponentList,
-      generatesMoreQuestions: true,
     ),
   if (AppSection.marketResearch.isConfigureable)
     Qb<List<UiComponent>, String>(
-      AppSection.marketResearch,
+      QuestionQuantifier.appSectionLevel(AppSection.marketResearch),
       AppSection.marketResearch.includeStr,
       AppSection.marketResearch.applicableComponents.map((e) => e.name),
       AppSection.marketResearch.convertIdxsToComponentList,
-      generatesMoreQuestions: true,
     ),
 ];
 

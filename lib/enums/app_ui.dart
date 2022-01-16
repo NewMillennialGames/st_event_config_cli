@@ -93,39 +93,43 @@ extension UiComponentExt1 on UiComponent {
 
   bool get isConfigureable => this.applicableRuleTypes.length > 0;
 
-  List<RuleType> get applicableRuleTypes {
+  List<VisualRuleType> get applicableRuleTypes {
     // customize this list to control what customization
     // rules go with this ui component
     switch (this) {
       case UiComponent.navBar:
-        return [RuleType.format];
+        return [VisualRuleType.format];
       case UiComponent.filterBar1:
-        return [RuleType.filter];
+        return [VisualRuleType.filter];
       case UiComponent.filterBar2:
         return [];
       case UiComponent.header:
-        return [RuleType.format, RuleType.show];
+        return [VisualRuleType.format, VisualRuleType.show];
       case UiComponent.banner:
-        return [RuleType.show];
+        return [VisualRuleType.show];
       case UiComponent.tableView:
-        return [RuleType.format, RuleType.group, RuleType.sort];
+        return [
+          VisualRuleType.format,
+          VisualRuleType.group,
+          VisualRuleType.sort
+        ];
       case UiComponent.footer:
-        return [RuleType.show];
+        return [VisualRuleType.show];
       case UiComponent.ticker:
-        return [RuleType.show];
+        return [VisualRuleType.show];
       case UiComponent.tabBar:
         return [];
     }
   }
 
   //
-  List<RuleType> convertIdxsToRuleList(String commaLstOfInts) {
+  List<VisualRuleType> convertIdxsToRuleList(String commaLstOfInts) {
     // since we dont show EVERY RuleType, the choice indexes are offset
     // need to fix that
     List<int> providedIdxs =
         commaLstOfInts.split(",").map((e) => int.tryParse(e) ?? -1).toList();
     //
-    Map<int, RuleType> idxToModifiableRuleTyps = {};
+    Map<int, VisualRuleType> idxToModifiableRuleTyps = {};
     int tempIdx = 0;
     this
         .applicableRuleTypes

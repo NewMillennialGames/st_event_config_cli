@@ -9,26 +9,27 @@ class Qb<AnsTyp, ConvertTyp> {
   // simple class to hold question data
   // T == data-type of user response
   // ConvertTyp in [int, string]
-  AppSection section;
+  QuestionQuantifier qq;
   String question;
   Iterable<String>? answerChoices;
   CastIdxToTyp<AnsTyp, ConvertTyp>? castFunc;
   int defaultAnswerIdx;
   bool dynamicFromPriorState;
-  bool generatesMoreQuestions = false;
-  UiComponent? uiComp;
   bool shouldSkip = false;
 
   Qb(
-    this.section,
+    this.qq,
     this.question,
     this.answerChoices,
     this.castFunc, {
     this.defaultAnswerIdx = 1,
     this.dynamicFromPriorState = false,
-    this.generatesMoreQuestions = false,
-    this.uiComp,
   });
+
+  // getters
+  AppSection get section => qq.appSection;
+  UiComponent? get uiComp => qq.uiCompInSection;
+  bool get addsOrDeletesFutureQuestions => qq.addsOrDeletesFutureQuestions;
 
   void deriveFromPriorAnswers(List<UserResponse> answers) {
     /* 
@@ -57,9 +58,9 @@ class Question<AnsTyp, ConvertTyp> {
 
   // building other questions based on prior answers
   bool get generatesScreenComponentQuestions =>
-      _quest.generatesMoreQuestions && AnsTyp is List<UiComponent>;
+      _quest.addsOrDeletesFutureQuestions && AnsTyp is List<UiComponent>;
   bool get generatesRuleTypeQuestions =>
-      _quest.generatesMoreQuestions && AnsTyp is List<RuleType>;
+      _quest.addsOrDeletesFutureQuestions && AnsTyp is List<VisualRuleType>;
 
   void askAndWait(Dialoger dialoger) {
     //
@@ -104,7 +105,7 @@ class Question<AnsTyp, ConvertTyp> {
       // FIXME
       dialoger.generateAssociatedUiRuleTypeQuestions(
         UiComponent.banner,
-        this.response as UserResponse<List<RuleType>>,
+        this.response as UserResponse<List<VisualRuleType>>,
       );
     }
   }

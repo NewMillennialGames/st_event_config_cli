@@ -13,5 +13,6 @@ part 'question.dart';
 part 'user_response.dart';
 part 'property_map.dart';
 part 'section.dart';
-part 'rule.dart';
+part '../rules/rule.dart';
 part 'all.g.dart';
+part 'quest_quantifier.dart';

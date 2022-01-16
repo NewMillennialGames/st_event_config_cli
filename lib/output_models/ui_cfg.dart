@@ -2,7 +2,7 @@ part of CfgOutputModels;
 
 class UiCfg {
   //
-  RuleType ruleType;
+  VisualRuleType ruleType;
   List<BaseRule> rulesForType;
   //
   UiCfg(this.ruleType, this.rulesForType);
