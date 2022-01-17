@@ -1,7 +1,7 @@
 library CfgOutputModels;
 
 import '../enums/all.dart';
-import '../input_models/all.dart';
+import '../rules/rule.dart';
 
 part 'template.dart';
 part 'section.dart';

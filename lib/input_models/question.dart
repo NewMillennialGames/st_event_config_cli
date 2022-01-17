@@ -65,7 +65,7 @@ class Question<AnsTyp, ConvertTyp> {
   void askAndWait(Dialoger dialoger) {
     //
     _configSelfIfNecessary(dialoger.getPriorAnswerCallback);
-    print(question);
+
     String? userResp = stdin.readLineSync();
     int answerIdx = -1;
     if (userResp != null) {

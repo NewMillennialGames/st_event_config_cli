@@ -1,11 +1,16 @@
-part of CfgInputModels;
+import 'package:json_annotation/json_annotation.dart';
 
-abstract class BaseRule {
+import '../input_models/all.dart';
+import '../enums/all.dart';
+
+part 'rule.g.dart';
+
+abstract class AppConfigRule {
   //
 
-  BaseRule._();
+  AppConfigRule._();
 
-  factory BaseRule.filter(
+  factory AppConfigRule.filter(
     DbRowType recType,
     String propertyName,
     MenuSortOrGroupIndex menuIdx, {
@@ -17,20 +22,34 @@ abstract class BaseRule {
         menuIdx: menuIdx,
         sortDescending: sortDescending,
       );
-  factory BaseRule.format() => FormatRule();
-  factory BaseRule.group() => GroupRule();
-  factory BaseRule.show() => ShowRule();
-  factory BaseRule.sort() => SortRule();
-
-  // factory BaseRule.navigate() => NavigateRule();
+  // visual and styling rules
+  factory AppConfigRule.format() => FormatRule();
+  factory AppConfigRule.group() => GroupRule();
+  factory AppConfigRule.show() => ShowRule();
+  factory AppConfigRule.sort() => SortRule();
+  // behavioral rules
+  factory AppConfigRule.navigate() => NavigateRule();
 
   // interface
+  // Map<VisualRuleType, String> getEncodedRule();
+}
+
+abstract class _AppVisualRule extends AppConfigRule {
+  //
+  _AppVisualRule._() : super._();
+  // interface
   VisualRuleType get ruleType;
-  Map<VisualRuleType, String> getEncodedRule();
+}
+
+abstract class _AppBehavioralRule extends AppConfigRule {
+  //
+  _AppBehavioralRule._() : super._();
+  // interface
+  BehaviorRuleType get ruleType;
 }
 
 @JsonSerializable()
-class FilterRule extends BaseRule {
+class FilterRule extends _AppVisualRule {
   //
   // final int filterListIdx;
   // final UiComponentSlotName property;
@@ -50,10 +69,10 @@ class FilterRule extends BaseRule {
   VisualRuleType get ruleType => VisualRuleType.filter;
 
   //
-  @override
-  Map<VisualRuleType, String> getEncodedRule() {
-    return {};
-  }
+  // @override
+  // Map<VisualRuleType, String> getEncodedRule() {
+  //   return {};
+  // }
 
   factory FilterRule.fromJson(Map<String, dynamic> json) =>
       _$FilterRuleFromJson(json);
@@ -61,7 +80,7 @@ class FilterRule extends BaseRule {
 }
 
 @JsonSerializable()
-class FormatRule extends BaseRule {
+class FormatRule extends _AppVisualRule {
   //
   FormatRule() : super._() {}
 
@@ -69,68 +88,67 @@ class FormatRule extends BaseRule {
   VisualRuleType get ruleType => VisualRuleType.format;
 
   //
-  @override
-  Map<VisualRuleType, String> getEncodedRule() {
-    return {};
-  }
+  // @override
+  // Map<VisualRuleType, String> getEncodedRule() {
+  //   return {};
+  // }
 }
 
 @JsonSerializable()
-class GroupRule extends BaseRule {
+class GroupRule extends _AppVisualRule {
   //
   GroupRule() : super._() {}
 
   //
   VisualRuleType get ruleType => VisualRuleType.group;
   //
-  @override
-  Map<VisualRuleType, String> getEncodedRule() {
-    return {};
-  }
+  // @override
+  // Map<VisualRuleType, String> getEncodedRule() {
+  //   return {};
+  // }
 }
 
 @JsonSerializable()
-class ShowRule extends BaseRule {
+class ShowRule extends _AppVisualRule {
   //
   ShowRule() : super._() {}
 
   //
   VisualRuleType get ruleType => VisualRuleType.show;
   //
-  @override
-  Map<VisualRuleType, String> getEncodedRule() {
-    return {};
-  }
+  // @override
+  // Map<VisualRuleType, String> getEncodedRule() {
+  //   return {};
+  // }
 }
 
 @JsonSerializable()
-class SortRule extends BaseRule {
+class SortRule extends _AppVisualRule {
   //
   SortRule() : super._() {}
 
   //
   VisualRuleType get ruleType => VisualRuleType.sort;
   //
-  @override
-  Map<VisualRuleType, String> getEncodedRule() {
-    return {};
-  }
+  // @override
+  // Map<VisualRuleType, String> getEncodedRule() {
+  //   return {};
+  // }
 }
 
+@JsonSerializable()
+class NavigateRule extends _AppBehavioralRule {
+  //
+  NavigateRule() : super._() {}
 
-// @JsonSerializable()
-// class NavigateRule extends BaseRule {
-//   //
-//   NavigateRule() : super._() {}
-
-//   //
-//   BehaviorRuleType get ruleType => BehaviorRuleType.navigate;
-//   //
-//   @override
-//   Map<VisualRuleType, String> getEncodedRule() {
-//     return {};
-//   }
-// }
+  //
+  BehaviorRuleType get ruleType => BehaviorRuleType.navigate;
+  //
+  // @override
+  // Map<VisualRuleType, String> getEncodedRule() {
+  //   return {};
+  // }
+}
 
 
   //   static BaseRule getRule(RuleType typ) {

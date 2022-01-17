@@ -2,12 +2,12 @@ part of EventCfgEnums;
 
 enum DbRowType {
   /*
-    describes the DB entity types
+    describes the Server DB entity types
     that are traded or
     that property mapping applies to
   */
   asset,
-  player, // aka Player
+  player,
   team,
   game,
   competition,

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of CfgInputModels;
+part of 'rule.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
@@ -55,3 +55,9 @@ Map<String, dynamic> _$ShowRuleToJson(ShowRule instance) => <String, dynamic>{};
 SortRule _$SortRuleFromJson(Map<String, dynamic> json) => SortRule();
 
 Map<String, dynamic> _$SortRuleToJson(SortRule instance) => <String, dynamic>{};
+
+NavigateRule _$NavigateRuleFromJson(Map<String, dynamic> json) =>
+    NavigateRule();
+
+Map<String, dynamic> _$NavigateRuleToJson(NavigateRule instance) =>
+    <String, dynamic>{};

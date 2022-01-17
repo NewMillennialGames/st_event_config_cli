@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:core';
-import 'dart:async';
-import 'dart:convert';
+// import 'dart:async';
+// import 'dart:convert';
 import 'package:args/args.dart';
 //
 // import 'models.dart';
@@ -28,9 +28,13 @@ Future<void> main(List<String> arguments) async {
 //     return Void;
 //   }
 
-  final dialoger = Dialoger();
+  // add clear lines
+  for (int i = 0; i < 4; i++) {
+    print('\n');
+  }
 
-  final res = await dialoger.loopUntilComplete();
+  final dialoger = Dialoger();
+  final res = dialoger.loopUntilComplete();
 
   stdout.writeln("Done:\n");
   stdout.writeln("$res");

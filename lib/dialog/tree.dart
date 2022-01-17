@@ -46,7 +46,7 @@ class DialogTree {
   DialogSectionCfg? _getNextSection() {
     //
     ++currSectionIdx;
-    if (currSectionIdx - 1 > _sections.length) return null;
+    if (currSectionIdx >= _sections.length) return null;
     return _sections[currSectionIdx];
   }
 

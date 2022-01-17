@@ -41,8 +41,8 @@ class DialogSectionCfg {
   }
 
   Question? getNextQuestion() {
-    currQuestIdx += 1;
-    if (currQuestIdx - 1 > _questions.length) return null;
+    ++currQuestIdx;
+    if (currQuestIdx >= _questions.length) return null;
 
     return _questions[currQuestIdx];
   }

@@ -3,9 +3,15 @@ part of ConfigDialog;
 class Dialoger {
   //
   final DialogTree _tree = DialogTree();
+  final int linesBetweenSections;
+  final int linesBetweenQuestions;
+  //
   int currQuestIdx = 0;
 
-  Dialoger() {
+  Dialoger([
+    this.linesBetweenSections = 3,
+    this.linesBetweenQuestions = 1,
+  ]) {
     _tree.loadDialog();
   }
 
@@ -18,18 +24,20 @@ class Dialoger {
   //
   String loopUntilComplete() {
     //
+    final questFormatter = CliQuestionFormatter();
+
     DialogSectionCfg? section = _tree._getNextSection();
     while (section != null) {
       //
       bool doSection = section.askIfNeeded();
       if (doSection) {
+        _addEmptyLines(isSection: true);
         Question? _quest = section.getNextQuestion();
         while (_quest != null) {
-          // UserResponse answer = _quest.askAndWait();
-          // _tree._collectAnswer(answer);
-          _quest.askAndWait(this);
+          questFormatter.askAndWaitForUserResponse(this, _quest);
           currQuestIdx++;
           _quest = section.getNextQuestion();
+          if (_quest != null) _addEmptyLines();
         }
       }
       section = _tree._getNextSection();
@@ -37,6 +45,14 @@ class Dialoger {
     String _summaryOfUserAnswers =
         _tree.priorAnswers.map((r) => r.toString()).toString();
     return _summaryOfUserAnswers;
+  }
+
+  void _addEmptyLines({bool isSection = false}) {
+    if (isSection) {
+      print('\n' * this.linesBetweenSections);
+    } else {
+      print('\n' * this.linesBetweenQuestions);
+    }
   }
 
   void generateAssociatedUiComponentQuestions(
