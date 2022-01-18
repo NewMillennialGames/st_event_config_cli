@@ -1,4 +1,4 @@
-part of ConfigDialog;
+part of ConfigDialogRunner;
 
 class Dialoger {
   //
@@ -12,10 +12,10 @@ class Dialoger {
     this.linesBetweenSections = 3,
     this.linesBetweenQuestions = 1,
   ]) {
-    _tree.loadDialog();
+    _tree.loadInitialConversation();
   }
 
-  List<UserResponse> getPriorAnswerCallback() {
+  List<UserResponse> getPriorAnswersList() {
     // used when a question needs to review prior
     // answers to configure itself
     return _tree.priorAnswers;
@@ -24,13 +24,18 @@ class Dialoger {
   //
   String loopUntilComplete() {
     //
+    // questFormatter manages display output
     final questFormatter = CliQuestionFormatter();
 
     DialogSectionCfg? section = _tree._getNextSection();
     while (section != null) {
       //
-      bool doSection = section.askIfNeeded();
-      if (doSection) {
+      bool shouldShowSection =
+          questFormatter.askSectionQuestionAndWaitForUserResponse(
+        this,
+        section,
+      );
+      if (shouldShowSection) {
         _addEmptyLines(isSection: true);
         Question? _quest = section.getNextQuestion();
         while (_quest != null) {
@@ -42,9 +47,12 @@ class Dialoger {
       }
       section = _tree._getNextSection();
     }
-    String _summaryOfUserAnswers =
-        _tree.priorAnswers.map((r) => r.toString()).toString();
-    return _summaryOfUserAnswers;
+
+    // not every answer-type (generic) has a toString method
+    // String _summaryOfUserAnswers =
+    //     _tree.priorAnswers.map((r) => r.toString()).toString();
+    // return _summaryOfUserAnswers;
+    return '';
   }
 
   void _addEmptyLines({bool isSection = false}) {

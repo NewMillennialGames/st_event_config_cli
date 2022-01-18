@@ -53,7 +53,7 @@ final Map<AppSection, List<Qb>> _questData = {
   AppSection.eventSelection: [
     if (AppSection.eventSelection.isConfigureable)
       ...AppSection.eventSelection.applicableComponents.map((uiComp) {
-        return Qb<List<VisualRuleType>, String>(
+        return Qb<String, List<VisualRuleType>>(
           QuestionQuantifier.appSectionLevel(AppSection.eventSelection),
           uiComp.includeStr(AppSection.eventSelection),
           uiComp.applicableRuleTypes.map((e) => e.name),

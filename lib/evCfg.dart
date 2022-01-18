@@ -29,9 +29,7 @@ Future<void> main(List<String> arguments) async {
 //   }
 
   // add clear lines
-  for (int i = 0; i < 4; i++) {
-    print('\n');
-  }
+  print('\n' * 2);
 
   final dialoger = Dialoger();
   final res = dialoger.loopUntilComplete();

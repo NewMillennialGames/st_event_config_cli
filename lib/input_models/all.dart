@@ -4,6 +4,7 @@ import "dart:io";
 import 'package:collection/collection.dart';
 // import 'package:json_annotation/json_annotation.dart';
 //
+import '../util/type_cast.dart';
 import '../enums/all.dart';
 import '../dialog/all.dart';
 import '../config/questions.dart';

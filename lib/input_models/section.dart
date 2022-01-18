@@ -25,6 +25,10 @@ class DialogSectionCfg {
   void loadQuestions() {
     //
     _questions = loadQuestionsForSection(appSection);
+    // print('Section $name loaded ${_questions.length} questions');
+    // for (Question q in _questions) {
+    //   print('${q.questionId}: ${q.question}');
+    // }
   }
 
   void appendQuestions(int idx, List<Question> newQuestions) {
@@ -36,7 +40,7 @@ class DialogSectionCfg {
 
     print(appSection.includeStr + '(enter y/yes or n/no)');
     var userResp = stdin.readLineSync() ?? 'Y';
-    print("askIfNeeded got: $userResp");
+    // print("askIfNeeded got: $userResp");
     return userResp.toUpperCase().startsWith('Y');
   }
 

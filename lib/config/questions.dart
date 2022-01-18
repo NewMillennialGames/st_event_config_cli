@@ -37,99 +37,102 @@ final List<Qb> _questData = [
     null,
     null,
   ),
-  Qb<EvType, int>(
+  Qb<int, EvType>(
     QuestionQuantifier.eventLevel(),
     'Select Event Type',
     EvType.values.map((e) => e.name),
     (i) => EvType.values[i],
   ),
-  Qb<EvCompetitorType, int>(
+  Qb<int, EvCompetitorType>(
     QuestionQuantifier.eventLevel(),
     'Whos competing .. what will be traded',
     EvCompetitorType.values.map((e) => e.name),
     (i) => EvCompetitorType.values[i],
   ),
-  Qb<EvOpponentType, int>(
+  Qb<int, EvOpponentType>(
     QuestionQuantifier.eventLevel(),
     'Who are they playing against',
     EvOpponentType.values.map((e) => e.name),
     (i) => EvOpponentType.values[i],
   ),
-  Qb<EvDuration, int>(
+  Qb<int, EvDuration>(
     QuestionQuantifier.eventLevel(),
     'How long will event last',
     EvDuration.values.map((e) => e.name),
     (i) => EvDuration.values[i],
   ),
-  Qb<EvEliminationStrategy, int>(
+  Qb<int, EvEliminationStrategy>(
     QuestionQuantifier.eventLevel(),
-    'How does elimination work',
+    'How does competitor elimination work',
     EvEliminationStrategy.values.map((e) => e.name),
     (i) => EvEliminationStrategy.values[i],
   ),
-  if (AppSection.eventSelection.isConfigureable)
-    Qb<List<UiComponent>, String>(
-      QuestionQuantifier.appSectionLevel(AppSection.eventSelection),
-      AppSection.eventSelection.includeStr,
-      AppSection.eventSelection.applicableComponents.map((e) => e.name),
-      AppSection.eventSelection.convertIdxsToComponentList,
-    ),
-  if (AppSection.poolSelection.isConfigureable)
-    Qb<List<UiComponent>, String>(
-      QuestionQuantifier.appSectionLevel(AppSection.poolSelection),
-      AppSection.poolSelection.includeStr,
-      AppSection.poolSelection.applicableComponents.map((e) => e.name),
-      AppSection.poolSelection.convertIdxsToComponentList,
-    ),
-  if (AppSection.marketView.isConfigureable)
-    Qb<List<UiComponent>, String>(
-      QuestionQuantifier.appSectionLevel(AppSection.marketView),
-      AppSection.marketView.includeStr,
-      AppSection.marketView.applicableComponents.map((e) => e.name),
-      AppSection.marketView.convertIdxsToComponentList,
-    ),
-  if (AppSection.socialPools.isConfigureable)
-    Qb<List<UiComponent>, String>(
-      QuestionQuantifier.appSectionLevel(AppSection.socialPools),
-      AppSection.socialPools.includeStr,
-      AppSection.socialPools.applicableComponents.map((e) => e.name),
-      AppSection.socialPools.convertIdxsToComponentList,
-    ),
-  if (AppSection.news.isConfigureable)
-    Qb<List<UiComponent>, String>(
-      QuestionQuantifier.appSectionLevel(AppSection.news),
-      AppSection.news.includeStr,
-      AppSection.news.applicableComponents.map((e) => e.name),
-      AppSection.news.convertIdxsToComponentList,
-    ),
-  if (AppSection.leaderboard.isConfigureable)
-    Qb<List<UiComponent>, String>(
-      QuestionQuantifier.appSectionLevel(AppSection.leaderboard),
-      AppSection.leaderboard.includeStr,
-      AppSection.leaderboard.applicableComponents.map((e) => e.name),
-      AppSection.leaderboard.convertIdxsToComponentList,
-    ),
-  if (AppSection.portfolio.isConfigureable)
-    Qb<List<UiComponent>, String>(
-      QuestionQuantifier.appSectionLevel(AppSection.portfolio),
-      AppSection.portfolio.includeStr,
-      AppSection.portfolio.applicableComponents.map((e) => e.name),
-      AppSection.portfolio.convertIdxsToComponentList,
-    ),
-  if (AppSection.trading.isConfigureable)
-    Qb<List<UiComponent>, String>(
-      QuestionQuantifier.appSectionLevel(AppSection.trading),
-      AppSection.trading.includeStr,
-      AppSection.trading.applicableComponents.map((e) => e.name),
-      AppSection.trading.convertIdxsToComponentList,
-    ),
-  if (AppSection.marketResearch.isConfigureable)
-    Qb<List<UiComponent>, String>(
-      QuestionQuantifier.appSectionLevel(AppSection.marketResearch),
-      AppSection.marketResearch.includeStr,
-      AppSection.marketResearch.applicableComponents.map((e) => e.name),
-      AppSection.marketResearch.convertIdxsToComponentList,
-    ),
+  // sections are asked automatically;
+  // we don't need defined questions for them
+
+  // if (AppSection.eventSelection.isConfigureable)
+  //   Qb<List<UiComponent>, String>(
+  //     QuestionQuantifier.appSectionLevel(AppSection.eventSelection),
+  //     AppSection.eventSelection.includeStr,
+  //     AppSection.eventSelection.applicableComponents.map((e) => e.name),
+  //     AppSection.eventSelection.convertIdxsToComponentList,
+  //   ),
+  // if (AppSection.poolSelection.isConfigureable)
+  //   Qb<List<UiComponent>, String>(
+  //     QuestionQuantifier.appSectionLevel(AppSection.poolSelection),
+  //     AppSection.poolSelection.includeStr,
+  //     AppSection.poolSelection.applicableComponents.map((e) => e.name),
+  //     AppSection.poolSelection.convertIdxsToComponentList,
+  //   ),
+  // if (AppSection.marketView.isConfigureable)
+  //   Qb<List<UiComponent>, String>(
+  //     QuestionQuantifier.appSectionLevel(AppSection.marketView),
+  //     AppSection.marketView.includeStr,
+  //     AppSection.marketView.applicableComponents.map((e) => e.name),
+  //     AppSection.marketView.convertIdxsToComponentList,
+  //   ),
+  // if (AppSection.socialPools.isConfigureable)
+  //   Qb<List<UiComponent>, String>(
+  //     QuestionQuantifier.appSectionLevel(AppSection.socialPools),
+  //     AppSection.socialPools.includeStr,
+  //     AppSection.socialPools.applicableComponents.map((e) => e.name),
+  //     AppSection.socialPools.convertIdxsToComponentList,
+  //   ),
+  // if (AppSection.news.isConfigureable)
+  //   Qb<List<UiComponent>, String>(
+  //     QuestionQuantifier.appSectionLevel(AppSection.news),
+  //     AppSection.news.includeStr,
+  //     AppSection.news.applicableComponents.map((e) => e.name),
+  //     AppSection.news.convertIdxsToComponentList,
+  //   ),
+  // if (AppSection.leaderboard.isConfigureable)
+  //   Qb<List<UiComponent>, String>(
+  //     QuestionQuantifier.appSectionLevel(AppSection.leaderboard),
+  //     AppSection.leaderboard.includeStr,
+  //     AppSection.leaderboard.applicableComponents.map((e) => e.name),
+  //     AppSection.leaderboard.convertIdxsToComponentList,
+  //   ),
+  // if (AppSection.portfolio.isConfigureable)
+  //   Qb<List<UiComponent>, String>(
+  //     QuestionQuantifier.appSectionLevel(AppSection.portfolio),
+  //     AppSection.portfolio.includeStr,
+  //     AppSection.portfolio.applicableComponents.map((e) => e.name),
+  //     AppSection.portfolio.convertIdxsToComponentList,
+  //   ),
+  // if (AppSection.trading.isConfigureable)
+  //   Qb<List<UiComponent>, String>(
+  //     QuestionQuantifier.appSectionLevel(AppSection.trading),
+  //     AppSection.trading.includeStr,
+  //     AppSection.trading.applicableComponents.map((e) => e.name),
+  //     AppSection.trading.convertIdxsToComponentList,
+  //   ),
+  // if (AppSection.marketResearch.isConfigureable)
+  //   Qb<List<UiComponent>, String>(
+  //     QuestionQuantifier.appSectionLevel(AppSection.marketResearch),
+  //     AppSection.marketResearch.includeStr,
+  //     AppSection.marketResearch.applicableComponents.map((e) => e.name),
+  //     AppSection.marketResearch.convertIdxsToComponentList,
+  //   ),
 ];
 
 //

@@ -1,6 +1,7 @@
 part of EventCfgEnums;
 
 enum QuestCascadeTyp {
+  captureValue,
   alterFutureQuestionList,
   produceVisualRule,
   produceBehavioralRule
@@ -8,6 +9,8 @@ enum QuestCascadeTyp {
 
 extension QuestCascadeTypExt on QuestCascadeTyp {
   //
+  bool get capturesScalarValues => this == QuestCascadeTyp.captureValue;
+
   bool get addsOrDeletesFutureQuestions =>
       this == QuestCascadeTyp.alterFutureQuestionList;
 

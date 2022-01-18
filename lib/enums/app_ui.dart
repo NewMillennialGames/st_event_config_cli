@@ -25,9 +25,10 @@ enum AppSection {
 
 extension AppSectionExt1 on AppSection {
   //
-  String get includeStr =>
-      'Configure ${this.name} section of app? (enter comma delimited list of Idx of UI components to config)';
-  bool get isConfigureable => this.applicableComponents.length > 0;
+  String get includeStr => 'Configure ${this.name} section of app?';
+  bool get isConfigureable =>
+      this.applicableComponents.length > 0 ||
+      this == AppSection.eventConfiguration;
 
   List<UiComponent> convertIdxsToComponentList(String commaLstOfInts) {
     // since we dont show EVERY UiComponent, the choice indexes are offset

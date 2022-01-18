@@ -1,4 +1,4 @@
-part of ConfigDialog;
+part of ConfigDialogRunner;
 
 class DialogTree {
   //
@@ -13,7 +13,7 @@ class DialogTree {
   AppSection get currentSectiontype => currentSectionCfg.appSection;
 
   List<UserResponse> get priorAnswers {
-    // TODO
+    //
     List<UserResponse> lst = [];
     for (DialogSectionCfg s in _sections) {
       //
@@ -22,7 +22,7 @@ class DialogTree {
     return lst;
   }
 
-  void loadDialog() {
+  void loadInitialConversation() {
     //
     _sections = _loadAppUiSections();
     _loadQuestionsForSection();
@@ -33,7 +33,10 @@ class DialogTree {
     for (AppSection s in AppSection.values) {
       l.add(DialogSectionCfg(s));
     }
-    l.sort((a, b) => a.order.compareTo(b.order));
+    // l.sort((a, b) => a.order.compareTo(b.order));
+    // print('AppUiSections:');
+    // var secNameStr = l.fold<String>('', (s, dc) => s + dc.name + ', ');
+    // print(secNameStr);
     return l;
   }
 
