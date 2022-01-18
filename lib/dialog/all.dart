@@ -8,3 +8,4 @@ import '../config/by_section.dart';
 
 part 'tree.dart';
 part 'dialoger.dart';
+part 'section_mgr.dart';

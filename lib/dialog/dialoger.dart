@@ -3,6 +3,7 @@ part of ConfigDialogRunner;
 class Dialoger {
   //
   final DialogTree _tree = DialogTree();
+  late final SectionManager _secMgr;
   final int linesBetweenSections;
   final int linesBetweenQuestions;
   //
@@ -12,7 +13,8 @@ class Dialoger {
     this.linesBetweenSections = 3,
     this.linesBetweenQuestions = 1,
   ]) {
-    _tree.loadInitialConversation();
+    _secMgr = SectionManager(_tree);
+    _secMgr.loadInitialConversation();
   }
 
   List<UserResponse> getPriorAnswersList() {
@@ -27,7 +29,7 @@ class Dialoger {
     // questFormatter manages display output
     final questFormatter = CliQuestionFormatter();
 
-    DialogSectionCfg? section = _tree._getNextSection();
+    DialogSectionCfg? section = _secMgr._getNextSection();
     while (section != null) {
       //
       bool shouldShowSection =
@@ -45,7 +47,7 @@ class Dialoger {
           if (_quest != null) _addEmptyLines();
         }
       }
-      section = _tree._getNextSection();
+      section = _secMgr._getNextSection();
     }
 
     // not every answer-type (generic) has a toString method
@@ -78,7 +80,7 @@ class Dialoger {
   ) {
     //
     var includedQuestions =
-        loadAddlRuleQuestions(_tree.currentSectiontype, uiComp, response);
+        loadAddlRuleQuestions(_secMgr.currentSectiontype, uiComp, response);
     _tree.insertNewQuestions(currQuestIdx, includedQuestions);
   }
 }
