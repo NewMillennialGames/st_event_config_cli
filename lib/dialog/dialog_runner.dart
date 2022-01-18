@@ -77,7 +77,7 @@ class DialogRunner {
     UserResponse<List<UiComponent>> response,
   ) {
     //
-    var includedQuestions = loadAddlSectionQuestions(section, response);
+    var includedQuestions = loadSpecificComponentQuestions(section, response);
     _questMgr.appendQuestions(section, includedQuestions);
   }
 
@@ -86,10 +86,15 @@ class DialogRunner {
     UserResponse<List<VisualRuleType>> response,
   ) {
     //
-    var includedQuestions = loadAddlRuleQuestions(
-        _questGroupMgr.currentSectiontype, uiComp, response);
+    var includedQuestions = fabricateVisualRuleQuestions(
+      _questGroupMgr.currentSectiontype,
+      uiComp,
+      response,
+    );
     _questMgr.appendQuestions(
-        _questGroupMgr.currentSectiontype, includedQuestions);
+      _questGroupMgr.currentSectiontype,
+      includedQuestions,
+    );
   }
 
   void generateAssociatedBehRuleTypeQuestions(

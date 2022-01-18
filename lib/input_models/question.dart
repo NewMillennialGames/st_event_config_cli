@@ -26,7 +26,10 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
     this.dynamicFromPriorState = false,
   });
   // getters
+  bool get isRuleQuestion => false;
   AppSection get appSection => qQant.appSection;
+  UiComponent? get uiComponent => qQant.uiCompInSection;
+
   List<String>? get choices => answerChoices?.toList();
   bool get hasChoices => (answerChoices?.length ?? 0) > 0;
   bool get capturesScalarValues => qQant.capturesScalarValues;
@@ -133,15 +136,6 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
   }
 
   // next two methods are for possible future usage?
-  void _deriveFromPriorAnswers(List<UserResponse> answers) {
-    /* 
-    some questions need to review prior state
-    before we know their shape or whether they
-    should even be asked
-    */
-    this.shouldSkip = true;
-  }
-
   void _configSelfIfNecessary(PriorAnswersCallback getPriorAnswersList) {
     // some questions are based on what answers came before
     if (dynamicFromPriorState) {
@@ -149,6 +143,15 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
       //     'this question needs to examine prior answers to decide what to ask');
       _deriveFromPriorAnswers(getPriorAnswersList());
     }
+  }
+
+  void _deriveFromPriorAnswers(List<UserResponse> answers) {
+    /* 
+    some questions need to review prior state
+    before we know their shape or whether they
+    should even be asked
+    */
+    this.shouldSkip = true;
   }
 
   // impl for equatable

@@ -11,23 +11,36 @@ abstract class AppConfigRule {
   AppConfigRule._();
 
   factory AppConfigRule.filter(
-    DbRowType recType,
-    String propertyName,
-    MenuSortOrGroupIndex menuIdx, {
-    bool sortDescending = true,
-  }) =>
+    PropertyMap pm,
+    // DbRowType recType,
+    // String propertyName,
+    // MenuSortOrGroupIndex menuIdx, {
+    // bool sortDescending = true,
+  ) =>
       FilterRule(
-        recType,
-        propertyName,
-        menuIdx: menuIdx,
-        sortDescending: sortDescending,
+        pm.recType,
+        pm.propertyName,
+        menuIdx: pm.menuIdx,
+        sortDescending: pm.sortDescending,
       );
   // visual and styling rules
-  factory AppConfigRule.format() => FormatRule();
-  factory AppConfigRule.group() => GroupRule();
-  factory AppConfigRule.show() => ShowRule();
-  factory AppConfigRule.sort() => SortRule();
-  // behavioral rules
+  factory AppConfigRule.format(
+    PropertyMap pm,
+  ) =>
+      FormatRule();
+  factory AppConfigRule.group(
+    PropertyMap pm,
+  ) =>
+      GroupRule();
+  factory AppConfigRule.show(
+    PropertyMap pm,
+  ) =>
+      ShowRule();
+  factory AppConfigRule.sort(
+    PropertyMap pm,
+  ) =>
+      SortRule();
+  // behavioral rules;  future
   factory AppConfigRule.navigate() => NavigateRule();
 
   // interface

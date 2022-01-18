@@ -2,15 +2,29 @@ import '../input_models/all.dart';
 import '../enums/all.dart';
 import './strings.dart';
 
-// List<Question> _questionLst = [];
+typedef Qb<ConvertTyp, AnsTyp> = Question<ConvertTyp, AnsTyp>;
 
 // public api
 List<Question> loadQuestionsForSection(AppSection appSection) {
   // List<Question> _questionLst = _getQuestionList();
-  return _questionLst.where((qb) => qb.appSection == appSection).toList();
+  return _questionLst
+      .where((qb) => qb.appSection == appSection && qb.uiComponent == null)
+      .toList();
 }
 
-typedef Qb<ConvertTyp, AnsTyp> = Question<ConvertTyp, AnsTyp>;
+List<Question> loadSpecificComponentQuestions(
+  AppSection section,
+  UserResponse<List<UiComponent>> response,
+) {
+  // load questions about components in section
+  List<UiComponent> relatedComponentsToConfigure = response.answers;
+  List<Question> newQuestions = _questionLst
+      .where((q) =>
+          q.appSection == section &&
+          relatedComponentsToConfigure.contains(q.uiComponent))
+      .toList();
+  return newQuestions;
+}
 
 // accumulate configuration data
 final List<Question> _questionLst = [
@@ -81,14 +95,15 @@ final List<Question> _questionLst = [
       AppSection.marketView.applicableComponents.map((e) => e.name),
       AppSection.marketView.convertIdxsToComponentList,
     ),
-  for (UiComponent uic in AppSection.marketView.applicableComponents)
-    for (VisualRuleType rt in uic.applicableRuleTypes)
-      Qb<String, bool>(
-        QuestionQuantifier.uiComponentLevel(AppSection.marketView, uic),
-        'Want to configure ${rt.name}',
-        null,
-        null,
-      ),
+  if (AppSection.marketView.isConfigureable)
+    for (UiComponent uic in AppSection.marketView.applicableComponents)
+      for (VisualRuleType rt in uic.applicableRuleTypes)
+        Qb<String, bool>(
+          QuestionQuantifier.uiComponentLevel(AppSection.marketView, uic),
+          'Want to configure ${rt.name} on ${uic.name}?',
+          null,
+          (yOrN) => yOrN.toUpperCase().startsWith('Y'),
+        ),
 ];
 
 

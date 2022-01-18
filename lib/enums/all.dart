@@ -1,10 +1,10 @@
 library EventCfgEnums;
 
-// import 'dart:async';
+import '../rules/rule.dart';
 
 part 'shape_event.dart';
 part 'rule_type.dart';
-part 'db_row_type.dart';
+part 'db_tables_properties.dart';
 part 'competition_style.dart';
 part 'app_ui.dart';
 part 'component_properties.dart';
