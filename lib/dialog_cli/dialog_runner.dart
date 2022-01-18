@@ -1,9 +1,17 @@
 part of ConfigDialogRunner;
 
 class DialogRunner {
-  //
-  final DialogQuestMgr _questMgr = DialogQuestMgr();
-  late final QuestionGroupMgr _questGroupMgr;
+  /* actually runs the conversation
+
+  the top-level obj that coordinates:
+    DialogMgr
+    QuestListMgr
+    CliQuestionFormatter
+    
+  to produce CLI output to the user
+  */
+  final QuestListMgr _questMgr = QuestListMgr();
+  late final DialogMgr _questGroupMgr;
   final int linesBetweenSections;
   final int linesBetweenQuestions;
   //
@@ -13,7 +21,7 @@ class DialogRunner {
     this.linesBetweenSections = 3,
     this.linesBetweenQuestions = 1,
   ]) {
-    _questGroupMgr = QuestionGroupMgr(_questMgr);
+    _questGroupMgr = DialogMgr(_questMgr);
     _questGroupMgr.loadBeginningDialog();
   }
 

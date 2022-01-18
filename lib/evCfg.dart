@@ -5,7 +5,7 @@ import 'dart:core';
 import 'package:args/args.dart';
 //
 // import 'models.dart';
-import 'dialog/all.dart';
+import 'dialog_cli/all.dart';
 /*
   check ReadMe.MD
 */

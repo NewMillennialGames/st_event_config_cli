@@ -1,4 +1,4 @@
-part of EventCfgEnums;
+part of AppEntities;
 
 enum UiComponentSlotName {
   /*  key to describing field-name

@@ -1,6 +1,6 @@
 part of ConfigDialogRunner;
 
-class DialogQuestMgr {
+class QuestListMgr {
   /*
     does nothing but track and manage the full
     list of questions, both pending and completed/answered
@@ -11,7 +11,7 @@ class DialogQuestMgr {
   Map<AppSection, List<Question>> _answeredQuestsBySection = {};
 
   // constructor
-  DialogQuestMgr();
+  QuestListMgr();
 
   //
   Question get _currentOrLastQuestion => _pendingQuestions[_currQuestionIdx];

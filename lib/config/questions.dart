@@ -1,8 +1,4 @@
-import '../input_models/all.dart';
-import '../enums/all.dart';
-import './strings.dart';
-
-typedef Qb<ConvertTyp, AnsTyp> = Question<ConvertTyp, AnsTyp>;
+part of QuestConfig;
 
 // public api
 List<Question> loadQuestionsForSection(AppSection appSection) {

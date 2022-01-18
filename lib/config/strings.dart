@@ -1,3 +1,5 @@
+part of QuestConfig;
+
 class DlgStr {
   //
   static String eventName = 'Enter Event Template Name';

@@ -7,8 +7,8 @@ import 'package:equatable/equatable.dart';
 //
 import '../util/type_cast.dart';
 import '../enums/all.dart';
-import '../dialog/all.dart';
-// import '../config/questions.dart';
+import '../dialog_cli/all.dart';
+import '../app_entities/all.dart';
 //
 
 // part '../rules/rule.g.dart';

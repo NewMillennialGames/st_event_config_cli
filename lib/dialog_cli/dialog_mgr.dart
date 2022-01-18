@@ -1,13 +1,16 @@
 part of ConfigDialogRunner;
 
-class QuestionGroupMgr {
-  //
+class DialogMgr {
+  /*
+    keeps track of Dialog Sections (aka groups of related questions)
+    and also coordinates (stays in sync with) the QuestListMgr
+  */
+  final QuestListMgr _questMgr;
   List<DialogSectionCfg> _sections = [];
   int _currSectionIdx = -1;
-  DialogQuestMgr _questMgr;
 
   // constructor
-  QuestionGroupMgr(this._questMgr);
+  DialogMgr(this._questMgr);
 
   //
   DialogSectionCfg get _currentSectionCfg => _sections[_currSectionIdx];

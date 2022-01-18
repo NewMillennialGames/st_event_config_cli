@@ -1,8 +1,6 @@
-import '../enums/all.dart';
-import '../input_models/all.dart';
-// import '../rules/rule.dart';
+part of QuestConfig;
 
-typedef Qb<ConvertTyp, AnsTyp> = Question<ConvertTyp, AnsTyp>;
+// import '../rules/rule.dart';
 
 //
 List<Question> fabricateVisualRuleQuestions(
