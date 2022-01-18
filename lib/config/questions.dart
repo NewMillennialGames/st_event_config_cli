@@ -6,7 +6,7 @@ import '../enums/all.dart';
 // public api
 List<Question> loadQuestionsForSection(AppSection appSection) {
   // List<Question> _questionLst = _getQuestionList();
-  return _questionLst.where((qb) => qb.section == appSection).toList();
+  return _questionLst.where((qb) => qb.appSection == appSection).toList();
 }
 
 typedef Qb<ConvertTyp, AnsTyp> = Question;
@@ -69,7 +69,30 @@ final List<Question> _questionLst = [
     EvEliminationStrategy.values.map((e) => e.name),
     (i) => EvEliminationStrategy.values[i],
   ),
-  // sections are asked automatically;
+  // top sections are asked automatically;
+  // and if user proceeds, then we ask them
+  // which UI components in the section they want to configure
+];
+
+//
+// List<Question> _getQuestionList() {
+//   // first run will store data in a global
+//   if (_questionLst.length > 4) return _questionLst;
+
+//   int qNum = 0;
+//   for (Qb q in _questData) {
+//     qNum += 1;
+//     _questionLst.add(Question(
+//       qNum,
+//       q,
+//     ));
+//   }
+//   return _questionLst;
+// }
+
+
+
+
   // we don't need defined questions for them
 
   // if (AppSection.eventSelection.isConfigureable)
@@ -135,20 +158,3 @@ final List<Question> _questionLst = [
   //     AppSection.marketResearch.applicableComponents.map((e) => e.name),
   //     AppSection.marketResearch.convertIdxsToComponentList,
   //   ),
-];
-
-//
-// List<Question> _getQuestionList() {
-//   // first run will store data in a global
-//   if (_questionLst.length > 4) return _questionLst;
-
-//   int qNum = 0;
-//   for (Qb q in _questData) {
-//     qNum += 1;
-//     _questionLst.add(Question(
-//       qNum,
-//       q,
-//     ));
-//   }
-//   return _questionLst;
-// }

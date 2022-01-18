@@ -8,7 +8,7 @@ List<Question> loadAddlSectionQuestions(
   UserResponse<List<UiComponent>> response,
 ) {
   List<Qb> newQuestions = _questData[section] ?? [];
-  newQuestions = newQuestions.where((qb) => qb.section == section).toList();
+  newQuestions = newQuestions.where((qb) => qb.appSection == section).toList();
   if (newQuestions.length < 1) return [];
 
   List<Question> lst = [];

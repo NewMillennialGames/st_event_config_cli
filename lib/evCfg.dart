@@ -31,7 +31,7 @@ Future<void> main(List<String> arguments) async {
   // add clear lines
   print('\n' * 2);
 
-  final dialoger = Dialoger();
+  final dialoger = DialogRunner();
   final res = dialoger.loopUntilComplete();
 
   stdout.writeln("Done:\n");

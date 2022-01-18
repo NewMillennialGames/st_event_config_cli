@@ -3,8 +3,9 @@ part of CfgInputModels;
 class DialogSectionCfg {
   //
   AppSection appSection;
+  int _questionCount = 0;
   int _processedQuestCount = 0;
-  List<Question> _questions = [];
+
   int currQuestIdx = -1;
 
   DialogSectionCfg(this.appSection);
@@ -13,26 +14,8 @@ class DialogSectionCfg {
   int get order => appSection.index;
   String get name => appSection.name;
 
-  List<UserResponse> get priorAnswers {
-    // skip questions where user-response is null
-    return _questions
-        .sublist(0, currQuestIdx - 1)
-        .map((q) => q.response)
-        .whereType<UserResponse>()
-        .toList();
-  }
-
-  void loadQuestions() {
-    //
-    _questions = loadQuestionsForSection(appSection);
-    // print('Section $name loaded ${_questions.length} questions');
-    // for (Question q in _questions) {
-    //   print('${q.questionId}: ${q.question}');
-    // }
-  }
-
-  void appendQuestions(int idx, List<Question> newQuestions) {
-    _questions.addAll(newQuestions);
+  set questionCount(int _questionCount) {
+    this._questionCount = _questionCount;
   }
 
   bool askIfNeeded() {
@@ -44,10 +27,32 @@ class DialogSectionCfg {
     return userResp.toUpperCase().startsWith('Y');
   }
 
-  Question? getNextQuestion() {
-    ++currQuestIdx;
-    if (currQuestIdx >= _questions.length) return null;
+  // List<UserResponse> get priorAnswers {
+  //   // skip questions where user-response is null
+  //   return _questions
+  //       .sublist(0, currQuestIdx - 1)
+  //       .map((q) => q.response)
+  //       .whereType<UserResponse>()
+  //       .toList();
+  // }
 
-    return _questions[currQuestIdx];
-  }
+  // void loadQuestions() {
+  //   //
+  //   _questions = loadQuestionsForSection(appSection);
+  //   // print('Section $name loaded ${_questions.length} questions');
+  //   // for (Question q in _questions) {
+  //   //   print('${q.questionId}: ${q.question}');
+  //   // }
+  // }
+
+  // void appendQuestions(int idx, List<Question> newQuestions) {
+  //   _questions.addAll(newQuestions);
+  // }
+
+  // Question? getNextQuestion() {
+  //   ++currQuestIdx;
+  //   if (currQuestIdx >= _questions.length) return null;
+
+  //   return _questions[currQuestIdx];
+  // }
 }

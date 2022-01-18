@@ -72,30 +72,28 @@ class Question<ConvertTyp, AnsTyp> {
     this.dynamicFromPriorState = false,
   });
   // getters
-  // String get question => _quest.question;
-  // AppSection get section => _quest.section;
-  // List<String>? get choices => _quest.answerChoices?.toList();
-  // CastUserInputToTyp<ConvertTyp, AnsTyp>? get castFunc => _quest.castFunc;
-
-  // int get defaultAnswerIdx => _quest.defaultAnswerIdx;
-  AppSection get section => qq.appSection;
+  AppSection get appSection => qq.appSection;
   List<String>? get choices => answerChoices?.toList();
   bool get hasChoices => (answerChoices?.length ?? 0) > 0;
   bool get capturesScalarValues => qq.capturesScalarValues;
   bool get addsOrDeletesFutureQuestions => qq.addsOrDeletesFutureQuestions;
   bool get producesVisualRules => qq.producesVisualRules;
   bool get producesBehavioralRules => qq.producesBehavioralRules;
-  // bool get acceptsMultiResponses => _quest.acceptsMultiResponses;
-
   // building other questions based on prior answers
   bool get generatesScreenComponentQuestions =>
       addsOrDeletesFutureQuestions && AnsTyp is List<UiComponent>;
-  bool get generatesRuleTypeQuestions =>
-      addsOrDeletesFutureQuestions && AnsTyp is List<VisualRuleType>;
+  bool get generatesVisRuleTypeQuestions =>
+      addsOrDeletesFutureQuestions &&
+      qq.uiCompInSection != null &&
+      AnsTyp is List<VisualRuleType>;
+  bool get generatesBehRuleTypeQuestions =>
+      addsOrDeletesFutureQuestions &&
+      qq.uiCompInSection != null &&
+      AnsTyp is List<BehaviorRuleType>;
 
-  void askAndWait(Dialoger dialoger) {
+  void askAndWait(DialogRunner dlogRunner) {
     //
-    _configSelfIfNecessary(dialoger.getPriorAnswersList);
+    _configSelfIfNecessary(dlogRunner.getPriorAnswersList);
 
     String? userResp = stdin.readLineSync();
     print("You entered: '$userResp'");
@@ -127,29 +125,7 @@ class Question<ConvertTyp, AnsTyp> {
     }
     this.response = UserResponse<AnsTyp>(derivedUserResponse);
     print("You entered: '$userResp' and ${derivedUserResponse.toString()}");
-
-    if (this.generatesScreenComponentQuestions) {
-      //
-      dialoger.generateAssociatedUiComponentQuestions(
-        section,
-        this.response as UserResponse<List<UiComponent>>,
-      );
-    } else if (this.generatesRuleTypeQuestions) {
-      //
-      dialoger.generateAssociatedUiRuleTypeQuestions(
-        UiComponent.banner,
-        this.response as UserResponse<List<VisualRuleType>>,
-      );
-    }
-  }
-
-  void _configSelfIfNecessary(PriorAnswersCallback getPriorAnswersList) {
-    // some questions are based on what answers came before
-    if (dynamicFromPriorState) {
-      assert(getPriorAnswersList != null,
-          'this question needs to examine prior answers to decide what to ask');
-      deriveFromPriorAnswers(getPriorAnswersList());
-    }
+    _handleCreatingNewQuestions(dlogRunner);
   }
 
   AnsTyp? _castResponseToAnswer(ConvertTyp convertibleVal) {
@@ -179,12 +155,44 @@ class Question<ConvertTyp, AnsTyp> {
     return answer;
   }
 
-  void deriveFromPriorAnswers(List<UserResponse> answers) {
+  void _handleCreatingNewQuestions(DialogRunner dlogRunner) {
+    //
+    if (this.generatesScreenComponentQuestions) {
+      //
+      dlogRunner.generateAssociatedUiComponentQuestions(
+        appSection,
+        this.response as UserResponse<List<UiComponent>>,
+      );
+    } else if (this.generatesVisRuleTypeQuestions) {
+      //
+      dlogRunner.generateAssociatedUiRuleTypeQuestions(
+        this.qq.uiCompInSection!,
+        this.response as UserResponse<List<VisualRuleType>>,
+      );
+    } else if (this.generatesBehRuleTypeQuestions) {
+      //
+      dlogRunner.generateAssociatedBehRuleTypeQuestions(
+        this.qq.uiCompInSection!,
+        this.response as UserResponse<List<BehaviorRuleType>>,
+      );
+    }
+  }
+
+  void _deriveFromPriorAnswers(List<UserResponse> answers) {
     /* 
     some questions need to review prior state
     before we know their shape or whether they
     should even be asked
     */
     this.shouldSkip = true;
+  }
+
+  void _configSelfIfNecessary(PriorAnswersCallback getPriorAnswersList) {
+    // some questions are based on what answers came before
+    if (dynamicFromPriorState) {
+      assert(getPriorAnswersList != null,
+          'this question needs to examine prior answers to decide what to ask');
+      _deriveFromPriorAnswers(getPriorAnswersList());
+    }
   }
 }

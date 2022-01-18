@@ -11,7 +11,7 @@ class CliQuestionFormatter {
   CliQuestionFormatter();
 
   bool askSectionQuestionAndWaitForUserResponse(
-    Dialoger dialoger,
+    DialogRunner dialoger,
     DialogSectionCfg sectionCfg,
   ) {
     if (sectionCfg.appSection == AppSection.eventConfiguration) return true;
@@ -20,7 +20,7 @@ class CliQuestionFormatter {
   }
 
   void askAndWaitForUserResponse(
-    Dialoger dialoger,
+    DialogRunner dialoger,
     Question quest,
   ) {
     _printQuestion(quest);
