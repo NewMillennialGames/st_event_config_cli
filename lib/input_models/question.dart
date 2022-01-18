@@ -4,54 +4,8 @@ typedef CastUserInputToTyp<InputTyp, AnsTyp> = AnsTyp Function(InputTyp input);
 // to load prior answers for some questions
 typedef PriorAnswersCallback = List<UserResponse> Function();
 
-// class Qb<ConvertTyp, AnsTyp> {
-//   // Qb == question body
-//   // simple class to hold question data
-//   // ConvertTyp == data-type of user response (string or int from CLI)
-//   // ConvertTyp may be different for the web UI
-//   // AnsTyp == real answer data-type after conversion of ConvertTyp
-
-//   QuestionQuantifier qq;
-//   String question;
-//   Iterable<String>? answerChoices;
-//   CastUserInputToTyp<ConvertTyp, AnsTyp>? castFunc;
-//   int defaultAnswerIdx;
-//   bool dynamicFromPriorState;
-//   bool shouldSkip = false;
-//   bool acceptsMultiResponses = false;
-
-//   Qb(
-//     this.qq,
-//     this.question,
-//     this.answerChoices,
-//     this.castFunc, {
-//     this.defaultAnswerIdx = 1,
-//     this.dynamicFromPriorState = false,
-//   });
-
-//   // getters
-//   AppSection get section => qq.appSection;
-//   UiComponent? get uiComp => qq.uiCompInSection;
-//   bool get capturesScalarValues => qq.capturesScalarValues;
-//   bool get addsOrDeletesFutureQuestions => qq.addsOrDeletesFutureQuestions;
-//   bool get producesVisualRules => qq.producesVisualRules;
-//   bool get producesBehavioralRules => qq.producesBehavioralRules;
-//   Type get convertType => ConvertTyp;
-//   // Type get convertType => typeOf<ConvertTyp>();
-//   Type get answerType => AnsTyp;
-
-//   void deriveFromPriorAnswers(List<UserResponse> answers) {
-//     /*
-//     some questions need to review prior state
-//     before we know their shape or whether they
-//     should even be asked
-//     */
-//     this.shouldSkip = true;
-//   }
-// }
-
-class Question<ConvertTyp, AnsTyp> {
-  final QuestionQuantifier qq;
+class Question<ConvertTyp, AnsTyp> extends Equatable {
+  final QuestionQuantifier qQant;
   final String question;
   final Iterable<String>? answerChoices;
   final CastUserInputToTyp<ConvertTyp, AnsTyp>? castFunc;
@@ -64,7 +18,7 @@ class Question<ConvertTyp, AnsTyp> {
   UserResponse<AnsTyp>? response;
 
   Question(
-    this.qq,
+    this.qQant,
     this.question,
     this.answerChoices,
     this.castFunc, {
@@ -72,23 +26,23 @@ class Question<ConvertTyp, AnsTyp> {
     this.dynamicFromPriorState = false,
   });
   // getters
-  AppSection get appSection => qq.appSection;
+  AppSection get appSection => qQant.appSection;
   List<String>? get choices => answerChoices?.toList();
   bool get hasChoices => (answerChoices?.length ?? 0) > 0;
-  bool get capturesScalarValues => qq.capturesScalarValues;
-  bool get addsOrDeletesFutureQuestions => qq.addsOrDeletesFutureQuestions;
-  bool get producesVisualRules => qq.producesVisualRules;
-  bool get producesBehavioralRules => qq.producesBehavioralRules;
+  bool get capturesScalarValues => qQant.capturesScalarValues;
+  bool get addsOrDeletesFutureQuestions => qQant.addsOrDeletesFutureQuestions;
+  bool get producesVisualRules => qQant.producesVisualRules;
+  bool get producesBehavioralRules => qQant.producesBehavioralRules;
   // building other questions based on prior answers
   bool get generatesScreenComponentQuestions =>
       addsOrDeletesFutureQuestions && AnsTyp is List<UiComponent>;
   bool get generatesVisRuleTypeQuestions =>
       addsOrDeletesFutureQuestions &&
-      qq.uiCompInSection != null &&
+      qQant.uiCompInSection != null &&
       AnsTyp is List<VisualRuleType>;
   bool get generatesBehRuleTypeQuestions =>
       addsOrDeletesFutureQuestions &&
-      qq.uiCompInSection != null &&
+      qQant.uiCompInSection != null &&
       AnsTyp is List<BehaviorRuleType>;
 
   void askAndWait(DialogRunner dlogRunner) {
@@ -166,18 +120,19 @@ class Question<ConvertTyp, AnsTyp> {
     } else if (this.generatesVisRuleTypeQuestions) {
       //
       dlogRunner.generateAssociatedUiRuleTypeQuestions(
-        this.qq.uiCompInSection!,
+        this.qQant.uiCompInSection!,
         this.response as UserResponse<List<VisualRuleType>>,
       );
     } else if (this.generatesBehRuleTypeQuestions) {
       //
       dlogRunner.generateAssociatedBehRuleTypeQuestions(
-        this.qq.uiCompInSection!,
+        this.qQant.uiCompInSection!,
         this.response as UserResponse<List<BehaviorRuleType>>,
       );
     }
   }
 
+  // next two methods are for possible future usage?
   void _deriveFromPriorAnswers(List<UserResponse> answers) {
     /* 
     some questions need to review prior state
@@ -190,9 +145,64 @@ class Question<ConvertTyp, AnsTyp> {
   void _configSelfIfNecessary(PriorAnswersCallback getPriorAnswersList) {
     // some questions are based on what answers came before
     if (dynamicFromPriorState) {
-      assert(getPriorAnswersList != null,
-          'this question needs to examine prior answers to decide what to ask');
+      // assert(getPriorAnswersList != null,
+      //     'this question needs to examine prior answers to decide what to ask');
       _deriveFromPriorAnswers(getPriorAnswersList());
     }
   }
+
+  // impl for equatable
+  // but really being used as a search filter
+  // to find questions in a specific granularity
+  @override
+  List<Object> get props => [qQant];
+
+  @override
+  bool get stringify => true;
 }
+
+// class Qb<ConvertTyp, AnsTyp> {
+//   // Qb == question body
+//   // simple class to hold question data
+//   // ConvertTyp == data-type of user response (string or int from CLI)
+//   // ConvertTyp may be different for the web UI
+//   // AnsTyp == real answer data-type after conversion of ConvertTyp
+
+//   QuestionQuantifier qq;
+//   String question;
+//   Iterable<String>? answerChoices;
+//   CastUserInputToTyp<ConvertTyp, AnsTyp>? castFunc;
+//   int defaultAnswerIdx;
+//   bool dynamicFromPriorState;
+//   bool shouldSkip = false;
+//   bool acceptsMultiResponses = false;
+
+//   Qb(
+//     this.qq,
+//     this.question,
+//     this.answerChoices,
+//     this.castFunc, {
+//     this.defaultAnswerIdx = 1,
+//     this.dynamicFromPriorState = false,
+//   });
+
+//   // getters
+//   AppSection get section => qq.appSection;
+//   UiComponent? get uiComp => qq.uiCompInSection;
+//   bool get capturesScalarValues => qq.capturesScalarValues;
+//   bool get addsOrDeletesFutureQuestions => qq.addsOrDeletesFutureQuestions;
+//   bool get producesVisualRules => qq.producesVisualRules;
+//   bool get producesBehavioralRules => qq.producesBehavioralRules;
+//   Type get convertType => ConvertTyp;
+//   // Type get convertType => typeOf<ConvertTyp>();
+//   Type get answerType => AnsTyp;
+
+//   void deriveFromPriorAnswers(List<UserResponse> answers) {
+//     /*
+//     some questions need to review prior state
+//     before we know their shape or whether they
+//     should even be asked
+//     */
+//     this.shouldSkip = true;
+//   }
+// }

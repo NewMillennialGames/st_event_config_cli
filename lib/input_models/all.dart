@@ -2,6 +2,7 @@ library CfgInputModels;
 
 import "dart:io";
 import 'package:collection/collection.dart';
+import 'package:equatable/equatable.dart';
 // import 'package:json_annotation/json_annotation.dart';
 //
 import '../util/type_cast.dart';

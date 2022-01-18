@@ -1,5 +1,6 @@
 import '../input_models/all.dart';
 import '../enums/all.dart';
+import './strings.dart';
 
 // List<Question> _questionLst = [];
 
@@ -9,7 +10,7 @@ List<Question> loadQuestionsForSection(AppSection appSection) {
   return _questionLst.where((qb) => qb.appSection == appSection).toList();
 }
 
-typedef Qb<ConvertTyp, AnsTyp> = Question;
+typedef Qb<ConvertTyp, AnsTyp> = Question<ConvertTyp, AnsTyp>;
 
 // accumulate configuration data
 final List<Question> _questionLst = [
@@ -29,50 +30,70 @@ final List<Question> _questionLst = [
   */
   Qb<String, String>(
     QuestionQuantifier.eventLevel(),
-    'Enter Event Template Name',
+    DlgStr.eventName,
     null,
     null,
   ),
   Qb<String, String>(
     QuestionQuantifier.eventLevel(),
-    'Enter Event Template Descrip',
+    DlgStr.eventDescrip,
     null,
     null,
   ),
   Qb<int, EvType>(
     QuestionQuantifier.eventLevel(),
-    'Select Event Type',
+    DlgStr.eventType,
     EvType.values.map((e) => e.name),
     (i) => EvType.values[i],
   ),
   Qb<int, EvCompetitorType>(
     QuestionQuantifier.eventLevel(),
-    'Whos competing .. what will be traded',
+    DlgStr.eventWhosCompeting,
     EvCompetitorType.values.map((e) => e.name),
     (i) => EvCompetitorType.values[i],
   ),
   Qb<int, EvOpponentType>(
     QuestionQuantifier.eventLevel(),
-    'Who are they playing against',
+    DlgStr.eventCompPlayAgainst,
     EvOpponentType.values.map((e) => e.name),
     (i) => EvOpponentType.values[i],
   ),
   Qb<int, EvDuration>(
     QuestionQuantifier.eventLevel(),
-    'How long will event last',
+    DlgStr.eventDuration,
     EvDuration.values.map((e) => e.name),
     (i) => EvDuration.values[i],
   ),
   Qb<int, EvEliminationStrategy>(
     QuestionQuantifier.eventLevel(),
-    'How does competitor elimination work',
+    DlgStr.eventEliminationStrategy,
     EvEliminationStrategy.values.map((e) => e.name),
     (i) => EvEliminationStrategy.values[i],
   ),
   // top sections are asked automatically;
   // and if user proceeds, then we ask them
   // which UI components in the section they want to configure
+
+  if (AppSection.marketView.isConfigureable)
+    Qb<String, List<UiComponent>>(
+      QuestionQuantifier.appSectionLevel(AppSection.marketView),
+      AppSection.marketView.includeStr,
+      AppSection.marketView.applicableComponents.map((e) => e.name),
+      AppSection.marketView.convertIdxsToComponentList,
+    ),
+  for (UiComponent uic in AppSection.marketView.applicableComponents)
+    for (VisualRuleType rt in uic.applicableRuleTypes)
+      Qb<String, bool>(
+        QuestionQuantifier.uiComponentLevel(AppSection.marketView, uic),
+        'Want to configure ${rt.name}',
+        null,
+        null,
+      ),
 ];
+
+
+
+
 
 //
 // List<Question> _getQuestionList() {
@@ -109,13 +130,7 @@ final List<Question> _questionLst = [
   //     AppSection.poolSelection.applicableComponents.map((e) => e.name),
   //     AppSection.poolSelection.convertIdxsToComponentList,
   //   ),
-  // if (AppSection.marketView.isConfigureable)
-  //   Qb<List<UiComponent>, String>(
-  //     QuestionQuantifier.appSectionLevel(AppSection.marketView),
-  //     AppSection.marketView.includeStr,
-  //     AppSection.marketView.applicableComponents.map((e) => e.name),
-  //     AppSection.marketView.convertIdxsToComponentList,
-  //   ),
+
   // if (AppSection.socialPools.isConfigureable)
   //   Qb<List<UiComponent>, String>(
   //     QuestionQuantifier.appSectionLevel(AppSection.socialPools),
