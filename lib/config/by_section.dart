@@ -1,6 +1,8 @@
 import '../enums/all.dart';
 import '../input_models/all.dart';
 
+typedef Qb<ConvertTyp, AnsTyp> = Question;
+
 List<Question> loadAddlSectionQuestions(
   AppSection section,
   UserResponse<List<UiComponent>> response,
@@ -11,7 +13,7 @@ List<Question> loadAddlSectionQuestions(
 
   List<Question> lst = [];
   for (Qb q in newQuestions) {
-    lst.add(Question(0, q));
+    // lst.add(Question(0, q));
   }
   return lst;
 }
@@ -23,14 +25,14 @@ List<Question> loadAddlRuleQuestions(
   UserResponse<List<VisualRuleType>> response,
 ) {
   List<Qb> newQuestions = _questData[section] ?? [];
-  newQuestions = newQuestions
-      .where((qb) => qb.uiComp != null && qb.uiComp == uiComp)
-      .toList();
+  // newQuestions = newQuestions
+  //     .where((qb) => qb.uiComp != null && qb.uiComp == uiComp)
+  //     .toList();
   if (newQuestions.length < 1) return [];
 
   List<Question> lst = [];
   for (Qb q in newQuestions) {
-    lst.add(Question(0, q));
+    // lst.add(Question(0, q));
   }
   return lst;
 }
@@ -50,15 +52,15 @@ final Map<AppSection, List<Qb>> _questData = {
     but then I'd have more boilerplate in ALL
     of my Qb.castFunc code
   */
-  AppSection.eventSelection: [
-    if (AppSection.eventSelection.isConfigureable)
-      ...AppSection.eventSelection.applicableComponents.map((uiComp) {
-        return Qb<String, List<VisualRuleType>>(
-          QuestionQuantifier.appSectionLevel(AppSection.eventSelection),
-          uiComp.includeStr(AppSection.eventSelection),
-          uiComp.applicableRuleTypes.map((e) => e.name),
-          uiComp.convertIdxsToRuleList,
-        );
-      }),
-  ],
+  // AppSection.eventSelection: [
+  //   if (AppSection.eventSelection.isConfigureable)
+  //     ...AppSection.eventSelection.applicableComponents.map((uiComp) {
+  //       return Qb<String, List<VisualRuleType>>(
+  //         QuestionQuantifier.appSectionLevel(AppSection.eventSelection),
+  //         uiComp.includeStr(AppSection.eventSelection),
+  //         uiComp.applicableRuleTypes.map((e) => e.name),
+  //         uiComp.convertIdxsToRuleList,
+  //       );
+  //     }),
+  // ],
 };

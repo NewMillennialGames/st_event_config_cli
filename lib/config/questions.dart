@@ -1,16 +1,18 @@
 import '../input_models/all.dart';
 import '../enums/all.dart';
 
-List<Question> _questionLst = [];
+// List<Question> _questionLst = [];
 
 // public api
 List<Question> loadQuestionsForSection(AppSection appSection) {
-  List<Question> _questionLst = _getQuestionList();
+  // List<Question> _questionLst = _getQuestionList();
   return _questionLst.where((qb) => qb.section == appSection).toList();
 }
 
+typedef Qb<ConvertTyp, AnsTyp> = Question;
+
 // accumulate configuration data
-final List<Qb> _questData = [
+final List<Question> _questionLst = [
   /*  
     eventConfiguration questions list below
 
@@ -136,17 +138,17 @@ final List<Qb> _questData = [
 ];
 
 //
-List<Question> _getQuestionList() {
-  // first run will store data in a global
-  if (_questionLst.length > 4) return _questionLst;
+// List<Question> _getQuestionList() {
+//   // first run will store data in a global
+//   if (_questionLst.length > 4) return _questionLst;
 
-  int qNum = 0;
-  for (Qb q in _questData) {
-    qNum += 1;
-    _questionLst.add(Question(
-      qNum,
-      q,
-    ));
-  }
-  return _questionLst;
-}
+//   int qNum = 0;
+//   for (Qb q in _questData) {
+//     qNum += 1;
+//     _questionLst.add(Question(
+//       qNum,
+//       q,
+//     ));
+//   }
+//   return _questionLst;
+// }
