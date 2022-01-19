@@ -80,6 +80,25 @@ final List<Question> _questionLst = [
     EvEliminationStrategy.values.map((e) => e.name),
     (i) => EvEliminationStrategy.values[i],
   ),
+  Qb<String, List<AppSection>>(
+    QuestionQuantifier.eventLevel(),
+    'Which app areas shall we configure?',
+    AppSection.eventConfiguration.sectionConfigOptions.map((e) => e.name),
+    (String strLstIdxs) {
+      //
+      List<int> _sectionIds = strLstIdxs
+          .split(',')
+          .map((e) => int.tryParse(e) ?? -1)
+          .where((i) => i >= 0)
+          .toList();
+      return _sectionIds
+          .map((idx) =>
+              AppSection.eventConfiguration.sectionConfigOptions[idx + 1])
+          .toList();
+    },
+    acceptsMultiResponses: true,
+    generatesNewQuestions: true,
+  ),
   // top sections are asked automatically;
   // and if user proceeds, then we ask them
   // which UI components in the section they want to configure

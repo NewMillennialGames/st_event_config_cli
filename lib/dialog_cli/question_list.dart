@@ -76,11 +76,13 @@ class QuestListMgr {
   }
 
   List<UserResponse> get priorAnswers {
-    //
+    // return all existing user answers
+
+    // List<Question> l0, List<Question>
     List<Question> _allAnsweredQuestions =
         _answeredQuestsBySection.values.fold<List<Question>>(
       [],
-      (List<Question> l0, List<Question> l1) => l0..addAll(l1),
+      (l0, l1) => l0..addAll(l1),
     );
 
     return _allAnsweredQuestions

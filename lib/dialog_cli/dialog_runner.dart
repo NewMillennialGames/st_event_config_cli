@@ -32,7 +32,7 @@ class DialogRunner {
   }
 
   //
-  String loopUntilComplete() {
+  bool loopUntilComplete() {
     //
     // questFormatter manages display output
     final questFormatter = CliQuestionFormatter();
@@ -63,12 +63,7 @@ class DialogRunner {
       }
       section = _questGroupMgr._getNextSection();
     }
-
-    // not every answer-type (generic) has a toString method
-    // String _summaryOfUserAnswers =
-    //     _tree.priorAnswers.map((r) => r.toString()).toString();
-    // return _summaryOfUserAnswers;
-    return '';
+    return true;
   }
 
   void _outputSpacerLines({bool forSection = false}) {

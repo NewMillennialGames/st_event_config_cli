@@ -1,10 +1,7 @@
 import 'dart:io';
 import 'dart:core';
-// import 'dart:async';
-// import 'dart:convert';
 import 'package:args/args.dart';
 //
-// import 'models.dart';
 import 'dialog_cli/all.dart';
 /*
   check ReadMe.MD
@@ -29,15 +26,15 @@ Future<void> main(List<String> arguments) async {
 //   }
 
   // add clear lines
-  print('\n' * 2);
+  print('\n' * 0);
 
   final dialoger = DialogRunner();
-  final res = dialoger.loopUntilComplete();
+  final succeeded = dialoger.loopUntilComplete();
 
   stdout.writeln("Done:\n");
-  stdout.writeln("$res");
+  // stdout.writeln("$res");
 
-  if (res == Null) {
+  if (!succeeded) {
     exitCode = 2;
   }
 }

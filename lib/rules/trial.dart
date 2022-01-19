@@ -12,12 +12,6 @@
 //   marketResearch,
 // }
 
-// void main() {
-//   for (AppSection s in AppSection.values) {
-//     print(s.name);
-//   }
-// }
-
 Type typeOf<T>() => T;
 
 class MyClass<T> {
@@ -31,10 +25,18 @@ class MyClass<T> {
 }
 
 main() {
-  Type type = typeOf<MyClass<int>>();
-  print(type);
-  var mc = MyClass<String>();
-  print(mc.genTyp());
-  print(mc.isStr);
-  print(mc.isInt);
+  //   for (AppSection s in AppSection.values) {
+//     print(s.name);
+//   }
+
+  // Type type = typeOf<MyClass<int>>();
+  // print(type);
+  // var mc = MyClass<String>();
+  // print(mc.genTyp());
+  // print(mc.isStr);
+  // print(mc.isInt);
+
+  var s = '1,2,3,';
+  var l = s.split(',');
+  print(l);
 }

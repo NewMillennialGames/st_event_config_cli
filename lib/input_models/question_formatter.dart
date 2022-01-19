@@ -119,7 +119,7 @@ class CliQuestionFormatter {
     if (!quest.hasChoices) return;
 
     print('Select from these options:\n');
-    quest.choices?.forEachIndexed((idx, opt) {
+    quest.answerChoicesList?.forEachIndexed((idx, opt) {
       String forDflt =
           quest.defaultAnswerIdx == idx ? '  (default: just press return)' : '';
       print('\t$idx) $opt $forDflt');
@@ -144,7 +144,7 @@ class CliQuestionFormatter {
     //
     if (quest.hasChoices) {
       if (quest.acceptsMultiResponses) {
-        print('Enter row #s of choices (eg 2,3,5,) then press enter/return!');
+        print('Enter row #s of choices (eg 2,3,5) then press enter/return!');
       } else {
         print('Enter row # of preferred choice, then press enter/return!');
       }

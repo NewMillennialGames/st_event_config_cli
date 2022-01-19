@@ -26,8 +26,8 @@ class QuestionQuantifier extends Equatable {
   }
 
   bool get capturesScalarValues => cascadeType.capturesScalarValues;
-  bool get addsOrDeletesFutureQuestions =>
-      cascadeType.addsOrDeletesFutureQuestions;
+  bool get addsOrDeletesFutureQuestions => cascadeType
+      .addsOrDeletesFutureQuestions; // || appSection == AppSection.eventConfiguration
   bool get producesVisualRules => cascadeType.producesVisualRules;
   bool get producesBehavioralRules => cascadeType.producesBehavioralRules;
 

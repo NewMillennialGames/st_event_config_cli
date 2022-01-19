@@ -5,47 +5,53 @@ typedef CastUserInputToTyp<InputTyp, AnsTyp> = AnsTyp Function(InputTyp input);
 typedef PriorAnswersCallback = List<UserResponse> Function();
 
 class Question<ConvertTyp, AnsTyp> extends Equatable {
-  final QuestionQuantifier qQant;
+  //
+  final QuestionQuantifier qQuantify;
   final String question;
-  final Iterable<String>? answerChoices;
+  final Iterable<String>? _answerChoices;
+  // castFunc not used on Rule-Type-Questions
   final CastUserInputToTyp<ConvertTyp, AnsTyp>? castFunc;
   final int defaultAnswerIdx;
   final bool dynamicFromPriorState;
-  final bool acceptsMultiResponses = false;
   // set later
+  bool generatesNewQuestions = false;
+  bool acceptsMultiResponses = false;
   bool shouldSkip = false;
   int questionId = 0;
   UserResponse<AnsTyp>? response;
 
   Question(
-    this.qQant,
+    this.qQuantify,
     this.question,
-    this.answerChoices,
+    this._answerChoices,
     this.castFunc, {
     this.defaultAnswerIdx = 1,
     this.dynamicFromPriorState = false,
+    this.generatesNewQuestions = false,
+    this.acceptsMultiResponses = false,
   });
   // getters
   bool get isRuleQuestion => false;
-  AppSection get appSection => qQant.appSection;
-  SectionUiArea? get uiComponent => qQant.uiCompInSection;
+  AppSection get appSection => qQuantify.appSection;
+  SectionUiArea? get uiComponent => qQuantify.uiCompInSection;
 
-  List<String>? get choices => answerChoices?.toList();
-  bool get hasChoices => (answerChoices?.length ?? 0) > 0;
-  bool get capturesScalarValues => qQant.capturesScalarValues;
-  bool get addsOrDeletesFutureQuestions => qQant.addsOrDeletesFutureQuestions;
-  bool get producesVisualRules => qQant.producesVisualRules;
-  bool get producesBehavioralRules => qQant.producesBehavioralRules;
+  List<String>? get answerChoicesList => _answerChoices?.toList();
+  bool get hasChoices => (_answerChoices?.length ?? 0) > 0;
+  bool get capturesScalarValues => qQuantify.capturesScalarValues;
+  bool get addsOrDeletesFutureQuestions =>
+      qQuantify.addsOrDeletesFutureQuestions || generatesNewQuestions;
+  bool get producesVisualRules => qQuantify.producesVisualRules;
+  bool get producesBehavioralRules => qQuantify.producesBehavioralRules;
   // building other questions based on prior answers
   bool get generatesScreenComponentQuestions =>
       addsOrDeletesFutureQuestions && AnsTyp is List<SectionUiArea>;
   bool get generatesVisRuleTypeQuestions =>
       addsOrDeletesFutureQuestions &&
-      qQant.uiCompInSection != null &&
+      qQuantify.uiCompInSection != null &&
       AnsTyp is List<VisualRuleType>;
   bool get generatesBehRuleTypeQuestions =>
       addsOrDeletesFutureQuestions &&
-      qQant.uiCompInSection != null &&
+      qQuantify.uiCompInSection != null &&
       AnsTyp is List<BehaviorRuleType>;
 
   void askAndWait(DialogRunner dlogRunner) {
@@ -53,7 +59,7 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
     _configSelfIfNecessary(dlogRunner.getPriorAnswersList);
 
     String? userResp = stdin.readLineSync();
-    print("You entered: '$userResp'");
+    // print("You entered: '$userResp'");
 
     int answerIdx = -1;
     AnsTyp? derivedUserResponse;
@@ -64,10 +70,10 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
       if (answerIdx == -1 && (hasChoices || !capturesScalarValues)) {
         answerIdx = defaultAnswerIdx;
       }
-      print('calling int converter ($answerIdx) on $question');
+      // print('calling int converter ($answerIdx) on $question');
       derivedUserResponse = _castResponseToAnswer(answerIdx as ConvertTyp);
     } else if (ConvertTyp == String) {
-      print('calling string converter ($userResp) on $question');
+      // print('calling string converter ($userResp) on $question');
       derivedUserResponse = _castResponseToAnswer(userResp as ConvertTyp);
     } else {
       var t = typeOf<ConvertTyp>().toString();
@@ -80,8 +86,9 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
       // print('answer was null on $questionId: $question');
       // return;
     }
+    print('Response: $derivedUserResponse');
     this.response = UserResponse<AnsTyp>(derivedUserResponse);
-    print("You entered: '$userResp' and ${derivedUserResponse.toString()}");
+    // print("You entered: '$userResp' and ${derivedUserResponse.toString()}");
     _handleCreatingNewQuestions(dlogRunner);
   }
 
@@ -103,8 +110,8 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
       answer = castFunc!(convertibleVal);
     } else {
       int answerIdx = convertibleVal as int;
-      if (choices != null) {
-        answer = choices![answerIdx] as AnsTyp;
+      if (answerChoicesList != null) {
+        answer = answerChoicesList![answerIdx] as AnsTyp;
       } else {
         answer = convertibleVal as AnsTyp;
       }
@@ -123,13 +130,13 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
     } else if (this.generatesVisRuleTypeQuestions) {
       //
       dlogRunner.generateAssociatedUiRuleTypeQuestions(
-        this.qQant.uiCompInSection!,
+        this.qQuantify.uiCompInSection!,
         this.response as UserResponse<List<VisualRuleType>>,
       );
     } else if (this.generatesBehRuleTypeQuestions) {
       //
       dlogRunner.generateAssociatedBehRuleTypeQuestions(
-        this.qQant.uiCompInSection!,
+        this.qQuantify.uiCompInSection!,
         this.response as UserResponse<List<BehaviorRuleType>>,
       );
     }
@@ -158,7 +165,7 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
   // but really being used as a search filter
   // to find questions in a specific granularity
   @override
-  List<Object> get props => [qQant];
+  List<Object> get props => [qQuantify];
 
   @override
   bool get stringify => true;

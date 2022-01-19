@@ -11,7 +11,7 @@ part of AppEntities;
 
 enum AppSection {
   // major screens or app-areas that user may wish to configure
-  eventConfiguration,
+  eventConfiguration, // general setup; not really a section
   eventSelection,
   poolSelection,
   marketView,
@@ -26,9 +26,27 @@ enum AppSection {
 extension AppSectionExt1 on AppSection {
   //
   String get includeStr => 'Configure ${this.name} section of app?';
+
+  List<AppSection> get _tempNotConfigurable => [
+        // list of app sections with no configurable appAreas as yet
+        AppSection.eventConfiguration,
+        AppSection.eventSelection,
+        AppSection.news,
+        AppSection.socialPools,
+        AppSection.poolSelection,
+        AppSection.trading,
+      ];
+
   bool get isConfigureable =>
       this.applicableComponents.length > 0 ||
       this == AppSection.eventConfiguration;
+
+  // AppSection.values.map((as) => as).toList();
+  List<AppSection> get sectionConfigOptions => AppSection.values
+      .where(
+        (as) => as.isConfigureable && !this._tempNotConfigurable.contains(this),
+      )
+      .toList();
 
   List<SectionUiArea> convertIdxsToComponentList(String commaLstOfInts) {
     // since we dont show EVERY UiComponent, the choice indexes are offset
