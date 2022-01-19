@@ -1,7 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import '../input_models/all.dart';
-import '../app_entity_enums/all.dart';
 import '../enums/all.dart';
 
 part 'rule.g.dart';
@@ -12,14 +11,9 @@ abstract class AppConfigRule {
   AppConfigRule._();
 
   factory AppConfigRule.filter(
-    RuleResponseWrapper pm,
+    RuleResponseWrapper ruleResp,
   ) =>
-      FilterRule(
-        pm.recType,
-        pm.propertyName,
-        menuIdx: pm.menuIdx,
-        sortDescending: pm.sortDescending,
-      );
+      FilterRule(ruleResp);
   // visual and styling rules
   factory AppConfigRule.format(
     RuleResponseWrapper pm,
@@ -61,19 +55,17 @@ abstract class _AppBehavioralRule extends AppConfigRule {
 @JsonSerializable()
 class FilterRule extends _AppVisualRule {
   //
+  final RuleResponseWrapper ruleResp;
   // final int filterListIdx;
   // final UiComponentSlotName property;
-  DbRowType rowType;
-  MenuSortOrGroupIndex menuIdx;
-  String propertyName;
-  bool sortDescending = true;
+  // DbRowType rowType;
+  // MenuSortOrGroupIndex menuIdx;
+  // String propertyName;
+  // bool sortDescending = true;
 
   FilterRule(
-    this.rowType,
-    this.propertyName, {
-    this.menuIdx = MenuSortOrGroupIndex.first,
-    this.sortDescending = true,
-  }) : super._();
+    this.ruleResp,
+  ) : super._();
 
   //
   VisualRuleType get ruleType => VisualRuleType.filter;

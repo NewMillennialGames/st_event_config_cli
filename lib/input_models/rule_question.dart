@@ -1,6 +1,6 @@
 part of InputModels;
 
-class VisualRuleQuestion<ConvertTyp, AnsTyp>
+class VisualRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseWrapper>
     extends Question<ConvertTyp, AnsTyp> {
   /*
     VisualRuleQuestion questions are multi-part questions
@@ -8,14 +8,7 @@ class VisualRuleQuestion<ConvertTyp, AnsTyp>
       depending on visRuleType, the questions required are one of:
         VisRuleQuestType enum
 
-    must collect enough data to produce:
-      class PropertyMap {
-        DbRowType recType;
-        UiComponentSlotName property;
-        String propertyName;
-        MenuSortOrGroupIndex menuIdx;
-        bool sortDescending;  }
-
+    must collect enough data to render the full rule
   */
   late final VisRuleQuestDef _questDef;
 
@@ -42,6 +35,11 @@ class VisualRuleQuestion<ConvertTyp, AnsTyp>
   VisRuleQuestDef get questDef => _questDef;
   List<VisRuleQuestWithChoices> get questsAndChoices =>
       _questDef.questsAndChoices;
+
+  void castResponseListAndStore(Map<VisRuleQuestType, String> multiAnswerMap) {
+    // store user answers
+    this.response = UserResponse(RuleResponseWrapper(multiAnswerMap) as AnsTyp);
+  }
 
   @override
   bool get isRuleQuestion => true;

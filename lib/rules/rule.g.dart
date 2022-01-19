@@ -7,36 +7,13 @@ part of 'rule.dart';
 // **************************************************************************
 
 FilterRule _$FilterRuleFromJson(Map<String, dynamic> json) => FilterRule(
-      $enumDecode(_$DbRowTypeEnumMap, json['rowType']),
-      json['propertyName'] as String,
-      menuIdx:
-          $enumDecodeNullable(_$MenuSortOrGroupIndexEnumMap, json['menuIdx']) ??
-              MenuSortOrGroupIndex.first,
-      sortDescending: json['sortDescending'] as bool? ?? true,
+      RuleResponseWrapper.fromJson(json['ruleResp'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$FilterRuleToJson(FilterRule instance) =>
     <String, dynamic>{
-      'rowType': _$DbRowTypeEnumMap[instance.rowType],
-      'menuIdx': _$MenuSortOrGroupIndexEnumMap[instance.menuIdx],
-      'propertyName': instance.propertyName,
-      'sortDescending': instance.sortDescending,
+      'ruleResp': instance.ruleResp,
     };
-
-const _$DbRowTypeEnumMap = {
-  DbRowType.asset: 'asset',
-  DbRowType.player: 'player',
-  DbRowType.team: 'team',
-  DbRowType.game: 'game',
-  DbRowType.competition: 'competition',
-  DbRowType.event: 'event',
-};
-
-const _$MenuSortOrGroupIndexEnumMap = {
-  MenuSortOrGroupIndex.first: 'first',
-  MenuSortOrGroupIndex.second: 'second',
-  MenuSortOrGroupIndex.third: 'third',
-};
 
 FormatRule _$FormatRuleFromJson(Map<String, dynamic> json) => FormatRule();
 

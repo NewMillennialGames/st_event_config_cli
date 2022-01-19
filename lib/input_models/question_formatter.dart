@@ -24,17 +24,22 @@ class CliQuestionFormatter {
     Question quest,
   ) {
     if (quest.isRuleQuestion) {
+      // rule questions are more complex and handled by
+      // looping for multiple answers
+
       if (quest is VisualRuleQuestion) {
-        String multiAnswerStr = _handleVisualRuleQuestion(
+        Map<VisRuleQuestType, String> multiAnswerRespList =
+            _handleVisualRuleQuestions(
           dialoger,
           quest,
         );
-        quest.response =
-            UserResponse(castInputStrToPropertyMap(multiAnswerStr));
+        quest.castResponseListAndStore(multiAnswerRespList);
       }
-      // else if (quest is VisualRuleQuestion) {
+      // else if (quest is BehaviorRuleQuestion) {
       //   // else do behavioral question
       // }
+      // store response payload on the question
+
       return;
     }
 
@@ -65,7 +70,7 @@ class CliQuestionFormatter {
     }
   }
 
-  String _handleVisualRuleQuestion(
+  Map<VisRuleQuestType, String> _handleVisualRuleQuestions(
     DialogRunner dialoger,
     VisualRuleQuestion ruleQuest,
   ) {
@@ -74,14 +79,13 @@ class CliQuestionFormatter {
         'Config ${ruleQuest.questDef.ruleTyp.name} in the ${ruleQuest.uiComponent?.name} of app-section ${ruleQuest.appSection.name}  (please answer each question below)';
     print(ruleQuestoverview);
 
-    String accumResponses = '';
+    Map<VisRuleQuestType, String> accumResponses = {};
 
     for (VisRuleQuestWithChoices questWithChoices
         in ruleQuest.questsAndChoices) {
       //
-      accumResponses = accumResponses +
-          '-' +
-          (_showOptionsAndWaitForResponse(questWithChoices) ?? '');
+      String answer = _showOptionsAndWaitForResponse(questWithChoices) ?? '';
+      accumResponses[questWithChoices.ruleQuestType] = answer;
     }
     return accumResponses;
   }
@@ -100,6 +104,7 @@ class CliQuestionFormatter {
     while (inputIsInvalid) {
       userResp = stdin.readLineSync();
       inputIsInvalid = userResp == null || userResp.isEmpty;
+      if (inputIsInvalid) print('invalid answer; pls try again');
     }
     return userResp;
   }

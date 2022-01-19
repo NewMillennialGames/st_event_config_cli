@@ -17,20 +17,9 @@ List<Question> fabricateVisualRuleQuestions(
         section,
         uiComp,
         rt,
-        castInputStrToPropertyMap,
+        null,
       ),
     );
   }
   return lst;
-}
-
-RuleResponseWrapper castInputStrToPropertyMap(String userInput) {
-  //
-  return RuleResponseWrapper(
-    DbRowType.asset,
-    UiAreaSlotName.header,
-    'propertyName',
-    MenuSortOrGroupIndex.first,
-    sortDescending: true,
-  );
 }

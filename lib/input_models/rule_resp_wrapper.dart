@@ -1,22 +1,19 @@
 part of InputModels;
 
+/*
+  RuleResponseWrapper needs to store answers to ALL
+  of these possible types of questions:
+
+*/
+
+@JsonSerializable()
 class RuleResponseWrapper {
-  //
-  DbRowType recType;
-  UiAreaSlotName property;
-  String propertyName;
-  MenuSortOrGroupIndex menuIdx;
-  bool sortDescending;
+  // holds user answers to rule questions
+  final Map<VisRuleQuestType, String> userResponses;
 
-  RuleResponseWrapper(
-    this.recType,
-    this.property,
-    this.propertyName,
-    this.menuIdx, {
-    this.sortDescending = true,
-  });
+  RuleResponseWrapper(this.userResponses);
 
-  // factory PropertyMap.fromUserInput(String userInput) {
-  //   return PropertyMap();
-  // }
+  factory RuleResponseWrapper.fromJson(Map<String, dynamic> json) =>
+      _$RuleResponseWrapperFromJson(json);
+  Map<String, dynamic> toJson() => _$RuleResponseWrapperToJson(this);
 }
