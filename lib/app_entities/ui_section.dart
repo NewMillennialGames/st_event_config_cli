@@ -30,13 +30,13 @@ extension AppSectionExt1 on AppSection {
       this.applicableComponents.length > 0 ||
       this == AppSection.eventConfiguration;
 
-  List<UiComponent> convertIdxsToComponentList(String commaLstOfInts) {
+  List<SectionUiArea> convertIdxsToComponentList(String commaLstOfInts) {
     // since we dont show EVERY UiComponent, the choice indexes are offset
     // need to fix that
     List<int> providedIdxs =
         commaLstOfInts.split(",").map((e) => int.tryParse(e) ?? -1).toList();
     //
-    Map<int, UiComponent> idxToModifiableUic = {};
+    Map<int, SectionUiArea> idxToModifiableUic = {};
     int tempIdx = 0;
     this
         .applicableComponents
@@ -45,7 +45,7 @@ extension AppSectionExt1 on AppSection {
     return idxToModifiableUic.values.toList();
   }
 
-  List<UiComponent> get applicableComponents {
+  List<SectionUiArea> get applicableComponents {
     // customize this list to control what sections
     // of each screen can be customized for
     // THIS SECTION of the app
@@ -53,23 +53,23 @@ extension AppSectionExt1 on AppSection {
       case AppSection.eventConfiguration:
         return [];
       case AppSection.eventSelection:
-        return [UiComponent.header, UiComponent.banner];
+        return [SectionUiArea.header, SectionUiArea.banner];
       case AppSection.poolSelection:
         return [];
       case AppSection.marketView:
-        return [UiComponent.filterBar1, UiComponent.tableView];
+        return [SectionUiArea.filterBar, SectionUiArea.tableRow];
       case AppSection.socialPools:
         return [];
       case AppSection.news:
-        return [UiComponent.header, UiComponent.banner];
+        return [SectionUiArea.header, SectionUiArea.banner];
       case AppSection.leaderboard:
-        return [UiComponent.header, UiComponent.banner];
+        return [SectionUiArea.header, SectionUiArea.banner];
       case AppSection.portfolio:
-        return [UiComponent.header, UiComponent.banner];
+        return [SectionUiArea.header, SectionUiArea.banner];
       case AppSection.trading:
-        return [UiComponent.header, UiComponent.banner];
+        return [SectionUiArea.header, SectionUiArea.banner];
       case AppSection.marketResearch:
-        return [UiComponent.header, UiComponent.banner];
+        return [SectionUiArea.header, SectionUiArea.banner];
     }
   }
 }

@@ -1,52 +1,87 @@
 part of AppEntities;
 
-enum UiComponent {
+enum SectionUiArea {
   // each part in a section of the app
-  // each below has subset of xxx
+  // each below has subset of UiComponentSlotName
   navBar,
-  filterBar1,
-  filterBar2,
+  filterBar,
   header,
   banner,
-  tableView,
+  tableRow,
   footer,
-  ticker,
-  tabBar
+  // ticker,
+  // tabBar
 }
 
-extension UiComponentExt1 on UiComponent {
+extension UiComponentExt1 on SectionUiArea {
   //
   String includeStr(AppSection section) =>
       'On Section ${section.name}, do you want to configure the ${this.name}?';
 
   bool get isConfigureable => this.applicableRuleTypes.length > 0;
 
+  List<UiAreaSlotName> get applicablePropertySlots {
+    //
+    switch (this) {
+      case SectionUiArea.navBar:
+        return [
+          UiAreaSlotName.title,
+          UiAreaSlotName.subtitle,
+        ];
+      case SectionUiArea.filterBar:
+        return [
+          UiAreaSlotName.slot1,
+          UiAreaSlotName.slot2,
+        ];
+      case SectionUiArea.header:
+        return [
+          UiAreaSlotName.title,
+          UiAreaSlotName.subtitle,
+        ];
+      case SectionUiArea.banner:
+        return [
+          UiAreaSlotName.bannerUrl,
+        ];
+      case SectionUiArea.tableRow:
+        return [
+          UiAreaSlotName.rowStyle,
+        ];
+      case SectionUiArea.footer:
+        return [
+          UiAreaSlotName.title,
+          UiAreaSlotName.subtitle,
+        ];
+      // case UiComponent.ticker:
+      //   return [VisualRuleType.show];
+      // case UiComponent.tabBar:
+      //   return [];
+    }
+  }
+
   List<VisualRuleType> get applicableRuleTypes {
     // customize this list to control what customization
     // rules go with this ui component
     switch (this) {
-      case UiComponent.navBar:
+      case SectionUiArea.navBar:
         return [VisualRuleType.format];
-      case UiComponent.filterBar1:
+      case SectionUiArea.filterBar:
         return [VisualRuleType.filter];
-      case UiComponent.filterBar2:
-        return [];
-      case UiComponent.header:
+      case SectionUiArea.header:
         return [VisualRuleType.format, VisualRuleType.show];
-      case UiComponent.banner:
+      case SectionUiArea.banner:
         return [VisualRuleType.show];
-      case UiComponent.tableView:
+      case SectionUiArea.tableRow:
         return [
           VisualRuleType.format,
           VisualRuleType.group,
           VisualRuleType.sort
         ];
-      case UiComponent.footer:
+      case SectionUiArea.footer:
         return [VisualRuleType.show];
-      case UiComponent.ticker:
-        return [VisualRuleType.show];
-      case UiComponent.tabBar:
-        return [];
+      // case UiComponent.ticker:
+      //   return [VisualRuleType.show];
+      // case UiComponent.tabBar:
+      //   return [];
     }
   }
 

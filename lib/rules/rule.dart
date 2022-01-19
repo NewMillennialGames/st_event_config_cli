@@ -12,11 +12,7 @@ abstract class AppConfigRule {
   AppConfigRule._();
 
   factory AppConfigRule.filter(
-    PropertyMap pm,
-    // DbRowType recType,
-    // String propertyName,
-    // MenuSortOrGroupIndex menuIdx, {
-    // bool sortDescending = true,
+    RuleResponseWrapper pm,
   ) =>
       FilterRule(
         pm.recType,
@@ -26,19 +22,19 @@ abstract class AppConfigRule {
       );
   // visual and styling rules
   factory AppConfigRule.format(
-    PropertyMap pm,
+    RuleResponseWrapper pm,
   ) =>
       FormatRule();
   factory AppConfigRule.group(
-    PropertyMap pm,
+    RuleResponseWrapper pm,
   ) =>
       GroupRule();
   factory AppConfigRule.show(
-    PropertyMap pm,
+    RuleResponseWrapper pm,
   ) =>
       ShowRule();
   factory AppConfigRule.sort(
-    PropertyMap pm,
+    RuleResponseWrapper pm,
   ) =>
       SortRule();
   // behavioral rules;  future

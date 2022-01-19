@@ -1,11 +1,11 @@
-part of CfgInputModels;
+part of InputModels;
 
 class QuestionQuantifier extends Equatable {
   // describes question purpose, behavior and output
   // made it equatable for searching Q-list
   final QuestCascadeTyp cascadeType;
   final AppSection appSection;
-  final UiComponent? uiCompInSection;
+  final SectionUiArea? uiCompInSection;
   final VisualRuleType? visRuleTypeForComp;
   final BehaviorRuleType? behRuleTypeForComp;
 
@@ -35,7 +35,7 @@ class QuestionQuantifier extends Equatable {
   factory QuestionQuantifier.forSearchFilter(
     QuestCascadeTyp cascadeType,
     AppSection appSection,
-    UiComponent? uiCompInSection,
+    SectionUiArea? uiCompInSection,
     VisualRuleType? visRuleTypeForComp,
     BehaviorRuleType? behRuleTypeForComp,
   ) {
@@ -72,7 +72,7 @@ class QuestionQuantifier extends Equatable {
 
   factory QuestionQuantifier.uiComponentLevel(
     AppSection appSection,
-    UiComponent uiCompInSection,
+    SectionUiArea uiCompInSection,
   ) {
     return QuestionQuantifier._(
       QuestCascadeTyp.alterFutureQuestionList,
@@ -85,7 +85,7 @@ class QuestionQuantifier extends Equatable {
 
   factory QuestionQuantifier.ruleCompositionLevel(
     AppSection appSection,
-    UiComponent uiCompInSection,
+    SectionUiArea uiCompInSection,
     VisualRuleType? visRuleTypeForComp,
     BehaviorRuleType? behRuleTypeForComp,
   ) {

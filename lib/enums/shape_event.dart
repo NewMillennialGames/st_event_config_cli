@@ -1,4 +1,4 @@
-part of EventCfgEnums;
+part of EvCfgEnums;
 
 // describe event at high level
 enum EvType {

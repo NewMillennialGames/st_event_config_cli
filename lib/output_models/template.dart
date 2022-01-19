@@ -1,4 +1,4 @@
-part of CfgOutputModels;
+part of OutputModels;
 
 class EventCfgTemplate {
   //

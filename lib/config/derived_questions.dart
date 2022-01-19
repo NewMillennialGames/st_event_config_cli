@@ -5,7 +5,7 @@ part of QuestConfig;
 //
 List<Question> fabricateVisualRuleQuestions(
   AppSection section,
-  UiComponent uiComp,
+  SectionUiArea uiComp,
   UserResponse<List<VisualRuleType>> response,
 ) {
   /*
@@ -15,7 +15,7 @@ List<Question> fabricateVisualRuleQuestions(
   List<Question> lst = [];
   for (VisualRuleType rt in response.answers) {
     lst.add(
-      VisualRuleQuestion<String, PropertyMap>(
+      VisualRuleQuestion<String, RuleResponseWrapper>(
         section,
         uiComp,
         rt,
@@ -27,11 +27,11 @@ List<Question> fabricateVisualRuleQuestions(
   return lst;
 }
 
-PropertyMap castInputStrToPropertyMap(String userInput) {
+RuleResponseWrapper castInputStrToPropertyMap(String userInput) {
   //
-  return PropertyMap(
+  return RuleResponseWrapper(
     DbRowType.asset,
-    UiComponentSlotName.header,
+    UiAreaSlotName.header,
     'propertyName',
     MenuSortOrGroupIndex.first,
     sortDescending: true,

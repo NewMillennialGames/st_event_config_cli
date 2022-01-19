@@ -1,4 +1,4 @@
-part of CfgInputModels;
+part of InputModels;
 
 typedef CastUserInputToTyp<InputTyp, AnsTyp> = AnsTyp Function(InputTyp input);
 // to load prior answers for some questions
@@ -28,7 +28,7 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
   // getters
   bool get isRuleQuestion => false;
   AppSection get appSection => qQant.appSection;
-  UiComponent? get uiComponent => qQant.uiCompInSection;
+  SectionUiArea? get uiComponent => qQant.uiCompInSection;
 
   List<String>? get choices => answerChoices?.toList();
   bool get hasChoices => (answerChoices?.length ?? 0) > 0;
@@ -38,7 +38,7 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
   bool get producesBehavioralRules => qQant.producesBehavioralRules;
   // building other questions based on prior answers
   bool get generatesScreenComponentQuestions =>
-      addsOrDeletesFutureQuestions && AnsTyp is List<UiComponent>;
+      addsOrDeletesFutureQuestions && AnsTyp is List<SectionUiArea>;
   bool get generatesVisRuleTypeQuestions =>
       addsOrDeletesFutureQuestions &&
       qQant.uiCompInSection != null &&
@@ -118,7 +118,7 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
       //
       dlogRunner.generateAssociatedUiComponentQuestions(
         appSection,
-        this.response as UserResponse<List<UiComponent>>,
+        this.response as UserResponse<List<SectionUiArea>>,
       );
     } else if (this.generatesVisRuleTypeQuestions) {
       //

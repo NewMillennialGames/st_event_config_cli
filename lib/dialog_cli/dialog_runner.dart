@@ -82,7 +82,7 @@ class DialogRunner {
   // create questions based on prior answers
   void generateAssociatedUiComponentQuestions(
     AppSection section,
-    UserResponse<List<UiComponent>> response,
+    UserResponse<List<SectionUiArea>> response,
   ) {
     //
     var includedQuestions = loadSpecificComponentQuestions(section, response);
@@ -90,7 +90,7 @@ class DialogRunner {
   }
 
   void generateAssociatedUiRuleTypeQuestions(
-    UiComponent uiComp,
+    SectionUiArea uiComp,
     UserResponse<List<VisualRuleType>> response,
   ) {
     //
@@ -106,7 +106,7 @@ class DialogRunner {
   }
 
   void generateAssociatedBehRuleTypeQuestions(
-    UiComponent uiComp,
+    SectionUiArea uiComp,
     UserResponse<List<BehaviorRuleType>> response,
   ) {
     // future

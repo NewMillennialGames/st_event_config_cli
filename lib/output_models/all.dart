@@ -1,4 +1,4 @@
-library CfgOutputModels;
+library OutputModels;
 
 import 'package:eventconfig/input_models/all.dart';
 

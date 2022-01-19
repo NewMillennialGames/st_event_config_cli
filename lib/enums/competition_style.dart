@@ -1,4 +1,4 @@
-part of EventCfgEnums;
+part of EvCfgEnums;
 
 // define assets
 enum EvCompetitionStyle {

@@ -1,9 +1,9 @@
-part of CfgOutputModels;
+part of OutputModels;
 
 extension VisualRuleTypeExt2 on VisualRuleType {
   //
 
-  AppConfigRule castPropertyMapToRule(PropertyMap pm) {
+  AppConfigRule castPropertyMapToRule(RuleResponseWrapper pm) {
     switch (this) {
       case VisualRuleType.sort:
         return AppConfigRule.sort(pm);

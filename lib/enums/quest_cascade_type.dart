@@ -1,4 +1,4 @@
-part of EventCfgEnums;
+part of EvCfgEnums;
 
 enum QuestCascadeTyp {
   captureValue,

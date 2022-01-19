@@ -1,14 +1,14 @@
-part of CfgInputModels;
+part of InputModels;
 
-class PropertyMap {
+class RuleResponseWrapper {
   //
   DbRowType recType;
-  UiComponentSlotName property;
+  UiAreaSlotName property;
   String propertyName;
   MenuSortOrGroupIndex menuIdx;
   bool sortDescending;
 
-  PropertyMap(
+  RuleResponseWrapper(
     this.recType,
     this.property,
     this.propertyName,

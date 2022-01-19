@@ -1,4 +1,4 @@
-part of CfgInputModels;
+part of InputModels;
 
 class UserResponse<AnsTyp> {
   // AnsTyp can be a value or list of values

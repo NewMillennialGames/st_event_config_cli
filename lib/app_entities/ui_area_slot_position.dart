@@ -1,19 +1,26 @@
 part of AppEntities;
 
-enum UiComponentSlotName {
+enum UiAreaSlotName {
   /*  key to describing field-name
     on some ApiMsg entity (asset, team, player, game)
     so we know which field to get to show in 
   */
+
+  // ui-sub-area of the UI component
   header,
   footer,
-  name,
+  slot1,
+  slot2,
+  rowStyle,
+
+  // data property of the component
   title,
   subtitle,
-  iconPath,
-  occurDt,
-  startTime,
   bannerUrl,
+  // name,
+  // iconPath,
+  // occurDt,
+  // startTime,
 }
 
 enum MenuSortOrGroupIndex {

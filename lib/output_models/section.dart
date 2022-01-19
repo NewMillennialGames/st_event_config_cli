@@ -1,9 +1,9 @@
-part of CfgOutputModels;
+part of OutputModels;
 
 class SectionCfg {
   //
   AppSection appSection;
-  Map<UiComponent, ComponentCfg> screenConfig;
+  Map<SectionUiArea, ComponentCfg> screenConfig;
 
   SectionCfg(this.appSection, this.screenConfig);
 }

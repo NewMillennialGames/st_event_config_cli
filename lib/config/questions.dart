@@ -10,10 +10,10 @@ List<Question> loadQuestionsForSection(AppSection appSection) {
 
 List<Question> loadSpecificComponentQuestions(
   AppSection section,
-  UserResponse<List<UiComponent>> response,
+  UserResponse<List<SectionUiArea>> response,
 ) {
   // load questions about components in section
-  List<UiComponent> relatedComponentsToConfigure = response.answers;
+  List<SectionUiArea> relatedComponentsToConfigure = response.answers;
   List<Question> newQuestions = _questionLst
       .where((q) =>
           q.appSection == section &&
@@ -85,14 +85,14 @@ final List<Question> _questionLst = [
   // which UI components in the section they want to configure
 
   if (AppSection.marketView.isConfigureable)
-    Qb<String, List<UiComponent>>(
+    Qb<String, List<SectionUiArea>>(
       QuestionQuantifier.appSectionLevel(AppSection.marketView),
       AppSection.marketView.includeStr,
       AppSection.marketView.applicableComponents.map((e) => e.name),
       AppSection.marketView.convertIdxsToComponentList,
     ),
   if (AppSection.marketView.isConfigureable)
-    for (UiComponent uic in AppSection.marketView.applicableComponents)
+    for (SectionUiArea uic in AppSection.marketView.applicableComponents)
       for (VisualRuleType rt in uic.applicableRuleTypes)
         Qb<String, bool>(
           QuestionQuantifier.uiComponentLevel(AppSection.marketView, uic),

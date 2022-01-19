@@ -1,4 +1,4 @@
-part of CfgInputModels;
+part of InputModels;
 
 class FlutterQuestionFormatter {
   // TODO:  future

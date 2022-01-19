@@ -1,9 +1,9 @@
-part of CfgInputModels;
+part of InputModels;
 
 class VisualRuleQuestion<ConvertTyp, AnsTyp>
     extends Question<ConvertTyp, AnsTyp> {
   /*
-    Rule questions are multi-part questions
+    VisualRuleQuestion questions are multi-part questions
     need to ask user:
       1) which table to use
       2) which col/attr/property from that table
@@ -18,9 +18,11 @@ class VisualRuleQuestion<ConvertTyp, AnsTyp>
         bool sortDescending;  }
 
   */
+  late final VisRuleQuestDef _questDef;
+
   VisualRuleQuestion(
     AppSection appSection,
-    UiComponent uiComp,
+    SectionUiArea uiComp,
     VisualRuleType visRuleType,
     CastUserInputToTyp<ConvertTyp, AnsTyp>? castFunc,
   ) : super(
@@ -31,15 +33,18 @@ class VisualRuleQuestion<ConvertTyp, AnsTyp>
             null,
           ),
           visRuleType.questionStr(appSection, uiComp),
-          visRuleType.choiceOptions(appSection, uiComp),
+          // visRuleType.choiceOptions(appSection, uiComp),
+          null,
           castFunc,
-        );
+        ) {
+    this._questDef = VisRuleQuestDef.byRuleTyp(visRuleType);
+  }
 
-  List<String> get dbTableChoices =>
-      DbRowType.values.map((e) => e.name).toList();
+  // List<String> get dbTableChoices =>
+  //     DbRowType.values.map((e) => e.name).toList();
 
-  List<String> dbTablePropertyChoices(DbRowType rt) =>
-      rt.associatedProperties.map((e) => e.name).toList();
+  // List<String> dbTablePropertyChoices(DbRowType rt) =>
+  //     rt.associatedProperties.map((e) => e.name).toList();
 
   @override
   bool get isRuleQuestion => true;
