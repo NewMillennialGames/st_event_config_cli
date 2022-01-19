@@ -1,7 +1,5 @@
 part of QuestConfig;
 
-// import '../rules/rule.dart';
-
 //
 List<Question> fabricateVisualRuleQuestions(
   AppSection section,
@@ -23,7 +21,6 @@ List<Question> fabricateVisualRuleQuestions(
       ),
     );
   }
-
   return lst;
 }
 

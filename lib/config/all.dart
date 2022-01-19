@@ -1,7 +1,7 @@
 library QuestConfig;
 
 import '../enums/all.dart';
-import '../app_entities/all.dart';
+import '../app_entity_enums/all.dart';
 import '../input_models/all.dart';
 
 // import '../input_models/all.dart';

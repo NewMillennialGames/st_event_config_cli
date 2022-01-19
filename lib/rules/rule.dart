@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import '../input_models/all.dart';
-import '../app_entities/all.dart';
+import '../app_entity_enums/all.dart';
 import '../enums/all.dart';
 
 part 'rule.g.dart';

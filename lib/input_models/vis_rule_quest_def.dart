@@ -2,12 +2,12 @@ part of InputModels;
 
 class VisRuleQuestWithChoices {
   //
-  final VisRuleQuestType questType;
-  final List<String> choices;
+  final VisRuleQuestType ruleQuestType;
+  final List<String> ruleQuestChoices;
 
   VisRuleQuestWithChoices(
-    this.questType,
-    this.choices,
+    this.ruleQuestType,
+    this.ruleQuestChoices,
   );
 }
 
@@ -22,11 +22,16 @@ class VisRuleQuestDef {
   );
 
   factory VisRuleQuestDef.byRuleTyp(VisualRuleType ruleTyp) {
-    List<VisRuleQuestWithChoices> questsAndChoices = _fromRt(ruleTyp);
+    // use VisualRuleType to get list of sub-questions
+    // and their respective choice options
+    List<VisRuleQuestWithChoices> questsAndChoices =
+        getSubQuestionsAndChoiceOptions(ruleTyp);
     return VisRuleQuestDef._(ruleTyp, questsAndChoices);
   }
 
-  static List<VisRuleQuestWithChoices> _fromRt(VisualRuleType rt) {
+  static List<VisRuleQuestWithChoices> getSubQuestionsAndChoiceOptions(
+    VisualRuleType rt,
+  ) {
     return rt.questionsRequired
         .map(
           (qrq) => VisRuleQuestWithChoices(

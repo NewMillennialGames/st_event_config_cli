@@ -5,9 +5,8 @@ class VisualRuleQuestion<ConvertTyp, AnsTyp>
   /*
     VisualRuleQuestion questions are multi-part questions
     need to ask user:
-      1) which table to use
-      2) which col/attr/property from that table
-      3) priority position of selected property
+      depending on visRuleType, the questions required are one of:
+        VisRuleQuestType enum
 
     must collect enough data to produce:
       class PropertyMap {
@@ -40,11 +39,9 @@ class VisualRuleQuestion<ConvertTyp, AnsTyp>
     this._questDef = VisRuleQuestDef.byRuleTyp(visRuleType);
   }
 
-  // List<String> get dbTableChoices =>
-  //     DbRowType.values.map((e) => e.name).toList();
-
-  // List<String> dbTablePropertyChoices(DbRowType rt) =>
-  //     rt.associatedProperties.map((e) => e.name).toList();
+  VisRuleQuestDef get questDef => _questDef;
+  List<VisRuleQuestWithChoices> get questsAndChoices =>
+      _questDef.questsAndChoices;
 
   @override
   bool get isRuleQuestion => true;

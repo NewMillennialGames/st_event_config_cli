@@ -4,7 +4,7 @@ import 'package:eventconfig/input_models/all.dart';
 
 import '../enums/all.dart';
 import '../rules/rule.dart';
-import '../app_entities/all.dart';
+import '../app_entity_enums/all.dart';
 
 part 'template.dart';
 part 'section.dart';

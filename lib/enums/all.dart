@@ -1,6 +1,6 @@
 library EvCfgEnums;
 
-import '../app_entities/all.dart';
+import '../app_entity_enums/all.dart';
 
 part 'shape_event.dart';
 part 'rule_type.dart';

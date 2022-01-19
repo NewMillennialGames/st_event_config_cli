@@ -23,6 +23,22 @@ class CliQuestionFormatter {
     DialogRunner dialoger,
     Question quest,
   ) {
+    if (quest.isRuleQuestion) {
+      if (quest is VisualRuleQuestion) {
+        String multiAnswerStr = _handleVisualRuleQuestion(
+          dialoger,
+          quest,
+        );
+        quest.response =
+            UserResponse(castInputStrToPropertyMap(multiAnswerStr));
+      }
+      // else if (quest is VisualRuleQuestion) {
+      //   // else do behavioral question
+      // }
+      return;
+    }
+
+    // normal question to figure out which rule questions to actually ask user
     _printQuestion(quest);
     _printOptions(quest);
     _printInstructions(quest);
@@ -47,6 +63,45 @@ class CliQuestionFormatter {
         // config may be corrupt??
       }
     }
+  }
+
+  String _handleVisualRuleQuestion(
+    DialogRunner dialoger,
+    VisualRuleQuestion ruleQuest,
+  ) {
+    //
+    String ruleQuestoverview =
+        'Config ${ruleQuest.questDef.ruleTyp.name} in the ${ruleQuest.uiComponent?.name} of app-section ${ruleQuest.appSection.name}  (please answer each question below)';
+    print(ruleQuestoverview);
+
+    String accumResponses = '';
+
+    for (VisRuleQuestWithChoices questWithChoices
+        in ruleQuest.questsAndChoices) {
+      //
+      accumResponses = accumResponses +
+          '-' +
+          (_showOptionsAndWaitForResponse(questWithChoices) ?? '');
+    }
+    return accumResponses;
+  }
+
+  String? _showOptionsAndWaitForResponse(VisRuleQuestWithChoices rulePart) {
+    //
+    print(rulePart.ruleQuestType.name);
+    print('\n');
+    rulePart.ruleQuestChoices.forEachIndexed((idx, opt) {
+      print('\t$idx) $opt ');
+    });
+
+    String? userResp;
+    // todo -- add validation here
+    bool inputIsInvalid = true;
+    while (inputIsInvalid) {
+      userResp = stdin.readLineSync();
+      inputIsInvalid = userResp == null || userResp.isEmpty;
+    }
+    return userResp;
   }
 
   void _printQuestion(Question quest) {
