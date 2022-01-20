@@ -3,7 +3,7 @@ import 'package:collection/collection.dart';
 import 'package:eventconfig/interfaces/question_presenter.dart';
 //
 import '../input_models/all.dart';
-import '../dialog_cli/all.dart';
+import '../dialog/all.dart';
 import '../app_entity_enums/all.dart';
 import '../enums/all.dart';
 
@@ -16,7 +16,7 @@ class CliQuestionPresenter implements QuestionPresenter {
     DialogRunner dialoger,
     DialogSectionCfg sectionCfg,
   ) {
-    if (sectionCfg.appSection == AppSection.eventConfiguration) return true;
+    if (sectionCfg.appSection == AppScreen.eventConfiguration) return true;
 
     return sectionCfg.askIfNeeded();
   }
@@ -55,7 +55,7 @@ class CliQuestionPresenter implements QuestionPresenter {
     bool validAnswerProvided = true;
     try {
       // bad user input or incomplete cast function can throw exception
-      quest.askAndWait(dialoger);
+      _getResponseThenCastAndStoreIt(dialoger, quest);
     } catch (e) {
       validAnswerProvided = false;
       // just rethrow until error handling is implemented
@@ -73,13 +73,26 @@ class CliQuestionPresenter implements QuestionPresenter {
     }
   }
 
+  void _getResponseThenCastAndStoreIt(
+    DialogRunner dlogRunner,
+    Question quest,
+  ) {
+    //
+    quest.configSelfIfNecessary(dlogRunner.getPriorAnswersList);
+
+    String userResp = stdin.readLineSync() ?? '';
+    // print("You entered: '$userResp'");
+    quest.convertAndStoreUserResponse(userResp);
+    // print("You entered: '$userResp' and ${derivedUserResponse.toString()}");
+  }
+
   Map<VisRuleQuestType, String> _handleVisualRuleQuestions(
     DialogRunner dialoger,
     VisualRuleQuestion ruleQuest,
   ) {
     //
     String ruleQuestoverview =
-        'Config ${ruleQuest.questDef.ruleTyp.name} in the ${ruleQuest.uiComponent?.name} of app-section ${ruleQuest.appSection.name}  (please answer each question below)';
+        'Config ${ruleQuest.questDef.ruleTyp.name} in the ${ruleQuest.sectionWidgetArea?.name} of app-section ${ruleQuest.appSection.name}  (please answer each question below)';
     print(ruleQuestoverview);
 
     Map<VisRuleQuestType, String> accumResponses = {};

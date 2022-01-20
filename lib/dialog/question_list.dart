@@ -7,8 +7,8 @@ class QuestListMgr {
   */
   int _currQuestionIdx = -1;
   List<Question> _pendingQuestions = [];
-  Map<AppSection, int> _questCountBySection = {};
-  Map<AppSection, List<Question>> _answeredQuestsBySection = {};
+  Map<AppScreen, int> _questCountBySection = {};
+  Map<AppScreen, List<Question>> _answeredQuestsBySection = {};
 
   // constructor
   QuestListMgr();
@@ -18,7 +18,7 @@ class QuestListMgr {
   int get totalAnsweredQuestions => _answeredQuestsBySection.values
       .fold<int>(0, (r, qLst) => r + qLst.length);
 
-  Question? _nextQuestionFor(AppSection section) {
+  Question? _nextQuestionFor(AppScreen section) {
     //
     _moveCurrentQuestToAnswered();
     //
@@ -51,8 +51,8 @@ class QuestListMgr {
 
   void loadInitialQuestions() {
     //
-    _pendingQuestions = loadQuestionsForSection(AppSection.eventConfiguration);
-    _questCountBySection[AppSection.eventConfiguration] =
+    _pendingQuestions = loadInitialConfigQuestions();
+    _questCountBySection[AppScreen.eventConfiguration] =
         _pendingQuestions.length;
     int c = 0;
     _pendingQuestions.forEach((q) {
@@ -64,9 +64,9 @@ class QuestListMgr {
     List<Question> quests,
   ) {
     //
-    Set<AppSection> newSections = quests.map((e) => e.appSection).toSet();
+    Set<AppScreen> newSections = quests.map((e) => e.appSection).toSet();
 
-    for (AppSection as in newSections) {
+    for (AppScreen as in newSections) {
       int newCntBySec = quests
           .where((q) => q.appSection == as)
           .fold(0, (accumVal, _) => accumVal + 1);

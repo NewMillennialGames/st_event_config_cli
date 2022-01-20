@@ -11,23 +11,23 @@ class NewQuestionComposer {
     if (quest.isRuleQuestion || quest.generatesNoQuestions) return;
 
     if (quest.addsPerSectionQuestions &&
-        quest.appSection == AppSection.eventConfiguration) {
+        quest.appSection == AppScreen.eventConfiguration) {
       dlogRunner.addQuestionsForAreasInSelectedSections(
-        quest.response as UserResponse<List<AppSection>>,
+        quest.response as UserResponse<List<AppScreen>>,
       );
       //
     } else if (quest.addsAreaQuestions) {
       //
     } else if (quest.producesVisualRules && quest.visRuleTypeForComp != null) {
       dlogRunner.generateAssociatedUiRuleTypeQuestions(
-        quest.qQuantify.uiCompInSection!,
+        quest.qQuantify.sectionWidgetArea!,
         quest.response as UserResponse<List<VisualRuleType>>,
       );
       //
     } else if (quest.producesBehavioralRules &&
         quest.behRuleTypeForComp != null) {
       dlogRunner.generateAssociatedBehRuleTypeQuestions(
-        quest.qQuantify.uiCompInSection!,
+        quest.qQuantify.sectionWidgetArea!,
         quest.response as UserResponse<List<BehaviorRuleType>>,
       );
       //

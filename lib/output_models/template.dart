@@ -4,7 +4,7 @@ class EventCfgTemplate {
   //
   String templateName;
   String templateDescription;
-  Map<AppSection, SectionCfg> screenConfig;
+  Map<AppScreen, SectionCfg> screenConfig;
 
   EventCfgTemplate(
     this.templateName,

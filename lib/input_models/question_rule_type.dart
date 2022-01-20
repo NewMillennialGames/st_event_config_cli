@@ -13,8 +13,8 @@ class VisualRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseWrapper>
   late final VisRuleChoiceConfig _questDef;
 
   VisualRuleQuestion(
-    AppSection appSection,
-    SectionUiArea uiComp,
+    AppScreen appSection,
+    ScreenWidgetArea uiComp,
     VisualRuleType visRuleType,
     CastUserInputToTyp<ConvertTyp, AnsTyp>? castFunc,
   ) : super(

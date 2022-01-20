@@ -9,7 +9,7 @@ part of AppEntities;
   and for each component, what types of customization rules apply
 */
 
-enum AppSection {
+enum AppScreen {
   // major screens or app-areas that user may wish to configure
   eventConfiguration, // general setup; not really a section
   eventSelection,
@@ -23,38 +23,38 @@ enum AppSection {
   marketResearch,
 }
 
-extension AppSectionExt1 on AppSection {
+extension AppScreenExt1 on AppScreen {
   //
   String get includeStr => 'Configure ${this.name} section of app?';
 
-  List<AppSection> get _tempNotConfigurable => [
+  List<AppScreen> get _tempNotConfigurable => [
         // list of app sections with no configurable appAreas as yet
-        AppSection.eventConfiguration,
-        AppSection.eventSelection,
-        AppSection.news,
-        AppSection.socialPools,
-        AppSection.poolSelection,
-        AppSection.trading,
+        AppScreen.eventConfiguration,
+        AppScreen.eventSelection,
+        AppScreen.news,
+        AppScreen.socialPools,
+        AppScreen.poolSelection,
+        AppScreen.trading,
       ];
 
   bool get isConfigureable =>
       this.applicableComponents.length > 0 ||
-      this == AppSection.eventConfiguration;
+      this == AppScreen.eventConfiguration;
 
   // AppSection.values.map((as) => as).toList();
-  List<AppSection> get sectionConfigOptions => AppSection.values
+  List<AppScreen> get sectionConfigOptions => AppScreen.values
       .where(
         (as) => as.isConfigureable && !this._tempNotConfigurable.contains(as),
       )
       .toList();
 
-  List<SectionUiArea> convertIdxsToComponentList(String commaLstOfInts) {
+  List<ScreenWidgetArea> convertIdxsToComponentList(String commaLstOfInts) {
     // since we dont show EVERY UiComponent, the choice indexes are offset
     // need to fix that
     List<int> providedIdxs =
         commaLstOfInts.split(",").map((e) => int.tryParse(e) ?? -1).toList();
     //
-    Map<int, SectionUiArea> idxToModifiableUic = {};
+    Map<int, ScreenWidgetArea> idxToModifiableUic = {};
     int tempIdx = 0;
     this
         .applicableComponents
@@ -63,31 +63,31 @@ extension AppSectionExt1 on AppSection {
     return idxToModifiableUic.values.toList();
   }
 
-  List<SectionUiArea> get applicableComponents {
+  List<ScreenWidgetArea> get applicableComponents {
     // customize this list to control what sections
     // of each screen can be customized for
     // THIS SECTION of the app
     switch (this) {
-      case AppSection.eventConfiguration:
+      case AppScreen.eventConfiguration:
         return [];
-      case AppSection.eventSelection:
-        return [SectionUiArea.header, SectionUiArea.banner];
-      case AppSection.poolSelection:
+      case AppScreen.eventSelection:
+        return [ScreenWidgetArea.header, ScreenWidgetArea.banner];
+      case AppScreen.poolSelection:
         return [];
-      case AppSection.marketView:
-        return [SectionUiArea.filterBar, SectionUiArea.tableRow];
-      case AppSection.socialPools:
+      case AppScreen.marketView:
+        return [ScreenWidgetArea.filterBar, ScreenWidgetArea.tableRow];
+      case AppScreen.socialPools:
         return [];
-      case AppSection.news:
-        return [SectionUiArea.header, SectionUiArea.banner];
-      case AppSection.leaderboard:
-        return [SectionUiArea.header, SectionUiArea.banner];
-      case AppSection.portfolio:
-        return [SectionUiArea.header, SectionUiArea.banner];
-      case AppSection.trading:
-        return [SectionUiArea.header, SectionUiArea.banner];
-      case AppSection.marketResearch:
-        return [SectionUiArea.header, SectionUiArea.banner];
+      case AppScreen.news:
+        return [ScreenWidgetArea.header, ScreenWidgetArea.banner];
+      case AppScreen.leaderboard:
+        return [ScreenWidgetArea.header, ScreenWidgetArea.banner];
+      case AppScreen.portfolio:
+        return [ScreenWidgetArea.header, ScreenWidgetArea.banner];
+      case AppScreen.trading:
+        return [ScreenWidgetArea.header, ScreenWidgetArea.banner];
+      case AppScreen.marketResearch:
+        return [ScreenWidgetArea.header, ScreenWidgetArea.banner];
     }
   }
 }

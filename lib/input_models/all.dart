@@ -5,7 +5,7 @@ import "dart:io";
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 //
-import '../dialog_cli/all.dart';
+// import '../dialog/all.dart';
 import '../app_entity_enums/all.dart';
 import '../enums/all.dart';
 import '../util/type_cast.dart';

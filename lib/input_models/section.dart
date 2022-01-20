@@ -2,7 +2,7 @@ part of InputModels;
 
 class DialogSectionCfg {
   //
-  final AppSection appSection;
+  final AppScreen appSection;
   // int _questionCount = 0;
   // int _processedQuestCount = 0;
 

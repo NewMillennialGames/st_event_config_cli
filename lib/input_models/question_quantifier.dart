@@ -4,27 +4,31 @@ class QuestionQuantifier extends Equatable {
   // describes question purpose, behavior and output
   // made it equatable for searching Q-list
   final QuestCascadeTyp cascadeType;
-  final AppSection appSection;
-  final SectionUiArea? uiCompInSection;
+  final AppScreen appSection;
+  final ScreenWidgetArea? sectionWidgetArea;
   final VisualRuleType? visRuleTypeForComp;
   final BehaviorRuleType? behRuleTypeForComp;
 
   const QuestionQuantifier._(
     this.cascadeType,
     this.appSection,
-    this.uiCompInSection,
+    this.sectionWidgetArea,
     this.visRuleTypeForComp,
     this.behRuleTypeForComp,
   );
 
   String get key {
     // makes equatable work for searching question list
-    int uiCompIdx = 1 + (uiCompInSection?.index ?? -1);
+    int uiCompIdx = 1 + (sectionWidgetArea?.index ?? -1);
     int visRuleTypeForCompIdx = 1 + (visRuleTypeForComp?.index ?? -1);
     int behRuleTypeForCompIdx = 1 + (behRuleTypeForComp?.index ?? -1);
     return '${cascadeType.index}-${appSection.index}-$uiCompIdx-$visRuleTypeForCompIdx-$behRuleTypeForCompIdx';
   }
 
+  bool get isTopLevelSectionQuestion =>
+      sectionWidgetArea == null && visRuleTypeForComp == null;
+  bool get isQuestForAreaInSection =>
+      sectionWidgetArea != null && visRuleTypeForComp == null;
   bool get generatesNoQuestions => cascadeType.generatesNoQuestions;
   bool get addsPerSectionQuestions => cascadeType.addsPerSectionQuestions;
   bool get addsAreaQuestions => cascadeType.addsAreaQuestions;
@@ -34,8 +38,8 @@ class QuestionQuantifier extends Equatable {
   // factory QuestionQuantifier.forSearchFilter = QuestionQuantifier.custom;
   factory QuestionQuantifier.forSearchFilter(
     QuestCascadeTyp cascadeType,
-    AppSection appSection,
-    SectionUiArea? uiCompInSection,
+    AppScreen appSection,
+    ScreenWidgetArea? uiCompInSection,
     VisualRuleType? visRuleTypeForComp,
     BehaviorRuleType? behRuleTypeForComp,
   ) {
@@ -53,14 +57,14 @@ class QuestionQuantifier extends Equatable {
       addsSectionQuestions
           ? QuestCascadeTyp.appendsPerSectionQuestions
           : QuestCascadeTyp.noCascade,
-      AppSection.eventConfiguration,
+      AppScreen.eventConfiguration,
       null,
       null,
       null,
     );
   }
 
-  factory QuestionQuantifier.appSectionLevel(AppSection appSection,
+  factory QuestionQuantifier.appSectionLevel(AppScreen appSection,
       {bool addsAreaQuestions = false}) {
     return QuestionQuantifier._(
       addsAreaQuestions
@@ -74,7 +78,7 @@ class QuestionQuantifier extends Equatable {
   }
 
   factory QuestionQuantifier.uiComponentLevel(
-      AppSection appSection, SectionUiArea uiCompInSection,
+      AppScreen appSection, ScreenWidgetArea uiCompInSection,
       {bool addsRuleQuestions = false}) {
     return QuestionQuantifier._(
       addsRuleQuestions
@@ -88,8 +92,8 @@ class QuestionQuantifier extends Equatable {
   }
 
   factory QuestionQuantifier.ruleCompositionLevel(
-    AppSection appSection,
-    SectionUiArea uiCompInSection,
+    AppScreen appSection,
+    ScreenWidgetArea uiCompInSection,
     VisualRuleType? visRuleTypeForComp,
     BehaviorRuleType? behRuleTypeForComp,
   ) {

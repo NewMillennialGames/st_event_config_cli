@@ -6,4 +6,5 @@ class UserResponse<AnsTyp> {
   UserResponse(this.answers);
   //
   bool get hasMultiple => answers is Iterable;
+  bool get isScalar => !hasMultiple;
 }

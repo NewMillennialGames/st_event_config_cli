@@ -13,8 +13,8 @@ enum VisualRuleType {
 extension VisualRuleTypeExt1 on VisualRuleType {
   //
   String questionStr(
-    AppSection section,
-    SectionUiArea uiComp,
+    AppScreen section,
+    ScreenWidgetArea uiComp,
   ) {
     return 'Select field name for ${this.name} rule in the ${uiComp.name} area of ${section.name}';
   }

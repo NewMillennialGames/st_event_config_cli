@@ -14,7 +14,7 @@ class DialogMgr {
 
   //
   DialogSectionCfg get _currentSectionCfg => _sections[_currSectionIdx];
-  AppSection get currentSectiontype => _currentSectionCfg.appSection;
+  AppScreen get currentSectiontype => _currentSectionCfg.appSection;
 
   DialogSectionCfg? _getNextSection() {
     //
@@ -38,17 +38,17 @@ class DialogMgr {
     _loadAppUiSections();
     // only load questions for top section
     // top == AppSection.eventConfiguration
-    loadQuestionsForSpecifiedSection(AppSection.eventConfiguration);
+    loadQuestionsForSpecifiedSection(AppScreen.eventConfiguration);
   }
 
-  void loadQuestionsForSpecifiedSection(AppSection section) {
-    List<Question> quests = loadQuestionsForSection(section);
+  void loadQuestionsForSpecifiedSection(AppScreen section) {
+    List<Question> quests = loadQuestionsAtTopOfSection(section);
     _questMgr.appendQuestions(quests);
   }
 
   void _loadAppUiSections() {
     List<DialogSectionCfg> l = [];
-    for (AppSection s in AppSection.values) {
+    for (AppScreen s in AppScreen.values) {
       l.add(DialogSectionCfg(s));
     }
     this._sections = l;

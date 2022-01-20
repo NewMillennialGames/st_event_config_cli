@@ -1,9 +1,15 @@
 part of InputModels;
 
-/*
-  RuleResponseWrapper needs to store answers to ALL
+/*  RuleResponseWrapper holds user answers to rule questions
+  it needs to store answers to ALL
   of these possible types of questions:
-
+    VisRuleQuestType:
+      whichTable,
+      whichField,
+      whichLevelPos,
+      isAscending,
+      whichRowStyle,
+      shouldShow,
 */
 
 @JsonSerializable()

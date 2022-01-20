@@ -13,11 +13,11 @@ class DialogRunner {
   final QuestListMgr _questMgr = QuestListMgr();
   final NewQuestionComposer _newQuestComposer = NewQuestionComposer();
   late final DialogMgr _questGroupMgr;
+  // set in init
+  final QuestionPresenter questFormatter;
   final int linesBetweenSections;
   final int linesBetweenQuestions;
-  final QuestionPresenter questFormatter;
   //
-  // AppSection _currSection = AppSection.eventConfiguration;
 
   DialogRunner(
     this.questFormatter, [
@@ -49,8 +49,6 @@ class DialogRunner {
         section,
       );
       if (shouldShowSection) {
-        // remember current section for derived questions
-        // _currSection = section.appSection;
         _outputSpacerLines(forSection: true);
         // check for another question
         Question? _quest = _questGroupMgr.getNextQuestInCurrentSection();
@@ -79,23 +77,23 @@ class DialogRunner {
 
   // callbacks when a question needs to add other questions
   void addQuestionsForAreasInSelectedSections(
-    UserResponse<List<AppSection>> response,
+    UserResponse<List<AppScreen>> response,
   ) {
     // should add "include" questions for all areas in selected section
-    var includedQuestions = loadQuestionsForAppSections(response);
+    var includedQuestions = loadQuestionsUnderSelectedSections(response);
     _questMgr.appendQuestions(includedQuestions);
   }
 
   void addQuestionsForVisRulesInSelectedAreas(
-    UserResponse<List<SectionUiArea>> response,
+    UserResponse<List<ScreenWidgetArea>> response,
   ) {}
 
   void generateAssociatedUiRuleTypeQuestions(
-    SectionUiArea uiComp,
+    ScreenWidgetArea uiComp,
     UserResponse<List<VisualRuleType>> response,
   ) {
     //
-    var includedQuestions = fabricateVisualRuleQuestions(
+    var includedQuestions = loadVisualRuleQuestionsForArea(
       _questGroupMgr.currentSectiontype,
       uiComp,
       response,
@@ -106,7 +104,7 @@ class DialogRunner {
   }
 
   void generateAssociatedBehRuleTypeQuestions(
-    SectionUiArea uiComp,
+    ScreenWidgetArea uiComp,
     UserResponse<List<BehaviorRuleType>> response,
   ) {
     // future

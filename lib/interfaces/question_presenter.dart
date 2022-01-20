@@ -1,5 +1,5 @@
 import '../input_models/all.dart';
-import '../dialog_cli/all.dart';
+import '../dialog/all.dart';
 
 abstract class QuestionPresenter {
   /*

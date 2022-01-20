@@ -34,8 +34,9 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
   bool get hasChoices => (_answerChoices?.length ?? 0) > 0;
 
   // quantified info
-  AppSection get appSection => qQuantify.appSection;
-  SectionUiArea? get uiComponent => qQuantify.uiCompInSection;
+  bool get isTopLevelSectionQuestion => qQuantify.isTopLevelSectionQuestion;
+  AppScreen get appSection => qQuantify.appSection;
+  ScreenWidgetArea? get sectionWidgetArea => qQuantify.sectionWidgetArea;
   VisualRuleType? get visRuleTypeForComp => qQuantify.visRuleTypeForComp;
   BehaviorRuleType? get behRuleTypeForComp => qQuantify.behRuleTypeForComp;
   bool get generatesNoQuestions => qQuantify.generatesNoQuestions;
@@ -44,13 +45,8 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
   bool get producesVisualRules => qQuantify.producesVisualRules;
   bool get producesBehavioralRules => qQuantify.producesBehavioralRules;
 
-  void askAndWait(DialogRunner dlogRunner) {
+  void convertAndStoreUserResponse(String userResp) {
     //
-    _configSelfIfNecessary(dlogRunner.getPriorAnswersList);
-
-    String? userResp = stdin.readLineSync();
-    // print("You entered: '$userResp'");
-
     int answerIdx = -1;
     AnsTyp? derivedUserResponse;
     if (ConvertTyp == int) {
@@ -78,9 +74,45 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
     }
     print('Response: $derivedUserResponse');
     this.response = UserResponse<AnsTyp>(derivedUserResponse);
-    // print("You entered: '$userResp' and ${derivedUserResponse.toString()}");
-    // _handleCreatingNewQuestions(dlogRunner);
   }
+
+  // void askAndWait(DialogRunner dlogRunner) {
+  //   //
+  //   _configSelfIfNecessary(dlogRunner.getPriorAnswersList);
+
+  //   String? userResp = stdin.readLineSync();
+  //   // print("You entered: '$userResp'");
+
+  //   int answerIdx = -1;
+  //   AnsTyp? derivedUserResponse;
+  //   if (ConvertTyp == int) {
+  //     if (userResp != null) {
+  //       answerIdx = int.tryParse(userResp) ?? -1;
+  //     }
+  //     if (answerIdx == -1 && (hasChoices)) {
+  //       answerIdx = defaultAnswerIdx;
+  //     }
+  //     // print('calling int converter ($answerIdx) on $question');
+  //     derivedUserResponse = _castResponseToAnswer(answerIdx as ConvertTyp);
+  //   } else if (ConvertTyp == String) {
+  //     // print('calling string converter ($userResp) on $question');
+  //     derivedUserResponse = _castResponseToAnswer(userResp as ConvertTyp);
+  //   } else {
+  //     var t = typeOf<ConvertTyp>().toString();
+  //     throw UnimplementedError('wtf $t');
+  //   }
+
+  //   // verify we got a value
+  //   if (derivedUserResponse == null) {
+  //     throw UnimplementedError('no conversion of $userResp or $answerIdx');
+  //     // print('answer was null on $questionId: $question');
+  //     // return;
+  //   }
+  //   print('Response: $derivedUserResponse');
+  //   this.response = UserResponse<AnsTyp>(derivedUserResponse);
+  //   // print("You entered: '$userResp' and ${derivedUserResponse.toString()}");
+  //   // _handleCreatingNewQuestions(dlogRunner);
+  // }
 
   AnsTyp? _castResponseToAnswer(ConvertTyp convertibleVal) {
     // ConvertTyp must be either String or int
@@ -110,7 +142,7 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
   }
 
   // next two methods are for possible future usage?
-  void _configSelfIfNecessary(PriorAnswersCallback getPriorAnswersList) {
+  void configSelfIfNecessary(PriorAnswersCallback getPriorAnswersList) {
     // some questions are based on what answers came before
     if (dynamicFromPriorState) {
       // assert(getPriorAnswersList != null,

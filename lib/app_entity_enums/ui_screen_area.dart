@@ -1,6 +1,6 @@
 part of AppEntities;
 
-enum SectionUiArea {
+enum ScreenWidgetArea {
   // each part in a section of the app
   // each below has subset of UiComponentSlotName
   navBar,
@@ -13,43 +13,43 @@ enum SectionUiArea {
   // tabBar
 }
 
-extension UiComponentExt1 on SectionUiArea {
+extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
   //
-  String includeStr(AppSection section) =>
+  String includeStr(AppScreen section) =>
       'On Section ${section.name}, do you want to configure the ${this.name}?';
 
   bool get isConfigureable => this.applicableRuleTypes.length > 0;
 
-  List<UiAreaSlotName> get applicablePropertySlots {
+  List<SubWidgetInScreenArea> get applicablePropertySlots {
     //
     switch (this) {
-      case SectionUiArea.navBar:
+      case ScreenWidgetArea.navBar:
         return [
-          UiAreaSlotName.title,
-          UiAreaSlotName.subtitle,
+          SubWidgetInScreenArea.title,
+          SubWidgetInScreenArea.subtitle,
         ];
-      case SectionUiArea.filterBar:
+      case ScreenWidgetArea.filterBar:
         return [
-          UiAreaSlotName.slot1,
-          UiAreaSlotName.slot2,
+          SubWidgetInScreenArea.slot1,
+          SubWidgetInScreenArea.slot2,
         ];
-      case SectionUiArea.header:
+      case ScreenWidgetArea.header:
         return [
-          UiAreaSlotName.title,
-          UiAreaSlotName.subtitle,
+          SubWidgetInScreenArea.title,
+          SubWidgetInScreenArea.subtitle,
         ];
-      case SectionUiArea.banner:
+      case ScreenWidgetArea.banner:
         return [
-          UiAreaSlotName.bannerUrl,
+          SubWidgetInScreenArea.bannerUrl,
         ];
-      case SectionUiArea.tableRow:
+      case ScreenWidgetArea.tableRow:
         return [
-          UiAreaSlotName.rowStyle,
+          SubWidgetInScreenArea.rowStyle,
         ];
-      case SectionUiArea.footer:
+      case ScreenWidgetArea.footer:
         return [
-          UiAreaSlotName.title,
-          UiAreaSlotName.subtitle,
+          SubWidgetInScreenArea.title,
+          SubWidgetInScreenArea.subtitle,
         ];
       // case UiComponent.ticker:
       //   return [VisualRuleType.show];
@@ -62,21 +62,21 @@ extension UiComponentExt1 on SectionUiArea {
     // customize this list to control what customization
     // rules go with this ui component
     switch (this) {
-      case SectionUiArea.navBar:
+      case ScreenWidgetArea.navBar:
         return [VisualRuleType.format];
-      case SectionUiArea.filterBar:
+      case ScreenWidgetArea.filterBar:
         return [VisualRuleType.filter];
-      case SectionUiArea.header:
+      case ScreenWidgetArea.header:
         return [VisualRuleType.format, VisualRuleType.show];
-      case SectionUiArea.banner:
+      case ScreenWidgetArea.banner:
         return [VisualRuleType.show];
-      case SectionUiArea.tableRow:
+      case ScreenWidgetArea.tableRow:
         return [
           VisualRuleType.format,
           VisualRuleType.group,
           VisualRuleType.sort
         ];
-      case SectionUiArea.footer:
+      case ScreenWidgetArea.footer:
         return [VisualRuleType.show];
       // case UiComponent.ticker:
       //   return [VisualRuleType.show];

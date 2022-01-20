@@ -1,25 +1,56 @@
 part of QuestConfig;
 
 // public api
-List<Question> loadQuestionsForSection(AppSection appSection) {
-  // List<Question> _questionLst = _getQuestionList();
+List<Question> loadInitialConfigQuestions() {
+  // event config questions DO NOT have areas or uiComponents
   return _questionLst
-      .where((qb) => qb.appSection == appSection && qb.uiComponent == null)
+      .where((qb) =>
+          qb.appSection == AppScreen.eventConfiguration &&
+          qb.isTopLevelSectionQuestion)
       .toList();
 }
 
-List<Question> loadQuestionsForAppSections(
-  // AppSection section,
-  UserResponse<List<AppSection>> response,
+List<Question> loadQuestionsAtTopOfSection(AppScreen appSection) {
+  return _questionLst
+      .where(
+          (qb) => qb.appSection == appSection && qb.isTopLevelSectionQuestion)
+      .toList();
+}
+
+List<Question> loadQuestionsUnderSelectedSections(
+  UserResponse<List<AppScreen>> response,
 ) {
-  // load questions about components in section
-  List<AppSection> appSectionsToConfigure = response.answers;
+  // load questions about areas in section
+  List<AppScreen> appSectionsToConfigure = response.answers;
   List<Question> newQuestions = _questionLst
-      .where((q) => appSectionsToConfigure.contains(q.appSection))
-      // &&
-      // relatedComponentsToConfigure.contains(q.uiComponent))
+      .where((q) =>
+          appSectionsToConfigure.contains(q.appSection) &&
+          !q.isTopLevelSectionQuestion)
       .toList();
   return newQuestions;
+}
+
+List<Question> loadVisualRuleQuestionsForArea(
+  AppScreen section,
+  ScreenWidgetArea uiComp,
+  UserResponse<List<VisualRuleType>> response,
+) {
+  /*
+    this method fabricates the rule rather than
+    loading an existing one
+  */
+  List<Question> lst = [];
+  for (VisualRuleType rt in response.answers) {
+    lst.add(
+      VisualRuleQuestion<String, RuleResponseWrapper>(
+        section,
+        uiComp,
+        rt,
+        null,
+      ),
+    );
+  }
+  return lst;
 }
 
 // accumulate configuration data
@@ -80,10 +111,10 @@ final List<Question> _questionLst = [
     EvEliminationStrategy.values.map((e) => e.name),
     (i) => EvEliminationStrategy.values[i],
   ),
-  Qb<String, List<AppSection>>(
+  Qb<String, List<AppScreen>>(
     QuestionQuantifier.eventLevel(addsSectionQuestions: true),
     'Which app areas shall we configure?',
-    AppSection.eventConfiguration.sectionConfigOptions.map((e) => e.name),
+    AppScreen.eventConfiguration.sectionConfigOptions.map((e) => e.name),
     (String strLstIdxs) {
       //
       List<int> _sectionIds = strLstIdxs
@@ -92,7 +123,7 @@ final List<Question> _questionLst = [
           .where((i) => i >= 0)
           .toList();
       return _sectionIds
-          .map((idx) => AppSection.eventConfiguration.sectionConfigOptions[idx])
+          .map((idx) => AppScreen.eventConfiguration.sectionConfigOptions[idx])
           .toList();
     },
     acceptsMultiResponses: true,
@@ -101,19 +132,19 @@ final List<Question> _questionLst = [
   // and if user proceeds, then we ask them
   // which UI components in the section they want to configure
 
-  if (AppSection.marketView.isConfigureable)
-    Qb<String, List<SectionUiArea>>(
-      QuestionQuantifier.appSectionLevel(AppSection.marketView,
+  if (AppScreen.marketView.isConfigureable)
+    Qb<String, List<ScreenWidgetArea>>(
+      QuestionQuantifier.appSectionLevel(AppScreen.marketView,
           addsAreaQuestions: true),
-      AppSection.marketView.includeStr,
-      AppSection.marketView.applicableComponents.map((e) => e.name),
-      AppSection.marketView.convertIdxsToComponentList,
+      AppScreen.marketView.includeStr,
+      AppScreen.marketView.applicableComponents.map((e) => e.name),
+      AppScreen.marketView.convertIdxsToComponentList,
     ),
-  if (AppSection.marketView.isConfigureable)
-    for (SectionUiArea uic in AppSection.marketView.applicableComponents)
+  if (AppScreen.marketView.isConfigureable)
+    for (ScreenWidgetArea uic in AppScreen.marketView.applicableComponents)
       for (VisualRuleType rt in uic.applicableRuleTypes)
         Qb<String, bool>(
-          QuestionQuantifier.uiComponentLevel(AppSection.marketView, uic,
+          QuestionQuantifier.uiComponentLevel(AppScreen.marketView, uic,
               addsRuleQuestions: true),
           'Want to configure ${rt.name} on ${uic.name}?',
           null,

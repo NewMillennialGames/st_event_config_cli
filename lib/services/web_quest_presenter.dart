@@ -5,7 +5,7 @@
 import 'package:eventconfig/interfaces/question_presenter.dart';
 
 import '../input_models/all.dart';
-import '../dialog_cli/all.dart';
+import '../dialog/all.dart';
 import '../app_entity_enums/all.dart';
 // import '../enums/all.dart';
 
@@ -21,7 +21,7 @@ class WebQuestionPresenter implements QuestionPresenter {
     DialogRunner dialoger,
     DialogSectionCfg sectionCfg,
   ) {
-    if (sectionCfg.appSection == AppSection.eventConfiguration) return true;
+    if (sectionCfg.appSection == AppScreen.eventConfiguration) return true;
 
     return sectionCfg.askIfNeeded();
   }
