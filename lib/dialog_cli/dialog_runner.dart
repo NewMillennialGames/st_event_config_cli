@@ -11,6 +11,7 @@ class DialogRunner {
   to produce CLI output to the user
   */
   final QuestListMgr _questMgr = QuestListMgr();
+  final NewQuestionComposer _newQuestComposer = NewQuestionComposer();
   late final DialogMgr _questGroupMgr;
   final int linesBetweenSections;
   final int linesBetweenQuestions;
@@ -48,8 +49,6 @@ class DialogRunner {
       if (shouldShowSection) {
         // remember current section for derived questions
         _currSection = section.appSection;
-        // load static questions here
-        _questGroupMgr.loadQuestionsForSpecifiedSection(_currSection);
         _outputSpacerLines(forSection: true);
         // check for another question
         Question? _quest = _questGroupMgr.getNextQuestInCurrentSection();
@@ -57,6 +56,8 @@ class DialogRunner {
           // askAndWaitForUserResponse() will callback to this
           // to create any derived questions for this section
           questFormatter.askAndWaitForUserResponse(this, _quest);
+          _newQuestComposer.handleAcquiringNewQuestions(this, _quest);
+
           _quest = _questGroupMgr.getNextQuestInCurrentSection();
           if (_quest != null) _outputSpacerLines();
         }
@@ -74,15 +75,18 @@ class DialogRunner {
     }
   }
 
-  // create questions based on prior answers
-  void generateAssociatedUiComponentQuestions(
-    AppSection section,
-    UserResponse<List<SectionUiArea>> response,
+  // callbacks when a question needs to add other questions
+  void addQuestionsForAreasInSelectedSections(
+    UserResponse<List<AppSection>> response,
   ) {
-    //
-    var includedQuestions = loadSpecificComponentQuestions(section, response);
-    _questMgr.appendQuestions(section, includedQuestions);
+    // should add "include" questions for all areas in selected section
+    var includedQuestions = loadQuestionsForAppSections(response);
+    _questMgr.appendQuestions(includedQuestions);
   }
+
+  void addQuestionsForVisRulesInSelectedAreas(
+    UserResponse<List<SectionUiArea>> response,
+  ) {}
 
   void generateAssociatedUiRuleTypeQuestions(
     SectionUiArea uiComp,
@@ -95,7 +99,6 @@ class DialogRunner {
       response,
     );
     _questMgr.appendQuestions(
-      _questGroupMgr.currentSectiontype,
       includedQuestions,
     );
   }

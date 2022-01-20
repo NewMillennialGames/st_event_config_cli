@@ -43,7 +43,7 @@ class DialogMgr {
 
   void loadQuestionsForSpecifiedSection(AppSection section) {
     List<Question> quests = loadQuestionsForSection(section);
-    _questMgr.appendQuestions(section, quests);
+    _questMgr.appendQuestions(quests);
   }
 
   void _loadAppUiSections() {

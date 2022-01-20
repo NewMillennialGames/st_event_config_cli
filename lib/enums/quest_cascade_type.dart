@@ -1,18 +1,27 @@
 part of EvCfgEnums;
 
 enum QuestCascadeTyp {
-  captureValue,
-  alterFutureQuestionList,
+  /* Cascade Type defines:
+    how does response from user
+    to a current question
+    impact future questions in the pending list
+   */
+  noCascade,
+  appendsPerSectionQuestions,
+  appendsPerSectionAreaQuestions,
   produceVisualRule,
   produceBehavioralRule
 }
 
 extension QuestCascadeTypExt on QuestCascadeTyp {
   //
-  bool get capturesScalarValues => this == QuestCascadeTyp.captureValue;
+  bool get generatesNoQuestions => this == QuestCascadeTyp.noCascade;
 
-  bool get addsOrDeletesFutureQuestions =>
-      this == QuestCascadeTyp.alterFutureQuestionList;
+  bool get addsPerSectionQuestions =>
+      this == QuestCascadeTyp.appendsPerSectionQuestions;
+
+  bool get addsAreaQuestions =>
+      this == QuestCascadeTyp.appendsPerSectionAreaQuestions;
 
   bool get producesVisualRules => this == QuestCascadeTyp.produceVisualRule;
 

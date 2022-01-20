@@ -11,22 +11,22 @@ class VisRuleQuestWithChoices {
   );
 }
 
-class VisRuleQuestDef {
+class VisRuleChoiceConfig {
   //
   final VisualRuleType ruleTyp;
   final List<VisRuleQuestWithChoices> questsAndChoices;
 
-  VisRuleQuestDef._(
+  VisRuleChoiceConfig._(
     this.ruleTyp,
     this.questsAndChoices,
   );
 
-  factory VisRuleQuestDef.byRuleTyp(VisualRuleType ruleTyp) {
+  factory VisRuleChoiceConfig.byRuleTyp(VisualRuleType ruleTyp) {
     // use VisualRuleType to get list of sub-questions
     // and their respective choice options
     List<VisRuleQuestWithChoices> questsAndChoices =
         getSubQuestionsAndChoiceOptions(ruleTyp);
-    return VisRuleQuestDef._(ruleTyp, questsAndChoices);
+    return VisRuleChoiceConfig._(ruleTyp, questsAndChoices);
   }
 
   static List<VisRuleQuestWithChoices> getSubQuestionsAndChoiceOptions(

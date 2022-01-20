@@ -61,13 +61,17 @@ class QuestListMgr {
   }
 
   void appendQuestions(
-    AppSection section,
     List<Question> quests,
   ) {
     //
-    _questCountBySection[section] =
-        (_questCountBySection[section] ?? 0) + quests.length;
+    Set<AppSection> newSections = quests.map((e) => e.appSection).toSet();
 
+    for (AppSection as in newSections) {
+      int newCntBySec = quests
+          .where((q) => q.appSection == as)
+          .fold(0, (accumVal, _) => accumVal + 1);
+      _questCountBySection[as] = (_questCountBySection[as] ?? 0) + newCntBySec;
+    }
     int c = _pendingQuestions.length;
     quests.forEach((q) {
       q.questionId = ++c;

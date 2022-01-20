@@ -8,16 +8,16 @@ List<Question> loadQuestionsForSection(AppSection appSection) {
       .toList();
 }
 
-List<Question> loadSpecificComponentQuestions(
-  AppSection section,
-  UserResponse<List<SectionUiArea>> response,
+List<Question> loadQuestionsForAppSections(
+  // AppSection section,
+  UserResponse<List<AppSection>> response,
 ) {
   // load questions about components in section
-  List<SectionUiArea> relatedComponentsToConfigure = response.answers;
+  List<AppSection> appSectionsToConfigure = response.answers;
   List<Question> newQuestions = _questionLst
-      .where((q) =>
-          q.appSection == section &&
-          relatedComponentsToConfigure.contains(q.uiComponent))
+      .where((q) => appSectionsToConfigure.contains(q.appSection))
+      // &&
+      // relatedComponentsToConfigure.contains(q.uiComponent))
       .toList();
   return newQuestions;
 }
@@ -81,7 +81,7 @@ final List<Question> _questionLst = [
     (i) => EvEliminationStrategy.values[i],
   ),
   Qb<String, List<AppSection>>(
-    QuestionQuantifier.eventLevel(),
+    QuestionQuantifier.eventLevel(addsSectionQuestions: true),
     'Which app areas shall we configure?',
     AppSection.eventConfiguration.sectionConfigOptions.map((e) => e.name),
     (String strLstIdxs) {
@@ -92,12 +92,10 @@ final List<Question> _questionLst = [
           .where((i) => i >= 0)
           .toList();
       return _sectionIds
-          .map((idx) =>
-              AppSection.eventConfiguration.sectionConfigOptions[idx + 1])
+          .map((idx) => AppSection.eventConfiguration.sectionConfigOptions[idx])
           .toList();
     },
     acceptsMultiResponses: true,
-    generatesNewQuestions: true,
   ),
   // top sections are asked automatically;
   // and if user proceeds, then we ask them
@@ -105,7 +103,8 @@ final List<Question> _questionLst = [
 
   if (AppSection.marketView.isConfigureable)
     Qb<String, List<SectionUiArea>>(
-      QuestionQuantifier.appSectionLevel(AppSection.marketView),
+      QuestionQuantifier.appSectionLevel(AppSection.marketView,
+          addsAreaQuestions: true),
       AppSection.marketView.includeStr,
       AppSection.marketView.applicableComponents.map((e) => e.name),
       AppSection.marketView.convertIdxsToComponentList,
@@ -114,7 +113,8 @@ final List<Question> _questionLst = [
     for (SectionUiArea uic in AppSection.marketView.applicableComponents)
       for (VisualRuleType rt in uic.applicableRuleTypes)
         Qb<String, bool>(
-          QuestionQuantifier.uiComponentLevel(AppSection.marketView, uic),
+          QuestionQuantifier.uiComponentLevel(AppSection.marketView, uic,
+              addsRuleQuestions: true),
           'Want to configure ${rt.name} on ${uic.name}?',
           null,
           (yOrN) => yOrN.toUpperCase().startsWith('Y'),

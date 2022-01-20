@@ -44,7 +44,7 @@ extension AppSectionExt1 on AppSection {
   // AppSection.values.map((as) => as).toList();
   List<AppSection> get sectionConfigOptions => AppSection.values
       .where(
-        (as) => as.isConfigureable && !this._tempNotConfigurable.contains(this),
+        (as) => as.isConfigureable && !this._tempNotConfigurable.contains(as),
       )
       .toList();
 

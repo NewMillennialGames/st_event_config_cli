@@ -128,9 +128,9 @@ class CliQuestionFormatter {
 
   void _printInstructions(Question quest) {
     //
-    if (quest.capturesScalarValues) {
+    if (quest.addsPerSectionQuestions) {
       // user will enter string or comma delimited list of ints
-    } else if (quest.addsOrDeletesFutureQuestions) {
+    } else if (quest.addsAreaQuestions) {
       // causes questions to be added or removed from future queue
       // user may enter int or comma delimited list of ints
     } else if (quest.producesVisualRules) {

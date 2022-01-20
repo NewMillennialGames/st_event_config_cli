@@ -13,9 +13,8 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
   final CastUserInputToTyp<ConvertTyp, AnsTyp>? castFunc;
   final int defaultAnswerIdx;
   final bool dynamicFromPriorState;
+  final bool acceptsMultiResponses;
   // set later
-  bool generatesNewQuestions = false;
-  bool acceptsMultiResponses = false;
   bool shouldSkip = false;
   int questionId = 0;
   UserResponse<AnsTyp>? response;
@@ -27,32 +26,23 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
     this.castFunc, {
     this.defaultAnswerIdx = 1,
     this.dynamicFromPriorState = false,
-    this.generatesNewQuestions = false,
     this.acceptsMultiResponses = false,
   });
   // getters
   bool get isRuleQuestion => false;
-  AppSection get appSection => qQuantify.appSection;
-  SectionUiArea? get uiComponent => qQuantify.uiCompInSection;
-
   List<String>? get answerChoicesList => _answerChoices?.toList();
   bool get hasChoices => (_answerChoices?.length ?? 0) > 0;
-  bool get capturesScalarValues => qQuantify.capturesScalarValues;
-  bool get addsOrDeletesFutureQuestions =>
-      qQuantify.addsOrDeletesFutureQuestions || generatesNewQuestions;
+
+  // quantified info
+  AppSection get appSection => qQuantify.appSection;
+  SectionUiArea? get uiComponent => qQuantify.uiCompInSection;
+  VisualRuleType? get visRuleTypeForComp => qQuantify.visRuleTypeForComp;
+  BehaviorRuleType? get behRuleTypeForComp => qQuantify.behRuleTypeForComp;
+  bool get generatesNoQuestions => qQuantify.generatesNoQuestions;
+  bool get addsPerSectionQuestions => qQuantify.addsPerSectionQuestions;
+  bool get addsAreaQuestions => qQuantify.addsAreaQuestions;
   bool get producesVisualRules => qQuantify.producesVisualRules;
   bool get producesBehavioralRules => qQuantify.producesBehavioralRules;
-  // building other questions based on prior answers
-  bool get generatesScreenComponentQuestions =>
-      addsOrDeletesFutureQuestions && AnsTyp is List<SectionUiArea>;
-  bool get generatesVisRuleTypeQuestions =>
-      addsOrDeletesFutureQuestions &&
-      qQuantify.uiCompInSection != null &&
-      AnsTyp is List<VisualRuleType>;
-  bool get generatesBehRuleTypeQuestions =>
-      addsOrDeletesFutureQuestions &&
-      qQuantify.uiCompInSection != null &&
-      AnsTyp is List<BehaviorRuleType>;
 
   void askAndWait(DialogRunner dlogRunner) {
     //
@@ -67,7 +57,7 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
       if (userResp != null) {
         answerIdx = int.tryParse(userResp) ?? -1;
       }
-      if (answerIdx == -1 && (hasChoices || !capturesScalarValues)) {
+      if (answerIdx == -1 && (hasChoices)) {
         answerIdx = defaultAnswerIdx;
       }
       // print('calling int converter ($answerIdx) on $question');
@@ -89,7 +79,7 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
     print('Response: $derivedUserResponse');
     this.response = UserResponse<AnsTyp>(derivedUserResponse);
     // print("You entered: '$userResp' and ${derivedUserResponse.toString()}");
-    _handleCreatingNewQuestions(dlogRunner);
+    // _handleCreatingNewQuestions(dlogRunner);
   }
 
   AnsTyp? _castResponseToAnswer(ConvertTyp convertibleVal) {
@@ -117,29 +107,6 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
       }
     }
     return answer;
-  }
-
-  void _handleCreatingNewQuestions(DialogRunner dlogRunner) {
-    //
-    if (this.generatesScreenComponentQuestions) {
-      //
-      dlogRunner.generateAssociatedUiComponentQuestions(
-        appSection,
-        this.response as UserResponse<List<SectionUiArea>>,
-      );
-    } else if (this.generatesVisRuleTypeQuestions) {
-      //
-      dlogRunner.generateAssociatedUiRuleTypeQuestions(
-        this.qQuantify.uiCompInSection!,
-        this.response as UserResponse<List<VisualRuleType>>,
-      );
-    } else if (this.generatesBehRuleTypeQuestions) {
-      //
-      dlogRunner.generateAssociatedBehRuleTypeQuestions(
-        this.qQuantify.uiCompInSection!,
-        this.response as UserResponse<List<BehaviorRuleType>>,
-      );
-    }
   }
 
   // next two methods are for possible future usage?

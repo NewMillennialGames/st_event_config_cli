@@ -25,9 +25,9 @@ class QuestionQuantifier extends Equatable {
     return '${cascadeType.index}-${appSection.index}-$uiCompIdx-$visRuleTypeForCompIdx-$behRuleTypeForCompIdx';
   }
 
-  bool get capturesScalarValues => cascadeType.capturesScalarValues;
-  bool get addsOrDeletesFutureQuestions => cascadeType
-      .addsOrDeletesFutureQuestions; // || appSection == AppSection.eventConfiguration
+  bool get generatesNoQuestions => cascadeType.generatesNoQuestions;
+  bool get addsPerSectionQuestions => cascadeType.addsPerSectionQuestions;
+  bool get addsAreaQuestions => cascadeType.addsAreaQuestions;
   bool get producesVisualRules => cascadeType.producesVisualRules;
   bool get producesBehavioralRules => cascadeType.producesBehavioralRules;
 
@@ -48,9 +48,11 @@ class QuestionQuantifier extends Equatable {
     );
   }
 
-  factory QuestionQuantifier.eventLevel() {
-    return const QuestionQuantifier._(
-      QuestCascadeTyp.captureValue,
+  factory QuestionQuantifier.eventLevel({bool addsSectionQuestions = false}) {
+    return QuestionQuantifier._(
+      addsSectionQuestions
+          ? QuestCascadeTyp.appendsPerSectionQuestions
+          : QuestCascadeTyp.noCascade,
       AppSection.eventConfiguration,
       null,
       null,
@@ -58,11 +60,12 @@ class QuestionQuantifier extends Equatable {
     );
   }
 
-  factory QuestionQuantifier.appSectionLevel(
-    AppSection appSection,
-  ) {
+  factory QuestionQuantifier.appSectionLevel(AppSection appSection,
+      {bool addsAreaQuestions = false}) {
     return QuestionQuantifier._(
-      QuestCascadeTyp.alterFutureQuestionList,
+      addsAreaQuestions
+          ? QuestCascadeTyp.appendsPerSectionAreaQuestions
+          : QuestCascadeTyp.noCascade,
       appSection,
       null,
       null,
@@ -71,11 +74,12 @@ class QuestionQuantifier extends Equatable {
   }
 
   factory QuestionQuantifier.uiComponentLevel(
-    AppSection appSection,
-    SectionUiArea uiCompInSection,
-  ) {
+      AppSection appSection, SectionUiArea uiCompInSection,
+      {bool addsRuleQuestions = false}) {
     return QuestionQuantifier._(
-      QuestCascadeTyp.alterFutureQuestionList,
+      addsRuleQuestions
+          ? QuestCascadeTyp.produceVisualRule
+          : QuestCascadeTyp.noCascade,
       appSection,
       uiCompInSection,
       null,

@@ -10,7 +10,7 @@ class VisualRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseWrapper>
 
     must collect enough data to render the full rule
   */
-  late final VisRuleQuestDef _questDef;
+  late final VisRuleChoiceConfig _questDef;
 
   VisualRuleQuestion(
     AppSection appSection,
@@ -29,10 +29,10 @@ class VisualRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseWrapper>
           null,
           castFunc,
         ) {
-    this._questDef = VisRuleQuestDef.byRuleTyp(visRuleType);
+    this._questDef = VisRuleChoiceConfig.byRuleTyp(visRuleType);
   }
 
-  VisRuleQuestDef get questDef => _questDef;
+  VisRuleChoiceConfig get questDef => _questDef;
   List<VisRuleQuestWithChoices> get questsAndChoices =>
       _questDef.questsAndChoices;
 
