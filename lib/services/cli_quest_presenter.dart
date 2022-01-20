@@ -1,15 +1,17 @@
-part of InputModels;
+import "dart:io";
+import 'package:collection/collection.dart';
+import 'package:eventconfig/interfaces/question_presenter.dart';
+//
+import '../input_models/all.dart';
+import '../dialog_cli/all.dart';
+import '../app_entity_enums/all.dart';
+import '../enums/all.dart';
 
-class FlutterQuestionFormatter {
-  // TODO:  future
-  // to render widget views of the question
-  // move this class to the parent flutter project
-}
-
-class CliQuestionFormatter {
+class CliQuestionPresenter implements QuestionPresenter {
   // formatter for command-line IO
-  CliQuestionFormatter();
+  CliQuestionPresenter();
 
+  @override
   bool askSectionQuestionAndWaitForUserResponse(
     DialogRunner dialoger,
     DialogSectionCfg sectionCfg,
@@ -19,6 +21,7 @@ class CliQuestionFormatter {
     return sectionCfg.askIfNeeded();
   }
 
+  @override
   void askAndWaitForUserResponse(
     DialogRunner dialoger,
     Question quest,

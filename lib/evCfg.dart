@@ -3,6 +3,7 @@ import 'dart:core';
 import 'package:args/args.dart';
 //
 import 'dialog_cli/all.dart';
+import 'services/cli_quest_presenter.dart';
 /*
   check ReadMe.MD
 */
@@ -28,7 +29,9 @@ Future<void> main(List<String> arguments) async {
   // add clear lines
   print('\n' * 0);
 
-  final dialoger = DialogRunner();
+  final cliQuestPresenter = CliQuestionPresenter();
+  // using DI to make it easy for web app to use same runner
+  final dialoger = DialogRunner(cliQuestPresenter);
   final succeeded = dialoger.loopUntilComplete();
 
   stdout.writeln("Done:\n");

@@ -15,10 +15,12 @@ class DialogRunner {
   late final DialogMgr _questGroupMgr;
   final int linesBetweenSections;
   final int linesBetweenQuestions;
+  final QuestionPresenter questFormatter;
   //
-  AppSection _currSection = AppSection.eventConfiguration;
+  // AppSection _currSection = AppSection.eventConfiguration;
 
-  DialogRunner([
+  DialogRunner(
+    this.questFormatter, [
     this.linesBetweenSections = 3,
     this.linesBetweenQuestions = 1,
   ]) {
@@ -36,7 +38,7 @@ class DialogRunner {
   bool loopUntilComplete() {
     //
     // questFormatter manages display output
-    final questFormatter = CliQuestionFormatter();
+    // final questFormatter = CliQuestionFormatter();
 
     DialogSectionCfg? section = _questGroupMgr._getNextSection();
     while (section != null) {
@@ -48,7 +50,7 @@ class DialogRunner {
       );
       if (shouldShowSection) {
         // remember current section for derived questions
-        _currSection = section.appSection;
+        // _currSection = section.appSection;
         _outputSpacerLines(forSection: true);
         // check for another question
         Question? _quest = _questGroupMgr.getNextQuestInCurrentSection();
