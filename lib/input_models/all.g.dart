@@ -22,10 +22,10 @@ Map<String, dynamic> _$RuleResponseWrapperToJson(
     };
 
 const _$VisRuleQuestTypeEnumMap = {
-  VisRuleQuestType.whichTable: 'whichTable',
-  VisRuleQuestType.whichField: 'whichField',
-  VisRuleQuestType.whichLevelPos: 'whichLevelPos',
-  VisRuleQuestType.isAscending: 'isAscending',
-  VisRuleQuestType.whichRowStyle: 'whichRowStyle',
-  VisRuleQuestType.shouldShow: 'shouldShow',
+  VisRuleQuestType.getValueFromTableAndField: 'whichTable',
+  VisRuleQuestType.selectFieldForSortOrGroup: 'whichField',
+  VisRuleQuestType.specifyPositionInGroup: 'whichLevelPos',
+  VisRuleQuestType.setSortOrder: 'isAscending',
+  VisRuleQuestType.selectVisualComponentOrStyle: 'whichRowStyle',
+  VisRuleQuestType.controlsVisibilityOfAreaOrSlot: 'shouldShow',
 };

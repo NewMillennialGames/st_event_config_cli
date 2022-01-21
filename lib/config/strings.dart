@@ -13,4 +13,12 @@ class DlgStr {
   // static String eventName = 'Enter Event Template Name';
   // static String eventName = 'Enter Event Template Name';
   // static String eventName = 'Enter Event Template Name';
+
+}
+
+class RuleTemplStr {
+  //
+
+  static String ruleRequiringRowColMap =
+      'Select field name for {0} rule in the {1} area of screen {2}';
 }

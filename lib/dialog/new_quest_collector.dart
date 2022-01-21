@@ -76,8 +76,8 @@ class NewQuestionCollector {
         questJustAnswered.visRuleTypeForSlotInArea != null) {
       print('calling: genNeededVisualRulesForAreaOrSlot');
       genNeededVisualRulesForAreaOrSlot(
-        questJustAnswered.qQuantify.screenWidgetArea!,
-        questJustAnswered.response as UserResponse<List<VisualRuleType>>,
+        _questMgr,
+        questJustAnswered as Question<String, List<VisualRuleType>>,
       );
       //
     } else if (questJustAnswered.asksDetailsForEachBehaveRuleType &&
@@ -227,18 +227,18 @@ class NewQuestionCollector {
   }
 
   void genNeededVisualRulesForAreaOrSlot(
-    ScreenWidgetArea uiComp,
-    UserResponse<List<VisualRuleType>> response,
+    QuestListMgr _questMgr,
+    Question<String, List<VisualRuleType>> quest,
   ) {
+    List<VisualRuleType> rulesToCreateForAreaOrSlot =
+        quest.response?.answers ?? [];
+    if (rulesToCreateForAreaOrSlot.length < 1) return;
+
+    AppScreen screen = quest.appScreen;
+    ScreenWidgetArea area = quest.screenWidgetArea!;
+    ScreenAreaWidgetSlot areaSlot = quest.slotInArea!;
     //
-    // var includedQuestions = loadVisualRuleQuestionsForArea(
-    //   _questGroupMgr.currentAppScreenTyp,
-    //   uiComp,
-    //   response,
-    // );
-    // _questMgr.appendNewQuestions(
-    //   includedQuestions,
-    // );
+    for (VisualRuleType rule in rulesToCreateForAreaOrSlot) {}
   }
 
   void genNeededBehaveRulesForAreaOrSlot(

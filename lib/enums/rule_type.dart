@@ -1,6 +1,9 @@
 part of EvCfgEnums;
 
 //
+const List<VisualRuleType> _unconfigurableFutureRules = [
+  VisualRuleType.show,
+];
 
 enum VisualRuleType {
   sort,
@@ -12,43 +15,81 @@ enum VisualRuleType {
 
 extension VisualRuleTypeExt1 on VisualRuleType {
   //
+  bool get isConfigurable => !_unconfigurableFutureRules.contains(this);
+  //
   String questionStr(
-    AppScreen section,
-    ScreenWidgetArea uiComp,
+    AppScreen screen,
+    ScreenWidgetArea screenArea,
+    ScreenAreaWidgetSlot? slotInArea,
   ) {
-    return 'Select field name for ${this.name} rule in the ${uiComp.name} area of ${section.name}';
+    bool isAreaScopedRule = slotInArea == null;
+    final List<dynamic> valsDyn = [
+      screen,
+      screenArea,
+      // valsDyn.length (of 2 or3) will inform depth of rule being created
+      if (!isAreaScopedRule) slotInArea,
+    ];
+
+    switch (this) {
+      case VisualRuleType.sort:
+        return RuleTemplStr.ruleRequiringRowColMap.makeRuleQuestionStr(
+          this,
+          isAreaScopedRule,
+          valsDyn,
+        );
+      case VisualRuleType.group:
+        return RuleTemplStr.ruleRequiringRowColMap.makeRuleQuestionStr(
+          this,
+          isAreaScopedRule,
+          valsDyn,
+        );
+      case VisualRuleType.filter:
+        return RuleTemplStr.ruleRequiringRowColMap.makeRuleQuestionStr(
+          this,
+          isAreaScopedRule,
+          valsDyn,
+        );
+      case VisualRuleType.format:
+        return RuleTemplStr.ruleRequiringRowColMap.makeRuleQuestionStr(
+          this,
+          isAreaScopedRule,
+          valsDyn,
+        );
+      case VisualRuleType.show:
+        return RuleTemplStr.ruleRequiringRowColMap.makeRuleQuestionStr(
+          this,
+          isAreaScopedRule,
+          valsDyn,
+        );
+    }
   }
 
   List<VisRuleQuestType> get questionsRequired {
     switch (this) {
       case VisualRuleType.sort:
         return [
-          Vrq.whichTable,
-          Vrq.whichField,
-          Vrq.whichLevelPos,
-          Vrq.isAscending
+          Vrq.selectFieldForSortOrGroup,
+          Vrq.specifyPositionInGroup,
+          Vrq.setSortOrder
         ];
       case VisualRuleType.group:
         return [
-          Vrq.whichTable,
-          Vrq.whichField,
-          Vrq.whichLevelPos,
-          Vrq.isAscending
+          Vrq.selectFieldForSortOrGroup,
+          Vrq.specifyPositionInGroup,
+          Vrq.setSortOrder
         ];
       case VisualRuleType.filter:
         return [
-          Vrq.whichTable,
-          Vrq.whichField,
-          Vrq.whichLevelPos,
+          Vrq.getValueFromTableAndField,
+          Vrq.specifyPositionInGroup,
         ];
       case VisualRuleType.format:
         return [
-          Vrq.whichTable,
-          Vrq.whichRowStyle,
+          Vrq.selectVisualComponentOrStyle,
         ];
       case VisualRuleType.show:
         return [
-          Vrq.shouldShow,
+          Vrq.controlsVisibilityOfAreaOrSlot,
         ];
     }
   }

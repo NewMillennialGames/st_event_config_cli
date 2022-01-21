@@ -6,6 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 import '../app_entity_enums/all.dart';
 import '../enums/all.dart';
 import '../util/type_cast.dart';
+import '../util/string_ext.dart';
 //
 part 'all.g.dart';
 part 'user_response.dart';
