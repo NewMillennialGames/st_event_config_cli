@@ -18,6 +18,75 @@ class QuestListMgr {
   int get totalAnsweredQuestions => _answeredQuestsBySection.values
       .fold<int>(0, (r, qLst) => r + qLst.length);
 
+  List<Question> get _allAnsweredQuestions =>
+      _answeredQuestsBySection.values.fold<List<Question>>(
+        [],
+        (l0, l1) => l0..addAll(l1),
+      );
+
+  List<AppScreen> get userSelectedScreens {
+    List<AppScreen> uss = (_allAnsweredQuestions
+            .whereType<Question<String, List<AppScreen>>>()
+            .where((q) => q.asksWhichScreensToConfig)
+            .first
+            .response
+            ?.answers ??
+        []);
+
+    print('userSelectedScreens has ${uss.length} items');
+    return uss;
+  }
+
+  Map<AppScreen, List<ScreenWidgetArea>> get screenAreasPerScreen {
+    //
+    Map<AppScreen, List<ScreenWidgetArea>> map = {};
+
+    for (AppScreen as in userSelectedScreens) {
+      map[as] = screenAreasFor(as);
+    }
+    return map;
+  }
+
+  Map<AppScreen, Map<ScreenWidgetArea, List<SubWidgetInScreenArea>>>
+      get allSlotsInAreasInScreens {
+    //
+    Map<AppScreen, Map<ScreenWidgetArea, List<SubWidgetInScreenArea>>> tree =
+        {};
+
+    for (MapEntry<AppScreen, List<ScreenWidgetArea>> mapEntry
+        in screenAreasPerScreen.entries<AppScreen, List<ScreenWidgetArea>>) {
+      //
+      tree[mapEntry.key] = {};
+      for (ScreenWidgetArea area in mapEntry.value) {
+        tree[mapEntry.key] = {area: screenSlotsInAreasFor(mapEntry.key, area)};
+      }
+    }
+
+    return tree;
+  }
+
+  List<ScreenWidgetArea> screenAreasFor(AppScreen as) {
+    //
+    return _allAnsweredQuestions
+        .whereType<Question<String, List<ScreenWidgetArea>>>()
+        .where((q) => q.appScreen == as)
+        .map((q) => q.response?.answers ?? [])
+        .fold<List<ScreenWidgetArea>>([], (l0, l1) => l0..addAll(l1)).toList();
+  }
+
+  List<SubWidgetInScreenArea> screenSlotsInAreasFor(
+    AppScreen as,
+    ScreenWidgetArea area,
+  ) {
+    //
+    return _allAnsweredQuestions
+        .whereType<Question<String, List<SubWidgetInScreenArea>>>()
+        .where((q) => q.appScreen == as && q.screenWidgetArea == area)
+        .map((q) => q.response?.answers ?? [])
+        .fold<List<SubWidgetInScreenArea>>(
+            [], (l0, l1) => l0..addAll(l1)).toList();
+  }
+
   Question? _nextQuestionFor(AppScreen section) {
     //
     _moveCurrentQuestToAnswered();
@@ -83,11 +152,6 @@ class QuestListMgr {
     // return all existing user answers
 
     // List<Question> l0, List<Question>
-    List<Question> _allAnsweredQuestions =
-        _answeredQuestsBySection.values.fold<List<Question>>(
-      [],
-      (l0, l1) => l0..addAll(l1),
-    );
 
     return _allAnsweredQuestions
         .map((e) => e.response)

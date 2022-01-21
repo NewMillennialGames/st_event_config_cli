@@ -10,9 +10,13 @@ class NewQuestionCollector {
   ) {
     // ruleQuestions don't currently generate new questions
     if (questJustAnswered.isRuleQuestion ||
-        questJustAnswered.generatesNoQuestions) return;
+        questJustAnswered.generatesNoNewQuestions) {
+      print(
+          'Quest: #${questJustAnswered.questionId} -- ${questJustAnswered.question} wont generated any new questions');
+      return;
+    }
 
-    if (questJustAnswered.addsWhichAreaInEachScreenQuestions &&
+    if (questJustAnswered.asksAreasWithinSelectedScreens &&
         questJustAnswered.appScreen == AppScreen.eventConfiguration) {
       /* called by the last question in hard-coded event list
         user has given us full list of screens they want to configure
@@ -23,7 +27,7 @@ class NewQuestionCollector {
         questJustAnswered.response as UserResponse<List<AppScreen>>,
       );
       //
-    } else if (questJustAnswered.addsWhichSlotsOfSelectedAreaQuestions) {
+    } else if (questJustAnswered.asksSlotsWithinSelectedScreenAreas) {
       /*  for all the areas (to be configured) of all of the selected screens
           we need to know which slot(s) on each area they want to configure
 
@@ -33,17 +37,18 @@ class NewQuestionCollector {
 
       askeUserWhichSlotsOnSelectedAreasToConfigure(
         _questMgr,
-        questJustAnswered,
+        questJustAnswered as Question<String, List<ScreenWidgetArea>>,
       );
       //
-    } else if (questJustAnswered.addsVisualRuleQuestions &&
+    } else if (questJustAnswered.asksRuleTypesForSelectedAreasOrSlots) {
+    } else if (questJustAnswered.asksDetailsForEachVisualRuleType &&
         questJustAnswered.visRuleTypeForSlotInArea != null) {
       generateAssociatedUiRuleTypeQuestions(
         questJustAnswered.qQuantify.screenWidgetArea!,
         questJustAnswered.response as UserResponse<List<VisualRuleType>>,
       );
       //
-    } else if (questJustAnswered.addsBehavioralRuleQuestions &&
+    } else if (questJustAnswered.asksDetailsForEachBehaveRuleType &&
         questJustAnswered.behRuleTypeForSlotInArea != null) {
       generateAssociatedBehRuleTypeQuestions(
         questJustAnswered.qQuantify.screenWidgetArea!,
@@ -116,6 +121,10 @@ class NewQuestionCollector {
     newQuestions.add(q);
     // }
     _questMgr.appendQuestions(newQuestions);
+  }
+
+  void askWhichConfigRulesToApplyToSelectedAreaOrSlot() {
+    //
   }
 
   void addQuestionsForVisRulesInSelectedAreas(

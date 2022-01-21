@@ -29,25 +29,37 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
   });
   // getters
   bool get isRuleQuestion => false;
+  bool get isTopLevelConfigOrScreenQuestion =>
+      qQuantify.isTopLevelConfigOrScreenQuestion;
   List<String>? get answerChoicesList => _answerChoices?.toList();
   bool get hasChoices => (_answerChoices?.length ?? 0) > 0;
 
   // quantified info
-  bool get isTopLevelSectionQuestion =>
-      qQuantify.isTopLevelConfigOrScreenQuestion;
   AppScreen get appScreen => qQuantify.appScreen;
   ScreenWidgetArea? get screenWidgetArea => qQuantify.screenWidgetArea;
+  SubWidgetInScreenArea? get slotInArea => qQuantify.slotInArea;
+  //
   VisualRuleType? get visRuleTypeForSlotInArea =>
       qQuantify.visRuleTypeForSlotInArea;
   BehaviorRuleType? get behRuleTypeForSlotInArea =>
       qQuantify.behRuleTypeForSlotInArea;
-  bool get generatesNoQuestions => qQuantify.generatesNoQuestions;
-  bool get addsWhichAreaInEachScreenQuestions =>
-      qQuantify.addsWhichAreaInEachScreenQuestions;
-  bool get addsWhichSlotsOfSelectedAreaQuestions =>
-      qQuantify.addsWhichSlotsOfSelectedAreaQuestions;
-  bool get addsVisualRuleQuestions => qQuantify.addsVisualRuleQuestions;
-  bool get addsBehavioralRuleQuestions => qQuantify.addsBehavioralRuleQuestions;
+  //
+
+  // below controls how each question causes cascade creation of new questions
+  bool get generatesNoNewQuestions => qQuantify.generatesNoNewQuestions;
+  bool get asksWhichScreensToConfig =>
+      qQuantify.appScreen == AppScreen.eventConfiguration &&
+      response?.answers is List<AppScreen>;
+  bool get asksAreasWithinSelectedScreens =>
+      qQuantify.asksAreasWithinSelectedScreens;
+  bool get asksSlotsWithinSelectedScreenAreas =>
+      qQuantify.asksSlotsWithinSelectedScreenAreas;
+  bool get asksRuleTypesForSelectedAreasOrSlots =>
+      qQuantify.asksRuleTypesForSelectedAreasOrSlots;
+  bool get asksDetailsForEachVisualRuleType =>
+      qQuantify.asksDetailsForEachVisualRuleType;
+  bool get asksDetailsForEachBehaveRuleType =>
+      qQuantify.asksDetailsForEachBehaveRuleType;
 
   void convertAndStoreUserResponse(String userResp) {
     //

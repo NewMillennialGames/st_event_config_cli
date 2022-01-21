@@ -40,14 +40,17 @@ class QuestionQuantifier extends Equatable {
   bool get isQuestAboutAreaInScreenOrSlotInArea =>
       screenWidgetArea != null && visRuleTypeForSlotInArea == null;
   //
-  bool get generatesNoQuestions => cascadeType.generatesNoQuestions;
-  bool get addsWhichAreaInEachScreenQuestions =>
-      cascadeType.addsWhichAreaInEachScreenQuestions;
-  bool get addsWhichSlotsOfSelectedAreaQuestions =>
-      cascadeType.addsWhichSlotsOfSelectedAreaQuestions;
-  bool get addsVisualRuleQuestions => cascadeType.addsVisualRuleQuestions;
-  bool get addsBehavioralRuleQuestions =>
-      cascadeType.addsBehavioralRuleQuestions;
+  bool get generatesNoNewQuestions => cascadeType.generatesNoNewQuestions;
+  bool get asksAreasWithinSelectedScreens =>
+      cascadeType.asksAreasWithinSelectedScreens;
+  bool get asksSlotsWithinSelectedScreenAreas =>
+      cascadeType.asksSlotsWithinSelectedScreenAreas;
+  bool get asksRuleTypesForSelectedAreasOrSlots =>
+      cascadeType.asksRuleTypesForSelectedAreasOrSlots;
+  bool get asksDetailsForEachVisualRuleType =>
+      cascadeType.asksDetailsForEachVisualRuleType;
+  bool get asksDetailsForEachBehaveRuleType =>
+      cascadeType.asksDetailsForEachBehaveRuleType;
 
   // factory QuestionQuantifier.forSearchFilter = QuestionQuantifier.custom;
   factory QuestionQuantifier.forSearchFilter(
@@ -114,7 +117,7 @@ class QuestionQuantifier extends Equatable {
   }) {
     return QuestionQuantifier._(
       addsSlotQuestions
-          ? QuestCascadeTyp.addsWhichPartOfSelectedAreaQuestions
+          ? QuestCascadeTyp.addsWhichSlotOfSelectedAreaQuestions
           : QuestCascadeTyp.noCascade,
       appScreen,
       screenArea,
@@ -132,7 +135,7 @@ class QuestionQuantifier extends Equatable {
   }) {
     return QuestionQuantifier._(
       addsRuleQuestions
-          ? QuestCascadeTyp.addsWhichPartOfSelectedAreaQuestions
+          ? QuestCascadeTyp.addsWhichSlotOfSelectedAreaQuestions
           : QuestCascadeTyp.noCascade,
       appScreen,
       screenArea,

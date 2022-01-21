@@ -5,27 +5,36 @@ enum QuestCascadeTyp {
     how does response from user
     to a current question
     impact future questions in the pending list
+
+    see extension below for clear wording
    */
   noCascade,
   addsWhichAreaInEachScreenQuestions,
-  addsWhichPartOfSelectedAreaQuestions, // for each screen
+  addsWhichSlotOfSelectedAreaQuestions, // for each screen
+  addsWhichRuleForAreaOrSlotOfScreen, // for each area and slot of each screen
   addsVisualRuleQuestions,
   addsBehavioralRuleQuestions
 }
 
 extension QuestCascadeTypExt on QuestCascadeTyp {
-  //
-  bool get generatesNoQuestions => this == QuestCascadeTyp.noCascade;
+  /*
+  properties exposed to Question up thru the QuestionQuantifier
 
-  bool get addsWhichAreaInEachScreenQuestions =>
+  */
+  bool get generatesNoNewQuestions => this == QuestCascadeTyp.noCascade;
+
+  bool get asksAreasWithinSelectedScreens =>
       this == QuestCascadeTyp.addsWhichAreaInEachScreenQuestions;
 
-  bool get addsWhichSlotsOfSelectedAreaQuestions =>
-      this == QuestCascadeTyp.addsWhichPartOfSelectedAreaQuestions;
+  bool get asksSlotsWithinSelectedScreenAreas =>
+      this == QuestCascadeTyp.addsWhichSlotOfSelectedAreaQuestions;
 
-  bool get addsVisualRuleQuestions =>
+  bool get asksRuleTypesForSelectedAreasOrSlots =>
+      this == QuestCascadeTyp.addsWhichRuleForAreaOrSlotOfScreen;
+
+  bool get asksDetailsForEachVisualRuleType =>
       this == QuestCascadeTyp.addsVisualRuleQuestions;
 
-  bool get addsBehavioralRuleQuestions =>
+  bool get asksDetailsForEachBehaveRuleType =>
       this == QuestCascadeTyp.addsBehavioralRuleQuestions;
 }

@@ -6,13 +6,14 @@ List<Question> loadInitialConfigQuestions() {
   return _questionLst
       .where((qb) =>
           qb.appScreen == AppScreen.eventConfiguration &&
-          qb.isTopLevelSectionQuestion)
+          qb.isTopLevelConfigOrScreenQuestion)
       .toList();
 }
 
 List<Question> loadQuestionsAtTopOfSection(AppScreen appSection) {
   return _questionLst
-      .where((qb) => qb.appScreen == appSection && qb.isTopLevelSectionQuestion)
+      .where((qb) =>
+          qb.appScreen == appSection && qb.isTopLevelConfigOrScreenQuestion)
       .toList();
 }
 
@@ -24,7 +25,7 @@ List<Question> loadQuestionsUnderSelectedSections(
   List<Question> newQuestions = _questionLst
       .where((q) =>
           appSectionsToConfigure.contains(q.appScreen) &&
-          !q.isTopLevelSectionQuestion)
+          !q.isTopLevelConfigOrScreenQuestion)
       .toList();
   return newQuestions;
 }

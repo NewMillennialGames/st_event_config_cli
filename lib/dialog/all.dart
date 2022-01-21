@@ -6,7 +6,7 @@ import '../app_entity_enums/all.dart';
 import '../config/all.dart';
 import '../interfaces/question_presenter.dart';
 
-part 'question_list.dart';
+part 'quest_list_mgr.dart';
 part 'dialog_runner.dart';
 part 'dialog_mgr.dart';
-part 'quest_generator.dart';
+part 'new_quest_collector.dart';
