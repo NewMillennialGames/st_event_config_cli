@@ -1,7 +1,28 @@
 part of ConfigDialogRunner;
 
 class NewQuestionCollector {
-  //
+  /*
+    each answered question is passed to this object
+    then the scope and context of the question is reviewed
+
+    for certain questions, this NQCollector will auto-generate
+    many related sub-questions
+
+    new questions are passed to QuestListMgr
+    which assigns them a questionId
+    and appends them to the to-be-answered list
+
+    at some point, we may wish to sort questions
+    into sensible order, but that process might
+    put already answered questions after the current
+    question index  (I've solved this but not tested)
+
+  Summary:
+  after user selects desired screens to configure, then we ask
+  which screen areas (and slots on those areas) to configure
+  then we ask them which visual rules they'd like to apply
+  to those areas and/or area-slots on each respective screen
+  */
 
   void handleAcquiringNewQuestions(
     DialogMgr _questGroupMgr,
@@ -12,7 +33,8 @@ class NewQuestionCollector {
     if (questJustAnswered.isRuleQuestion ||
         questJustAnswered.generatesNoNewQuestions) {
       print(
-          'Quest: #${questJustAnswered.questionId} -- ${questJustAnswered.question} wont generated any new questions');
+        'Quest: #${questJustAnswered.questionId} -- ${questJustAnswered.question} wont generated any new questions',
+      );
       return;
     }
 
@@ -22,35 +44,46 @@ class NewQuestionCollector {
         user has given us full list of screens they want to configure
         so we don't need to ask individual screens again
        */
+      print('calling: askUserWhichAreasOfSelectedScreensToConfigure');
       askUserWhichAreasOfSelectedScreensToConfigure(
         _questMgr,
         questJustAnswered.response as UserResponse<List<AppScreen>>,
       );
       //
-    } else if (questJustAnswered.asksSlotsWithinSelectedScreenAreas) {
+    } else if (questJustAnswered
+        .asksAboutRulesAndSlotsWithinSelectedScreenAreas) {
       /*  for all the areas (to be configured) of all of the selected screens
           we need to know which slot(s) on each area they want to configure
 
           this will be called once for each screen/area combination
           askeUserWhichPartsOfSelectedAreasToConfigure
       */
-
-      askeUserWhichSlotsOnSelectedAreasToConfigure(
+      print('calling: askeWhichRulesGoWithAreaAndWhichSlotsToConfig');
+      askeWhichRulesGoWithAreaAndWhichSlotsToConfig(
         _questMgr,
         questJustAnswered as Question<String, List<ScreenWidgetArea>>,
       );
       //
     } else if (questJustAnswered.asksRuleTypesForSelectedAreasOrSlots) {
+      //
+      print('calling: askWhichConfigRulesGoWithEachSlot');
+      askWhichConfigRulesGoWithEachSlot(
+        _questMgr,
+        questJustAnswered as Question<String, List<ScreenAreaWidgetSlot>>,
+      );
+      //
     } else if (questJustAnswered.asksDetailsForEachVisualRuleType &&
         questJustAnswered.visRuleTypeForSlotInArea != null) {
-      generateAssociatedUiRuleTypeQuestions(
+      print('calling: genNeededVisualRulesForAreaOrSlot');
+      genNeededVisualRulesForAreaOrSlot(
         questJustAnswered.qQuantify.screenWidgetArea!,
         questJustAnswered.response as UserResponse<List<VisualRuleType>>,
       );
       //
     } else if (questJustAnswered.asksDetailsForEachBehaveRuleType &&
         questJustAnswered.behRuleTypeForSlotInArea != null) {
-      generateAssociatedBehRuleTypeQuestions(
+      print('calling: genNeededBehaveRulesForAreaOrSlot');
+      genNeededBehaveRulesForAreaOrSlot(
         questJustAnswered.qQuantify.screenWidgetArea!,
         questJustAnswered.response as UserResponse<List<BehaviorRuleType>>,
       );
@@ -63,21 +96,25 @@ class NewQuestionCollector {
     QuestListMgr _questMgr,
     UserResponse<List<AppScreen>> response,
   ) {
-    // should add "include" questions for all areas in selected section
+    // receives list of multiple screens user wants to configure
+    // create "include" questions for all areas in selected screens
+    // user response to each of these questions will cause a call to:
+    // askeUserWhichSlotsOnSelectedAreasToConfigure() below
+    // note that these questions have appScreen set, but no ScreenWidgetArea
     List<Question> newQuestions = [];
     for (AppScreen scr in response.answers) {
+      // skip screens that dont have configurable areas
+      if (!scr.hasConfigurableScreenAreas) continue;
+
       var q = Question<String, List<ScreenWidgetArea>>(
         QuestionQuantifier.appScreenLevel(
           scr,
-          addsAreaQuestions: true,
+          responseAddsWhichSlotQuestions: true,
         ),
-        'For screen ${scr.name}, select the areas would you like to configure?',
+        'For screen ${scr.name}, select the areas would you`d like to configure?',
         scr.configurableScreenAreas.map((e) => e.name),
         (String idxStrs) {
-          return idxStrs
-              .split(',')
-              .map((idxStr) => int.tryParse(idxStr) ?? -1)
-              .where((idx) => idx >= 0)
+          return castStrOfIdxsToIterOfInts(idxStrs)
               .map((idx) => scr.configurableScreenAreas[idx])
               .toList();
         },
@@ -85,68 +122,126 @@ class NewQuestionCollector {
       newQuestions.add(q);
     }
     // now put these questions in the queue
-    _questMgr.appendQuestions(newQuestions);
+    _questMgr.appendNewQuestions(newQuestions);
   }
 
-  void askeUserWhichSlotsOnSelectedAreasToConfigure(
+  void askeWhichRulesGoWithAreaAndWhichSlotsToConfig(
     QuestListMgr _questMgr,
     Question<String, List<ScreenWidgetArea>> quest,
   ) {
-    var screen = quest.appScreen;
-    var area = quest.screenWidgetArea!;
+    // receives 1 screen but multiple areas
+    AppScreen screen = quest.appScreen;
+    assert(quest.response?.answers is List<ScreenWidgetArea>);
 
-    var areasSelectedInLastQuest =
+    var areasSelectedForScreenInLastQuest =
         quest.response?.answers as List<ScreenWidgetArea>;
-    if (areasSelectedInLastQuest.length < 1) return;
+    if (areasSelectedForScreenInLastQuest.length < 1) return;
+
+    // for each configurable area in current screen
+    // make a question about it's possible rule-types
+    List<Question> newQuestions = [];
+
+    // ask rules for each area
+    for (ScreenWidgetArea area in areasSelectedForScreenInLastQuest) {
+      if (!area.isConfigureable || area.applicableRuleTypes.length < 1)
+        continue;
+
+      var q = Question<String, List<VisualRuleType>>(
+        QuestionQuantifier.screenAreaLevel(
+          screen,
+          area,
+          responseAddsWhichRuleTypeQuestions: true,
+        ),
+        'Which rules would you like to add to the ${area.name} of ${screen.name}?',
+        area.applicableRuleTypes.map((r) => r.name),
+        (String idxStrs) {
+          return castStrOfIdxsToIterOfInts(idxStrs)
+              .map((idx) => area.applicableRuleTypes[idx])
+              .toList();
+        },
+      );
+      newQuestions.add(q);
+    }
+
+    // ask which slots user would like to configure within each area
+    for (ScreenWidgetArea area in areasSelectedForScreenInLastQuest) {
+      if (!area.isConfigureable) continue;
+
+      var q = Question<String, List<ScreenAreaWidgetSlot>>(
+        QuestionQuantifier.screenAreaLevel(
+          screen,
+          area,
+          responseAddsWhichRuleTypeQuestions: true,
+        ),
+        'Which properties on the ${area.name} of ${screen.name} would you like to configure?',
+        area.applicableWigetSlots.map((r) => r.name),
+        (String idxStrs) {
+          return castStrOfIdxsToIterOfInts(idxStrs)
+              .map((idx) => area.applicableWigetSlots[idx])
+              .toList();
+        },
+      );
+      newQuestions.add(q);
+    }
+
+    _questMgr.appendNewQuestions(newQuestions);
+  }
+
+  void askWhichConfigRulesGoWithEachSlot(
+    QuestListMgr _questMgr,
+    Question<String, List<ScreenAreaWidgetSlot>> quest,
+  ) {
+    // receives 1 screen & 1 area but multiple slots
+
+    AppScreen screen = quest.appScreen;
+    ScreenWidgetArea screenArea = quest.screenWidgetArea!;
+
+    List<ScreenAreaWidgetSlot> selectedSlotsInArea =
+        quest.response?.answers ?? [];
+    if (selectedSlotsInArea.length < 1) return;
 
     List<Question> newQuestions = [];
-    // for (ScreenWidgetArea slot in areasSelectedInLastQuest) {
-    var q = Question<String, List<SubWidgetInScreenArea>>(
-      QuestionQuantifier.screenAreaLevel(
-        screen,
-        area,
-        addsSlotQuestions: true,
-      ),
-      'Which properties would you like to configure on ${area.name} of ${screen.name}?',
-      area.applicablePropertySlots.map((r) => r.name),
-      (String idxStrs) {
-        return idxStrs
-            .split(',')
-            .map((idxStr) => int.tryParse(idxStr) ?? -1)
-            .where((idx) => idx >= 0)
-            .map((idx) => area.applicablePropertySlots[idx])
-            .toList();
-      },
-    );
-    newQuestions.add(q);
-    // }
-    _questMgr.appendQuestions(newQuestions);
+    for (ScreenAreaWidgetSlot slotInArea in selectedSlotsInArea) {
+      //
+      if (!slotInArea.isConfigurable) continue;
+
+      var q = Question<String, List<VisualRuleType>>(
+        QuestionQuantifier.slotAreaLevel(
+          screen,
+          screenArea,
+          slotInArea,
+          responseAddsWhichRuleTypeQuestions: true,
+        ),
+        'Which rules would you like to add to the ${slotInArea.name} area of ${screenArea.name} on screen ${screen.name}?',
+        slotInArea.possibleConfigRules.map((r) => r.name),
+        (String idxStrs) {
+          return castStrOfIdxsToIterOfInts(idxStrs)
+              .map((idx) => slotInArea.possibleConfigRules[idx])
+              .toList();
+        },
+      );
+      newQuestions.add(q);
+    }
+
+    _questMgr.appendNewQuestions(newQuestions);
   }
 
-  void askWhichConfigRulesToApplyToSelectedAreaOrSlot() {
-    //
-  }
-
-  void addQuestionsForVisRulesInSelectedAreas(
-    UserResponse<List<ScreenWidgetArea>> response,
-  ) {}
-
-  void generateAssociatedUiRuleTypeQuestions(
+  void genNeededVisualRulesForAreaOrSlot(
     ScreenWidgetArea uiComp,
     UserResponse<List<VisualRuleType>> response,
   ) {
     //
-    var includedQuestions = loadVisualRuleQuestionsForArea(
-      _questGroupMgr.currentSectiontype,
-      uiComp,
-      response,
-    );
-    _questMgr.appendQuestions(
-      includedQuestions,
-    );
+    // var includedQuestions = loadVisualRuleQuestionsForArea(
+    //   _questGroupMgr.currentAppScreenTyp,
+    //   uiComp,
+    //   response,
+    // );
+    // _questMgr.appendNewQuestions(
+    //   includedQuestions,
+    // );
   }
 
-  void generateAssociatedBehRuleTypeQuestions(
+  void genNeededBehaveRulesForAreaOrSlot(
     ScreenWidgetArea uiComp,
     UserResponse<List<BehaviorRuleType>> response,
   ) {

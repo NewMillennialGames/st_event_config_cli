@@ -37,7 +37,7 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
   // quantified info
   AppScreen get appScreen => qQuantify.appScreen;
   ScreenWidgetArea? get screenWidgetArea => qQuantify.screenWidgetArea;
-  SubWidgetInScreenArea? get slotInArea => qQuantify.slotInArea;
+  ScreenAreaWidgetSlot? get slotInArea => qQuantify.slotInArea;
   //
   VisualRuleType? get visRuleTypeForSlotInArea =>
       qQuantify.visRuleTypeForSlotInArea;
@@ -51,15 +51,17 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
       qQuantify.appScreen == AppScreen.eventConfiguration &&
       response?.answers is List<AppScreen>;
   bool get asksAreasWithinSelectedScreens =>
-      qQuantify.asksAreasWithinSelectedScreens;
-  bool get asksSlotsWithinSelectedScreenAreas =>
-      qQuantify.asksSlotsWithinSelectedScreenAreas;
+      qQuantify.asksAreasWithinSelectedScreens && AnsTyp == List<AppScreen>;
+  bool get asksAboutRulesAndSlotsWithinSelectedScreenAreas =>
+      qQuantify.asksAboutRulesAndSlotsWithinSelectedScreenAreas &&
+      AnsTyp == List<ScreenWidgetArea>;
   bool get asksRuleTypesForSelectedAreasOrSlots =>
       qQuantify.asksRuleTypesForSelectedAreasOrSlots;
   bool get asksDetailsForEachVisualRuleType =>
       qQuantify.asksDetailsForEachVisualRuleType;
   bool get asksDetailsForEachBehaveRuleType =>
       qQuantify.asksDetailsForEachBehaveRuleType;
+  String get sortKey => '${qQuantify.sortKey}';
 
   void convertAndStoreUserResponse(String userResp) {
     //

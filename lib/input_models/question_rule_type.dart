@@ -15,7 +15,7 @@ class VisualRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseWrapper>
   VisualRuleQuestion(
     AppScreen appSection,
     ScreenWidgetArea uiComp,
-    SubWidgetInScreenArea slot,
+    ScreenAreaWidgetSlot slot,
     VisualRuleType visRuleType,
     CastUserInputToTyp<ConvertTyp, AnsTyp>? castFunc,
   ) : super(

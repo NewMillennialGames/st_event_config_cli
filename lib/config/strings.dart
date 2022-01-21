@@ -1,4 +1,4 @@
-part of QuestConfig;
+part of EvCfgConfig;
 
 class DlgStr {
   //

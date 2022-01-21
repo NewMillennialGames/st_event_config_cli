@@ -1,6 +1,6 @@
 part of AppEntities;
 
-enum SubWidgetInScreenArea {
+enum ScreenAreaWidgetSlot {
   /*  key to describing field-name
     on some ApiMsg entity (asset, team, player, game)
     so we know which field to get to show in 
@@ -23,39 +23,42 @@ enum SubWidgetInScreenArea {
   // startTime,
 }
 
-extension SubWidgetInScreenAreaExt1 on SubWidgetInScreenArea {
+extension ScreenAreaWidgetSlotExt1 on ScreenAreaWidgetSlot {
   //
-  List<VisualRuleType> get applicableRules {
+
+  bool get isConfigurable => this.possibleConfigRules.length > 0;
+
+  List<VisualRuleType> get possibleConfigRules {
     switch (this) {
-      case SubWidgetInScreenArea.header:
+      case ScreenAreaWidgetSlot.header:
         return [
           VisualRuleType.show,
         ];
-      case SubWidgetInScreenArea.footer:
+      case ScreenAreaWidgetSlot.footer:
         return [
           VisualRuleType.show,
         ];
-      case SubWidgetInScreenArea.slot1:
+      case ScreenAreaWidgetSlot.slot1:
         return [
           VisualRuleType.filter,
         ];
-      case SubWidgetInScreenArea.slot2:
+      case ScreenAreaWidgetSlot.slot2:
         return [
           VisualRuleType.filter,
         ];
-      case SubWidgetInScreenArea.rowStyle:
+      case ScreenAreaWidgetSlot.rowStyle:
         return [
           VisualRuleType.format,
         ];
-      case SubWidgetInScreenArea.title:
+      case ScreenAreaWidgetSlot.title:
         return [
           VisualRuleType.format,
         ];
-      case SubWidgetInScreenArea.subtitle:
+      case ScreenAreaWidgetSlot.subtitle:
         return [
           VisualRuleType.show,
         ];
-      case SubWidgetInScreenArea.bannerUrl:
+      case ScreenAreaWidgetSlot.bannerUrl:
         return [
           VisualRuleType.show,
         ];

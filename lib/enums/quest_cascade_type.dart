@@ -19,11 +19,12 @@ enum QuestCascadeTyp {
 extension QuestCascadeTypExt on QuestCascadeTyp {
   /*
   properties exposed to Question up thru the QuestionQuantifier
-
+  these properties describe CURRENT question 
+  (not the ones they will be creating)
   */
   bool get generatesNoNewQuestions => this == QuestCascadeTyp.noCascade;
 
-  bool get asksAreasWithinSelectedScreens =>
+  bool get asksAboutRulesAndSlotsWithinSelectedScreenAreas =>
       this == QuestCascadeTyp.addsWhichAreaInEachScreenQuestions;
 
   bool get asksSlotsWithinSelectedScreenAreas =>

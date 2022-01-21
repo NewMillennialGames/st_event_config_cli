@@ -37,21 +37,29 @@ class QuestListMgr {
     return uss;
   }
 
+  List<ScreenWidgetArea> configurableAreasForScreen(AppScreen as) {
+    //
+    return _allAnsweredQuestions
+        .whereType<Question<String, List<ScreenWidgetArea>>>()
+        .where((q) => q.appScreen == as)
+        .map((q) => q.response?.answers ?? [])
+        .fold<List<ScreenWidgetArea>>([], (l0, l1) => l0..addAll(l1)).toList();
+  }
+
   Map<AppScreen, List<ScreenWidgetArea>> get screenAreasPerScreen {
     //
     Map<AppScreen, List<ScreenWidgetArea>> map = {};
 
     for (AppScreen as in userSelectedScreens) {
-      map[as] = screenAreasFor(as);
+      map[as] = configurableAreasForScreen(as);
     }
     return map;
   }
 
-  Map<AppScreen, Map<ScreenWidgetArea, List<SubWidgetInScreenArea>>>
+  Map<AppScreen, Map<ScreenWidgetArea, List<ScreenAreaWidgetSlot>>>
       get allSlotsInAreasInScreens {
     //
-    Map<AppScreen, Map<ScreenWidgetArea, List<SubWidgetInScreenArea>>> tree =
-        {};
+    Map<AppScreen, Map<ScreenWidgetArea, List<ScreenAreaWidgetSlot>>> tree = {};
 
     for (MapEntry<AppScreen, List<ScreenWidgetArea>> mapEntry
         in screenAreasPerScreen.entries<AppScreen, List<ScreenWidgetArea>>) {
@@ -65,26 +73,33 @@ class QuestListMgr {
     return tree;
   }
 
-  List<ScreenWidgetArea> screenAreasFor(AppScreen as) {
-    //
-    return _allAnsweredQuestions
-        .whereType<Question<String, List<ScreenWidgetArea>>>()
-        .where((q) => q.appScreen == as)
-        .map((q) => q.response?.answers ?? [])
-        .fold<List<ScreenWidgetArea>>([], (l0, l1) => l0..addAll(l1)).toList();
-  }
+  // List<ScreenWidgetArea> configurableAreasForScreen(AppScreen as) {
+  //   // return previously answered config areas for this screen
 
-  List<SubWidgetInScreenArea> screenSlotsInAreasFor(
+  // }
+
+  List<ScreenAreaWidgetSlot> screenSlotsInAreasFor(
     AppScreen as,
     ScreenWidgetArea area,
   ) {
     //
     return _allAnsweredQuestions
-        .whereType<Question<String, List<SubWidgetInScreenArea>>>()
+        .whereType<Question<String, List<ScreenAreaWidgetSlot>>>()
         .where((q) => q.appScreen == as && q.screenWidgetArea == area)
         .map((q) => q.response?.answers ?? [])
-        .fold<List<SubWidgetInScreenArea>>(
+        .fold<List<ScreenAreaWidgetSlot>>(
             [], (l0, l1) => l0..addAll(l1)).toList();
+  }
+
+  void _sortPendingQuestions() {
+    // its important that we ONLY sort the section AFTER _currQuestionIdx
+
+    var unaskedQuests = _pendingQuestions.sublist(_currQuestionIdx + 1);
+
+    unaskedQuests.sort((a, b) => a.sortKey.compareTo(b.sortKey));
+
+    this._pendingQuestions =
+        _pendingQuestions.sublist(0, _currQuestionIdx) + unaskedQuests;
   }
 
   Question? _nextQuestionFor(AppScreen section) {
@@ -129,7 +144,7 @@ class QuestListMgr {
     });
   }
 
-  void appendQuestions(
+  void appendNewQuestions(
     List<Question> quests,
   ) {
     //
@@ -141,17 +156,20 @@ class QuestListMgr {
           .fold(0, (accumVal, _) => accumVal + 1);
       _questCountBySection[as] = (_questCountBySection[as] ?? 0) + newCntBySec;
     }
+    // quest id's start at 1, not zero
     int c = _pendingQuestions.length;
     quests.forEach((q) {
       q.questionId = ++c;
     });
-    _pendingQuestions.addAll(quests);
+    this._pendingQuestions.addAll(quests);
+
+    // TODO:  test sorting after everything else is working
+    // _sortPendingQuestions();
   }
 
   List<UserResponse> get priorAnswers {
     // return all existing user answers
-
-    // List<Question> l0, List<Question>
+    // filter out any null responses
 
     return _allAnsweredQuestions
         .map((e) => e.response)

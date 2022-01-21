@@ -4,15 +4,18 @@ class QuestionQuantifier extends Equatable {
   /* describes what a question is about
     it's purpose, behavior and output
     made it equatable to enable searching Q-list
-
   */
 
   final QuestCascadeTyp cascadeType;
   final AppScreen appScreen;
+  /* properties below are in ORDER
+  if any property is set (not null)
+  then all properties ABOVE it must also be non-null
+  */
   final ScreenWidgetArea? screenWidgetArea;
-  final SubWidgetInScreenArea? slotInArea;
+  final ScreenAreaWidgetSlot? slotInArea;
   // a rule-type applies to all of:
-  //    screen, screen-area, slot in that area
+  //    appScreen, screenWidgetArea, slotInArea
   final VisualRuleType? visRuleTypeForSlotInArea;
   final BehaviorRuleType? behRuleTypeForSlotInArea;
 
@@ -25,16 +28,21 @@ class QuestionQuantifier extends Equatable {
     this.behRuleTypeForSlotInArea,
   );
 
-  String get key {
+  String get sortKey {
     // makes equatable work for searching question list
     int uiCompIdx = 1 + (screenWidgetArea?.index ?? -1);
+    int slotAreaIdx = 1 + (slotInArea?.index ?? -1);
     int visRuleTypeForCompIdx = 1 + (visRuleTypeForSlotInArea?.index ?? -1);
     int behRuleTypeForCompIdx = 1 + (behRuleTypeForSlotInArea?.index ?? -1);
-    return '${cascadeType.index}-${appScreen.index}-$uiCompIdx-$visRuleTypeForCompIdx-$behRuleTypeForCompIdx';
+    return '${appScreen.index}-$uiCompIdx-$slotAreaIdx-$visRuleTypeForCompIdx-$behRuleTypeForCompIdx-${cascadeType.index}';
   }
+
+  // equatableKey must be distinct & unique
+  String get equatableKey => sortKey;
 
   bool get isTopLevelConfigOrScreenQuestion =>
       screenWidgetArea == null &&
+      slotInArea == null &&
       visRuleTypeForSlotInArea == null &&
       behRuleTypeForSlotInArea == null;
   bool get isQuestAboutAreaInScreenOrSlotInArea =>
@@ -42,8 +50,8 @@ class QuestionQuantifier extends Equatable {
   //
   bool get generatesNoNewQuestions => cascadeType.generatesNoNewQuestions;
   bool get asksAreasWithinSelectedScreens =>
-      cascadeType.asksAreasWithinSelectedScreens;
-  bool get asksSlotsWithinSelectedScreenAreas =>
+      cascadeType.asksAboutRulesAndSlotsWithinSelectedScreenAreas;
+  bool get asksAboutRulesAndSlotsWithinSelectedScreenAreas =>
       cascadeType.asksSlotsWithinSelectedScreenAreas;
   bool get asksRuleTypesForSelectedAreasOrSlots =>
       cascadeType.asksRuleTypesForSelectedAreasOrSlots;
@@ -57,7 +65,7 @@ class QuestionQuantifier extends Equatable {
     QuestCascadeTyp cascadeType,
     AppScreen appScreen,
     ScreenWidgetArea? screenArea,
-    SubWidgetInScreenArea? slotInArea,
+    ScreenAreaWidgetSlot? slotInArea,
     VisualRuleType? visRuleTypeForAreaSlot,
     BehaviorRuleType? behRuleTypeForAreaSlot,
   ) {
@@ -76,10 +84,10 @@ class QuestionQuantifier extends Equatable {
   */
 
   factory QuestionQuantifier.eventLevel({
-    bool addsWhichScreenQuestions = false,
+    bool responseAddsWhichAreaQuestions = false,
   }) {
     return QuestionQuantifier._(
-      addsWhichScreenQuestions
+      responseAddsWhichAreaQuestions
           ? QuestCascadeTyp.addsWhichAreaInEachScreenQuestions
           : QuestCascadeTyp.noCascade,
       AppScreen.eventConfiguration,
@@ -92,15 +100,15 @@ class QuestionQuantifier extends Equatable {
 
   factory QuestionQuantifier.appScreenLevel(
     AppScreen appScreen, {
-    bool addsAreaQuestions = false,
+    bool responseAddsWhichSlotQuestions = false,
   }) {
     // not in use but here for future
     // these individual "Wanna config this screen?" questions are skipped
     // because the FINAL event-level question above
     // has addsWhichScreenQuestions = true and it does all this work for you
     return QuestionQuantifier._(
-      addsAreaQuestions
-          ? QuestCascadeTyp.addsWhichAreaInEachScreenQuestions
+      responseAddsWhichSlotQuestions
+          ? QuestCascadeTyp.addsWhichSlotOfSelectedAreaQuestions
           : QuestCascadeTyp.noCascade,
       appScreen,
       null,
@@ -113,11 +121,11 @@ class QuestionQuantifier extends Equatable {
   factory QuestionQuantifier.screenAreaLevel(
     AppScreen appScreen,
     ScreenWidgetArea screenArea, {
-    bool addsSlotQuestions = false,
+    bool responseAddsWhichRuleTypeQuestions = false,
   }) {
     return QuestionQuantifier._(
-      addsSlotQuestions
-          ? QuestCascadeTyp.addsWhichSlotOfSelectedAreaQuestions
+      responseAddsWhichRuleTypeQuestions
+          ? QuestCascadeTyp.addsVisualRuleQuestions
           : QuestCascadeTyp.noCascade,
       appScreen,
       screenArea,
@@ -127,15 +135,15 @@ class QuestionQuantifier extends Equatable {
     );
   }
 
-  factory QuestionQuantifier.areaSlotLevel(
+  factory QuestionQuantifier.slotAreaLevel(
     AppScreen appScreen,
     ScreenWidgetArea screenArea,
-    SubWidgetInScreenArea slot, {
-    bool addsRuleQuestions = false,
+    ScreenAreaWidgetSlot slot, {
+    bool responseAddsWhichRuleTypeQuestions = false,
   }) {
     return QuestionQuantifier._(
-      addsRuleQuestions
-          ? QuestCascadeTyp.addsWhichSlotOfSelectedAreaQuestions
+      responseAddsWhichRuleTypeQuestions
+          ? QuestCascadeTyp.addsVisualRuleQuestions
           : QuestCascadeTyp.noCascade,
       appScreen,
       screenArea,
@@ -148,7 +156,7 @@ class QuestionQuantifier extends Equatable {
   factory QuestionQuantifier.ruleCompositionLevel(
     AppScreen appScreen,
     ScreenWidgetArea screenWidgetArea,
-    SubWidgetInScreenArea slot,
+    ScreenAreaWidgetSlot slot,
     VisualRuleType? visRuleTypeForSlotInArea,
     BehaviorRuleType? behRuleTypeForSlotInArea, {
     bool addsMoreRuleQuestions = false,
@@ -170,7 +178,7 @@ class QuestionQuantifier extends Equatable {
 
   // impl for equatable
   @override
-  List<Object> get props => [key];
+  List<Object> get props => [equatableKey];
 
   @override
   bool get stringify => true;

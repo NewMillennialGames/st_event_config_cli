@@ -19,7 +19,7 @@ class CliQuestionPresenter implements QuestionPresenter {
     AppScreen screen = sectionCfg.appScreen;
     if (screen == AppScreen.eventConfiguration) return true;
 
-    if (!screen.isConfigureable) return false;
+    if (!screen.hasConfigurableScreenAreas) return false;
 
     print(screen.includeStr + ' (enter y/yes or n/no)');
     var userResp = stdin.readLineSync() ?? 'Y';
@@ -152,7 +152,7 @@ class CliQuestionPresenter implements QuestionPresenter {
     //
     if (quest.asksAreasWithinSelectedScreens) {
       // user will enter string or comma delimited list of ints
-    } else if (quest.asksSlotsWithinSelectedScreenAreas) {
+    } else if (quest.asksAboutRulesAndSlotsWithinSelectedScreenAreas) {
       // causes questions to be added or removed from future queue
       // user may enter int or comma delimited list of ints
     } else if (quest.asksDetailsForEachVisualRuleType) {

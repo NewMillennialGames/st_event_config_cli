@@ -7,7 +7,7 @@ enum ScreenWidgetArea {
   filterBar,
   header,
   banner,
-  tableRow,
+  tableview,
   footer,
   // ticker,
   // tabBar
@@ -18,38 +18,43 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
   String includeStr(AppScreen section) =>
       'On Section ${section.name}, do you want to configure the ${this.name}?';
 
-  bool get isConfigureable => this.applicableRuleTypes.length > 0;
+  // intentionally checking rules here (in addition to slots)
+  // an area can be configurable EVEN IF it has ZERO
+  // configurable slots (if it just has rules available)
+  bool get isConfigureable =>
+      this.applicableRuleTypes.length > 0 ||
+      this.applicableWigetSlots.length > 0;
 
-  List<SubWidgetInScreenArea> get applicablePropertySlots {
+  List<ScreenAreaWidgetSlot> get applicableWigetSlots {
     //
     switch (this) {
       case ScreenWidgetArea.navBar:
         return [
-          SubWidgetInScreenArea.title,
-          SubWidgetInScreenArea.subtitle,
+          ScreenAreaWidgetSlot.title,
+          ScreenAreaWidgetSlot.subtitle,
         ];
       case ScreenWidgetArea.filterBar:
         return [
-          SubWidgetInScreenArea.slot1,
-          SubWidgetInScreenArea.slot2,
+          ScreenAreaWidgetSlot.slot1,
+          ScreenAreaWidgetSlot.slot2,
         ];
       case ScreenWidgetArea.header:
         return [
-          SubWidgetInScreenArea.title,
-          SubWidgetInScreenArea.subtitle,
+          ScreenAreaWidgetSlot.title,
+          ScreenAreaWidgetSlot.subtitle,
         ];
       case ScreenWidgetArea.banner:
         return [
-          SubWidgetInScreenArea.bannerUrl,
+          ScreenAreaWidgetSlot.bannerUrl,
         ];
-      case ScreenWidgetArea.tableRow:
+      case ScreenWidgetArea.tableview:
         return [
-          SubWidgetInScreenArea.rowStyle,
+          ScreenAreaWidgetSlot.rowStyle,
         ];
       case ScreenWidgetArea.footer:
         return [
-          SubWidgetInScreenArea.title,
-          SubWidgetInScreenArea.subtitle,
+          ScreenAreaWidgetSlot.title,
+          ScreenAreaWidgetSlot.subtitle,
         ];
       // case UiComponent.ticker:
       //   return [VisualRuleType.show];
@@ -70,7 +75,7 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
         return [VisualRuleType.format, VisualRuleType.show];
       case ScreenWidgetArea.banner:
         return [VisualRuleType.show];
-      case ScreenWidgetArea.tableRow:
+      case ScreenWidgetArea.tableview:
         return [
           VisualRuleType.format,
           VisualRuleType.group,

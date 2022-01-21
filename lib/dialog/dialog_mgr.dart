@@ -14,7 +14,7 @@ class DialogMgr {
 
   //
   DialogSectionCfg get _currentSectionCfg => _sections[_currSectionIdx];
-  AppScreen get currentSectiontype => _currentSectionCfg.appScreen;
+  AppScreen get currentAppScreenTyp => _currentSectionCfg.appScreen;
 
   DialogSectionCfg? _getNextSection() {
     //
@@ -25,7 +25,7 @@ class DialogMgr {
 
   Question? getNextQuestInCurrentSection() {
     // only in this section
-    return _questMgr._nextQuestionFor(currentSectiontype);
+    return _questMgr._nextQuestionFor(currentAppScreenTyp);
   }
 
   List<UserResponse> get priorAnswers {
@@ -36,15 +36,17 @@ class DialogMgr {
   void loadBeginningDialog() {
     //
     _loadAppUiSections();
-    // only load questions for top section
-    // top == AppSection.eventConfiguration
-    loadQuestionsForSpecifiedSection(AppScreen.eventConfiguration);
+    // only load questions for top (eventConfiguration) section
+    // answers in that section will kick off creation of new Quests
+    // inside of NewQuestionCollector()
+    List<Question> quests = loadInitialConfigQuestions();
+    _questMgr.appendNewQuestions(quests);
   }
 
-  void loadQuestionsForSpecifiedSection(AppScreen section) {
-    List<Question> quests = loadQuestionsAtTopOfSection(section);
-    _questMgr.appendQuestions(quests);
-  }
+  // void _loadQuestionsForSpecifiedSection(AppScreen section) {
+  //   List<Question> quests = loadQuestionsAtTopOfSection(section);
+  //   _questMgr.appendNewQuestions(quests);
+  // }
 
   void _loadAppUiSections() {
     List<DialogSectionCfg> l = [];
