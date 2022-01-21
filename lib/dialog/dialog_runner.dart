@@ -11,7 +11,7 @@ class DialogRunner {
   to produce CLI output to the user
   */
   final QuestListMgr _questMgr = QuestListMgr();
-  final NewQuestionComposer _newQuestComposer = NewQuestionComposer();
+  final NewQuestionCollector _newQuestComposer = NewQuestionCollector();
   late final DialogMgr _questGroupMgr;
   // set in init
   final QuestionPresenter questFormatter;
@@ -56,7 +56,8 @@ class DialogRunner {
           // askAndWaitForUserResponse() will callback to this
           // to create any derived questions for this section
           questFormatter.askAndWaitForUserResponse(this, _quest);
-          _newQuestComposer.handleAcquiringNewQuestions(this, _quest);
+          _newQuestComposer.handleAcquiringNewQuestions(
+              _questGroupMgr, _questMgr, _quest);
 
           _quest = _questGroupMgr.getNextQuestInCurrentSection();
           if (_quest != null) _outputSpacerLines();
@@ -73,44 +74,5 @@ class DialogRunner {
     } else {
       print('\n' * this.linesBetweenQuestions);
     }
-  }
-
-  // callbacks when a question needs to add other questions
-  void addQuestionsForAreasInSelectedSections(
-    UserResponse<List<AppScreen>> response,
-  ) {
-    // should add "include" questions for all areas in selected section
-    var includedQuestions = loadQuestionsUnderSelectedSections(response);
-    _questMgr.appendQuestions(includedQuestions);
-  }
-
-  void addQuestionsForVisRulesInSelectedAreas(
-    UserResponse<List<ScreenWidgetArea>> response,
-  ) {}
-
-  void generateAssociatedUiRuleTypeQuestions(
-    ScreenWidgetArea uiComp,
-    UserResponse<List<VisualRuleType>> response,
-  ) {
-    //
-    var includedQuestions = loadVisualRuleQuestionsForArea(
-      _questGroupMgr.currentSectiontype,
-      uiComp,
-      response,
-    );
-    _questMgr.appendQuestions(
-      includedQuestions,
-    );
-  }
-
-  void generateAssociatedBehRuleTypeQuestions(
-    ScreenWidgetArea uiComp,
-    UserResponse<List<BehaviorRuleType>> response,
-  ) {
-    // future
-    // var includedQuestions = loadAddlRuleQuestions(
-    //     _questGroupMgr.currentSectiontype, uiComp, response);
-    // _questMgr.appendQuestions(
-    //     _questGroupMgr.currentSectiontype, includedQuestions);
   }
 }

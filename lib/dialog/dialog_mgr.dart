@@ -14,7 +14,7 @@ class DialogMgr {
 
   //
   DialogSectionCfg get _currentSectionCfg => _sections[_currSectionIdx];
-  AppScreen get currentSectiontype => _currentSectionCfg.appSection;
+  AppScreen get currentSectiontype => _currentSectionCfg.appScreen;
 
   DialogSectionCfg? _getNextSection() {
     //

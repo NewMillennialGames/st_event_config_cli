@@ -1,108 +1,167 @@
 part of InputModels;
 
 class QuestionQuantifier extends Equatable {
-  // describes question purpose, behavior and output
-  // made it equatable for searching Q-list
+  /* describes what a question is about
+    it's purpose, behavior and output
+    made it equatable to enable searching Q-list
+
+  */
+
   final QuestCascadeTyp cascadeType;
-  final AppScreen appSection;
-  final ScreenWidgetArea? sectionWidgetArea;
-  final VisualRuleType? visRuleTypeForComp;
-  final BehaviorRuleType? behRuleTypeForComp;
+  final AppScreen appScreen;
+  final ScreenWidgetArea? screenWidgetArea;
+  final SubWidgetInScreenArea? slotInArea;
+  // a rule-type applies to all of:
+  //    screen, screen-area, slot in that area
+  final VisualRuleType? visRuleTypeForSlotInArea;
+  final BehaviorRuleType? behRuleTypeForSlotInArea;
 
   const QuestionQuantifier._(
     this.cascadeType,
-    this.appSection,
-    this.sectionWidgetArea,
-    this.visRuleTypeForComp,
-    this.behRuleTypeForComp,
+    this.appScreen,
+    this.screenWidgetArea,
+    this.slotInArea,
+    this.visRuleTypeForSlotInArea,
+    this.behRuleTypeForSlotInArea,
   );
 
   String get key {
     // makes equatable work for searching question list
-    int uiCompIdx = 1 + (sectionWidgetArea?.index ?? -1);
-    int visRuleTypeForCompIdx = 1 + (visRuleTypeForComp?.index ?? -1);
-    int behRuleTypeForCompIdx = 1 + (behRuleTypeForComp?.index ?? -1);
-    return '${cascadeType.index}-${appSection.index}-$uiCompIdx-$visRuleTypeForCompIdx-$behRuleTypeForCompIdx';
+    int uiCompIdx = 1 + (screenWidgetArea?.index ?? -1);
+    int visRuleTypeForCompIdx = 1 + (visRuleTypeForSlotInArea?.index ?? -1);
+    int behRuleTypeForCompIdx = 1 + (behRuleTypeForSlotInArea?.index ?? -1);
+    return '${cascadeType.index}-${appScreen.index}-$uiCompIdx-$visRuleTypeForCompIdx-$behRuleTypeForCompIdx';
   }
 
-  bool get isTopLevelSectionQuestion =>
-      sectionWidgetArea == null && visRuleTypeForComp == null;
-  bool get isQuestForAreaInSection =>
-      sectionWidgetArea != null && visRuleTypeForComp == null;
+  bool get isTopLevelConfigOrScreenQuestion =>
+      screenWidgetArea == null &&
+      visRuleTypeForSlotInArea == null &&
+      behRuleTypeForSlotInArea == null;
+  bool get isQuestAboutAreaInScreenOrSlotInArea =>
+      screenWidgetArea != null && visRuleTypeForSlotInArea == null;
+  //
   bool get generatesNoQuestions => cascadeType.generatesNoQuestions;
-  bool get addsPerSectionQuestions => cascadeType.addsPerSectionQuestions;
-  bool get addsAreaQuestions => cascadeType.addsAreaQuestions;
-  bool get producesVisualRules => cascadeType.producesVisualRules;
-  bool get producesBehavioralRules => cascadeType.producesBehavioralRules;
+  bool get addsWhichAreaInEachScreenQuestions =>
+      cascadeType.addsWhichAreaInEachScreenQuestions;
+  bool get addsWhichSlotsOfSelectedAreaQuestions =>
+      cascadeType.addsWhichSlotsOfSelectedAreaQuestions;
+  bool get addsVisualRuleQuestions => cascadeType.addsVisualRuleQuestions;
+  bool get addsBehavioralRuleQuestions =>
+      cascadeType.addsBehavioralRuleQuestions;
 
   // factory QuestionQuantifier.forSearchFilter = QuestionQuantifier.custom;
   factory QuestionQuantifier.forSearchFilter(
     QuestCascadeTyp cascadeType,
-    AppScreen appSection,
-    ScreenWidgetArea? uiCompInSection,
-    VisualRuleType? visRuleTypeForComp,
-    BehaviorRuleType? behRuleTypeForComp,
+    AppScreen appScreen,
+    ScreenWidgetArea? screenArea,
+    SubWidgetInScreenArea? slotInArea,
+    VisualRuleType? visRuleTypeForAreaSlot,
+    BehaviorRuleType? behRuleTypeForAreaSlot,
   ) {
     return QuestionQuantifier._(
       cascadeType,
-      appSection,
-      uiCompInSection,
-      visRuleTypeForComp,
-      behRuleTypeForComp,
+      appScreen,
+      screenArea,
+      slotInArea,
+      visRuleTypeForAreaSlot,
+      behRuleTypeForAreaSlot,
     );
   }
 
-  factory QuestionQuantifier.eventLevel({bool addsSectionQuestions = false}) {
+  /*  certain questions at top 3 levels (when property answered)
+      can generate questions for levels below them
+  */
+
+  factory QuestionQuantifier.eventLevel({
+    bool addsWhichScreenQuestions = false,
+  }) {
     return QuestionQuantifier._(
-      addsSectionQuestions
-          ? QuestCascadeTyp.appendsPerSectionQuestions
+      addsWhichScreenQuestions
+          ? QuestCascadeTyp.addsWhichAreaInEachScreenQuestions
           : QuestCascadeTyp.noCascade,
       AppScreen.eventConfiguration,
       null,
       null,
       null,
+      null,
     );
   }
 
-  factory QuestionQuantifier.appSectionLevel(AppScreen appSection,
-      {bool addsAreaQuestions = false}) {
+  factory QuestionQuantifier.appScreenLevel(
+    AppScreen appScreen, {
+    bool addsAreaQuestions = false,
+  }) {
+    // not in use but here for future
+    // these individual "Wanna config this screen?" questions are skipped
+    // because the FINAL event-level question above
+    // has addsWhichScreenQuestions = true and it does all this work for you
     return QuestionQuantifier._(
       addsAreaQuestions
-          ? QuestCascadeTyp.appendsPerSectionAreaQuestions
+          ? QuestCascadeTyp.addsWhichAreaInEachScreenQuestions
           : QuestCascadeTyp.noCascade,
-      appSection,
+      appScreen,
+      null,
       null,
       null,
       null,
     );
   }
 
-  factory QuestionQuantifier.uiComponentLevel(
-      AppScreen appSection, ScreenWidgetArea uiCompInSection,
-      {bool addsRuleQuestions = false}) {
+  factory QuestionQuantifier.screenAreaLevel(
+    AppScreen appScreen,
+    ScreenWidgetArea screenArea, {
+    bool addsSlotQuestions = false,
+  }) {
+    return QuestionQuantifier._(
+      addsSlotQuestions
+          ? QuestCascadeTyp.addsWhichPartOfSelectedAreaQuestions
+          : QuestCascadeTyp.noCascade,
+      appScreen,
+      screenArea,
+      null,
+      null,
+      null,
+    );
+  }
+
+  factory QuestionQuantifier.areaSlotLevel(
+    AppScreen appScreen,
+    ScreenWidgetArea screenArea,
+    SubWidgetInScreenArea slot, {
+    bool addsRuleQuestions = false,
+  }) {
     return QuestionQuantifier._(
       addsRuleQuestions
-          ? QuestCascadeTyp.produceVisualRule
+          ? QuestCascadeTyp.addsWhichPartOfSelectedAreaQuestions
           : QuestCascadeTyp.noCascade,
-      appSection,
-      uiCompInSection,
+      appScreen,
+      screenArea,
+      slot,
       null,
       null,
     );
   }
 
   factory QuestionQuantifier.ruleCompositionLevel(
-    AppScreen appSection,
-    ScreenWidgetArea uiCompInSection,
-    VisualRuleType? visRuleTypeForComp,
-    BehaviorRuleType? behRuleTypeForComp,
-  ) {
+    AppScreen appScreen,
+    ScreenWidgetArea screenWidgetArea,
+    SubWidgetInScreenArea slot,
+    VisualRuleType? visRuleTypeForSlotInArea,
+    BehaviorRuleType? behRuleTypeForSlotInArea, {
+    bool addsMoreRuleQuestions = false,
+  }) {
+    bool isVisual = visRuleTypeForSlotInArea != null;
     return QuestionQuantifier._(
-      QuestCascadeTyp.produceVisualRule,
-      appSection,
-      uiCompInSection,
-      visRuleTypeForComp,
-      behRuleTypeForComp,
+      addsMoreRuleQuestions
+          ? (isVisual
+              ? QuestCascadeTyp.addsVisualRuleQuestions
+              : QuestCascadeTyp.addsBehavioralRuleQuestions)
+          : QuestCascadeTyp.noCascade,
+      appScreen,
+      screenWidgetArea,
+      slot,
+      visRuleTypeForSlotInArea,
+      behRuleTypeForSlotInArea,
     );
   }
 

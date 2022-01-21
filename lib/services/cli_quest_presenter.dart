@@ -16,9 +16,15 @@ class CliQuestionPresenter implements QuestionPresenter {
     DialogRunner dialoger,
     DialogSectionCfg sectionCfg,
   ) {
-    if (sectionCfg.appSection == AppScreen.eventConfiguration) return true;
+    AppScreen screen = sectionCfg.appScreen;
+    if (screen == AppScreen.eventConfiguration) return true;
 
-    return sectionCfg.askIfNeeded();
+    if (!screen.isConfigureable) return false;
+
+    print(screen.includeStr + ' (enter y/yes or n/no)');
+    var userResp = stdin.readLineSync() ?? 'Y';
+    // print("askIfNeeded got: $userResp");
+    return userResp.toUpperCase().startsWith('Y');
   }
 
   @override
@@ -92,7 +98,7 @@ class CliQuestionPresenter implements QuestionPresenter {
   ) {
     //
     String ruleQuestoverview =
-        'Config ${ruleQuest.questDef.ruleTyp.name} in the ${ruleQuest.sectionWidgetArea?.name} of app-section ${ruleQuest.appSection.name}  (please answer each question below)';
+        'Config ${ruleQuest.questDef.ruleTyp.name} in the ${ruleQuest.screenWidgetArea?.name} of app-section ${ruleQuest.appScreen.name}  (please answer each question below)';
     print(ruleQuestoverview);
 
     Map<VisRuleQuestType, String> accumResponses = {};
@@ -144,15 +150,15 @@ class CliQuestionPresenter implements QuestionPresenter {
 
   void _printInstructions(Question quest) {
     //
-    if (quest.addsPerSectionQuestions) {
+    if (quest.addsWhichAreaInEachScreenQuestions) {
       // user will enter string or comma delimited list of ints
-    } else if (quest.addsAreaQuestions) {
+    } else if (quest.addsWhichSlotsOfSelectedAreaQuestions) {
       // causes questions to be added or removed from future queue
       // user may enter int or comma delimited list of ints
-    } else if (quest.producesVisualRules) {
+    } else if (quest.addsVisualRuleQuestions) {
       // needs to produce visual formatting rules
       // user will select a widget display option
-    } else if (quest.producesBehavioralRules) {
+    } else if (quest.addsBehavioralRuleQuestions) {
       // needs to produce behavioral rules
       // future;  not yet implemented
     }

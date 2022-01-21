@@ -26,7 +26,7 @@ class QuestListMgr {
       return null;
     }
     ++_currQuestionIdx;
-    if (_currentOrLastQuestion.appSection != section) {
+    if (_currentOrLastQuestion.appScreen != section) {
       --_currQuestionIdx;
       return null;
     }
@@ -39,14 +39,14 @@ class QuestListMgr {
         totalAnsweredQuestions >= _pendingQuestions.length) return;
     //
     Question? mostRecentSaved =
-        _answeredQuestsBySection[_currentOrLastQuestion.appSection]?.last;
+        _answeredQuestsBySection[_currentOrLastQuestion.appScreen]?.last;
     // dont store same question twice
     if (mostRecentSaved != null &&
         mostRecentSaved.questionId == _currentOrLastQuestion.questionId) return;
     // store into list for this section
-    var l = _answeredQuestsBySection[_currentOrLastQuestion.appSection] ?? [];
+    var l = _answeredQuestsBySection[_currentOrLastQuestion.appScreen] ?? [];
     l.add(_currentOrLastQuestion);
-    _answeredQuestsBySection[_currentOrLastQuestion.appSection] = l;
+    _answeredQuestsBySection[_currentOrLastQuestion.appScreen] = l;
   }
 
   void loadInitialQuestions() {
@@ -64,11 +64,11 @@ class QuestListMgr {
     List<Question> quests,
   ) {
     //
-    Set<AppScreen> newSections = quests.map((e) => e.appSection).toSet();
+    Set<AppScreen> newSections = quests.map((e) => e.appScreen).toSet();
 
     for (AppScreen as in newSections) {
       int newCntBySec = quests
-          .where((q) => q.appSection == as)
+          .where((q) => q.appScreen == as)
           .fold(0, (accumVal, _) => accumVal + 1);
       _questCountBySection[as] = (_questCountBySection[as] ?? 0) + newCntBySec;
     }

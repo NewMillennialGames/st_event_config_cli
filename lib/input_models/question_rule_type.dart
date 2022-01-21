@@ -15,12 +15,14 @@ class VisualRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseWrapper>
   VisualRuleQuestion(
     AppScreen appSection,
     ScreenWidgetArea uiComp,
+    SubWidgetInScreenArea slot,
     VisualRuleType visRuleType,
     CastUserInputToTyp<ConvertTyp, AnsTyp>? castFunc,
   ) : super(
           QuestionQuantifier.ruleCompositionLevel(
             appSection,
             uiComp,
+            slot,
             visRuleType,
             null,
           ),

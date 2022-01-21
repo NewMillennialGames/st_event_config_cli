@@ -38,7 +38,7 @@ extension AppScreenExt1 on AppScreen {
       ];
 
   bool get isConfigureable =>
-      this.applicableComponents.length > 0 ||
+      this.configurableScreenAreas.length > 0 ||
       this == AppScreen.eventConfiguration;
 
   // AppSection.values.map((as) => as).toList();
@@ -57,13 +57,13 @@ extension AppScreenExt1 on AppScreen {
     Map<int, ScreenWidgetArea> idxToModifiableUic = {};
     int tempIdx = 0;
     this
-        .applicableComponents
+        .configurableScreenAreas
         .forEach((uic) => idxToModifiableUic[++tempIdx] = uic);
     idxToModifiableUic.removeWhere((idx, uic) => !providedIdxs.contains(idx));
     return idxToModifiableUic.values.toList();
   }
 
-  List<ScreenWidgetArea> get applicableComponents {
+  List<ScreenWidgetArea> get configurableScreenAreas {
     // customize this list to control what sections
     // of each screen can be customized for
     // THIS SECTION of the app

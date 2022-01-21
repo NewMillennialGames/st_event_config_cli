@@ -1,6 +1,5 @@
 part of InputModels;
 
-typedef CastUserInputToTyp<InputTyp, AnsTyp> = AnsTyp Function(InputTyp input);
 // to load prior answers for some questions
 typedef PriorAnswersCallback = List<UserResponse> Function();
 
@@ -34,16 +33,21 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
   bool get hasChoices => (_answerChoices?.length ?? 0) > 0;
 
   // quantified info
-  bool get isTopLevelSectionQuestion => qQuantify.isTopLevelSectionQuestion;
-  AppScreen get appSection => qQuantify.appSection;
-  ScreenWidgetArea? get sectionWidgetArea => qQuantify.sectionWidgetArea;
-  VisualRuleType? get visRuleTypeForComp => qQuantify.visRuleTypeForComp;
-  BehaviorRuleType? get behRuleTypeForComp => qQuantify.behRuleTypeForComp;
+  bool get isTopLevelSectionQuestion =>
+      qQuantify.isTopLevelConfigOrScreenQuestion;
+  AppScreen get appScreen => qQuantify.appScreen;
+  ScreenWidgetArea? get screenWidgetArea => qQuantify.screenWidgetArea;
+  VisualRuleType? get visRuleTypeForSlotInArea =>
+      qQuantify.visRuleTypeForSlotInArea;
+  BehaviorRuleType? get behRuleTypeForSlotInArea =>
+      qQuantify.behRuleTypeForSlotInArea;
   bool get generatesNoQuestions => qQuantify.generatesNoQuestions;
-  bool get addsPerSectionQuestions => qQuantify.addsPerSectionQuestions;
-  bool get addsAreaQuestions => qQuantify.addsAreaQuestions;
-  bool get producesVisualRules => qQuantify.producesVisualRules;
-  bool get producesBehavioralRules => qQuantify.producesBehavioralRules;
+  bool get addsWhichAreaInEachScreenQuestions =>
+      qQuantify.addsWhichAreaInEachScreenQuestions;
+  bool get addsWhichSlotsOfSelectedAreaQuestions =>
+      qQuantify.addsWhichSlotsOfSelectedAreaQuestions;
+  bool get addsVisualRuleQuestions => qQuantify.addsVisualRuleQuestions;
+  bool get addsBehavioralRuleQuestions => qQuantify.addsBehavioralRuleQuestions;
 
   void convertAndStoreUserResponse(String userResp) {
     //
@@ -75,44 +79,6 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
     print('Response: $derivedUserResponse');
     this.response = UserResponse<AnsTyp>(derivedUserResponse);
   }
-
-  // void askAndWait(DialogRunner dlogRunner) {
-  //   //
-  //   _configSelfIfNecessary(dlogRunner.getPriorAnswersList);
-
-  //   String? userResp = stdin.readLineSync();
-  //   // print("You entered: '$userResp'");
-
-  //   int answerIdx = -1;
-  //   AnsTyp? derivedUserResponse;
-  //   if (ConvertTyp == int) {
-  //     if (userResp != null) {
-  //       answerIdx = int.tryParse(userResp) ?? -1;
-  //     }
-  //     if (answerIdx == -1 && (hasChoices)) {
-  //       answerIdx = defaultAnswerIdx;
-  //     }
-  //     // print('calling int converter ($answerIdx) on $question');
-  //     derivedUserResponse = _castResponseToAnswer(answerIdx as ConvertTyp);
-  //   } else if (ConvertTyp == String) {
-  //     // print('calling string converter ($userResp) on $question');
-  //     derivedUserResponse = _castResponseToAnswer(userResp as ConvertTyp);
-  //   } else {
-  //     var t = typeOf<ConvertTyp>().toString();
-  //     throw UnimplementedError('wtf $t');
-  //   }
-
-  //   // verify we got a value
-  //   if (derivedUserResponse == null) {
-  //     throw UnimplementedError('no conversion of $userResp or $answerIdx');
-  //     // print('answer was null on $questionId: $question');
-  //     // return;
-  //   }
-  //   print('Response: $derivedUserResponse');
-  //   this.response = UserResponse<AnsTyp>(derivedUserResponse);
-  //   // print("You entered: '$userResp' and ${derivedUserResponse.toString()}");
-  //   // _handleCreatingNewQuestions(dlogRunner);
-  // }
 
   AnsTyp? _castResponseToAnswer(ConvertTyp convertibleVal) {
     // ConvertTyp must be either String or int
@@ -169,49 +135,3 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
   @override
   bool get stringify => true;
 }
-
-// class Qb<ConvertTyp, AnsTyp> {
-//   // Qb == question body
-//   // simple class to hold question data
-//   // ConvertTyp == data-type of user response (string or int from CLI)
-//   // ConvertTyp may be different for the web UI
-//   // AnsTyp == real answer data-type after conversion of ConvertTyp
-
-//   QuestionQuantifier qq;
-//   String question;
-//   Iterable<String>? answerChoices;
-//   CastUserInputToTyp<ConvertTyp, AnsTyp>? castFunc;
-//   int defaultAnswerIdx;
-//   bool dynamicFromPriorState;
-//   bool shouldSkip = false;
-//   bool acceptsMultiResponses = false;
-
-//   Qb(
-//     this.qq,
-//     this.question,
-//     this.answerChoices,
-//     this.castFunc, {
-//     this.defaultAnswerIdx = 1,
-//     this.dynamicFromPriorState = false,
-//   });
-
-//   // getters
-//   AppSection get section => qq.appSection;
-//   UiComponent? get uiComp => qq.uiCompInSection;
-//   bool get capturesScalarValues => qq.capturesScalarValues;
-//   bool get addsOrDeletesFutureQuestions => qq.addsOrDeletesFutureQuestions;
-//   bool get producesVisualRules => qq.producesVisualRules;
-//   bool get producesBehavioralRules => qq.producesBehavioralRules;
-//   Type get convertType => ConvertTyp;
-//   // Type get convertType => typeOf<ConvertTyp>();
-//   Type get answerType => AnsTyp;
-
-//   void deriveFromPriorAnswers(List<UserResponse> answers) {
-//     /*
-//     some questions need to review prior state
-//     before we know their shape or whether they
-//     should even be asked
-//     */
-//     this.shouldSkip = true;
-//   }
-// }

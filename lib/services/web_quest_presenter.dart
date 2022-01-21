@@ -1,13 +1,9 @@
 // import "dart:io";
-// import 'package:collection/collection.dart';
-// import 'package:eventconfig/interfaces/question_presenter.dart';
 //
-import 'package:eventconfig/interfaces/question_presenter.dart';
-
+import '../interfaces/question_presenter.dart';
 import '../input_models/all.dart';
 import '../dialog/all.dart';
 import '../app_entity_enums/all.dart';
-// import '../enums/all.dart';
 
 class WebQuestionPresenter implements QuestionPresenter {
   // to render widget views of the question
@@ -21,9 +17,10 @@ class WebQuestionPresenter implements QuestionPresenter {
     DialogRunner dialoger,
     DialogSectionCfg sectionCfg,
   ) {
-    if (sectionCfg.appSection == AppScreen.eventConfiguration) return true;
+    if (sectionCfg.appScreen == AppScreen.eventConfiguration) return true;
 
-    return sectionCfg.askIfNeeded();
+    // TODO
+    return sectionCfg.appScreen.isConfigureable;
   }
 
   @override

@@ -5,15 +5,14 @@ List<Question> loadInitialConfigQuestions() {
   // event config questions DO NOT have areas or uiComponents
   return _questionLst
       .where((qb) =>
-          qb.appSection == AppScreen.eventConfiguration &&
+          qb.appScreen == AppScreen.eventConfiguration &&
           qb.isTopLevelSectionQuestion)
       .toList();
 }
 
 List<Question> loadQuestionsAtTopOfSection(AppScreen appSection) {
   return _questionLst
-      .where(
-          (qb) => qb.appSection == appSection && qb.isTopLevelSectionQuestion)
+      .where((qb) => qb.appScreen == appSection && qb.isTopLevelSectionQuestion)
       .toList();
 }
 
@@ -24,15 +23,16 @@ List<Question> loadQuestionsUnderSelectedSections(
   List<AppScreen> appSectionsToConfigure = response.answers;
   List<Question> newQuestions = _questionLst
       .where((q) =>
-          appSectionsToConfigure.contains(q.appSection) &&
+          appSectionsToConfigure.contains(q.appScreen) &&
           !q.isTopLevelSectionQuestion)
       .toList();
   return newQuestions;
 }
 
 List<Question> loadVisualRuleQuestionsForArea(
-  AppScreen section,
-  ScreenWidgetArea uiComp,
+  AppScreen screen,
+  ScreenWidgetArea screenWidgetArea,
+  SubWidgetInScreenArea slotInArea,
   UserResponse<List<VisualRuleType>> response,
 ) {
   /*
@@ -40,12 +40,13 @@ List<Question> loadVisualRuleQuestionsForArea(
     loading an existing one
   */
   List<Question> lst = [];
-  for (VisualRuleType rt in response.answers) {
+  for (VisualRuleType applicableRuleForSlot in response.answers) {
     lst.add(
       VisualRuleQuestion<String, RuleResponseWrapper>(
-        section,
-        uiComp,
-        rt,
+        screen,
+        screenWidgetArea,
+        slotInArea,
+        applicableRuleForSlot,
         null,
       ),
     );
@@ -112,7 +113,7 @@ final List<Question> _questionLst = [
     (i) => EvEliminationStrategy.values[i],
   ),
   Qb<String, List<AppScreen>>(
-    QuestionQuantifier.eventLevel(addsSectionQuestions: true),
+    QuestionQuantifier.eventLevel(addsWhichScreenQuestions: true),
     'Which app areas shall we configure?',
     AppScreen.eventConfiguration.sectionConfigOptions.map((e) => e.name),
     (String strLstIdxs) {
@@ -132,24 +133,24 @@ final List<Question> _questionLst = [
   // and if user proceeds, then we ask them
   // which UI components in the section they want to configure
 
-  if (AppScreen.marketView.isConfigureable)
-    Qb<String, List<ScreenWidgetArea>>(
-      QuestionQuantifier.appSectionLevel(AppScreen.marketView,
-          addsAreaQuestions: true),
-      AppScreen.marketView.includeStr,
-      AppScreen.marketView.applicableComponents.map((e) => e.name),
-      AppScreen.marketView.convertIdxsToComponentList,
-    ),
-  if (AppScreen.marketView.isConfigureable)
-    for (ScreenWidgetArea uic in AppScreen.marketView.applicableComponents)
-      for (VisualRuleType rt in uic.applicableRuleTypes)
-        Qb<String, bool>(
-          QuestionQuantifier.uiComponentLevel(AppScreen.marketView, uic,
-              addsRuleQuestions: true),
-          'Want to configure ${rt.name} on ${uic.name}?',
-          null,
-          (yOrN) => yOrN.toUpperCase().startsWith('Y'),
-        ),
+  // if (AppScreen.marketView.isConfigureable)
+  //   Qb<String, List<ScreenWidgetArea>>(
+  //     QuestionQuantifier.appScreenLevel(AppScreen.marketView,
+  //         addsAreaQuestions: true),
+  //     AppScreen.marketView.includeStr,
+  //     AppScreen.marketView.applicableComponents.map((e) => e.name),
+  //     AppScreen.marketView.convertIdxsToComponentList,
+  //   ),
+  // if (AppScreen.marketView.isConfigureable)
+  //   for (ScreenWidgetArea uic in AppScreen.marketView.applicableComponents)
+  //     for (VisualRuleType rt in uic.applicableRuleTypes)
+  //       Qb<String, bool>(
+  //         QuestionQuantifier.screenAreaLevel(AppScreen.marketView, uic,
+  //             addsSlotQuestions: true),
+  //         'Want to configure ${rt.name} on ${uic.name}?',
+  //         null,
+  //         (yOrN) => yOrN.toUpperCase().startsWith('Y'),
+  //       ),
 ];
 
 

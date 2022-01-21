@@ -7,24 +7,25 @@ enum QuestCascadeTyp {
     impact future questions in the pending list
    */
   noCascade,
-  appendsPerSectionQuestions,
-  appendsPerSectionAreaQuestions,
-  produceVisualRule,
-  produceBehavioralRule
+  addsWhichAreaInEachScreenQuestions,
+  addsWhichPartOfSelectedAreaQuestions, // for each screen
+  addsVisualRuleQuestions,
+  addsBehavioralRuleQuestions
 }
 
 extension QuestCascadeTypExt on QuestCascadeTyp {
   //
   bool get generatesNoQuestions => this == QuestCascadeTyp.noCascade;
 
-  bool get addsPerSectionQuestions =>
-      this == QuestCascadeTyp.appendsPerSectionQuestions;
+  bool get addsWhichAreaInEachScreenQuestions =>
+      this == QuestCascadeTyp.addsWhichAreaInEachScreenQuestions;
 
-  bool get addsAreaQuestions =>
-      this == QuestCascadeTyp.appendsPerSectionAreaQuestions;
+  bool get addsWhichSlotsOfSelectedAreaQuestions =>
+      this == QuestCascadeTyp.addsWhichPartOfSelectedAreaQuestions;
 
-  bool get producesVisualRules => this == QuestCascadeTyp.produceVisualRule;
+  bool get addsVisualRuleQuestions =>
+      this == QuestCascadeTyp.addsVisualRuleQuestions;
 
-  bool get producesBehavioralRules =>
-      this == QuestCascadeTyp.produceBehavioralRule;
+  bool get addsBehavioralRuleQuestions =>
+      this == QuestCascadeTyp.addsBehavioralRuleQuestions;
 }
