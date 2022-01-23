@@ -5,15 +5,15 @@ extension VisualRuleTypeExt2 on VisualRuleType {
 
   AppConfigRule castPropertyMapToRule(RuleResponseWrapper pm) {
     switch (this) {
-      case VisualRuleType.sort:
+      case VisualRuleType.sortCfg:
         return AppConfigRule.sort(pm);
-      case VisualRuleType.group:
+      case VisualRuleType.groupCfg:
         return AppConfigRule.group(pm);
-      case VisualRuleType.filter:
+      case VisualRuleType.filterCfg:
         return AppConfigRule.filter(pm);
-      case VisualRuleType.format:
+      case VisualRuleType.styleOrFormat:
         return AppConfigRule.format(pm);
-      case VisualRuleType.show:
+      case VisualRuleType.showOrHide:
         return AppConfigRule.show(pm);
     }
   }

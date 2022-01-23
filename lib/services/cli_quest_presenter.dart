@@ -1,7 +1,7 @@
 import "dart:io";
 import 'package:collection/collection.dart';
-import 'package:eventconfig/interfaces/question_presenter.dart';
 //
+import '../interfaces/question_presenter.dart';
 import '../input_models/all.dart';
 import '../dialog/all.dart';
 import '../app_entity_enums/all.dart';
@@ -11,22 +11,23 @@ class CliQuestionPresenter implements QuestionPresenter {
   // formatter for command-line IO
   CliQuestionPresenter();
 
-  @override
-  bool askSectionQuestionAndWaitForUserResponse(
-    DialogRunner dialoger,
-    DialogSectionCfg sectionCfg,
-  ) {
-    // return true;
-    AppScreen screen = sectionCfg.appScreen;
-    if (screen == AppScreen.eventConfiguration) return true;
+  // @override
+  // bool askSectionQuestionAndWaitForUserResponse(
+  //   DialogRunner dialoger,
+  //   DialogSectionCfg sectionCfg,
+  // ) {
+  //   // no longer needed
+  //   return true;
+  //   AppScreen screen = sectionCfg.appScreen;
+  //   if (screen == AppScreen.eventConfiguration) return true;
 
-    if (!screen.isConfigurable) return false;
+  //   if (!screen.isConfigurable) return false;
 
-    print(screen.includeStr + ' (enter y/yes or n/no)');
-    var userResp = stdin.readLineSync() ?? 'Y';
-    // print("askIfNeeded got: $userResp");
-    return userResp.toUpperCase().startsWith('Y');
-  }
+  //   print(screen.includeStr + ' (enter y/yes or n/no)');
+  //   var userResp = stdin.readLineSync() ?? 'Y';
+  //   // print("askIfNeeded got: $userResp");
+  //   return userResp.toUpperCase().startsWith('Y');
+  // }
 
   @override
   void askAndWaitForUserResponse(
@@ -119,7 +120,7 @@ class CliQuestionPresenter implements QuestionPresenter {
     String quest = rQuestAndChoices.createFormattedQuestion(rQuest);
     print(quest);
     print('\n');
-    rQuestAndChoices.ruleQuestChoices.forEachIndexed((idx, opt) {
+    rQuestAndChoices.choices.forEachIndexed((idx, opt) {
       print('\t$idx) $opt ');
     });
 
@@ -136,7 +137,7 @@ class CliQuestionPresenter implements QuestionPresenter {
 
   void _printQuestion(Question quest) {
     // show the question
-    print(quest.question);
+    print(quest.questStr);
   }
 
   void _printOptions(Question quest) {
@@ -169,7 +170,7 @@ class CliQuestionPresenter implements QuestionPresenter {
     //
     if (quest.hasChoices) {
       if (quest.acceptsMultiResponses) {
-        print('Enter row #s of choices (eg 2,3,5) then press enter/return!');
+        print('Enter row #s of choices (eg 0,1,2) then press enter/return!');
       } else {
         print('Enter row # of preferred choice, then press enter/return!');
       }

@@ -2,15 +2,15 @@ part of EvCfgEnums;
 
 //
 const List<VisualRuleType> _unconfigurableFutureRules = [
-  VisualRuleType.show,
+  VisualRuleType.showOrHide,
 ];
 
 enum VisualRuleType {
-  sort,
-  group,
-  filter,
-  format,
-  show,
+  sortCfg,
+  groupCfg,
+  filterCfg,
+  styleOrFormat,
+  showOrHide,
 }
 
 extension VisualRuleTypeExt1 on VisualRuleType {
@@ -21,15 +21,15 @@ extension VisualRuleTypeExt1 on VisualRuleType {
     //
     String nm = this.name;
     switch (this) {
-      case VisualRuleType.sort:
+      case VisualRuleType.sortCfg:
         return nm + ' (config row order)';
-      case VisualRuleType.group:
+      case VisualRuleType.groupCfg:
         return nm + ' (config row grouping)';
-      case VisualRuleType.filter:
+      case VisualRuleType.filterCfg:
         return nm + ' (config filtering options)';
-      case VisualRuleType.format:
+      case VisualRuleType.styleOrFormat:
         return nm + ' (set style or appearance)';
-      case VisualRuleType.show:
+      case VisualRuleType.showOrHide:
         return nm + ' (hide or show)';
     }
   }
@@ -83,28 +83,28 @@ extension VisualRuleTypeExt1 on VisualRuleType {
 
   List<VisRuleQuestType> get questionsRequired {
     switch (this) {
-      case VisualRuleType.sort:
+      case VisualRuleType.sortCfg:
         return [
           Vrq.selectFieldForSortOrGroup,
           Vrq.specifyPositionInGroup,
           Vrq.setSortOrder
         ];
-      case VisualRuleType.group:
+      case VisualRuleType.groupCfg:
         return [
           Vrq.selectFieldForSortOrGroup,
           Vrq.specifyPositionInGroup,
           Vrq.setSortOrder
         ];
-      case VisualRuleType.filter:
+      case VisualRuleType.filterCfg:
         return [
           Vrq.getValueFromTableAndField,
           Vrq.specifyPositionInGroup,
         ];
-      case VisualRuleType.format:
+      case VisualRuleType.styleOrFormat:
         return [
           Vrq.selectVisualComponentOrStyle,
         ];
-      case VisualRuleType.show:
+      case VisualRuleType.showOrHide:
         return [
           Vrq.controlsVisibilityOfAreaOrSlot,
         ];

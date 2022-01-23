@@ -3,12 +3,15 @@ part of InputModels;
 class VisRuleQuestWithChoices {
   //
   final VisRuleQuestType ruleQuestType;
-  final List<String> ruleQuestChoices;
+  final List<String> _ruleQuestChoices;
 
   VisRuleQuestWithChoices(
     this.ruleQuestType,
-    this.ruleQuestChoices,
+    this._ruleQuestChoices,
   );
+
+  String get questStr => 'QwC: ' + ruleQuestType.name + '\n' + _subQuests;
+  String get _subQuests => _ruleQuestChoices.toString();
 
   String createFormattedQuestion(VisualRuleQuestion rQuest) {
     String templ =
@@ -26,7 +29,7 @@ class VisRuleQuestWithChoices {
     return templ;
   }
 
-  List<String> get choices => ruleQuestChoices;
+  List<String> get choices => _ruleQuestChoices;
 }
 
 class VisRuleChoiceConfig {
@@ -40,6 +43,16 @@ class VisRuleChoiceConfig {
   );
 
   String get choiceName => ruleTyp.friendlyName;
+  String get questStr =>
+      'RT: ${ruleTyp.name}:  SubQs: ${questsAndChoices.fold<String>(
+        '',
+        (ac, c) =>
+            ac +
+            '' +
+            c.choices.reduce(
+              (s1, s2) => s1 + '' + s2,
+            ),
+      )}';
 
   factory VisRuleChoiceConfig.fromRuleTyp(VisualRuleType ruleTyp) {
     // use VisualRuleType to get list of sub-questions

@@ -33,19 +33,19 @@ extension ScreenAreaWidgetSlotExt1 on ScreenAreaWidgetSlot {
     switch (this) {
       case ScreenAreaWidgetSlot.header:
         return [
-          VisualRuleType.show,
+          VisualRuleType.showOrHide,
         ];
       case ScreenAreaWidgetSlot.footer:
         return [
-          VisualRuleType.show,
+          VisualRuleType.showOrHide,
         ];
       case ScreenAreaWidgetSlot.slot1:
         return [
-          VisualRuleType.filter,
+          VisualRuleType.filterCfg,
         ];
       case ScreenAreaWidgetSlot.slot2:
         return [
-          VisualRuleType.filter,
+          VisualRuleType.filterCfg,
         ];
       // case ScreenAreaWidgetSlot.rowStyle:
       //   return [
@@ -53,15 +53,15 @@ extension ScreenAreaWidgetSlotExt1 on ScreenAreaWidgetSlot {
       //   ];
       case ScreenAreaWidgetSlot.title:
         return [
-          VisualRuleType.format,
+          VisualRuleType.styleOrFormat,
         ];
       case ScreenAreaWidgetSlot.subtitle:
         return [
-          VisualRuleType.show,
+          VisualRuleType.showOrHide,
         ];
       case ScreenAreaWidgetSlot.bannerUrl:
         return [
-          VisualRuleType.show,
+          VisualRuleType.showOrHide,
         ];
     }
   }

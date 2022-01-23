@@ -37,6 +37,9 @@ class VisualRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseWrapper>
   List<VisRuleQuestWithChoices> get questsAndChoices =>
       _questDef.questsAndChoices;
 
+  @override
+  String get questStr => _questDef.questStr;
+
   void castResponseListAndStore(Map<VisRuleQuestType, String> multiAnswerMap) {
     // store user answers
     this.response = UserResponse(RuleResponseWrapper(multiAnswerMap) as AnsTyp);

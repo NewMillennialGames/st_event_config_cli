@@ -39,7 +39,11 @@ Future<void> main(List<String> arguments) async {
 
 void createOutputFileFromResponses(QuestListMgr questionMgr) {
   //
-  final exportableQuestions = questionMgr.exportableQuestions;
+  final List<Question> exportableQuestions = questionMgr.exportableQuestions;
+
+  for (Question q in exportableQuestions) {
+    print(q.questStr);
+  }
 }
 
 // ArgParser setupOptions() {

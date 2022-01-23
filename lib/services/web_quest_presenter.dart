@@ -3,7 +3,7 @@
 import '../interfaces/question_presenter.dart';
 import '../input_models/all.dart';
 import '../dialog/all.dart';
-import '../app_entity_enums/all.dart';
+// import '../app_entity_enums/all.dart';
 
 class WebQuestionPresenter implements QuestionPresenter {
   // to render widget views of the question
@@ -13,19 +13,23 @@ class WebQuestionPresenter implements QuestionPresenter {
   WebQuestionPresenter();
 
   @override
-  bool askSectionQuestionAndWaitForUserResponse(
-    DialogRunner dialoger,
-    DialogSectionCfg sectionCfg,
-  ) {
-    if (sectionCfg.appScreen == AppScreen.eventConfiguration) return true;
-
-    // TODO
-    return sectionCfg.appScreen.isConfigurable;
-  }
-
-  @override
   void askAndWaitForUserResponse(
     DialogRunner dialoger,
     Question quest,
-  ) {}
+  ) {
+    // should pump a widget to some provider
+    // to redraw the whole screen
+  }
+
+  // @override
+  // bool askSectionQuestionAndWaitForUserResponse(
+  //   DialogRunner dialoger,
+  //   DialogSectionCfg sectionCfg,
+  // ) {
+  //   if (sectionCfg.appScreen == AppScreen.eventConfiguration) return true;
+
+  //   // TODO
+  //   return sectionCfg.appScreen.isConfigurable;
+  // }
+
 }

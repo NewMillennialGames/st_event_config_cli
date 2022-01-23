@@ -68,7 +68,7 @@ class FilterRule extends _AppVisualRule {
   ) : super._();
 
   //
-  VisualRuleType get ruleType => VisualRuleType.filter;
+  VisualRuleType get ruleType => VisualRuleType.filterCfg;
 
   //
   // @override
@@ -87,7 +87,7 @@ class FormatRule extends _AppVisualRule {
   FormatRule() : super._() {}
 
   //
-  VisualRuleType get ruleType => VisualRuleType.format;
+  VisualRuleType get ruleType => VisualRuleType.styleOrFormat;
 
   //
   // @override
@@ -102,7 +102,7 @@ class GroupRule extends _AppVisualRule {
   GroupRule() : super._() {}
 
   //
-  VisualRuleType get ruleType => VisualRuleType.group;
+  VisualRuleType get ruleType => VisualRuleType.groupCfg;
   //
   // @override
   // Map<VisualRuleType, String> getEncodedRule() {
@@ -116,7 +116,7 @@ class ShowRule extends _AppVisualRule {
   ShowRule() : super._() {}
 
   //
-  VisualRuleType get ruleType => VisualRuleType.show;
+  VisualRuleType get ruleType => VisualRuleType.showOrHide;
   //
   // @override
   // Map<VisualRuleType, String> getEncodedRule() {
@@ -130,7 +130,7 @@ class SortRule extends _AppVisualRule {
   SortRule() : super._() {}
 
   //
-  VisualRuleType get ruleType => VisualRuleType.sort;
+  VisualRuleType get ruleType => VisualRuleType.sortCfg;
   //
   // @override
   // Map<VisualRuleType, String> getEncodedRule() {

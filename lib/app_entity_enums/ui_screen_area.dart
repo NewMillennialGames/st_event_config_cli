@@ -66,24 +66,24 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
     // rules go with this ui component
     switch (this) {
       case ScreenWidgetArea.navBar:
-        return [VisualRuleType.format];
+        return [VisualRuleType.styleOrFormat];
       case ScreenWidgetArea.filterBar:
-        return [VisualRuleType.filter];
+        return [VisualRuleType.filterCfg];
       case ScreenWidgetArea.header:
         return [
-          VisualRuleType.format,
-          VisualRuleType.show,
+          VisualRuleType.styleOrFormat,
+          VisualRuleType.showOrHide,
         ];
       case ScreenWidgetArea.banner:
-        return [VisualRuleType.show];
+        return [VisualRuleType.showOrHide];
       case ScreenWidgetArea.tableview:
         return [
-          VisualRuleType.format,
-          VisualRuleType.group,
-          VisualRuleType.sort
+          VisualRuleType.styleOrFormat,
+          VisualRuleType.groupCfg,
+          VisualRuleType.sortCfg
         ];
       case ScreenWidgetArea.footer:
-        return [VisualRuleType.show];
+        return [VisualRuleType.showOrHide];
       // case UiComponent.ticker:
       //   return [VisualRuleType.show];
       // case UiComponent.tabBar:

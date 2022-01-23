@@ -13,10 +13,10 @@ abstract class QuestionPresenter {
   in:  lib/services/web_quest_presenter.dart
   */
 
-  bool askSectionQuestionAndWaitForUserResponse(
-    DialogRunner dialoger,
-    DialogSectionCfg sectionCfg,
-  );
+  // bool askSectionQuestionAndWaitForUserResponse(
+  //   DialogRunner dialoger,
+  //   DialogSectionCfg sectionCfg,
+  // );
 
   void askAndWaitForUserResponse(
     DialogRunner dialoger,

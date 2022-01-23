@@ -6,7 +6,7 @@ typedef PriorAnswersCallback = List<UserResponse> Function();
 class Question<ConvertTyp, AnsTyp> extends Equatable {
   //
   final QuestionQuantifier qQuantify;
-  final String question;
+  final String _questStr;
   final Iterable<String>? _answerChoices;
   // castFunc not used on Rule-Type-Questions
   final CastUserInputToTyp<ConvertTyp, AnsTyp>? castFunc;
@@ -20,7 +20,7 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
 
   Question(
     this.qQuantify,
-    this.question,
+    this._questStr,
     this._answerChoices,
     this.castFunc, {
     this.defaultAnswerIdx = 1,
@@ -28,6 +28,7 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
     this.acceptsMultiResponses = false,
   });
   // getters
+  String get questStr => _questStr;
   bool get isRuleQuestion =>
       this is VisualRuleQuestion || this is BehaveRuleQuestion;
   bool get isTopLevelConfigOrScreenQuestion =>
@@ -102,15 +103,22 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
   AnsTyp? _castResponseToAnswer(ConvertTyp convertibleVal) {
     // ConvertTyp must be either String or int
     // AnsTyp is typically a string or whatever returned from: castFunc()
-    if (convertibleVal is String) {
-      if (this.castFunc != null) {
-        return castFunc!(convertibleVal);
-      } else {
-        return convertibleVal as AnsTyp?;
+
+    try {
+      if (convertibleVal is String) {
+        if (this.castFunc != null) {
+          return castFunc!(convertibleVal);
+        } else {
+          return convertibleVal as AnsTyp?;
+        }
       }
+    } catch (e) {
+      //
+      print('Err: Str $convertibleVal was invalid or out of range');
+      return null;
     }
 
-    assert(convertibleVal is int, 'wtf?');
+    assert(convertibleVal == int, 'wtf?');
 
     AnsTyp? answer;
     if (castFunc != null) {

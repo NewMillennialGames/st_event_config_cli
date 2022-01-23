@@ -33,7 +33,7 @@ class NewQuestionCollector {
     if (questJustAnswered.isRuleQuestion ||
         questJustAnswered.generatesNoNewQuestions) {
       print(
-        'Quest: #${questJustAnswered.questionId} -- ${questJustAnswered.question} wont generated any new questions',
+        'Quest: #${questJustAnswered.questionId} -- ${questJustAnswered.questStr} wont generated any new questions',
       );
       return;
     }
@@ -76,10 +76,20 @@ class NewQuestionCollector {
       //
     } else if (questJustAnswered.asksDetailsForEachVisualRuleType) {
       // print('calling: genRequestedVisualRulesForAreaOrSlot');
-      genRequestedVisualRulesForAreaOrSlot(
-        _questMgr,
-        questJustAnswered as Question<String, List<VisualRuleType>>,
-      );
+
+      if (questJustAnswered is Question<String, List<VisualRuleType>>) {
+        genRequestedVisualRulesForAreaOrSlot(
+          _questMgr,
+          questJustAnswered as Question<String, List<VisualRuleType>>,
+        );
+      } else if (questJustAnswered
+          is Question<String, List<ScreenAreaWidgetSlot>>) {
+        // genRequestedVisualRulesForAreaOrSlot(
+        //   _questMgr,
+        //   questJustAnswered as Question<String, List<ScreenAreaWidgetSlot>>,
+        // );
+      }
+
       //
     } else if (questJustAnswered.asksDetailsForEachBehaveRuleType) {
       // print('calling: genRequestedBehaveRulesForAreaOrSlot');
@@ -90,7 +100,7 @@ class NewQuestionCollector {
       //
     } else {
       print(
-        '\n**Quest ID ${questJustAnswered.questionId} about "${questJustAnswered.question}" did not generate any new questions',
+        '\n**Quest ID ${questJustAnswered.questionId} about "${questJustAnswered.questStr}" did not generate any new questions',
       );
       print(
         'asksDetailsForEachVisualRuleType: ${questJustAnswered.asksDetailsForEachVisualRuleType} -- ${questJustAnswered.visRuleTypeForSlotInArea?.name ?? 'err-missing'}',

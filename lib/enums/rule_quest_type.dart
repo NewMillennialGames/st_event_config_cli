@@ -34,7 +34,7 @@ extension VisRuleQuestTypeExt1 on VisRuleQuestType {
         return 'Select Sort position';
       case VisRuleQuestType.selectVisualComponentOrStyle:
         switch (ruleTyp) {
-          case VisualRuleType.format:
+          case VisualRuleType.styleOrFormat:
             resp =
                 'Pick the Component or Style that applies to {slot} on {area} of {screen} screen';
             break;
