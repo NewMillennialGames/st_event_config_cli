@@ -259,7 +259,7 @@ class NewQuestionCollector {
         area,
         ruleTyp,
         areaSlot,
-        null,
+        // null,
       );
       newQuestions.add(q);
     }

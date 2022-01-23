@@ -17,52 +17,52 @@ extension VisualRuleTypeExt1 on VisualRuleType {
   //
   bool get isConfigurable => !_unconfigurableFutureRules.contains(this);
   //
-  String questionStr(
-    AppScreen screen,
-    ScreenWidgetArea screenArea,
-    ScreenAreaWidgetSlot? slotInArea,
-  ) {
-    bool isAreaScopedRule = slotInArea == null;
-    final List<dynamic> valsDyn = [
-      screen,
-      screenArea,
-      // valsDyn.length (of 2 or3) will inform depth of rule being created
-      if (!isAreaScopedRule) slotInArea,
-    ];
+  // String questionStr(
+  //   AppScreen screen,
+  //   ScreenWidgetArea screenArea,
+  //   ScreenAreaWidgetSlot? slotInArea,
+  // ) {
+  //   bool isAreaScopedRule = slotInArea == null;
+  //   final List<dynamic> valsDyn = [
+  //     screen,
+  //     screenArea,
+  //     // valsDyn.length (of 2 or3) will inform depth of rule being created
+  //     if (!isAreaScopedRule) slotInArea,
+  //   ];
 
-    switch (this) {
-      case VisualRuleType.sort:
-        return RuleTemplStr.sort.makeRuleQuestionStr(
-          this,
-          isAreaScopedRule,
-          valsDyn,
-        );
-      case VisualRuleType.group:
-        return RuleTemplStr.sort.makeRuleQuestionStr(
-          this,
-          isAreaScopedRule,
-          valsDyn,
-        );
-      case VisualRuleType.filter:
-        return RuleTemplStr.sort.makeRuleQuestionStr(
-          this,
-          isAreaScopedRule,
-          valsDyn,
-        );
-      case VisualRuleType.format:
-        return RuleTemplStr.sort.makeRuleQuestionStr(
-          this,
-          isAreaScopedRule,
-          valsDyn,
-        );
-      case VisualRuleType.show:
-        return RuleTemplStr.sort.makeRuleQuestionStr(
-          this,
-          isAreaScopedRule,
-          valsDyn,
-        );
-    }
-  }
+  //   switch (this) {
+  //     case VisualRuleType.sort:
+  //       return RuleTemplStr.sort.makeRuleQuestionStr(
+  //         this,
+  //         isAreaScopedRule,
+  //         valsDyn,
+  //       );
+  //     case VisualRuleType.group:
+  //       return RuleTemplStr.group.makeRuleQuestionStr(
+  //         this,
+  //         isAreaScopedRule,
+  //         valsDyn,
+  //       );
+  //     case VisualRuleType.filter:
+  //       return RuleTemplStr.filter.makeRuleQuestionStr(
+  //         this,
+  //         isAreaScopedRule,
+  //         valsDyn,
+  //       );
+  //     case VisualRuleType.format:
+  //       return RuleTemplStr.format.makeRuleQuestionStr(
+  //         this,
+  //         isAreaScopedRule,
+  //         valsDyn,
+  //       );
+  //     case VisualRuleType.show:
+  //       return RuleTemplStr.show.makeRuleQuestionStr(
+  //         this,
+  //         isAreaScopedRule,
+  //         valsDyn,
+  //       );
+  //   }
+  // }
 
   List<VisRuleQuestType> get questionsRequired {
     switch (this) {

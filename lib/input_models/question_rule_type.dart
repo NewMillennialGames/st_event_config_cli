@@ -17,19 +17,18 @@ class VisualRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseWrapper>
     ScreenWidgetArea screenArea,
     VisualRuleType visRuleType,
     ScreenAreaWidgetSlot? slot,
-    CastUserInputToTyp<ConvertTyp, AnsTyp>? castFunc,
+    // CastUserInputToTyp<ConvertTyp, AnsTyp>? castFunc,
   ) : super(
           QuestionQuantifier.ruleCompositionLevel(
             appSection,
             screenArea,
-            slot,
             visRuleType,
+            slot,
             null,
           ),
-          visRuleType.questionStr(appSection, screenArea, slot),
-          // visRuleType.choiceOptions(appSection, uiComp),
+          'niu--sub questions will be used',
           null,
-          castFunc,
+          null,
         ) {
     this._questDef = VisRuleChoiceConfig.fromRuleTyp(visRuleType);
   }

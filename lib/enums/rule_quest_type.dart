@@ -1,8 +1,12 @@
 part of EvCfgEnums;
 
 enum VisRuleQuestType {
-  // possible questions to be asked
-  // for a given Visibility-Rule
+  /* general structure of the possible questions to be asked
+    for a given Visibility-Rule
+
+    in other words, HOW MANY pieces of data needs to be
+    collected to properly build a complete rule
+  */
   getValueFromTableAndField,
   selectFieldForSortOrGroup,
   specifyPositionInGroup,
@@ -13,8 +17,32 @@ enum VisRuleQuestType {
 
 extension VisRuleQuestTypeExt1 on VisRuleQuestType {
   //
-  String questionTemplate() {
-    return 'DialogRuleQuestType.questionTemplate';
+  String templateForRuleType(VisualRuleType ruleTyp) {
+    /* return question template for each of these rules
+
+
+    */
+    String resp = '_unset';
+    switch (this) {
+      case VisRuleQuestType.getValueFromTableAndField:
+        return '';
+      case VisRuleQuestType.selectFieldForSortOrGroup:
+        return '';
+      case VisRuleQuestType.specifyPositionInGroup:
+        return '';
+      case VisRuleQuestType.setSortOrder:
+        return '';
+      case VisRuleQuestType.selectVisualComponentOrStyle:
+        switch (ruleTyp) {
+          case VisualRuleType.format:
+            resp =
+                'Pick the Component or Style that applies to {slot} on {area} of {screen} screen';
+        }
+        return resp;
+      case VisRuleQuestType.controlsVisibilityOfAreaOrSlot:
+        return '';
+    }
+    // return 'DialogRuleQuestType.questionTemplate';
   }
 
   List<String> get choices {

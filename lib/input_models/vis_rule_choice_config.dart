@@ -9,6 +9,23 @@ class VisRuleQuestWithChoices {
     this.ruleQuestType,
     this.ruleQuestChoices,
   );
+
+  String createFormattedQuestion(VisualRuleQuestion rQuest) {
+    String templ =
+        ruleQuestType.templateForRuleType(rQuest.visRuleTypeForSlotInArea!);
+
+    String slotStr = rQuest.slotInArea == null ? '' : '';
+    Map<String, String> templFillerVals = {
+      'slot': slotStr,
+      'area':
+          rQuest.screenWidgetArea?.name ?? 'error -- vis rule quest w no area?',
+      'screen': rQuest.appScreen.name,
+    };
+    templ = templ.formatWithMap(templFillerVals);
+    return templ;
+  }
+
+  List<String> get choices => ruleQuestChoices;
 }
 
 class VisRuleChoiceConfig {

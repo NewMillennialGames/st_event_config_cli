@@ -106,17 +106,22 @@ class CliQuestionPresenter implements QuestionPresenter {
     for (VisRuleQuestWithChoices questWithChoices
         in ruleQuest.questsAndChoices) {
       //
-      String answer = _showOptionsAndWaitForResponse(questWithChoices) ?? '';
+      String answer =
+          _showOptionsAndWaitForResponse(ruleQuest, questWithChoices) ?? '';
       accumResponses[questWithChoices.ruleQuestType] = answer;
     }
     return accumResponses;
   }
 
-  String? _showOptionsAndWaitForResponse(VisRuleQuestWithChoices rulePart) {
+  String? _showOptionsAndWaitForResponse(
+    VisualRuleQuestion rQuest,
+    VisRuleQuestWithChoices rQuestAndChoices,
+  ) {
     //
-    print(rulePart.ruleQuestType.name);
+    String quest = rQuestAndChoices.createFormattedQuestion(rQuest);
+    print(quest);
     print('\n');
-    rulePart.ruleQuestChoices.forEachIndexed((idx, opt) {
+    rQuestAndChoices.ruleQuestChoices.forEachIndexed((idx, opt) {
       print('\t$idx) $opt ');
     });
 

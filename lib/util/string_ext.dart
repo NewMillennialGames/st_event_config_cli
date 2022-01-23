@@ -22,13 +22,13 @@ extension StringFormating on String {
     });
   }
 
-  String makeRuleQuestionStr(
-    VisualRuleType rt,
-    bool isAreaScopedRule, // not a slot-level rule
-    List<dynamic> valsDyn,
-  ) {
-    List<String> valsStr = valsDyn.map((e) => e.toString()).toList();
+  // String makeRuleQuestionStr(
+  //   VisualRuleType rt,
+  //   bool isAreaScopedRule, // not a slot-level rule
+  //   List<dynamic> valsDyn,
+  // ) {
+  //   List<String> valsStr = valsDyn.map((e) => e.toString()).toList();
 
-    return this.format(valsStr);
-  }
+  //   return this.format(valsStr);
+  // }
 }

@@ -156,8 +156,9 @@ class QuestionQuantifier extends Equatable {
   factory QuestionQuantifier.ruleCompositionLevel(
     AppScreen appScreen,
     ScreenWidgetArea screenWidgetArea,
+    VisualRuleType visRuleTypeForSlotInArea,
+    // rule level always has screen & area; may have slot
     ScreenAreaWidgetSlot? slot,
-    VisualRuleType? visRuleTypeForSlotInArea,
     BehaviorRuleType? behRuleTypeForSlotInArea, {
     bool addsMoreRuleQuestions = false,
   }) {
