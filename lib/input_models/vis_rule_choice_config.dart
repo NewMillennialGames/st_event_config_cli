@@ -21,7 +21,7 @@ class VisRuleChoiceConfig {
     this.questsAndChoices,
   );
 
-  factory VisRuleChoiceConfig.byRuleTyp(VisualRuleType ruleTyp) {
+  factory VisRuleChoiceConfig.fromRuleTyp(VisualRuleType ruleTyp) {
     // use VisualRuleType to get list of sub-questions
     // and their respective choice options
     List<VisRuleQuestWithChoices> questsAndChoices =

@@ -14,24 +14,24 @@ class VisualRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseWrapper>
 
   VisualRuleQuestion(
     AppScreen appSection,
-    ScreenWidgetArea uiComp,
+    ScreenWidgetArea screenArea,
     VisualRuleType visRuleType,
     ScreenAreaWidgetSlot? slot,
     CastUserInputToTyp<ConvertTyp, AnsTyp>? castFunc,
   ) : super(
           QuestionQuantifier.ruleCompositionLevel(
             appSection,
-            uiComp,
+            screenArea,
             slot,
             visRuleType,
             null,
           ),
-          visRuleType.questionStr(appSection, uiComp, slot),
+          visRuleType.questionStr(appSection, screenArea, slot),
           // visRuleType.choiceOptions(appSection, uiComp),
           null,
           castFunc,
         ) {
-    this._questDef = VisRuleChoiceConfig.byRuleTyp(visRuleType);
+    this._questDef = VisRuleChoiceConfig.fromRuleTyp(visRuleType);
   }
 
   VisRuleChoiceConfig get questDef => _questDef;

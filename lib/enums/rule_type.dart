@@ -32,31 +32,31 @@ extension VisualRuleTypeExt1 on VisualRuleType {
 
     switch (this) {
       case VisualRuleType.sort:
-        return RuleTemplStr.ruleRequiringRowColMap.makeRuleQuestionStr(
+        return RuleTemplStr.sort.makeRuleQuestionStr(
           this,
           isAreaScopedRule,
           valsDyn,
         );
       case VisualRuleType.group:
-        return RuleTemplStr.ruleRequiringRowColMap.makeRuleQuestionStr(
+        return RuleTemplStr.sort.makeRuleQuestionStr(
           this,
           isAreaScopedRule,
           valsDyn,
         );
       case VisualRuleType.filter:
-        return RuleTemplStr.ruleRequiringRowColMap.makeRuleQuestionStr(
+        return RuleTemplStr.sort.makeRuleQuestionStr(
           this,
           isAreaScopedRule,
           valsDyn,
         );
       case VisualRuleType.format:
-        return RuleTemplStr.ruleRequiringRowColMap.makeRuleQuestionStr(
+        return RuleTemplStr.sort.makeRuleQuestionStr(
           this,
           isAreaScopedRule,
           valsDyn,
         );
       case VisualRuleType.show:
-        return RuleTemplStr.ruleRequiringRowColMap.makeRuleQuestionStr(
+        return RuleTemplStr.sort.makeRuleQuestionStr(
           this,
           isAreaScopedRule,
           valsDyn,

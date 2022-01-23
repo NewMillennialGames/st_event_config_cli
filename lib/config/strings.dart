@@ -19,6 +19,18 @@ class DlgStr {
 class RuleTemplStr {
   //
 
-  static String ruleRequiringRowColMap =
+  static String sort =
+      'Select field name for {0} rule in the {1} area of screen {2}';
+
+  static String filter =
+      'Select field name for {0} rule in the {1} area of screen {2}';
+
+  static String group =
+      'Select field name for {0} rule in the {1} area of screen {2}';
+
+  static String format =
+      'Select field name for {0} rule in the {1} area of screen {2}';
+
+  static String show =
       'Select field name for {0} rule in the {1} area of screen {2}';
 }

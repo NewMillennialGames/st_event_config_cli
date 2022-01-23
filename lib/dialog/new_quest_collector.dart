@@ -57,6 +57,8 @@ class NewQuestionCollector {
 
           this will be called once for each screen/area combination
           askeUserWhichPartsOfSelectedAreasToConfigure
+
+          I walked up to farmers market to get some caffeine ... give me 15 minutes notice and I'll walk back to my hotel and put on warmer clothes
       */
       print('calling: askeWhichRulesGoWithAreaAndWhichSlotsToConfig');
       askeWhichRulesGoWithAreaAndWhichSlotsToConfig(
@@ -74,20 +76,24 @@ class NewQuestionCollector {
       //
     } else if (questJustAnswered.asksDetailsForEachVisualRuleType &&
         questJustAnswered.visRuleTypeForSlotInArea != null) {
-      print('calling: genNeededVisualRulesForAreaOrSlot');
-      genNeededVisualRulesForAreaOrSlot(
+      print('calling: genRequestedVisualRulesForAreaOrSlot');
+      genRequestedVisualRulesForAreaOrSlot(
         _questMgr,
         questJustAnswered as Question<String, List<VisualRuleType>>,
       );
       //
     } else if (questJustAnswered.asksDetailsForEachBehaveRuleType &&
         questJustAnswered.behRuleTypeForSlotInArea != null) {
-      print('calling: genNeededBehaveRulesForAreaOrSlot');
-      genNeededBehaveRulesForAreaOrSlot(
+      print('calling: genRequestedBehaveRulesForAreaOrSlot');
+      genRequestedBehaveRulesForAreaOrSlot(
         questJustAnswered.qQuantify.screenWidgetArea!,
         questJustAnswered.response as UserResponse<List<BehaviorRuleType>>,
       );
       //
+    } else {
+      print(
+        '\n\n**Quest ID ${questJustAnswered.questionId} about "${questJustAnswered.question}" did not generate any new questions\n\n',
+      );
     }
   }
 
@@ -210,7 +216,7 @@ class NewQuestionCollector {
           screen,
           screenArea,
           slotInArea,
-          responseAddsWhichRuleTypeQuestions: true,
+          responseAddsRuleDetailQuestions: true,
         ),
         'Which rules would you like to add to the ${slotInArea.name} area of ${screenArea.name} on screen ${screen.name}?',
         slotInArea.possibleConfigRules.map((r) => r.name),
@@ -226,29 +232,44 @@ class NewQuestionCollector {
     _questMgr.appendNewQuestions(newQuestions);
   }
 
-  void genNeededVisualRulesForAreaOrSlot(
+  void genRequestedVisualRulesForAreaOrSlot(
     QuestListMgr _questMgr,
     Question<String, List<VisualRuleType>> quest,
   ) {
+    /*
+      user has responded WHICH rules they would like to apply
+      to EITHER a screenArea, OR a slot in an area
+      usually should be just one ruleType for each
+      screen location
+    */
     List<VisualRuleType> rulesToCreateForAreaOrSlot =
         quest.response?.answers ?? [];
     if (rulesToCreateForAreaOrSlot.length < 1) return;
 
     AppScreen screen = quest.appScreen;
     ScreenWidgetArea area = quest.screenWidgetArea!;
-    ScreenAreaWidgetSlot areaSlot = quest.slotInArea!;
+    ScreenAreaWidgetSlot? areaSlot = quest.slotInArea;
     //
-    for (VisualRuleType rule in rulesToCreateForAreaOrSlot) {}
+    List<Question> newQuestions = [];
+    // VisualRuleQuestions figure out their questions &
+    // select options from the rule-type being passed
+    for (VisualRuleType ruleTyp in rulesToCreateForAreaOrSlot) {
+      var q = VisualRuleQuestion<String, RuleResponseWrapper>(
+        screen,
+        area,
+        ruleTyp,
+        areaSlot,
+        null,
+      );
+      newQuestions.add(q);
+    }
+    _questMgr.appendNewQuestions(newQuestions);
   }
 
-  void genNeededBehaveRulesForAreaOrSlot(
+  void genRequestedBehaveRulesForAreaOrSlot(
     ScreenWidgetArea uiComp,
     UserResponse<List<BehaviorRuleType>> response,
   ) {
-    // future
-    // var includedQuestions = loadAddlRuleQuestions(
-    //     _questGroupMgr.currentSectiontype, uiComp, response);
-    // _questMgr.appendQuestions(
-    //     _questGroupMgr.currentSectiontype, includedQuestions);
+    // use example above for this pattern
   }
 }
