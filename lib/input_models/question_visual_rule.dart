@@ -41,7 +41,4 @@ class VisualRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseWrapper>
     // store user answers
     this.response = UserResponse(RuleResponseWrapper(multiAnswerMap) as AnsTyp);
   }
-
-  @override
-  bool get isRuleQuestion => true;
 }

@@ -36,7 +36,7 @@ enum AppScreen {
 
 extension AppScreenExt1 on AppScreen {
   //
-  String get includeStr => 'Configure ${this.name} section of app?';
+  // String get includeStr => 'Configure ${this.name} section of app?';
 
   bool get hasConfigurableScreenAreas =>
       this.configurableScreenAreas.length > 0;

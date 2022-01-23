@@ -61,8 +61,9 @@ class QuestListMgr {
     //
     Map<AppScreen, Map<ScreenWidgetArea, List<ScreenAreaWidgetSlot>>> tree = {};
 
+    // <AppScreen, List<ScreenWidgetArea>>
     for (MapEntry<AppScreen, List<ScreenWidgetArea>> mapEntry
-        in screenAreasPerScreen.entries<AppScreen, List<ScreenWidgetArea>>) {
+        in screenAreasPerScreen.entries) {
       //
       tree[mapEntry.key] = {};
       for (ScreenWidgetArea area in mapEntry.value) {

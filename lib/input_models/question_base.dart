@@ -28,7 +28,8 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
     this.acceptsMultiResponses = false,
   });
   // getters
-  bool get isRuleQuestion => false;
+  bool get isRuleQuestion =>
+      this is VisualRuleQuestion || this is BehaveRuleQuestion;
   bool get isTopLevelConfigOrScreenQuestion =>
       qQuantify.isTopLevelConfigOrScreenQuestion;
   List<String>? get answerChoicesList => _answerChoices?.toList();

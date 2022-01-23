@@ -16,15 +16,16 @@ class CliQuestionPresenter implements QuestionPresenter {
     DialogRunner dialoger,
     DialogSectionCfg sectionCfg,
   ) {
-    AppScreen screen = sectionCfg.appScreen;
-    if (screen == AppScreen.eventConfiguration) return true;
+    return true;
+    // AppScreen screen = sectionCfg.appScreen;
+    // if (screen == AppScreen.eventConfiguration) return true;
 
-    if (!screen.hasConfigurableScreenAreas) return false;
+    // if (!screen.hasConfigurableScreenAreas) return false;
 
-    print(screen.includeStr + ' (enter y/yes or n/no)');
-    var userResp = stdin.readLineSync() ?? 'Y';
-    // print("askIfNeeded got: $userResp");
-    return userResp.toUpperCase().startsWith('Y');
+    // print(screen.includeStr + ' (enter y/yes or n/no)');
+    // var userResp = stdin.readLineSync() ?? 'Y';
+    // // print("askIfNeeded got: $userResp");
+    // return userResp.toUpperCase().startsWith('Y');
   }
 
   @override
@@ -32,25 +33,22 @@ class CliQuestionPresenter implements QuestionPresenter {
     DialogRunner dialoger,
     Question quest,
   ) {
-    if (quest.isRuleQuestion) {
-      // rule questions are more complex and handled by
-      // looping for multiple answers
-
-      if (quest is VisualRuleQuestion) {
-        Map<VisRuleQuestType, String> multiAnswerRespList =
-            _handleVisualRuleQuestions(
-          dialoger,
-          quest,
-        );
-        quest.castResponseListAndStore(multiAnswerRespList);
-      }
-      // else if (quest is BehaviorRuleQuestion) {
-      //   // else do behavioral question
-      // }
+    // rule questions are more complex and handled by
+    // looping for multiple answers
+    if (quest is VisualRuleQuestion) {
+      Map<VisRuleQuestType, String> multiAnswerRespList =
+          _handleVisualRuleQuestions(
+        dialoger,
+        quest,
+      );
       // store response payload on the question
-
+      quest.castResponseListAndStore(multiAnswerRespList);
       return;
     }
+    // else if (quest is BehaviorRuleQuestion) {
+    //   // else do behavioral question
+    // return;
+    // }
 
     // normal question to figure out which rule questions to actually ask user
     _printQuestion(quest);
