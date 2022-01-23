@@ -64,6 +64,10 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
       qQuantify.asksDetailsForEachBehaveRuleType;
   String get sortKey => '${qQuantify.sortKey}';
 
+  // appliesToClientConfiguration == should be exported to file
+  bool get appliesToClientConfiguration =>
+      isRuleQuestion || appScreen == AppScreen.eventConfiguration;
+
   void convertAndStoreUserResponse(String userResp) {
     //
     int answerIdx = -1;
@@ -91,7 +95,7 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
       // print('answer was null on $questionId: $question');
       // return;
     }
-    print('Response: $derivedUserResponse');
+    print('\n\nResp: $derivedUserResponse');
     this.response = UserResponse<AnsTyp>(derivedUserResponse);
   }
 

@@ -48,9 +48,7 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
           ScreenAreaWidgetSlot.bannerUrl,
         ];
       case ScreenWidgetArea.tableview:
-        return [
-          ScreenAreaWidgetSlot.rowStyle,
-        ];
+        return [];
       case ScreenWidgetArea.footer:
         return [
           ScreenAreaWidgetSlot.title,
@@ -72,7 +70,10 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
       case ScreenWidgetArea.filterBar:
         return [VisualRuleType.filter];
       case ScreenWidgetArea.header:
-        return [VisualRuleType.format, VisualRuleType.show];
+        return [
+          VisualRuleType.format,
+          VisualRuleType.show,
+        ];
       case ScreenWidgetArea.banner:
         return [VisualRuleType.show];
       case ScreenWidgetArea.tableview:
@@ -94,8 +95,7 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
   List<VisualRuleType> convertIdxsToRuleList(String commaLstOfInts) {
     // since we dont show EVERY RuleType, the choice indexes are offset
     // need to fix that
-    List<int> providedIdxs =
-        commaLstOfInts.split(",").map((e) => int.tryParse(e) ?? -1).toList();
+    Set<int> providedIdxs = castStrOfIdxsToIterOfInts(commaLstOfInts).toSet();
     //
     Map<int, VisualRuleType> idxToModifiableRuleTyps = {};
     int tempIdx = 0;

@@ -28,6 +28,7 @@ class DialogRunner {
     _questGroupMgr.loadBeginningDialog();
   }
 
+  QuestListMgr get questionMgr => _questMgr;
   List<UserResponse> getPriorAnswersList() {
     // used when a question needs to review prior
     // answers to configure itself
@@ -43,11 +44,12 @@ class DialogRunner {
     DialogSectionCfg? section = _questGroupMgr._getNextSection();
     while (section != null) {
       //
-      bool shouldShowSection =
-          questFormatter.askSectionQuestionAndWaitForUserResponse(
-        this,
-        section,
-      );
+
+      bool shouldShowSection = section.isConfigurable;
+      // bool shouldShowSection = questFormatter.askSectionQuestionAndWaitForUserResponse(
+      //   this,
+      //   section,
+      // );
       if (shouldShowSection) {
         _outputSpacerLines(forSection: true);
         // check for another question

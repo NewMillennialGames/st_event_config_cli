@@ -3,6 +3,7 @@ import 'dart:core';
 import 'package:args/args.dart';
 //
 import 'dialog/all.dart';
+import 'input_models/all.dart';
 import 'services/cli_quest_presenter.dart';
 /*
   check ReadMe.MD
@@ -25,12 +26,20 @@ Future<void> main(List<String> arguments) async {
   final dialoger = DialogRunner(cliQuestPresenter);
   final succeeded = dialoger.loopUntilComplete();
 
+  // now generate results into a config file
+  createOutputFileFromResponses(dialoger.questionMgr);
+
   stdout.writeln("Done:\n");
   // stdout.writeln("$res");
 
   if (!succeeded) {
     exitCode = 2;
   }
+}
+
+void createOutputFileFromResponses(QuestListMgr questionMgr) {
+  //
+  final exportableQuestions = questionMgr.exportableQuestions;
 }
 
 // ArgParser setupOptions() {

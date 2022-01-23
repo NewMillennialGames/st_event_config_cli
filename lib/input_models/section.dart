@@ -16,6 +16,7 @@ class DialogSectionCfg {
 
   int get order => appScreen.index;
   String get name => appScreen.name;
+  bool get isConfigurable => appScreen.isConfigurable;
 
   // bool get wasProcessed => _processedQuestCount > 0;
   // set questionCount(int _questionCount) {

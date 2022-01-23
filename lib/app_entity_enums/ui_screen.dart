@@ -36,16 +36,15 @@ enum AppScreen {
 
 extension AppScreenExt1 on AppScreen {
   //
-  // String get includeStr => 'Configure ${this.name} section of app?';
+  String get includeStr => 'Configure ${this.name} section of app?';
 
-  bool get hasConfigurableScreenAreas =>
-      this.configurableScreenAreas.length > 0;
+  bool get isConfigurable =>
+      this.configurableScreenAreas.length > 0 ||
+      this == AppScreen.eventConfiguration;
 
   List<AppScreen> get topConfigurableScreens => AppScreen.values
       .where(
-        (as) =>
-            as.hasConfigurableScreenAreas &&
-            !_notCurrentlyConfigurable.contains(as),
+        (as) => as.isConfigurable && !_notCurrentlyConfigurable.contains(as),
       )
       .toList();
 

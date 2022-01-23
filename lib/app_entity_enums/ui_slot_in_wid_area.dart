@@ -11,7 +11,6 @@ enum ScreenAreaWidgetSlot {
   footer,
   slot1,
   slot2,
-  rowStyle,
 
   // data property of the component
   title,
@@ -27,6 +26,8 @@ extension ScreenAreaWidgetSlotExt1 on ScreenAreaWidgetSlot {
   //
 
   bool get isConfigurable => this.possibleConfigRules.length > 0;
+
+  String get choiceName => this.name;
 
   List<VisualRuleType> get possibleConfigRules {
     switch (this) {
@@ -46,10 +47,10 @@ extension ScreenAreaWidgetSlotExt1 on ScreenAreaWidgetSlot {
         return [
           VisualRuleType.filter,
         ];
-      case ScreenAreaWidgetSlot.rowStyle:
-        return [
-          VisualRuleType.format,
-        ];
+      // case ScreenAreaWidgetSlot.rowStyle:
+      //   return [
+      //     VisualRuleType.format,
+      //   ];
       case ScreenAreaWidgetSlot.title:
         return [
           VisualRuleType.format,

@@ -16,6 +16,23 @@ enum VisualRuleType {
 extension VisualRuleTypeExt1 on VisualRuleType {
   //
   bool get isConfigurable => !_unconfigurableFutureRules.contains(this);
+
+  String get friendlyName {
+    //
+    String nm = this.name;
+    switch (this) {
+      case VisualRuleType.sort:
+        return nm + ' (config row order)';
+      case VisualRuleType.group:
+        return nm + ' (config row grouping)';
+      case VisualRuleType.filter:
+        return nm + ' (config filtering options)';
+      case VisualRuleType.format:
+        return nm + ' (set style or appearance)';
+      case VisualRuleType.show:
+        return nm + ' (hide or show)';
+    }
+  }
   //
   // String questionStr(
   //   AppScreen screen,
@@ -103,45 +120,3 @@ extension BehaviorRuleTypeExt1 on BehaviorRuleType {
   //
 
 }
-
-
-
-
-
-
-// List<String> choiceOptions(
-  //   AppSection section,
-  //   SectionUiArea uiComp,
-  // ) {
-  //   /*
-
-  //   */
-  //   switch (this) {
-  //     case VisualRuleType.sort:
-  //       return [];
-  //     case VisualRuleType.group:
-  //       return [];
-  //     case VisualRuleType.filter:
-  //       return [];
-  //     case VisualRuleType.format:
-  //       return [];
-  //     case VisualRuleType.show:
-  //       return [];
-  //   }
-  //   // return [];
-  // }
-
-  // AppConfigRule castInputToRule(String userInput) {
-  //   switch (this) {
-  //     case VisualRuleType.sort:
-  //       return AppConfigRule.sort();
-  //     case VisualRuleType.group:
-  //       return AppConfigRule.group();
-  //     case VisualRuleType.filter:
-  //       return AppConfigRule.filter();
-  //     case VisualRuleType.format:
-  //       return AppConfigRule.format();
-  //     case VisualRuleType.show:
-  //       return AppConfigRule.show();
-  //   }
-  // }

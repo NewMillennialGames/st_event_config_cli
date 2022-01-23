@@ -1,3 +1,5 @@
+import '../enums/all.dart';
+
 // enum AppSection {
 //   // major screens or app-areas that user may wish to configure
 //   eventConfiguration,
@@ -24,6 +26,15 @@ class MyClass<T> {
   bool get isInt => T == int;
 }
 
+// extension EnumFriendlyName on Enum {
+//   /*
+//     friendlyName is the one to IMPLEMENT on specific enums
+//     choiceName is the property to USE for UI display purposes
+//   */
+//   String? get friendlyName => null;
+//   String get choiceName => friendlyName ?? this.name;
+// }
+
 main() {
   //   for (AppSection s in AppSection.values) {
 //     print(s.name);
@@ -36,7 +47,9 @@ main() {
   // print(mc.isStr);
   // print(mc.isInt);
 
-  var s = '1,2,3,';
-  var l = s.split(',');
-  print(l);
+  // var s = '1,2,3,';
+  // var l = s.split(',');
+  // print(l);
+
+  // print(VisualRuleType.choiceName);
 }

@@ -20,7 +20,7 @@ class WebQuestionPresenter implements QuestionPresenter {
     if (sectionCfg.appScreen == AppScreen.eventConfiguration) return true;
 
     // TODO
-    return sectionCfg.appScreen.hasConfigurableScreenAreas;
+    return sectionCfg.appScreen.isConfigurable;
   }
 
   @override

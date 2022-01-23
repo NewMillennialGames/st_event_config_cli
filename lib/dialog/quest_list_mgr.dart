@@ -14,6 +14,10 @@ class QuestListMgr {
   QuestListMgr();
 
   //
+  List<Question> get exportableQuestions => _allAnsweredQuestions
+      .where((q) => q.appliesToClientConfiguration)
+      .toList();
+
   Question get _currentOrLastQuestion => _pendingQuestions[_currQuestionIdx];
   int get totalAnsweredQuestions => _answeredQuestsBySection.values
       .fold<int>(0, (r, qLst) => r + qLst.length);

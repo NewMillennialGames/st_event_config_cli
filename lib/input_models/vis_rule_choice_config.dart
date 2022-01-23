@@ -14,7 +14,8 @@ class VisRuleQuestWithChoices {
     String templ =
         ruleQuestType.templateForRuleType(rQuest.visRuleTypeForSlotInArea!);
 
-    String slotStr = rQuest.slotInArea == null ? '' : '';
+    String slotStr =
+        rQuest.slotInArea == null ? '' : rQuest.slotInArea!.name + '';
     Map<String, String> templFillerVals = {
       'slot': slotStr,
       'area':
@@ -37,6 +38,8 @@ class VisRuleChoiceConfig {
     this.ruleTyp,
     this.questsAndChoices,
   );
+
+  String get choiceName => ruleTyp.friendlyName;
 
   factory VisRuleChoiceConfig.fromRuleTyp(VisualRuleType ruleTyp) {
     // use VisualRuleType to get list of sub-questions

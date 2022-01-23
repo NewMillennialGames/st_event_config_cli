@@ -1,7 +1,5 @@
 library EvCfgEnums;
 
-import '../config/all.dart';
-import '../util/string_ext.dart';
 import '../app_entity_enums/all.dart';
 
 part 'shape_event.dart';

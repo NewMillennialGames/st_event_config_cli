@@ -16,16 +16,16 @@ class CliQuestionPresenter implements QuestionPresenter {
     DialogRunner dialoger,
     DialogSectionCfg sectionCfg,
   ) {
-    return true;
-    // AppScreen screen = sectionCfg.appScreen;
-    // if (screen == AppScreen.eventConfiguration) return true;
+    // return true;
+    AppScreen screen = sectionCfg.appScreen;
+    if (screen == AppScreen.eventConfiguration) return true;
 
-    // if (!screen.hasConfigurableScreenAreas) return false;
+    if (!screen.isConfigurable) return false;
 
-    // print(screen.includeStr + ' (enter y/yes or n/no)');
-    // var userResp = stdin.readLineSync() ?? 'Y';
-    // // print("askIfNeeded got: $userResp");
-    // return userResp.toUpperCase().startsWith('Y');
+    print(screen.includeStr + ' (enter y/yes or n/no)');
+    var userResp = stdin.readLineSync() ?? 'Y';
+    // print("askIfNeeded got: $userResp");
+    return userResp.toUpperCase().startsWith('Y');
   }
 
   @override
@@ -96,7 +96,7 @@ class CliQuestionPresenter implements QuestionPresenter {
   ) {
     //
     String ruleQuestoverview =
-        'Config ${ruleQuest.questDef.ruleTyp.name} in the ${ruleQuest.screenWidgetArea?.name} of app-section ${ruleQuest.appScreen.name}  (please answer each question below)';
+        'Config ${ruleQuest.questDef.ruleTyp.name} in the ${ruleQuest.screenWidgetArea?.name} of ${ruleQuest.appScreen.name} screen  (please answer each question below)';
     print(ruleQuestoverview);
 
     Map<VisRuleQuestType, String> accumResponses = {};

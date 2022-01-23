@@ -25,22 +25,26 @@ extension VisRuleQuestTypeExt1 on VisRuleQuestType {
     String resp = '_unset';
     switch (this) {
       case VisRuleQuestType.getValueFromTableAndField:
-        return '';
+        return 'Specify source for value (table and field)';
       case VisRuleQuestType.selectFieldForSortOrGroup:
-        return '';
+        return 'Select sort field (table and field)';
       case VisRuleQuestType.specifyPositionInGroup:
-        return '';
+        return 'Select Group position';
       case VisRuleQuestType.setSortOrder:
-        return '';
+        return 'Select Sort position';
       case VisRuleQuestType.selectVisualComponentOrStyle:
         switch (ruleTyp) {
           case VisualRuleType.format:
             resp =
                 'Pick the Component or Style that applies to {slot} on {area} of {screen} screen';
+            break;
+          default:
+            resp =
+                'err: Pick the Component or Style that applies to {slot} on {area} of {screen} screen';
         }
         return resp;
       case VisRuleQuestType.controlsVisibilityOfAreaOrSlot:
-        return '';
+        return 'Should show this area/slot?';
     }
     // return 'DialogRuleQuestType.questionTemplate';
   }
