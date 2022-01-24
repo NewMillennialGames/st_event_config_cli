@@ -150,10 +150,13 @@ class QuestListMgr {
   }
 
   void appendNewQuestions(
-    List<Question> quests,
-  ) {
+    List<Question> quests, {
+    String dbgNam = '', // debug-name
+  }) {
     //
     Set<AppScreen> newSections = quests.map((e) => e.appScreen).toSet();
+
+    print('$dbgNam is adding ${quests.length} new questions to $newSections');
 
     for (AppScreen as in newSections) {
       int newCntBySec = quests

@@ -43,6 +43,8 @@ void createOutputFileFromResponses(QuestListMgr questionMgr) {
 
   for (Question q in exportableQuestions) {
     print(q.questStr);
+    print(q.response?.answers.toString());
+    print('\n\n');
   }
 }
 

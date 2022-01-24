@@ -122,11 +122,14 @@ class QuestionQuantifier extends Equatable {
     AppScreen appScreen,
     ScreenWidgetArea screenArea, {
     bool responseAddsWhichRuleTypeQuestions = false,
+    bool responseAddsWhichSlotQuestions = false,
   }) {
     return QuestionQuantifier._(
       responseAddsWhichRuleTypeQuestions
           ? QuestCascadeTyp.addsVisualRuleQuestions
-          : QuestCascadeTyp.noCascade,
+          : (responseAddsWhichSlotQuestions
+              ? QuestCascadeTyp.addsWhichSlotOfSelectedAreaQuestions
+              : QuestCascadeTyp.noCascade),
       appScreen,
       screenArea,
       null,

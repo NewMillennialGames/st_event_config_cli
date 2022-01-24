@@ -40,7 +40,7 @@ extension VisRuleQuestTypeExt1 on VisRuleQuestType {
             break;
           default:
             resp =
-                'err: Pick the Component or Style that applies to {slot} on {area} of {screen} screen';
+                'err: Pick the Component or Style that applies to {slot} {area} of {screen} screen';
         }
         return resp;
       case VisRuleQuestType.controlsVisibilityOfAreaOrSlot:

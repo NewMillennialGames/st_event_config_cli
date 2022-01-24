@@ -18,7 +18,7 @@ class VisRuleQuestWithChoices {
         ruleQuestType.templateForRuleType(rQuest.visRuleTypeForSlotInArea!);
 
     String slotStr =
-        rQuest.slotInArea == null ? '' : rQuest.slotInArea!.name + '';
+        rQuest.slotInArea == null ? '' : rQuest.slotInArea!.name + ' on';
     Map<String, String> templFillerVals = {
       'slot': slotStr,
       'area':

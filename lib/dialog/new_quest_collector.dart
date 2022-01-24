@@ -61,7 +61,7 @@ class NewQuestionCollector {
           I walked up to farmers market to get some caffeine ... give me 15 minutes notice and I'll walk back to my hotel and put on warmer clothes
       */
       // print('calling: askeWhichRulesGoWithAreaAndWhichSlotsToConfig');
-      askeWhichRulesGoWithAreaAndWhichSlotsToConfig(
+      askWhichRulesGoWithAreaAndWhichSlotsToConfig(
         _questMgr,
         questJustAnswered as Question<String, List<ScreenWidgetArea>>,
       );
@@ -77,18 +77,22 @@ class NewQuestionCollector {
     } else if (questJustAnswered.asksDetailsForEachVisualRuleType) {
       // print('calling: genRequestedVisualRulesForAreaOrSlot');
 
-      if (questJustAnswered is Question<String, List<VisualRuleType>>) {
-        genRequestedVisualRulesForAreaOrSlot(
-          _questMgr,
-          questJustAnswered as Question<String, List<VisualRuleType>>,
-        );
-      } else if (questJustAnswered
-          is Question<String, List<ScreenAreaWidgetSlot>>) {
-        // genRequestedVisualRulesForAreaOrSlot(
-        //   _questMgr,
-        //   questJustAnswered as Question<String, List<ScreenAreaWidgetSlot>>,
-        // );
-      }
+      genRequestedVisualRulesForAreaOrSlot(
+        _questMgr,
+        questJustAnswered as Question<String, List<VisualRuleType>>,
+      );
+      // if (questJustAnswered is Question<String, List<VisualRuleType>>) {
+      //   genRequestedVisualRulesForAreaOrSlot(
+      //     _questMgr,
+      //     questJustAnswered as Question<String, List<VisualRuleType>>,
+      //   );
+      // } else if (questJustAnswered
+      //     is Question<String, List<ScreenAreaWidgetSlot>>) {
+      //   askWhichConfigRulesGoWithEachSlot(
+      //     _questMgr,
+      //     questJustAnswered as Question<String, List<ScreenAreaWidgetSlot>>,
+      //   );
+      // }
 
       //
     } else if (questJustAnswered.asksDetailsForEachBehaveRuleType) {
@@ -143,10 +147,13 @@ class NewQuestionCollector {
       newQuestions.add(q);
     }
     // now put these questions in the queue
-    _questMgr.appendNewQuestions(newQuestions);
+    _questMgr.appendNewQuestions(
+      newQuestions,
+      dbgNam: 'askUserWhichAreasOfSelectedScreensToConfigure',
+    );
   }
 
-  void askeWhichRulesGoWithAreaAndWhichSlotsToConfig(
+  void askWhichRulesGoWithAreaAndWhichSlotsToConfig(
     QuestListMgr _questMgr,
     Question<String, List<ScreenWidgetArea>> quest,
   ) {
@@ -192,6 +199,8 @@ class NewQuestionCollector {
       newQuestions.add(q);
     }
 
+    print(
+        'askWhichRulesGoWithAreaAndWhichSlotsToConfig adding ${newQuestions.length} rule questions');
     // ask which slots user would like to configure within each area
     for (ScreenWidgetArea area in areasSelectedForScreenInLastQuest) {
       if (!area.isConfigureable || area.applicableWigetSlots.length < 1)
@@ -201,7 +210,7 @@ class NewQuestionCollector {
         QuestionQuantifier.screenAreaLevel(
           screen,
           area,
-          responseAddsWhichRuleTypeQuestions: true,
+          responseAddsWhichSlotQuestions: true,
         ),
         'Which slots/widgets on the ${area.name} of ${screen.name} would you like to configure?',
         area.applicableWigetSlots.map((r) => r.choiceName),
@@ -215,7 +224,10 @@ class NewQuestionCollector {
       newQuestions.add(q);
     }
 
-    _questMgr.appendNewQuestions(newQuestions);
+    _questMgr.appendNewQuestions(
+      newQuestions,
+      dbgNam: 'askWhichRulesGoWithAreaAndWhichSlotsToConfig',
+    );
   }
 
   void askWhichConfigRulesGoWithEachSlot(
@@ -255,7 +267,10 @@ class NewQuestionCollector {
       newQuestions.add(q);
     }
 
-    _questMgr.appendNewQuestions(newQuestions);
+    _questMgr.appendNewQuestions(
+      newQuestions,
+      dbgNam: 'askWhichConfigRulesGoWithEachSlot',
+    );
   }
 
   void genRequestedVisualRulesForAreaOrSlot(
@@ -288,7 +303,10 @@ class NewQuestionCollector {
       );
       newQuestions.add(q);
     }
-    _questMgr.appendNewQuestions(newQuestions);
+    _questMgr.appendNewQuestions(
+      newQuestions,
+      dbgNam: 'genRequestedVisualRulesForAreaOrSlot',
+    );
   }
 
   void genRequestedBehaveRulesForAreaOrSlot(
