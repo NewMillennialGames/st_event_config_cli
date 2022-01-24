@@ -15,7 +15,7 @@ class VisRuleQuestWithChoices {
 
   String createFormattedQuestion(VisualRuleQuestion rQuest) {
     String templ =
-        ruleQuestType.templateForRuleType(rQuest.visRuleTypeForSlotInArea!);
+        ruleQuestType.templateForRuleType(rQuest.visRuleTypeForAreaOrSlot!);
 
     String slotStr =
         rQuest.slotInArea == null ? '' : rQuest.slotInArea!.name + ' on';

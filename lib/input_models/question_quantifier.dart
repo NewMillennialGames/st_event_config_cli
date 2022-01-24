@@ -16,24 +16,24 @@ class QuestionQuantifier extends Equatable {
   final ScreenAreaWidgetSlot? slotInArea;
   // a rule-type applies to all of:
   //    appScreen, screenWidgetArea, slotInArea
-  final VisualRuleType? visRuleTypeForSlotInArea;
-  final BehaviorRuleType? behRuleTypeForSlotInArea;
+  final VisualRuleType? visRuleTypeForAreaOrSlot;
+  final BehaviorRuleType? behRuleTypeForAreaOrSlot;
 
   const QuestionQuantifier._(
     this.cascadeType,
     this.appScreen,
     this.screenWidgetArea,
     this.slotInArea,
-    this.visRuleTypeForSlotInArea,
-    this.behRuleTypeForSlotInArea,
+    this.visRuleTypeForAreaOrSlot,
+    this.behRuleTypeForAreaOrSlot,
   );
 
   String get sortKey {
     // makes equatable work for searching question list
     int uiCompIdx = 1 + (screenWidgetArea?.index ?? -1);
     int slotAreaIdx = 1 + (slotInArea?.index ?? -1);
-    int visRuleTypeForCompIdx = 1 + (visRuleTypeForSlotInArea?.index ?? -1);
-    int behRuleTypeForCompIdx = 1 + (behRuleTypeForSlotInArea?.index ?? -1);
+    int visRuleTypeForCompIdx = 1 + (visRuleTypeForAreaOrSlot?.index ?? -1);
+    int behRuleTypeForCompIdx = 1 + (behRuleTypeForAreaOrSlot?.index ?? -1);
     return '${appScreen.index}-$uiCompIdx-$slotAreaIdx-$visRuleTypeForCompIdx-$behRuleTypeForCompIdx-${cascadeType.index}';
   }
 
@@ -43,10 +43,10 @@ class QuestionQuantifier extends Equatable {
   bool get isTopLevelConfigOrScreenQuestion =>
       screenWidgetArea == null &&
       slotInArea == null &&
-      visRuleTypeForSlotInArea == null &&
-      behRuleTypeForSlotInArea == null;
+      visRuleTypeForAreaOrSlot == null &&
+      behRuleTypeForAreaOrSlot == null;
   bool get isQuestAboutAreaInScreenOrSlotInArea =>
-      screenWidgetArea != null && visRuleTypeForSlotInArea == null;
+      screenWidgetArea != null && visRuleTypeForAreaOrSlot == null;
   //
   bool get generatesNoNewQuestions => cascadeType.generatesNoNewQuestions;
   bool get asksAreasWithinSelectedScreens =>

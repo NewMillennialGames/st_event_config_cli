@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'dart:core';
 import 'package:args/args.dart';
+import 'package:eventconfig/app_entity_enums/all.dart';
 //
 import 'dialog/all.dart';
 import 'input_models/all.dart';
+import 'output_models/all.dart';
 import 'services/cli_quest_presenter.dart';
 /*
   check ReadMe.MD
@@ -27,7 +29,7 @@ Future<void> main(List<String> arguments) async {
   final succeeded = dialoger.loopUntilComplete();
 
   // now generate results into a config file
-  createOutputFileFromResponses(dialoger.questionMgr);
+  createOutputFileFromResponses(dialoger.questionMgr, null);
 
   stdout.writeln("Done:\n");
   // stdout.writeln("$res");
@@ -37,7 +39,8 @@ Future<void> main(List<String> arguments) async {
   }
 }
 
-void createOutputFileFromResponses(QuestListMgr questionMgr) {
+void createOutputFileFromResponses(QuestListMgr questionMgr,
+    [String? filename]) {
   //
   final List<Question> exportableQuestions = questionMgr.exportableQuestions;
 
@@ -46,6 +49,17 @@ void createOutputFileFromResponses(QuestListMgr questionMgr) {
     print(q.response?.answers.toString());
     print('\n\n');
   }
+
+  var eventConfigLevelAnswers = exportableQuestions.whereType<Question>().where(
+        (q) => q.appScreen == AppScreen.eventConfiguration,
+      );
+  final evCfg = EventCfgTree.fromEventLevelConfig(eventConfigLevelAnswers);
+  // create the per-area or per-slotArea rules
+  evCfg.fillFromRuleAnswers(
+    exportableQuestions.whereType<VisualRuleQuestion>(),
+  );
+  // now dump evCfg to file
+  evCfg.dump(filename);
 }
 
 // ArgParser setupOptions() {

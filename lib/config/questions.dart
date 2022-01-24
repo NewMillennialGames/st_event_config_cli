@@ -77,7 +77,7 @@ final List<Question> _questionLst = [
     null,
     null,
   ),
-  if (false) ...[
+  if (true) ...[
     Qb<String, String>(
       QuestionQuantifier.eventLevel(),
       DlgStr.eventDescrip,

@@ -1,9 +1,9 @@
 part of OutputModels;
 
-class UiCfg {
+class SlotOrAreaRuleCfg {
   //
   VisualRuleType ruleType;
   List<AppConfigRule> rulesForType;
   //
-  UiCfg(this.ruleType, this.rulesForType);
+  SlotOrAreaRuleCfg(this.ruleType, this.rulesForType);
 }

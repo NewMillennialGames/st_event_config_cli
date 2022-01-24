@@ -107,7 +107,7 @@ class NewQuestionCollector {
         '\n**Quest ID ${questJustAnswered.questionId} about "${questJustAnswered.questStr}" did not generate any new questions',
       );
       print(
-        'asksDetailsForEachVisualRuleType: ${questJustAnswered.asksDetailsForEachVisualRuleType} -- ${questJustAnswered.visRuleTypeForSlotInArea?.name ?? 'err-missing'}',
+        'asksDetailsForEachVisualRuleType: ${questJustAnswered.asksDetailsForEachVisualRuleType} -- ${questJustAnswered.visRuleTypeForAreaOrSlot?.name ?? 'err-missing'}',
       );
       // print(
       //   'Quest ID ${questJustAnswered.questionId} about "${questJustAnswered.question}" did not generate any new questions\n\n',

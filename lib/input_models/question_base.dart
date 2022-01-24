@@ -43,10 +43,10 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
   ScreenWidgetArea? get screenWidgetArea => qQuantify.screenWidgetArea;
   ScreenAreaWidgetSlot? get slotInArea => qQuantify.slotInArea;
   //
-  VisualRuleType? get visRuleTypeForSlotInArea =>
-      qQuantify.visRuleTypeForSlotInArea;
-  BehaviorRuleType? get behRuleTypeForSlotInArea =>
-      qQuantify.behRuleTypeForSlotInArea;
+  VisualRuleType? get visRuleTypeForAreaOrSlot =>
+      qQuantify.visRuleTypeForAreaOrSlot;
+  BehaviorRuleType? get behRuleTypeForAreaOrSlot =>
+      qQuantify.behRuleTypeForAreaOrSlot;
   //
 
   // below controls how each question causes cascade creation of new questions
