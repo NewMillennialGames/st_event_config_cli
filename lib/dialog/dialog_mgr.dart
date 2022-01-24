@@ -6,26 +6,27 @@ class DialogMgr {
     and also coordinates (stays in sync with) the QuestListMgr
   */
   final QuestListMgr _questMgr;
-  List<DialogSectionCfg> _sections = [];
-  int _currSectionIdx = -1;
+  // List<DialogSectionCfg> _sections = [];
+  // int _currSectionIdx = -1;
 
   // constructor
   DialogMgr(this._questMgr);
 
   //
-  DialogSectionCfg get _currentSectionCfg => _sections[_currSectionIdx];
-  AppScreen get currentAppScreenTyp => _currentSectionCfg.appScreen;
+  // DialogSectionCfg get _currentSectionCfg => _sections[_currSectionIdx];
+  // AppScreen get currentAppScreenTyp => _currentSectionCfg.appScreen;
 
-  DialogSectionCfg? _getNextSection() {
-    //
-    if (_currSectionIdx + 1 >= _sections.length) return null;
-    ++_currSectionIdx;
-    return _currentSectionCfg;
-  }
+  // DialogSectionCfg? _getNextSection() {
+  //   //
+  //   if (_currSectionIdx + 1 >= _sections.length) return null;
+  //   ++_currSectionIdx;
+  //   return _currentSectionCfg;
+  // }
 
   Question? getNextQuestInCurrentSection() {
     // only in this section
-    return _questMgr._nextQuestionFor(currentAppScreenTyp);
+    // return _questMgr._nextQuestionFor(currentAppScreenTyp);
+    return _questMgr._nextQuestionFor();
   }
 
   List<UserResponse> get priorAnswers {
@@ -49,10 +50,10 @@ class DialogMgr {
   // }
 
   void _loadAppUiSections() {
-    List<DialogSectionCfg> l = [];
-    for (AppScreen s in AppScreen.values) {
-      l.add(DialogSectionCfg(s));
-    }
-    this._sections = l;
+    // List<DialogSectionCfg> l = [];
+    // for (AppScreen s in AppScreen.values) {
+    //   l.add(DialogSectionCfg(s));
+    // }
+    // this._sections = l;
   }
 }

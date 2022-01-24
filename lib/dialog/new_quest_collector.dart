@@ -33,7 +33,7 @@ class NewQuestionCollector {
     if (questJustAnswered.isRuleQuestion ||
         questJustAnswered.generatesNoNewQuestions) {
       print(
-        'Quest: #${questJustAnswered.questionId} -- ${questJustAnswered.questStr} wont generated any new questions',
+        'Quest: #${questJustAnswered.questionId} -- ${questJustAnswered.questStr} wont generate any new questions',
       );
       return;
     }

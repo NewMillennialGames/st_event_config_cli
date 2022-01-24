@@ -127,6 +127,7 @@ final List<Question> _questionLst = [
           .toList();
     },
     acceptsMultiResponses: true,
+    isNotForOutput: true,
   ),
   // after user selects desired screens to configure, then
   // which screen areas (and slots on those areas) are asked automatically;

@@ -107,18 +107,18 @@ class QuestListMgr {
         _pendingQuestions.sublist(0, _currQuestionIdx) + unaskedQuests;
   }
 
-  Question? _nextQuestionFor(AppScreen section) {
-    //
+  Question? _nextQuestionFor() {
+    // AppScreen section
     _moveCurrentQuestToAnswered();
     //
     if (_currQuestionIdx + 1 >= _pendingQuestions.length) {
       return null;
     }
     ++_currQuestionIdx;
-    if (_currentOrLastQuestion.appScreen != section) {
-      --_currQuestionIdx;
-      return null;
-    }
+    // if (_currentOrLastQuestion.appScreen != section) {
+    //   --_currQuestionIdx;
+    //   return null;
+    // }
     return _currentOrLastQuestion;
   }
 

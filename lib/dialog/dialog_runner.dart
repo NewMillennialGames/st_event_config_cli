@@ -41,31 +41,18 @@ class DialogRunner {
     // questFormatter manages display output
     // final questFormatter = CliQuestionFormatter();
 
-    DialogSectionCfg? section = _questGroupMgr._getNextSection();
-    while (section != null) {
-      //
+    _outputSpacerLines(forSection: true);
+    // check for another question
+    Question? _quest = _questGroupMgr.getNextQuestInCurrentSection();
+    while (_quest != null) {
+      // askAndWaitForUserResponse() will callback to this
+      // to create any derived questions for this section
+      questFormatter.askAndWaitForUserResponse(this, _quest);
+      _newQuestComposer.handleAcquiringNewQuestions(
+          _questGroupMgr, _questMgr, _quest);
 
-      bool shouldShowSection = section.isConfigurable;
-      // bool shouldShowSection = questFormatter.askSectionQuestionAndWaitForUserResponse(
-      //   this,
-      //   section,
-      // );
-      if (shouldShowSection) {
-        _outputSpacerLines(forSection: true);
-        // check for another question
-        Question? _quest = _questGroupMgr.getNextQuestInCurrentSection();
-        while (_quest != null) {
-          // askAndWaitForUserResponse() will callback to this
-          // to create any derived questions for this section
-          questFormatter.askAndWaitForUserResponse(this, _quest);
-          _newQuestComposer.handleAcquiringNewQuestions(
-              _questGroupMgr, _questMgr, _quest);
-
-          _quest = _questGroupMgr.getNextQuestInCurrentSection();
-          if (_quest != null) _outputSpacerLines();
-        }
-      }
-      section = _questGroupMgr._getNextSection();
+      _quest = _questGroupMgr.getNextQuestInCurrentSection();
+      if (_quest != null) _outputSpacerLines();
     }
     return true;
   }

@@ -44,15 +44,15 @@ class VisRuleChoiceConfig {
 
   String get choiceName => ruleTyp.friendlyName;
   String get questStr =>
-      'RT: ${ruleTyp.name}:  SubQs: ${questsAndChoices.fold<String>(
+      'Rule: ${ruleTyp.name}:  SubQs: "${questsAndChoices.fold<String>(
         '',
         (ac, c) =>
             ac +
             '' +
             c.choices.reduce(
-              (s1, s2) => s1 + '' + s2,
+              (s1, s2) => s1 + ', ' + s2,
             ),
-      )}';
+      )}"';
 
   factory VisRuleChoiceConfig.fromRuleTyp(VisualRuleType ruleTyp) {
     // use VisualRuleType to get list of sub-questions

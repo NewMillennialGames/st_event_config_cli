@@ -11,10 +11,11 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
   // castFunc not used on Rule-Type-Questions
   final CastUserInputToTyp<ConvertTyp, AnsTyp>? castFunc;
   final int defaultAnswerIdx;
-  final bool dynamicFromPriorState;
   final bool acceptsMultiResponses;
+  final bool isNotForOutput;
+  // final bool dynamicFromPriorState;
   // set later
-  bool shouldSkip = false;
+  // bool shouldSkip = false;
   int questionId = 0;
   UserResponse<AnsTyp>? response;
 
@@ -24,8 +25,9 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
     this._answerChoices,
     this.castFunc, {
     this.defaultAnswerIdx = 1,
-    this.dynamicFromPriorState = false,
     this.acceptsMultiResponses = false,
+    this.isNotForOutput = false,
+    // this.dynamicFromPriorState = false,
   });
   // getters
   String get questStr => _questStr;
@@ -137,7 +139,8 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
   // next two methods are for possible future usage?
   void configSelfIfNecessary(PriorAnswersCallback getPriorAnswersList) {
     // some questions are based on what answers came before
-    if (dynamicFromPriorState) {
+    if (false) {
+      // dynamicFromPriorState
       // assert(getPriorAnswersList != null,
       //     'this question needs to examine prior answers to decide what to ask');
       _deriveFromPriorAnswers(getPriorAnswersList());
@@ -150,7 +153,7 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
     before we know their shape or whether they
     should even be asked
     */
-    this.shouldSkip = true;
+    // this.shouldSkip = true;
   }
 
   // impl for equatable
