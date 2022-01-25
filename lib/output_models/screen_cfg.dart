@@ -5,30 +5,24 @@ class ScreenCfg {
   //
   AppScreen appScreen;
   Map<ScreenWidgetArea, ScreenAreaCfg> areaConfig = {};
-  Map<ScreenWidgetArea, SlotOrAreaRuleCfg> slotConfig = {};
 
   ScreenCfg(
     this.appScreen,
   );
 
-  void appendRules(VisualRuleQuestion rQuest) {
+  void appendRules(VisualRuleQuestion<dynamic, RuleResponseWrapper> rQuest) {
     //
     RuleResponseWrapper? answer = rQuest.response?.answers;
-    if (answer == null) return;
+    ScreenWidgetArea? swa = rQuest.screenWidgetArea;
+    if (answer == null || swa == null) return;
 
     if (answer is Iterable) {
+      throw UnimplementedError('todo');
     } else {
-      _handleAreaRules(answer);
-      _handleSlotRules(answer);
+      var sac = areaConfig[swa] ?? ScreenAreaCfg(swa);
+      sac.appendAreaOrSlotRule(rQuest);
+      areaConfig[swa] = sac;
     }
-  }
-
-  void _handleAreaRules(RuleResponseWrapper answer) {
-    //
-  }
-
-  void _handleSlotRules(RuleResponseWrapper answer) {
-    //
   }
 
   factory ScreenCfg.fromJson(Map<String, dynamic> json) =>

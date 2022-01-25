@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'dart:core';
 import 'package:args/args.dart';
-import 'package:eventconfig/app_entity_enums/all.dart';
 //
+// import '../app_entity_enums/all.dart';
 import 'dialog/all.dart';
 import 'input_models/all.dart';
 import 'output_models/all.dart';
@@ -27,39 +27,42 @@ Future<void> main(List<String> arguments) async {
   // using DI to make it easy for web app to use same dialog runner
   final dialoger = DialogRunner(cliQuestPresenter);
   final succeeded = dialoger.loopUntilComplete();
+  if (!succeeded) {
+    exitCode = 2;
+    print('Something went wrong!!');
+  }
 
   // now generate results into a config file
   createOutputFileFromResponses(dialoger.questionMgr, null);
 
   stdout.writeln("Done:\n");
-  // stdout.writeln("$res");
-
-  if (!succeeded) {
-    exitCode = 2;
-  }
 }
 
-void createOutputFileFromResponses(QuestListMgr questionMgr,
-    [String? filename]) {
+void createOutputFileFromResponses(
+  QuestListMgr questionMgr, [
+  String? filename,
+]) {
   //
   final List<Question> exportableQuestions = questionMgr.exportableQuestions;
 
-  // for (Question q in exportableQuestions) {
-  //   print(q.questStr);
-  //   print(q.response?.answers.toString());
-  //   print('\n\n');
-  // }
+  for (Question q in exportableQuestions) {
+    print(q.questStr);
+    print(q.response?.answers.toString());
+    print('\n\n');
+  }
 
-  var eventConfigLevelAnswers = exportableQuestions.whereType<Question>().where(
-        (q) => q.appScreen == AppScreen.eventConfiguration,
-      );
-  final evCfg = EventCfgTree.fromEventLevelConfig(eventConfigLevelAnswers);
+  print('now building rules');
+
+  Iterable<Question> eventConfigLevelData = exportableQuestions.where(
+    (q) => q.isTopLevelConfigOrScreenQuestion,
+  );
+  final evCfg = EventCfgTree.fromEventLevelConfig(eventConfigLevelData);
   // create the per-area or per-slot rules
-  evCfg.fillFromRuleAnswers(
+  evCfg.fillFromVisualRuleAnswers(
     exportableQuestions.whereType<VisualRuleQuestion>(),
   );
   // now dump evCfg to file
-  evCfg.dump(filename);
+  evCfg.dumpCfgToFile(filename);
 }
 
 // ArgParser setupOptions() {

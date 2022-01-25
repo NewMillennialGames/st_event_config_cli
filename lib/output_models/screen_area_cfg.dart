@@ -3,10 +3,28 @@ part of OutputModels;
 @JsonSerializable()
 class ScreenAreaCfg {
   // ComponentRules
-  ScreenWidgetArea sectionComponent;
-  Map<VisualRuleType, SlotOrAreaRuleCfg> uiCfgByApplicableRules;
+  ScreenWidgetArea screenArea;
+  // area level config rules
+  Map<VisualRuleType, SlotOrAreaRuleCfg> visRulesForArea = {};
+  // slot level config (rules embedded)
+  Map<ScreenAreaWidgetSlot, SlotOrAreaRuleCfg> visConfigBySlotInArea = {};
 
-  ScreenAreaCfg(this.sectionComponent, this.uiCfgByApplicableRules);
+  ScreenAreaCfg(
+    this.screenArea,
+  );
+
+  void appendAreaOrSlotRule(VisualRuleQuestion rQuest) {
+    //
+    if (rQuest.slotInArea == null) {
+      // this is an area level rule
+      visRulesForArea[rQuest.visRuleTypeForAreaOrSlot!] =
+          SlotOrAreaRuleCfg.fromQuest(rQuest);
+    } else {
+      // this is a slot level rule
+      visConfigBySlotInArea[rQuest.slotInArea!] =
+          SlotOrAreaRuleCfg.fromQuest(rQuest);
+    }
+  }
 
   factory ScreenAreaCfg.fromJson(Map<String, dynamic> json) =>
       _$ScreenAreaCfgFromJson(json);

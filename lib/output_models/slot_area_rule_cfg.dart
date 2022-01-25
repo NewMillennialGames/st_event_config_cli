@@ -11,6 +11,11 @@ class SlotOrAreaRuleCfg {
     this.rulesForType,
   );
 
+  factory SlotOrAreaRuleCfg.fromQuest(VisualRuleQuestion rQuest) {
+    //
+    return SlotOrAreaRuleCfg(rQuest.visRuleTypeForAreaOrSlot!, []);
+  }
+
   factory SlotOrAreaRuleCfg.fromJson(Map<String, dynamic> json) =>
       _$SlotOrAreaRuleCfgFromJson(json);
 
