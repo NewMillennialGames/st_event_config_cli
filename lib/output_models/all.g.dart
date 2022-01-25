@@ -90,15 +90,15 @@ const _$AppScreenEnumMap = {
 
 ScreenCfg _$ScreenCfgFromJson(Map<String, dynamic> json) => ScreenCfg(
       $enumDecode(_$AppScreenEnumMap, json['appScreen']),
-      (json['areaConfig'] as Map<String, dynamic>).map(
+    )
+      ..areaConfig = (json['areaConfig'] as Map<String, dynamic>).map(
         (k, e) => MapEntry($enumDecode(_$ScreenWidgetAreaEnumMap, k),
             ScreenAreaCfg.fromJson(e as Map<String, dynamic>)),
-      ),
-      (json['slotConfig'] as Map<String, dynamic>).map(
+      )
+      ..slotConfig = (json['slotConfig'] as Map<String, dynamic>).map(
         (k, e) => MapEntry($enumDecode(_$ScreenWidgetAreaEnumMap, k),
             SlotOrAreaRuleCfg.fromJson(e as Map<String, dynamic>)),
-      ),
-    );
+      );
 
 Map<String, dynamic> _$ScreenCfgToJson(ScreenCfg instance) => <String, dynamic>{
       'appScreen': _$AppScreenEnumMap[instance.appScreen],

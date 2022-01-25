@@ -4,14 +4,32 @@ part of OutputModels;
 class ScreenCfg {
   //
   AppScreen appScreen;
-  Map<ScreenWidgetArea, ScreenAreaCfg> areaConfig;
-  Map<ScreenWidgetArea, SlotOrAreaRuleCfg> slotConfig;
+  Map<ScreenWidgetArea, ScreenAreaCfg> areaConfig = {};
+  Map<ScreenWidgetArea, SlotOrAreaRuleCfg> slotConfig = {};
 
   ScreenCfg(
     this.appScreen,
-    this.areaConfig,
-    this.slotConfig,
   );
+
+  void appendRules(VisualRuleQuestion rQuest) {
+    //
+    RuleResponseWrapper? answer = rQuest.response?.answers;
+    if (answer == null) return;
+
+    if (answer is Iterable) {
+    } else {
+      _handleAreaRules(answer);
+      _handleSlotRules(answer);
+    }
+  }
+
+  void _handleAreaRules(RuleResponseWrapper answer) {
+    //
+  }
+
+  void _handleSlotRules(RuleResponseWrapper answer) {
+    //
+  }
 
   factory ScreenCfg.fromJson(Map<String, dynamic> json) =>
       _$ScreenCfgFromJson(json);

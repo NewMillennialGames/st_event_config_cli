@@ -117,7 +117,7 @@ final List<Question> _questionLst = [
   ],
   Qb<String, List<AppScreen>>(
     QuestionQuantifier.eventLevel(responseAddsWhichAreaQuestions: true),
-    'Which app screens shall we configure?',
+    'Select the app screens you`d like to configure?',
     AppScreen.eventConfiguration.topConfigurableScreens.map((e) => e.name),
     (String strLstIdxs) {
       //

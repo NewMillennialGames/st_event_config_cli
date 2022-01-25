@@ -41,12 +41,16 @@ class QuestionQuantifier extends Equatable {
   String get equatableKey => sortKey;
 
   bool get isTopLevelConfigOrScreenQuestion =>
+      appScreen == AppScreen.eventConfiguration &&
       screenWidgetArea == null &&
       slotInArea == null &&
       visRuleTypeForAreaOrSlot == null &&
       behRuleTypeForAreaOrSlot == null;
+
   bool get isQuestAboutAreaInScreenOrSlotInArea =>
-      screenWidgetArea != null && visRuleTypeForAreaOrSlot == null;
+      screenWidgetArea != null &&
+      visRuleTypeForAreaOrSlot == null &&
+      behRuleTypeForAreaOrSlot == null; // && slotInArea == null
   //
   bool get generatesNoNewQuestions => cascadeType.generatesNoNewQuestions;
   bool get asksAreasWithinSelectedScreens =>

@@ -79,25 +79,34 @@ class EventCfgTree {
   void fillFromRuleAnswers(Iterable<VisualRuleQuestion> answeredQuestions) {
     //
     for (VisualRuleQuestion rQuest in answeredQuestions) {
-      switch (rQuest.visRuleTypeForAreaOrSlot) {
-        case VisualRuleType.styleOrFormat:
-          _createStyleOrFormatRule(rQuest);
-      }
+      //
+      var screenCfg =
+          this.screenConfig[rQuest.appScreen] ?? ScreenCfg(rQuest.appScreen);
+      screenCfg.appendRules(rQuest);
+      this.screenConfig[rQuest.appScreen] = screenCfg;
+
+      // switch (rQuest.visRuleTypeForAreaOrSlot) {
+      //   case VisualRuleType.styleOrFormat:
+      //     _createStyleOrFormatRule(rQuest);
+      // }
     }
   }
 
-  void _createStyleOrFormatRule(VisualRuleQuestion rQuest) {
-    //
-  }
+  // void _createStyleOrFormatRule(VisualRuleQuestion rQuest) {
+  //   //
+  //   this.screenConfig[rQuest.appScreen] = ScreenCfg.fromRuleQuestion();
+  // }
 
   void dump(String? filename) {
     // write data out to file
     var fn = filename ?? evTemplateName;
     var outFile = File('$fn.json');
-
-    // outFile.writeAsStringSync(this.toJson());
+    var jsonData = this.toJson();
+    outFile.writeAsStringSync(jsonEncode(jsonData));
+    // outFile.close();
   }
 
+  // impl for JsonSerializable above
   factory EventCfgTree.fromJson(Map<String, dynamic> json) =>
       _$EventCfgTreeFromJson(json);
 
