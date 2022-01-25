@@ -44,17 +44,17 @@ void createOutputFileFromResponses(QuestListMgr questionMgr,
   //
   final List<Question> exportableQuestions = questionMgr.exportableQuestions;
 
-  for (Question q in exportableQuestions) {
-    print(q.questStr);
-    print(q.response?.answers.toString());
-    print('\n\n');
-  }
+  // for (Question q in exportableQuestions) {
+  //   print(q.questStr);
+  //   print(q.response?.answers.toString());
+  //   print('\n\n');
+  // }
 
   var eventConfigLevelAnswers = exportableQuestions.whereType<Question>().where(
         (q) => q.appScreen == AppScreen.eventConfiguration,
       );
   final evCfg = EventCfgTree.fromEventLevelConfig(eventConfigLevelAnswers);
-  // create the per-area or per-slotArea rules
+  // create the per-area or per-slot rules
   evCfg.fillFromRuleAnswers(
     exportableQuestions.whereType<VisualRuleQuestion>(),
   );

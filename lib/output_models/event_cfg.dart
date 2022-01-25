@@ -19,7 +19,7 @@ class EventCfgTree {
   // area and slot level data filled below in fillFromRuleAnswers
   Map<AppScreen, ScreenCfg> screenConfig = {};
 
-  EventCfgTree._(
+  EventCfgTree(
     this.evTemplateName,
     this.evTemplateDescription,
     this.evType, {
@@ -31,16 +31,49 @@ class EventCfgTree {
 
   factory EventCfgTree.fromEventLevelConfig(Iterable<Question> responses) {
     //
-    String evTemplateName = '';
-    String evTemplateDescription = '';
-    EvType evType = EvType.standard;
-    //
-    EvCompetitorType? evCompetitorType;
-    EvOpponentType? evOpponentType;
-    EvDuration? evDuration;
-    EvEliminationStrategy? evEliminationType;
+    String evTemplateName =
+        (responses.where((q) => q.questionId == 1).first.response?.answers ??
+            '') as String;
+    String evTemplateDescription =
+        (responses.where((q) => q.questionId == 2).first.response?.answers ??
+            '') as String;
 
-    return EventCfgTree._(evTemplateName, evTemplateDescription, evType);
+    EvType evType = responses
+        .where((q) => q.response?.answers is EvType)
+        .first
+        .response!
+        .answers as EvType;
+    //
+    EvCompetitorType evCompetitorType = responses
+        .where((q) => q.response?.answers is EvCompetitorType)
+        .first
+        .response!
+        .answers as EvCompetitorType;
+    EvOpponentType evOpponentType = responses
+        .where((q) => q.response?.answers is EvOpponentType)
+        .first
+        .response!
+        .answers as EvOpponentType;
+    EvDuration evDuration = responses
+        .where((q) => q.response?.answers is EvDuration)
+        .first
+        .response!
+        .answers as EvDuration;
+    EvEliminationStrategy evEliminationType = responses
+        .where((q) => q.response?.answers is EvEliminationStrategy)
+        .first
+        .response!
+        .answers as EvEliminationStrategy;
+
+    return EventCfgTree(
+      evTemplateName,
+      evTemplateDescription,
+      evType,
+      evCompetitorType: evCompetitorType,
+      evOpponentType: evOpponentType,
+      evDuration: evDuration,
+      evEliminationType: evEliminationType,
+    );
   }
 
   void fillFromRuleAnswers(Iterable<VisualRuleQuestion> answeredQuestions) {
@@ -53,7 +86,9 @@ class EventCfgTree {
     }
   }
 
-  void _createStyleOrFormatRule(VisualRuleQuestion rQuest) {}
+  void _createStyleOrFormatRule(VisualRuleQuestion rQuest) {
+    //
+  }
 
   void dump(String? filename) {
     // write data out to file
@@ -62,4 +97,9 @@ class EventCfgTree {
 
     // outFile.writeAsStringSync(this.toJson());
   }
+
+  factory EventCfgTree.fromJson(Map<String, dynamic> json) =>
+      _$EventCfgTreeFromJson(json);
+
+  Map<String, dynamic> toJson() => _$EventCfgTreeToJson(this);
 }

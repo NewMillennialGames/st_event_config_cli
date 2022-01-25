@@ -9,6 +9,7 @@ import '../enums/all.dart';
 import '../rules/rule.dart';
 import '../app_entity_enums/all.dart';
 
+part 'all.g.dart';
 part 'event_cfg.dart';
 part 'screen_cfg.dart';
 part 'screen_area_cfg.dart';

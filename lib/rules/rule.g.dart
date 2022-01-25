@@ -6,6 +6,12 @@ part of 'rule.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+AppVisualRule _$AppVisualRuleFromJson(Map<String, dynamic> json) =>
+    AppVisualRule();
+
+Map<String, dynamic> _$AppVisualRuleToJson(AppVisualRule instance) =>
+    <String, dynamic>{};
+
 FilterRule _$FilterRuleFromJson(Map<String, dynamic> json) => FilterRule(
       RuleResponseWrapper.fromJson(json['ruleResp'] as Map<String, dynamic>),
     );

@@ -38,22 +38,27 @@ abstract class AppConfigRule {
   // Map<VisualRuleType, String> getEncodedRule();
 }
 
-abstract class _AppVisualRule extends AppConfigRule {
+@JsonSerializable()
+class AppVisualRule extends AppConfigRule {
   //
-  _AppVisualRule._() : super._();
+  AppVisualRule() : super._();
   // interface
-  VisualRuleType get ruleType;
+  VisualRuleType get ruleType => VisualRuleType.styleOrFormat;
+
+  factory AppVisualRule.fromJson(Map<String, dynamic> json) =>
+      _$AppVisualRuleFromJson(json);
+  Map<String, dynamic> toJson() => _$AppVisualRuleToJson(this);
 }
 
-abstract class _AppBehavioralRule extends AppConfigRule {
+class AppBehavioralRule extends AppConfigRule {
   //
-  _AppBehavioralRule._() : super._();
+  AppBehavioralRule() : super._();
   // interface
-  BehaviorRuleType get ruleType;
+  BehaviorRuleType get ruleType => BehaviorRuleType.navigate;
 }
 
 @JsonSerializable()
-class FilterRule extends _AppVisualRule {
+class FilterRule extends AppVisualRule {
   //
   final RuleResponseWrapper ruleResp;
   // final int filterListIdx;
@@ -65,7 +70,7 @@ class FilterRule extends _AppVisualRule {
 
   FilterRule(
     this.ruleResp,
-  ) : super._();
+  ) : super();
 
   //
   VisualRuleType get ruleType => VisualRuleType.filterCfg;
@@ -82,9 +87,9 @@ class FilterRule extends _AppVisualRule {
 }
 
 @JsonSerializable()
-class FormatRule extends _AppVisualRule {
+class FormatRule extends AppVisualRule {
   //
-  FormatRule() : super._() {}
+  FormatRule() : super();
 
   //
   VisualRuleType get ruleType => VisualRuleType.styleOrFormat;
@@ -97,9 +102,9 @@ class FormatRule extends _AppVisualRule {
 }
 
 @JsonSerializable()
-class GroupRule extends _AppVisualRule {
+class GroupRule extends AppVisualRule {
   //
-  GroupRule() : super._() {}
+  GroupRule() : super() {}
 
   //
   VisualRuleType get ruleType => VisualRuleType.groupCfg;
@@ -111,9 +116,9 @@ class GroupRule extends _AppVisualRule {
 }
 
 @JsonSerializable()
-class ShowRule extends _AppVisualRule {
+class ShowRule extends AppVisualRule {
   //
-  ShowRule() : super._() {}
+  ShowRule() : super() {}
 
   //
   VisualRuleType get ruleType => VisualRuleType.showOrHide;
@@ -125,9 +130,9 @@ class ShowRule extends _AppVisualRule {
 }
 
 @JsonSerializable()
-class SortRule extends _AppVisualRule {
+class SortRule extends AppVisualRule {
   //
-  SortRule() : super._() {}
+  SortRule() : super() {}
 
   //
   VisualRuleType get ruleType => VisualRuleType.sortCfg;
@@ -139,9 +144,9 @@ class SortRule extends _AppVisualRule {
 }
 
 @JsonSerializable()
-class NavigateRule extends _AppBehavioralRule {
+class NavigateRule extends AppBehavioralRule {
   //
-  NavigateRule() : super._() {}
+  NavigateRule() : super() {}
 
   //
   BehaviorRuleType get ruleType => BehaviorRuleType.navigate;
