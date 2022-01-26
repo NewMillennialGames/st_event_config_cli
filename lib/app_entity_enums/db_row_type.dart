@@ -1,5 +1,6 @@
 part of AppEntities;
 
+@JsonEnum()
 enum DbRowType {
   /*
     describes the Server DB entity types

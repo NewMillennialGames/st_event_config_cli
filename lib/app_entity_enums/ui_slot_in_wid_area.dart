@@ -1,5 +1,6 @@
 part of AppEntities;
 
+@JsonEnum()
 enum ScreenAreaWidgetSlot {
   /*  key to describing field-name
     on some ApiMsg entity (asset, team, player, game)

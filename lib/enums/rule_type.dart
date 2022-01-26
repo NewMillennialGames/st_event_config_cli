@@ -5,6 +5,7 @@ const List<VisualRuleType> _unconfigurableFutureRules = [
   VisualRuleType.showOrHide,
 ];
 
+@JsonEnum()
 enum VisualRuleType {
   sortCfg,
   groupCfg,

@@ -83,7 +83,7 @@ class EventCfgTree {
       //
       var screenCfg =
           this.screenConfig[rQuest.appScreen] ?? ScreenCfg(rQuest.appScreen);
-      screenCfg.appendRules(rQuest);
+      screenCfg.appendRule(rQuest);
       this.screenConfig[rQuest.appScreen] = screenCfg;
     }
   }

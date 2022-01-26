@@ -1,5 +1,7 @@
 library AppEntities;
 
+import 'package:json_annotation/json_annotation.dart';
+
 import '../enums/all.dart';
 import '../util/type_cast.dart';
 

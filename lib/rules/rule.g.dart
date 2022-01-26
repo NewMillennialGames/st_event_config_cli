@@ -7,9 +7,26 @@ part of 'rule.dart';
 // **************************************************************************
 
 AppVisualRule _$AppVisualRuleFromJson(Map<String, dynamic> json) =>
-    AppVisualRule();
+    AppVisualRule(
+      $enumDecode(_$VisualRuleTypeEnumMap, json['ruleType']),
+    );
 
 Map<String, dynamic> _$AppVisualRuleToJson(AppVisualRule instance) =>
+    <String, dynamic>{
+      'ruleType': _$VisualRuleTypeEnumMap[instance.ruleType],
+    };
+
+const _$VisualRuleTypeEnumMap = {
+  VisualRuleType.sortCfg: 'sortCfg',
+  VisualRuleType.groupCfg: 'groupCfg',
+  VisualRuleType.filterCfg: 'filterCfg',
+  VisualRuleType.styleOrFormat: 'styleOrFormat',
+  VisualRuleType.showOrHide: 'showOrHide',
+};
+
+FormatRule _$FormatRuleFromJson(Map<String, dynamic> json) => FormatRule();
+
+Map<String, dynamic> _$FormatRuleToJson(FormatRule instance) =>
     <String, dynamic>{};
 
 FilterRule _$FilterRuleFromJson(Map<String, dynamic> json) => FilterRule(
@@ -21,19 +38,18 @@ Map<String, dynamic> _$FilterRuleToJson(FilterRule instance) =>
       'ruleResp': instance.ruleResp,
     };
 
-FormatRule _$FormatRuleFromJson(Map<String, dynamic> json) => FormatRule();
-
-Map<String, dynamic> _$FormatRuleToJson(FormatRule instance) =>
-    <String, dynamic>{};
-
 GroupRule _$GroupRuleFromJson(Map<String, dynamic> json) => GroupRule();
 
 Map<String, dynamic> _$GroupRuleToJson(GroupRule instance) =>
     <String, dynamic>{};
 
-ShowRule _$ShowRuleFromJson(Map<String, dynamic> json) => ShowRule();
+ShowRule _$ShowRuleFromJson(Map<String, dynamic> json) => ShowRule(
+      json['shouldShow'] as bool,
+    );
 
-Map<String, dynamic> _$ShowRuleToJson(ShowRule instance) => <String, dynamic>{};
+Map<String, dynamic> _$ShowRuleToJson(ShowRule instance) => <String, dynamic>{
+      'shouldShow': instance.shouldShow,
+    };
 
 SortRule _$SortRuleFromJson(Map<String, dynamic> json) => SortRule();
 

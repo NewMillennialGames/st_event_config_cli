@@ -1,5 +1,6 @@
 part of AppEntities;
 
+@JsonEnum()
 enum ScreenWidgetArea {
   // each part in a section of the app
   // each below has subset of UiComponentSlotName

@@ -90,22 +90,14 @@ const _$AppScreenEnumMap = {
 
 ScreenCfg _$ScreenCfgFromJson(Map<String, dynamic> json) => ScreenCfg(
       $enumDecode(_$AppScreenEnumMap, json['appScreen']),
-    )
-      ..areaConfig = (json['areaConfig'] as Map<String, dynamic>).map(
+    )..areaConfig = (json['areaConfig'] as Map<String, dynamic>).map(
         (k, e) => MapEntry($enumDecode(_$ScreenWidgetAreaEnumMap, k),
             ScreenAreaCfg.fromJson(e as Map<String, dynamic>)),
-      )
-      ..visConfigBySlotInArea =
-          (json['slotConfig'] as Map<String, dynamic>).map(
-        (k, e) => MapEntry($enumDecode(_$ScreenWidgetAreaEnumMap, k),
-            SlotOrAreaRuleCfg.fromJson(e as Map<String, dynamic>)),
       );
 
 Map<String, dynamic> _$ScreenCfgToJson(ScreenCfg instance) => <String, dynamic>{
       'appScreen': _$AppScreenEnumMap[instance.appScreen],
       'areaConfig': instance.areaConfig
-          .map((k, e) => MapEntry(_$ScreenWidgetAreaEnumMap[k], e)),
-      'slotConfig': instance.visConfigBySlotInArea
           .map((k, e) => MapEntry(_$ScreenWidgetAreaEnumMap[k], e)),
     };
 
@@ -120,18 +112,25 @@ const _$ScreenWidgetAreaEnumMap = {
 
 ScreenAreaCfg _$ScreenAreaCfgFromJson(Map<String, dynamic> json) =>
     ScreenAreaCfg(
-      $enumDecode(_$ScreenWidgetAreaEnumMap, json['sectionComponent']),
-      (json['uiCfgByApplicableRules'] as Map<String, dynamic>).map(
+      $enumDecode(_$ScreenWidgetAreaEnumMap, json['screenArea']),
+    )
+      ..visRulesForArea = (json['visRulesForArea'] as Map<String, dynamic>).map(
         (k, e) => MapEntry($enumDecode(_$VisualRuleTypeEnumMap, k),
             SlotOrAreaRuleCfg.fromJson(e as Map<String, dynamic>)),
-      ),
-    );
+      )
+      ..visConfigBySlotInArea =
+          (json['visConfigBySlotInArea'] as Map<String, dynamic>).map(
+        (k, e) => MapEntry($enumDecode(_$ScreenAreaWidgetSlotEnumMap, k),
+            SlotOrAreaRuleCfg.fromJson(e as Map<String, dynamic>)),
+      );
 
 Map<String, dynamic> _$ScreenAreaCfgToJson(ScreenAreaCfg instance) =>
     <String, dynamic>{
-      'sectionComponent': _$ScreenWidgetAreaEnumMap[instance.screenArea],
-      'uiCfgByApplicableRules': instance.visRulesForArea
+      'screenArea': _$ScreenWidgetAreaEnumMap[instance.screenArea],
+      'visRulesForArea': instance.visRulesForArea
           .map((k, e) => MapEntry(_$VisualRuleTypeEnumMap[k], e)),
+      'visConfigBySlotInArea': instance.visConfigBySlotInArea
+          .map((k, e) => MapEntry(_$ScreenAreaWidgetSlotEnumMap[k], e)),
     };
 
 const _$VisualRuleTypeEnumMap = {
@@ -140,6 +139,16 @@ const _$VisualRuleTypeEnumMap = {
   VisualRuleType.filterCfg: 'filterCfg',
   VisualRuleType.styleOrFormat: 'styleOrFormat',
   VisualRuleType.showOrHide: 'showOrHide',
+};
+
+const _$ScreenAreaWidgetSlotEnumMap = {
+  ScreenAreaWidgetSlot.header: 'header',
+  ScreenAreaWidgetSlot.footer: 'footer',
+  ScreenAreaWidgetSlot.slot1: 'slot1',
+  ScreenAreaWidgetSlot.slot2: 'slot2',
+  ScreenAreaWidgetSlot.title: 'title',
+  ScreenAreaWidgetSlot.subtitle: 'subtitle',
+  ScreenAreaWidgetSlot.bannerUrl: 'bannerUrl',
 };
 
 SlotOrAreaRuleCfg _$SlotOrAreaRuleCfgFromJson(Map<String, dynamic> json) =>

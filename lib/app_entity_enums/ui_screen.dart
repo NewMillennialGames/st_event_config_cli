@@ -20,6 +20,7 @@ const List<AppScreen> _notCurrentlyConfigurable = [
   AppScreen.trading,
 ];
 
+@JsonEnum()
 enum AppScreen {
   // major screens or app-areas that user may wish to configure
   eventConfiguration, // general setup; not really a section

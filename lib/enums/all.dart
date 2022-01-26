@@ -1,5 +1,7 @@
 library EvCfgEnums;
 
+import 'package:json_annotation/json_annotation.dart';
+//
 import '../app_entity_enums/all.dart';
 
 part 'shape_event.dart';

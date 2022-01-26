@@ -1,5 +1,6 @@
 part of EvCfgEnums;
 
+@JsonEnum()
 enum VisRuleQuestType {
   /* general structure of the possible questions to be asked
     for a given Visibility-Rule

@@ -1,11 +1,13 @@
 part of EvCfgEnums;
 
 // describe event at high level
+@JsonEnum()
 enum EvType {
   fantasy,
   standard,
 }
 
+@JsonEnum()
 enum EvDuration {
   // cadence of competitions
   oneGame, // aka once
@@ -15,6 +17,7 @@ enum EvDuration {
 }
 
 // type of gameplay
+@JsonEnum()
 enum EvEliminationStrategy {
   // how do you get promoted or eliminated
   singleGame,
@@ -26,6 +29,7 @@ enum EvEliminationStrategy {
 }
 
 // define assets
+@JsonEnum()
 enum EvCompetitorType {
   // EvCompetitionStyle will tell you how they face-off each other
   team,
@@ -34,6 +38,7 @@ enum EvCompetitorType {
   other,
 }
 
+@JsonEnum()
 enum EvOpponentType {
   sameAsCompetitorType,
   field,

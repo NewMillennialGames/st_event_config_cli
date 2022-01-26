@@ -10,11 +10,18 @@ class ScreenCfg {
     this.appScreen,
   );
 
-  void appendRules(VisualRuleQuestion<dynamic, RuleResponseWrapper> rQuest) {
+  void appendRule(
+    VisualRuleQuestion<dynamic, RuleResponseWrapper> rQuest,
+  ) {
     //
     RuleResponseWrapper? answer = rQuest.response?.answers;
     ScreenWidgetArea? swa = rQuest.screenWidgetArea;
-    if (answer == null || swa == null) return;
+    if (answer == null || swa == null) {
+      print(
+        'Err: ${rQuest.questionId} ${rQuest.questDef.questStr} was missing key data',
+      );
+      return;
+    }
 
     if (answer is Iterable) {
       throw UnimplementedError('todo');

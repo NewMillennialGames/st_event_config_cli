@@ -26,35 +26,57 @@ abstract class AppConfigRule {
   factory AppConfigRule.show(
     RuleResponseWrapper pm,
   ) =>
-      ShowRule();
+      ShowRule(true);
   factory AppConfigRule.sort(
     RuleResponseWrapper pm,
   ) =>
       SortRule();
+
   // behavioral rules;  future
   factory AppConfigRule.navigate() => NavigateRule();
-
-  // interface
-  // Map<VisualRuleType, String> getEncodedRule();
 }
 
 @JsonSerializable()
 class AppVisualRule extends AppConfigRule {
   //
-  AppVisualRule() : super._();
   // interface
-  VisualRuleType get ruleType => VisualRuleType.styleOrFormat;
+  final VisualRuleType ruleType;
+  //
+  AppVisualRule(this.ruleType) : super._();
 
-  factory AppVisualRule.fromJson(Map<String, dynamic> json) =>
-      _$AppVisualRuleFromJson(json);
+  // JsonSerializable
   Map<String, dynamic> toJson() => _$AppVisualRuleToJson(this);
+
+  factory AppVisualRule.fromJson(Map<String, dynamic> json) {
+    int ruleTypeIdx = json['ruleType'] as int;
+    VisualRuleType ruleType = VisualRuleType.values[ruleTypeIdx];
+    //
+    switch (ruleType) {
+      case VisualRuleType.styleOrFormat:
+        return FormatRule.fromJson(json);
+      default:
+        return AppVisualRule(VisualRuleType.styleOrFormat);
+    }
+  }
 }
 
 class AppBehavioralRule extends AppConfigRule {
   //
-  AppBehavioralRule() : super._();
-  // interface
-  BehaviorRuleType get ruleType => BehaviorRuleType.navigate;
+  final BehaviorRuleType ruleType;
+  //
+  AppBehavioralRule(this.ruleType) : super._();
+}
+
+@JsonSerializable()
+class FormatRule extends AppVisualRule {
+  //
+  FormatRule() : super(VisualRuleType.styleOrFormat);
+
+  //
+  factory FormatRule.fromJson(Map<String, dynamic> json) =>
+      _$FormatRuleFromJson(json);
+
+  Map<String, dynamic> toJson() => _$FormatRuleToJson(this);
 }
 
 @JsonSerializable()
@@ -70,91 +92,62 @@ class FilterRule extends AppVisualRule {
 
   FilterRule(
     this.ruleResp,
-  ) : super();
+  ) : super(VisualRuleType.filterCfg);
 
   //
-  VisualRuleType get ruleType => VisualRuleType.filterCfg;
-
-  //
-  // @override
-  // Map<VisualRuleType, String> getEncodedRule() {
-  //   return {};
-  // }
-
   factory FilterRule.fromJson(Map<String, dynamic> json) =>
       _$FilterRuleFromJson(json);
   Map<String, dynamic> toJson() => _$FilterRuleToJson(this);
 }
 
 @JsonSerializable()
-class FormatRule extends AppVisualRule {
-  //
-  FormatRule() : super();
-
-  //
-  VisualRuleType get ruleType => VisualRuleType.styleOrFormat;
-
-  //
-  // @override
-  // Map<VisualRuleType, String> getEncodedRule() {
-  //   return {};
-  // }
-}
-
-@JsonSerializable()
 class GroupRule extends AppVisualRule {
   //
-  GroupRule() : super() {}
+  GroupRule() : super(VisualRuleType.groupCfg) {}
 
   //
-  VisualRuleType get ruleType => VisualRuleType.groupCfg;
-  //
-  // @override
-  // Map<VisualRuleType, String> getEncodedRule() {
-  //   return {};
-  // }
+  factory GroupRule.fromJson(Map<String, dynamic> json) =>
+      _$GroupRuleFromJson(json);
+
+  Map<String, dynamic> toJson() => _$GroupRuleToJson(this);
 }
 
 @JsonSerializable()
 class ShowRule extends AppVisualRule {
   //
-  ShowRule() : super() {}
+  final bool shouldShow;
+  //
+  ShowRule(this.shouldShow) : super(VisualRuleType.showOrHide) {}
 
   //
-  VisualRuleType get ruleType => VisualRuleType.showOrHide;
-  //
-  // @override
-  // Map<VisualRuleType, String> getEncodedRule() {
-  //   return {};
-  // }
+  factory ShowRule.fromJson(Map<String, dynamic> json) =>
+      _$ShowRuleFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ShowRuleToJson(this);
 }
 
 @JsonSerializable()
 class SortRule extends AppVisualRule {
   //
-  SortRule() : super() {}
+  SortRule() : super(VisualRuleType.sortCfg) {}
 
   //
-  VisualRuleType get ruleType => VisualRuleType.sortCfg;
-  //
-  // @override
-  // Map<VisualRuleType, String> getEncodedRule() {
-  //   return {};
-  // }
+  factory SortRule.fromJson(Map<String, dynamic> json) =>
+      _$SortRuleFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SortRuleToJson(this);
 }
 
 @JsonSerializable()
 class NavigateRule extends AppBehavioralRule {
   //
-  NavigateRule() : super() {}
+  NavigateRule() : super(BehaviorRuleType.navigate) {}
 
   //
-  BehaviorRuleType get ruleType => BehaviorRuleType.navigate;
-  //
-  // @override
-  // Map<VisualRuleType, String> getEncodedRule() {
-  //   return {};
-  // }
+  factory NavigateRule.fromJson(Map<String, dynamic> json) =>
+      _$NavigateRuleFromJson(json);
+
+  Map<String, dynamic> toJson() => _$NavigateRuleToJson(this);
 }
 
 
