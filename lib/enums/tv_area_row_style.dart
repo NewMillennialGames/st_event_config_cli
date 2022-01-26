@@ -9,12 +9,23 @@ enum TvAreaRowStyle {
     Portfolio
 
   */
-  playerSolo,
-  playerWithTeam,
-  playerVsPlayer,
-  teamSolo,
   teamVsTeam,
-  style6,
-  style7,
-  style8,
+  teamVsTeamRanked,
+  teamVsField,
+  teamVsFieldRanked,
+  playerVsField,
+  playerVsFieldRanked,
+  teamPlayerVsField,
+  driverVsField,
+}
+
+typedef _Rs = TvAreaRowStyle;
+
+extension TvAreaRowStyleExt1 on TvAreaRowStyle {
+  //
+  bool get twoPerRowOnMarketScreens => [
+        // applies to both MarketView and MarketResearch
+        _Rs.teamVsTeam,
+        _Rs.teamVsTeamRanked,
+      ].contains(this);
 }
