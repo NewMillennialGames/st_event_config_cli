@@ -7,9 +7,19 @@
 
 */
 
+part of StUiController;
+
 abstract class RowPropertyInterface {
   //
   String get topName;
   String get subName;
   String get imgUrl;
+  //
+  double get price;
+  String get priceStr;
+  double get delta;
+  String get deltaStr;
+  //
+  int get rank;
+  String get rankStr;
 }

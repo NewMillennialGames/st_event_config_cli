@@ -20,7 +20,9 @@ Questions are nested into a hierarchy as follows:
 #### CLI Usage
     open terminal
     "cd" into project folder
-    run this cmd:  "dart lib/evCdg.dart"
+    run these cmds:
+        dart pub get
+        dart lib/evCdg.dart
 
 ### General flow of app
 App Feeds question to user
