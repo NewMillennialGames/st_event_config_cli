@@ -103,3 +103,27 @@ class EventCfgTree {
 
   Map<String, dynamic> toJson() => _$EventCfgTreeToJson(this);
 }
+
+extension EventCfgTreeExt1 on EventCfgTree {
+  //
+  ScreenCfg screenCfg(AppScreen screen) => this.screenConfig[screen]!;
+
+  ScreenAreaCfg screenArea(
+    AppScreen screen,
+    ScreenWidgetArea area,
+  ) =>
+      screenCfg(screen).areaConfig[area]!;
+
+  Map<VisualRuleType, SlotOrAreaRuleCfg> areaCfgVisual(
+    AppScreen screen,
+    ScreenWidgetArea area,
+  ) =>
+      screenArea(screen, area).visRulesForArea;
+
+  SlotOrAreaRuleCfg areaTableRules(AppScreen screen) => areaCfgVisual(
+      screen, ScreenWidgetArea.tableview)[VisualRuleType.styleOrFormat]!;
+
+  AppVisualRule tableFormatRule(AppScreen screen) {
+    return areaTableRules(screen).ruleByType(VisualRuleType.styleOrFormat);
+  }
+}

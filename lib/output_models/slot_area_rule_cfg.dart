@@ -11,6 +11,9 @@ class SlotOrAreaRuleCfg {
     this.rulesForType,
   );
 
+  AppVisualRule ruleByType(VisualRuleType typ) =>
+      rulesForType.firstWhere((e) => e.ruleType == typ);
+
   factory SlotOrAreaRuleCfg.fromQuest(VisualRuleQuestion rQuest) {
     //
     return SlotOrAreaRuleCfg(rQuest.visRuleTypeForAreaOrSlot!, []);
