@@ -7,7 +7,6 @@ part 'rule.g.dart';
 
 abstract class AppConfigRule {
   //
-
   AppConfigRule._();
 
   factory AppConfigRule.filter(
@@ -16,9 +15,9 @@ abstract class AppConfigRule {
       FilterRule(ruleResp);
   // visual and styling rules
   factory AppConfigRule.format(
-    RuleResponseWrapper pm,
+    RuleResponseWrapper rrw,
   ) =>
-      FormatRule();
+      FormatRule(rrw);
   factory AppConfigRule.group(
     RuleResponseWrapper pm,
   ) =>
@@ -45,8 +44,6 @@ class AppVisualRule extends AppConfigRule {
   AppVisualRule(this.ruleType) : super._();
 
   // JsonSerializable
-  Map<String, dynamic> toJson() => _$AppVisualRuleToJson(this);
-
   factory AppVisualRule.fromJson(Map<String, dynamic> json) {
     int ruleTypeIdx = json['ruleType'] as int;
     VisualRuleType ruleType = VisualRuleType.values[ruleTypeIdx];
@@ -58,19 +55,26 @@ class AppVisualRule extends AppConfigRule {
         return AppVisualRule(VisualRuleType.styleOrFormat);
     }
   }
+  Map<String, dynamic> toJson() => _$AppVisualRuleToJson(this);
 }
 
-class AppBehavioralRule extends AppConfigRule {
-  //
-  final BehaviorRuleType ruleType;
-  //
-  AppBehavioralRule(this.ruleType) : super._();
-}
+// @JsonSerializable()
+// class StyleFormatCfg {
+//   //
+//   TvAreaRowStyle rowStyle;
+//   StyleFormatCfg(this.rowStyle);
+
+//     factory StyleFormatCfg.fromJson(Map<String, dynamic> json) =>
+//       _$StyleFormatCfgFromJson(json);
+
+//   Map<String, dynamic> toJson() => _$StyleFormatCfgToJson(this);
+// }
 
 @JsonSerializable()
 class FormatRule extends AppVisualRule {
   //
-  FormatRule() : super(VisualRuleType.styleOrFormat);
+  final RuleResponseWrapper rrw;
+  FormatRule(this.rrw) : super(VisualRuleType.styleOrFormat);
 
   //
   factory FormatRule.fromJson(Map<String, dynamic> json) =>
@@ -136,6 +140,20 @@ class SortRule extends AppVisualRule {
       _$SortRuleFromJson(json);
 
   Map<String, dynamic> toJson() => _$SortRuleToJson(this);
+}
+
+// behavior rules below
+//
+//
+//
+//
+//
+
+class AppBehavioralRule extends AppConfigRule {
+  //
+  final BehaviorRuleType ruleType;
+  //
+  AppBehavioralRule(this.ruleType) : super._();
 }
 
 @JsonSerializable()

@@ -24,10 +24,14 @@ const _$VisualRuleTypeEnumMap = {
   VisualRuleType.showOrHide: 'showOrHide',
 };
 
-FormatRule _$FormatRuleFromJson(Map<String, dynamic> json) => FormatRule();
+FormatRule _$FormatRuleFromJson(Map<String, dynamic> json) => FormatRule(
+      RuleResponseWrapper.fromJson(json['rrw'] as Map<String, dynamic>),
+    );
 
 Map<String, dynamic> _$FormatRuleToJson(FormatRule instance) =>
-    <String, dynamic>{};
+    <String, dynamic>{
+      'rrw': instance.rrw,
+    };
 
 FilterRule _$FilterRuleFromJson(Map<String, dynamic> json) => FilterRule(
       RuleResponseWrapper.fromJson(json['ruleResp'] as Map<String, dynamic>),

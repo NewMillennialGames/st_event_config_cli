@@ -19,6 +19,8 @@ class RuleResponseWrapper {
 
   RuleResponseWrapper(this.userResponses);
 
+  String configForQuestType(VisRuleQuestType qTyp) => userResponses[qTyp]!;
+
   factory RuleResponseWrapper.fromJson(Map<String, dynamic> json) =>
       _$RuleResponseWrapperFromJson(json);
   Map<String, dynamic> toJson() => _$RuleResponseWrapperToJson(this);

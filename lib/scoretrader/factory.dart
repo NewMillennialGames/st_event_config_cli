@@ -8,8 +8,12 @@ class RowStyleFactory {
 
   Widget rowForAsset(List<RowPropertyInterface> competitors) {
     //
-    switch (_eConfig.tableFormatRule(screen)) {
-    }
+    RuleResponseWrapper formatRuleCfg = _eConfig.formatRuleCfg(screen);
+    String userResponse = formatRuleCfg
+        .configForQuestType(VisRuleQuestType.selectVisualComponentOrStyle);
+    // switch (appRule.ruleType) {
+    //   case
+    // }
     return Widget();
   }
 }
