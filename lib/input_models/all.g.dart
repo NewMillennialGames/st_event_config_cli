@@ -8,25 +8,40 @@ part of InputModels;
 
 RuleResponseWrapper _$RuleResponseWrapperFromJson(Map<String, dynamic> json) =>
     RuleResponseWrapper(
-      (json['userResponses'] as Map<String, dynamic>).map(
-        (k, e) =>
-            MapEntry($enumDecode(_$VisRuleQuestTypeEnumMap, k), e as String),
-      ),
+      $enumDecode(_$VisualRuleTypeEnumMap, json['ruleType']),
     );
 
 Map<String, dynamic> _$RuleResponseWrapperToJson(
         RuleResponseWrapper instance) =>
     <String, dynamic>{
-      'userResponses': instance.userResponses
-          .map((k, e) => MapEntry(_$VisRuleQuestTypeEnumMap[k], e)),
+      'ruleType': _$VisualRuleTypeEnumMap[instance.ruleType],
     };
 
-const _$VisRuleQuestTypeEnumMap = {
-  VisRuleQuestType.getValueFromTableAndField: 'getValueFromTableAndField',
-  VisRuleQuestType.selectFieldForSortOrGroup: 'selectFieldForSortOrGroup',
-  VisRuleQuestType.specifyPositionInGroup: 'specifyPositionInGroup',
-  VisRuleQuestType.setSortOrder: 'setSortOrder',
-  VisRuleQuestType.selectVisualComponentOrStyle: 'selectVisualComponentOrStyle',
-  VisRuleQuestType.controlsVisibilityOfAreaOrSlot:
-      'controlsVisibilityOfAreaOrSlot',
+const _$VisualRuleTypeEnumMap = {
+  VisualRuleType.sortCfg: 'sortCfg',
+  VisualRuleType.groupCfg: 'groupCfg',
+  VisualRuleType.filterCfg: 'filterCfg',
+  VisualRuleType.styleOrFormat: 'styleOrFormat',
+  VisualRuleType.showOrHide: 'showOrHide',
+};
+
+TvRowStyleCfg _$TvRowStyleCfgFromJson(Map<String, dynamic> json) =>
+    TvRowStyleCfg()
+      ..selectedRowStyle =
+          $enumDecode(_$TvAreaRowStyleEnumMap, json['selectedRowStyle']);
+
+Map<String, dynamic> _$TvRowStyleCfgToJson(TvRowStyleCfg instance) =>
+    <String, dynamic>{
+      'selectedRowStyle': _$TvAreaRowStyleEnumMap[instance.selectedRowStyle],
+    };
+
+const _$TvAreaRowStyleEnumMap = {
+  TvAreaRowStyle.teamVsTeam: 'teamVsTeam',
+  TvAreaRowStyle.teamVsTeamRanked: 'teamVsTeamRanked',
+  TvAreaRowStyle.teamVsField: 'teamVsField',
+  TvAreaRowStyle.teamVsFieldRanked: 'teamVsFieldRanked',
+  TvAreaRowStyle.playerVsField: 'playerVsField',
+  TvAreaRowStyle.playerVsFieldRanked: 'playerVsFieldRanked',
+  TvAreaRowStyle.teamPlayerVsField: 'teamPlayerVsField',
+  TvAreaRowStyle.driverVsField: 'driverVsField',
 };

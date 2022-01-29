@@ -2,37 +2,39 @@ part of EvCfgEnums;
 
 @JsonEnum()
 enum VisRuleQuestType {
-  /* general structure of the possible questions to be asked
+  /* describes
+    general structure of the possible questions to be asked
     for a given Visibility-Rule
 
     in other words, HOW MANY pieces of data needs to be
     collected to properly build a complete rule
   */
-  getValueFromTableAndField,
-  selectFieldForSortOrGroup,
+  // getTableName,
+  selectDataFieldName,
   specifyPositionInGroup,
-  setSortOrder,
+  specifySortAscending,
   selectVisualComponentOrStyle,
   controlsVisibilityOfAreaOrSlot,
 }
 
 extension VisRuleQuestTypeExt1 on VisRuleQuestType {
   //
-  String templateForRuleType(VisualRuleType ruleTyp) {
+
+  String questTemplByRuleType(VisualRuleType ruleTyp) {
     /* return question template for each of these rules
 
 
     */
     String resp = '_unset';
     switch (this) {
-      case VisRuleQuestType.getValueFromTableAndField:
-        return 'Specify source for value (table and field)';
-      case VisRuleQuestType.selectFieldForSortOrGroup:
-        return 'Select sort field (table and field)';
+      // case VisRuleQuestType.getTableName:
+      //   return 'Select Table that contains required value';
+      case VisRuleQuestType.selectDataFieldName:
+        return 'Select field containg (sort, group, filter) value';
       case VisRuleQuestType.specifyPositionInGroup:
-        return 'Select Group position';
-      case VisRuleQuestType.setSortOrder:
-        return 'Select Sort position';
+        return 'Select Group/Sort/Filter position';
+      case VisRuleQuestType.specifySortAscending:
+        return 'Sort Ascending';
       case VisRuleQuestType.selectVisualComponentOrStyle:
         switch (ruleTyp) {
           case VisualRuleType.styleOrFormat:
@@ -45,20 +47,19 @@ extension VisRuleQuestTypeExt1 on VisRuleQuestType {
         }
         return resp;
       case VisRuleQuestType.controlsVisibilityOfAreaOrSlot:
-        return 'Should show this area/slot?';
+        return 'Show this area/slot?';
     }
-    // return 'DialogRuleQuestType.questionTemplate';
   }
 
   List<String> get choices {
     switch (this) {
-      case VisRuleQuestType.getValueFromTableAndField:
-        return DbRowType.values.map((e) => e.name).toList();
-      case VisRuleQuestType.selectFieldForSortOrGroup:
+      // case VisRuleQuestType.getTableName:
+      //   return DbRowType.values.map((e) => e.name).toList();
+      case VisRuleQuestType.selectDataFieldName:
         return RowPropertylName.values.map((e) => e.name).toList();
       case VisRuleQuestType.specifyPositionInGroup:
-        return MenuSortOrGroupIndex.values.map((e) => e.name).toList();
-      case VisRuleQuestType.setSortOrder:
+        return SortOrGroupIdxOrder.values.map((e) => e.name).toList();
+      case VisRuleQuestType.specifySortAscending:
         // idx 0 == no;  1 == yes;  dont reverse these
         return [
           'no',
@@ -75,48 +76,49 @@ extension VisRuleQuestTypeExt1 on VisRuleQuestType {
     }
   }
 
-  T castStringToExpectedResponseType<T>(
-    String userResp, [
-    int defaultChoice = -1,
-  ]) {
-    // variable defaults based on type of this
-    defaultChoice = defaultChoice > -1 ? defaultChoice : this._defaultChoice;
-    int asIdx = int.tryParse(userResp) ?? defaultChoice;
-    switch (this) {
-      case VisRuleQuestType.getValueFromTableAndField:
-        return DbRowType.values[asIdx] as T;
-      case VisRuleQuestType.selectFieldForSortOrGroup:
-        return RowPropertylName.values[asIdx] as T;
-      case VisRuleQuestType.specifyPositionInGroup:
-        return MenuSortOrGroupIndex.values[asIdx] as T;
-      case VisRuleQuestType.setSortOrder:
-        return ((asIdx == 1) ? true : false) as T;
-      case VisRuleQuestType.selectVisualComponentOrStyle:
-        return TvAreaRowStyle.values[asIdx] as T;
-      case VisRuleQuestType.controlsVisibilityOfAreaOrSlot:
-        return ((asIdx == 1) ? true : false) as T;
-    }
-  }
-
-  Type get expectedTypeOfResponse {
-    switch (this) {
-      case VisRuleQuestType.getValueFromTableAndField:
-        return DbRowType;
-      case VisRuleQuestType.selectFieldForSortOrGroup:
-        return RowPropertylName;
-      case VisRuleQuestType.specifyPositionInGroup:
-        return MenuSortOrGroupIndex;
-      case VisRuleQuestType.setSortOrder:
-        return bool;
-      case VisRuleQuestType.selectVisualComponentOrStyle:
-        return TvAreaRowStyle;
-      case VisRuleQuestType.controlsVisibilityOfAreaOrSlot:
-        return bool;
-    }
-  }
-
   int get _defaultChoice {
     // each question can have different default choice
     return 0;
   }
 }
+
+
+// T castStringToExpectedResponseType<T>(
+  //   String userResp, [
+  //   int defaultChoice = -1,
+  // ]) {
+  //   // variable defaults based on type of this
+  //   defaultChoice = defaultChoice > -1 ? defaultChoice : this._defaultChoice;
+  //   int asIdx = int.tryParse(userResp) ?? defaultChoice;
+  //   switch (this) {
+  //     case VisRuleQuestType.getValueFromTableAndField:
+  //       return DbRowType.values[asIdx] as T;
+  //     case VisRuleQuestType.selectFieldForSortOrGroup:
+  //       return RowPropertylName.values[asIdx] as T;
+  //     case VisRuleQuestType.specifyPositionInGroup:
+  //       return MenuSortOrGroupIndex.values[asIdx] as T;
+  //     case VisRuleQuestType.setSortOrder:
+  //       return ((asIdx == 1) ? true : false) as T;
+  //     case VisRuleQuestType.selectVisualComponentOrStyle:
+  //       return TvAreaRowStyle.values[asIdx] as T;
+  //     case VisRuleQuestType.controlsVisibilityOfAreaOrSlot:
+  //       return ((asIdx == 1) ? true : false) as T;
+  //   }
+  // }
+
+  // Type get expectedTypeOfResponse {
+  //   switch (this) {
+  //     case VisRuleQuestType.getValueFromTableAndField:
+  //       return DbRowType;
+  //     case VisRuleQuestType.selectFieldForSortOrGroup:
+  //       return RowPropertylName;
+  //     case VisRuleQuestType.specifyPositionInGroup:
+  //       return MenuSortOrGroupIndex;
+  //     case VisRuleQuestType.setSortOrder:
+  //       return bool;
+  //     case VisRuleQuestType.selectVisualComponentOrStyle:
+  //       return TvAreaRowStyle;
+  //     case VisRuleQuestType.controlsVisibilityOfAreaOrSlot:
+  //       return bool;
+  //   }
+  // }

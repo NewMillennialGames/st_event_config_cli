@@ -17,5 +17,6 @@ part 'question_base.dart';
 part 'question_visual_rule.dart';
 part 'question_behave_rule.dart';
 part 'vis_rule_choice_config.dart';
+part 'rule_resp_per_quest_type.dart';
 
 typedef CastUserInputToTyp<InputTyp, AnsTyp> = AnsTyp Function(InputTyp input);

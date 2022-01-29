@@ -2,9 +2,13 @@ part of AppEntities;
 
 @JsonEnum()
 enum RowPropertylName {
-  name,
+  teamName,
+  playerName,
+  conference,
+  region,
+  eventName,
+  eventLocation,
+  eventBannerUrl,
   openPrice,
   currentPrice,
-  url,
-  // title,
 }

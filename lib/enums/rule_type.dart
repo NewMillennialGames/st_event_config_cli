@@ -15,7 +15,24 @@ enum VisualRuleType {
 }
 
 extension VisualRuleTypeExt1 on VisualRuleType {
-  //
+  // TODO: fix types returned below
+
+  RuleResponseWrapper get ruleResponseContainer {
+    // return instance of the class that parses user response
+    switch (this) {
+      case VisualRuleType.sortCfg:
+        return TvSortCfg();
+      case VisualRuleType.groupCfg:
+        return RuleResponseWrapper(this);
+      case VisualRuleType.filterCfg:
+        return RuleResponseWrapper(this);
+      case VisualRuleType.styleOrFormat:
+        return TvRowStyleCfg();
+      case VisualRuleType.showOrHide:
+        return RuleResponseWrapper(this);
+    }
+  }
+
   bool get isConfigurable => !_unconfigurableFutureRules.contains(this);
 
   String get friendlyName {
@@ -35,7 +52,49 @@ extension VisualRuleTypeExt1 on VisualRuleType {
     }
   }
   //
-  // String questionStr(
+
+  List<VisRuleQuestType> get questionsRequired {
+    switch (this) {
+      case VisualRuleType.sortCfg:
+        return [
+          Vrq.selectDataFieldName,
+          Vrq.specifyPositionInGroup,
+          Vrq.specifySortAscending
+        ];
+      case VisualRuleType.groupCfg:
+        return [
+          Vrq.selectDataFieldName,
+          Vrq.specifyPositionInGroup,
+          Vrq.specifySortAscending
+        ];
+      case VisualRuleType.filterCfg:
+        return [
+          Vrq.selectDataFieldName,
+          Vrq.specifyPositionInGroup,
+        ];
+      case VisualRuleType.styleOrFormat:
+        return [
+          Vrq.selectVisualComponentOrStyle,
+        ];
+      case VisualRuleType.showOrHide:
+        return [
+          Vrq.controlsVisibilityOfAreaOrSlot,
+        ];
+    }
+  }
+}
+
+enum BehaviorRuleType {
+  navigate,
+}
+
+extension BehaviorRuleTypeExt1 on BehaviorRuleType {
+  //
+
+}
+
+
+ // String questionStr(
   //   AppScreen screen,
   //   ScreenWidgetArea screenArea,
   //   ScreenAreaWidgetSlot? slotInArea,
@@ -81,43 +140,3 @@ extension VisualRuleTypeExt1 on VisualRuleType {
   //       );
   //   }
   // }
-
-  List<VisRuleQuestType> get questionsRequired {
-    switch (this) {
-      case VisualRuleType.sortCfg:
-        return [
-          Vrq.selectFieldForSortOrGroup,
-          Vrq.specifyPositionInGroup,
-          Vrq.setSortOrder
-        ];
-      case VisualRuleType.groupCfg:
-        return [
-          Vrq.selectFieldForSortOrGroup,
-          Vrq.specifyPositionInGroup,
-          Vrq.setSortOrder
-        ];
-      case VisualRuleType.filterCfg:
-        return [
-          Vrq.getValueFromTableAndField,
-          Vrq.specifyPositionInGroup,
-        ];
-      case VisualRuleType.styleOrFormat:
-        return [
-          Vrq.selectVisualComponentOrStyle,
-        ];
-      case VisualRuleType.showOrHide:
-        return [
-          Vrq.controlsVisibilityOfAreaOrSlot,
-        ];
-    }
-  }
-}
-
-enum BehaviorRuleType {
-  navigate,
-}
-
-extension BehaviorRuleTypeExt1 on BehaviorRuleType {
-  //
-
-}

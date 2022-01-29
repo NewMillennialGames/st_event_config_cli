@@ -12,14 +12,25 @@ part of InputModels;
       shouldShow,
 */
 
+abstract class RuleResponseWrapperIfc {
+  //
+  void castResponsesToAnswerTypes(Map<VisRuleQuestType, String> responses);
+}
+
 @JsonSerializable()
-class RuleResponseWrapper {
+class RuleResponseWrapper implements RuleResponseWrapperIfc {
+  //
+
   // holds user answers to rule questions
-  final Map<VisRuleQuestType, String> userResponses;
+  final VisualRuleType ruleType;
+  final Map<VisRuleQuestType, String> userResponses = {};
 
-  RuleResponseWrapper(this.userResponses);
+  RuleResponseWrapper(this.ruleType);
 
-  String configForQuestType(VisRuleQuestType qTyp) => userResponses[qTyp]!;
+  void castResponsesToAnswerTypes(Map<VisRuleQuestType, String> responses) {
+    // this.userResponses[key] = val;
+    throw UnimplementedError();
+  }
 
   factory RuleResponseWrapper.fromJson(Map<String, dynamic> json) =>
       _$RuleResponseWrapperFromJson(json);

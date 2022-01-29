@@ -35,6 +35,6 @@ class BehaveRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseWrapper>
 
   void castResponseListAndStore(Map<VisRuleQuestType, String> multiAnswerMap) {
     // store user answers
-    this.response = UserResponse(RuleResponseWrapper(multiAnswerMap) as AnsTyp);
+    // this.response = UserResponse(RuleResponseWrapper(multiAnswerMap) as AnsTyp);
   }
 }

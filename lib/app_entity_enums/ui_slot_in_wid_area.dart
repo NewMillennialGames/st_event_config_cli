@@ -67,15 +67,3 @@ extension ScreenAreaWidgetSlotExt1 on ScreenAreaWidgetSlot {
     }
   }
 }
-
-enum MenuSortOrGroupIndex {
-  /* describes whether some rule record applies to:
-    the n (eg 1st) filter menu
-    the n sort field
-    the n group-by key
-
-  */
-  first,
-  second,
-  third,
-}

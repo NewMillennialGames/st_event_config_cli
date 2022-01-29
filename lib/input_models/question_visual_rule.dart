@@ -31,6 +31,7 @@ class VisualRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseWrapper>
           null,
         ) {
     this._questDef = VisRuleChoiceConfig.fromRuleTyp(visRuleType);
+    this.response = UserResponse(visRuleType.ruleResponseContainer as AnsTyp);
   }
 
   VisRuleChoiceConfig get questDef => _questDef;
@@ -42,6 +43,7 @@ class VisualRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseWrapper>
 
   void castResponseListAndStore(Map<VisRuleQuestType, String> multiAnswerMap) {
     // store user answers
-    this.response = UserResponse(RuleResponseWrapper(multiAnswerMap) as AnsTyp);
+    (this.response?.answers as RuleResponseWrapper)
+        .castResponsesToAnswerTypes(multiAnswerMap);
   }
 }
