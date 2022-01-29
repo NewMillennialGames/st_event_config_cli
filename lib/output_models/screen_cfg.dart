@@ -71,9 +71,9 @@ class ScreenCfgByArea {
 
   // JsonSerializable
   factory ScreenCfgByArea.fromJson(Map<String, dynamic> json) =>
-      _$ScreenCfgFromJson(json);
+      _$ScreenCfgByAreaFromJson(json);
 
   Map<String, dynamic> toJson() {
-    return _$ScreenCfgToJson(this);
+    return _$ScreenCfgByAreaToJson(this);
   }
 }

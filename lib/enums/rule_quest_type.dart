@@ -56,7 +56,7 @@ extension VisRuleQuestTypeExt1 on VisRuleQuestType {
       // case VisRuleQuestType.getTableName:
       //   return DbRowType.values.map((e) => e.name).toList();
       case VisRuleQuestType.selectDataFieldName:
-        return RowPropertylName.values.map((e) => e.name).toList();
+        return DbTableFieldName.values.map((e) => e.name).toList();
       case VisRuleQuestType.specifyPositionInGroup:
         return SortOrGroupIdxOrder.values.map((e) => e.name).toList();
       case VisRuleQuestType.specifySortAscending:

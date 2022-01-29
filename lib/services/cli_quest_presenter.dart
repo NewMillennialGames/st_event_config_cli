@@ -117,8 +117,8 @@ class CliQuestionPresenter implements QuestionPresenter {
     VisRuleQuestWithChoices rQuestAndChoices,
   ) {
     //
-    String quest = rQuestAndChoices.createFormattedQuestion(rQuest);
-    print(quest);
+    String questForuser = rQuestAndChoices.createFormattedQuestion(rQuest);
+    print(questForuser);
     print('\n');
     rQuestAndChoices.choices.forEachIndexed((idx, opt) {
       print('\t$idx) $opt ');
@@ -132,6 +132,7 @@ class CliQuestionPresenter implements QuestionPresenter {
       inputIsInvalid = userResp == null || userResp.isEmpty;
       if (inputIsInvalid) print('invalid answer; pls try again');
     }
+    print('' * 4); // create space after answer
     return userResp;
   }
 

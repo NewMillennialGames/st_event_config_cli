@@ -17,6 +17,7 @@ class CfgForAreaAndNestedSlots {
     VisualRuleType rt,
     ScreenAreaWidgetSlot? slot,
   ) {
+    // confirm that passed data makes sense in this class
     if (slot != null) {
       assert(screenArea.applicableWigetSlots.contains(slot));
       assert(slot.possibleConfigRules.contains(rt));
@@ -68,7 +69,7 @@ class CfgForAreaAndNestedSlots {
 
   // JsonSerializable
   factory CfgForAreaAndNestedSlots.fromJson(Map<String, dynamic> json) =>
-      _$ScreenAreaCfgFromJson(json);
+      _$CfgForAreaAndNestedSlotsFromJson(json);
   // dont need to fill defaults below
-  Map<String, dynamic> toJson() => _$ScreenAreaCfgToJson(this);
+  Map<String, dynamic> toJson() => _$CfgForAreaAndNestedSlotsToJson(this);
 }

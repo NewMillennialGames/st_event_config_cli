@@ -65,7 +65,7 @@ class VisRuleChoiceConfig {
   static List<VisRuleQuestWithChoices> getSubQuestionsAndChoiceOptions(
     VisualRuleType rt,
   ) {
-    return rt.questionsRequired
+    return rt.requiredQuestions
         .map(
           (qrq) => VisRuleQuestWithChoices(
             qrq,

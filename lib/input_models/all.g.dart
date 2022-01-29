@@ -47,17 +47,27 @@ const _$TvAreaRowStyleEnumMap = {
 };
 
 TvSortCfg _$TvSortCfgFromJson(Map<String, dynamic> json) => TvSortCfg()
-  ..tableName = json['tableName'] as String
-  ..colName = json['colName'] as String
+  ..colName = $enumDecode(_$DbTableFieldNameEnumMap, json['colName'])
   ..order = $enumDecode(_$SortOrGroupIdxOrderEnumMap, json['order'])
   ..asc = json['asc'] as bool;
 
 Map<String, dynamic> _$TvSortCfgToJson(TvSortCfg instance) => <String, dynamic>{
-      'tableName': instance.tableName,
-      'colName': instance.colName,
+      'colName': _$DbTableFieldNameEnumMap[instance.colName],
       'order': _$SortOrGroupIdxOrderEnumMap[instance.order],
       'asc': instance.asc,
     };
+
+const _$DbTableFieldNameEnumMap = {
+  DbTableFieldName.teamName: 'teamName',
+  DbTableFieldName.playerName: 'playerName',
+  DbTableFieldName.conference: 'conference',
+  DbTableFieldName.region: 'region',
+  DbTableFieldName.eventName: 'eventName',
+  DbTableFieldName.eventLocation: 'eventLocation',
+  DbTableFieldName.eventBannerUrl: 'eventBannerUrl',
+  DbTableFieldName.assetOpenPrice: 'assetOpenPrice',
+  DbTableFieldName.assetCurrentPrice: 'assetCurrentPrice',
+};
 
 const _$SortOrGroupIdxOrderEnumMap = {
   SortOrGroupIdxOrder.first: 'first',

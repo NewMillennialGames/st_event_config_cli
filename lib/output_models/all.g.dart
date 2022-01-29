@@ -22,7 +22,7 @@ EventCfgTree _$EventCfgTreeFromJson(Map<String, dynamic> json) => EventCfgTree(
       evEliminationType: $enumDecodeNullable(
               _$EvEliminationStrategyEnumMap, json['evEliminationType']) ??
           EvEliminationStrategy.roundRobin,
-    )..screenConfigMap = (json['screenConfig'] as Map<String, dynamic>).map(
+    )..screenConfigMap = (json['screenConfigMap'] as Map<String, dynamic>).map(
         (k, e) => MapEntry($enumDecode(_$AppScreenEnumMap, k),
             ScreenCfgByArea.fromJson(e as Map<String, dynamic>)),
       );
@@ -37,7 +37,7 @@ Map<String, dynamic> _$EventCfgTreeToJson(EventCfgTree instance) =>
       'evDuration': _$EvDurationEnumMap[instance.evDuration],
       'evEliminationType':
           _$EvEliminationStrategyEnumMap[instance.evEliminationType],
-      'screenConfig': instance.screenConfigMap
+      'screenConfigMap': instance.screenConfigMap
           .map((k, e) => MapEntry(_$AppScreenEnumMap[k], e)),
     };
 
@@ -88,17 +88,18 @@ const _$AppScreenEnumMap = {
   AppScreen.marketResearch: 'marketResearch',
 };
 
-ScreenCfgByArea _$ScreenCfgFromJson(Map<String, dynamic> json) =>
+ScreenCfgByArea _$ScreenCfgByAreaFromJson(Map<String, dynamic> json) =>
     ScreenCfgByArea(
       $enumDecode(_$AppScreenEnumMap, json['appScreen']),
     );
 
-Map<String, dynamic> _$ScreenCfgToJson(ScreenCfgByArea instance) =>
+Map<String, dynamic> _$ScreenCfgByAreaToJson(ScreenCfgByArea instance) =>
     <String, dynamic>{
       'appScreen': _$AppScreenEnumMap[instance.appScreen],
     };
 
-CfgForAreaAndNestedSlots _$ScreenAreaCfgFromJson(Map<String, dynamic> json) =>
+CfgForAreaAndNestedSlots _$CfgForAreaAndNestedSlotsFromJson(
+        Map<String, dynamic> json) =>
     CfgForAreaAndNestedSlots(
       $enumDecode(_$ScreenWidgetAreaEnumMap, json['screenArea']),
     )
@@ -112,7 +113,8 @@ CfgForAreaAndNestedSlots _$ScreenAreaCfgFromJson(Map<String, dynamic> json) =>
             SlotOrAreaRuleCfg.fromJson(e as Map<String, dynamic>)),
       );
 
-Map<String, dynamic> _$ScreenAreaCfgToJson(CfgForAreaAndNestedSlots instance) =>
+Map<String, dynamic> _$CfgForAreaAndNestedSlotsToJson(
+        CfgForAreaAndNestedSlots instance) =>
     <String, dynamic>{
       'screenArea': _$ScreenWidgetAreaEnumMap[instance.screenArea],
       'visRulesForArea': instance.visRulesForArea

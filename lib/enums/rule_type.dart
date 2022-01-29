@@ -53,7 +53,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
   }
   //
 
-  List<VisRuleQuestType> get questionsRequired {
+  List<VisRuleQuestType> get requiredQuestions {
     switch (this) {
       case VisualRuleType.sortCfg:
         return [

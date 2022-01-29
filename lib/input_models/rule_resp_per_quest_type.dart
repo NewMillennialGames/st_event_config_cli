@@ -16,17 +16,17 @@ class TvRowStyleCfg extends RuleResponseWrapper {
   @override
   void castResponsesToAnswerTypes(Map<VisRuleQuestType, String> responses) {
     //
-    for (MapEntry e in responses.entries) {
+    for (MapEntry<VisRuleQuestType, String> e in responses.entries) {
       this.userResponses[e.key] = e.value;
     }
     _castToRealTypes();
   }
 
   void _castToRealTypes() {
-    String uResp =
-        userResponses[VisRuleQuestType.selectVisualComponentOrStyle] ?? '0';
+    VisRuleQuestType key = requiredQuestions.first; // ?? ;
+    assert(key == VisRuleQuestType.selectVisualComponentOrStyle);
+    String uResp = userResponses[key] ?? '0';
     int uRespIdx = int.tryParse(uResp) ?? 0;
-
     this.selectedRowStyle = TvAreaRowStyle.values[uRespIdx];
   }
 }
@@ -34,36 +34,47 @@ class TvRowStyleCfg extends RuleResponseWrapper {
 @JsonSerializable()
 class TvSortCfg extends RuleResponseWrapper {
   //
-  late String tableName;
-  late String colName;
+  late DbTableFieldName colName;
   late SortOrGroupIdxOrder order;
   late bool asc;
 
   TvSortCfg() : super(VisualRuleType.sortCfg);
 
   @override
-  void castResponsesToAnswerTypes(Map<VisRuleQuestType, String> responses) {
+  void castResponsesToAnswerTypes(
+    Map<VisRuleQuestType, String> responses,
+  ) {
     //
-    for (MapEntry e in responses.entries) {
+    assert(
+      this.requiredQuestions.length == responses.length,
+      'not enough answers passed',
+    );
+
+    for (MapEntry<VisRuleQuestType, String> e in responses.entries) {
       this.userResponses[e.key] = e.value;
     }
     _castToRealTypes();
   }
 
   void _castToRealTypes() {
-    //
-    for (VisRuleQuestType qt in VisualRuleType.sortCfg.questionsRequired) {
-      String resp = this.userResponses[qt] ?? '';
+    /* for these answers:
+        Vrq.selectDataFieldName,
+        Vrq.specifyPositionInGroup,
+        Vrq.specifySortAscending
+    */
+    for (MapEntry e in this.userResponses.entries) {
+      String resp = e.value;
+      int answIdx = int.tryParse(resp) ?? 0;
 
-      switch (qt) {
+      switch (e.key) {
         case VisRuleQuestType.selectDataFieldName:
-          this.tableName = resp;
+          this.colName = DbTableFieldName.values[answIdx];
           break;
         case VisRuleQuestType.specifySortAscending:
-          this.order = SortOrGroupIdxOrder.values[int.tryParse(resp) ?? 0];
+          this.order = SortOrGroupIdxOrder.values[answIdx];
           break;
-        case VisRuleQuestType.specifyPositionInGroup:
-          this.order = SortOrGroupIdxOrder.values[int.tryParse(resp) ?? 0];
+        case VisRuleQuestType.specifySortAscending:
+          this.asc = answIdx == 1;
           break;
       }
     }

@@ -30,6 +30,8 @@ class NewQuestionCollector {
     Question questJustAnswered,
   ) {
     // ruleQuestions don't currently generate new questions
+    // actually, a sort or group (level 2 or 3) question
+    // should generate the questions under it??  TODO
     if (questJustAnswered.isRuleQuestion ||
         questJustAnswered.generatesNoNewQuestions) {
       print(

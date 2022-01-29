@@ -1,7 +1,7 @@
 part of AppEntities;
 
 @JsonEnum()
-enum RowPropertylName {
+enum DbTableFieldName {
   teamName,
   playerName,
   conference,
@@ -9,6 +9,6 @@ enum RowPropertylName {
   eventName,
   eventLocation,
   eventBannerUrl,
-  openPrice,
-  currentPrice,
+  assetOpenPrice,
+  assetCurrentPrice,
 }

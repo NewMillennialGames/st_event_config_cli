@@ -26,10 +26,10 @@ class SlotOrAreaRuleCfg {
 
   void fillMissingWithDefaults() {
     // TODO
-    for (VisRuleQuestType rqt in ruleType.questionsRequired) {
+    for (VisRuleQuestType rqt in ruleType.requiredQuestions) {
       // for (VisRuleQuestType qt in ruleType.questionsRequired)
       int cnt = rulesForType
-          .where((avr) => avr.ruleType.questionsRequired.contains(rqt))
+          .where((avr) => avr.ruleType.requiredQuestions.contains(rqt))
           .length;
       if (cnt < 1) {
         //
