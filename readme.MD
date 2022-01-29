@@ -43,6 +43,11 @@ or (Future) they can be
 
 ###### Dev instructions
 
+This whole system is governed by Enum definitions
+and the relationship between these Enums
+
+if you wish to add features, you must understand the Enum hierarchy
+
 Control what is configurable by editing the lists returned in:
     lib/app_entity_enums/ui_screen.dart
 

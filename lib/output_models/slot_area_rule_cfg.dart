@@ -2,7 +2,12 @@ part of OutputModels;
 
 @JsonSerializable()
 class SlotOrAreaRuleCfg {
-  //
+  /*
+    this class holds rule definitions
+    defined at the area or slot level
+    parent container (collection of these instances)
+    is how you know scope of "this"
+  */
   VisualRuleType ruleType;
   List<AppVisualRule> rulesForType;
   //
@@ -19,10 +24,13 @@ class SlotOrAreaRuleCfg {
     return SlotOrAreaRuleCfg(rQuest.visRuleTypeForAreaOrSlot!, []);
   }
 
-  void buildDefaults() {
+  void fillMissingWithDefaults() {
     // TODO
     for (VisRuleQuestType rqt in ruleType.questionsRequired) {
-      int cnt = rulesForType.where((e) => e.ruleType == rqt).length;
+      // for (VisRuleQuestType qt in ruleType.questionsRequired)
+      int cnt = rulesForType
+          .where((avr) => avr.ruleType.questionsRequired.contains(rqt))
+          .length;
       if (cnt < 1) {
         //
 

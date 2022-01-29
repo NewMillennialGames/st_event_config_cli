@@ -17,7 +17,7 @@ class EventCfgTree {
   EvDuration evDuration;
   EvEliminationStrategy evEliminationType;
   // area and slot level data filled below in fillFromRuleAnswers
-  Map<AppScreen, ScreenCfg> screenConfig = {};
+  Map<AppScreen, ScreenCfgByArea> screenConfigMap = {};
 
   EventCfgTree(
     this.evTemplateName,
@@ -81,10 +81,10 @@ class EventCfgTree {
     //
     for (VisualRuleQuestion rQuest in answeredQuestions) {
       //
-      var screenCfg =
-          this.screenConfig[rQuest.appScreen] ?? ScreenCfg(rQuest.appScreen);
+      var screenCfg = this.screenConfigMap[rQuest.appScreen] ??
+          ScreenCfgByArea(rQuest.appScreen);
       screenCfg.appendRule(rQuest);
-      this.screenConfig[rQuest.appScreen] = screenCfg;
+      this.screenConfigMap[rQuest.appScreen] = screenCfg;
     }
   }
 
@@ -97,18 +97,31 @@ class EventCfgTree {
     // outFile.close();
   }
 
+  void fillMissingWithDefaults() {
+    // called automatically before conversion to JSON
+    // fill out any missing rules with defaults
+    for (AppScreen as in AppScreen.eventConfiguration.topConfigurableScreens) {
+      if (screenConfigMap.containsKey(as)) continue;
+      screenConfigMap[as] = ScreenCfgByArea(as);
+    }
+    this.screenConfigMap.values.forEach((sc) => sc.fillMissingWithDefaults());
+  }
+
   // impl for JsonSerializable above
   factory EventCfgTree.fromJson(Map<String, dynamic> json) =>
       _$EventCfgTreeFromJson(json);
 
-  Map<String, dynamic> toJson() => _$EventCfgTreeToJson(this);
+  Map<String, dynamic> toJson() {
+    fillMissingWithDefaults();
+    return _$EventCfgTreeToJson(this);
+  }
 }
 
 extension EventCfgTreeExt1 on EventCfgTree {
   //
-  ScreenCfg screenCfg(AppScreen screen) => this.screenConfig[screen]!;
+  ScreenCfgByArea screenCfg(AppScreen screen) => this.screenConfigMap[screen]!;
 
-  ScreenAreaCfg screenArea(
+  CfgForAreaAndNestedSlots screenArea(
     AppScreen screen,
     ScreenWidgetArea area,
   ) =>
