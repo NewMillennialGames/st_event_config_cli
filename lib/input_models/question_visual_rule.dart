@@ -1,6 +1,6 @@
 part of InputModels;
 
-class VisualRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseWrapper>
+class VisualRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseWrapperIfc>
     extends Question<ConvertTyp, AnsTyp> {
   /*
     VisualRuleQuestion questions are multi-part questions
@@ -43,7 +43,7 @@ class VisualRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseWrapper>
 
   void castResponseListAndStore(Map<VisRuleQuestType, String> multiAnswerMap) {
     // store user answers
-    (this.response?.answers as RuleResponseWrapper)
+    (this.response?.answers as RuleResponseWrapperIfc)
         .castResponsesToAnswerTypes(multiAnswerMap);
   }
 }

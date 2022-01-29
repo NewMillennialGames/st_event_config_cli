@@ -34,36 +34,51 @@ class EventCfgTree {
     String evTemplateName =
         (responses.where((q) => q.questionId == 1).first.response?.answers ??
             '') as String;
-    String evTemplateDescription =
-        (responses.where((q) => q.questionId == 2).first.response?.answers ??
-            '') as String;
 
-    EvType evType = responses
-        .where((q) => q.response?.answers is EvType)
-        .first
-        .response!
-        .answers as EvType;
-    //
-    EvCompetitorType evCompetitorType = responses
-        .where((q) => q.response?.answers is EvCompetitorType)
-        .first
-        .response!
-        .answers as EvCompetitorType;
-    EvOpponentType evOpponentType = responses
-        .where((q) => q.response?.answers is EvOpponentType)
-        .first
-        .response!
-        .answers as EvOpponentType;
-    EvDuration evDuration = responses
-        .where((q) => q.response?.answers is EvDuration)
-        .first
-        .response!
-        .answers as EvDuration;
-    EvEliminationStrategy evEliminationType = responses
-        .where((q) => q.response?.answers is EvEliminationStrategy)
-        .first
-        .response!
-        .answers as EvEliminationStrategy;
+    // declare Event level vals to be captured
+    String evTemplateDescription = '';
+    EvType evType = EvType.standard;
+    EvCompetitorType evCompetitorType = EvCompetitorType.team;
+    EvOpponentType evOpponentType = EvOpponentType.sameAsCompetitorType;
+    EvDuration evDuration = EvDuration.oneGame;
+    EvEliminationStrategy evEliminationType = EvEliminationStrategy.singleGame;
+    // use try to catch errs and allow easy debugging
+    try {
+      evTemplateDescription =
+          (responses.where((q) => q.questionId == 2).first.response?.answers ??
+              '') as String;
+
+      evType = responses
+          .where((q) => q.response?.answers is EvType)
+          .first
+          .response!
+          .answers as EvType;
+      //
+      evCompetitorType = responses
+          .where((q) => q.response?.answers is EvCompetitorType)
+          .first
+          .response!
+          .answers as EvCompetitorType;
+      evOpponentType = responses
+          .where((q) => q.response?.answers is EvOpponentType)
+          .first
+          .response!
+          .answers as EvOpponentType;
+      evDuration = responses
+          .where((q) => q.response?.answers is EvDuration)
+          .first
+          .response!
+          .answers as EvDuration;
+      evEliminationType = responses
+          .where((q) => q.response?.answers is EvEliminationStrategy)
+          .first
+          .response!
+          .answers as EvEliminationStrategy;
+    } catch (e) {
+      print(
+        'Warnnig:  key Event level quests/fields missing.  Hope you are debugging',
+      );
+    }
 
     return EventCfgTree(
       evTemplateName,

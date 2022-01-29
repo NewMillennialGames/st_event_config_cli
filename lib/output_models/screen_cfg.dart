@@ -33,12 +33,12 @@ class ScreenCfgByArea {
   }
 
   void appendRule(
-    VisualRuleQuestion<dynamic, RuleResponseWrapper> rQuest,
+    VisualRuleQuestion<dynamic, RuleResponseWrapperIfc> rQuest,
   ) {
     //
     _confirmAreaIsApplicable(rQuest.screenWidgetArea!, false);
     //
-    RuleResponseWrapper? answer = rQuest.response?.answers;
+    RuleResponseWrapperIfc? answer = rQuest.response?.answers;
     ScreenWidgetArea? swa = rQuest.screenWidgetArea;
     if (answer == null || swa == null) {
       var msg =
