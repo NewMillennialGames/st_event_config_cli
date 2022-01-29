@@ -3,12 +3,14 @@ part of OutputModels;
 @JsonSerializable()
 class ScreenCfg {
   //
-  AppScreen appScreen;
-  Map<ScreenWidgetArea, ScreenAreaCfg> areaConfig = {};
+  final AppScreen appScreen;
+  final Map<ScreenWidgetArea, ScreenAreaCfg> areaConfig = {};
 
   ScreenCfg(
     this.appScreen,
   );
+
+  ScreenAreaCfg configForArea(ScreenWidgetArea area) => areaConfig[area]!;
 
   void appendRule(
     VisualRuleQuestion<dynamic, RuleResponseWrapper> rQuest,
@@ -32,8 +34,23 @@ class ScreenCfg {
     }
   }
 
+  void _addDefaultRulesWhereMissing() {
+    //  TODO
+    for (ScreenWidgetArea a in ScreenWidgetArea.values) {
+      if (!areaConfig.containsKey(a)) {
+        areaConfig[a] = ScreenAreaCfg(a)..buildDefaults();
+      }
+    }
+  }
+
+  // JsonSerializable
   factory ScreenCfg.fromJson(Map<String, dynamic> json) =>
       _$ScreenCfgFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ScreenCfgToJson(this);
+  Map<String, dynamic> toJson() {
+    //
+    _addDefaultRulesWhereMissing();
+
+    return _$ScreenCfgToJson(this);
+  }
 }

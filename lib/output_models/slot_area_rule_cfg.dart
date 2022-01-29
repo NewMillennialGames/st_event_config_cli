@@ -19,6 +19,18 @@ class SlotOrAreaRuleCfg {
     return SlotOrAreaRuleCfg(rQuest.visRuleTypeForAreaOrSlot!, []);
   }
 
+  void buildDefaults() {
+    // TODO
+    for (VisRuleQuestType rqt in ruleType.questionsRequired) {
+      int cnt = rulesForType.where((e) => e.ruleType == rqt).length;
+      if (cnt < 1) {
+        //
+
+      }
+    }
+  }
+
+  // JsonSerializable
   factory SlotOrAreaRuleCfg.fromJson(Map<String, dynamic> json) =>
       _$SlotOrAreaRuleCfgFromJson(json);
 

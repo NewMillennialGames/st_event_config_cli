@@ -45,3 +45,22 @@ const _$TvAreaRowStyleEnumMap = {
   TvAreaRowStyle.teamPlayerVsField: 'teamPlayerVsField',
   TvAreaRowStyle.driverVsField: 'driverVsField',
 };
+
+TvSortCfg _$TvSortCfgFromJson(Map<String, dynamic> json) => TvSortCfg()
+  ..tableName = json['tableName'] as String
+  ..colName = json['colName'] as String
+  ..order = $enumDecode(_$SortOrGroupIdxOrderEnumMap, json['order'])
+  ..asc = json['asc'] as bool;
+
+Map<String, dynamic> _$TvSortCfgToJson(TvSortCfg instance) => <String, dynamic>{
+      'tableName': instance.tableName,
+      'colName': instance.colName,
+      'order': _$SortOrGroupIdxOrderEnumMap[instance.order],
+      'asc': instance.asc,
+    };
+
+const _$SortOrGroupIdxOrderEnumMap = {
+  SortOrGroupIdxOrder.first: 'first',
+  SortOrGroupIdxOrder.second: 'second',
+  SortOrGroupIdxOrder.third: 'third',
+};

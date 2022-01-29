@@ -13,6 +13,19 @@ class ScreenAreaCfg {
     this.screenArea,
   );
 
+  void buildDefaults() {
+    // TODO
+    for (ScreenAreaWidgetSlot slot in screenArea.applicableWigetSlots) {
+      if (!visConfigBySlotInArea.containsKey(slot)) {
+        //
+        for (VisualRuleType vrt in slot.possibleConfigRules) {
+          visConfigBySlotInArea[slot] = SlotOrAreaRuleCfg(vrt, [])
+            ..buildDefaults();
+        }
+      }
+    }
+  }
+
   void appendAreaOrSlotRule(VisualRuleQuestion rQuest) {
     //
     if (rQuest.slotInArea == null) {
