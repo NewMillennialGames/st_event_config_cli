@@ -15,6 +15,11 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
     throw UnimplementedError('impl in subclass');
   }
 
+  @override
+  String toString() {
+    return 'RuleResponseBase for ${ruleType.name} with ${userResponses.length} responses';
+  }
+
   // JsonSerializable
   factory RuleResponseBase.fromJson(Map<String, dynamic> json) =>
       _$RuleResponseBaseFromJson(json);
@@ -50,6 +55,16 @@ class TvRowStyleCfg extends RuleResponseBase implements RuleResponseWrapperIfc {
     int uRespIdx = int.tryParse(uResp) ?? 0;
     this.selectedRowStyle = TvAreaRowStyle.values[uRespIdx];
   }
+
+  @override
+  String toString() {
+    return 'TvRowStyleCfg for ${ruleType.name} applying rowstyle: ${selectedRowStyle.name}';
+  }
+
+  // JsonSerializable
+  factory TvRowStyleCfg.fromJson(Map<String, dynamic> json) =>
+      _$TvRowStyleCfgFromJson(json);
+  Map<String, dynamic> toJson() => _$TvRowStyleCfgToJson(this);
 }
 
 @JsonSerializable()
@@ -57,7 +72,7 @@ class TvSortOrGroupCfg extends RuleResponseBase {
   //
   late DbTableFieldName colName;
   late SortOrGroupIdxOrder order;
-  late bool asc;
+  late bool asc = false;
 
   TvSortOrGroupCfg() : super(VisualRuleType.sortCfg);
   TvSortOrGroupCfg.byType(VisualRuleType rt) : super(rt);
@@ -92,7 +107,7 @@ class TvSortOrGroupCfg extends RuleResponseBase {
         case VisRuleQuestType.selectDataFieldName:
           this.colName = DbTableFieldName.values[answIdx];
           break;
-        case VisRuleQuestType.specifySortAscending:
+        case VisRuleQuestType.specifyPositionInGroup:
           this.order = SortOrGroupIdxOrder.values[answIdx];
           break;
         case VisRuleQuestType.specifySortAscending:
@@ -101,4 +116,16 @@ class TvSortOrGroupCfg extends RuleResponseBase {
       }
     }
   }
+
+  @override
+  String toString() {
+    return 'TvSortOrGroupCfg for ${ruleType.name} with responses: $_answerSummary';
+  }
+
+  String get _answerSummary => '${colName.name}-${order.name}-$asc';
+
+  // JsonSerializable
+  factory TvSortOrGroupCfg.fromJson(Map<String, dynamic> json) =>
+      _$TvSortOrGroupCfgFromJson(json);
+  Map<String, dynamic> toJson() => _$TvSortOrGroupCfgToJson(this);
 }

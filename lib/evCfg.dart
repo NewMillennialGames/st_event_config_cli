@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:core';
 import 'package:args/args.dart';
 //
-// import '../app_entity_enums/all.dart';
 import 'dialog/all.dart';
 import 'input_models/all.dart';
 import 'output_models/all.dart';
@@ -34,7 +33,6 @@ Future<void> main(List<String> arguments) async {
 
   // now generate results into a config file
   createOutputFileFromResponses(dialoger.questionMgr, null);
-
   stdout.writeln("Done:\n");
 }
 
