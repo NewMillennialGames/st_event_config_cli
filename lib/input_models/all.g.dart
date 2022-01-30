@@ -6,13 +6,12 @@ part of InputModels;
 // JsonSerializableGenerator
 // **************************************************************************
 
-RuleResponseWrapper _$RuleResponseWrapperFromJson(Map<String, dynamic> json) =>
-    RuleResponseWrapper(
+RuleResponseBase _$RuleResponseBaseFromJson(Map<String, dynamic> json) =>
+    RuleResponseBase(
       $enumDecode(_$VisualRuleTypeEnumMap, json['ruleType']),
     );
 
-Map<String, dynamic> _$RuleResponseWrapperToJson(
-        RuleResponseWrapper instance) =>
+Map<String, dynamic> _$RuleResponseBaseToJson(RuleResponseBase instance) =>
     <String, dynamic>{
       'ruleType': _$VisualRuleTypeEnumMap[instance.ruleType],
     };
@@ -46,12 +45,14 @@ const _$TvAreaRowStyleEnumMap = {
   TvAreaRowStyle.driverVsField: 'driverVsField',
 };
 
-TvSortCfg _$TvSortCfgFromJson(Map<String, dynamic> json) => TvSortCfg()
-  ..colName = $enumDecode(_$DbTableFieldNameEnumMap, json['colName'])
-  ..order = $enumDecode(_$SortOrGroupIdxOrderEnumMap, json['order'])
-  ..asc = json['asc'] as bool;
+TvSortOrGroupCfg _$TvSortOrGroupCfgFromJson(Map<String, dynamic> json) =>
+    TvSortOrGroupCfg()
+      ..colName = $enumDecode(_$DbTableFieldNameEnumMap, json['colName'])
+      ..order = $enumDecode(_$SortOrGroupIdxOrderEnumMap, json['order'])
+      ..asc = json['asc'] as bool;
 
-Map<String, dynamic> _$TvSortCfgToJson(TvSortCfg instance) => <String, dynamic>{
+Map<String, dynamic> _$TvSortOrGroupCfgToJson(TvSortOrGroupCfg instance) =>
+    <String, dynamic>{
       'colName': _$DbTableFieldNameEnumMap[instance.colName],
       'order': _$SortOrGroupIdxOrderEnumMap[instance.order],
       'asc': instance.asc,

@@ -155,6 +155,6 @@ extension EventCfgTreeExt1 on EventCfgTree {
     return areaTableRules(screen).ruleByType(VisualRuleType.styleOrFormat);
   }
 
-  RuleResponseWrapper formatRuleCfg(AppScreen screen) =>
+  RuleResponseBase formatRuleCfg(AppScreen screen) =>
       (tableFormatRule as FormatRule).rrw;
 }

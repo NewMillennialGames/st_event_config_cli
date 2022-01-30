@@ -1,5 +1,26 @@
 part of InputModels;
 
+@JsonSerializable()
+class RuleResponseBase implements RuleResponseWrapperIfc {
+  //
+  // holds user answers to rule questions
+  final VisualRuleType ruleType;
+  final Map<VisRuleQuestType, String> userResponses = {};
+
+  RuleResponseBase(this.ruleType);
+
+  List<VisRuleQuestType> get requiredQuestions => ruleType.requiredQuestions;
+
+  void castResponsesToAnswerTypes(Map<VisRuleQuestType, String> responses) {
+    throw UnimplementedError('impl in subclass');
+  }
+
+  // JsonSerializable
+  factory RuleResponseBase.fromJson(Map<String, dynamic> json) =>
+      _$RuleResponseBaseFromJson(json);
+  Map<String, dynamic> toJson() => _$RuleResponseBaseToJson(this);
+}
+
 // TODO:
 // enum VisualRuleType {
 //   groupCfg,
@@ -7,7 +28,7 @@ part of InputModels;
 //   showOrHide,
 
 @JsonSerializable()
-class TvRowStyleCfg extends RuleResponseWrapper {
+class TvRowStyleCfg extends RuleResponseBase implements RuleResponseWrapperIfc {
   //
   late TvAreaRowStyle selectedRowStyle;
 
@@ -32,13 +53,14 @@ class TvRowStyleCfg extends RuleResponseWrapper {
 }
 
 @JsonSerializable()
-class TvSortCfg extends RuleResponseWrapper {
+class TvSortOrGroupCfg extends RuleResponseBase {
   //
   late DbTableFieldName colName;
   late SortOrGroupIdxOrder order;
   late bool asc;
 
-  TvSortCfg() : super(VisualRuleType.sortCfg);
+  TvSortOrGroupCfg() : super(VisualRuleType.sortCfg);
+  TvSortOrGroupCfg.byType(VisualRuleType rt) : super(rt);
 
   @override
   void castResponsesToAnswerTypes(

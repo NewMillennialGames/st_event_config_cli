@@ -17,19 +17,20 @@ enum VisualRuleType {
 extension VisualRuleTypeExt1 on VisualRuleType {
   // TODO: fix types returned below
 
-  RuleResponseWrapper get ruleResponseContainer {
-    // return instance of the class that parses user response
+  RuleResponseBase get ruleResponseContainer {
+    // return special types to contain answers
+    // instance of the class that parses user response
     switch (this) {
       case VisualRuleType.sortCfg:
-        return TvSortCfg();
+        return TvSortOrGroupCfg.byType(this);
       case VisualRuleType.groupCfg:
-        return TvSortCfg();
+        return TvSortOrGroupCfg.byType(this);
       case VisualRuleType.filterCfg:
-        return TvSortCfg();
+        return TvRowStyleCfg();
       case VisualRuleType.styleOrFormat:
         return TvRowStyleCfg();
       case VisualRuleType.showOrHide:
-        return TvSortCfg();
+        return TvRowStyleCfg();
     }
   }
 

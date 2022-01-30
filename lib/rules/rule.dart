@@ -10,24 +10,24 @@ abstract class AppConfigRule {
   AppConfigRule._();
 
   factory AppConfigRule.filter(
-    RuleResponseWrapper ruleResp,
+    RuleResponseBase ruleResp,
   ) =>
       FilterRule(ruleResp);
   // visual and styling rules
   factory AppConfigRule.format(
-    RuleResponseWrapper rrw,
+    RuleResponseBase rrw,
   ) =>
       FormatRule(rrw);
   factory AppConfigRule.group(
-    RuleResponseWrapper pm,
+    RuleResponseBase pm,
   ) =>
       GroupRule();
   factory AppConfigRule.show(
-    RuleResponseWrapper pm,
+    RuleResponseBase pm,
   ) =>
       ShowRule(true);
   factory AppConfigRule.sort(
-    RuleResponseWrapper pm,
+    RuleResponseBase pm,
   ) =>
       SortRule();
 
@@ -73,7 +73,7 @@ class AppVisualRule extends AppConfigRule {
 @JsonSerializable()
 class FormatRule extends AppVisualRule {
   //
-  final RuleResponseWrapper rrw;
+  final RuleResponseBase rrw;
   FormatRule(this.rrw) : super(VisualRuleType.styleOrFormat);
 
   //
@@ -86,7 +86,7 @@ class FormatRule extends AppVisualRule {
 @JsonSerializable()
 class FilterRule extends AppVisualRule {
   //
-  final RuleResponseWrapper ruleResp;
+  final RuleResponseBase ruleResp;
   // final int filterListIdx;
   // final UiComponentSlotName property;
   // DbRowType rowType;

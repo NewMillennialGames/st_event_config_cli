@@ -297,7 +297,7 @@ class NewQuestionCollector {
     // VisualRuleQuestions figure out their questions &
     // select options from the rule-type being passed
     for (VisualRuleType ruleTyp in rulesToCreateForAreaOrSlot) {
-      var q = VisualRuleQuestion<String, RuleResponseWrapper>(
+      var q = VisualRuleQuestion<String, RuleResponseWrapperIfc>(
         screen,
         area,
         ruleTyp,

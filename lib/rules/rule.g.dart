@@ -25,7 +25,7 @@ const _$VisualRuleTypeEnumMap = {
 };
 
 FormatRule _$FormatRuleFromJson(Map<String, dynamic> json) => FormatRule(
-      RuleResponseWrapper.fromJson(json['rrw'] as Map<String, dynamic>),
+      RuleResponseBase.fromJson(json['rrw'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$FormatRuleToJson(FormatRule instance) =>
@@ -34,7 +34,7 @@ Map<String, dynamic> _$FormatRuleToJson(FormatRule instance) =>
     };
 
 FilterRule _$FilterRuleFromJson(Map<String, dynamic> json) => FilterRule(
-      RuleResponseWrapper.fromJson(json['ruleResp'] as Map<String, dynamic>),
+      RuleResponseBase.fromJson(json['ruleResp'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$FilterRuleToJson(FilterRule instance) =>

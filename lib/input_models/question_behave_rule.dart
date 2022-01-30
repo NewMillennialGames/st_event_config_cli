@@ -1,6 +1,6 @@
 part of InputModels;
 
-class BehaveRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseWrapper>
+class BehaveRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseBase>
     extends Question<ConvertTyp, AnsTyp> {
   /*
     not implemented or tested ...
