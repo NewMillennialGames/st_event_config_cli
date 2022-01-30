@@ -26,11 +26,11 @@ extension VisualRuleTypeExt1 on VisualRuleType {
       case VisualRuleType.groupCfg:
         return TvSortOrGroupCfg.byType(this);
       case VisualRuleType.filterCfg:
-        return TvRowStyleCfg();
+        return TvFilterCfg.byType(this);
       case VisualRuleType.styleOrFormat:
         return TvRowStyleCfg();
       case VisualRuleType.showOrHide:
-        return TvRowStyleCfg();
+        return ShowHideCfg();
     }
   }
 

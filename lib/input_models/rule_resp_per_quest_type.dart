@@ -2,8 +2,9 @@ part of InputModels;
 
 @JsonSerializable()
 class RuleResponseBase implements RuleResponseWrapperIfc {
-  //
-  // holds user answers to rule questions
+  /* base class for user answers to rule questions
+
+  */
   final VisualRuleType ruleType;
   final Map<VisRuleQuestType, String> userResponses = {};
 
@@ -11,7 +12,27 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
 
   List<VisRuleQuestType> get requiredQuestions => ruleType.requiredQuestions;
 
+  void _checkArgs(Map<VisRuleQuestType, String> responses) {
+    assert(
+      this.requiredQuestions.length == responses.length,
+      'not enough answers passed: got ${responses.length} exp: ${this.requiredQuestions.length}',
+    );
+  }
+
   void castResponsesToAnswerTypes(Map<VisRuleQuestType, String> responses) {
+    /* can probably let this method fill the userResponses map
+    (same for all rule-types)
+    and then call a subclass method to parse the strings
+    into actual data-types
+    */
+    _checkArgs(responses);
+    for (MapEntry<VisRuleQuestType, String> e in responses.entries) {
+      this.userResponses[e.key] = e.value;
+    }
+    _castToRealTypes();
+  }
+
+  void _castToRealTypes() {
     throw UnimplementedError('impl in subclass');
   }
 
@@ -26,28 +47,24 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
   Map<String, dynamic> toJson() => _$RuleResponseBaseToJson(this);
 }
 
-// TODO:
-// enum VisualRuleType {
-//   groupCfg,
-//   filterCfg,
-//   showOrHide,
-
 @JsonSerializable()
-class TvRowStyleCfg extends RuleResponseBase implements RuleResponseWrapperIfc {
+class TvRowStyleCfg extends RuleResponseBase {
   //
   late TvAreaRowStyle selectedRowStyle;
 
   TvRowStyleCfg() : super(VisualRuleType.styleOrFormat);
 
-  @override
-  void castResponsesToAnswerTypes(Map<VisRuleQuestType, String> responses) {
-    //
-    for (MapEntry<VisRuleQuestType, String> e in responses.entries) {
-      this.userResponses[e.key] = e.value;
-    }
-    _castToRealTypes();
-  }
+  // @override
+  // void castResponsesToAnswerTypes(Map<VisRuleQuestType, String> responses) {
+  //   //
+  //   _checkArgs(responses);
+  //   for (MapEntry<VisRuleQuestType, String> e in responses.entries) {
+  //     this.userResponses[e.key] = e.value;
+  //   }
+  //   _castToRealTypes();
+  // }
 
+  @override
   void _castToRealTypes() {
     VisRuleQuestType key = requiredQuestions.first; // ?? ;
     assert(key == VisRuleQuestType.selectVisualComponentOrStyle);
@@ -77,22 +94,20 @@ class TvSortOrGroupCfg extends RuleResponseBase {
   TvSortOrGroupCfg() : super(VisualRuleType.sortCfg);
   TvSortOrGroupCfg.byType(VisualRuleType rt) : super(rt);
 
+  // @override
+  // void castResponsesToAnswerTypes(
+  //   Map<VisRuleQuestType, String> responses,
+  // ) {
+  //   //
+  //   _checkArgs(responses);
+
+  //   for (MapEntry<VisRuleQuestType, String> e in responses.entries) {
+  //     this.userResponses[e.key] = e.value;
+  //   }
+  //   _castToRealTypes();
+  // }
+
   @override
-  void castResponsesToAnswerTypes(
-    Map<VisRuleQuestType, String> responses,
-  ) {
-    //
-    assert(
-      this.requiredQuestions.length == responses.length,
-      'not enough answers passed',
-    );
-
-    for (MapEntry<VisRuleQuestType, String> e in responses.entries) {
-      this.userResponses[e.key] = e.value;
-    }
-    _castToRealTypes();
-  }
-
   void _castToRealTypes() {
     /* for these answers:
         Vrq.selectDataFieldName,
@@ -128,4 +143,98 @@ class TvSortOrGroupCfg extends RuleResponseBase {
   factory TvSortOrGroupCfg.fromJson(Map<String, dynamic> json) =>
       _$TvSortOrGroupCfgFromJson(json);
   Map<String, dynamic> toJson() => _$TvSortOrGroupCfgToJson(this);
+}
+
+@JsonSerializable()
+class TvFilterCfg extends RuleResponseBase {
+  //
+  late DbTableFieldName colName;
+  late SortOrGroupIdxOrder order;
+  late bool asc = false;
+
+  TvFilterCfg() : super(VisualRuleType.filterCfg);
+  TvFilterCfg.byType(VisualRuleType rt) : super(rt);
+
+  // @override
+  // void castResponsesToAnswerTypes(
+  //   Map<VisRuleQuestType, String> responses,
+  // ) {
+  //   //
+  //   _checkArgs(responses);
+  //   for (MapEntry<VisRuleQuestType, String> e in responses.entries) {
+  //     this.userResponses[e.key] = e.value;
+  //   }
+  //   _castToRealTypes();
+  // }
+
+  @override
+  void _castToRealTypes() {
+    /* for these answers:
+        Vrq.selectDataFieldName,
+        Vrq.specifyPositionInGroup,
+        Vrq.specifySortAscending
+    */
+    for (MapEntry e in this.userResponses.entries) {
+      String resp = e.value;
+      int answIdx = int.tryParse(resp) ?? 0;
+
+      switch (e.key) {
+        case VisRuleQuestType.selectDataFieldName:
+          this.colName = DbTableFieldName.values[answIdx];
+          break;
+        case VisRuleQuestType.specifyPositionInGroup:
+          this.order = SortOrGroupIdxOrder.values[answIdx];
+          break;
+        case VisRuleQuestType.specifySortAscending:
+          this.asc = answIdx == 1;
+          break;
+      }
+    }
+  }
+
+  @override
+  String toString() {
+    return 'TvSortOrGroupCfg for ${ruleType.name} with responses: $_answerSummary';
+  }
+
+  String get _answerSummary => '${colName.name}-${order.name}-$asc';
+
+  // JsonSerializable
+  factory TvFilterCfg.fromJson(Map<String, dynamic> json) =>
+      _$TvFilterCfgFromJson(json);
+  Map<String, dynamic> toJson() => _$TvFilterCfgToJson(this);
+}
+
+@JsonSerializable()
+class ShowHideCfg extends RuleResponseBase {
+  //
+  late bool shouldShow;
+
+  ShowHideCfg() : super(VisualRuleType.styleOrFormat);
+
+  // @override
+  // void castResponsesToAnswerTypes(Map<VisRuleQuestType, String> responses) {
+  //   //
+  //   _checkArgs(responses);
+  //   for (MapEntry<VisRuleQuestType, String> e in responses.entries) {
+  //     this.userResponses[e.key] = e.value;
+  //   }
+  //   _castToRealTypes();
+  // }
+
+  @override
+  void _castToRealTypes() {
+    this.shouldShow =
+        userResponses[VisRuleQuestType.controlsVisibilityOfAreaOrSlot] != '0';
+  }
+
+  @override
+  String toString() {
+    return 'ShowHideCfg for ${ruleType.name} should show: $shouldShow';
+  }
+
+  // JsonSerializable
+  factory ShowHideCfg.fromJson(Map<String, dynamic> json) =>
+      _$ShowHideCfgFromJson(json);
+  Map<String, dynamic> toJson() => _$ShowHideCfgToJson(this);
 }

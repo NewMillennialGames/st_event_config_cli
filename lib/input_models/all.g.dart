@@ -75,3 +75,23 @@ const _$SortOrGroupIdxOrderEnumMap = {
   SortOrGroupIdxOrder.second: 'second',
   SortOrGroupIdxOrder.third: 'third',
 };
+
+TvFilterCfg _$TvFilterCfgFromJson(Map<String, dynamic> json) => TvFilterCfg()
+  ..colName = $enumDecode(_$DbTableFieldNameEnumMap, json['colName'])
+  ..order = $enumDecode(_$SortOrGroupIdxOrderEnumMap, json['order'])
+  ..asc = json['asc'] as bool;
+
+Map<String, dynamic> _$TvFilterCfgToJson(TvFilterCfg instance) =>
+    <String, dynamic>{
+      'colName': _$DbTableFieldNameEnumMap[instance.colName],
+      'order': _$SortOrGroupIdxOrderEnumMap[instance.order],
+      'asc': instance.asc,
+    };
+
+ShowHideCfg _$ShowHideCfgFromJson(Map<String, dynamic> json) =>
+    ShowHideCfg()..shouldShow = json['shouldShow'] as bool;
+
+Map<String, dynamic> _$ShowHideCfgToJson(ShowHideCfg instance) =>
+    <String, dynamic>{
+      'shouldShow': instance.shouldShow,
+    };
