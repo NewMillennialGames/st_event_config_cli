@@ -23,13 +23,13 @@ extension VisualRuleTypeExt1 on VisualRuleType {
       case VisualRuleType.sortCfg:
         return TvSortCfg();
       case VisualRuleType.groupCfg:
-        return RuleResponseWrapper(this);
+        return TvSortCfg();
       case VisualRuleType.filterCfg:
-        return RuleResponseWrapper(this);
+        return TvSortCfg();
       case VisualRuleType.styleOrFormat:
         return TvRowStyleCfg();
       case VisualRuleType.showOrHide:
-        return RuleResponseWrapper(this);
+        return TvSortCfg();
     }
   }
 

@@ -151,7 +151,7 @@ class QuestListMgr {
 
   void appendNewQuestions(
     List<Question> quests, {
-    String dbgNam = '', // debug-name
+    String dbgNam = 'init', // debug-name
   }) {
     //
     Set<AppScreen> newSections = quests.map((e) => e.appScreen).toSet();
