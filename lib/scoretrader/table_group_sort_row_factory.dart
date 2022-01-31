@@ -3,15 +3,15 @@ part of StUiController;
 class TableStyleFactory {
   //
   final AppScreen screen;
-  final CfgForAreaAndNestedSlots _eConfig;
+  final CfgForAreaAndNestedSlots _tblAreaConfig;
 
   TableStyleFactory(
     this.screen,
-    this._eConfig,
+    this._tblAreaConfig,
   );
 
   GroupedTableDataMgr tableDataConfig(List<AssetRowPropertyIfc> rows) {
-    TableConfigPayload cfg = TableConfigPayload(_eConfig);
+    TableConfigPayload cfg = TableConfigPayload(_tblAreaConfig);
     return GroupedTableDataMgr(rows, cfg);
   }
 

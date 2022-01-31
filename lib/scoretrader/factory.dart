@@ -1,7 +1,8 @@
 part of StUiController;
 
 class AbstractUiFactory {
-  /*
+  /* top level config API
+
     this object will be global
     and served by a riverpod provider
 
@@ -26,5 +27,18 @@ class AbstractUiFactory {
     final cfg = _eConfig!
         .screenConfigMap[screen]!.areaConfig[ScreenWidgetArea.tableview];
     return TableStyleFactory(screen, cfg!);
+  }
+
+  // FIXME
+  void filterBarConfigForScreen(AppScreen screen) {
+    //
+  }
+
+  void headerConfigForScreen(AppScreen screen) {
+    //
+  }
+
+  void footerConfigForScreen(AppScreen screen) {
+    //
   }
 }

@@ -13,9 +13,12 @@ enum TvAreaRowStyle {
   teamVsTeamRanked,
   teamVsField,
   teamVsFieldRanked,
+  teamDraft,
+  teamLine,
+  teamPlayerVsField,
   playerVsField,
   playerVsFieldRanked,
-  teamPlayerVsField,
+  playerDraft,
   driverVsField,
 }
 
