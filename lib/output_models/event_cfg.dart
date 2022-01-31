@@ -7,8 +7,8 @@ part of OutputModels;
 */
 
 @JsonSerializable()
-class EventCfgTree {
-  //
+class TopEventCfg {
+  /* */
   String evTemplateName;
   String evTemplateDescription;
   EvType evType;
@@ -16,10 +16,8 @@ class EventCfgTree {
   EvOpponentType evOpponentType;
   EvDuration evDuration;
   EvEliminationStrategy evEliminationType;
-  // area and slot level data filled below in fillFromRuleAnswers
-  Map<AppScreen, ScreenCfgByArea> screenConfigMap = {};
 
-  EventCfgTree(
+  TopEventCfg(
     this.evTemplateName,
     this.evTemplateDescription,
     this.evType, {
@@ -28,6 +26,26 @@ class EventCfgTree {
     this.evDuration = EvDuration.oneGame,
     this.evEliminationType = EvEliminationStrategy.roundRobin,
   });
+
+  // impl for JsonSerializable above
+  factory TopEventCfg.fromJson(Map<String, dynamic> json) =>
+      _$TopEventCfgFromJson(json);
+
+  Map<String, dynamic> toJson() {
+    return _$TopEventCfgToJson(this);
+  }
+}
+
+@JsonSerializable()
+class EventCfgTree {
+  //
+  TopEventCfg eventCfg;
+  // area and slot level data filled below in fillFromRuleAnswers
+  Map<AppScreen, ScreenCfgByArea> screenConfigMap = {};
+
+  EventCfgTree(
+    this.eventCfg,
+  );
 
   factory EventCfgTree.fromEventLevelConfig(Iterable<Question> responses) {
     //
@@ -80,7 +98,7 @@ class EventCfgTree {
       );
     }
 
-    return EventCfgTree(
+    final eventCfg = TopEventCfg(
       evTemplateName,
       evTemplateDescription,
       evType,
@@ -89,6 +107,8 @@ class EventCfgTree {
       evDuration: evDuration,
       evEliminationType: evEliminationType,
     );
+
+    return EventCfgTree(eventCfg);
   }
 
   void fillFromVisualRuleAnswers(
@@ -105,7 +125,7 @@ class EventCfgTree {
 
   void dumpCfgToFile(String? filename) {
     // write data out to file
-    var fn = filename ?? evTemplateName;
+    var fn = filename ?? eventCfg.evTemplateName;
     var outFile = File('$fn.json');
     var jsonData = this.toJson();
     outFile.writeAsStringSync(jsonEncode(jsonData));
@@ -156,5 +176,5 @@ extension EventCfgTreeExt1 on EventCfgTree {
   }
 
   TvRowStyleCfg formatRuleCfg(AppScreen screen) =>
-      (tableFormatRule as TvRowStyleCfg).rrw;
+      (tableFormatRule as TvRowStyleCfg);
 }

@@ -6,7 +6,7 @@ part of OutputModels;
 // JsonSerializableGenerator
 // **************************************************************************
 
-EventCfgTree _$EventCfgTreeFromJson(Map<String, dynamic> json) => EventCfgTree(
+TopEventCfg _$TopEventCfgFromJson(Map<String, dynamic> json) => TopEventCfg(
       json['evTemplateName'] as String,
       json['evTemplateDescription'] as String,
       $enumDecode(_$EvTypeEnumMap, json['evType']),
@@ -22,12 +22,9 @@ EventCfgTree _$EventCfgTreeFromJson(Map<String, dynamic> json) => EventCfgTree(
       evEliminationType: $enumDecodeNullable(
               _$EvEliminationStrategyEnumMap, json['evEliminationType']) ??
           EvEliminationStrategy.roundRobin,
-    )..screenConfigMap = (json['screenConfigMap'] as Map<String, dynamic>).map(
-        (k, e) => MapEntry($enumDecode(_$AppScreenEnumMap, k),
-            ScreenCfgByArea.fromJson(e as Map<String, dynamic>)),
-      );
+    );
 
-Map<String, dynamic> _$EventCfgTreeToJson(EventCfgTree instance) =>
+Map<String, dynamic> _$TopEventCfgToJson(TopEventCfg instance) =>
     <String, dynamic>{
       'evTemplateName': instance.evTemplateName,
       'evTemplateDescription': instance.evTemplateDescription,
@@ -37,8 +34,6 @@ Map<String, dynamic> _$EventCfgTreeToJson(EventCfgTree instance) =>
       'evDuration': _$EvDurationEnumMap[instance.evDuration],
       'evEliminationType':
           _$EvEliminationStrategyEnumMap[instance.evEliminationType],
-      'screenConfigMap': instance.screenConfigMap
-          .map((k, e) => MapEntry(_$AppScreenEnumMap[k], e)),
     };
 
 const _$EvTypeEnumMap = {
@@ -74,6 +69,20 @@ const _$EvEliminationStrategyEnumMap = {
   EvEliminationStrategy.doubeElim: 'doubeElim',
   EvEliminationStrategy.audienceVote: 'audienceVote',
 };
+
+EventCfgTree _$EventCfgTreeFromJson(Map<String, dynamic> json) => EventCfgTree(
+      TopEventCfg.fromJson(json['eventCfg'] as Map<String, dynamic>),
+    )..screenConfigMap = (json['screenConfigMap'] as Map<String, dynamic>).map(
+        (k, e) => MapEntry($enumDecode(_$AppScreenEnumMap, k),
+            ScreenCfgByArea.fromJson(e as Map<String, dynamic>)),
+      );
+
+Map<String, dynamic> _$EventCfgTreeToJson(EventCfgTree instance) =>
+    <String, dynamic>{
+      'eventCfg': instance.eventCfg,
+      'screenConfigMap': instance.screenConfigMap
+          .map((k, e) => MapEntry(_$AppScreenEnumMap[k], e)),
+    };
 
 const _$AppScreenEnumMap = {
   AppScreen.eventConfiguration: 'eventConfiguration',

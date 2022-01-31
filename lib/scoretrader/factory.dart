@@ -1,37 +1,30 @@
 part of StUiController;
 
-class RowStyleFactory {
-  //
-  final AppScreen screen;
-  final EventCfgTree _eConfig;
-  RowStyleFactory(this.screen, this._eConfig);
-
-  Widget rowForAsset(List<RowPropertyInterface> competitors) {
-    //
-    TvRowStyleCfg formatRuleCfg = _eConfig.formatRuleCfg(screen);
-    // String userResponse = formatRuleCfg
-    //     .configForQuestType(VisRuleQuestType.selectVisualComponentOrStyle);
-    // switch (appRule.ruleType) {
-    //   case
-    // }
-    return Widget();
-  }
-}
-
 class AbstractUiFactory {
-  //
+  /*
+    this object will be global
+    and served by a riverpod provider
+
+    it will be refreshed every time the user changes events
+
+    when each screen inits, they will request
+    the configuration objs they need fromt the methods below
+  */
   EventCfgTree? _eConfig;
   //
   AbstractUiFactory();
 
   void setConfigForCurrentEvent(Map<String, dynamic> eCfgJsonMap) {
-    /*
+    /* call this every time user switches events
       send api payload (upon event switching) here
       to reconfigure the factory
     */
     this._eConfig = EventCfgTree.fromJson(eCfgJsonMap);
   }
 
-  RowStyleFactory rowFactoryForScreen(AppScreen screen) =>
-      RowStyleFactory(screen, _eConfig!);
+  TableStyleFactory tableUiConfigForScreen(AppScreen screen) {
+    final cfg = _eConfig!
+        .screenConfigMap[screen]!.areaConfig[ScreenWidgetArea.tableview];
+    return TableStyleFactory(screen, cfg!);
+  }
 }

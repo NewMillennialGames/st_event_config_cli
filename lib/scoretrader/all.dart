@@ -12,4 +12,6 @@ import '../output_models/all.dart';
 part 'factory.dart';
 part 'property_interface.dart';
 part 'flutter_mocks.dart';
-part 'grouped_list_container.dart';
+part 'grouped_tbl_mgr.dart';
+part 'table_group_sort_row_factory.dart';
+part 'config_consolidation.dart';
