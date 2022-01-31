@@ -15,9 +15,9 @@ abstract class AppConfigRule {
       FilterRule(ruleResp);
   // visual and styling rules
   factory AppConfigRule.format(
-    RuleResponseBase rrw,
+    TvRowStyleCfg rrw, // RuleResponseBase
   ) =>
-      FormatRule(rrw);
+      StyleOrFormatRule(rrw as TvRowStyleCfg);
   factory AppConfigRule.group(
     RuleResponseBase pm,
   ) =>
@@ -50,7 +50,7 @@ class AppVisualRule extends AppConfigRule {
     //
     switch (ruleType) {
       case VisualRuleType.styleOrFormat:
-        return FormatRule.fromJson(json);
+        return StyleOrFormatRule.fromJson(json);
       default:
         return AppVisualRule(VisualRuleType.styleOrFormat);
     }
@@ -71,16 +71,16 @@ class AppVisualRule extends AppConfigRule {
 // }
 
 @JsonSerializable()
-class FormatRule extends AppVisualRule {
+class StyleOrFormatRule extends AppVisualRule {
   //
-  final RuleResponseBase rrw;
-  FormatRule(this.rrw) : super(VisualRuleType.styleOrFormat);
+  final TvRowStyleCfg rrw;
+  StyleOrFormatRule(this.rrw) : super(VisualRuleType.styleOrFormat);
 
   //
-  factory FormatRule.fromJson(Map<String, dynamic> json) =>
-      _$FormatRuleFromJson(json);
+  factory StyleOrFormatRule.fromJson(Map<String, dynamic> json) =>
+      _$StyleOrFormatRuleFromJson(json);
 
-  Map<String, dynamic> toJson() => _$FormatRuleToJson(this);
+  Map<String, dynamic> toJson() => _$StyleOrFormatRuleToJson(this);
 }
 
 @JsonSerializable()

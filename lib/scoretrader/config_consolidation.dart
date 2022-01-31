@@ -11,10 +11,18 @@ class TableConfigPayload {
       row-style
   */
 
-  TableConfigPayload._();
+  final TvAreaRowStyle rowStyle;
+  // final DbTableFieldName
+
+  TableConfigPayload._(this.rowStyle);
 
   factory TableConfigPayload(CfgForAreaAndNestedSlots tableAreaCfg) {
     //
-    return TableConfigPayload._();
+    SlotOrAreaRuleCfg tableRules = tableAreaCfg
+        .visRulesForArea[VisRuleQuestType.selectVisualComponentOrStyle]!;
+
+    StyleOrFormatRule rule = tableRules.ruleByType(VisualRuleType.styleOrFormat)
+        as StyleOrFormatRule;
+    return TableConfigPayload._(rule.rrw.selectedRowStyle);
   }
 }

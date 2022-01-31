@@ -39,9 +39,12 @@ const _$TvAreaRowStyleEnumMap = {
   TvAreaRowStyle.teamVsTeamRanked: 'teamVsTeamRanked',
   TvAreaRowStyle.teamVsField: 'teamVsField',
   TvAreaRowStyle.teamVsFieldRanked: 'teamVsFieldRanked',
+  TvAreaRowStyle.teamDraft: 'teamDraft',
+  TvAreaRowStyle.teamLine: 'teamLine',
+  TvAreaRowStyle.teamPlayerVsField: 'teamPlayerVsField',
   TvAreaRowStyle.playerVsField: 'playerVsField',
   TvAreaRowStyle.playerVsFieldRanked: 'playerVsFieldRanked',
-  TvAreaRowStyle.teamPlayerVsField: 'teamPlayerVsField',
+  TvAreaRowStyle.playerDraft: 'playerDraft',
   TvAreaRowStyle.driverVsField: 'driverVsField',
 };
 
