@@ -8,7 +8,7 @@ class RowStyleFactory {
 
   Widget rowForAsset(List<RowPropertyInterface> competitors) {
     //
-    RuleResponseBase formatRuleCfg = _eConfig.formatRuleCfg(screen);
+    TvRowStyleCfg formatRuleCfg = _eConfig.formatRuleCfg(screen);
     // String userResponse = formatRuleCfg
     //     .configForQuestType(VisRuleQuestType.selectVisualComponentOrStyle);
     // switch (appRule.ruleType) {
