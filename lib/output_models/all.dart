@@ -6,7 +6,7 @@ import 'package:eventconfig/input_models/all.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import '../enums/all.dart';
-import '../rules/rule.dart';
+import '../rules/all.dart';
 import '../app_entity_enums/all.dart';
 
 part 'all.g.dart';

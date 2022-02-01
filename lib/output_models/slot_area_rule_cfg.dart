@@ -8,27 +8,28 @@ class SlotOrAreaRuleCfg {
     parent container (collection of these instances)
     is how you know scope of "this"
   */
-  VisualRuleType ruleType;
-  List<AppVisualRule> rulesForType;
+  VisualRuleType _visRuleType;
+  List<AppVisualRuleBase> _visRuleList;
   //
   SlotOrAreaRuleCfg(
-    this.ruleType,
-    this.rulesForType,
+    this._visRuleType,
+    this._visRuleList,
   );
 
-  AppVisualRule ruleByType(VisualRuleType typ) =>
-      rulesForType.firstWhere((e) => e.ruleType == typ);
+  AppVisualRuleBase ruleByType(VisualRuleType typ) =>
+      _visRuleList.firstWhere((e) => e.ruleType == typ);
 
   factory SlotOrAreaRuleCfg.fromQuest(VisualRuleQuestion rQuest) {
     //
-    return SlotOrAreaRuleCfg(rQuest.visRuleTypeForAreaOrSlot!, []);
+    List<AppVisualRuleBase> vrs = rQuest.asVisualRules();
+    return SlotOrAreaRuleCfg(rQuest.visRuleTypeForAreaOrSlot!, vrs);
   }
 
   void fillMissingWithDefaults() {
     // TODO
-    for (VisRuleQuestType rqt in ruleType.requiredQuestions) {
+    for (VisRuleQuestType rqt in _visRuleType.requiredQuestions) {
       // for (VisRuleQuestType qt in ruleType.questionsRequired)
-      int cnt = rulesForType
+      int cnt = _visRuleList
           .where((avr) => avr.ruleType.requiredQuestions.contains(rqt))
           .length;
       if (cnt < 1) {

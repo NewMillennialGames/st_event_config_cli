@@ -1,20 +1,18 @@
 part of OutputModels;
 
-// extension VisualRuleTypeExt2 on VisualRuleType {
-//   // NIU ..
-
-//   AppConfigRule castPropertyMapToRule(RuleResponseBase pm) {
-//     switch (this) {
-//       case VisualRuleType.sortCfg:
-//         return AppConfigRule.sort(pm);
-//       case VisualRuleType.groupCfg:
-//         return AppConfigRule.group(pm);
-//       case VisualRuleType.filterCfg:
-//         return AppConfigRule.filter(pm);
-//       case VisualRuleType.styleOrFormat:
-//         return AppConfigRule.format(pm);
-//       case VisualRuleType.showOrHide:
-//         return AppConfigRule.show(pm);
-//     }
-//   }
-// }
+extension VisualRuleTypeExt2 on VisualRuleType {
+  AppVisualRuleBase castPropertyMapToRule(RuleResponseBase pm) {
+    switch (this) {
+      case VisualRuleType.sortCfg:
+        return AppVisualRuleBase.sort(pm);
+      case VisualRuleType.groupCfg:
+        return AppVisualRuleBase.group(pm);
+      case VisualRuleType.filterCfg:
+        return AppVisualRuleBase.filter(pm);
+      case VisualRuleType.styleOrFormat:
+        return AppVisualRuleBase.format(pm as TvRowStyleCfg);
+      case VisualRuleType.showOrHide:
+        return AppVisualRuleBase.show(pm);
+    }
+  }
+}

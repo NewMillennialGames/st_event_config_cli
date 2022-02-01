@@ -1,17 +1,17 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'rule.dart';
+part of CfgRules;
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-AppVisualRule _$AppVisualRuleFromJson(Map<String, dynamic> json) =>
-    AppVisualRule(
+AppVisualRuleBase _$AppVisualRuleFromJson(Map<String, dynamic> json) =>
+    AppVisualRuleBase(
       $enumDecode(_$VisualRuleTypeEnumMap, json['ruleType']),
     );
 
-Map<String, dynamic> _$AppVisualRuleToJson(AppVisualRule instance) =>
+Map<String, dynamic> _$AppVisualRuleToJson(AppVisualRuleBase instance) =>
     <String, dynamic>{
       'ruleType': _$VisualRuleTypeEnumMap[instance.ruleType],
     };

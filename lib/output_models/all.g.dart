@@ -163,12 +163,12 @@ SlotOrAreaRuleCfg _$SlotOrAreaRuleCfgFromJson(Map<String, dynamic> json) =>
     SlotOrAreaRuleCfg(
       $enumDecode(_$VisualRuleTypeEnumMap, json['ruleType']),
       (json['rulesForType'] as List<dynamic>)
-          .map((e) => AppVisualRule.fromJson(e as Map<String, dynamic>))
+          .map((e) => AppVisualRuleBase.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
 Map<String, dynamic> _$SlotOrAreaRuleCfgToJson(SlotOrAreaRuleCfg instance) =>
     <String, dynamic>{
-      'ruleType': _$VisualRuleTypeEnumMap[instance.ruleType],
-      'rulesForType': instance.rulesForType,
+      'ruleType': _$VisualRuleTypeEnumMap[instance._visRuleType],
+      'rulesForType': instance._visRuleList,
     };

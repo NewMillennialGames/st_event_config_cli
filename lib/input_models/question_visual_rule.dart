@@ -41,6 +41,11 @@ class VisualRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseWrapperIfc>
   @override
   String get questStr => _questDef.questStr;
 
+  List<AppVisualRuleBase> asVisualRules() {
+    var vrs = response!.answers.asVisualRules();
+    return vrs;
+  }
+
   void castResponseListAndStore(Map<VisRuleQuestType, String> multiAnswerMap) {
     // store user answers
     (this.response?.answers as RuleResponseWrapperIfc)

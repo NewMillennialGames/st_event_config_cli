@@ -9,7 +9,7 @@ import 'package:tuple/tuple.dart';
 import '../app_entity_enums/all.dart';
 import '../input_models/all.dart';
 import '../output_models/all.dart';
-import '../rules/rule.dart';
+import '../rules/all.dart';
 
 part 'factory.dart';
 part 'property_interface.dart';

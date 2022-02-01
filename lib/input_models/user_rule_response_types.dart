@@ -1,5 +1,11 @@
 part of InputModels;
 
+abstract class RuleResponseWrapperIfc {
+  // handles answers for real Rule questions
+  void castResponsesToAnswerTypes(Map<VisRuleQuestType, String> responses);
+  List<AppVisualRuleBase> asVisualRules();
+}
+
 @JsonSerializable()
 class RuleResponseBase implements RuleResponseWrapperIfc {
   /* base class for user answers to rule questions
@@ -11,6 +17,15 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
   RuleResponseBase(this.ruleType);
 
   List<VisRuleQuestType> get requiredQuestions => ruleType.requiredQuestions;
+
+  List<AppVisualRuleBase> asVisualRules() {
+    // run subclass method
+    return _castToVisualRules();
+  }
+
+  List<AppVisualRuleBase> _castToVisualRules() {
+    throw UnimplementedError('impl in subclass');
+  }
 
   void _checkArgs(Map<VisRuleQuestType, String> responses) {
     assert(
@@ -54,7 +69,11 @@ class TvRowStyleCfg extends RuleResponseBase {
 
   TvRowStyleCfg() : super(VisualRuleType.styleOrFormat);
 
-  // @override
+  @override
+  List<StyleOrFormatRule> _castToVisualRules() {
+    return [this.ruleType.castPropertyMapToRule(this) as StyleOrFormatRule];
+  }
+
   // void castResponsesToAnswerTypes(Map<VisRuleQuestType, String> responses) {
   //   //
   //   _checkArgs(responses);
@@ -106,6 +125,11 @@ class TvSortOrGroupCfg extends RuleResponseBase {
   //   }
   //   _castToRealTypes();
   // }
+
+  @override
+  List<GroupRule> _castToVisualRules() {
+    return [this.ruleType.castPropertyMapToRule(this) as GroupRule];
+  }
 
   @override
   void _castToRealTypes() {
@@ -168,6 +192,11 @@ class TvFilterCfg extends RuleResponseBase {
   // }
 
   @override
+  List<FilterRule> _castToVisualRules() {
+    return [this.ruleType.castPropertyMapToRule(this) as FilterRule];
+  }
+
+  @override
   void _castToRealTypes() {
     /* for these answers:
         Vrq.selectDataFieldName,
@@ -221,6 +250,11 @@ class ShowHideCfg extends RuleResponseBase {
   //   }
   //   _castToRealTypes();
   // }
+
+  @override
+  List<ShowRule> _castToVisualRules() {
+    return [this.ruleType.castPropertyMapToRule(this) as ShowRule];
+  }
 
   @override
   void _castToRealTypes() {

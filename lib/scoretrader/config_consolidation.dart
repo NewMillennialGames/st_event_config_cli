@@ -12,17 +12,32 @@ class TableConfigPayload {
   */
 
   final TvAreaRowStyle rowStyle;
-  // final DbTableFieldName
+  final List<GroupRule> groupByRules;
+  final List<SortRule> sortRules;
 
-  TableConfigPayload._(this.rowStyle);
+  TableConfigPayload._(
+    this.rowStyle,
+    this.groupByRules,
+    this.sortRules,
+  );
 
   factory TableConfigPayload(CfgForAreaAndNestedSlots tableAreaCfg) {
     //
-    SlotOrAreaRuleCfg tableRules = tableAreaCfg
-        .visRulesForArea[VisRuleQuestType.selectVisualComponentOrStyle]!;
+    SlotOrAreaRuleCfg tableRules =
+        tableAreaCfg.areaRuleByRuleType(VisualRuleType.styleOrFormat);
 
-    StyleOrFormatRule rule = tableRules.ruleByType(VisualRuleType.styleOrFormat)
-        as StyleOrFormatRule;
-    return TableConfigPayload._(rule.rrw.selectedRowStyle);
+    StyleOrFormatRule styleRule = tableRules
+        .ruleByType(VisualRuleType.styleOrFormat) as StyleOrFormatRule;
+
+    List<GroupRule> groupRules = [];
+
+    /// tableRules.rulesForType;
+    List<SortRule> sortRules = [];
+
+    return TableConfigPayload._(
+      styleRule.rrw.selectedRowStyle,
+      groupRules,
+      sortRules,
+    );
   }
 }

@@ -1,50 +1,37 @@
-import 'package:json_annotation/json_annotation.dart';
-
-import '../input_models/all.dart';
-import '../enums/all.dart';
-
-part 'rule.g.dart';
-
-abstract class AppConfigRule {
-  //
-  AppConfigRule._();
-
-  factory AppConfigRule.filter(
-    RuleResponseBase ruleResp,
-  ) =>
-      FilterRule(ruleResp);
-  // visual and styling rules
-  factory AppConfigRule.format(
-    TvRowStyleCfg rrw, // RuleResponseBase
-  ) =>
-      StyleOrFormatRule(rrw as TvRowStyleCfg);
-  factory AppConfigRule.group(
-    RuleResponseBase pm,
-  ) =>
-      GroupRule();
-  factory AppConfigRule.show(
-    RuleResponseBase pm,
-  ) =>
-      ShowRule(true);
-  factory AppConfigRule.sort(
-    RuleResponseBase pm,
-  ) =>
-      SortRule();
-
-  // behavioral rules;  future
-  factory AppConfigRule.navigate() => NavigateRule();
-}
+part of CfgRules;
 
 @JsonSerializable()
-class AppVisualRule extends AppConfigRule {
+class AppVisualRuleBase {
   //
   // interface
   final VisualRuleType ruleType;
   //
-  AppVisualRule(this.ruleType) : super._();
+  AppVisualRuleBase(this.ruleType);
+
+  factory AppVisualRuleBase.filter(
+    RuleResponseBase ruleResp,
+  ) =>
+      FilterRule(ruleResp);
+  // visual and styling rules
+  factory AppVisualRuleBase.format(
+    TvRowStyleCfg rrw, // RuleResponseBase
+  ) =>
+      StyleOrFormatRule(rrw);
+  factory AppVisualRuleBase.group(
+    RuleResponseBase pm,
+  ) =>
+      GroupRule();
+  factory AppVisualRuleBase.show(
+    RuleResponseBase pm,
+  ) =>
+      ShowRule(true);
+  factory AppVisualRuleBase.sort(
+    RuleResponseBase pm,
+  ) =>
+      SortRule();
 
   // JsonSerializable
-  factory AppVisualRule.fromJson(Map<String, dynamic> json) {
+  factory AppVisualRuleBase.fromJson(Map<String, dynamic> json) {
     int ruleTypeIdx = json['ruleType'] as int;
     VisualRuleType ruleType = VisualRuleType.values[ruleTypeIdx];
     //
@@ -52,26 +39,14 @@ class AppVisualRule extends AppConfigRule {
       case VisualRuleType.styleOrFormat:
         return StyleOrFormatRule.fromJson(json);
       default:
-        return AppVisualRule(VisualRuleType.styleOrFormat);
+        return AppVisualRuleBase(VisualRuleType.styleOrFormat);
     }
   }
   Map<String, dynamic> toJson() => _$AppVisualRuleToJson(this);
 }
 
-// @JsonSerializable()
-// class StyleFormatCfg {
-//   //
-//   TvAreaRowStyle rowStyle;
-//   StyleFormatCfg(this.rowStyle);
-
-//     factory StyleFormatCfg.fromJson(Map<String, dynamic> json) =>
-//       _$StyleFormatCfgFromJson(json);
-
-//   Map<String, dynamic> toJson() => _$StyleFormatCfgToJson(this);
-// }
-
 @JsonSerializable()
-class StyleOrFormatRule extends AppVisualRule {
+class StyleOrFormatRule extends AppVisualRuleBase {
   //
   final TvRowStyleCfg rrw;
   StyleOrFormatRule(this.rrw) : super(VisualRuleType.styleOrFormat);
@@ -84,7 +59,7 @@ class StyleOrFormatRule extends AppVisualRule {
 }
 
 @JsonSerializable()
-class FilterRule extends AppVisualRule {
+class FilterRule extends AppVisualRuleBase {
   //
   final RuleResponseBase ruleResp;
   // final int filterListIdx;
@@ -105,7 +80,7 @@ class FilterRule extends AppVisualRule {
 }
 
 @JsonSerializable()
-class GroupRule extends AppVisualRule {
+class GroupRule extends AppVisualRuleBase {
   //
   GroupRule() : super(VisualRuleType.groupCfg) {}
 
@@ -117,7 +92,7 @@ class GroupRule extends AppVisualRule {
 }
 
 @JsonSerializable()
-class ShowRule extends AppVisualRule {
+class ShowRule extends AppVisualRuleBase {
   //
   final bool shouldShow;
   //
@@ -131,7 +106,7 @@ class ShowRule extends AppVisualRule {
 }
 
 @JsonSerializable()
-class SortRule extends AppVisualRule {
+class SortRule extends AppVisualRuleBase {
   //
   SortRule() : super(VisualRuleType.sortCfg) {}
 
@@ -142,31 +117,40 @@ class SortRule extends AppVisualRule {
   Map<String, dynamic> toJson() => _$SortRuleToJson(this);
 }
 
-// behavior rules below
-//
-//
-//
-//
-//
 
-class AppBehavioralRule extends AppConfigRule {
-  //
-  final BehaviorRuleType ruleType;
-  //
-  AppBehavioralRule(this.ruleType) : super._();
-}
 
-@JsonSerializable()
-class NavigateRule extends AppBehavioralRule {
-  //
-  NavigateRule() : super(BehaviorRuleType.navigate) {}
 
-  //
-  factory NavigateRule.fromJson(Map<String, dynamic> json) =>
-      _$NavigateRuleFromJson(json);
+// abstract class AppVisCfgRuleIfc {
+//   //
+//   // AppVisCfgRuleIfc._();
 
-  Map<String, dynamic> toJson() => _$NavigateRuleToJson(this);
-}
+//   // factory AppVisCfgRuleIfc.filter(
+//   //   RuleResponseBase ruleResp,
+//   // ) =>
+//   //     FilterRule(ruleResp);
+//   // // visual and styling rules
+//   // factory AppVisCfgRuleIfc.format(
+//   //   TvRowStyleCfg rrw, // RuleResponseBase
+//   // ) =>
+//   //     StyleOrFormatRule(rrw);
+//   // factory AppVisCfgRuleIfc.group(
+//   //   RuleResponseBase pm,
+//   // ) =>
+//   //     GroupRule();
+//   // factory AppVisCfgRuleIfc.show(
+//   //   RuleResponseBase pm,
+//   // ) =>
+//   //     ShowRule(true);
+//   // factory AppVisCfgRuleIfc.sort(
+//   //   RuleResponseBase pm,
+//   // ) =>
+//   //     SortRule();
+
+//   // behavioral rules;  future
+//   // factory AppVisCfgRuleIfc.navigate() => NavigateRule();
+// }
+
+
 
 
   //   static BaseRule getRule(RuleType typ) {

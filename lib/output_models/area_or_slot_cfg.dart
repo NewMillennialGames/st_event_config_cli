@@ -13,6 +13,14 @@ class CfgForAreaAndNestedSlots {
     this.screenArea,
   );
 
+  SlotOrAreaRuleCfg areaRuleByRuleType(VisualRuleType typ) =>
+      visRulesForArea[typ]!;
+
+  SlotOrAreaRuleCfg slotRulesBySlot(
+    ScreenAreaWidgetSlot slot,
+  ) =>
+      visConfigBySlotInArea[slot]!;
+
   void _validateRuleAndSlotIsApplicable(
     VisualRuleType rt,
     ScreenAreaWidgetSlot? slot,

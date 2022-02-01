@@ -171,7 +171,7 @@ extension EventCfgTreeExt1 on EventCfgTree {
   SlotOrAreaRuleCfg areaTableRules(AppScreen screen) => areaCfgVisual(
       screen, ScreenWidgetArea.tableview)[VisualRuleType.styleOrFormat]!;
 
-  AppVisualRule tableFormatRule(AppScreen screen) {
+  AppVisualRuleBase tableFormatRule(AppScreen screen) {
     return areaTableRules(screen).ruleByType(VisualRuleType.styleOrFormat);
   }
 
