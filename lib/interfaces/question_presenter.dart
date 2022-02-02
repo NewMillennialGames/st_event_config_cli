@@ -22,4 +22,6 @@ abstract class QuestionPresenter {
     DialogRunner dialoger,
     Question quest,
   );
+
+  void informUiWeAreDone();
 }

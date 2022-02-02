@@ -36,7 +36,30 @@ class DialogRunner {
   }
 
   //
-  bool loopUntilComplete() {
+  // web start asking questions for web
+  bool serveNextQuestionToGui() {
+    //
+    Question? _quest = _questGroupMgr.getNextQuestInCurrentSection();
+    if (_quest == null) return false;
+    questFormatter.askAndWaitForUserResponse(this, _quest);
+    return true;
+  }
+
+  void advanceToNextQuestion() {
+    //
+    _newQuestComposer.handleAcquiringNewQuestions(
+      _questGroupMgr,
+      _questMgr,
+    );
+
+    bool hasNextQuest = serveNextQuestionToGui();
+    if (!hasNextQuest) {
+      questFormatter.informUiWeAreDone();
+    }
+  }
+
+  //
+  bool cliLoopUntilComplete() {
     //
     // questFormatter manages display output
     // final questFormatter = CliQuestionFormatter();
@@ -49,7 +72,9 @@ class DialogRunner {
       // to create any derived questions for this section
       questFormatter.askAndWaitForUserResponse(this, _quest);
       _newQuestComposer.handleAcquiringNewQuestions(
-          _questGroupMgr, _questMgr, _quest);
+        _questGroupMgr,
+        _questMgr,
+      );
 
       _quest = _questGroupMgr.getNextQuestInCurrentSection();
       if (_quest != null) _outputSpacerLines();

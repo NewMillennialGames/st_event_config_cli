@@ -27,8 +27,8 @@ class NewQuestionCollector {
   void handleAcquiringNewQuestions(
     DialogMgr _questGroupMgr,
     QuestListMgr _questMgr,
-    Question questJustAnswered,
   ) {
+    Question questJustAnswered = _questMgr._currentOrLastQuestion;
     // ruleQuestions don't currently generate new questions
     // actually, a sort or group (level 2 or 3) question
     // should generate the questions under it??  TODO

@@ -17,6 +17,7 @@ dependencies:
   json_annotation: ^4.4.0
   grouped_list: ^4.1.0
   tuple: ^2.0.0
+  flutter_riverpod: ^1.0.3
 
 dev_dependencies:
   flutter_test:

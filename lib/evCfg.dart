@@ -25,7 +25,7 @@ Future<void> main(List<String> arguments) async {
   final cliQuestPresenter = CliQuestionPresenter();
   // using DI to make it easy for web app to use same dialog runner
   final dialoger = DialogRunner(cliQuestPresenter);
-  final succeeded = dialoger.loopUntilComplete();
+  final succeeded = dialoger.cliLoopUntilComplete();
   if (!succeeded) {
     exitCode = 2;
     print('Something went wrong!!');

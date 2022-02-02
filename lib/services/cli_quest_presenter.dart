@@ -179,4 +179,6 @@ class CliQuestionPresenter implements QuestionPresenter {
       print('Type your answer, then press enter/return!');
     }
   }
+
+  void informUiWeAreDone() {}
 }

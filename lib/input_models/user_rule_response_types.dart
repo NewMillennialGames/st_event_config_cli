@@ -24,7 +24,8 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
   }
 
   List<AppVisualRuleBase> _castToVisualRules() {
-    throw UnimplementedError('impl in subclass');
+    // throw UnimplementedError('impl in subclass');
+    return [ruleType.castPropertyMapToRule(this)];
   }
 
   void _checkArgs(Map<VisRuleQuestType, String> responses) {
