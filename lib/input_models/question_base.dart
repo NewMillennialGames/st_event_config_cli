@@ -120,7 +120,7 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
       return null;
     }
 
-    assert(convertibleVal == int, 'wtf?');
+    assert(convertibleVal is int, 'wtf?');
 
     AnsTyp? answer;
     if (castFunc != null) {

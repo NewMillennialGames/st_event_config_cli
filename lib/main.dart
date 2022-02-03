@@ -125,30 +125,126 @@ class QuestionUi extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  Widget listAnswerChoices(dynamic size) {
+    //
+    List<String> listAnswerChoice = [];
+    int temp = 0;
+
+    quest.answerChoicesList == null
+        ? temp = 0
+        : temp = quest.answerChoicesList!.length;
+    if (temp > 0) {
+      for (var i = 0; i < temp; i++) {
+        //
+
+        listAnswerChoice.add('$i)${quest.answerChoicesList![i]}');
+      }
+
+      return ListView.separated(
+        separatorBuilder: (context, index) => SizedBox(
+          height: size.height * 0.04,
+        ),
+        itemCount: temp,
+        itemBuilder: (context, index) {
+          //
+
+          return Center(child: Text(listAnswerChoice[index]));
+        },
+      );
+    } else {
+      //
+
+      return SizedBox();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          child: Center(
-            child: Text('Render question here!'),
-          ),
-          color: Colors.lightBlue[300],
-          height: 500,
-        ),
-        Center(
-          child: Container(
-            child: ElevatedButton(
+    //
+
+    final TextEditingController questController = TextEditingController();
+    final size = MediaQuery.of(context).size;
+
+    return DecoratedBox(
+      decoration: BoxDecoration(color: Colors.blueAccent.shade100),
+      child: Column(
+        children: [
+          SizedBox(
+            height: size.height * 0.15,
+            width: size.width * 0.9,
+            child: Center(
               child: Text(
-                'Submit answer as string',
-              ),
-              onPressed: () {
-                answerDispatcher.add('this is user answer to question');
-              },
+                  '#${quest.questionId == 12 ? '' : quest.questionId} -- ${quest.questStr} ${quest.questionId < 3 ? "wont generate any new questions" : ''}'),
             ),
           ),
-        ),
-      ],
+          SizedBox(
+            width: size.width * 0.85,
+            child: Divider(),
+          ),
+          SizedBox(
+            height: size.height * 0.03,
+          ),
+          SizedBox(
+            height: size.height * 0.4,
+            width: size.width * 0.5,
+            child: listAnswerChoices(size),
+          ),
+          SizedBox(
+            width: size.width * 0.85,
+            child: Divider(),
+          ),
+          SizedBox(
+            width: size.width * 0.5,
+            height: size.height * 0.13,
+            child: Center(
+              child: TextFormField(
+                  controller: questController,
+                  decoration: InputDecoration(
+                    hintText: 'Enter',
+                  )),
+            ),
+          ),
+          SizedBox(
+            height: size.height * 0.15,
+            child: Center(
+              child: Container(
+                child: ElevatedButton(
+                  child: Text(
+                    'Submit answer as string',
+                  ),
+                  onPressed: () {
+                    if (questController.text.isEmpty) {
+                      //
+                      final SnackBar snackBar = SnackBar(
+                        duration: Duration(seconds: 1),
+                        content: Text('the field is empty'),
+                      );
+
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    } else if (quest.questionId > 2 &&
+                            questController.text
+                                .contains(new RegExp(r"[a-z]")) ||
+                        quest.questionId > 2 &&
+                            int.parse(questController.text) >
+                                quest.answerChoicesList!.length - 1) {
+                      //
+                      final SnackBar snackBar = SnackBar(
+                        duration: Duration(seconds: 1),
+                        content: Text('value out of range'),
+                      );
+
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    } else {
+                      //
+                      answerDispatcher.add(questController.text);
+                    }
+                  },
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
