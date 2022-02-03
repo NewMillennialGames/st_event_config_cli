@@ -6,21 +6,13 @@ part of StUiController;
 
     todo: replace Tuple3 with a reall class
 */
-typedef GroupHeaderData = Tuple3<String, String, String>;
-
-typedef GetGroupKeyFromRow = GroupHeaderData Function(AssetRowPropertyIfc);
-typedef GroupHeaderBuilder = Widget Function(AssetRowPropertyIfc);
-typedef GroupSepRowBuilder = Widget Function(GroupHeaderData);
-
-typedef IndexedItemRowBuilder = Widget Function(
-    BuildContext, AssetRowPropertyIfc, int);
-typedef SectionSortComparator = int Function(
-    AssetRowPropertyIfc, AssetRowPropertyIfc);
 
 class GroupedTableDataMgr {
   /*
     this is the object returned when you want to build
     a table-view with custom grouping, sorting and row-styles
+
+    produces the arguments needed to use the "GroupedListView" package
 
   designed specifically to work with:
     GroupedListView<RowPropertyInterface, GroupKeyTuple>
@@ -28,8 +20,8 @@ class GroupedTableDataMgr {
   TODO:  all the getters below must be completed to return real methods
   */
 
-  List<AssetRowPropertyIfc> _elements;
-  TableConfigPayload _cfg;
+  final List<AssetRowPropertyIfc> _elements;
+  final TableviewConfigPayload _cfg;
   GroupedListOrder order = GroupedListOrder.ASC;
 
   GroupedTableDataMgr(
@@ -48,8 +40,13 @@ class GroupedTableDataMgr {
   GroupHeaderBuilder? get groupHeaderBuilder =>
       (AssetRowPropertyIfc _) => Widget();
 
-  IndexedItemRowBuilder get indexedItemBuilder =>
-      (BuildContext ctx, AssetRowPropertyIfc row, int i) => Widget();
+  IndexedItemRowBuilder get indexedItemBuilder => (
+        BuildContext ctx,
+        StdRowData assets,
+        int i,
+      ) {
+        return _cfg.rowConstructor(assets);
+      };
   // for sorting sections
   SectionSortComparator get itemComparator => (i1, i2) => 0;
 }

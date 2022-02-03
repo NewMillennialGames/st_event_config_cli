@@ -41,5 +41,6 @@ class WebQuestionPresenter implements QuestionPresenter {
 
   void informUiWeAreDone() {
     questDispatcher.close();
+    // need to save generated file to user desktop
   }
 }

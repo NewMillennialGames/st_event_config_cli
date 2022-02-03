@@ -32,4 +32,6 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
   String get groupKey => '';
   String get rankStr => '';
   String get priceStr => '';
+
+  bool get canTradeable => false;
 }

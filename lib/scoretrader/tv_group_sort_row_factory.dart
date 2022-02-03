@@ -11,7 +11,7 @@ class TableStyleFactory {
   );
 
   GroupedTableDataMgr tableDataConfig(List<AssetRowPropertyIfc> rows) {
-    TableConfigPayload cfg = TableConfigPayload(_tblAreaConfig);
+    TableviewConfigPayload cfg = TableviewConfigPayload(_tblAreaConfig);
     return GroupedTableDataMgr(rows, cfg);
   }
 
