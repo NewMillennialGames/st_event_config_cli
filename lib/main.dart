@@ -32,21 +32,23 @@ class _EvCfgAppState extends ConsumerState<EvCfgApp> {
   //
   late WebQuestionPresenter wqp;
   late DialogRunner dRunner;
+
   @override
   void initState() {
-    StreamController<Question> questDispatcher = ref.watch(
+    StreamController<Question> questDispatcher = ref.read(
       questDispatcherProvider,
     );
-    Stream<String> answerStream = ref.watch(answerStreamProvier.stream);
+    Stream<String> answerStream = ref.read(answerStreamProvier.stream);
     this.wqp = WebQuestionPresenter(questDispatcher, answerStream);
     this.dRunner = DialogRunner(wqp);
-    _startServingQuestions();
     super.initState();
+    //
+    _startServingQuestions();
   }
 
   void _startServingQuestions() {
     // DIEGO  this starts the question stream
-    // may need to delay it??
+    // need to delay it??
     // Future.delayed(
     //   Duration(milliseconds: 100),
     //   () {
@@ -72,7 +74,8 @@ class ConfigDialog extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('blah'),
+        title: Text('ST Event Configurator'),
+        centerTitle: true,
       ),
       body: StreamBuilder<Question>(
         stream: ref.watch(questionStreamProvier.stream),
@@ -88,10 +91,12 @@ class ConfigDialog extends ConsumerWidget {
             return Text('waiting for first question');
           } else if (snapshot.connectionState == ConnectionState.active) {
             if (snapshot.hasError) {
-              return const Text('Error');
+              return Text('Error: ${snapshot.error}');
             } else if (snapshot.hasData) {
               return QuestionUi(
-                  ref.read(answerDispatcherProvider), snapshot.data!);
+                ref.read(answerDispatcherProvider),
+                snapshot.data!,
+              );
             } else {
               return const Text('Empty data');
             }
@@ -113,6 +118,7 @@ class QuestionUi extends StatelessWidget {
   */
   final StreamController<String> answerDispatcher;
   final Question quest;
+  //
   const QuestionUi(
     this.answerDispatcher,
     this.quest, {
@@ -121,15 +127,28 @@ class QuestionUi extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ElevatedButton(
-        child: Text(
-          'Submit answer as string',
+    return Column(
+      children: [
+        Container(
+          child: Center(
+            child: Text('Render question here!'),
+          ),
+          color: Colors.lightBlue[300],
+          height: 500,
         ),
-        onPressed: () {
-          answerDispatcher.add('this is user answer to question');
-        },
-      ),
+        Center(
+          child: Container(
+            child: ElevatedButton(
+              child: Text(
+                'Submit answer as string',
+              ),
+              onPressed: () {
+                answerDispatcher.add('this is user answer to question');
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

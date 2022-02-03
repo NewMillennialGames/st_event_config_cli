@@ -10,7 +10,7 @@ class WebQuestionPresenter implements QuestionPresenter {
 
   final StreamController<Question> questDispatcher;
   final Stream<String> answerStream;
-  late DialogRunner? dRunner;
+  DialogRunner? dRunner;
   late Question _quest;
 
   WebQuestionPresenter(
