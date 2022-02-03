@@ -34,11 +34,11 @@ class GroupedTableDataMgr {
       (AssetRowPropertyIfc row) => GroupHeaderData('', '', '');
   //
   GroupSepRowBuilder get groupSeparatorBuilder =>
-      (GroupHeaderData _) => Widget();
+      (GroupHeaderData _) => TvGroupHeaderSep(GroupHeaderData.mockRow);
 
   // defining groupHeaderBuilder will cause groupSeparatorBuilder to be ignored
   GroupHeaderBuilder? get groupHeaderBuilder =>
-      (AssetRowPropertyIfc _) => Widget();
+      (AssetRowPropertyIfc _) => TvGroupHeader(GroupHeaderData.mockRow);
 
   IndexedItemRowBuilder get indexedItemBuilder => (
         BuildContext ctx,

@@ -4,9 +4,13 @@ part of StUiController;
 
 
 */
-
 class TvGroupHeader extends StatelessWidget {
-  const TvGroupHeader({Key? key}) : super(key: key);
+  //
+  GroupHeaderData data;
+  TvGroupHeader(
+    this.data, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +19,12 @@ class TvGroupHeader extends StatelessWidget {
 }
 
 class TvGroupHeaderSep extends StatelessWidget {
-  const TvGroupHeaderSep({Key? key}) : super(key: key);
+  //
+  GroupHeaderData data;
+  TvGroupHeaderSep(
+    this.data, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

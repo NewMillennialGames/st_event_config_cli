@@ -17,4 +17,6 @@ class GroupHeaderData {
     this.second,
     this.third,
   );
+
+  static GroupHeaderData get mockRow => GroupHeaderData('', '', '');
 }
