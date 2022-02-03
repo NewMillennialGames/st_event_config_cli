@@ -34,10 +34,10 @@ class _EvCfgAppState extends ConsumerState<EvCfgApp> {
   late DialogRunner dRunner;
   @override
   void initState() {
-    StreamController<Question> questDispatcher = ref.read(
+    StreamController<Question> questDispatcher = ref.watch(
       questDispatcherProvider,
     );
-    Stream<String> answerStream = ref.read(answerStreamProvier.stream);
+    Stream<String> answerStream = ref.watch(answerStreamProvier.stream);
     this.wqp = WebQuestionPresenter(questDispatcher, answerStream);
     this.dRunner = DialogRunner(wqp);
     _startServingQuestions();
