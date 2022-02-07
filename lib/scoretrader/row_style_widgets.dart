@@ -26,7 +26,7 @@ enum TvAreaRowStyle {
 
 class TeamVsTeamRow extends StBaseTvRow with ShowsTwoAssets {
   TeamVsTeamRow(
-    StdRowData assets, {
+    TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
 
@@ -39,7 +39,7 @@ class TeamVsTeamRow extends StBaseTvRow with ShowsTwoAssets {
 
 class TeamVsTeamRankedRow extends StBaseTvRow with ShowsTwoAssets {
   TeamVsTeamRankedRow(
-    StdRowData assets, {
+    TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
 
@@ -52,7 +52,7 @@ class TeamVsTeamRankedRow extends StBaseTvRow with ShowsTwoAssets {
 
 class TeamVsFieldRow extends StBaseTvRow with ShowsOneAsset {
   TeamVsFieldRow(
-    StdRowData assets, {
+    TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
 
@@ -65,7 +65,7 @@ class TeamVsFieldRow extends StBaseTvRow with ShowsOneAsset {
 
 class TeamVsFieldRankedRow extends StBaseTvRow with ShowsOneAsset {
   TeamVsFieldRankedRow(
-    StdRowData assets, {
+    TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
 
@@ -78,7 +78,7 @@ class TeamVsFieldRankedRow extends StBaseTvRow with ShowsOneAsset {
 
 class TeamDraftRow extends StBaseTvRow with ShowsOneAsset {
   TeamDraftRow(
-    StdRowData assets, {
+    TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
 
@@ -91,7 +91,7 @@ class TeamDraftRow extends StBaseTvRow with ShowsOneAsset {
 
 class TeamLineRow extends StBaseTvRow with ShowsOneAsset {
   TeamLineRow(
-    StdRowData assets, {
+    TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
 
@@ -104,7 +104,7 @@ class TeamLineRow extends StBaseTvRow with ShowsOneAsset {
 
 class TeamPlayerVsFieldRow extends StBaseTvRow with ShowsOneAsset {
   TeamPlayerVsFieldRow(
-    StdRowData assets, {
+    TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
 
@@ -117,7 +117,7 @@ class TeamPlayerVsFieldRow extends StBaseTvRow with ShowsOneAsset {
 
 class PlayerVsFieldRow extends StBaseTvRow with ShowsOneAsset {
   PlayerVsFieldRow(
-    StdRowData assets, {
+    TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
 
@@ -130,7 +130,7 @@ class PlayerVsFieldRow extends StBaseTvRow with ShowsOneAsset {
 
 class PlayerVsFieldRankedRow extends StBaseTvRow with ShowsOneAsset {
   PlayerVsFieldRankedRow(
-    StdRowData assets, {
+    TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
 
@@ -143,7 +143,7 @@ class PlayerVsFieldRankedRow extends StBaseTvRow with ShowsOneAsset {
 
 class PlayerDraftRow extends StBaseTvRow with ShowsOneAsset {
   PlayerDraftRow(
-    StdRowData assets, {
+    TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
 
@@ -156,7 +156,7 @@ class PlayerDraftRow extends StBaseTvRow with ShowsOneAsset {
 
 class DriverVsFieldRow extends StBaseTvRow with ShowsOneAsset {
   DriverVsFieldRow(
-    StdRowData assets, {
+    TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
 

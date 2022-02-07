@@ -114,7 +114,8 @@ class EventCfgTree {
   void fillFromVisualRuleAnswers(
     Iterable<VisRuleStyleQuest> answeredQuestions,
   ) {
-    /*  receive all vis-rule-questions, and fill
+    /*  part of instance construction
+      receive all vis-rule-questions, and fill
         out the tree of configuration data
         that will customize the client UI
     */
@@ -158,7 +159,7 @@ class EventCfgTree {
 }
 
 extension EventCfgTreeExt1 on EventCfgTree {
-  //
+  // return the config data needed to provision the ST UI builder logic
   ScreenCfgByArea fullScreenCfg(AppScreen screen) =>
       this.screenConfigMap[screen]!;
 

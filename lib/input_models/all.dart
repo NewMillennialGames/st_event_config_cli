@@ -5,10 +5,9 @@ import 'package:json_annotation/json_annotation.dart';
 //
 import '../app_entity_enums/all.dart';
 import '../enums/all.dart';
-import '../rules/all.dart';
 import '../util/type_cast.dart';
 import '../util/string_ext.dart';
-import '../output_models/all.dart';
+// import '../output_models/all.dart';
 //
 part 'all.g.dart';
 part 'user_response.dart';

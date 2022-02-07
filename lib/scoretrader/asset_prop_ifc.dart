@@ -1,8 +1,9 @@
 /*
-  every asset (probably wrapped) passed to the
-  ST row factory should follow the interface below
+  every displayable/tradable asset (wrapped in AssetRowPropertyIfc)
+  passed to the ST row factory should follow the interface below
 
-  these are the properties the row-factory needs to render a row
+  these are the properties the row-factory needs to render
+  all of our various types of rows
 */
 
 part of StUiController;
@@ -26,7 +27,7 @@ abstract class AssetRowPropertyIfc {
 }
 
 extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
-  // sensible defaults
+  // sensible defaults if not overridden
   String get groupKey => '';
   String get rankStr => '';
   String get priceStr => '';

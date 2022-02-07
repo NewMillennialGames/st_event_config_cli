@@ -25,26 +25,34 @@ class AbstractUiFactory {
 
   GroupedTableDataMgr tableviewConfigForScreen(
     AppScreen screen,
-    List<StdRowData> rows,
+    List<TableviewDataRowTuple> rows,
   ) {
-    //
-    final cfg = _eConfig!
-        .screenConfigMap[screen]!.areaConfig[ScreenWidgetArea.tableview];
-    TableviewConfigPayload tvsp = TableviewConfigPayload(cfg!);
-    return GroupedTableDataMgr(rows, tvsp);
+    /* build object that wraps all data and display rules
+    */
+    final CfgForAreaAndNestedSlots tableCfg =
+        _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.tableview);
+    return GroupedTableDataMgr(rows, TableviewConfigPayload(tableCfg));
   }
 
-  // FIXME
-  void filterBarConfigForScreen(AppScreen screen) {
+  SlotOrAreaRuleCfg filterBarConfigForScreen(AppScreen screen) {
     //
+    CfgForAreaAndNestedSlots tableCfg =
+        _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.filterBar);
+    return tableCfg.areaRuleByRuleType(VisualRuleType.filterCfg);
   }
 
-  void headerConfigForScreen(AppScreen screen) {
+  SlotOrAreaRuleCfg headerConfigForScreen(AppScreen screen) {
     //
+    CfgForAreaAndNestedSlots tableCfg =
+        _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.header);
+    return tableCfg.areaRuleByRuleType(VisualRuleType.styleOrFormat);
   }
 
-  void footerConfigForScreen(AppScreen screen) {
+  SlotOrAreaRuleCfg footerConfigForScreen(AppScreen screen) {
     //
+    CfgForAreaAndNestedSlots tableCfg =
+        _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.footer);
+    return tableCfg.areaRuleByRuleType(VisualRuleType.styleOrFormat);
   }
 }
 

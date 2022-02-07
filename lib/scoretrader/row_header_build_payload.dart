@@ -8,7 +8,6 @@ part of StUiController;
 
   third value is extra
 */
-typedef StdRowData = Tuple3<AssetRowPropertyIfc, AssetRowPropertyIfc?, String?>;
 
 class GroupHeaderData {
   String first;
@@ -20,6 +19,12 @@ class GroupHeaderData {
     this.second,
     this.third,
   );
+
+  static GetGroupKeyFromRow keyConstructorFromCfg(GroupingRules groupingRules) {
+    return (AssetRowPropertyIfc row) {
+      return GroupHeaderData('', '', '');
+    };
+  }
 
   static GroupHeaderData get mockRow =>
       GroupHeaderData('first', 'second', 'third');

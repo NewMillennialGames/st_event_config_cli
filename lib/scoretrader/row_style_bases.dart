@@ -1,17 +1,21 @@
 part of StUiController;
 
-abstract class StBaseTvRowAbs extends StatelessWidget {
+abstract class StBaseTvRowIfc extends StatelessWidget {
   //
-  StdRowData assets;
-  StBaseTvRowAbs(this.assets, {Key? key}) : super(key: key);
+  final TableviewDataRowTuple assets;
+  StBaseTvRowIfc(
+    this.assets, {
+    Key? key,
+  }) : super(key: key);
 
   Widget rowBody(BuildContext ctx);
 }
 
-class StBaseTvRow extends StBaseTvRowAbs {
-  //
+class StBaseTvRow extends StBaseTvRowIfc {
+  // base class for EVERY tableview row
+  // on 4 main screens of scoretrader
   StBaseTvRow(
-    StdRowData assets, {
+    TableviewDataRowTuple assets, {
     Key? key,
   }) : super(
           assets,
@@ -20,12 +24,15 @@ class StBaseTvRow extends StBaseTvRowAbs {
 
   @override
   Widget build(BuildContext context) {
-    // throw UnimplementedError('implement in subclass');
+    // you can wrap row body here if needed
+    // should also use ScopedProvider to toggle
+    // Trade button on and off
     return rowBody(context);
   }
 
   @override
   Widget rowBody(BuildContext ctx) {
+    // acatual subclass will return the specific row-type
     throw UnimplementedError('implement in subclass');
   }
 }

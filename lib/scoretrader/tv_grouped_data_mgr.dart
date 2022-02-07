@@ -20,18 +20,20 @@ class GroupedTableDataMgr {
   TODO:  all the getters below must be completed to return real methods
   */
 
-  final List<StdRowData> _elements;
+  final List<TableviewDataRowTuple> _assetRows;
   final TableviewConfigPayload _cfg;
   GroupedListOrder order = GroupedListOrder.ASC;
 
   GroupedTableDataMgr(
-    this._elements,
+    this._assetRows,
     this._cfg, {
-    bool asc = true,
-  }) : this.order = asc ? GroupedListOrder.ASC : GroupedListOrder.DESC;
+    bool ascending = true,
+  }) : this.order = ascending ? GroupedListOrder.ASC : GroupedListOrder.DESC;
 
-  GetGroupKeyFromRow get groupBy =>
-      (AssetRowPropertyIfc row) => GroupHeaderData('', '', '');
+  GetGroupKeyFromRow get groupBy {
+    return GroupHeaderData.keyConstructorFromCfg(_cfg.groupByRules);
+  }
+
   //
   GroupSepRowBuilder get groupSeparatorBuilder =>
       (GroupHeaderData _) => TvGroupHeaderSep(GroupHeaderData.mockRow);
@@ -42,7 +44,7 @@ class GroupedTableDataMgr {
 
   IndexedItemRowBuilder get indexedItemBuilder => (
         BuildContext ctx,
-        StdRowData assets,
+        TableviewDataRowTuple assets,
         int i,
       ) {
         return _cfg.rowConstructor(assets);

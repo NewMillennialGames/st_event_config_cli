@@ -2,7 +2,14 @@ part of OutputModels;
 
 @JsonSerializable()
 class CfgForAreaAndNestedSlots {
-  // Area and Slot Rules
+  /*
+  this Config object encompasses ALL user specified rules
+  for all of the screen Areas and Slots
+  under one single screen
+  the actual rule (stored as value in either
+    visCfgForArea or visCfgBySlotInArea)
+  is a subclass of RuleResponseBase
+  */
   ScreenWidgetArea screenArea;
   // area level config rules
   Map<VisualRuleType, SlotOrAreaRuleCfg> visCfgForArea = {};
