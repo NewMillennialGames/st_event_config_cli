@@ -3,8 +3,6 @@
   ST row factory should follow the interface below
 
   these are the properties the row-factory needs to render a row
-
-
 */
 
 part of StUiController;
@@ -33,5 +31,5 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
   String get rankStr => '';
   String get priceStr => '';
 
-  bool get canTradeable => false;
+  bool get canTrade => false;
 }

@@ -8,28 +8,62 @@ class SlotOrAreaRuleCfg {
     parent container (collection of these instances)
     is how you know scope of "this"
   */
-  VisualRuleType _visRuleType;
-  List<AppVisualRuleBase> _visRuleList;
+  VisualRuleType visRuleType;
+  List<RuleResponseBase> visRuleList;
   //
   SlotOrAreaRuleCfg(
-    this._visRuleType,
-    this._visRuleList,
+    this.visRuleType,
+    this.visRuleList,
   );
 
-  AppVisualRuleBase ruleByType(VisualRuleType typ) =>
-      _visRuleList.firstWhere((e) => e.ruleType == typ);
+  RuleResponseBase ruleByType(VisualRuleType typ) =>
+      visRuleList.firstWhere((e) => e.ruleType == typ);
+
+  GroupingRules? get groupingRules {
+    List<TvSortOrGroupCfg> definedGroupRules = visRuleList
+        .whereType<TvSortOrGroupCfg>()
+        .where((e) => e.ruleType == VisualRuleType.groupCfg)
+        .toList();
+
+    int len = definedGroupRules.length;
+    if (len < 1) return null;
+
+    definedGroupRules
+        .sort((r1, r2) => r1.ruleType.index.compareTo(r2.ruleType.index));
+
+    TvSortOrGroupCfg? gr2 = len > 1 ? definedGroupRules[1] : null;
+    TvSortOrGroupCfg? gr3 = len > 2 ? definedGroupRules[2] : null;
+    return GroupingRules(definedGroupRules.first, gr2, gr3);
+  }
+
+  SortingRules? get sortingRules {
+    List<TvSortOrGroupCfg> definedGroupRules = visRuleList
+        .whereType<TvSortOrGroupCfg>()
+        .where((e) => e.ruleType == VisualRuleType.sortCfg)
+        .toList();
+
+    int len = definedGroupRules.length;
+    if (len < 1) return null;
+
+    definedGroupRules
+        .sort((r1, r2) => r1.ruleType.index.compareTo(r2.ruleType.index));
+
+    TvSortOrGroupCfg? gr2 = len > 1 ? definedGroupRules[1] : null;
+    TvSortOrGroupCfg? gr3 = len > 2 ? definedGroupRules[2] : null;
+    return SortingRules(definedGroupRules.first, gr2, gr3);
+  }
 
   factory SlotOrAreaRuleCfg.fromQuest(VisualRuleQuestion rQuest) {
     //
-    List<AppVisualRuleBase> vrs = rQuest.asVisualRules();
-    return SlotOrAreaRuleCfg(rQuest.visRuleTypeForAreaOrSlot!, vrs);
+    TvSortOrGroupCfg vrs = rQuest.asVisualRules as TvSortOrGroupCfg;
+    return SlotOrAreaRuleCfg(rQuest.visRuleTypeForAreaOrSlot!, [vrs]);
   }
 
   void fillMissingWithDefaults() {
     // TODO
-    for (VisRuleQuestType rqt in _visRuleType.requiredQuestions) {
+    for (VisRuleQuestType rqt in visRuleType.requiredQuestions) {
       // for (VisRuleQuestType qt in ruleType.questionsRequired)
-      int cnt = _visRuleList
+      int cnt = visRuleList
           .where((avr) => avr.ruleType.requiredQuestions.contains(rqt))
           .length;
       if (cnt < 1) {

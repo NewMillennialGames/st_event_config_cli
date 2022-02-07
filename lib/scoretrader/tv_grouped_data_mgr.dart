@@ -20,7 +20,7 @@ class GroupedTableDataMgr {
   TODO:  all the getters below must be completed to return real methods
   */
 
-  final List<AssetRowPropertyIfc> _elements;
+  final List<StdRowData> _elements;
   final TableviewConfigPayload _cfg;
   GroupedListOrder order = GroupedListOrder.ASC;
 

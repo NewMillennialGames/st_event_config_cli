@@ -74,7 +74,7 @@ Control what is configurable by editing the lists returned in:
 
 rebuild JSON models:  
     cd projectRoot (above lib/)
-    flutter pub run build_runner build
+    flutter pub run build_runner build --delete-conflicting-outputs
 
 
 ###### Examples:

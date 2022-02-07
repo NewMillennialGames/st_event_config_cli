@@ -23,10 +23,15 @@ class AbstractUiFactory {
     this._eConfig = EventCfgTree.fromJson(eCfgJsonMap);
   }
 
-  TableStyleFactory tableUiConfigForScreen(AppScreen screen) {
+  GroupedTableDataMgr tableviewConfigForScreen(
+    AppScreen screen,
+    List<StdRowData> rows,
+  ) {
+    //
     final cfg = _eConfig!
         .screenConfigMap[screen]!.areaConfig[ScreenWidgetArea.tableview];
-    return TableStyleFactory(screen, cfg!);
+    TableviewConfigPayload tvsp = TableviewConfigPayload(cfg!);
+    return GroupedTableDataMgr(rows, tvsp);
   }
 
   // FIXME
@@ -42,3 +47,10 @@ class AbstractUiFactory {
     //
   }
 }
+
+
+  // TableStyleFactory tableUiConfigForScreen(AppScreen screen) {
+  //   final cfg = _eConfig!
+  //       .screenConfigMap[screen]!.areaConfig[ScreenWidgetArea.tableview];
+  //   return TableStyleFactory(screen, cfg!);
+  // }

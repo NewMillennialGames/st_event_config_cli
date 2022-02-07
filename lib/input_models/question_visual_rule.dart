@@ -30,7 +30,9 @@ class VisualRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseWrapperIfc>
           null,
           null,
         ) {
+    // derive question/choices config
     this._questDef = VisRuleChoiceConfig.fromRuleTyp(visRuleType);
+    // create empty response container
     this.response = UserResponse(visRuleType.ruleResponseContainer as AnsTyp);
   }
 
@@ -41,9 +43,11 @@ class VisualRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseWrapperIfc>
   @override
   String get questStr => _questDef.questStr;
 
-  List<AppVisualRuleBase> asVisualRules() {
-    var vrs = response!.answers.asVisualRules();
-    return vrs;
+  RuleResponseWrapperIfc get asVisualRules {
+    // doing the hard work of converting answers
+    // into a structured data representation
+    // var vrs = response!.answers;
+    return response!.answers;
   }
 
   void castResponseListAndStore(Map<VisRuleQuestType, String> multiAnswerMap) {

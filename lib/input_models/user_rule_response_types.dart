@@ -2,14 +2,17 @@ part of InputModels;
 
 abstract class RuleResponseWrapperIfc {
   // handles answers for real Rule questions
+  // receive user-answers IN
   void castResponsesToAnswerTypes(Map<VisRuleQuestType, String> responses);
-  List<AppVisualRuleBase> asVisualRules();
+  // send user answers OUT in std format
+  RuleResponseBase get asVisualRules;
 }
 
 @JsonSerializable()
 class RuleResponseBase implements RuleResponseWrapperIfc {
   /* base class for user answers to rule questions
-
+    it implements the interface
+    and calls subclass methods to do the hard work
   */
   final VisualRuleType ruleType;
   final Map<VisRuleQuestType, String> userResponses = {};
@@ -18,15 +21,15 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
 
   List<VisRuleQuestType> get requiredQuestions => ruleType.requiredQuestions;
 
-  List<AppVisualRuleBase> asVisualRules() {
+  RuleResponseBase get asVisualRules {
     // run subclass method
-    return _castToVisualRules();
+    return this;
   }
 
-  List<AppVisualRuleBase> _castToVisualRules() {
-    // throw UnimplementedError('impl in subclass');
-    return [ruleType.castPropertyMapToRule(this)];
-  }
+  // List<AppVisualRuleBase> _castToVisualRules() {
+  //   // throw UnimplementedError('impl in subclass');
+  //   return [ruleType.castPropertyMapToRule(this)];
+  // }
 
   void _checkArgs(Map<VisRuleQuestType, String> responses) {
     assert(
@@ -36,15 +39,19 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
   }
 
   void castResponsesToAnswerTypes(Map<VisRuleQuestType, String> responses) {
-    /* can probably let this method fill the userResponses map
+    /* let this method fill the userResponses map
     (same for all rule-types)
     and then call a subclass method to parse the strings
     into actual data-types
+
+    only called once per instance so I'm not sure why
+    i'm looping instead of assigning; oh, its final
     */
     _checkArgs(responses);
     for (MapEntry<VisRuleQuestType, String> e in responses.entries) {
       this.userResponses[e.key] = e.value;
     }
+    // each subclass should impl its own method
     _castToRealTypes();
   }
 
@@ -70,20 +77,7 @@ class TvRowStyleCfg extends RuleResponseBase {
 
   TvRowStyleCfg() : super(VisualRuleType.styleOrFormat);
 
-  @override
-  List<StyleOrFormatRule> _castToVisualRules() {
-    return [this.ruleType.castPropertyMapToRule(this) as StyleOrFormatRule];
-  }
-
-  // void castResponsesToAnswerTypes(Map<VisRuleQuestType, String> responses) {
-  //   //
-  //   _checkArgs(responses);
-  //   for (MapEntry<VisRuleQuestType, String> e in responses.entries) {
-  //     this.userResponses[e.key] = e.value;
-  //   }
-  //   _castToRealTypes();
-  // }
-
+  // receive str data into instance & make it structured data
   @override
   void _castToRealTypes() {
     VisRuleQuestType key = requiredQuestions.first; // ?? ;
@@ -92,6 +86,12 @@ class TvRowStyleCfg extends RuleResponseBase {
     int uRespIdx = int.tryParse(uResp) ?? 0;
     this.selectedRowStyle = TvAreaRowStyle.values[uRespIdx];
   }
+
+  // send structured data OUT of instance
+  // @override
+  // List<StyleOrFormatRule> _castToVisualRules() {
+  //   return [this.ruleType.castPropertyMapToRule(this) as StyleOrFormatRule];
+  // }
 
   @override
   String toString() {
@@ -127,10 +127,10 @@ class TvSortOrGroupCfg extends RuleResponseBase {
   //   _castToRealTypes();
   // }
 
-  @override
-  List<GroupRule> _castToVisualRules() {
-    return [this.ruleType.castPropertyMapToRule(this) as GroupRule];
-  }
+  // @override
+  // List<GroupRule> _castToVisualRules() {
+  //   return [this.ruleType.castPropertyMapToRule(this) as GroupRule];
+  // }
 
   @override
   void _castToRealTypes() {
@@ -192,10 +192,10 @@ class TvFilterCfg extends RuleResponseBase {
   //   _castToRealTypes();
   // }
 
-  @override
-  List<FilterRule> _castToVisualRules() {
-    return [this.ruleType.castPropertyMapToRule(this) as FilterRule];
-  }
+  // @override
+  // List<FilterRule> _castToVisualRules() {
+  //   return [this.ruleType.castPropertyMapToRule(this) as FilterRule];
+  // }
 
   @override
   void _castToRealTypes() {
@@ -252,10 +252,10 @@ class ShowHideCfg extends RuleResponseBase {
   //   _castToRealTypes();
   // }
 
-  @override
-  List<ShowRule> _castToVisualRules() {
-    return [this.ruleType.castPropertyMapToRule(this) as ShowRule];
-  }
+  // @override
+  // List<ShowRule> _castToVisualRules() {
+  //   return [this.ruleType.castPropertyMapToRule(this) as ShowRule];
+  // }
 
   @override
   void _castToRealTypes() {

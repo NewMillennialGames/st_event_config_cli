@@ -297,6 +297,9 @@ class NewQuestionCollector {
     // VisualRuleQuestions figure out their questions &
     // select options from the rule-type being passed
     for (VisualRuleType ruleTyp in rulesToCreateForAreaOrSlot) {
+      // string is the user-input value being parsed
+      // RuleResponseWrapperIfc is one of these response types:
+      // TvRowStyleCfg, TvSortOrGroupCfg, TvFilterCfg, ShowHideCfg
       var q = VisualRuleQuestion<String, RuleResponseWrapperIfc>(
         screen,
         area,

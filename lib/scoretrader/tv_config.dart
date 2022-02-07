@@ -12,8 +12,8 @@ class TableviewConfigPayload {
   */
 
   final TvAreaRowStyle rowStyle;
-  final List<GroupRule> groupByRules;
-  final List<SortRule> sortRules;
+  final GroupingRules groupByRules;
+  final SortingRules sortRules;
 
   TableviewConfigPayload._(
     this.rowStyle,
@@ -27,16 +27,14 @@ class TableviewConfigPayload {
     SlotOrAreaRuleCfg tableRules =
         tableAreaCfg.areaRuleByRuleType(VisualRuleType.styleOrFormat);
 
-    StyleOrFormatRule styleRule = tableRules
-        .ruleByType(VisualRuleType.styleOrFormat) as StyleOrFormatRule;
+    TvRowStyleCfg styleRule =
+        tableRules.ruleByType(VisualRuleType.styleOrFormat) as TvRowStyleCfg;
 
-    List<GroupRule> groupRules = [];
-
-    /// tableRules.rulesForType;
-    List<SortRule> sortRules = [];
+    GroupingRules groupRules = tableRules.groupingRules!;
+    SortingRules sortRules = tableRules.sortingRules!;
 
     return TableviewConfigPayload._(
-      styleRule.rrw.selectedRowStyle,
+      styleRule.selectedRowStyle,
       groupRules,
       sortRules,
     );

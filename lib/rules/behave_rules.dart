@@ -1,23 +1,23 @@
-part of CfgRules;
+// part of CfgRules;
 
-// behavior rules below
-//
+// // behavior rules below
+// //
 
-class AppBehavioralRule {
-  //
-  final BehaviorRuleType ruleType;
-  //
-  AppBehavioralRule(this.ruleType);
-}
+// class AppBehavioralRule {
+//   //
+//   final BehaviorRuleType ruleType;
+//   //
+//   AppBehavioralRule(this.ruleType);
+// }
 
-@JsonSerializable()
-class NavigateRule extends AppBehavioralRule {
-  //
-  NavigateRule() : super(BehaviorRuleType.navigate) {}
+// @JsonSerializable()
+// class NavigateRule extends AppBehavioralRule {
+//   //
+//   NavigateRule() : super(BehaviorRuleType.navigate) {}
 
-  //
-  factory NavigateRule.fromJson(Map<String, dynamic> json) =>
-      _$NavigateRuleFromJson(json);
+//   //
+//   factory NavigateRule.fromJson(Map<String, dynamic> json) =>
+//       _$NavigateRuleFromJson(json);
 
-  Map<String, dynamic> toJson() => _$NavigateRuleToJson(this);
-}
+//   Map<String, dynamic> toJson() => _$NavigateRuleToJson(this);
+// }
