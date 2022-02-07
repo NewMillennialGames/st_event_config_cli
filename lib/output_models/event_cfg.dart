@@ -115,8 +115,8 @@ class EventCfgTree {
       Iterable<VisualRuleQuestion> answeredQuestions) {
     //
     for (VisualRuleQuestion rQuest in answeredQuestions) {
-      //
-      var screenCfg = this.screenConfigMap[rQuest.appScreen] ??
+      // look up or create it
+      ScreenCfgByArea screenCfg = this.screenConfigMap[rQuest.appScreen] ??
           ScreenCfgByArea(rQuest.appScreen);
       screenCfg.appendRule(rQuest);
       this.screenConfigMap[rQuest.appScreen] = screenCfg;

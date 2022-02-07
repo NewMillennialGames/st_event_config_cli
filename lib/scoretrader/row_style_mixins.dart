@@ -15,3 +15,20 @@ mixin IsTradeable on StBaseTvRowAbs {
   //
   bool canTrade = false;
 }
+
+// screen areas
+mixin ForMarketView on StBaseTvRowAbs {
+  //
+}
+
+mixin ForLeaderboard on StBaseTvRowAbs {
+  //
+}
+
+mixin ForPortfolio on StBaseTvRowAbs {
+  //
+}
+
+mixin ForMarketResearch on StBaseTvRowAbs {
+  //
+}
