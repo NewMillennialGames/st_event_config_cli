@@ -43,6 +43,11 @@ class VisualRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseWrapperIfc>
   @override
   String get questStr => _questDef.questStr;
 
+  @override
+  bool get gens2ndOr3rdSortGroupFilterQuests {
+    return this.response?.answers.gens2ndOr3rdSortGroupFilterQuests ?? false;
+  }
+
   RuleResponseWrapperIfc get asVisualRules {
     // doing the hard work of converting answers
     // into a structured data representation

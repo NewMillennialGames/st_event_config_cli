@@ -50,7 +50,9 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
   //
 
   // below controls how each question causes cascade creation of new questions
-  bool get generatesNoNewQuestions => qQuantify.generatesNoNewQuestions;
+  bool get generatesNoNewQuestions =>
+      qQuantify.generatesNoNewQuestions &&
+      !this.gens2ndOr3rdSortGroupFilterQuests;
   bool get asksWhichScreensToConfig =>
       qQuantify.appScreen == AppScreen.eventConfiguration &&
       response?.answers is List<AppScreen>;
@@ -66,6 +68,8 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
   bool get asksDetailsForEachBehaveRuleType =>
       qQuantify.asksDetailsForEachBehaveRuleType;
   String get sortKey => '${qQuantify.sortKey}';
+  // ask 2nd & 3rd position for (sort, group, filter)
+  bool get gens2ndOr3rdSortGroupFilterQuests => false;
 
   // appliesToClientConfiguration == should be exported to file
   bool get appliesToClientConfiguration =>

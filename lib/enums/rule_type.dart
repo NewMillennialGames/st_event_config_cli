@@ -22,11 +22,11 @@ extension VisualRuleTypeExt1 on VisualRuleType {
     // instance of the class that parses user response
     switch (this) {
       case VisualRuleType.sortCfg:
-        return TvSortOrGroupCfg.byType(this);
+        return TvSortCfg();
       case VisualRuleType.groupCfg:
-        return TvSortOrGroupCfg.byType(this);
+        return TvGroupCfg();
       case VisualRuleType.filterCfg:
-        return TvFilterCfg.byType(this);
+        return TvFilterCfg();
       case VisualRuleType.styleOrFormat:
         return TvRowStyleCfg();
       case VisualRuleType.showOrHide:

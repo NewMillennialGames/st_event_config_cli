@@ -9,11 +9,16 @@ part of InputModels;
 RuleResponseBase _$RuleResponseBaseFromJson(Map<String, dynamic> json) =>
     RuleResponseBase(
       $enumDecode(_$VisualRuleTypeEnumMap, json['ruleType']),
-    );
+    )..userResponses = (json['userResponses'] as Map<String, dynamic>).map(
+        (k, e) =>
+            MapEntry($enumDecode(_$VisRuleQuestTypeEnumMap, k), e as String),
+      );
 
 Map<String, dynamic> _$RuleResponseBaseToJson(RuleResponseBase instance) =>
     <String, dynamic>{
       'ruleType': _$VisualRuleTypeEnumMap[instance.ruleType],
+      'userResponses': instance.userResponses
+          .map((k, e) => MapEntry(_$VisRuleQuestTypeEnumMap[k], e)),
     };
 
 const _$VisualRuleTypeEnumMap = {
@@ -24,13 +29,28 @@ const _$VisualRuleTypeEnumMap = {
   VisualRuleType.showOrHide: 'showOrHide',
 };
 
+const _$VisRuleQuestTypeEnumMap = {
+  VisRuleQuestType.selectDataFieldName: 'selectDataFieldName',
+  VisRuleQuestType.specifyPositionInGroup: 'specifyPositionInGroup',
+  VisRuleQuestType.specifySortAscending: 'specifySortAscending',
+  VisRuleQuestType.selectVisualComponentOrStyle: 'selectVisualComponentOrStyle',
+  VisRuleQuestType.controlsVisibilityOfAreaOrSlot:
+      'controlsVisibilityOfAreaOrSlot',
+};
+
 TvRowStyleCfg _$TvRowStyleCfgFromJson(Map<String, dynamic> json) =>
     TvRowStyleCfg()
+      ..userResponses = (json['userResponses'] as Map<String, dynamic>).map(
+        (k, e) =>
+            MapEntry($enumDecode(_$VisRuleQuestTypeEnumMap, k), e as String),
+      )
       ..selectedRowStyle =
           $enumDecode(_$TvAreaRowStyleEnumMap, json['selectedRowStyle']);
 
 Map<String, dynamic> _$TvRowStyleCfgToJson(TvRowStyleCfg instance) =>
     <String, dynamic>{
+      'userResponses': instance.userResponses
+          .map((k, e) => MapEntry(_$VisRuleQuestTypeEnumMap[k], e)),
       'selectedRowStyle': _$TvAreaRowStyleEnumMap[instance.selectedRowStyle],
     };
 
@@ -48,14 +68,17 @@ const _$TvAreaRowStyleEnumMap = {
   TvAreaRowStyle.driverVsField: 'driverVsField',
 };
 
-TvSortOrGroupCfg _$TvSortOrGroupCfgFromJson(Map<String, dynamic> json) =>
-    TvSortOrGroupCfg()
-      ..colName = $enumDecode(_$DbTableFieldNameEnumMap, json['colName'])
-      ..order = $enumDecode(_$SortOrGroupIdxOrderEnumMap, json['order'])
-      ..asc = json['asc'] as bool;
+TvSortCfg _$TvSortCfgFromJson(Map<String, dynamic> json) => TvSortCfg()
+  ..userResponses = (json['userResponses'] as Map<String, dynamic>).map(
+    (k, e) => MapEntry($enumDecode(_$VisRuleQuestTypeEnumMap, k), e as String),
+  )
+  ..colName = $enumDecode(_$DbTableFieldNameEnumMap, json['colName'])
+  ..order = $enumDecode(_$SortOrGroupIdxOrderEnumMap, json['order'])
+  ..asc = json['asc'] as bool;
 
-Map<String, dynamic> _$TvSortOrGroupCfgToJson(TvSortOrGroupCfg instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$TvSortCfgToJson(TvSortCfg instance) => <String, dynamic>{
+      'userResponses': instance.userResponses
+          .map((k, e) => MapEntry(_$VisRuleQuestTypeEnumMap[k], e)),
       'colName': _$DbTableFieldNameEnumMap[instance.colName],
       'order': _$SortOrGroupIdxOrderEnumMap[instance.order],
       'asc': instance.asc,
@@ -79,22 +102,49 @@ const _$SortOrGroupIdxOrderEnumMap = {
   SortOrGroupIdxOrder.third: 'third',
 };
 
+TvGroupCfg _$TvGroupCfgFromJson(Map<String, dynamic> json) => TvGroupCfg()
+  ..userResponses = (json['userResponses'] as Map<String, dynamic>).map(
+    (k, e) => MapEntry($enumDecode(_$VisRuleQuestTypeEnumMap, k), e as String),
+  )
+  ..colName = $enumDecode(_$DbTableFieldNameEnumMap, json['colName'])
+  ..order = $enumDecode(_$SortOrGroupIdxOrderEnumMap, json['order'])
+  ..asc = json['asc'] as bool;
+
+Map<String, dynamic> _$TvGroupCfgToJson(TvGroupCfg instance) =>
+    <String, dynamic>{
+      'userResponses': instance.userResponses
+          .map((k, e) => MapEntry(_$VisRuleQuestTypeEnumMap[k], e)),
+      'colName': _$DbTableFieldNameEnumMap[instance.colName],
+      'order': _$SortOrGroupIdxOrderEnumMap[instance.order],
+      'asc': instance.asc,
+    };
+
 TvFilterCfg _$TvFilterCfgFromJson(Map<String, dynamic> json) => TvFilterCfg()
+  ..userResponses = (json['userResponses'] as Map<String, dynamic>).map(
+    (k, e) => MapEntry($enumDecode(_$VisRuleQuestTypeEnumMap, k), e as String),
+  )
   ..colName = $enumDecode(_$DbTableFieldNameEnumMap, json['colName'])
   ..order = $enumDecode(_$SortOrGroupIdxOrderEnumMap, json['order'])
   ..asc = json['asc'] as bool;
 
 Map<String, dynamic> _$TvFilterCfgToJson(TvFilterCfg instance) =>
     <String, dynamic>{
+      'userResponses': instance.userResponses
+          .map((k, e) => MapEntry(_$VisRuleQuestTypeEnumMap[k], e)),
       'colName': _$DbTableFieldNameEnumMap[instance.colName],
       'order': _$SortOrGroupIdxOrderEnumMap[instance.order],
       'asc': instance.asc,
     };
 
-ShowHideCfg _$ShowHideCfgFromJson(Map<String, dynamic> json) =>
-    ShowHideCfg()..shouldShow = json['shouldShow'] as bool;
+ShowHideCfg _$ShowHideCfgFromJson(Map<String, dynamic> json) => ShowHideCfg()
+  ..userResponses = (json['userResponses'] as Map<String, dynamic>).map(
+    (k, e) => MapEntry($enumDecode(_$VisRuleQuestTypeEnumMap, k), e as String),
+  )
+  ..shouldShow = json['shouldShow'] as bool;
 
 Map<String, dynamic> _$ShowHideCfgToJson(ShowHideCfg instance) =>
     <String, dynamic>{
+      'userResponses': instance.userResponses
+          .map((k, e) => MapEntry(_$VisRuleQuestTypeEnumMap[k], e)),
       'shouldShow': instance.shouldShow,
     };

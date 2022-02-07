@@ -36,7 +36,7 @@ class DialogRunner {
   }
 
   //
-  // web start asking questions for web
+  // web logic;  start asking questions for GUI
   bool serveNextQuestionToGui() {
     //
     Question? _quest = _questGroupMgr.getNextQuestInCurrentSection();
@@ -58,7 +58,7 @@ class DialogRunner {
     }
   }
 
-  //
+  // CLI logic
   bool cliLoopUntilComplete() {
     //
     // questFormatter manages display output

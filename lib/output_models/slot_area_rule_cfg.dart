@@ -20,8 +20,8 @@ class SlotOrAreaRuleCfg {
       visRuleList.firstWhere((e) => e.ruleType == typ);
 
   GroupingRules? get groupingRules {
-    List<TvSortOrGroupCfg> definedGroupRules = visRuleList
-        .whereType<TvSortOrGroupCfg>()
+    List<TvSortCfg> definedGroupRules = visRuleList
+        .whereType<TvSortCfg>()
         .where((e) => e.ruleType == VisualRuleType.groupCfg)
         .toList();
 
@@ -31,14 +31,14 @@ class SlotOrAreaRuleCfg {
     definedGroupRules
         .sort((r1, r2) => r1.ruleType.index.compareTo(r2.ruleType.index));
 
-    TvSortOrGroupCfg? gr2 = len > 1 ? definedGroupRules[1] : null;
-    TvSortOrGroupCfg? gr3 = len > 2 ? definedGroupRules[2] : null;
+    TvSortCfg? gr2 = len > 1 ? definedGroupRules[1] : null;
+    TvSortCfg? gr3 = len > 2 ? definedGroupRules[2] : null;
     return GroupingRules(definedGroupRules.first, gr2, gr3);
   }
 
   SortingRules? get sortingRules {
-    List<TvSortOrGroupCfg> definedGroupRules = visRuleList
-        .whereType<TvSortOrGroupCfg>()
+    List<TvSortCfg> definedGroupRules = visRuleList
+        .whereType<TvSortCfg>()
         .where((e) => e.ruleType == VisualRuleType.sortCfg)
         .toList();
 
@@ -48,14 +48,14 @@ class SlotOrAreaRuleCfg {
     definedGroupRules
         .sort((r1, r2) => r1.ruleType.index.compareTo(r2.ruleType.index));
 
-    TvSortOrGroupCfg? gr2 = len > 1 ? definedGroupRules[1] : null;
-    TvSortOrGroupCfg? gr3 = len > 2 ? definedGroupRules[2] : null;
+    TvSortCfg? gr2 = len > 1 ? definedGroupRules[1] : null;
+    TvSortCfg? gr3 = len > 2 ? definedGroupRules[2] : null;
     return SortingRules(definedGroupRules.first, gr2, gr3);
   }
 
   factory SlotOrAreaRuleCfg.fromQuest(VisualRuleQuestion rQuest) {
     //
-    TvSortOrGroupCfg vrs = rQuest.asVisualRules as TvSortOrGroupCfg;
+    TvSortCfg vrs = rQuest.asVisualRules as TvSortCfg;
     return SlotOrAreaRuleCfg(rQuest.visRuleTypeForAreaOrSlot!, [vrs]);
   }
 

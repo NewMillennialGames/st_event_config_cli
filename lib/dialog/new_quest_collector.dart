@@ -40,6 +40,14 @@ class NewQuestionCollector {
       return;
     }
 
+    if (questJustAnswered.gens2ndOr3rdSortGroupFilterQuests) {
+      askUser2ndOr3rdFieldForSortGroupFilter(
+        _questMgr,
+        questJustAnswered as VisualRuleQuestion<String, TvSortGroupFilterBase>,
+      );
+      return;
+    }
+
     if (questJustAnswered.asksAreasWithinSelectedScreens &&
         questJustAnswered.appScreen == AppScreen.eventConfiguration) {
       /* called by the last question in hard-coded event list
@@ -293,7 +301,7 @@ class NewQuestionCollector {
     ScreenWidgetArea area = quest.screenWidgetArea!;
     ScreenAreaWidgetSlot? areaSlot = quest.slotInArea;
     //
-    List<Question> newQuestions = [];
+    List<VisualRuleQuestion> newQuestions = [];
     // VisualRuleQuestions figure out their questions &
     // select options from the rule-type being passed
     for (VisualRuleType ruleTyp in rulesToCreateForAreaOrSlot) {
@@ -320,4 +328,47 @@ class NewQuestionCollector {
   ) {
     // use example above for this pattern
   }
+}
+
+// callbacks when a question needs to add other questions
+void askUser2ndOr3rdFieldForSortGroupFilter(
+  QuestListMgr _questMgr,
+  VisualRuleQuestion<String, TvSortGroupFilterBase> questJustAnswered,
+) {
+  /*
+
+  */
+  int curSlot = questJustAnswered.slotInArea?.index ?? 0;
+  if (curSlot > 1) return;
+
+  // final answer = questJustAnswered.response!.answers as TvSortGroupFilterBase;
+  final nextSlot = ScreenAreaWidgetSlot.values[curSlot + 1];
+  // VisualRuleQuestion newQuestion =
+  final newQuestion = VisualRuleQuestion<String, TvSortGroupFilterBase>(
+    questJustAnswered.appScreen,
+    questJustAnswered.screenWidgetArea!,
+    questJustAnswered.visRuleTypeForAreaOrSlot!,
+    nextSlot,
+  );
+  // switch (questJustAnswered.visRuleTypeForAreaOrSlot) {
+  //   case VisualRuleType.sortCfg:
+  //     newQuestion = VisualRuleQuestion<String, RuleResponseWrapperIfc>(
+  //       questJustAnswered.appScreen,
+  //       questJustAnswered.screenWidgetArea!,
+  //       questJustAnswered.visRuleTypeForAreaOrSlot!,
+  //       nextSlot,
+  //     );
+  //     break;
+  //   case VisualRuleType.groupCfg:
+  //     break;
+  //   case VisualRuleType.filterCfg:
+  //     break;
+  //   default:
+  //     break;
+  // }
+
+  _questMgr.appendNewQuestions(
+    [newQuestion],
+    dbgNam: 'askUser2ndOr3rdFieldForSortGroupFilter',
+  );
 }
