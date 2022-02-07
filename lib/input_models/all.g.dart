@@ -55,8 +55,8 @@ Map<String, dynamic> _$TvRowStyleCfgToJson(TvRowStyleCfg instance) =>
     };
 
 const _$TvAreaRowStyleEnumMap = {
-  TvAreaRowStyle.teamVsTeam: 'teamVsTeam',
-  TvAreaRowStyle.teamVsTeamRanked: 'teamVsTeamRanked',
+  TvAreaRowStyle.assetVsAsset: 'teamVsTeam',
+  TvAreaRowStyle.assetVsAssetRanked: 'teamVsTeamRanked',
   TvAreaRowStyle.teamVsField: 'teamVsField',
   TvAreaRowStyle.teamVsFieldRanked: 'teamVsFieldRanked',
   TvAreaRowStyle.teamDraft: 'teamDraft',

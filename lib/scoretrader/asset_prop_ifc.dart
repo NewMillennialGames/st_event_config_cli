@@ -33,4 +33,29 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
   String get priceStr => '';
 
   bool get canTrade => false;
+
+  String valueExtractor(DbTableFieldName fldName) {
+    switch (fldName) {
+      case DbTableFieldName.teamName:
+        return topName;
+      case DbTableFieldName.playerName:
+        return topName;
+      case DbTableFieldName.conference:
+        return topName;
+      case DbTableFieldName.region:
+        return topName;
+      case DbTableFieldName.eventName:
+        return topName;
+      case DbTableFieldName.eventLocation:
+        return topName;
+      case DbTableFieldName.eventBannerUrl:
+        return topName;
+      case DbTableFieldName.assetOpenPrice:
+        return topName;
+      case DbTableFieldName.assetCurrentPrice:
+        return topName;
+      default:
+        return '_dfltProp';
+    }
+  }
 }

@@ -13,6 +13,7 @@ typedef TvRowBuilder = Widget Function(TableviewDataRowTuple);
 
 // TODO:  consider passing TableviewDataRowTuple to group functions
 // instead of first item in TableviewDataRowTuple.item1
+typedef CastRowToSortVal = String Function(AssetRowPropertyIfc);
 typedef GetGroupKeyFromRow = GroupHeaderData Function(AssetRowPropertyIfc);
 typedef GroupHeaderBuilder = Widget Function(AssetRowPropertyIfc);
 typedef GroupSepRowBuilder = Widget Function(GroupHeaderData);

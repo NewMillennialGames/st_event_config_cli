@@ -44,9 +44,9 @@ class TableviewConfigPayload {
     // TODO:  implement remaining row styles
 
     switch (rowStyle) {
-      case TvAreaRowStyle.teamVsTeam:
+      case TvAreaRowStyle.assetVsAsset:
         return TeamVsTeamRow.new;
-      case TvAreaRowStyle.teamVsTeamRanked:
+      case TvAreaRowStyle.assetVsAssetRanked:
         return TeamVsTeamRankedRow.new;
       case TvAreaRowStyle.teamVsField:
         return TeamVsFieldRow.new;

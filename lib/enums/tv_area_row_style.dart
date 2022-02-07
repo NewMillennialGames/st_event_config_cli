@@ -10,14 +10,12 @@ enum TvAreaRowStyle {
     MarketResearch
 
     2 Assets Per row only shows up on the MarketView screen
-    for these four types
-        teamVsTeam,
-        teamVsTeamRanked,
-        playerVsPlayer
-        playerVsPlayerRanked
+    for these two types
+        assetVsAsset,
+        assetVsAssetRanked,
   */
-  teamVsTeam,
-  teamVsTeamRanked,
+  assetVsAsset, // aka teamVsTeam & playerVsPlayer
+  assetVsAssetRanked, // aka teamVsTeamRanked & playerVsPlayerRanked
   teamVsField,
   teamVsFieldRanked,
   teamDraft,
@@ -35,7 +33,7 @@ extension TvAreaRowStyleExt1 on TvAreaRowStyle {
   //
   bool get twoPerRowOnMarketViewScreen => [
         // applies only to MarketView
-        _Rs.teamVsTeam,
-        _Rs.teamVsTeamRanked,
+        _Rs.assetVsAsset,
+        _Rs.assetVsAssetRanked,
       ].contains(this);
 }
