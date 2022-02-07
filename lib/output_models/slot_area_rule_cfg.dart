@@ -1,5 +1,7 @@
 part of OutputModels;
 
+// typedef AnyRuleType = Type extends RuleResponseBase;
+
 @JsonSerializable()
 class SlotOrAreaRuleCfg {
   /*
@@ -16,47 +18,56 @@ class SlotOrAreaRuleCfg {
     this.visRuleList,
   );
 
-  RuleResponseBase ruleByType(VisualRuleType typ) =>
-      visRuleList.firstWhere((e) => e.ruleType == typ);
+  List<RuleResponseBase> rulesOfType(VisualRuleType rt) =>
+      visRuleList.where((e) => e.ruleType == rt).toList();
 
   GroupingRules? get groupingRules {
-    List<TvSortCfg> definedGroupRules = visRuleList
-        .whereType<TvSortCfg>()
-        .where((e) => e.ruleType == VisualRuleType.groupCfg)
-        .toList();
+    List<TvGroupCfg> definedGroupRules =
+        rulesOfType(VisualRuleType.groupCfg) as List<TvGroupCfg>;
 
     int len = definedGroupRules.length;
     if (len < 1) return null;
 
     definedGroupRules
-        .sort((r1, r2) => r1.ruleType.index.compareTo(r2.ruleType.index));
+        .sort((r1, r2) => r1.order.index.compareTo(r2.order.index));
 
-    TvSortCfg? gr2 = len > 1 ? definedGroupRules[1] : null;
-    TvSortCfg? gr3 = len > 2 ? definedGroupRules[2] : null;
+    TvGroupCfg? gr2 = len > 1 ? definedGroupRules[1] : null;
+    TvGroupCfg? gr3 = len > 2 ? definedGroupRules[2] : null;
     return GroupingRules(definedGroupRules.first, gr2, gr3);
   }
 
   SortingRules? get sortingRules {
-    List<TvSortCfg> definedGroupRules = visRuleList
-        .whereType<TvSortCfg>()
-        .where((e) => e.ruleType == VisualRuleType.sortCfg)
-        .toList();
+    List<TvSortCfg> definedGroupRules =
+        rulesOfType(VisualRuleType.sortCfg) as List<TvSortCfg>;
 
     int len = definedGroupRules.length;
     if (len < 1) return null;
 
     definedGroupRules
-        .sort((r1, r2) => r1.ruleType.index.compareTo(r2.ruleType.index));
+        .sort((r1, r2) => r1.order.index.compareTo(r2.order.index));
 
     TvSortCfg? gr2 = len > 1 ? definedGroupRules[1] : null;
     TvSortCfg? gr3 = len > 2 ? definedGroupRules[2] : null;
     return SortingRules(definedGroupRules.first, gr2, gr3);
   }
 
-  factory SlotOrAreaRuleCfg.fromQuest(VisRuleStyleQuest rQuest) {
-    //
-    TvSortCfg vrs = rQuest.asVisualRules as TvSortCfg;
-    return SlotOrAreaRuleCfg(rQuest.visRuleTypeForAreaOrSlot!, [vrs]);
+  FilterRules? get filterRules {
+    List<TvFilterCfg> definedGroupRules =
+        rulesOfType(VisualRuleType.filterCfg) as List<TvFilterCfg>;
+
+    int len = definedGroupRules.length;
+    if (len < 1) return null;
+
+    definedGroupRules
+        .sort((r1, r2) => r1.order.index.compareTo(r2.order.index));
+
+    TvFilterCfg? gr2 = len > 1 ? definedGroupRules[1] : null;
+    TvFilterCfg? gr3 = len > 2 ? definedGroupRules[2] : null;
+    return FilterRules(definedGroupRules.first, gr2, gr3);
+  }
+
+  void appendQuestion(VisRuleStyleQuest rQuest) {
+    this.visRuleList.add(rQuest.response!.answers);
   }
 
   void fillMissingWithDefaults() {

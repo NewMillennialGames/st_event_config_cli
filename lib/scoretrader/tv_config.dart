@@ -28,7 +28,7 @@ class TableviewConfigPayload {
         tableAreaCfg.areaRuleByRuleType(VisualRuleType.styleOrFormat);
 
     TvRowStyleCfg styleRule =
-        tableRules.ruleByType(VisualRuleType.styleOrFormat) as TvRowStyleCfg;
+        tableRules.rulesOfType(VisualRuleType.styleOrFormat) as TvRowStyleCfg;
 
     GroupingRules groupRules = tableRules.groupingRules!;
     SortingRules sortRules = tableRules.sortingRules!;

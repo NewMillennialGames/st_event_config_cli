@@ -159,27 +159,48 @@ class EventCfgTree {
 
 extension EventCfgTreeExt1 on EventCfgTree {
   //
-  ScreenCfgByArea screenCfg(AppScreen screen) => this.screenConfigMap[screen]!;
+  ScreenCfgByArea fullScreenCfg(AppScreen screen) =>
+      this.screenConfigMap[screen]!;
 
-  CfgForAreaAndNestedSlots screenArea(
+  CfgForAreaAndNestedSlots screenAreaCfg(
     AppScreen screen,
     ScreenWidgetArea area,
   ) =>
-      screenCfg(screen).areaConfig[area]!;
+      fullScreenCfg(screen).configForArea(area);
 
-  Map<VisualRuleType, SlotOrAreaRuleCfg> areaCfgVisual(
+  Map<VisualRuleType, SlotOrAreaRuleCfg> allVisualRulesInScreenArea(
     AppScreen screen,
     ScreenWidgetArea area,
   ) =>
-      screenArea(screen, area).visCfgForArea;
+      screenAreaCfg(screen, area).visCfgForArea;
 
-  SlotOrAreaRuleCfg areaTableRules(AppScreen screen) => areaCfgVisual(
-      screen, ScreenWidgetArea.tableview)[VisualRuleType.styleOrFormat]!;
-
-  RuleResponseBase tableFormatRule(AppScreen screen) {
-    return areaTableRules(screen).ruleByType(VisualRuleType.styleOrFormat);
+  GroupingRules tvGroupingRules(AppScreen screen) {
+    // Map<VisualRuleType, SlotOrAreaRuleCfg> areaCfgByRuleType =
+    //     allVisualRulesInScreenArea(screen, ScreenWidgetArea.tableview);
+    return allVisualRulesInScreenArea(
+            screen, ScreenWidgetArea.tableview)[VisualRuleType.groupCfg]!
+        .groupingRules!;
   }
 
-  TvRowStyleCfg formatRuleCfg(AppScreen screen) =>
-      (tableFormatRule as TvRowStyleCfg);
+  SortingRules tvSortingRules(AppScreen screen) {
+    // Map<VisualRuleType, SlotOrAreaRuleCfg> areaCfgByRuleType =
+    //     allVisualRulesInScreenArea(screen, ScreenWidgetArea.tableview);
+    return allVisualRulesInScreenArea(
+            screen, ScreenWidgetArea.tableview)[VisualRuleType.sortCfg]!
+        .sortingRules!;
+  }
+
+  FilterRules tvFilteringRules(AppScreen screen) {
+    // Map<VisualRuleType, SlotOrAreaRuleCfg> areaCfgByRuleType =
+    //     allVisualRulesInScreenArea(screen, ScreenWidgetArea.tableview);
+    return allVisualRulesInScreenArea(
+            screen, ScreenWidgetArea.tableview)[VisualRuleType.filterCfg]!
+        .filterRules!;
+  }
+
+  TvAreaRowStyle tableRowStyleFor(AppScreen screen) {
+    return (allVisualRulesInScreenArea(screen, ScreenWidgetArea.tableview)[
+            VisualRuleType.styleOrFormat]! as TvRowStyleCfg)
+        .selectedRowStyle;
+  }
 }

@@ -12,6 +12,8 @@ typedef IndexedItemRowBuilder = Widget Function(BuildContext, StdRowData, int);
 typedef SectionSortComparator = int Function(
     AssetRowPropertyIfc, AssetRowPropertyIfc);
 
-typedef GroupingRules = Tuple3<TvSortCfg, TvSortCfg?, TvSortCfg?>;
+typedef GroupingRules = Tuple3<TvGroupCfg, TvGroupCfg?, TvGroupCfg?>;
 
 typedef SortingRules = Tuple3<TvSortCfg, TvSortCfg?, TvSortCfg?>;
+
+typedef FilterRules = Tuple3<TvFilterCfg, TvFilterCfg?, TvFilterCfg?>;

@@ -61,18 +61,25 @@ class CfgForAreaAndNestedSlots {
       'cant add question that has no attached rule',
     );
     //
-    ScreenAreaWidgetSlot? slotInArea = rQuest.slotInArea;
+    ScreenAreaWidgetSlot? optSlotInArea = rQuest.slotInArea;
     _validateRuleAndSlotIsApplicable(
       rQuest.visRuleTypeForAreaOrSlot!,
-      slotInArea,
+      optSlotInArea,
     );
-    if (slotInArea == null) {
-      // this is an area level rule
-      visCfgForArea[rQuest.visRuleTypeForAreaOrSlot!] =
-          SlotOrAreaRuleCfg.fromQuest(rQuest);
+
+    SlotOrAreaRuleCfg cfgForSlotOrArea;
+    if (optSlotInArea == null) {
+      // this is an area level rule by specific type
+      cfgForSlotOrArea = visCfgForArea[rQuest.visRuleTypeForAreaOrSlot!] ??
+          SlotOrAreaRuleCfg(rQuest.visRuleTypeForAreaOrSlot!, []);
+      cfgForSlotOrArea.appendQuestion(rQuest);
+      visCfgForArea[rQuest.visRuleTypeForAreaOrSlot!] = cfgForSlotOrArea;
     } else {
       // this is a slot level rule
-      visCfgBySlotInArea[slotInArea] = SlotOrAreaRuleCfg.fromQuest(rQuest);
+      cfgForSlotOrArea = visCfgBySlotInArea[optSlotInArea] ??
+          SlotOrAreaRuleCfg(rQuest.visRuleTypeForAreaOrSlot!, []);
+      cfgForSlotOrArea.appendQuestion(rQuest);
+      visCfgBySlotInArea[optSlotInArea] = cfgForSlotOrArea;
     }
   }
 
