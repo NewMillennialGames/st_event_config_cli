@@ -33,12 +33,12 @@ class ScreenCfgByArea {
   }
 
   void appendRule(
-    VisualRuleQuestion<dynamic, RuleResponseWrapperIfc> rQuest,
+    VisRuleStyleQuest rQuest,
   ) {
     //
     _confirmAreaIsApplicable(rQuest.screenWidgetArea!, false);
     //
-    RuleResponseWrapperIfc? answer = rQuest.response?.answers;
+    RuleResponseBase? answer = rQuest.response?.answers;
     ScreenWidgetArea? swa = rQuest.screenWidgetArea;
     if (answer == null || swa == null) {
       var msg =
@@ -53,7 +53,7 @@ class ScreenCfgByArea {
     if (answer is Iterable) {
       throw UnimplementedError('todo');
     } else {
-      var areaCfg = areaConfig[swa] ?? CfgForAreaAndNestedSlots(swa);
+      var areaCfg = this.areaConfig[swa] ?? CfgForAreaAndNestedSlots(swa);
       areaCfg.appendAreaOrSlotRule(rQuest);
       areaConfig[swa] = areaCfg;
     }

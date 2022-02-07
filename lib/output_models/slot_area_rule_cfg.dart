@@ -53,7 +53,7 @@ class SlotOrAreaRuleCfg {
     return SortingRules(definedGroupRules.first, gr2, gr3);
   }
 
-  factory SlotOrAreaRuleCfg.fromQuest(VisualRuleQuestion rQuest) {
+  factory SlotOrAreaRuleCfg.fromQuest(VisRuleStyleQuest rQuest) {
     //
     TvSortCfg vrs = rQuest.asVisualRules as TvSortCfg;
     return SlotOrAreaRuleCfg(rQuest.visRuleTypeForAreaOrSlot!, [vrs]);

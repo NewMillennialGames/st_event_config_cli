@@ -112,11 +112,11 @@ CfgForAreaAndNestedSlots _$CfgForAreaAndNestedSlotsFromJson(
     CfgForAreaAndNestedSlots(
       $enumDecode(_$ScreenWidgetAreaEnumMap, json['screenArea']),
     )
-      ..visRulesForArea = (json['visRulesForArea'] as Map<String, dynamic>).map(
+      ..visCfgForArea = (json['visRulesForArea'] as Map<String, dynamic>).map(
         (k, e) => MapEntry($enumDecode(_$VisualRuleTypeEnumMap, k),
             SlotOrAreaRuleCfg.fromJson(e as Map<String, dynamic>)),
       )
-      ..visConfigBySlotInArea =
+      ..visCfgBySlotInArea =
           (json['visConfigBySlotInArea'] as Map<String, dynamic>).map(
         (k, e) => MapEntry($enumDecode(_$ScreenAreaWidgetSlotEnumMap, k),
             SlotOrAreaRuleCfg.fromJson(e as Map<String, dynamic>)),
@@ -126,9 +126,9 @@ Map<String, dynamic> _$CfgForAreaAndNestedSlotsToJson(
         CfgForAreaAndNestedSlots instance) =>
     <String, dynamic>{
       'screenArea': _$ScreenWidgetAreaEnumMap[instance.screenArea],
-      'visRulesForArea': instance.visRulesForArea
+      'visRulesForArea': instance.visCfgForArea
           .map((k, e) => MapEntry(_$VisualRuleTypeEnumMap[k], e)),
-      'visConfigBySlotInArea': instance.visConfigBySlotInArea
+      'visConfigBySlotInArea': instance.visCfgBySlotInArea
           .map((k, e) => MapEntry(_$ScreenAreaWidgetSlotEnumMap[k], e)),
     };
 

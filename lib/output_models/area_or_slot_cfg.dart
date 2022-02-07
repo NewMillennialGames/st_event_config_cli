@@ -5,21 +5,21 @@ class CfgForAreaAndNestedSlots {
   // Area and Slot Rules
   ScreenWidgetArea screenArea;
   // area level config rules
-  Map<VisualRuleType, SlotOrAreaRuleCfg> visRulesForArea = {};
+  Map<VisualRuleType, SlotOrAreaRuleCfg> visCfgForArea = {};
   // slot level config (rules embedded)
-  Map<ScreenAreaWidgetSlot, SlotOrAreaRuleCfg> visConfigBySlotInArea = {};
+  Map<ScreenAreaWidgetSlot, SlotOrAreaRuleCfg> visCfgBySlotInArea = {};
 
   CfgForAreaAndNestedSlots(
     this.screenArea,
   );
 
   SlotOrAreaRuleCfg areaRuleByRuleType(VisualRuleType typ) =>
-      visRulesForArea[typ]!;
+      visCfgForArea[typ]!;
 
   SlotOrAreaRuleCfg slotRulesBySlot(
     ScreenAreaWidgetSlot slot,
   ) =>
-      visConfigBySlotInArea[slot]!;
+      visCfgBySlotInArea[slot]!;
 
   void _validateRuleAndSlotIsApplicable(
     VisualRuleType rt,
@@ -38,40 +38,41 @@ class CfgForAreaAndNestedSlots {
     //
     // create missing default rules for this screen area
     for (VisualRuleType rt in screenArea.applicableRuleTypes) {
-      if (visRulesForArea.containsKey(rt)) continue;
+      if (visCfgForArea.containsKey(rt)) continue;
       //
-      visRulesForArea[rt] = SlotOrAreaRuleCfg(rt, [])
-        ..fillMissingWithDefaults();
+      visCfgForArea[rt] = SlotOrAreaRuleCfg(rt, [])..fillMissingWithDefaults();
     }
 
     // create missing default rules for SLOTS INSIDE this screen area
     for (ScreenAreaWidgetSlot slot in screenArea.applicableWigetSlots) {
-      if (visConfigBySlotInArea.containsKey(slot)) continue;
+      if (visCfgBySlotInArea.containsKey(slot)) continue;
       //
       for (VisualRuleType vrt in slot.possibleConfigRules) {
-        visConfigBySlotInArea[slot] = SlotOrAreaRuleCfg(vrt, [])
+        visCfgBySlotInArea[slot] = SlotOrAreaRuleCfg(vrt, [])
           ..fillMissingWithDefaults();
       }
     }
   }
 
-  void appendAreaOrSlotRule(VisualRuleQuestion rQuest) {
+  void appendAreaOrSlotRule(VisRuleStyleQuest rQuest) {
     //
-    assert(rQuest.visRuleTypeForAreaOrSlot != null,
-        'cant add question that has no attached rule');
+    assert(
+      rQuest.visRuleTypeForAreaOrSlot != null,
+      'cant add question that has no attached rule',
+    );
     //
+    ScreenAreaWidgetSlot? slotInArea = rQuest.slotInArea;
     _validateRuleAndSlotIsApplicable(
       rQuest.visRuleTypeForAreaOrSlot!,
-      rQuest.slotInArea,
+      slotInArea,
     );
-    if (rQuest.slotInArea == null) {
+    if (slotInArea == null) {
       // this is an area level rule
-      visRulesForArea[rQuest.visRuleTypeForAreaOrSlot!] =
+      visCfgForArea[rQuest.visRuleTypeForAreaOrSlot!] =
           SlotOrAreaRuleCfg.fromQuest(rQuest);
     } else {
       // this is a slot level rule
-      visConfigBySlotInArea[rQuest.slotInArea!] =
-          SlotOrAreaRuleCfg.fromQuest(rQuest);
+      visCfgBySlotInArea[slotInArea] = SlotOrAreaRuleCfg.fromQuest(rQuest);
     }
   }
 

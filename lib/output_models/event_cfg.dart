@@ -36,7 +36,7 @@ class TopEventCfg {
   }
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: false)
 class EventCfgTree {
   //
   TopEventCfg eventCfg;
@@ -112,9 +112,14 @@ class EventCfgTree {
   }
 
   void fillFromVisualRuleAnswers(
-      Iterable<VisualRuleQuestion> answeredQuestions) {
-    //
-    for (VisualRuleQuestion rQuest in answeredQuestions) {
+    Iterable<VisRuleStyleQuest> answeredQuestions,
+  ) {
+    /*  receive all vis-rule-questions, and fill
+        out the tree of configuration data
+        that will customize the client UI
+    */
+    for (VisualRuleQuestion<String, RuleResponseBase> rQuest
+        in answeredQuestions) {
       // look up or create it
       ScreenCfgByArea screenCfg = this.screenConfigMap[rQuest.appScreen] ??
           ScreenCfgByArea(rQuest.appScreen);
@@ -166,7 +171,7 @@ extension EventCfgTreeExt1 on EventCfgTree {
     AppScreen screen,
     ScreenWidgetArea area,
   ) =>
-      screenArea(screen, area).visRulesForArea;
+      screenArea(screen, area).visCfgForArea;
 
   SlotOrAreaRuleCfg areaTableRules(AppScreen screen) => areaCfgVisual(
       screen, ScreenWidgetArea.tableview)[VisualRuleType.styleOrFormat]!;

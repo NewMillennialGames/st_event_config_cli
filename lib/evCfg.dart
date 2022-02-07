@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:core';
 import 'package:args/args.dart';
 //
+import 'scoretrader/all.dart';
 import 'dialog/all.dart';
 import 'input_models/all.dart';
 import 'output_models/all.dart';
@@ -57,7 +58,7 @@ void createOutputFileFromResponses(
   final evCfg = EventCfgTree.fromEventLevelConfig(eventConfigLevelData);
   // create the per-area or per-slot rules
   evCfg.fillFromVisualRuleAnswers(
-    exportableQuestions.whereType<VisualRuleQuestion>(),
+    exportableQuestions.whereType<VisRuleStyleQuest>(),
   );
   // now dump evCfg to file
   evCfg.dumpCfgToFile(filename);

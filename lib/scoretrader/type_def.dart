@@ -1,5 +1,7 @@
 part of StUiController;
 
+typedef VisRuleStyleQuest = VisualRuleQuestion<String, RuleResponseBase>;
+
 typedef TvRowBuilder = Widget Function(StdRowData);
 
 typedef GetGroupKeyFromRow = GroupHeaderData Function(AssetRowPropertyIfc);
