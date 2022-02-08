@@ -24,8 +24,8 @@ enum TvAreaRowStyle {
 }
   */
 
-class TeamVsTeamRow extends StBaseTvRow with ShowsTwoAssets {
-  TeamVsTeamRow(
+class AssetVsAssetRow extends StBaseTvRow with ShowsTwoAssets {
+  AssetVsAssetRow(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
@@ -37,8 +37,8 @@ class TeamVsTeamRow extends StBaseTvRow with ShowsTwoAssets {
   }
 }
 
-class TeamVsTeamRankedRow extends StBaseTvRow with ShowsTwoAssets {
-  TeamVsTeamRankedRow(
+class AssetVsAssetRankedRow extends StBaseTvRow with ShowsTwoAssets {
+  AssetVsAssetRankedRow(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);

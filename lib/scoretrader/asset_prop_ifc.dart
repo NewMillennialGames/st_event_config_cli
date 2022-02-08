@@ -16,6 +16,7 @@ abstract class AssetRowPropertyIfc {
   String get imgUrl;
   String get regionOrConference;
   String get groupKey; // for grouping and sorting
+  String get location;
   //
   double get price;
   String get priceStr;
@@ -41,19 +42,19 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
       case DbTableFieldName.playerName:
         return topName;
       case DbTableFieldName.conference:
-        return topName;
+        return regionOrConference;
       case DbTableFieldName.region:
-        return topName;
+        return regionOrConference;
       case DbTableFieldName.eventName:
         return topName;
-      case DbTableFieldName.eventLocation:
-        return topName;
-      case DbTableFieldName.eventBannerUrl:
-        return topName;
+      case DbTableFieldName.gameLocation:
+        return location;
+      case DbTableFieldName.imageUrl:
+        return imgUrl;
       case DbTableFieldName.assetOpenPrice:
-        return topName;
+        return priceStr;
       case DbTableFieldName.assetCurrentPrice:
-        return topName;
+        return priceStr;
       default:
         return '_dfltProp';
     }

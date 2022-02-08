@@ -21,22 +21,24 @@ class TableviewConfigPayload {
     this.sortRules,
   );
 
-  factory TableviewConfigPayload(CfgForAreaAndNestedSlots tableAreaCfg) {
+  factory TableviewConfigPayload(
+    CfgForAreaAndNestedSlots tableAreaCfg,
+  ) {
     //
     assert(tableAreaCfg.screenArea == ScreenWidgetArea.tableview, 'oops!');
-    SlotOrAreaRuleCfg tableRules =
+    //
+    SlotOrAreaRuleCfg tableAreaRules =
         tableAreaCfg.areaRuleByRuleType(VisualRuleType.styleOrFormat);
+    TvRowStyleCfg tvRowStyleRule = tableAreaRules
+        .rulesOfType(VisualRuleType.styleOrFormat) as TvRowStyleCfg;
 
-    TvRowStyleCfg styleRule =
-        tableRules.rulesOfType(VisualRuleType.styleOrFormat) as TvRowStyleCfg;
-
-    GroupingRules groupRules = tableRules.groupingRules!;
-    SortingRules sortRules = tableRules.sortingRules!;
+    // GroupingRules groupRules = tableAreaRules.groupingRules!;
+    // SortingRules sortRules = tableAreaRules.sortingRules!;
 
     return TableviewConfigPayload._(
-      styleRule.selectedRowStyle,
-      groupRules,
-      sortRules,
+      tvRowStyleRule.selectedRowStyle,
+      tableAreaRules.groupingRules!,
+      tableAreaRules.sortingRules!,
     );
   }
 
@@ -45,28 +47,28 @@ class TableviewConfigPayload {
 
     switch (rowStyle) {
       case TvAreaRowStyle.assetVsAsset:
-        return TeamVsTeamRow.new;
+        return AssetVsAssetRow.new;
       case TvAreaRowStyle.assetVsAssetRanked:
-        return TeamVsTeamRankedRow.new;
+        return AssetVsAssetRankedRow.new;
       case TvAreaRowStyle.teamVsField:
         return TeamVsFieldRow.new;
       case TvAreaRowStyle.teamVsFieldRanked:
         return TeamVsFieldRow.new;
 
       case TvAreaRowStyle.teamDraft:
-        return TeamVsTeamRow.new;
+        return AssetVsAssetRow.new;
       case TvAreaRowStyle.teamLine:
-        return TeamVsTeamRow.new;
+        return AssetVsAssetRow.new;
       case TvAreaRowStyle.teamPlayerVsField:
-        return TeamVsTeamRow.new;
+        return AssetVsAssetRow.new;
       case TvAreaRowStyle.playerVsField:
-        return TeamVsTeamRow.new;
+        return AssetVsAssetRow.new;
       case TvAreaRowStyle.playerVsFieldRanked:
-        return TeamVsTeamRow.new;
+        return AssetVsAssetRow.new;
       case TvAreaRowStyle.playerDraft:
-        return TeamVsTeamRow.new;
+        return AssetVsAssetRow.new;
       case TvAreaRowStyle.driverVsField:
-        return TeamVsTeamRow.new;
+        return AssetVsAssetRow.new;
       // default:
       //   return TeamVsTeamRow.new;
     }

@@ -35,8 +35,10 @@ class GroupedTableDataMgr {
   }
 
   //
-  GroupSepRowBuilder get groupSeparatorBuilder =>
-      (GroupHeaderData _) => TvGroupHeaderSep(GroupHeaderData.mockRow);
+  GroupSepRowBuilder get groupSeparatorBuilder {
+    //
+    return (GroupHeaderData _) => TvGroupHeaderSep(GroupHeaderData.mockRow);
+  }
 
   // defining groupHeaderBuilder will cause groupSeparatorBuilder to be ignored
   GroupHeaderBuilder? get groupHeaderBuilder =>

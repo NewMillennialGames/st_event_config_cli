@@ -3,14 +3,14 @@ part of EvCfgEnums;
 @JsonEnum()
 enum TvAreaRowStyle {
   /*
-  these are the tbl-view row style options on 3 main screens:
+  these are the tbl-view row style options on 4 main screens:
     MarketView
     Leaderboard
     Portfolio
     MarketResearch
 
     2 Assets Per row only shows up on the MarketView screen
-    for these two types
+    for these two row types
         assetVsAsset,
         assetVsAssetRanked,
   */

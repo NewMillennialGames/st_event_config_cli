@@ -19,7 +19,7 @@ class SlotOrAreaRuleCfg {
   );
 
   List<RuleResponseBase> rulesOfType(VisualRuleType rt) =>
-      visRuleList.where((e) => e.ruleType == rt).toList();
+      visRuleList.where((rr) => rr.ruleType == rt).toList();
 
   GroupingRules? get groupingRules {
     List<TvGroupCfg> definedGroupRules =

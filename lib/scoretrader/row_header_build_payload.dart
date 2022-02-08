@@ -20,20 +20,22 @@ class GroupHeaderData {
     this.third,
   );
 
-  static GetGroupKeyFromRow keyConstructorFromCfg(GroupingRules groupingRules) {
-    //
+  static GetGroupKeyFromRow keyConstructorFromCfg(
+    GroupingRules groupingRules,
+  ) {
+    // returns a func that creates a GroupHeaderData
     CastRowToSortVal firstValFn = (AssetRowPropertyIfc row) {
       return row.valueExtractor(groupingRules.item1.colName);
     };
 
     CastRowToSortVal secondValFn = (AssetRowPropertyIfc row) {
-      var col2Rule = groupingRules.item2;
+      TvGroupCfg? col2Rule = groupingRules.item2;
       if (col2Rule == null) return '';
       return row.valueExtractor(col2Rule.colName);
     };
 
     CastRowToSortVal thirdValFn = (AssetRowPropertyIfc row) {
-      var col3Rule = groupingRules.item3;
+      TvGroupCfg? col3Rule = groupingRules.item3;
       if (col3Rule == null) return '';
       return row.valueExtractor(col3Rule.colName);
     };

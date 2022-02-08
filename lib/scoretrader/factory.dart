@@ -55,10 +55,3 @@ class AbstractUiFactory {
     return tableCfg.areaRuleByRuleType(VisualRuleType.styleOrFormat);
   }
 }
-
-
-  // TableStyleFactory tableUiConfigForScreen(AppScreen screen) {
-  //   final cfg = _eConfig!
-  //       .screenConfigMap[screen]!.areaConfig[ScreenWidgetArea.tableview];
-  //   return TableStyleFactory(screen, cfg!);
-  // }

@@ -7,8 +7,9 @@ enum DbTableFieldName {
   conference,
   region,
   eventName,
-  eventLocation,
-  eventBannerUrl,
+  gameLocation,
+  imageUrl,
   assetOpenPrice,
   assetCurrentPrice,
+  rank,
 }

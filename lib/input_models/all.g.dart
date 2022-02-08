@@ -90,8 +90,8 @@ const _$DbTableFieldNameEnumMap = {
   DbTableFieldName.conference: 'conference',
   DbTableFieldName.region: 'region',
   DbTableFieldName.eventName: 'eventName',
-  DbTableFieldName.eventLocation: 'eventLocation',
-  DbTableFieldName.eventBannerUrl: 'eventBannerUrl',
+  DbTableFieldName.gameLocation: 'eventLocation',
+  DbTableFieldName.imageUrl: 'eventBannerUrl',
   DbTableFieldName.assetOpenPrice: 'assetOpenPrice',
   DbTableFieldName.assetCurrentPrice: 'assetCurrentPrice',
 };
