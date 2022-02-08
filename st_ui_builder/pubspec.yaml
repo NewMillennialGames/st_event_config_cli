@@ -31,6 +31,8 @@ dependencies:
     sdk: flutter
   st_ev_cfg:
      path: ../../st_ev_cfg/
+  grouped_list: ^4.1.0
+  tuple: ^2.0.0
 
 
   # The following adds the Cupertino Icons font to your application.
