@@ -1,6 +1,6 @@
 part of StUiController;
 
-class AbstractUiFactory {
+class StUiBuilderFactory {
   /* top level config API
 
     this object will be global
@@ -13,7 +13,7 @@ class AbstractUiFactory {
   */
   EventCfgTree? _eConfig;
   //
-  AbstractUiFactory();
+  StUiBuilderFactory();
 
   void setConfigForCurrentEvent(Map<String, dynamic> eCfgJsonMap) {
     /* call this every time user switches events
@@ -29,7 +29,7 @@ class AbstractUiFactory {
   ) {
     /* build object that wraps all data and display rules
     */
-    final CfgForAreaAndNestedSlots tableCfg =
+    CfgForAreaAndNestedSlots tableCfg =
         _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.tableview);
     return GroupedTableDataMgr(rows, TableviewConfigPayload(tableCfg));
   }

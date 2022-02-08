@@ -7,21 +7,8 @@ part of StUiController;
     Portfolio
     MarketResearch
 
-need one for each of:
-
-enum TvAreaRowStyle {
-  teamVsTeam,
-  teamVsTeamRanked,
-  teamVsField,
-  teamVsFieldRanked,
-  teamDraft,
-  teamLine,
-  teamPlayerVsField,
-  playerVsField,
-  playerVsFieldRanked,
-  playerDraft,
-  driverVsField,
-}
+we have one style for each value of:
+    enum TvAreaRowStyle
   */
 
 class AssetVsAssetRow extends StBaseTvRow with ShowsTwoAssets {

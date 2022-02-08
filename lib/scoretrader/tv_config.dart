@@ -53,22 +53,22 @@ class TableviewConfigPayload {
       case TvAreaRowStyle.teamVsField:
         return TeamVsFieldRow.new;
       case TvAreaRowStyle.teamVsFieldRanked:
-        return TeamVsFieldRow.new;
+        return TeamVsFieldRankedRow.new;
 
       case TvAreaRowStyle.teamDraft:
-        return AssetVsAssetRow.new;
+        return TeamDraftRow.new;
       case TvAreaRowStyle.teamLine:
-        return AssetVsAssetRow.new;
+        return TeamLineRow.new;
       case TvAreaRowStyle.teamPlayerVsField:
-        return AssetVsAssetRow.new;
+        return TeamPlayerVsFieldRow.new;
       case TvAreaRowStyle.playerVsField:
-        return AssetVsAssetRow.new;
+        return PlayerVsFieldRow.new;
       case TvAreaRowStyle.playerVsFieldRanked:
-        return AssetVsAssetRow.new;
+        return PlayerVsFieldRankedRow.new;
       case TvAreaRowStyle.playerDraft:
-        return AssetVsAssetRow.new;
+        return PlayerDraftRow.new;
       case TvAreaRowStyle.driverVsField:
-        return AssetVsAssetRow.new;
+        return DriverVsFieldRow.new;
       // default:
       //   return TeamVsTeamRow.new;
     }
