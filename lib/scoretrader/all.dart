@@ -1,11 +1,11 @@
 library StUiController;
 
 import 'package:flutter/material.dart';
-import 'package:eventconfig/enums/all.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:tuple/tuple.dart';
 //
 import '../app_entity_enums/all.dart';
+import '../enums/all.dart';
 import '../output_models/all.dart';
 import '../input_models/all.dart';
 

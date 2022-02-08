@@ -1,4 +1,4 @@
-library DialogWeb;
+library StEvCfgWeb;
 
 /*
   put your classes here to support

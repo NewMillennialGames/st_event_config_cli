@@ -1,4 +1,4 @@
-name: eventconfig
+name: st_ev_cfg
 description: scoretrader event payload
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
