@@ -99,6 +99,7 @@ class QuestListMgr {
   void _sortPendingQuestions() {
     // its important that we ONLY sort the section AFTER _currQuestionIdx
     // or else we might re-ask prior (already answered) questions
+    if (_currQuestionIdx < 5) return;
 
     var unaskedQuests = _pendingQuestions.sublist(_currQuestionIdx + 1);
 

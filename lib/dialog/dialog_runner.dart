@@ -53,7 +53,7 @@ class DialogRunner {
       _questGroupMgr,
       _questMgr,
     );
-    if (!didAddNew) {
+    if (!didAddNew & false) {
       // new version of handleAcquiringNewQuestions
       // run it only if handleAcquiringNewQuestions does no work
       appendNewQuests(_questMgr, _questMgr._currentOrLastQuestion);
