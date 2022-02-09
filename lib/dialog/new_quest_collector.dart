@@ -45,7 +45,7 @@ class NewQuestionCollector {
       print('gens2ndOr3rdSortGroupFilterQuests was true');
       askUser2ndOr3rdFieldForSortGroupFilter(
         _questMgr,
-        questJustAnswered as VisualRuleQuestion<String, TvSortGroupFilterBase>,
+        questJustAnswered as VisualRuleQuestion<String, RuleResponseWrapperIfc>,
       );
       return true;
     }
@@ -343,7 +343,7 @@ class NewQuestionCollector {
 // callbacks when a question needs to add other questions
 void askUser2ndOr3rdFieldForSortGroupFilter(
   QuestListMgr _questMgr,
-  VisualRuleQuestion<String, TvSortGroupFilterBase> questJustAnswered,
+  VisualRuleQuestion<String, RuleResponseWrapperIfc> questJustAnswered,
 ) {
   /*
 
