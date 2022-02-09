@@ -47,10 +47,16 @@ class DialogRunner {
 
   void advanceToNextQuestion() {
     //
-    _newQuestComposer.handleAcquiringNewQuestions(
+    bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(
       _questGroupMgr,
       _questMgr,
     );
+
+    if (!didAddNew) {
+      // new version of handleAcquiringNewQuestions
+      // run it only if handleAcquiringNewQuestions does no work
+      appendNewQuests(_questMgr, _questMgr._currentOrLastQuestion);
+    }
 
     bool hasNextQuest = serveNextQuestionToGui();
     if (!hasNextQuest) {
@@ -71,10 +77,16 @@ class DialogRunner {
       // askAndWaitForUserResponse() will callback to this
       // to create any derived questions for this section
       questFormatter.askAndWaitForUserResponse(this, _quest);
-      _newQuestComposer.handleAcquiringNewQuestions(
+      bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(
         _questGroupMgr,
         _questMgr,
       );
+
+      if (!didAddNew) {
+        // new version of handleAcquiringNewQuestions
+        // run it only if handleAcquiringNewQuestions does no work
+        appendNewQuests(_questMgr, _quest);
+      }
 
       _quest = _questGroupMgr.getNextQuestInCurrentSection();
       if (_quest != null) _outputSpacerLines();

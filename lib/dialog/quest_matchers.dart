@@ -59,8 +59,7 @@ class QuestMatcher<AnsType> {
             this.behRuleTypeForAreaOrSlot == quest.behRuleTypeForAreaOrSlot);
 
     dMatch = dMatch &&
-        (this.isRuleQuestion == null ||
-            this.isRuleQuestion == quest.isRuleQuestion);
+        (this.isRuleQuestion == false || quest.isRuleQuestion == true);
 
     dMatch =
         dMatch && (this.typ == null || quest.response.runtimeType == this.typ);

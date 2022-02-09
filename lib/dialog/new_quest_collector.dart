@@ -24,7 +24,7 @@ class NewQuestionCollector {
   to those areas and/or area-slots on each respective screen
   */
 
-  void handleAcquiringNewQuestions(
+  bool handleAcquiringNewQuestions(
     DialogMgr _questGroupMgr,
     QuestListMgr _questMgr,
   ) {
@@ -38,7 +38,7 @@ class NewQuestionCollector {
       print(
         'Quest: #${questJustAnswered.questionId} -- ${questJustAnswered.questStr} wont generate any new questions',
       );
-      return;
+      return false;
     }
 
     if (questJustAnswered.gens2ndOr3rdSortGroupFilterQuests) {
@@ -47,9 +47,10 @@ class NewQuestionCollector {
         _questMgr,
         questJustAnswered as VisualRuleQuestion<String, TvSortGroupFilterBase>,
       );
-      return;
+      return true;
     }
 
+    bool addedNew = false;
     if (questJustAnswered.asksAreasWithinSelectedScreens &&
         questJustAnswered.appScreen == AppScreen.eventConfiguration) {
       /* called by the last question in hard-coded event list
@@ -61,6 +62,7 @@ class NewQuestionCollector {
         _questMgr,
         questJustAnswered.response as UserResponse<List<AppScreen>>,
       );
+      addedNew = true;
       //
     } else if (questJustAnswered
         .asksAboutRulesAndSlotsWithinSelectedScreenAreas) {
@@ -77,6 +79,7 @@ class NewQuestionCollector {
         _questMgr,
         questJustAnswered as Question<String, List<ScreenWidgetArea>>,
       );
+      addedNew = true;
       //
     } else if (questJustAnswered.asksRuleTypesForSelectedAreasOrSlots) {
       //
@@ -85,6 +88,7 @@ class NewQuestionCollector {
         _questMgr,
         questJustAnswered as Question<String, List<ScreenAreaWidgetSlot>>,
       );
+      addedNew = true;
       //
     } else if (questJustAnswered.asksDetailsForEachVisualRuleType) {
       // print('calling: genRequestedVisualRulesForAreaOrSlot');
@@ -93,6 +97,7 @@ class NewQuestionCollector {
         _questMgr,
         questJustAnswered as Question<String, List<VisualRuleType>>,
       );
+      addedNew = true;
       // if (questJustAnswered is Question<String, List<VisualRuleType>>) {
       //   genRequestedVisualRulesForAreaOrSlot(
       //     _questMgr,
@@ -113,6 +118,7 @@ class NewQuestionCollector {
         _questMgr,
         questJustAnswered as Question<String, List<BehaviorRuleType>>,
       );
+      addedNew = true;
       //
     } else {
       print(
@@ -125,6 +131,8 @@ class NewQuestionCollector {
       //   'Quest ID ${questJustAnswered.questionId} about "${questJustAnswered.question}" did not generate any new questions\n\n',
       // );
     }
+
+    return addedNew;
   }
 
   // callbacks when a question needs to add other questions
