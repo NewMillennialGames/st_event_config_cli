@@ -32,7 +32,8 @@ class NewQuestionCollector {
     // ruleQuestions don't currently generate new questions
     // actually, a sort or group (level 2 or 3) question
     // should generate the questions under it??  TODO
-    if (questJustAnswered.isRuleQuestion ||
+    if ((questJustAnswered.isRuleQuestion &&
+            !questJustAnswered.gens2ndOr3rdSortGroupFilterQuests) ||
         questJustAnswered.generatesNoNewQuestions) {
       print(
         'Quest: #${questJustAnswered.questionId} -- ${questJustAnswered.questStr} wont generate any new questions',
@@ -41,6 +42,7 @@ class NewQuestionCollector {
     }
 
     if (questJustAnswered.gens2ndOr3rdSortGroupFilterQuests) {
+      print('gens2ndOr3rdSortGroupFilterQuests was true');
       askUser2ndOr3rdFieldForSortGroupFilter(
         _questMgr,
         questJustAnswered as VisualRuleQuestion<String, TvSortGroupFilterBase>,

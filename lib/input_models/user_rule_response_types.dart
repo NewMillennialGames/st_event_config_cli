@@ -21,7 +21,9 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
   RuleResponseBase(this.ruleType);
 
   List<VisRuleQuestType> get requiredQuestions => ruleType.requiredQuestions;
+  @override
   bool get gens2ndOr3rdSortGroupFilterQuests => false;
+  //
   RuleResponseBase get asRuleResponse =>
       throw UnimplementedError('impl in sub class');
 

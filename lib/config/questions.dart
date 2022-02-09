@@ -115,6 +115,12 @@ final List<Question> _questionLst = [
       EvEliminationStrategy.values.map((e) => e.name),
       (i) => EvEliminationStrategy.values[i],
     ),
+    Qb<String, bool>(
+      QuestionQuantifier.eventLevel(),
+      'Apply 1st TblView row style to all other screens?',
+      ['no', 'yes'],
+      (i) => i == 1,
+    ),
   ],
   Qb<String, List<AppScreen>>(
     QuestionQuantifier.eventLevel(responseAddsWhichAreaQuestions: true),

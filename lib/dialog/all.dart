@@ -11,3 +11,4 @@ part 'quest_list_mgr.dart';
 part 'dialog_runner.dart';
 part 'dialog_mgr.dart';
 part 'new_quest_collector.dart';
+part 'quest_matchers.dart';
