@@ -2,9 +2,8 @@ import "dart:io";
 import 'package:collection/collection.dart';
 //
 import '../interfaces/question_presenter.dart';
-import '../input_models/all.dart';
+import '../questions/all.dart';
 import '../dialog/all.dart';
-import '../app_entity_enums/all.dart';
 import '../enums/all.dart';
 
 class CliQuestionPresenter implements QuestionPresenter {

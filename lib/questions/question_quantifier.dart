@@ -29,12 +29,12 @@ class QuestionQuantifier extends Equatable {
   );
 
   String get sortKey {
-    // makes equatable work for searching question list
-    int uiCompIdx = 1 + (screenWidgetArea?.index ?? -1);
-    int slotAreaIdx = 1 + (slotInArea?.index ?? -1);
-    int visRuleTypeForCompIdx = 1 + (visRuleTypeForAreaOrSlot?.index ?? -1);
-    int behRuleTypeForCompIdx = 1 + (behRuleTypeForAreaOrSlot?.index ?? -1);
-    return '${appScreen.index}-$uiCompIdx-$slotAreaIdx-$visRuleTypeForCompIdx-$behRuleTypeForCompIdx-${cascadeType.index}';
+    // makes equatable work for searching & sorting question list
+    int screenAreaIdx = 1 + (screenWidgetArea?.index ?? -1);
+    int slotInAreaIdx = 1 + (slotInArea?.index ?? -1);
+    int visRuleTypeIdx = 1 + (visRuleTypeForAreaOrSlot?.index ?? -1);
+    int behRuleTypeIdx = 1 + (behRuleTypeForAreaOrSlot?.index ?? -1);
+    return '${appScreen.index}-$screenAreaIdx-$slotInAreaIdx-$visRuleTypeIdx-$behRuleTypeIdx-${cascadeType.index}';
   }
 
   // equatableKey must be distinct & unique
@@ -65,23 +65,23 @@ class QuestionQuantifier extends Equatable {
       cascadeType.asksDetailsForEachBehaveRuleType;
 
   // factory QuestionQuantifier.forSearchFilter = QuestionQuantifier.custom;
-  factory QuestionQuantifier.forSearchFilter(
-    QuestCascadeTyp cascadeType,
-    AppScreen appScreen,
-    ScreenWidgetArea? screenArea,
-    ScreenAreaWidgetSlot? slotInArea,
-    VisualRuleType? visRuleTypeForAreaSlot,
-    BehaviorRuleType? behRuleTypeForAreaSlot,
-  ) {
-    return QuestionQuantifier._(
-      cascadeType,
-      appScreen,
-      screenArea,
-      slotInArea,
-      visRuleTypeForAreaSlot,
-      behRuleTypeForAreaSlot,
-    );
-  }
+  // factory QuestionQuantifier.forSearchFilter(
+  //   QuestCascadeTyp cascadeType,
+  //   AppScreen appScreen,
+  //   ScreenWidgetArea? screenArea,
+  //   ScreenAreaWidgetSlot? slotInArea,
+  //   VisualRuleType? visRuleTypeForAreaSlot,
+  //   BehaviorRuleType? behRuleTypeForAreaSlot,
+  // ) {
+  //   return QuestionQuantifier._(
+  //     cascadeType,
+  //     appScreen,
+  //     screenArea,
+  //     slotInArea,
+  //     visRuleTypeForAreaSlot,
+  //     behRuleTypeForAreaSlot,
+  //   );
+  // }
 
   /*  certain questions at top 3 levels (when property answered)
       can generate questions for levels below them
@@ -182,6 +182,10 @@ class QuestionQuantifier extends Equatable {
       visRuleTypeForSlotInArea,
       behRuleTypeForSlotInArea,
     );
+  }
+
+  List<VisualRuleType> relatedSubVisualRules() {
+    return [];
   }
 
   // impl for equatable

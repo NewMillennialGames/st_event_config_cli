@@ -7,13 +7,16 @@ enum QuestCascadeTyp {
     impact future questions in the pending list
 
     see extension below for clear wording
+
+    I want NO CASCADE questions to sort to LAST position
+    so I moved it's index to the bottom of list
    */
-  noCascade,
   addsWhichAreaInEachScreenQuestions,
   addsWhichSlotOfSelectedAreaQuestions, // for each screen
   addsWhichRuleForAreaOrSlotOfScreen, // for each area and slot of each screen
   addsVisualRuleQuestions,
-  addsBehavioralRuleQuestions
+  addsBehavioralRuleQuestions,
+  noCascade,
 }
 
 extension QuestCascadeTypExt on QuestCascadeTyp {

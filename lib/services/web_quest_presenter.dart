@@ -1,7 +1,7 @@
 import "dart:async";
 //
 import '../interfaces/question_presenter.dart';
-import '../input_models/all.dart';
+import '../questions/all.dart';
 import '../dialog/all.dart';
 
 class WebQuestionPresenter implements QuestionPresenter {

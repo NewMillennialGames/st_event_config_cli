@@ -72,7 +72,15 @@ if you wish to add features, you must understand the Enum hierarchy
 Control what is configurable by editing the lists returned in:
     lib/app_entity_enums/ui_screen.dart
 
-rebuild JSON models:  
+also, it's important to understand that some answers
+cause new questions to be created
+there are currently TWO code-pathways to creating new questions
+1)  NewQuestionCollector()
+2)  QuestMatcher()
+
+Both are working fine but I may want to clean this up in the future
+
+to rebuild JSON models:  
     cd projectRoot (above lib/)
     flutter pub run build_runner build --delete-conflicting-outputs
 

@@ -3,7 +3,7 @@ library EvCfgEnums;
 import 'package:json_annotation/json_annotation.dart';
 //
 import '../app_entity_enums/all.dart';
-import '../input_models/all.dart';
+import '../questions/all.dart';
 
 part 'shape_event.dart';
 part 'rule_type.dart';

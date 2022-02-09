@@ -4,7 +4,7 @@ void appendNewQuests(QuestListMgr questListMgr, Question quest) {
   //
   for (QuestMatcher qm in _possibleNewQuests) {
     if (qm.doesMatch(quest)) {
-      questListMgr.appendNewQuestions(qm.quests);
+      questListMgr.appendNewQuestions(qm._quests);
     }
   }
 }
@@ -20,7 +20,7 @@ class QuestMatcher<AnsType> {
   final bool isRuleQuestion;
   Type? typ = UserResponse<String>;
   //
-  List<VisualRuleQuestion> quests;
+  List<VisualRuleQuestion> _quests = [];
 
   QuestMatcher(
     this.cascadeType,
@@ -31,8 +31,30 @@ class QuestMatcher<AnsType> {
     this.behRuleTypeForAreaOrSlot,
     this.isRuleQuestion = false,
     this.typ,
-    this.quests = const [],
+    // this.quests,
   });
+
+  List<VisualRuleType> _subRuleQuests(Question quest) {
+    //
+    // List<VisualRuleType> lstVr = [];
+    // return lstVr;
+    return quest.qQuantify.relatedSubVisualRules();
+  }
+
+  void _createNewQuestAfterDoesMatch(Question quest) {
+    //
+    // int qId = quest.questionId;
+
+    for (VisualRuleType rt in _subRuleQuests(quest)) {
+      var q = VisualRuleQuestion<String, RuleResponseWrapperIfc>(
+        quest.appScreen,
+        quest.screenWidgetArea!,
+        rt,
+        quest.slotInArea,
+      );
+      _quests.add(q);
+    }
+  }
 
   bool doesMatch(Question quest) {
     bool dMatch = true;
@@ -64,6 +86,9 @@ class QuestMatcher<AnsType> {
     dMatch =
         dMatch && (this.typ == null || quest.response.runtimeType == this.typ);
 
+    if (dMatch) {
+      _createNewQuestAfterDoesMatch(quest);
+    }
     return dMatch;
   }
 }
@@ -72,8 +97,8 @@ List<QuestMatcher> _possibleNewQuests = [
   //
   QuestMatcher<int>(
     QuestCascadeTyp.addsVisualRuleQuestions,
-    AppScreen.marketView,
-    screenWidgetArea: ScreenWidgetArea.filterBar,
-    quests: [],
+    null,
+    screenWidgetArea: ScreenWidgetArea.tableview,
+    visRuleTypeForAreaOrSlot: VisualRuleType.sortCfg,
   ),
 ];

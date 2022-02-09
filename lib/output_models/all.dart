@@ -5,9 +5,8 @@ import 'dart:convert';
 import 'package:json_annotation/json_annotation.dart';
 //
 import '../scoretrader/all.dart';
-import '../input_models/all.dart';
+import '../questions/all.dart';
 import '../enums/all.dart';
-import '../input_models/all.dart';
 import '../app_entity_enums/all.dart';
 
 part 'all.g.dart';

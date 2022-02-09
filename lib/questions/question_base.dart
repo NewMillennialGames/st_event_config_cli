@@ -67,7 +67,7 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
       qQuantify.asksDetailsForEachVisualRuleType;
   bool get asksDetailsForEachBehaveRuleType =>
       qQuantify.asksDetailsForEachBehaveRuleType;
-  String get sortKey => '${qQuantify.sortKey}';
+  String get sortKey => qQuantify.sortKey;
   // ask 2nd & 3rd position for (sort, group, filter)
   bool get gens2ndOr3rdSortGroupFilterQuests => false;
 

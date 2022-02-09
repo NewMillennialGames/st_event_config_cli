@@ -98,6 +98,7 @@ class QuestListMgr {
 
   void _sortPendingQuestions() {
     // its important that we ONLY sort the section AFTER _currQuestionIdx
+    // or else we might re-ask prior (already answered) questions
 
     var unaskedQuests = _pendingQuestions.sublist(_currQuestionIdx + 1);
 
@@ -172,7 +173,7 @@ class QuestListMgr {
     this._pendingQuestions.addAll(quests);
 
     // TODO:  test sorting after everything else is working
-    // _sortPendingQuestions();
+    _sortPendingQuestions();
   }
 
   List<UserResponse> get priorAnswers {
