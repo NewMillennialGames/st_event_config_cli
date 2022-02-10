@@ -35,9 +35,9 @@ class NewQuestionCollector {
     if ((questJustAnswered.isRuleQuestion &&
             !questJustAnswered.gens2ndOr3rdSortGroupFilterQuests) ||
         questJustAnswered.generatesNoNewQuestions) {
-      // print(
-      //   'Quest: #${questJustAnswered.questionId} -- ${questJustAnswered.questStr} wont generate any new questions',
-      // );
+      print(
+        'Quest: #${questJustAnswered.questionId} -- ${questJustAnswered.questStr} wont generate any new questions',
+      );
       return false;
     }
 
