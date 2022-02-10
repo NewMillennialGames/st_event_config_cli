@@ -1,6 +1,9 @@
 part of ConfigDialogRunner;
 
-void appendNewQuests(QuestListMgr questListMgr, Question quest) {
+void appendNewQuests(
+  QuestListMgr questListMgr,
+  Question quest,
+) {
   //
   for (QuestMatcher qm in _possibleNewQuests) {
     if (qm.doesMatch(quest)) {
@@ -38,7 +41,7 @@ class QuestMatcher<AnsType> {
     //
     // List<VisualRuleType> lstVr = [];
     // return lstVr;
-    return quest.qQuantify.relatedSubVisualRules();
+    return quest.qQuantify.relatedSubVisualRules(quest);
   }
 
   void _createNewQuestAfterDoesMatch(Question quest) {

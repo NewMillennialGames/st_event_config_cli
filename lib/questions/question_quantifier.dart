@@ -184,8 +184,16 @@ class QuestionQuantifier extends Equatable {
     );
   }
 
-  List<VisualRuleType> relatedSubVisualRules() {
-    return [];
+  List<VisualRuleType> relatedSubVisualRules(Question quest) {
+    if (!this.generatesNoNewQuestions) return [];
+
+    List<VisualRuleType> list = [];
+    switch (this.visRuleTypeForAreaOrSlot!) {
+      case VisualRuleType.filterCfg:
+        list.addAll([]);
+    }
+
+    return list;
   }
 
   // impl for equatable

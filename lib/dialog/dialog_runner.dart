@@ -50,7 +50,7 @@ class DialogRunner {
     // logic to add new questions based on user response
     // two different methods
     bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(
-      _questGroupMgr,
+      // _questGroupMgr,
       _questMgr,
     );
     if (!didAddNew & false) {
@@ -83,7 +83,7 @@ class DialogRunner {
       // logic to add new questions based on user response
       // two different methods
       bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(
-        _questGroupMgr,
+        // _questGroupMgr,
         _questMgr,
       );
       if (!didAddNew) {

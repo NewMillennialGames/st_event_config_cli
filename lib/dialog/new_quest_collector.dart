@@ -25,7 +25,7 @@ class NewQuestionCollector {
   */
 
   bool handleAcquiringNewQuestions(
-    DialogMgr _questGroupMgr,
+    // DialogMgr _questGroupMgr,
     QuestListMgr _questMgr,
   ) {
     Question questJustAnswered = _questMgr._currentOrLastQuestion;
