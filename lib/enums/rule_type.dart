@@ -71,7 +71,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
       case VisualRuleType.filterCfg:
         return [
           Vrq.selectDataFieldName,
-          Vrq.specifyPositionInGroup,
+          // Vrq.specifyPositionInGroup,
         ];
       case VisualRuleType.styleOrFormat:
         return [

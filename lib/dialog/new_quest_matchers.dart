@@ -65,28 +65,6 @@ class QuestMatcher<AnsType> {
         MatcherBehavior.addQuestsAndAnswers
       ].contains(matcherBehavior);
 
-  List<VisualRuleType> _subRuleQuests(Question quest) {
-    //
-    // List<VisualRuleType> lstVr = [];
-    // return lstVr;
-    return quest.qQuantify.relatedSubVisualRules(quest);
-  }
-
-  void _createNewQuestAfterDoesMatch(Question quest) {
-    //
-    // int qId = quest.questionId;
-
-    for (VisualRuleType rt in _subRuleQuests(quest)) {
-      var q = VisualRuleQuestion<String, RuleResponseWrapperIfc>(
-        quest.appScreen,
-        quest.screenWidgetArea!,
-        rt,
-        quest.slotInArea,
-      );
-      _pendingQuests.add(q);
-    }
-  }
-
   bool doesMatch(Question quest) {
     bool dMatch = true;
     dMatch = dMatch &&
@@ -120,18 +98,67 @@ class QuestMatcher<AnsType> {
     if (dMatch && addQuestChkCallbk(quest.response!.answers!)) {
       // it was a mach and answer value indicates that
       // new questions /answers SHOULD be created
-      _createNewQuestAfterDoesMatch(quest);
+      if (this.addsPendingQuestions) {
+        _createNewQuestAfterDoesMatch(quest);
+      }
+      if (this.createsImplicitAnswers) {
+        _createImplicitAnswersAfterDoesMatch(quest);
+      }
     }
     return dMatch;
+  }
+
+  List<VisualRuleType> _subRuleQuests(Question quest) {
+    //
+    // List<VisualRuleType> lstVr = [];
+    // return lstVr;
+    return quest.qQuantify.relatedSubVisualRules(quest);
+  }
+
+  void _createNewQuestAfterDoesMatch(Question quest) {
+    //
+    // int qId = quest.questionId;
+
+    for (VisualRuleType rt in _subRuleQuests(quest)) {
+      var q = VisualRuleQuestion<String, RuleResponseWrapperIfc>(
+        quest.appScreen,
+        quest.screenWidgetArea!,
+        rt,
+        quest.slotInArea,
+      );
+      _pendingQuests.add(q);
+    }
+  }
+
+  void _createImplicitAnswersAfterDoesMatch(Question quest) {
+    //
+    for (VisualRuleType rt in _subRuleQuests(quest)) {
+      var q = VisualRuleQuestion<String, RuleResponseWrapperIfc>(
+        quest.appScreen,
+        quest.screenWidgetArea!,
+        rt,
+        quest.slotInArea,
+      );
+      _answeredQuests.add(q);
+    }
   }
 }
 
 List<QuestMatcher> _matcherList = [
-  //
-  QuestMatcher<int>(
-    MatcherBehavior.addPendingQuestions,
+  // defines rules for adding new questions or implicit answers
+  QuestMatcher<bool>(
+    // question asking about 1st selected row-style being global
+    MatcherBehavior.addImplicitAnswers,
     (_) => true,
-    QuestCascadeTyp.addsVisualRuleQuestions,
+    QuestCascadeTyp.noCascade,
+    appScreen: AppScreen.eventConfiguration,
+  ),
+  QuestMatcher<bool>(
+    // question asking about 1st selected row-style being global
+    MatcherBehavior.addImplicitAnswers,
+    (_) => true,
+    QuestCascadeTyp.noCascade,
+    appScreen: AppScreen.eventConfiguration,
     screenWidgetArea: ScreenWidgetArea.tableview,
     visRuleTypeForAreaOrSlot: VisualRuleType.sortCfg,
   ),

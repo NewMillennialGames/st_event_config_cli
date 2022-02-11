@@ -30,7 +30,7 @@ extension VisRuleQuestTypeExt1 on VisRuleQuestType {
       // case VisRuleQuestType.getTableName:
       //   return 'Select Table that contains required value';
       case VisRuleQuestType.selectDataFieldName:
-        return 'Select field containg (sort, group, filter) value';
+        return 'Select field containg relevant value';
       case VisRuleQuestType.specifyPositionInGroup:
         return 'Select Group/Sort/Filter position';
       case VisRuleQuestType.specifySortAscending:

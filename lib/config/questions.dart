@@ -78,7 +78,7 @@ final List<Question> _questionLst = [
     null,
   ),
   // set false to shorten manual testing
-  if (true) ...[
+  if (false) ...[
     Qb<String, String>(
       QuestionQuantifier.eventLevel(),
       DlgStr.eventDescrip,
@@ -115,13 +115,14 @@ final List<Question> _questionLst = [
       EvEliminationStrategy.values.map((e) => e.name),
       (i) => EvEliminationStrategy.values[i],
     ),
-    Qb<String, bool>(
-      QuestionQuantifier.eventLevel(),
-      'Apply 1st TblView row style to all other screens?',
-      ['no', 'yes'],
-      (i) => i == 1,
-    ),
   ],
+  Qb<String, bool>(
+    QuestionQuantifier.eventLevel(),
+    'Apply 1st selected TblView row style to all other screens?',
+    ['no', 'yes'],
+    (i) => i == 1,
+    defaultAnswerIdx: 1,
+  ),
   Qb<String, List<AppScreen>>(
     QuestionQuantifier.eventLevel(responseAddsWhichAreaQuestions: true),
     'Select the app screens you`d like to configure?',

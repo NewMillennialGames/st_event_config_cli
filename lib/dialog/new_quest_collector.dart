@@ -214,13 +214,21 @@ class NewQuestionCollector {
               .map((idx) => area.applicableRuleTypes[idx])
               .toList();
         },
-        acceptsMultiResponses: true,
+        acceptsMultiResponses: area.applicableRuleTypes.length > 0,
       );
+      // if (area.applicableRuleTypes.length == 1) {
+      //   // only one option;  we can auto-answer this one
+      //   q.convertAndStoreUserResponse('0');
+      //   _questMgr.addImplicitAnswers([q]);
+      //   askWhichConfigRulesGoWithEachSlot(_questMgr, q);
+      //   continue;
+      // }
       newQuestions.add(q);
     }
 
     print(
-        'askWhichRulesGoWithAreaAndWhichSlotsToConfig adding ${newQuestions.length} rule questions');
+      'askWhichRulesGoWithAreaAndWhichSlotsToConfig adding ${newQuestions.length} rule questions',
+    );
     // ask which slots user would like to configure within each area
     for (ScreenWidgetArea area in areasSelectedForScreenInLastQuest) {
       if (!area.isConfigureable || area.applicableWigetSlots.length < 1)
