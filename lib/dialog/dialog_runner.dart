@@ -56,7 +56,8 @@ class DialogRunner {
     if (!didAddNew & false) {
       // new version of handleAcquiringNewQuestions
       // run it only if handleAcquiringNewQuestions does no work
-      appendNewQuests(_questMgr, _questMgr._currentOrLastQuestion);
+      appendNewQuestsOrInsertImplicitAnswers(
+          _questMgr, _questMgr._currentOrLastQuestion);
     }
     // end of logic to add new questions based on user response
 
@@ -89,7 +90,7 @@ class DialogRunner {
       if (!didAddNew) {
         // new version of handleAcquiringNewQuestions
         // run it only if handleAcquiringNewQuestions does no work
-        appendNewQuests(_questMgr, _quest);
+        appendNewQuestsOrInsertImplicitAnswers(_questMgr, _quest);
       }
       // end of logic to add new questions based on user response
 

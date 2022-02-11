@@ -87,8 +87,8 @@ Map<String, dynamic> _$TvSortCfgToJson(TvSortCfg instance) => <String, dynamic>{
 const _$DbTableFieldNameEnumMap = {
   DbTableFieldName.teamName: 'teamName',
   DbTableFieldName.playerName: 'playerName',
-  DbTableFieldName.conference: 'conference',
-  DbTableFieldName.region: 'region',
+  DbTableFieldName.conference: 'conferenceOrRegion',
+  DbTableFieldName.gameDate: 'gameDate',
   DbTableFieldName.eventName: 'eventName',
   DbTableFieldName.gameLocation: 'eventLocation',
   DbTableFieldName.imageUrl: 'eventBannerUrl',

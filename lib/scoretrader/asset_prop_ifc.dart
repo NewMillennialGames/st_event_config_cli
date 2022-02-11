@@ -43,7 +43,7 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
         return topName;
       case DbTableFieldName.conference:
         return regionOrConference;
-      case DbTableFieldName.region:
+      case DbTableFieldName.gameDate:
         return regionOrConference;
       case DbTableFieldName.eventName:
         return topName;

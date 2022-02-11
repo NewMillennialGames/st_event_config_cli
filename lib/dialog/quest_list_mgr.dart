@@ -151,6 +151,19 @@ class QuestListMgr {
     });
   }
 
+  void addImplicitAnswers(
+    List<Question> implicitlyAnsweredQuests, {
+    String dbgNam = 'init', // debug-name
+  }) {
+    var alreadyAnsweredQuests =
+        _pendingQuestions.sublist(0, _currQuestionIdx + 1);
+    alreadyAnsweredQuests.addAll(implicitlyAnsweredQuests);
+
+    var unaskedQuests = _pendingQuestions.sublist(_currQuestionIdx + 1);
+
+    this._pendingQuestions = alreadyAnsweredQuests..addAll(unaskedQuests);
+  }
+
   void appendNewQuestions(
     List<Question> quests, {
     String dbgNam = 'init', // debug-name

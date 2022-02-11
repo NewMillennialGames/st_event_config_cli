@@ -10,8 +10,9 @@ enum ScreenAreaWidgetSlot {
   // ui-sub-area of the UI component
   header,
   footer,
-  slot1,
-  slot2,
+  dropMenu1,
+  dropMenu2,
+  dropMenu3,
 
   // data property of the component
   title,
@@ -40,18 +41,18 @@ extension ScreenAreaWidgetSlotExt1 on ScreenAreaWidgetSlot {
         return [
           VisualRuleType.showOrHide,
         ];
-      case ScreenAreaWidgetSlot.slot1:
+      case ScreenAreaWidgetSlot.dropMenu1:
         return [
           VisualRuleType.filterCfg,
         ];
-      case ScreenAreaWidgetSlot.slot2:
+      case ScreenAreaWidgetSlot.dropMenu2:
         return [
           VisualRuleType.filterCfg,
         ];
-      // case ScreenAreaWidgetSlot.rowStyle:
-      //   return [
-      //     VisualRuleType.format,
-      //   ];
+      case ScreenAreaWidgetSlot.dropMenu3:
+        return [
+          VisualRuleType.filterCfg,
+        ];
       case ScreenAreaWidgetSlot.title:
         return [
           VisualRuleType.styleOrFormat,

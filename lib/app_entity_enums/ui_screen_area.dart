@@ -36,8 +36,9 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
         ];
       case ScreenWidgetArea.filterBar:
         return [
-          ScreenAreaWidgetSlot.slot1,
-          ScreenAreaWidgetSlot.slot2,
+          ScreenAreaWidgetSlot.dropMenu1,
+          ScreenAreaWidgetSlot.dropMenu2,
+          ScreenAreaWidgetSlot.dropMenu3,
         ];
       case ScreenWidgetArea.header:
         return [

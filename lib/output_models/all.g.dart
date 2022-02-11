@@ -152,8 +152,8 @@ const _$VisualRuleTypeEnumMap = {
 const _$ScreenAreaWidgetSlotEnumMap = {
   ScreenAreaWidgetSlot.header: 'header',
   ScreenAreaWidgetSlot.footer: 'footer',
-  ScreenAreaWidgetSlot.slot1: 'slot1',
-  ScreenAreaWidgetSlot.slot2: 'slot2',
+  ScreenAreaWidgetSlot.dropMenu1: 'slot1',
+  ScreenAreaWidgetSlot.dropMenu2: 'slot2',
   ScreenAreaWidgetSlot.title: 'title',
   ScreenAreaWidgetSlot.subtitle: 'subtitle',
   ScreenAreaWidgetSlot.bannerUrl: 'bannerUrl',

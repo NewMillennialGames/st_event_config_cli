@@ -1,19 +1,34 @@
 part of ConfigDialogRunner;
 
-void appendNewQuests(
+void appendNewQuestsOrInsertImplicitAnswers(
   QuestListMgr questListMgr,
-  Question quest,
+  Question questJustAnswered,
 ) {
   //
-  for (QuestMatcher qm in _possibleNewQuests) {
-    if (qm.doesMatch(quest)) {
-      questListMgr.appendNewQuestions(qm._quests);
+  // Question questJustAnswered = questListMgr._currentOrLastQuestion;
+
+  for (QuestMatcher matchTest in _matcherList) {
+    if (matchTest.doesMatch(questJustAnswered)) {
+      if (matchTest.addsPendingQuestions) {
+        questListMgr.appendNewQuestions(matchTest._pendingQuests);
+      }
+      if (matchTest.createsImplicitAnswers) {
+        questListMgr.addImplicitAnswers(matchTest._answeredQuests);
+      }
     }
   }
 }
 
+enum MatcherBehavior {
+  addPendingQuestions,
+  addImplicitAnswers,
+  addQuestsAndAnswers, // aka BOTH
+}
+
 class QuestMatcher<AnsType> {
   //
+  final MatcherBehavior matcherBehavior;
+  final AddQuestChkCallbk addQuestChkCallbk;
   final QuestCascadeTyp? cascadeType;
   final AppScreen? appScreen;
   final ScreenWidgetArea? screenWidgetArea;
@@ -23,11 +38,14 @@ class QuestMatcher<AnsType> {
   final bool isRuleQuestion;
   Type? typ = UserResponse<String>;
   //
-  List<VisualRuleQuestion> _quests = [];
+  List<VisualRuleQuestion> _pendingQuests = [];
+  List<VisualRuleQuestion> _answeredQuests = [];
 
   QuestMatcher(
-    this.cascadeType,
-    this.appScreen, {
+    this.matcherBehavior,
+    this.addQuestChkCallbk,
+    this.cascadeType, {
+    this.appScreen,
     this.screenWidgetArea,
     this.slotInArea,
     this.visRuleTypeForAreaOrSlot,
@@ -36,6 +54,16 @@ class QuestMatcher<AnsType> {
     this.typ,
     // this.quests,
   });
+
+  // getters
+  bool get addsPendingQuestions => [
+        MatcherBehavior.addPendingQuestions,
+        MatcherBehavior.addQuestsAndAnswers
+      ].contains(matcherBehavior);
+  bool get createsImplicitAnswers => [
+        MatcherBehavior.addImplicitAnswers,
+        MatcherBehavior.addQuestsAndAnswers
+      ].contains(matcherBehavior);
 
   List<VisualRuleType> _subRuleQuests(Question quest) {
     //
@@ -55,7 +83,7 @@ class QuestMatcher<AnsType> {
         rt,
         quest.slotInArea,
       );
-      _quests.add(q);
+      _pendingQuests.add(q);
     }
   }
 
@@ -89,18 +117,21 @@ class QuestMatcher<AnsType> {
     dMatch =
         dMatch && (this.typ == null || quest.response.runtimeType == this.typ);
 
-    if (dMatch) {
+    if (dMatch && addQuestChkCallbk(quest.response!.answers!)) {
+      // it was a mach and answer value indicates that
+      // new questions /answers SHOULD be created
       _createNewQuestAfterDoesMatch(quest);
     }
     return dMatch;
   }
 }
 
-List<QuestMatcher> _possibleNewQuests = [
+List<QuestMatcher> _matcherList = [
   //
   QuestMatcher<int>(
+    MatcherBehavior.addPendingQuestions,
+    (_) => true,
     QuestCascadeTyp.addsVisualRuleQuestions,
-    null,
     screenWidgetArea: ScreenWidgetArea.tableview,
     visRuleTypeForAreaOrSlot: VisualRuleType.sortCfg,
   ),

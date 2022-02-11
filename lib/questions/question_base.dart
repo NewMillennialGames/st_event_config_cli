@@ -13,9 +13,7 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
   final int defaultAnswerIdx;
   final bool acceptsMultiResponses;
   final bool isNotForOutput;
-  // final bool dynamicFromPriorState;
-  // set later
-  // bool shouldSkip = false;
+//
   int questionId = 0;
   UserResponse<AnsTyp>? response;
 
