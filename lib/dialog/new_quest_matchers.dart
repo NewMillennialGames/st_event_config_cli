@@ -36,23 +36,24 @@ class QuestMatcher<AnsType> {
   final VisualRuleType? visRuleTypeForAreaOrSlot;
   final BehaviorRuleType? behRuleTypeForAreaOrSlot;
   final bool isRuleQuestion;
-  Type? typ = UserResponse<String>;
+  final String questionId;
+  // Type? typ = UserResponse<AnsType>;
   //
-  List<VisualRuleQuestion> _pendingQuests = [];
-  List<VisualRuleQuestion> _answeredQuests = [];
+  List<Question> _pendingQuests = [];
+  List<Question> _answeredQuests = [];
 
   QuestMatcher(
     this.matcherBehavior,
-    this.addQuestChkCallbk,
-    this.cascadeType, {
+    this.addQuestChkCallbk, {
+    this.cascadeType,
+    this.questionId = '-na',
     this.appScreen,
     this.screenWidgetArea,
     this.slotInArea,
     this.visRuleTypeForAreaOrSlot,
     this.behRuleTypeForAreaOrSlot,
     this.isRuleQuestion = false,
-    this.typ,
-    // this.quests,
+    // this.typ,
   });
 
   // getters
@@ -66,6 +67,31 @@ class QuestMatcher<AnsType> {
       ].contains(matcherBehavior);
 
   bool doesMatch(Question quest) {
+    bool dMatch = quest.questionId == this.questionId || _doDeeperMatch(quest);
+
+    if (dMatch && addQuestChkCallbk(quest.response!.answers!)) {
+      // it was a mach and answer value indicates that
+      // new questions /answers SHOULD be created
+      if (this.addsPendingQuestions) {
+        _pendingQuests.addAll(
+          DerivedQuestions.pendingQuestsFromAnswer(
+            quest,
+          ),
+        );
+      }
+      if (this.createsImplicitAnswers) {
+        _answeredQuests.addAll(
+          DerivedQuestions.impliedAnswersFromAnswer(
+            quest,
+          ),
+        );
+      }
+    }
+    return dMatch;
+  }
+
+  bool _doDeeperMatch(Question quest) {
+    // compare all properties instead of only questionId
     bool dMatch = true;
     dMatch = dMatch &&
         (this.cascadeType == null ||
@@ -92,55 +118,9 @@ class QuestMatcher<AnsType> {
     dMatch = dMatch &&
         (this.isRuleQuestion == false || quest.isRuleQuestion == true);
 
-    dMatch =
-        dMatch && (this.typ == null || quest.response.runtimeType == this.typ);
-
-    if (dMatch && addQuestChkCallbk(quest.response!.answers!)) {
-      // it was a mach and answer value indicates that
-      // new questions /answers SHOULD be created
-      if (this.addsPendingQuestions) {
-        _createNewQuestAfterDoesMatch(quest);
-      }
-      if (this.createsImplicitAnswers) {
-        _createImplicitAnswersAfterDoesMatch(quest);
-      }
-    }
+    // dMatch =
+    //     dMatch && (this.typ == null || quest.response.runtimeType == this.typ);
     return dMatch;
-  }
-
-  List<VisualRuleType> _subRuleQuests(Question quest) {
-    //
-    // List<VisualRuleType> lstVr = [];
-    // return lstVr;
-    return quest.qQuantify.relatedSubVisualRules(quest);
-  }
-
-  void _createNewQuestAfterDoesMatch(Question quest) {
-    //
-    // int qId = quest.questionId;
-
-    for (VisualRuleType rt in _subRuleQuests(quest)) {
-      var q = VisualRuleQuestion<String, RuleResponseWrapperIfc>(
-        quest.appScreen,
-        quest.screenWidgetArea!,
-        rt,
-        quest.slotInArea,
-      );
-      _pendingQuests.add(q);
-    }
-  }
-
-  void _createImplicitAnswersAfterDoesMatch(Question quest) {
-    //
-    for (VisualRuleType rt in _subRuleQuests(quest)) {
-      var q = VisualRuleQuestion<String, RuleResponseWrapperIfc>(
-        quest.appScreen,
-        quest.screenWidgetArea!,
-        rt,
-        quest.slotInArea,
-      );
-      _answeredQuests.add(q);
-    }
   }
 }
 
@@ -149,15 +129,14 @@ List<QuestMatcher> _matcherList = [
   QuestMatcher<bool>(
     // question asking about 1st selected row-style being global
     MatcherBehavior.addImplicitAnswers,
-    (_) => true,
-    QuestCascadeTyp.noCascade,
-    appScreen: AppScreen.eventConfiguration,
+    (ans) => ans as bool,
+    questionId: QuestionIds.globalRowStyle,
   ),
   QuestMatcher<bool>(
     // question asking about 1st selected row-style being global
     MatcherBehavior.addImplicitAnswers,
     (_) => true,
-    QuestCascadeTyp.noCascade,
+    cascadeType: QuestCascadeTyp.noCascade,
     appScreen: AppScreen.eventConfiguration,
     screenWidgetArea: ScreenWidgetArea.tableview,
     visRuleTypeForAreaOrSlot: VisualRuleType.sortCfg,

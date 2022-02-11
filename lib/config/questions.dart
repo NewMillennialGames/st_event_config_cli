@@ -122,6 +122,7 @@ final List<Question> _questionLst = [
     ['no', 'yes'],
     (i) => i == 1,
     defaultAnswerIdx: 1,
+    questionId: QuestionIds.globalRowStyle,
   ),
   Qb<String, List<AppScreen>>(
     QuestionQuantifier.eventLevel(responseAddsWhichAreaQuestions: true),

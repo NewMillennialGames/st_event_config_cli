@@ -13,8 +13,8 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
   final int defaultAnswerIdx;
   final bool acceptsMultiResponses;
   final bool isNotForOutput;
-//
-  int questionId = 0;
+// unique value for expedited matching
+  String questionId = '';
   UserResponse<AnsTyp>? response;
 
   Question(
@@ -25,6 +25,7 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
     this.defaultAnswerIdx = 1,
     this.acceptsMultiResponses = false,
     this.isNotForOutput = false,
+    this.questionId = '',
     // this.dynamicFromPriorState = false,
   });
   // getters

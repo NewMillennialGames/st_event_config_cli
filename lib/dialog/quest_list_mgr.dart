@@ -146,9 +146,9 @@ class QuestListMgr {
     _questCountBySection[AppScreen.eventConfiguration] =
         _pendingQuestions.length;
     int c = 0;
-    _pendingQuestions.forEach((q) {
-      q.questionId = ++c;
-    });
+    // _pendingQuestions.forEach((q) {
+    //   q.questionId = ++c;
+    // });
   }
 
   void addImplicitAnswers(
@@ -180,10 +180,10 @@ class QuestListMgr {
       _questCountBySection[as] = (_questCountBySection[as] ?? 0) + newCntBySec;
     }
     // quest id's start at 1, not zero
-    int c = _pendingQuestions.length;
-    quests.forEach((q) {
-      q.questionId = ++c;
-    });
+    // int c = _pendingQuestions.length;
+    // quests.forEach((q) {
+    //   q.questionId = ++c;
+    // });
     this._pendingQuestions.addAll(quests);
 
     // TODO:  test sorting after everything else is working

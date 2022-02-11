@@ -34,3 +34,8 @@ class RuleTemplStr {
   static String show =
       'Select field name for {0} rule in the {1} area of screen {2}';
 }
+
+class QuestionIds {
+  //
+  static String globalRowStyle = 'globalRowStyle';
+}
