@@ -1,6 +1,6 @@
 library StUiController;
 
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
 //
 import 'package:st_ev_cfg/st_ev_cfg.dart';

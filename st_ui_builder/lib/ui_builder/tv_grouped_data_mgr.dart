@@ -53,12 +53,66 @@ class GroupedTableDataMgr {
   // for sorting sections
   SectionSortComparator get itemComparator => (i1, i2) => 0;
 
-  void filterDataBy(DbTableFieldName fld, String value) {
-    //
-    TvFilterCfg filterCfg = _filterBarCfg.filterRules!.item1;
+  FilterRules? get _filterRules => _filterBarCfg.filterRules;
 
-    this._filteredAssetRows =
-        this._assetRows.where((TableviewDataRowTuple dr) => true).toList();
+  bool get hasFilterBar {
+    return _filterRules == null ? false : true;
+  }
+
+  Widget filterBarRow() {
+    // dont call this without first checking this.hasFilterBar
+    FilterRules fltrRules = this._filterRules!;
+
+    return Row(
+      children: [
+        _dropMenuList(fltrRules.item1),
+        if (fltrRules.item2 != null) _dropMenuList(fltrRules.item2!),
+        if (fltrRules.item3 != null) _dropMenuList(fltrRules.item3!),
+      ],
+    );
+  }
+
+  DropdownButton<String> _dropMenuList(TvFilterCfg fCfg) {
+    // return DropdownButton menu for slot
+    List<String> listItems = _filterListItems(fCfg);
+    return DropdownButton<String>(
+      items: listItems
+          .map((e) => DropdownMenuItem<String>(child: Text(e)))
+          .toList(),
+      onChanged: (String? selectedVal) {
+        if (selectedVal == null) {
+          clearFilters();
+          return;
+        }
+        _doFilteringFor(fCfg.colName, selectedVal);
+      },
+    );
+  }
+
+  List<String> _filterListItems(TvFilterCfg fCfg) {
+    Iterable<String> l = _assetRows.map(
+      (e) => e.item1.valueExtractor(fCfg.colName),
+    );
+    return l.toList();
+  }
+
+  void _doFilteringFor(DbTableFieldName colName, String selectedVal) {
+    // void filterDataBy(DbTableFieldName fld, String value) {
+    //
+    FilterRules fltrRules = this._filterRules!;
+    TvFilterCfg filterCfg;
+    if (fltrRules.item1.colName == colName) {
+      filterCfg = fltrRules.item1;
+    } else if (fltrRules.item2!.colName == colName) {
+      filterCfg = fltrRules.item1;
+    } else if (fltrRules.item3!.colName == colName) {
+      filterCfg = fltrRules.item1;
+    }
+    this._filteredAssetRows = this
+        ._assetRows
+        .where((TableviewDataRowTuple dr) =>
+            dr.item1.valueExtractor(colName) == selectedVal)
+        .toList();
 
     print('you must reload your list after calling this');
   }
