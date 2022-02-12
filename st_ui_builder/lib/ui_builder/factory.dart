@@ -19,6 +19,8 @@ class StUiBuilderFactory {
     /* call this every time user switches events
       send api payload (upon event switching) here
       to reconfigure the factory
+
+      TODO:  add versioning
     */
     this._eConfig = EventCfgTree.fromJson(eCfgJsonMap);
   }
@@ -31,10 +33,13 @@ class StUiBuilderFactory {
     */
     CfgForAreaAndNestedSlots tableCfg =
         _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.tableview);
-    return GroupedTableDataMgr(rows, TableviewConfigPayload(tableCfg));
+
+    SlotOrAreaRuleCfg filterBarCfg = _filterBarConfigForScreen(screen);
+    return GroupedTableDataMgr(
+        rows, TableviewConfigPayload(tableCfg), filterBarCfg);
   }
 
-  SlotOrAreaRuleCfg filterBarConfigForScreen(AppScreen screen) {
+  SlotOrAreaRuleCfg _filterBarConfigForScreen(AppScreen screen) {
     //
     CfgForAreaAndNestedSlots tableCfg =
         _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.filterBar);

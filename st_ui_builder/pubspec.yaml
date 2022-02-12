@@ -30,7 +30,7 @@ dependencies:
   flutter:
     sdk: flutter
   st_ev_cfg:
-     path: ../../st_ev_cfg/
+     path: ../../st_event_config/
   grouped_list: ^4.1.0
   tuple: ^2.0.0
 

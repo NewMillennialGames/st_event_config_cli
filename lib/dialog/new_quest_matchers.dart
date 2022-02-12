@@ -1,5 +1,6 @@
 part of ConfigDialogRunner;
 
+// top level function to add new questions or implicit answers
 void appendNewQuestsOrInsertImplicitAnswers(
   QuestListMgr questListMgr,
   Question questJustAnswered,
