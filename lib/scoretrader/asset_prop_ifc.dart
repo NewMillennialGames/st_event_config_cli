@@ -9,14 +9,18 @@
 part of StUiController;
 
 abstract class AssetRowPropertyIfc {
-  //
+  // must have a value for each name on:
+  // enum DbTableFieldName()
+  String get groupKey; // for grouping and sorting
   String get id; // for unique comparison
   String get topName;
   String get subName;
   String get imgUrl;
   String get regionOrConference;
-  String get groupKey; // for grouping and sorting
   String get location;
+  String get position;
+  DateTime get gameDate;
+  String get gameDateStr;
   //
   double get price;
   String get priceStr;
@@ -30,8 +34,11 @@ abstract class AssetRowPropertyIfc {
 extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
   // sensible defaults if not overridden
   String get groupKey => '';
-  String get rankStr => '';
-  String get priceStr => '';
+
+  String get gameDateStr => '_to unwrap';
+  String get priceStr => '_to unwrap';
+  String get priceDeltaStr => '_to unwrap';
+  String get rankStr => '_to unwrap';
 
   bool get canTrade => false;
 
@@ -43,8 +50,10 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
         return topName;
       case DbTableFieldName.conference:
         return regionOrConference;
-      case DbTableFieldName.gameDate:
+      case DbTableFieldName.region:
         return regionOrConference;
+      case DbTableFieldName.gameDate:
+        return gameDateStr;
       case DbTableFieldName.eventName:
         return topName;
       case DbTableFieldName.gameLocation:
@@ -55,8 +64,12 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
         return priceStr;
       case DbTableFieldName.assetCurrentPrice:
         return priceStr;
-      default:
-        return '_dfltProp';
+      case DbTableFieldName.assetRank:
+        return rankStr;
+      case DbTableFieldName.assetPosition:
+        return position;
+      // default:
+      //   return '_dfltProp';
     }
   }
 }

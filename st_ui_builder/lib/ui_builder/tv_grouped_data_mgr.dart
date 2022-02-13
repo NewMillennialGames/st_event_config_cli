@@ -20,27 +20,31 @@ class GroupedTableDataMgr {
   TODO:  all the getters below must be completed to return real methods
   */
 
-  final List<TableviewDataRowTuple> _assetRows;
-  final TableviewConfigPayload _cfg;
-  final SlotOrAreaRuleCfg _filterBarCfg;
+  final List<TableviewDataRowTuple> _allAssetRows;
+  final TableviewConfigPayload _tableViewCfg;
   GroupedListOrder order = GroupedListOrder.ASC;
+  // rows actually rendered from _filteredAssetRows
   List<TableviewDataRowTuple> _filteredAssetRows = [];
 
   GroupedTableDataMgr(
-    this._assetRows,
-    this._cfg,
-    this._filterBarCfg, {
+    this._allAssetRows,
+    this._tableViewCfg, {
     bool ascending = true,
-  }) : this.order = ascending ? GroupedListOrder.ASC : GroupedListOrder.DESC;
+  })  : this.order = ascending ? GroupedListOrder.ASC : GroupedListOrder.DESC,
+        this._filteredAssetRows = _allAssetRows.toList();
+
+  GroupingRules get groupRules => _tableViewCfg.groupByRules;
+  SortingRules get sortingRules => _tableViewCfg.sortRules;
+  FilterRules get filterRules => _tableViewCfg.filterRules;
 
   GetGroupKeyFromRow get groupBy {
-    return GroupHeaderData.keyConstructorFromCfg(_cfg.groupByRules);
+    return GroupHeaderData.keyConstructorFromCfg(_tableViewCfg.groupByRules);
   }
 
   // groupHeaderBuilder is function to return header widget
   // defining groupHeaderBuilder will cause groupSeparatorBuilder to be ignored
   GroupHeaderBuilder? get groupHeaderBuilder =>
-      (AssetRowPropertyIfc _) => TvGroupHeader(GroupHeaderData.mockRow);
+      (TableviewDataRowTuple _) => TvGroupHeader(GroupHeaderData.mockRow);
 
   // indexedItemBuilder is function to return a Tv-Row for this screen
   IndexedItemRowBuilder get indexedItemBuilder => (
@@ -48,32 +52,32 @@ class GroupedTableDataMgr {
         TableviewDataRowTuple assets,
         int i,
       ) {
-        return _cfg.rowConstructor(assets);
+        return _tableViewCfg.rowConstructor(assets);
       };
   // for sorting sections
-  SectionSortComparator get itemComparator => (i1, i2) => 0;
-
-  FilterRules? get _filterRules => _filterBarCfg.filterRules;
+  SectionSortComparator get itemComparator =>
+      (TableviewDataRowTuple i1, TableviewDataRowTuple i2) {
+        // TODO: base it on configured sort fields
+        return i1.item1.gameDate.compareTo(i2.item1.gameDate);
+      };
 
   bool get hasFilterBar {
-    return _filterRules == null ? false : true;
+    return filterRules == null ? false : true;
   }
 
   Widget filterBarRow() {
     // dont call this without first checking this.hasFilterBar
-    FilterRules fltrRules = this._filterRules!;
-
     return Row(
       children: [
-        _dropMenuList(fltrRules.item1),
-        if (fltrRules.item2 != null) _dropMenuList(fltrRules.item2!),
-        if (fltrRules.item3 != null) _dropMenuList(fltrRules.item3!),
+        _dropMenuList(filterRules.item1),
+        if (filterRules.item2 != null) _dropMenuList(filterRules.item2!),
+        if (filterRules.item3 != null) _dropMenuList(filterRules.item3!),
       ],
     );
   }
 
   DropdownButton<String> _dropMenuList(TvFilterCfg fCfg) {
-    // return DropdownButton menu for slot
+    // return DropdownButton menu for filter bar slot
     List<String> listItems = _filterListItems(fCfg);
     return DropdownButton<String>(
       items: listItems
@@ -90,26 +94,45 @@ class GroupedTableDataMgr {
   }
 
   List<String> _filterListItems(TvFilterCfg fCfg) {
-    Iterable<String> l = _assetRows.map(
-      (e) => e.item1.valueExtractor(fCfg.colName),
-    );
-    return l.toList();
+    // elim dups and sort
+    return _allAssetRows
+        .map(
+          (e) => e.item1.valueExtractor(fCfg.colName),
+        )
+        .toSet()
+        .toList()
+      ..sort((v1, v2) => v1.compareTo(v2));
   }
 
   void _doFilteringFor(DbTableFieldName colName, String selectedVal) {
     // void filterDataBy(DbTableFieldName fld, String value) {
     //
-    FilterRules fltrRules = this._filterRules!;
-    TvFilterCfg filterCfg;
-    if (fltrRules.item1.colName == colName) {
-      filterCfg = fltrRules.item1;
-    } else if (fltrRules.item2!.colName == colName) {
-      filterCfg = fltrRules.item1;
-    } else if (fltrRules.item3!.colName == colName) {
-      filterCfg = fltrRules.item1;
-    }
-    this._filteredAssetRows = this
-        ._assetRows
+    // FilterRules fltrRules = this._filterRules!;
+    // // TvFilterCfg? filterCfg;
+    // SortOrGroupIdxOrder order = SortOrGroupIdxOrder.first;
+
+    // if (fltrRules.item1.colName == colName) {
+    //   // filterCfg = fltrRules.item1;
+    //   order = SortOrGroupIdxOrder.first;
+    // } else if (fltrRules.item2?.colName == colName) {
+    //   // filterCfg = fltrRules.item1;
+    //   order = SortOrGroupIdxOrder.first;
+    // } else if (fltrRules.item3?.colName == colName) {
+    //   // filterCfg = fltrRules.item1;
+    //   order = SortOrGroupIdxOrder.first;
+    // }
+    // // if (filterCfg == null) return;
+
+    // var filterFunc = (TableviewDataRowTuple dr) {
+    //   switch (order) {
+    //     case SortOrGroupIdxOrder.first:
+    //       return dr.item1.valueExtractor(colName) == selectedVal;
+    //     case SortOrGroupIdxOrder.first:
+    //       return dr.item1.valueExtractor(colName) == selectedVal;
+    //   }
+    // };
+
+    _filteredAssetRows = _allAssetRows
         .where((TableviewDataRowTuple dr) =>
             dr.item1.valueExtractor(colName) == selectedVal)
         .toList();
@@ -118,7 +141,7 @@ class GroupedTableDataMgr {
   }
 
   void clearFilters() {
-    this._filteredAssetRows = _assetRows;
+    this._filteredAssetRows = _allAssetRows;
     print('you must reload your list after calling this');
   }
 

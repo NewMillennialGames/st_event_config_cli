@@ -36,7 +36,9 @@ class StUiBuilderFactory {
 
     SlotOrAreaRuleCfg filterBarCfg = _filterBarConfigForScreen(screen);
     return GroupedTableDataMgr(
-        rows, TableviewConfigPayload(tableCfg), filterBarCfg);
+      rows,
+      TableviewConfigPayload(tableCfg),
+    );
   }
 
   SlotOrAreaRuleCfg _filterBarConfigForScreen(AppScreen screen) {

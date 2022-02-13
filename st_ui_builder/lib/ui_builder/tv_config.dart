@@ -14,11 +14,13 @@ class TableviewConfigPayload {
   final TvAreaRowStyle rowStyle;
   final GroupingRules groupByRules;
   final SortingRules sortRules;
+  final FilterRules filterRules;
 
   TableviewConfigPayload._(
     this.rowStyle,
     this.groupByRules,
     this.sortRules,
+    this.filterRules,
   );
 
   factory TableviewConfigPayload(
@@ -32,13 +34,11 @@ class TableviewConfigPayload {
     TvRowStyleCfg tvRowStyleRule = tableAreaRules
         .rulesOfType(VisualRuleType.styleOrFormat) as TvRowStyleCfg;
 
-    // GroupingRules groupRules = tableAreaRules.groupingRules!;
-    // SortingRules sortRules = tableAreaRules.sortingRules!;
-
     return TableviewConfigPayload._(
       tvRowStyleRule.selectedRowStyle,
       tableAreaRules.groupingRules!,
       tableAreaRules.sortingRules!,
+      tableAreaRules.filterRules!,
     );
   }
 

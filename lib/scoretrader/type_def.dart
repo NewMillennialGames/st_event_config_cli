@@ -13,7 +13,7 @@ typedef CastRowToSortVal = String Function(AssetRowPropertyIfc);
 typedef GetGroupKeyFromRow = GroupHeaderData Function(AssetRowPropertyIfc);
 
 typedef SectionSortComparator = int Function(
-    AssetRowPropertyIfc, AssetRowPropertyIfc);
+    TableviewDataRowTuple, TableviewDataRowTuple);
 
 typedef GroupingRules = Tuple3<TvGroupCfg, TvGroupCfg?, TvGroupCfg?>;
 
