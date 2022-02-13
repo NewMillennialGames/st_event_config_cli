@@ -34,10 +34,9 @@ class StUiBuilderFactory {
     CfgForAreaAndNestedSlots tableCfg =
         _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.tableview);
 
-    SlotOrAreaRuleCfg filterBarCfg = _filterBarConfigForScreen(screen);
     return GroupedTableDataMgr(
       rows,
-      TableviewConfigPayload(tableCfg),
+      TableviewConfigPayload(screen, tableCfg),
     );
   }
 

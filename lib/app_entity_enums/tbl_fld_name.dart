@@ -35,7 +35,7 @@ extension DbTableFieldNameExt1 on DbTableFieldName {
       case DbTableFieldName.gameLocation:
         return 'Location';
       case DbTableFieldName.imageUrl:
-        return 'Avatar';
+        return 'Avatar (select this to hide filter bar)';
       case DbTableFieldName.assetOpenPrice:
         return 'Open Price';
       case DbTableFieldName.assetCurrentPrice:

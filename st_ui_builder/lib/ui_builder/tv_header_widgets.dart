@@ -6,9 +6,9 @@ part of StUiController;
 */
 class TvGroupHeader extends StatelessWidget {
   //
-  GroupHeaderData data;
+  GroupHeaderData headerData;
   TvGroupHeader(
-    this.data, {
+    this.headerData, {
     Key? key,
   }) : super(key: key);
 
@@ -18,16 +18,16 @@ class TvGroupHeader extends StatelessWidget {
   }
 }
 
-class TvGroupHeaderSep extends StatelessWidget {
-  //
-  GroupHeaderData data;
-  TvGroupHeaderSep(
-    this.data, {
-    Key? key,
-  }) : super(key: key);
+// class TvGroupHeaderSep extends StatelessWidget {
+//   //
+//   GroupHeaderData data;
+//   TvGroupHeaderSep(
+//     this.data, {
+//     Key? key,
+//   }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container();
+//   }
+// }

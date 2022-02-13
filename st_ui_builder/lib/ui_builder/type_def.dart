@@ -11,3 +11,7 @@ typedef IndexedItemRowBuilder = Widget Function(
   TableviewDataRowTuple,
   int,
 );
+
+// NIU
+// typedef GroupComparatorCallback = int Function(
+//     GroupHeaderData, GroupHeaderData);

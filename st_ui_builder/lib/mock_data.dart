@@ -1,0 +1,108 @@
+import 'package:intl/intl.dart';
+//
+import 'package:st_ev_cfg/st_ev_cfg.dart';
+
+/*
+  creating fake data for testing
+
+
+*/
+
+final _today = DateTime.now();
+
+final DateFormat dtFmtr = DateFormat('yyyy-MM-dd');
+
+class MockAsset {
+  // mock example of what comes from the server API
+  String id = '333';
+  String name;
+  String region;
+  String teamName;
+  String imgUrl = 'https://ui-avatars.com/api/?name=John+Doe';
+
+  DateTime get gameDt => _today;
+
+  MockAsset(
+    this.name,
+    this.region,
+    this.teamName,
+    // this.imgUrl,
+  );
+
+  static List<MockAssetWrapper> get mockRows =>
+      _fakeData.map((e) => MockAssetWrapper(e)).toList();
+}
+
+class MockAssetWrapper implements AssetRowPropertyIfc {
+  // example of what Natalia should create
+  // should return properties from asset
+  // that are required by AssetRowPropertyIfc
+  MockAsset asset;
+
+  MockAssetWrapper(this.asset);
+
+  @override
+  DateTime get gameDate => asset.gameDt;
+
+  @override
+  String get gameDateStr => dtFmtr.format(gameDate);
+
+  @override
+  String get id => asset.id;
+
+  @override
+  String get imgUrl => asset.imgUrl;
+
+  @override
+  String get location => 'Austin';
+
+  String get position => 'p-Quarterback';
+
+  @override
+  double get price => 4.33;
+
+  @override
+  double get priceDelta => -0.25;
+
+  @override
+  String get priceDeltaStr => '$priceDelta';
+
+  @override
+  String get priceStr => '\$$price';
+
+  @override
+  int get rank => 3;
+
+  @override
+  String get rankStr => '$rank';
+
+  @override
+  String get regionOrConference => asset.region;
+
+  @override
+  String get subName => asset.teamName;
+
+  @override
+  String get topName => asset.name;
+
+  @override
+  String get groupKey => 'niu';
+}
+
+List<MockAsset> _fakeData = [
+  MockAsset('Abe', 'Reg1', 'Cowboys'),
+  MockAsset('Bob', 'Reg1', 'Cowboys'),
+  MockAsset('Charlie', 'Reg1', 'Cowboys'),
+  MockAsset('David', 'Reg1', 'N. England'),
+  MockAsset('Ed', 'Reg2', 'Redskins'),
+  MockAsset('Frank', 'Reg2', 'Redskins'),
+  MockAsset('Gil', 'Reg2', 'Redskins'),
+  MockAsset('Hank', 'Reg2', 'Saints'),
+  MockAsset('Ive', 'Reg2', 'Saints'),
+  MockAsset('Jake', 'Reg2', 'Saints'),
+  MockAsset('Frank', 'Reg3', 'Dukes'),
+  MockAsset('Gil', 'Reg3', 'Dukes'),
+  MockAsset('Hank', 'Reg3', 'Jeeps'),
+  MockAsset('Ive', 'Reg3', 'Jeeps'),
+  MockAsset('Jake', 'Reg3', 'Ford'),
+];

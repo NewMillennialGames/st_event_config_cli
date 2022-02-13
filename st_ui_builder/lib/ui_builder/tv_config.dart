@@ -9,14 +9,17 @@ class TableviewConfigPayload {
       grouping options
       sorting options
       row-style
+      and filter options
   */
 
+  final AppScreen appScreen;
   final TvAreaRowStyle rowStyle;
   final GroupingRules groupByRules;
   final SortingRules sortRules;
   final FilterRules filterRules;
 
   TableviewConfigPayload._(
+    this.appScreen,
     this.rowStyle,
     this.groupByRules,
     this.sortRules,
@@ -24,6 +27,7 @@ class TableviewConfigPayload {
   );
 
   factory TableviewConfigPayload(
+    AppScreen appScreen,
     CfgForAreaAndNestedSlots tableAreaCfg,
   ) {
     //
@@ -35,6 +39,7 @@ class TableviewConfigPayload {
         .rulesOfType(VisualRuleType.styleOrFormat) as TvRowStyleCfg;
 
     return TableviewConfigPayload._(
+      appScreen,
       tvRowStyleRule.selectedRowStyle,
       tableAreaRules.groupingRules!,
       tableAreaRules.sortingRules!,

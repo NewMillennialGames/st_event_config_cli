@@ -9,16 +9,17 @@ part of StUiController;
   third value is extra
 */
 
-class GroupHeaderData {
-  String first;
-  String second;
-  String third;
+class GroupHeaderData implements Comparable<GroupHeaderData> {
+  final String first;
+  final String second;
+  final String third;
+  final String _sortKey;
 
   GroupHeaderData(
     this.first,
     this.second,
     this.third,
-  );
+  ) : this._sortKey = '$first-$second-$third';
 
   static GetGroupKeyFromRow keyConstructorFromCfg(
     GroupingRules groupingRules,
@@ -40,10 +41,16 @@ class GroupHeaderData {
       return row.valueExtractor(col3Rule.colName);
     };
 
-    return (AssetRowPropertyIfc row) {
+    return (TableviewDataRowTuple row) {
       return GroupHeaderData(
-          firstValFn(row), secondValFn(row), thirdValFn(row));
+          firstValFn(row.item1), secondValFn(row.item1), thirdValFn(row.item1));
     };
+  }
+
+  @override
+  int compareTo(GroupHeaderData other) {
+    // add natural sort order to this class
+    return _sortKey.compareTo(other._sortKey);
   }
 
   static GroupHeaderData get mockRow =>

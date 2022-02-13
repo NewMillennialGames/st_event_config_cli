@@ -35,7 +35,9 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
   // sensible defaults if not overridden
   String get groupKey => '';
 
+  @override
   String get gameDateStr => '_to unwrap';
+
   String get priceStr => '_to unwrap';
   String get priceDeltaStr => '_to unwrap';
   String get rankStr => '_to unwrap';
@@ -43,6 +45,10 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
   bool get canTrade => false;
 
   String valueExtractor(DbTableFieldName fldName) {
+    /* need to coordinate with Natalia
+      to make sure values below match
+      what she sets in the Asset wrapper
+    */
     switch (fldName) {
       case DbTableFieldName.teamName:
         return topName;
