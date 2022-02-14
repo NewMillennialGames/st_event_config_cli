@@ -65,7 +65,8 @@ class ScreenCfgByArea {
     // called automatically when top obj () tries to convert to JSON
     for (ScreenWidgetArea a in appScreen.configurableScreenAreas) {
       if (areaConfig.containsKey(a)) continue;
-      areaConfig[a] = CfgForAreaAndNestedSlots(a)..fillMissingWithDefaults();
+      areaConfig[a] = CfgForAreaAndNestedSlots(a)
+        ..fillMissingWithDefaults(appScreen);
     }
   }
 

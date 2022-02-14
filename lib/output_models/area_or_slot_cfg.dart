@@ -41,13 +41,14 @@ class CfgForAreaAndNestedSlots {
     }
   }
 
-  void fillMissingWithDefaults() {
+  void fillMissingWithDefaults(AppScreen appScreen) {
     //
     // create missing default rules for this screen area
     for (VisualRuleType rt in screenArea.applicableRuleTypes) {
       if (visCfgForArea.containsKey(rt)) continue;
       //
-      visCfgForArea[rt] = SlotOrAreaRuleCfg(rt, [])..fillMissingWithDefaults();
+      visCfgForArea[rt] = SlotOrAreaRuleCfg(rt, [])
+        ..fillMissingWithDefaults(appScreen, screenArea, null);
     }
 
     // create missing default rules for SLOTS INSIDE this screen area
@@ -56,7 +57,7 @@ class CfgForAreaAndNestedSlots {
       //
       for (VisualRuleType vrt in slot.possibleConfigRules) {
         visCfgBySlotInArea[slot] = SlotOrAreaRuleCfg(vrt, [])
-          ..fillMissingWithDefaults();
+          ..fillMissingWithDefaults(appScreen, screenArea, slot);
       }
     }
   }

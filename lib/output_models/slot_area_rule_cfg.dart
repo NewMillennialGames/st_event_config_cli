@@ -70,18 +70,34 @@ class SlotOrAreaRuleCfg {
     this.visRuleList.add(rQuest.response!.answers);
   }
 
-  void fillMissingWithDefaults() {
-    // TODO
-    for (VisRuleQuestType rqt in visRuleType.requiredQuestions) {
-      // for (VisRuleQuestType qt in ruleType.questionsRequired)
-      int cnt = visRuleList
-          .where((avr) => avr.ruleType.requiredQuestions.contains(rqt))
-          .length;
-      if (cnt < 1) {
-        //
+  void fillMissingWithDefaults(
+    AppScreen appScreen,
+    ScreenWidgetArea screenArea,
+    ScreenAreaWidgetSlot? optSlot,
+  ) {
+    /* walk through existing responses for this VisualRuleType
+        and add any that are missing
+    */
+    var requiredResponses = Set<VisRuleQuestType>()
+      ..addAll(visRuleType.requiredQuestions);
+    List<VisRuleQuestType> answerTypesSoFar = visRuleList
+        .map((e) => e.requiredQuestions)
+        .reduce((finalLst, lsVals) => finalLst..addAll(lsVals));
+    Set<VisRuleQuestType> existingResponses = Set<VisRuleQuestType>()
+      ..addAll(answerTypesSoFar);
 
-      }
-    }
+    Set<VisRuleQuestType> missingResponses =
+        requiredResponses.difference(existingResponses);
+    if (missingResponses.length < 1) return;
+
+    var answerBuilder = DefaultAnswerBuilder.forMissingAreaOrSlot(
+      appScreen,
+      screenArea,
+      visRuleType,
+      optSlot,
+      missingResponses,
+    );
+    visRuleList.addAll(answerBuilder.defaultAnswers);
   }
 
   // JsonSerializable

@@ -76,7 +76,7 @@ extension VisRuleQuestTypeExt1 on VisRuleQuestType {
     }
   }
 
-  int get _defaultChoice {
+  int get defaultChoice {
     // each question can have different default choice
     return 0;
   }

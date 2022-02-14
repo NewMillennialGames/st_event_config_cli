@@ -2,6 +2,7 @@ library StUiController;
 
 import 'package:tuple/tuple.dart';
 //
+import '../enums/all.dart';
 import '../app_entity_enums/all.dart';
 import '../questions/all.dart';
 
@@ -16,3 +17,4 @@ import '../questions/all.dart';
 part 'asset_prop_ifc.dart';
 part 'group_header_build_payload.dart';
 part 'type_def.dart';
+part 'default_answers.dart';
