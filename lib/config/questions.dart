@@ -76,44 +76,51 @@ final List<Question> _questionLst = [
     DlgStr.eventName,
     null,
     null,
+    questionId: QuestionIds.eventName,
   ),
   // set false to shorten manual testing
-  if (false) ...[
+  if (true) ...[
     Qb<String, String>(
       QuestionQuantifier.eventLevel(),
       DlgStr.eventDescrip,
       null,
       null,
+      questionId: QuestionIds.eventDescrip,
     ),
     Qb<int, EvType>(
       QuestionQuantifier.eventLevel(),
       DlgStr.eventType,
       EvType.values.map((e) => e.name),
       (i) => EvType.values[i],
+      questionId: QuestionIds.eventType,
     ),
     Qb<int, EvCompetitorType>(
       QuestionQuantifier.eventLevel(),
       DlgStr.eventWhosCompeting,
       EvCompetitorType.values.map((e) => e.name),
       (i) => EvCompetitorType.values[i],
+      questionId: QuestionIds.competitorType,
     ),
     Qb<int, EvOpponentType>(
       QuestionQuantifier.eventLevel(),
       DlgStr.eventCompPlayAgainst,
       EvOpponentType.values.map((e) => e.name),
       (i) => EvOpponentType.values[i],
+      questionId: QuestionIds.competeAgainstType,
     ),
     Qb<int, EvDuration>(
       QuestionQuantifier.eventLevel(),
       DlgStr.eventDuration,
       EvDuration.values.map((e) => e.name),
       (i) => EvDuration.values[i],
+      questionId: QuestionIds.eventDuration,
     ),
     Qb<int, EvEliminationStrategy>(
       QuestionQuantifier.eventLevel(),
       DlgStr.eventEliminationStrategy,
       EvEliminationStrategy.values.map((e) => e.name),
       (i) => EvEliminationStrategy.values[i],
+      questionId: QuestionIds.eventEliminationStrategy,
     ),
   ],
   Qb<String, bool>(
@@ -137,6 +144,7 @@ final List<Question> _questionLst = [
     },
     acceptsMultiResponses: true,
     isNotForOutput: true,
+    questionId: QuestionIds.selectAppScreens,
   ),
   // after user selects desired screens to configure, then
   // which screen areas (and slots on those areas) are asked automatically;

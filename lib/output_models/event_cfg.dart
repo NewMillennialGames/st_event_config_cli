@@ -49,9 +49,12 @@ class EventCfgTree {
 
   factory EventCfgTree.fromEventLevelConfig(Iterable<Question> responses) {
     //
-    String evTemplateName =
-        (responses.where((q) => q.questionId == 1).first.response?.answers ??
-            '') as String;
+    String evTemplateName = (responses
+            .where((q) => q.questionId == QuestionIds.eventName)
+            .first
+            .response
+            ?.answers ??
+        '') as String;
 
     // declare Event level vals to be captured
     String evTemplateDescription = '';
@@ -62,9 +65,12 @@ class EventCfgTree {
     EvEliminationStrategy evEliminationType = EvEliminationStrategy.singleGame;
     // use try to catch errs and allow easy debugging
     try {
-      evTemplateDescription =
-          (responses.where((q) => q.questionId == 2).first.response?.answers ??
-              '') as String;
+      evTemplateDescription = (responses
+              .where((q) => q.questionId == QuestionIds.eventDescrip)
+              .first
+              .response
+              ?.answers ??
+          '') as String;
 
       evType = responses
           .where((q) => q.response?.answers is EvType)
@@ -132,7 +138,7 @@ class EventCfgTree {
   void dumpCfgToFile(String? filename) {
     // write data out to file
     var fn = filename ?? eventCfg.evTemplateName;
-    var outFile = File('$fn.json');
+    var outFile = File('st_ui_builder/assets/$fn.json');
     var jsonData = this.toJson();
     outFile.writeAsStringSync(jsonEncode(jsonData));
     // outFile.close();

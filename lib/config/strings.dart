@@ -36,6 +36,15 @@ class RuleTemplStr {
 }
 
 class QuestionIds {
-  //
+  // eventDuration
+  static String eventName = 'eventName';
+  static String eventDescrip = 'eventDescrip';
+  static String eventType = 'eventType';
+  static String competitorType = 'competitorType';
+  static String competeAgainstType = 'competeAgainstType';
+  static String eventDuration = 'eventDuration';
+  static String eventEliminationStrategy = 'eventEliminationStrategy';
+  static String selectAppScreens = 'selectAppScreens';
+
   static String globalRowStyle = 'globalRowStyle';
 }

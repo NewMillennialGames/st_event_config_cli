@@ -5,6 +5,8 @@ void appendNewQuestsOrInsertImplicitAnswers(
   QuestListMgr questListMgr,
   Question questJustAnswered,
 ) {
+  // feature deprecated for now
+  return;
   //
   // Question questJustAnswered = questListMgr._currentOrLastQuestion;
 

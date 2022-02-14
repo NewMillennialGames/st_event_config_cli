@@ -46,7 +46,8 @@ class Scoretrader extends StatelessWidget {
 }
 
 class MarketViewScreen extends StatefulWidget {
-  // real MarketViewScreen will get assets data & StUiBuilderFactory via RpProvider
+  // real MarketViewScreen will get assets list & StUiBuilderFactory
+  // via a Riverpod Provider
   final StUiBuilderFactory stBldr = StUiBuilderFactory();
   final List<MockAssetWrapper> assets;
 
@@ -71,6 +72,8 @@ class _MarketViewScreenState extends State<MarketViewScreen> {
     widget.stBldr.setConfigForCurrentEvent(evCfgDataFromServer);
     // pretend asset data sent from server
     // and wrapped in Natalia's wrapper class
+    // now use this data to construct the TableviewDataRowTuple
+    // argument needed for the RowStyle constructors
     List<TableviewDataRowTuple> assetRows = widget.assets
         .map((e) => TableviewDataRowTuple(e, null, 'test data'))
         .toList();

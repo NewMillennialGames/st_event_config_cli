@@ -6,7 +6,7 @@ abstract class RuleResponseWrapperIfc {
   void castResponsesToAnswerTypes(Map<VisRuleQuestType, String> responses);
   // send user answers OUT as whatever class rule is
   RuleResponseBase get asRuleResponse;
-  bool get gens2ndOr3rdSortGroupFilterQuests;
+  // bool get gens2ndOr3rdSortGroupFilterQuests;
 }
 
 @JsonSerializable()
@@ -21,8 +21,8 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
   RuleResponseBase(this.ruleType);
 
   List<VisRuleQuestType> get requiredQuestions => ruleType.requiredQuestions;
-  @override
-  bool get gens2ndOr3rdSortGroupFilterQuests => false;
+  // @override
+  // bool get gens2ndOr3rdSortGroupFilterQuests => false;
   //
   RuleResponseBase get asRuleResponse =>
       throw UnimplementedError('impl in sub class');
@@ -110,11 +110,12 @@ class TvSortGroupFilterBase extends RuleResponseBase {
   @override
   TvSortGroupFilterBase get asRuleResponse => this;
 
-  @override
-  bool get gens2ndOr3rdSortGroupFilterQuests => [
-        SortOrGroupIdxOrder.first,
-        SortOrGroupIdxOrder.second
-      ].contains(this.order);
+  // @override
+  // bool get gens2ndOr3rdSortGroupFilterQuests => false;
+  // [
+  //       SortOrGroupIdxOrder.first,
+  //       SortOrGroupIdxOrder.second
+  //     ].contains(this.order);
 
   @override
   void _castToRealTypes() {

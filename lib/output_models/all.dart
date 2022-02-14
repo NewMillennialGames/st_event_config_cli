@@ -8,6 +8,7 @@ import '../scoretrader/all.dart';
 import '../questions/all.dart';
 import '../enums/all.dart';
 import '../app_entity_enums/all.dart';
+import '../config/all.dart';
 
 part 'all.g.dart';
 part 'event_cfg.dart';

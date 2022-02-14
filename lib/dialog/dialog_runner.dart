@@ -87,7 +87,7 @@ class DialogRunner {
         // _questGroupMgr,
         _questMgr,
       );
-      if (!didAddNew) {
+      if (!didAddNew && _quest.isRuleQuestion) {
         // new version of handleAcquiringNewQuestions
         // run it only if handleAcquiringNewQuestions does no work
         appendNewQuestsOrInsertImplicitAnswers(_questMgr, _quest);
