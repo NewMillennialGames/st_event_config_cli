@@ -22,7 +22,8 @@ class StUiBuilderFactory {
 
       TODO:  add versioning
     */
-    this._eConfig = EventCfgTree.fromJson(eCfgJsonMap);
+    this._eConfig = EventCfgTree.fromJson(eCfgJsonMap)
+      ..fillMissingWithDefaults();
   }
 
   GroupedTableDataMgr tableviewConfigForScreen(
@@ -40,12 +41,12 @@ class StUiBuilderFactory {
     );
   }
 
-  SlotOrAreaRuleCfg _filterBarConfigForScreen(AppScreen screen) {
-    //
-    CfgForAreaAndNestedSlots tableCfg =
-        _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.filterBar);
-    return tableCfg.areaRuleByRuleType(VisualRuleType.filterCfg);
-  }
+  // SlotOrAreaRuleCfg _filterBarConfigForScreen(AppScreen screen) {
+  //   //
+  //   CfgForAreaAndNestedSlots tableCfg =
+  //       _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.filterBar);
+  //   return tableCfg.areaRuleByRuleType(VisualRuleType.filterCfg);
+  // }
 
   SlotOrAreaRuleCfg headerConfigForScreen(AppScreen screen) {
     //
