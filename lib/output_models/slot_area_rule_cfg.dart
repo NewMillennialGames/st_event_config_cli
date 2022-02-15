@@ -80,11 +80,18 @@ class SlotOrAreaRuleCfg {
     */
     var requiredResponses = Set<VisRuleQuestType>()
       ..addAll(visRuleType.requiredQuestions);
-    List<VisRuleQuestType> answerTypesSoFar = visRuleList
-        .map((e) => e.requiredQuestions)
-        .reduce((finalLst, lsVals) => finalLst..addAll(lsVals));
+
+    Iterable<List<VisRuleQuestType>> answerTypesSoFar =
+        visRuleList.map((e) => e.requiredQuestions);
+
+    List<VisRuleQuestType> lstVrqt = [];
+    if (answerTypesSoFar.length > 0) {
+      lstVrqt = answerTypesSoFar
+          .reduce((finalLst, lsVals) => finalLst..addAll(lsVals));
+    }
+
     Set<VisRuleQuestType> existingResponses = Set<VisRuleQuestType>()
-      ..addAll(answerTypesSoFar);
+      ..addAll(lstVrqt);
 
     Set<VisRuleQuestType> missingResponses =
         requiredResponses.difference(existingResponses);

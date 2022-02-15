@@ -101,6 +101,8 @@ class QuestListMgr {
     // or else we might re-ask prior (already answered) questions
     if (_currQuestionIdx < 7) return;
 
+    print('running sortPendingQuestions');
+
     var unaskedQuests = _pendingQuestions.sublist(_currQuestionIdx + 1);
 
     unaskedQuests.sort((a, b) => a.sortKey.compareTo(b.sortKey));

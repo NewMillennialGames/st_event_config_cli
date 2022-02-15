@@ -33,8 +33,9 @@ class QuestionQuantifier extends Equatable {
     int screenAreaIdx = 1 + (screenWidgetArea?.index ?? -1);
     int slotInAreaIdx = 1 + (slotInArea?.index ?? -1);
     int visRuleTypeIdx = 1 + (visRuleTypeForAreaOrSlot?.index ?? -1);
-    int behRuleTypeIdx = 1 + (behRuleTypeForAreaOrSlot?.index ?? -1);
-    return '${appScreen.index}-$screenAreaIdx-$slotInAreaIdx-$visRuleTypeIdx-$behRuleTypeIdx-${cascadeType.index}';
+    // int behRuleTypeIdx = 1 + (behRuleTypeForAreaOrSlot?.index ?? -1);
+    // -$behRuleTypeIdx-${cascadeType.index}
+    return '${appScreen.index}-$screenAreaIdx-$slotInAreaIdx-$visRuleTypeIdx';
   }
 
   // equatableKey must be distinct & unique
