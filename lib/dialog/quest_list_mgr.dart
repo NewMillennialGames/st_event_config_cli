@@ -189,7 +189,8 @@ class QuestListMgr {
     this._pendingQuestions.addAll(quests);
 
     // TODO:  test sorting after everything else is working
-    _sortPendingQuestions();
+    // sorting not working and not necessary
+    // _sortPendingQuestions();
   }
 
   List<UserResponse> get priorAnswers {
