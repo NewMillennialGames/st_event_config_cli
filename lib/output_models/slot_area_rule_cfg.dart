@@ -21,49 +21,49 @@ class SlotOrAreaRuleCfg {
   List<RuleResponseBase> rulesOfType(VisualRuleType rt) =>
       visRuleList.where((rr) => rr.ruleType == rt).toList();
 
-  GroupingRules? get groupingRules {
-    List<TvGroupCfg> definedGroupRules =
-        rulesOfType(VisualRuleType.groupCfg) as List<TvGroupCfg>;
+  // GroupingRules? get groupingRules {
+  //   List<TvGroupCfg> definedGroupRules =
+  //       rulesOfType(VisualRuleType.groupCfg) as List<TvGroupCfg>;
 
-    int len = definedGroupRules.length;
-    if (len < 1) return null;
+  //   int len = definedGroupRules.length;
+  //   if (len < 1) return null;
 
-    definedGroupRules
-        .sort((r1, r2) => r1.order.index.compareTo(r2.order.index));
+  //   definedGroupRules
+  //       .sort((r1, r2) => r1.order.index.compareTo(r2.order.index));
 
-    TvGroupCfg? gr2 = len > 1 ? definedGroupRules[1] : null;
-    TvGroupCfg? gr3 = len > 2 ? definedGroupRules[2] : null;
-    return GroupingRules(definedGroupRules.first, gr2, gr3);
-  }
+  //   TvGroupCfg? gr2 = len > 1 ? definedGroupRules[1] : null;
+  //   TvGroupCfg? gr3 = len > 2 ? definedGroupRules[2] : null;
+  //   return GroupingRules(definedGroupRules.first, gr2, gr3);
+  // }
 
   SortingRules? get sortingRules {
-    List<TvSortCfg> definedGroupRules =
+    List<TvSortCfg> definedSortRules =
         rulesOfType(VisualRuleType.sortCfg) as List<TvSortCfg>;
 
-    int len = definedGroupRules.length;
+    int len = definedSortRules.length;
     if (len < 1) return null;
 
-    definedGroupRules
-        .sort((r1, r2) => r1.order.index.compareTo(r2.order.index));
+    // definedGroupRules
+    //     .sort((r1, r2) => r1.order.index.compareTo(r2.order.index));
 
-    TvSortCfg? gr2 = len > 1 ? definedGroupRules[1] : null;
-    TvSortCfg? gr3 = len > 2 ? definedGroupRules[2] : null;
-    return SortingRules(definedGroupRules.first, gr2, gr3);
+    TvSortCfg? gr2 = len > 1 ? definedSortRules[1] : null;
+    TvSortCfg? gr3 = len > 2 ? definedSortRules[2] : null;
+    return SortingRules(definedSortRules.first, gr2, gr3);
   }
 
   FilterRules? get filterRules {
-    List<TvFilterCfg> definedGroupRules =
+    List<TvFilterCfg> definedFilterRules =
         rulesOfType(VisualRuleType.filterCfg) as List<TvFilterCfg>;
 
-    int len = definedGroupRules.length;
+    int len = definedFilterRules.length;
     if (len < 1) return null;
 
-    definedGroupRules
-        .sort((r1, r2) => r1.order.index.compareTo(r2.order.index));
+    // definedGroupRules
+    //     .sort((r1, r2) => r1.order.index.compareTo(r2.order.index));
 
-    TvFilterCfg? gr2 = len > 1 ? definedGroupRules[1] : null;
-    TvFilterCfg? gr3 = len > 2 ? definedGroupRules[2] : null;
-    return FilterRules(definedGroupRules.first, gr2, gr3);
+    TvFilterCfg? gr2 = len > 1 ? definedFilterRules[1] : null;
+    TvFilterCfg? gr3 = len > 2 ? definedFilterRules[2] : null;
+    return FilterRules(definedFilterRules.first, gr2, gr3);
   }
 
   void appendQuestion(VisRuleStyleQuest rQuest) {

@@ -11,10 +11,12 @@ enum QuestCascadeTyp {
     I want NO CASCADE questions to sort to LAST position
     so I moved it's index to the bottom of list
    */
-  addsWhichAreaInEachScreenQuestions,
+  addsWhichAreaInSelectedScreenQuestions,
+  addsWhichRulesForSelectedAreaQuestions, // for each area of each screen
   addsWhichSlotOfSelectedAreaQuestions, // for each screen
-  addsWhichRuleForAreaOrSlotOfScreen, // for each area and slot of each screen
+  addsWhichRulesForSlotsInArea, // for each slot in area
   addsVisualRuleQuestions,
+  addsVisualRuleDetailQuestions,
   addsBehavioralRuleQuestions,
   noCascade,
 }
@@ -27,18 +29,24 @@ extension QuestCascadeTypExt on QuestCascadeTyp {
   */
   bool get generatesNoNewQuestions => this == QuestCascadeTyp.noCascade;
 
-  bool get asksAboutRulesAndSlotsWithinSelectedScreenAreas =>
-      this == QuestCascadeTyp.addsWhichAreaInEachScreenQuestions;
+  bool get addsWhichAreaInSelectedScreenQuestions =>
+      this == QuestCascadeTyp.addsWhichAreaInSelectedScreenQuestions;
 
-  bool get asksSlotsWithinSelectedScreenAreas =>
+  bool get addsWhichRulesForSelectedAreaQuestions =>
+      this == QuestCascadeTyp.addsWhichRulesForSelectedAreaQuestions;
+
+  bool get addsWhichSlotOfSelectedAreaQuestions =>
       this == QuestCascadeTyp.addsWhichSlotOfSelectedAreaQuestions;
 
-  bool get asksRuleTypesForSelectedAreasOrSlots =>
-      this == QuestCascadeTyp.addsWhichRuleForAreaOrSlotOfScreen;
+  bool get addsWhichRulesForSlotsInArea =>
+      this == QuestCascadeTyp.addsWhichRulesForSlotsInArea;
 
-  bool get asksDetailsForEachVisualRuleType =>
+  bool get addsVisualRuleQuestions =>
       this == QuestCascadeTyp.addsVisualRuleQuestions;
 
-  bool get asksDetailsForEachBehaveRuleType =>
+  bool get addsVisualRuleDetailQuestions =>
+      this == QuestCascadeTyp.addsVisualRuleDetailQuestions;
+
+  bool get addsBehavioralRuleQuestions =>
       this == QuestCascadeTyp.addsBehavioralRuleQuestions;
 }

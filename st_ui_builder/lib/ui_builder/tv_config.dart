@@ -14,14 +14,14 @@ class TableviewConfigPayload {
 
   final AppScreen appScreen;
   final TvAreaRowStyle rowStyle;
-  final GroupingRules groupByRules;
+  // final GroupingRules groupByRules;
   final SortingRules sortRules;
   final FilterRules filterRules;
 
   TableviewConfigPayload._(
     this.appScreen,
     this.rowStyle,
-    this.groupByRules,
+    // this.groupByRules,
     this.sortRules,
     this.filterRules,
   );
@@ -41,7 +41,7 @@ class TableviewConfigPayload {
     return TableviewConfigPayload._(
       appScreen,
       tvRowStyleRule.selectedRowStyle,
-      tableAreaRules.groupingRules!,
+      // tableAreaRules.groupingRules!,
       tableAreaRules.sortingRules!,
       tableAreaRules.filterRules!,
     );

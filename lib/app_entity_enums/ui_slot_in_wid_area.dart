@@ -10,9 +10,9 @@ enum ScreenAreaWidgetSlot {
   // ui-sub-area of the UI component
   header,
   footer,
-  dropMenu1,
-  dropMenu2,
-  dropMenu3,
+  menuSortPosOrSlot1,
+  menuSortPosOrSlot2,
+  menuSortPosOrSlot3,
 
   // data property of the component
   title,
@@ -27,11 +27,11 @@ enum ScreenAreaWidgetSlot {
 extension ScreenAreaWidgetSlotExt1 on ScreenAreaWidgetSlot {
   //
 
-  bool get isConfigurable => this.possibleConfigRules.length > 0;
+  bool get isConfigurable => true; //this.possibleConfigRules.length > 0;
 
   String get choiceName => this.name;
 
-  List<VisualRuleType> get possibleConfigRules {
+  List<VisualRuleType> possibleConfigRules(ScreenWidgetArea forArea) {
     switch (this) {
       case ScreenAreaWidgetSlot.header:
         return [
@@ -41,17 +41,20 @@ extension ScreenAreaWidgetSlotExt1 on ScreenAreaWidgetSlot {
         return [
           VisualRuleType.showOrHide,
         ];
-      case ScreenAreaWidgetSlot.dropMenu1:
+      case ScreenAreaWidgetSlot.menuSortPosOrSlot1:
         return [
-          VisualRuleType.filterCfg,
+          if (forArea == ScreenWidgetArea.filterBar) VisualRuleType.filterCfg,
+          if (forArea == ScreenWidgetArea.tableview) VisualRuleType.sortCfg,
         ];
-      case ScreenAreaWidgetSlot.dropMenu2:
+      case ScreenAreaWidgetSlot.menuSortPosOrSlot2:
         return [
-          VisualRuleType.filterCfg,
+          if (forArea == ScreenWidgetArea.filterBar) VisualRuleType.filterCfg,
+          if (forArea == ScreenWidgetArea.tableview) VisualRuleType.sortCfg,
         ];
-      case ScreenAreaWidgetSlot.dropMenu3:
+      case ScreenAreaWidgetSlot.menuSortPosOrSlot3:
         return [
-          VisualRuleType.filterCfg,
+          if (forArea == ScreenWidgetArea.filterBar) VisualRuleType.filterCfg,
+          if (forArea == ScreenWidgetArea.tableview) VisualRuleType.sortCfg,
         ];
       case ScreenAreaWidgetSlot.title:
         return [

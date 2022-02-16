@@ -8,6 +8,7 @@ enum DbTableFieldName {
   region,
   eventName,
   gameDate,
+  gameTime,
   gameLocation,
   imageUrl,
   assetOpenPrice,
@@ -32,6 +33,8 @@ extension DbTableFieldNameExt1 on DbTableFieldName {
         return 'Event Name';
       case DbTableFieldName.gameDate:
         return 'Date';
+      case DbTableFieldName.gameTime:
+        return 'Game Time';
       case DbTableFieldName.gameLocation:
         return 'Location';
       case DbTableFieldName.imageUrl:

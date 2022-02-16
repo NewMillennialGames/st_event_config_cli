@@ -48,41 +48,29 @@ class QuestionQuantifier extends Equatable {
       visRuleTypeForAreaOrSlot == null &&
       behRuleTypeForAreaOrSlot == null;
 
-  bool get isQuestAboutAreaInScreenOrSlotInArea =>
-      screenWidgetArea != null &&
-      visRuleTypeForAreaOrSlot == null &&
-      behRuleTypeForAreaOrSlot == null; // && slotInArea == null
+  // bool get isQuestAboutAreaInScreenOrSlotInArea =>
+  //     screenWidgetArea != null &&
+  //     visRuleTypeForAreaOrSlot == null &&
+  //     behRuleTypeForAreaOrSlot == null; // && slotInArea == null
   //
   bool get generatesNoNewQuestions => cascadeType.generatesNoNewQuestions;
-  bool get asksAreasWithinSelectedScreens =>
-      cascadeType.asksAboutRulesAndSlotsWithinSelectedScreenAreas;
-  bool get asksAboutRulesAndSlotsWithinSelectedScreenAreas =>
-      cascadeType.asksSlotsWithinSelectedScreenAreas;
-  bool get asksRuleTypesForSelectedAreasOrSlots =>
-      cascadeType.asksRuleTypesForSelectedAreasOrSlots;
-  bool get asksDetailsForEachVisualRuleType =>
-      cascadeType.asksDetailsForEachVisualRuleType;
-  bool get asksDetailsForEachBehaveRuleType =>
-      cascadeType.asksDetailsForEachBehaveRuleType;
 
-  // factory QuestionQuantifier.forSearchFilter = QuestionQuantifier.custom;
-  // factory QuestionQuantifier.forSearchFilter(
-  //   QuestCascadeTyp cascadeType,
-  //   AppScreen appScreen,
-  //   ScreenWidgetArea? screenArea,
-  //   ScreenAreaWidgetSlot? slotInArea,
-  //   VisualRuleType? visRuleTypeForAreaSlot,
-  //   BehaviorRuleType? behRuleTypeForAreaSlot,
-  // ) {
-  //   return QuestionQuantifier._(
-  //     cascadeType,
-  //     appScreen,
-  //     screenArea,
-  //     slotInArea,
-  //     visRuleTypeForAreaSlot,
-  //     behRuleTypeForAreaSlot,
-  //   );
-  // }
+  bool get addsWhichAreaInSelectedScreenQuestions =>
+      cascadeType.addsWhichAreaInSelectedScreenQuestions;
+
+  bool get addsWhichRulesForSelectedAreaQuestions =>
+      cascadeType.addsWhichRulesForSelectedAreaQuestions;
+
+  bool get addsWhichSlotOfSelectedAreaQuestions =>
+      cascadeType.addsWhichSlotOfSelectedAreaQuestions;
+
+  bool get addsWhichRulesForSlotsInArea =>
+      cascadeType.addsWhichRulesForSlotsInArea;
+
+  bool get addsVisualRuleQuestions => cascadeType.addsVisualRuleQuestions;
+
+  bool get addsBehavioralRuleQuestions =>
+      cascadeType.addsBehavioralRuleQuestions;
 
   /*  certain questions at top 3 levels (when property answered)
       can generate questions for levels below them
@@ -91,9 +79,15 @@ class QuestionQuantifier extends Equatable {
   factory QuestionQuantifier.eventLevel({
     bool responseAddsWhichAreaQuestions = false,
   }) {
+    /*
+      sample question:    for this event:
+      'Select the app screens you`d like to configure?',
+      when responseAddsWhichAreaQuestions is true
+      this answer will build "which area" questions
+    */
     return QuestionQuantifier._(
       responseAddsWhichAreaQuestions
-          ? QuestCascadeTyp.addsWhichAreaInEachScreenQuestions
+          ? QuestCascadeTyp.addsWhichAreaInSelectedScreenQuestions
           : QuestCascadeTyp.noCascade,
       AppScreen.eventConfiguration,
       null,
@@ -103,17 +97,19 @@ class QuestionQuantifier extends Equatable {
     );
   }
 
-  factory QuestionQuantifier.appScreenLevel(
+  factory QuestionQuantifier.screenLevel(
     AppScreen appScreen, {
-    bool responseAddsWhichSlotQuestions = false,
+    bool responseAddsWhichRuleAndSlotQuestions = false,
   }) {
-    // not in use but here for future
-    // these individual "Wanna config this screen?" questions are skipped
-    // because the FINAL event-level question above
-    // has addsWhichScreenQuestions = true and it does all this work for you
+    /*
+      sample question:
+      'For the ${scr.name} screen, select the areas you`d like to configure?',
+      when responseAddsWhichRuleAndSlotQuestions is true
+      this answer will build "which rule for area" questions
+    */
     return QuestionQuantifier._(
-      responseAddsWhichSlotQuestions
-          ? QuestCascadeTyp.addsWhichSlotOfSelectedAreaQuestions
+      responseAddsWhichRuleAndSlotQuestions
+          ? QuestCascadeTyp.addsWhichRulesForSelectedAreaQuestions
           : QuestCascadeTyp.noCascade,
       appScreen,
       null,
@@ -123,18 +119,21 @@ class QuestionQuantifier extends Equatable {
     );
   }
 
-  factory QuestionQuantifier.screenAreaLevel(
+  factory QuestionQuantifier.areaLevelRules(
     AppScreen appScreen,
     ScreenWidgetArea screenArea, {
-    bool responseAddsWhichRuleTypeQuestions = false,
-    bool responseAddsWhichSlotQuestions = false,
+    bool responseAddsWhichRuleTypeQuestsForArea = false,
   }) {
+    /*
+      sample question:
+       'Which rules would you like to add to the ${area.name} of ${screen.name}?',
+      when responseAddsWhichRuleTypeQuestsForArea is true
+      this answer will build "rule detail ?? for area" questions
+    */
     return QuestionQuantifier._(
-      responseAddsWhichRuleTypeQuestions
-          ? QuestCascadeTyp.addsVisualRuleQuestions
-          : (responseAddsWhichSlotQuestions
-              ? QuestCascadeTyp.addsWhichSlotOfSelectedAreaQuestions
-              : QuestCascadeTyp.noCascade),
+      responseAddsWhichRuleTypeQuestsForArea
+          ? QuestCascadeTyp.addsWhichRulesForSelectedAreaQuestions
+          : QuestCascadeTyp.noCascade,
       appScreen,
       screenArea,
       null,
@@ -143,15 +142,44 @@ class QuestionQuantifier extends Equatable {
     );
   }
 
-  factory QuestionQuantifier.slotAreaLevel(
+  factory QuestionQuantifier.areaLevelSlots(
+    AppScreen appScreen,
+    ScreenWidgetArea screenArea, {
+    bool responseAddsWhichRuleQuestions = false,
+  }) {
+    /*
+      sample question:
+      'Which slots/widgets on the ${area.name} of ${screen.name} would you like to configure?',
+      when responseAddsWhichRuleQuestions is true
+      this answer will build "rule detail ?? for slot" questions
+    */
+    return QuestionQuantifier._(
+      responseAddsWhichRuleQuestions
+          ? QuestCascadeTyp.addsWhichRulesForSlotsInArea
+          : QuestCascadeTyp.noCascade,
+      appScreen,
+      screenArea,
+      null,
+      null,
+      null,
+    );
+  }
+
+  factory QuestionQuantifier.ruleLevel(
     AppScreen appScreen,
     ScreenWidgetArea screenArea,
-    ScreenAreaWidgetSlot slot, {
+    ScreenAreaWidgetSlot? slot, {
     bool responseAddsRuleDetailQuestions = false,
   }) {
+    /*
+      sample question:
+     'Which rules would you like to add to the ${slotInArea.name} area of ${screenArea.name} on screen ${screen.name}?',
+      when responseAddsRuleDetailQuestions is true
+      this answer will build "rule detail ?? for slot" questions
+    */
     return QuestionQuantifier._(
       responseAddsRuleDetailQuestions
-          ? QuestCascadeTyp.addsVisualRuleQuestions
+          ? QuestCascadeTyp.addsVisualRuleDetailQuestions
           : QuestCascadeTyp.noCascade,
       appScreen,
       screenArea,
@@ -164,7 +192,7 @@ class QuestionQuantifier extends Equatable {
   factory QuestionQuantifier.ruleCompositionLevel(
     AppScreen appScreen,
     ScreenWidgetArea screenWidgetArea,
-    VisualRuleType visRuleTypeForSlotInArea,
+    VisualRuleType? visRuleTypeForSlotInArea,
     // rule level always has screen & area; may have slot
     ScreenAreaWidgetSlot? slot,
     BehaviorRuleType? behRuleTypeForSlotInArea, {

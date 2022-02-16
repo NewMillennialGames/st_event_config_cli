@@ -127,7 +127,7 @@ final List<Question> _questionLst = [
     QuestionQuantifier.eventLevel(),
     'Apply 1st selected TblView row style to all other screens?',
     ['no', 'yes'],
-    (i) => i == 1,
+    (i) => i == '1',
     defaultAnswerIdx: 1,
     questionId: QuestionIds.globalRowStyle,
   ),

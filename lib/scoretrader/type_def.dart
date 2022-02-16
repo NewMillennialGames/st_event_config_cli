@@ -15,7 +15,7 @@ typedef GetGroupKeyFromRow = GroupHeaderData Function(TableviewDataRowTuple);
 typedef SectionSortComparator = int Function(
     TableviewDataRowTuple, TableviewDataRowTuple);
 
-typedef GroupingRules = Tuple3<TvGroupCfg, TvGroupCfg?, TvGroupCfg?>;
+// typedef GroupingRules = Tuple3<TvGroupCfg, TvGroupCfg?, TvGroupCfg?>;
 
 typedef SortingRules = Tuple3<TvSortCfg, TvSortCfg?, TvSortCfg?>;
 

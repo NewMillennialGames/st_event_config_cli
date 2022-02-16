@@ -25,6 +25,8 @@ class GroupedTableDataMgr {
   GroupedListOrder order = GroupedListOrder.ASC;
   // rows actually rendered from _filteredAssetRows
   List<TableviewDataRowTuple> _filteredAssetRows = [];
+  // regions no longer matter when you get to final 4
+  bool disableGroupingBeyondDate = false;
 
   GroupedTableDataMgr(
     this._allAssetRows,
@@ -34,12 +36,12 @@ class GroupedTableDataMgr {
         this._filteredAssetRows = _allAssetRows.toList();
 
   List<TableviewDataRowTuple> get listData => _filteredAssetRows;
-  GroupingRules get groupRules => _tableViewCfg.groupByRules;
+  // GroupingRules get groupRules => _tableViewCfg.groupByRules;
   SortingRules get sortingRules => _tableViewCfg.sortRules;
   FilterRules get filterRules => _tableViewCfg.filterRules;
 
   GetGroupKeyFromRow get groupBy {
-    return GroupHeaderData.keyConstructorFromCfg(_tableViewCfg.groupByRules);
+    return GroupHeaderData.keyConstructorFromCfg(_tableViewCfg.sortRules);
   }
 
   // groupHeaderBuilder is function to return header widget

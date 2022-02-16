@@ -22,7 +22,8 @@ TopEventCfg _$TopEventCfgFromJson(Map<String, dynamic> json) => TopEventCfg(
       evEliminationType: $enumDecodeNullable(
               _$EvEliminationStrategyEnumMap, json['evEliminationType']) ??
           EvEliminationStrategy.roundRobin,
-    );
+    )..applySameRowStyleToAllScreens =
+        json['applySameRowStyleToAllScreens'] as bool;
 
 Map<String, dynamic> _$TopEventCfgToJson(TopEventCfg instance) =>
     <String, dynamic>{
@@ -34,6 +35,7 @@ Map<String, dynamic> _$TopEventCfgToJson(TopEventCfg instance) =>
       'evDuration': _$EvDurationEnumMap[instance.evDuration],
       'evEliminationType':
           _$EvEliminationStrategyEnumMap[instance.evEliminationType],
+      'applySameRowStyleToAllScreens': instance.applySameRowStyleToAllScreens,
     };
 
 const _$EvTypeEnumMap = {
@@ -112,12 +114,12 @@ CfgForAreaAndNestedSlots _$CfgForAreaAndNestedSlotsFromJson(
     CfgForAreaAndNestedSlots(
       $enumDecode(_$ScreenWidgetAreaEnumMap, json['screenArea']),
     )
-      ..visCfgForArea = (json['visRulesForArea'] as Map<String, dynamic>).map(
+      ..visCfgForArea = (json['visCfgForArea'] as Map<String, dynamic>).map(
         (k, e) => MapEntry($enumDecode(_$VisualRuleTypeEnumMap, k),
             SlotOrAreaRuleCfg.fromJson(e as Map<String, dynamic>)),
       )
       ..visCfgBySlotInArea =
-          (json['visConfigBySlotInArea'] as Map<String, dynamic>).map(
+          (json['visCfgBySlotInArea'] as Map<String, dynamic>).map(
         (k, e) => MapEntry($enumDecode(_$ScreenAreaWidgetSlotEnumMap, k),
             SlotOrAreaRuleCfg.fromJson(e as Map<String, dynamic>)),
       );
@@ -126,9 +128,9 @@ Map<String, dynamic> _$CfgForAreaAndNestedSlotsToJson(
         CfgForAreaAndNestedSlots instance) =>
     <String, dynamic>{
       'screenArea': _$ScreenWidgetAreaEnumMap[instance.screenArea],
-      'visRulesForArea': instance.visCfgForArea
+      'visCfgForArea': instance.visCfgForArea
           .map((k, e) => MapEntry(_$VisualRuleTypeEnumMap[k], e)),
-      'visConfigBySlotInArea': instance.visCfgBySlotInArea
+      'visCfgBySlotInArea': instance.visCfgBySlotInArea
           .map((k, e) => MapEntry(_$ScreenAreaWidgetSlotEnumMap[k], e)),
     };
 
@@ -143,7 +145,6 @@ const _$ScreenWidgetAreaEnumMap = {
 
 const _$VisualRuleTypeEnumMap = {
   VisualRuleType.sortCfg: 'sortCfg',
-  VisualRuleType.groupCfg: 'groupCfg',
   VisualRuleType.filterCfg: 'filterCfg',
   VisualRuleType.styleOrFormat: 'styleOrFormat',
   VisualRuleType.showOrHide: 'showOrHide',
@@ -152,8 +153,9 @@ const _$VisualRuleTypeEnumMap = {
 const _$ScreenAreaWidgetSlotEnumMap = {
   ScreenAreaWidgetSlot.header: 'header',
   ScreenAreaWidgetSlot.footer: 'footer',
-  ScreenAreaWidgetSlot.dropMenu1: 'slot1',
-  ScreenAreaWidgetSlot.dropMenu2: 'slot2',
+  ScreenAreaWidgetSlot.menuSortPosOrSlot1: 'menuSortPosOrSlot1',
+  ScreenAreaWidgetSlot.menuSortPosOrSlot2: 'menuSortPosOrSlot2',
+  ScreenAreaWidgetSlot.menuSortPosOrSlot3: 'menuSortPosOrSlot3',
   ScreenAreaWidgetSlot.title: 'title',
   ScreenAreaWidgetSlot.subtitle: 'subtitle',
   ScreenAreaWidgetSlot.bannerUrl: 'bannerUrl',

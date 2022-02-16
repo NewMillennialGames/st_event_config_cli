@@ -16,6 +16,9 @@ class TopEventCfg {
   EvOpponentType evOpponentType;
   EvDuration evDuration;
   EvEliminationStrategy evEliminationType;
+  // TODO  below not connected to Constructor or JSON
+  bool applySameRowStyleToAllScreens = true;
+  // bool groupOnlyByDate = false;
 
   TopEventCfg(
     this.evTemplateName,
@@ -181,13 +184,13 @@ extension EventCfgTreeExt1 on EventCfgTree {
   ) =>
       screenAreaCfg(screen, area).visCfgForArea;
 
-  GroupingRules tvGroupingRules(AppScreen screen) {
-    // Map<VisualRuleType, SlotOrAreaRuleCfg> areaCfgByRuleType =
-    //     allVisualRulesInScreenArea(screen, ScreenWidgetArea.tableview);
-    return allVisualRulesInScreenArea(
-            screen, ScreenWidgetArea.tableview)[VisualRuleType.groupCfg]!
-        .groupingRules!;
-  }
+  // GroupingRules tvGroupingRules(AppScreen screen) {
+  //   // Map<VisualRuleType, SlotOrAreaRuleCfg> areaCfgByRuleType =
+  //   //     allVisualRulesInScreenArea(screen, ScreenWidgetArea.tableview);
+  //   return allVisualRulesInScreenArea(
+  //           screen, ScreenWidgetArea.tableview)[VisualRuleType.groupCfg]!
+  //       .groupingRules!;
+  // }
 
   SortingRules tvSortingRules(AppScreen screen) {
     // Map<VisualRuleType, SlotOrAreaRuleCfg> areaCfgByRuleType =

@@ -23,7 +23,6 @@ Map<String, dynamic> _$RuleResponseBaseToJson(RuleResponseBase instance) =>
 
 const _$VisualRuleTypeEnumMap = {
   VisualRuleType.sortCfg: 'sortCfg',
-  VisualRuleType.groupCfg: 'groupCfg',
   VisualRuleType.filterCfg: 'filterCfg',
   VisualRuleType.styleOrFormat: 'styleOrFormat',
   VisualRuleType.showOrHide: 'showOrHide',
@@ -31,7 +30,6 @@ const _$VisualRuleTypeEnumMap = {
 
 const _$VisRuleQuestTypeEnumMap = {
   VisRuleQuestType.selectDataFieldName: 'selectDataFieldName',
-  VisRuleQuestType.specifyPositionInGroup: 'specifyPositionInGroup',
   VisRuleQuestType.specifySortAscending: 'specifySortAscending',
   VisRuleQuestType.selectVisualComponentOrStyle: 'selectVisualComponentOrStyle',
   VisRuleQuestType.controlsVisibilityOfAreaOrSlot:
@@ -55,8 +53,8 @@ Map<String, dynamic> _$TvRowStyleCfgToJson(TvRowStyleCfg instance) =>
     };
 
 const _$TvAreaRowStyleEnumMap = {
-  TvAreaRowStyle.assetVsAsset: 'teamVsTeam',
-  TvAreaRowStyle.assetVsAssetRanked: 'teamVsTeamRanked',
+  TvAreaRowStyle.assetVsAsset: 'assetVsAsset',
+  TvAreaRowStyle.assetVsAssetRanked: 'assetVsAssetRanked',
   TvAreaRowStyle.teamVsField: 'teamVsField',
   TvAreaRowStyle.teamVsFieldRanked: 'teamVsFieldRanked',
   TvAreaRowStyle.teamDraft: 'teamDraft',
@@ -73,58 +71,35 @@ TvSortCfg _$TvSortCfgFromJson(Map<String, dynamic> json) => TvSortCfg()
     (k, e) => MapEntry($enumDecode(_$VisRuleQuestTypeEnumMap, k), e as String),
   )
   ..colName = $enumDecode(_$DbTableFieldNameEnumMap, json['colName'])
-  ..order = $enumDecode(_$SortOrGroupIdxOrderEnumMap, json['order'])
   ..asc = json['asc'] as bool;
 
 Map<String, dynamic> _$TvSortCfgToJson(TvSortCfg instance) => <String, dynamic>{
       'userResponses': instance.userResponses
           .map((k, e) => MapEntry(_$VisRuleQuestTypeEnumMap[k], e)),
       'colName': _$DbTableFieldNameEnumMap[instance.colName],
-      'order': _$SortOrGroupIdxOrderEnumMap[instance.order],
       'asc': instance.asc,
     };
 
 const _$DbTableFieldNameEnumMap = {
   DbTableFieldName.teamName: 'teamName',
   DbTableFieldName.playerName: 'playerName',
-  DbTableFieldName.conference: 'conferenceOrRegion',
-  DbTableFieldName.gameDate: 'gameDate',
+  DbTableFieldName.conference: 'conference',
+  DbTableFieldName.region: 'region',
   DbTableFieldName.eventName: 'eventName',
-  DbTableFieldName.gameLocation: 'eventLocation',
-  DbTableFieldName.imageUrl: 'eventBannerUrl',
+  DbTableFieldName.gameDate: 'gameDate',
+  DbTableFieldName.gameLocation: 'gameLocation',
+  DbTableFieldName.imageUrl: 'imageUrl',
   DbTableFieldName.assetOpenPrice: 'assetOpenPrice',
   DbTableFieldName.assetCurrentPrice: 'assetCurrentPrice',
+  DbTableFieldName.assetRank: 'assetRank',
+  DbTableFieldName.assetPosition: 'assetPosition',
 };
-
-const _$SortOrGroupIdxOrderEnumMap = {
-  SortOrGroupIdxOrder.first: 'first',
-  SortOrGroupIdxOrder.second: 'second',
-  SortOrGroupIdxOrder.third: 'third',
-};
-
-TvGroupCfg _$TvGroupCfgFromJson(Map<String, dynamic> json) => TvGroupCfg()
-  ..userResponses = (json['userResponses'] as Map<String, dynamic>).map(
-    (k, e) => MapEntry($enumDecode(_$VisRuleQuestTypeEnumMap, k), e as String),
-  )
-  ..colName = $enumDecode(_$DbTableFieldNameEnumMap, json['colName'])
-  ..order = $enumDecode(_$SortOrGroupIdxOrderEnumMap, json['order'])
-  ..asc = json['asc'] as bool;
-
-Map<String, dynamic> _$TvGroupCfgToJson(TvGroupCfg instance) =>
-    <String, dynamic>{
-      'userResponses': instance.userResponses
-          .map((k, e) => MapEntry(_$VisRuleQuestTypeEnumMap[k], e)),
-      'colName': _$DbTableFieldNameEnumMap[instance.colName],
-      'order': _$SortOrGroupIdxOrderEnumMap[instance.order],
-      'asc': instance.asc,
-    };
 
 TvFilterCfg _$TvFilterCfgFromJson(Map<String, dynamic> json) => TvFilterCfg()
   ..userResponses = (json['userResponses'] as Map<String, dynamic>).map(
     (k, e) => MapEntry($enumDecode(_$VisRuleQuestTypeEnumMap, k), e as String),
   )
   ..colName = $enumDecode(_$DbTableFieldNameEnumMap, json['colName'])
-  ..order = $enumDecode(_$SortOrGroupIdxOrderEnumMap, json['order'])
   ..asc = json['asc'] as bool;
 
 Map<String, dynamic> _$TvFilterCfgToJson(TvFilterCfg instance) =>
@@ -132,7 +107,6 @@ Map<String, dynamic> _$TvFilterCfgToJson(TvFilterCfg instance) =>
       'userResponses': instance.userResponses
           .map((k, e) => MapEntry(_$VisRuleQuestTypeEnumMap[k], e)),
       'colName': _$DbTableFieldNameEnumMap[instance.colName],
-      'order': _$SortOrGroupIdxOrderEnumMap[instance.order],
       'asc': instance.asc,
     };
 

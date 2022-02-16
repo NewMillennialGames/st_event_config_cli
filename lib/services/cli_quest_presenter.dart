@@ -154,15 +154,17 @@ class CliQuestionPresenter implements QuestionPresenter {
 
   void _printInstructions(Question quest) {
     //
-    if (quest.asksAreasWithinSelectedScreens) {
+    if (quest.addsWhichAreaInSelectedScreenQuestions) {
       // user will enter string or comma delimited list of ints
-    } else if (quest.asksAboutRulesAndSlotsWithinSelectedScreenAreas) {
+    } else if (quest.addsWhichRulesForSelectedAreaQuestions) {
       // causes questions to be added or removed from future queue
       // user may enter int or comma delimited list of ints
-    } else if (quest.asksDetailsForEachVisualRuleType) {
+    } else if (quest.addsWhichRulesForSlotsInArea) {
+      //
+    } else if (quest.addsVisualRuleQuestions) {
       // needs to produce visual formatting rules
       // user will select a widget display option
-    } else if (quest.asksDetailsForEachBehaveRuleType) {
+    } else if (quest.addsBehavioralRuleQuestions) {
       // needs to produce behavioral rules
       // future;  not yet implemented
     }

@@ -22,11 +22,11 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
   // intentionally checking rules here (in addition to slots)
   // an area can be configurable EVEN IF it has ZERO
   // configurable slots (if it just has rules available)
-  bool get isConfigureable =>
-      this.applicableRuleTypes.length > 0 ||
-      this.applicableWigetSlots.length > 0;
+  bool get isConfigureable => true;
+  // this.applicableRuleTypes.length > 0 ||
+  // this.applicableWigetSlots.length > 0;
 
-  List<ScreenAreaWidgetSlot> get applicableWigetSlots {
+  List<ScreenAreaWidgetSlot> applicableWigetSlots(AppScreen screen) {
     //
     switch (this) {
       case ScreenWidgetArea.navBar:
@@ -36,9 +36,9 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
         ];
       case ScreenWidgetArea.filterBar:
         return [
-          ScreenAreaWidgetSlot.dropMenu1,
-          ScreenAreaWidgetSlot.dropMenu2,
-          ScreenAreaWidgetSlot.dropMenu3,
+          ScreenAreaWidgetSlot.menuSortPosOrSlot1,
+          ScreenAreaWidgetSlot.menuSortPosOrSlot2,
+          ScreenAreaWidgetSlot.menuSortPosOrSlot3,
         ];
       case ScreenWidgetArea.header:
         return [
@@ -50,7 +50,11 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
           ScreenAreaWidgetSlot.bannerUrl,
         ];
       case ScreenWidgetArea.tableview:
-        return [];
+        return [
+          ScreenAreaWidgetSlot.menuSortPosOrSlot1,
+          ScreenAreaWidgetSlot.menuSortPosOrSlot2,
+          ScreenAreaWidgetSlot.menuSortPosOrSlot3,
+        ];
       case ScreenWidgetArea.footer:
         return [
           ScreenAreaWidgetSlot.title,
@@ -63,7 +67,7 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
     }
   }
 
-  List<VisualRuleType> get applicableRuleTypes {
+  List<VisualRuleType> applicableRuleTypes(AppScreen screen) {
     // customize this list to control what customization
     // rules go with this ui component
     switch (this) {
@@ -81,8 +85,8 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
       case ScreenWidgetArea.tableview:
         return [
           VisualRuleType.styleOrFormat,
-          VisualRuleType.groupCfg,
-          VisualRuleType.sortCfg
+          // VisualRuleType.groupCfg,
+          // VisualRuleType.sortCfg
         ];
       case ScreenWidgetArea.footer:
         return [VisualRuleType.showOrHide];
@@ -94,7 +98,10 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
   }
 
   //
-  List<VisualRuleType> convertIdxsToRuleList(String commaLstOfInts) {
+  List<VisualRuleType> convertIdxsToRuleList(
+    AppScreen screen,
+    String commaLstOfInts,
+  ) {
     // since we dont show EVERY RuleType, the choice indexes are offset
     // need to fix that
     Set<int> providedIdxs = castStrOfIdxsToIterOfInts(commaLstOfInts).toSet();
@@ -102,7 +109,7 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
     Map<int, VisualRuleType> idxToModifiableRuleTyps = {};
     int tempIdx = 0;
     this
-        .applicableRuleTypes
+        .applicableRuleTypes(screen)
         .forEach((rt) => idxToModifiableRuleTyps[++tempIdx] = rt);
     idxToModifiableRuleTyps
         .removeWhere((idx, uic) => !providedIdxs.contains(idx));

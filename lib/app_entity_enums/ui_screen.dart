@@ -70,23 +70,44 @@ extension AppScreenExt1 on AppScreen {
       case AppScreen.eventConfiguration:
         return [];
       case AppScreen.eventSelection:
-        return [ScreenWidgetArea.header, ScreenWidgetArea.banner];
+        return [
+          ScreenWidgetArea.header,
+          ScreenWidgetArea.banner,
+        ];
       case AppScreen.poolSelection:
         return [];
       case AppScreen.marketView:
-        return [ScreenWidgetArea.filterBar, ScreenWidgetArea.tableview];
+        return [
+          ScreenWidgetArea.filterBar,
+          ScreenWidgetArea.tableview,
+        ];
       case AppScreen.socialPools:
         return [];
       case AppScreen.news:
-        return [ScreenWidgetArea.header, ScreenWidgetArea.banner];
+        return [
+          ScreenWidgetArea.header,
+          ScreenWidgetArea.banner,
+        ];
       case AppScreen.leaderboard:
-        return [ScreenWidgetArea.header, ScreenWidgetArea.banner];
+        return [
+          ScreenWidgetArea.header,
+          ScreenWidgetArea.banner,
+        ];
       case AppScreen.portfolio:
-        return [ScreenWidgetArea.header, ScreenWidgetArea.banner];
+        return [
+          ScreenWidgetArea.header,
+          ScreenWidgetArea.banner,
+        ];
       case AppScreen.trading:
-        return [ScreenWidgetArea.header, ScreenWidgetArea.banner];
+        return [
+          ScreenWidgetArea.header,
+          ScreenWidgetArea.banner,
+        ];
       case AppScreen.marketResearch:
-        return [ScreenWidgetArea.header, ScreenWidgetArea.banner];
+        return [
+          ScreenWidgetArea.header,
+          ScreenWidgetArea.banner,
+        ];
     }
   }
 }

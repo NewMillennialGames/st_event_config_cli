@@ -25,7 +25,6 @@ class NewQuestionCollector {
   */
 
   bool handleAcquiringNewQuestions(
-    // DialogMgr _questGroupMgr,
     QuestListMgr _questMgr,
   ) {
     Question questJustAnswered = _questMgr._currentOrLastQuestion;
@@ -50,21 +49,20 @@ class NewQuestionCollector {
     // }
 
     bool addedNew = false;
-    if (questJustAnswered.asksAreasWithinSelectedScreens &&
-        questJustAnswered.appScreen == AppScreen.eventConfiguration) {
+    if (questJustAnswered.addsWhichAreaInSelectedScreenQuestions) {
       /* called by the last question in hard-coded event list
         user has given us full list of screens they want to configure
         so we don't need to ask individual screens again
        */
-      // print('calling: askUserWhichAreasOfSelectedScreensToConfigure');
+      print('calling: askUserWhichAreasOfSelectedScreensToConfigure');
       askUserWhichAreasOfSelectedScreensToConfigure(
         _questMgr,
         questJustAnswered.response as UserResponse<List<AppScreen>>,
       );
       addedNew = true;
       //
-    } else if (questJustAnswered
-        .asksAboutRulesAndSlotsWithinSelectedScreenAreas) {
+    } else if (questJustAnswered.addsWhichRulesForSelectedAreaQuestions ||
+        questJustAnswered.addsWhichSlotOfSelectedAreaQuestions) {
       /*  for all the areas (to be configured) of all of the selected screens
           we need to know which slot(s) on each area they want to configure
 
@@ -73,46 +71,33 @@ class NewQuestionCollector {
 
           I walked up to farmers market to get some caffeine ... give me 15 minutes notice and I'll walk back to my hotel and put on warmer clothes
       */
-      // print('calling: askeWhichRulesGoWithAreaAndWhichSlotsToConfig');
+      print('calling: askeWhichRulesGoWithAreaAndWhichSlotsToConfig');
       askWhichRulesGoWithAreaAndWhichSlotsToConfig(
         _questMgr,
         questJustAnswered as Question<String, List<ScreenWidgetArea>>,
       );
       addedNew = true;
       //
-    } else if (questJustAnswered.asksRuleTypesForSelectedAreasOrSlots) {
+    } else if (questJustAnswered.addsWhichRulesForSlotsInArea) {
       //
-      // print('calling: askWhichConfigRulesGoWithEachSlot');
+      print('calling: askWhichConfigRulesGoWithEachSlot');
       askWhichConfigRulesGoWithEachSlot(
         _questMgr,
         questJustAnswered as Question<String, List<ScreenAreaWidgetSlot>>,
       );
       addedNew = true;
       //
-    } else if (questJustAnswered.asksDetailsForEachVisualRuleType) {
-      // print('calling: genRequestedVisualRulesForAreaOrSlot');
+    } else if (questJustAnswered.addsVisualRuleQuestions) {
+      print('calling: askWhichConfigRulesGoWithEachSlot');
 
-      genRequestedVisualRulesForAreaOrSlot(
+      askWhichConfigRulesGoWithEachSlot(
         _questMgr,
-        questJustAnswered as Question<String, List<VisualRuleType>>,
+        questJustAnswered as Question<String, List<ScreenAreaWidgetSlot>>,
       );
       addedNew = true;
-      // if (questJustAnswered is Question<String, List<VisualRuleType>>) {
-      //   genRequestedVisualRulesForAreaOrSlot(
-      //     _questMgr,
-      //     questJustAnswered as Question<String, List<VisualRuleType>>,
-      //   );
-      // } else if (questJustAnswered
-      //     is Question<String, List<ScreenAreaWidgetSlot>>) {
-      //   askWhichConfigRulesGoWithEachSlot(
-      //     _questMgr,
-      //     questJustAnswered as Question<String, List<ScreenAreaWidgetSlot>>,
-      //   );
-      // }
-
       //
-    } else if (questJustAnswered.asksDetailsForEachBehaveRuleType) {
-      // print('calling: genRequestedBehaveRulesForAreaOrSlot');
+    } else if (questJustAnswered.addsBehavioralRuleQuestions) {
+      print('calling: genRequestedBehaveRulesForAreaOrSlot');
       genRequestedBehaveRulesForAreaOrSlot(
         _questMgr,
         questJustAnswered as Question<String, List<BehaviorRuleType>>,
@@ -124,7 +109,7 @@ class NewQuestionCollector {
         '\n**Quest ID ${questJustAnswered.questionId} about "${questJustAnswered.questStr}" did not generate any new questions',
       );
       print(
-        'asksDetailsForEachVisualRuleType: ${questJustAnswered.asksDetailsForEachVisualRuleType} -- ${questJustAnswered.visRuleTypeForAreaOrSlot?.name ?? 'err-missing'}',
+        'asksDetailsForEachVisualRuleType: ${questJustAnswered.addsVisualRuleQuestions} -- ${questJustAnswered.visRuleTypeForAreaOrSlot?.name ?? 'err-missing'}',
       );
       // print(
       //   'Quest ID ${questJustAnswered.questionId} about "${questJustAnswered.question}" did not generate any new questions\n\n',
@@ -150,9 +135,9 @@ class NewQuestionCollector {
       if (!scr.isConfigurable) continue;
 
       var q = Question<String, List<ScreenWidgetArea>>(
-        QuestionQuantifier.appScreenLevel(
+        QuestionQuantifier.screenLevel(
           scr,
-          responseAddsWhichSlotQuestions: true,
+          responseAddsWhichRuleAndSlotQuestions: true,
         ),
         'For the ${scr.name} screen, select the areas you`d like to configure?',
         scr.configurableScreenAreas.map((e) => e.name),
@@ -197,23 +182,23 @@ class NewQuestionCollector {
 
     // ask rules for each area
     for (ScreenWidgetArea area in areasSelectedForScreenInLastQuest) {
-      if (!area.isConfigureable || area.applicableRuleTypes.length < 1)
-        continue;
+      var applicableRuleTypes = area.applicableRuleTypes(screen);
+      if (!area.isConfigureable || applicableRuleTypes.length < 1) continue;
 
       var q = Question<String, List<VisualRuleType>>(
-        QuestionQuantifier.screenAreaLevel(
+        QuestionQuantifier.areaLevelRules(
           screen,
           area,
-          responseAddsWhichRuleTypeQuestions: true,
+          responseAddsWhichRuleTypeQuestsForArea: true,
         ),
         'Which rules would you like to add to the ${area.name} of ${screen.name}?',
-        area.applicableRuleTypes.map((r) => r.friendlyName),
+        applicableRuleTypes.map((r) => r.friendlyName),
         (String idxStrs) {
           return castStrOfIdxsToIterOfInts(idxStrs)
-              .map((idx) => area.applicableRuleTypes[idx])
+              .map((idx) => applicableRuleTypes[idx])
               .toList();
         },
-        acceptsMultiResponses: area.applicableRuleTypes.length > 0,
+        acceptsMultiResponses: applicableRuleTypes.length > 0,
       );
       // if (area.applicableRuleTypes.length == 1) {
       //   // only one option;  we can auto-answer this one
@@ -225,25 +210,28 @@ class NewQuestionCollector {
       newQuestions.add(q);
     }
 
-    print(
-      'askWhichRulesGoWithAreaAndWhichSlotsToConfig adding ${newQuestions.length} rule questions',
-    );
     // ask which slots user would like to configure within each area
+    print(
+      'screen ${screen.name} has ${areasSelectedForScreenInLastQuest.length} areas to config',
+    );
     for (ScreenWidgetArea area in areasSelectedForScreenInLastQuest) {
-      if (!area.isConfigureable || area.applicableWigetSlots.length < 1)
-        continue;
+      var applicableWigetSlots = area.applicableWigetSlots(screen);
+      print(
+        'screen ${screen.name} + area ${area.name} has ${applicableWigetSlots.length} slots to config (area.isConfigureable: ${area.isConfigureable})',
+      );
+      if (!area.isConfigureable || applicableWigetSlots.length < 1) continue;
 
       var q = Question<String, List<ScreenAreaWidgetSlot>>(
-        QuestionQuantifier.screenAreaLevel(
+        QuestionQuantifier.areaLevelSlots(
           screen,
           area,
-          responseAddsWhichSlotQuestions: true,
+          responseAddsWhichRuleQuestions: true,
         ),
         'Which slots/widgets on the ${area.name} of ${screen.name} would you like to configure?',
-        area.applicableWigetSlots.map((r) => r.choiceName),
+        applicableWigetSlots.map((ScreenAreaWidgetSlot r) => r.choiceName),
         (String idxStrs) {
           return castStrOfIdxsToIterOfInts(idxStrs)
-              .map((idx) => area.applicableWigetSlots[idx])
+              .map((idx) => applicableWigetSlots[idx])
               .toList();
         },
         acceptsMultiResponses: true,
@@ -254,6 +242,9 @@ class NewQuestionCollector {
     _questMgr.appendNewQuestions(
       newQuestions,
       dbgNam: 'askWhichRulesGoWithAreaAndWhichSlotsToConfig',
+    );
+    print(
+      'askWhichRulesGoWithAreaAndWhichSlotsToConfig adding ${newQuestions.length} rule questions',
     );
   }
 
@@ -273,21 +264,22 @@ class NewQuestionCollector {
     List<Question> newQuestions = [];
     for (ScreenAreaWidgetSlot slotInArea in selectedSlotsInArea) {
       //
-      if (!slotInArea.isConfigurable ||
-          slotInArea.possibleConfigRules.length < 1) continue;
+      var possibleConfigRules = slotInArea.possibleConfigRules(screenArea);
+      if (!slotInArea.isConfigurable || possibleConfigRules.length < 1)
+        continue;
 
       var q = Question<String, List<VisualRuleType>>(
-        QuestionQuantifier.slotAreaLevel(
+        QuestionQuantifier.ruleLevel(
           screen,
           screenArea,
           slotInArea,
           responseAddsRuleDetailQuestions: true,
         ),
         'Which rules would you like to add to the ${slotInArea.name} area of ${screenArea.name} on screen ${screen.name}?',
-        slotInArea.possibleConfigRules.map((r) => r.friendlyName),
+        possibleConfigRules.map((r) => r.friendlyName),
         (String idxStrs) {
           return castStrOfIdxsToIterOfInts(idxStrs)
-              .map((idx) => slotInArea.possibleConfigRules[idx])
+              .map((idx) => possibleConfigRules[idx])
               .toList();
         },
       );

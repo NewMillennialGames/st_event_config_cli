@@ -11,7 +11,7 @@ enum VisRuleQuestType {
   */
   // getTableName,
   selectDataFieldName,
-  specifyPositionInGroup,
+  // specifyPositionInGroup,
   specifySortAscending,
   selectVisualComponentOrStyle,
   controlsVisibilityOfAreaOrSlot,
@@ -31,8 +31,8 @@ extension VisRuleQuestTypeExt1 on VisRuleQuestType {
       //   return 'Select Table that contains required value';
       case VisRuleQuestType.selectDataFieldName:
         return 'Select field containg relevant value';
-      case VisRuleQuestType.specifyPositionInGroup:
-        return 'Select Group/Sort/Filter position';
+      // case VisRuleQuestType.specifyPositionInGroup:
+      //   return 'Select Group/Sort/Filter position';
       case VisRuleQuestType.specifySortAscending:
         return 'Sort Ascending';
       case VisRuleQuestType.selectVisualComponentOrStyle:
@@ -57,8 +57,8 @@ extension VisRuleQuestTypeExt1 on VisRuleQuestType {
       //   return DbRowType.values.map((e) => e.name).toList();
       case VisRuleQuestType.selectDataFieldName:
         return DbTableFieldName.values.map((e) => e.name).toList();
-      case VisRuleQuestType.specifyPositionInGroup:
-        return SortOrGroupIdxOrder.values.map((e) => e.name).toList();
+      // case VisRuleQuestType.specifyPositionInGroup:
+      //   return SortOrGroupIdxOrder.values.map((e) => e.name).toList();
       case VisRuleQuestType.specifySortAscending:
         // idx 0 == no;  1 == yes;  dont reverse these
         return [

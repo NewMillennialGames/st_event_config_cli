@@ -48,6 +48,12 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
   String get gameDateStr => dtFmtr.format(gameDate);
 
   @override
+  DateTime get gameTime => asset.gameDt;
+
+  @override
+  String get gameTimeStr => dtFmtr.format(gameTime);
+
+  @override
   String get id => asset.id;
 
   @override

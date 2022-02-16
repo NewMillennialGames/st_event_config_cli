@@ -102,7 +102,7 @@ class TvRowStyleCfg extends RuleResponseBase {
 class TvSortGroupFilterBase extends RuleResponseBase {
   //
   late DbTableFieldName colName;
-  late SortOrGroupIdxOrder order;
+  // late SortOrGroupIdxOrder order;
   late bool asc = false;
 
   TvSortGroupFilterBase(VisualRuleType rt) : super(rt);
@@ -132,9 +132,9 @@ class TvSortGroupFilterBase extends RuleResponseBase {
         case VisRuleQuestType.selectDataFieldName:
           this.colName = DbTableFieldName.values[answIdx];
           break;
-        case VisRuleQuestType.specifyPositionInGroup:
-          this.order = SortOrGroupIdxOrder.values[answIdx];
-          break;
+        // case VisRuleQuestType.specifyPositionInGroup:
+        //   this.order = SortOrGroupIdxOrder.values[answIdx];
+        //   break;
         case VisRuleQuestType.specifySortAscending:
           this.asc = answIdx == 1;
           break;
@@ -148,126 +148,37 @@ class TvSortGroupFilterBase extends RuleResponseBase {
     return '$className for ${ruleType.name} with responses: $_answerSummary';
   }
 
-  String get _answerSummary => '${colName.name}-${order.name}-$asc';
+  String get _answerSummary => '${colName.name}-$asc';
 }
 
 @JsonSerializable()
 class TvSortCfg extends TvSortGroupFilterBase {
   //
-  // late DbTableFieldName colName;
-  // late SortOrGroupIdxOrder order;
-  // late bool asc = false;
-
   TvSortCfg() : super(VisualRuleType.sortCfg);
   //
-  // TvSortCfg get asRuleResponse => this;
-
-  // @override
-  // void _castToRealTypes() {
-  //   /* for these answers:
-  //       Vrq.selectDataFieldName,
-  //       Vrq.specifyPositionInGroup,
-  //       Vrq.specifySortAscending
-  //   */
-  //   for (MapEntry e in this.userResponses.entries) {
-  //     String resp = e.value;
-  //     int answIdx = int.tryParse(resp) ?? 0;
-
-  //     switch (e.key) {
-  //       case VisRuleQuestType.selectDataFieldName:
-  //         this.colName = DbTableFieldName.values[answIdx];
-  //         break;
-  //       case VisRuleQuestType.specifyPositionInGroup:
-  //         this.order = SortOrGroupIdxOrder.values[answIdx];
-  //         break;
-  //       case VisRuleQuestType.specifySortAscending:
-  //         this.asc = answIdx == 1;
-  //         break;
-  //     }
-  //   }
-  // }
-
-  // @override
-  // String toString() {
-  //   return 'TvSortCfg for ${ruleType.name} with responses: $_answerSummary';
-  // }
-
-  // String get _answerSummary => '${colName.name}-${order.name}-$asc';
-
   // JsonSerializable
   factory TvSortCfg.fromJson(Map<String, dynamic> json) =>
       _$TvSortCfgFromJson(json);
   Map<String, dynamic> toJson() => _$TvSortCfgToJson(this);
 }
 
-@JsonSerializable()
-class TvGroupCfg extends TvSortGroupFilterBase {
-  //
-  // late DbTableFieldName colName;
-  // late SortOrGroupIdxOrder order;
-  // late bool asc = false;
+// @JsonSerializable()
+// class TvGroupCfg extends TvSortGroupFilterBase {
+//   //
+//   TvGroupCfg() : super(VisualRuleType.groupCfg);
+//   //
 
-  TvGroupCfg() : super(VisualRuleType.groupCfg);
-  //
-  // TvGroupCfg get asRuleResponse => this;
-
-  // @override
-  // String toString() {
-  //   return 'TvGroupCfg for ${ruleType.name} with responses: $_answerSummary';
-  // }
-
-  // String get _answerSummary => '${colName.name}-${order.name}-$asc';
-
-  // JsonSerializable
-  factory TvGroupCfg.fromJson(Map<String, dynamic> json) =>
-      _$TvGroupCfgFromJson(json);
-  Map<String, dynamic> toJson() => _$TvGroupCfgToJson(this);
-}
+//   // JsonSerializable
+//   factory TvGroupCfg.fromJson(Map<String, dynamic> json) =>
+//       _$TvGroupCfgFromJson(json);
+//   Map<String, dynamic> toJson() => _$TvGroupCfgToJson(this);
+// }
 
 @JsonSerializable()
 class TvFilterCfg extends TvSortGroupFilterBase {
   //
-  // late DbTableFieldName colName;
-  // late SortOrGroupIdxOrder order;
-  // late bool asc = false;
-
   TvFilterCfg() : super(VisualRuleType.filterCfg);
   //
-  // TvFilterCfg get asRuleResponse => this;
-  // TvFilterCfg.byType(VisualRuleType rt) : super(rt);
-
-  // @override
-  // void _castToRealTypes() {
-  //   /* for these answers:
-  //       Vrq.selectDataFieldName,
-  //       Vrq.specifyPositionInGroup,
-  //       Vrq.specifySortAscending
-  //   */
-  //   for (MapEntry e in this.userResponses.entries) {
-  //     String resp = e.value;
-  //     int answIdx = int.tryParse(resp) ?? 0;
-
-  //     switch (e.key) {
-  //       case VisRuleQuestType.selectDataFieldName:
-  //         this.colName = DbTableFieldName.values[answIdx];
-  //         break;
-  //       case VisRuleQuestType.specifyPositionInGroup:
-  //         this.order = SortOrGroupIdxOrder.values[answIdx];
-  //         break;
-  //       case VisRuleQuestType.specifySortAscending:
-  //         this.asc = answIdx == 1;
-  //         break;
-  //     }
-  //   }
-  // }
-
-  // @override
-  // String toString() {
-  //   return 'TvFilterCfg for ${ruleType.name} with responses: $_answerSummary';
-  // }
-
-  // String get _answerSummary => '${colName.name}-${order.name}-$asc';
-
   // JsonSerializable
   factory TvFilterCfg.fromJson(Map<String, dynamic> json) =>
       _$TvFilterCfgFromJson(json);

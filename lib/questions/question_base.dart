@@ -50,22 +50,32 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
 
   // below controls how each question causes cascade creation of new questions
   bool get generatesNoNewQuestions => qQuantify.generatesNoNewQuestions;
-  //  &&
-  // !this.gens2ndOr3rdSortGroupFilterQuests;
+
   bool get asksWhichScreensToConfig =>
       qQuantify.appScreen == AppScreen.eventConfiguration &&
-      response?.answers is List<AppScreen>;
-  bool get asksAreasWithinSelectedScreens =>
-      qQuantify.asksAreasWithinSelectedScreens && AnsTyp == List<AppScreen>;
-  bool get asksAboutRulesAndSlotsWithinSelectedScreenAreas =>
-      qQuantify.asksAboutRulesAndSlotsWithinSelectedScreenAreas &&
+      AnsTyp == List<AppScreen>;
+
+  bool get addsWhichAreaInSelectedScreenQuestions =>
+      qQuantify.addsWhichAreaInSelectedScreenQuestions &&
+      appScreen == AppScreen.eventConfiguration &&
+      AnsTyp == List<AppScreen>;
+
+  bool get addsWhichRulesForSelectedAreaQuestions =>
+      qQuantify.addsWhichRulesForSelectedAreaQuestions &&
       AnsTyp == List<ScreenWidgetArea>;
-  bool get asksRuleTypesForSelectedAreasOrSlots =>
-      qQuantify.asksRuleTypesForSelectedAreasOrSlots;
-  bool get asksDetailsForEachVisualRuleType =>
-      qQuantify.asksDetailsForEachVisualRuleType;
-  bool get asksDetailsForEachBehaveRuleType =>
-      qQuantify.asksDetailsForEachBehaveRuleType;
+
+  bool get addsWhichSlotOfSelectedAreaQuestions =>
+      qQuantify.addsWhichSlotOfSelectedAreaQuestions &&
+      AnsTyp == List<ScreenWidgetArea>;
+
+  bool get addsWhichRulesForSlotsInArea =>
+      qQuantify.addsWhichRulesForSlotsInArea &&
+      AnsTyp == List<ScreenAreaWidgetSlot>;
+
+  bool get addsVisualRuleQuestions => qQuantify.addsVisualRuleQuestions;
+
+  bool get addsBehavioralRuleQuestions => qQuantify.addsBehavioralRuleQuestions;
+
   String get sortKey => qQuantify.sortKey;
   // ask 2nd & 3rd position for (sort, group, filter)
   // bool get gens2ndOr3rdSortGroupFilterQuests => false;

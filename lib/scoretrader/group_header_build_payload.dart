@@ -22,7 +22,7 @@ class GroupHeaderData implements Comparable<GroupHeaderData> {
   ) : this._sortKey = '$first-$second-$third';
 
   static GetGroupKeyFromRow keyConstructorFromCfg(
-    GroupingRules groupingRules,
+    SortingRules groupingRules,
   ) {
     // returns a func that creates a GroupHeaderData
     CastRowToSortVal firstValFn = (AssetRowPropertyIfc row) {
@@ -30,13 +30,13 @@ class GroupHeaderData implements Comparable<GroupHeaderData> {
     };
 
     CastRowToSortVal secondValFn = (AssetRowPropertyIfc row) {
-      TvGroupCfg? col2Rule = groupingRules.item2;
+      TvSortCfg? col2Rule = groupingRules.item2;
       if (col2Rule == null) return '';
       return row.valueExtractor(col2Rule.colName);
     };
 
     CastRowToSortVal thirdValFn = (AssetRowPropertyIfc row) {
-      TvGroupCfg? col3Rule = groupingRules.item3;
+      TvSortCfg? col3Rule = groupingRules.item3;
       if (col3Rule == null) return '';
       return row.valueExtractor(col3Rule.colName);
     };

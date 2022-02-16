@@ -29,22 +29,23 @@ class CfgForAreaAndNestedSlots {
       visCfgBySlotInArea[slot]!;
 
   void _validateRuleAndSlotIsApplicable(
+    AppScreen appScreen,
     VisualRuleType rt,
     ScreenAreaWidgetSlot? slot,
   ) {
     // confirm that passed data makes sense in this class
     if (slot != null) {
-      assert(screenArea.applicableWigetSlots.contains(slot));
-      assert(slot.possibleConfigRules.contains(rt));
+      assert(screenArea.applicableWigetSlots(appScreen).contains(slot));
+      assert(slot.possibleConfigRules(screenArea).contains(rt));
     } else {
-      assert(screenArea.applicableRuleTypes.contains(rt));
+      assert(screenArea.applicableRuleTypes(appScreen).contains(rt));
     }
   }
 
   void fillMissingWithDefaults(AppScreen appScreen) {
     //
     // create missing default rules for this screen area
-    for (VisualRuleType rt in screenArea.applicableRuleTypes) {
+    for (VisualRuleType rt in screenArea.applicableRuleTypes(appScreen)) {
       if (visCfgForArea.containsKey(rt)) continue;
       //
       visCfgForArea[rt] = SlotOrAreaRuleCfg(rt, [])
@@ -52,10 +53,11 @@ class CfgForAreaAndNestedSlots {
     }
 
     // create missing default rules for SLOTS INSIDE this screen area
-    for (ScreenAreaWidgetSlot slot in screenArea.applicableWigetSlots) {
+    for (ScreenAreaWidgetSlot slot
+        in screenArea.applicableWigetSlots(appScreen)) {
       if (visCfgBySlotInArea.containsKey(slot)) continue;
       //
-      for (VisualRuleType vrt in slot.possibleConfigRules) {
+      for (VisualRuleType vrt in slot.possibleConfigRules(screenArea)) {
         visCfgBySlotInArea[slot] = SlotOrAreaRuleCfg(vrt, [])
           ..fillMissingWithDefaults(appScreen, screenArea, slot);
       }
@@ -71,6 +73,7 @@ class CfgForAreaAndNestedSlots {
     //
     ScreenAreaWidgetSlot? optSlotInArea = rQuest.slotInArea;
     _validateRuleAndSlotIsApplicable(
+      rQuest.appScreen,
       rQuest.visRuleTypeForAreaOrSlot!,
       optSlotInArea,
     );
