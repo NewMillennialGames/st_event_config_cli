@@ -72,9 +72,10 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
       qQuantify.addsWhichRulesForSlotsInArea &&
       AnsTyp == List<ScreenAreaWidgetSlot>;
 
-  bool get addsVisualRuleQuestions => qQuantify.addsVisualRuleQuestions;
+  bool get addsRuleDetailQuestsForSlotOrArea =>
+      qQuantify.addsRuleDetailQuestsForSlotOrArea;
 
-  bool get addsBehavioralRuleQuestions => qQuantify.addsBehavioralRuleQuestions;
+  // bool get addsBehavioralRuleQuestions => qQuantify.addsBehavioralRuleQuestions;
 
   String get sortKey => qQuantify.sortKey;
   // ask 2nd & 3rd position for (sort, group, filter)

@@ -19,7 +19,7 @@ class VisualRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseWrapperIfc>
     ScreenAreaWidgetSlot? slot,
     // CastUserInputToTyp<ConvertTyp, AnsTyp>? castFunc,
   ) : super(
-          QuestionQuantifier.ruleCompositionLevel(
+          QuestionQuantifier.ruleDetailMultiResponse(
             appSection,
             screenArea,
             visRuleType,

@@ -67,10 +67,11 @@ class QuestionQuantifier extends Equatable {
   bool get addsWhichRulesForSlotsInArea =>
       cascadeType.addsWhichRulesForSlotsInArea;
 
-  bool get addsVisualRuleQuestions => cascadeType.addsVisualRuleQuestions;
+  bool get addsRuleDetailQuestsForSlotOrArea =>
+      cascadeType.addsRuleDetailQuestsForSlotOrArea;
 
-  bool get addsBehavioralRuleQuestions =>
-      cascadeType.addsBehavioralRuleQuestions;
+  // bool get addsBehavioralRuleQuestions =>
+  //     cascadeType.addsBehavioralRuleQuestions;
 
   /*  certain questions at top 3 levels (when property answered)
       can generate questions for levels below them
@@ -119,28 +120,28 @@ class QuestionQuantifier extends Equatable {
     );
   }
 
-  factory QuestionQuantifier.areaLevelRules(
-    AppScreen appScreen,
-    ScreenWidgetArea screenArea, {
-    bool responseAddsWhichRuleTypeQuestsForArea = false,
-  }) {
-    /*
-      sample question:
-       'Which rules would you like to add to the ${area.name} of ${screen.name}?',
-      when responseAddsWhichRuleTypeQuestsForArea is true
-      this answer will build "rule detail ?? for area" questions
-    */
-    return QuestionQuantifier._(
-      responseAddsWhichRuleTypeQuestsForArea
-          ? QuestCascadeTyp.addsWhichRulesForSelectedAreaQuestions
-          : QuestCascadeTyp.noCascade,
-      appScreen,
-      screenArea,
-      null,
-      null,
-      null,
-    );
-  }
+  // factory QuestionQuantifier.areaLevelRules(
+  //   AppScreen appScreen,
+  //   ScreenWidgetArea screenArea, {
+  //   bool responseAddsRuleDetailQuests = false,
+  // }) {
+  //   /*
+  //     sample question:
+  //      'Which rules would you like to add to the ${area.name} of ${screen.name}?',
+  //     when responseAddsWhichRuleTypeQuestsForArea is true
+  //     this answer will build "rule detail ?? for area" questions
+  //   */
+  //   return QuestionQuantifier._(
+  //     responseAddsRuleDetailQuests
+  //         ? QuestCascadeTyp.addsRuleDetailQuestsForSlotOrArea
+  //         : QuestCascadeTyp.noCascade,
+  //     appScreen,
+  //     screenArea,
+  //     null,
+  //     null,
+  //     null,
+  //   );
+  // }
 
   factory QuestionQuantifier.areaLevelSlots(
     AppScreen appScreen,
@@ -179,7 +180,7 @@ class QuestionQuantifier extends Equatable {
     */
     return QuestionQuantifier._(
       responseAddsRuleDetailQuestions
-          ? QuestCascadeTyp.addsVisualRuleDetailQuestions
+          ? QuestCascadeTyp.addsRuleDetailQuestsForSlotOrArea
           : QuestCascadeTyp.noCascade,
       appScreen,
       screenArea,
@@ -189,7 +190,7 @@ class QuestionQuantifier extends Equatable {
     );
   }
 
-  factory QuestionQuantifier.ruleCompositionLevel(
+  factory QuestionQuantifier.ruleDetailMultiResponse(
     AppScreen appScreen,
     ScreenWidgetArea screenWidgetArea,
     VisualRuleType? visRuleTypeForSlotInArea,
@@ -202,8 +203,8 @@ class QuestionQuantifier extends Equatable {
     return QuestionQuantifier._(
       addsMoreRuleQuestions
           ? (isVisual
-              ? QuestCascadeTyp.addsVisualRuleQuestions
-              : QuestCascadeTyp.addsBehavioralRuleQuestions)
+              ? QuestCascadeTyp.addsRuleDetailQuestsForSlotOrArea
+              : QuestCascadeTyp.addsRuleDetailQuestsForSlotOrArea)
           : QuestCascadeTyp.noCascade,
       appScreen,
       screenWidgetArea,

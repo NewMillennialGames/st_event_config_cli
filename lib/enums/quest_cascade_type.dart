@@ -15,9 +15,9 @@ enum QuestCascadeTyp {
   addsWhichRulesForSelectedAreaQuestions, // for each area of each screen
   addsWhichSlotOfSelectedAreaQuestions, // for each screen
   addsWhichRulesForSlotsInArea, // for each slot in area
-  addsVisualRuleQuestions,
-  addsVisualRuleDetailQuestions,
-  addsBehavioralRuleQuestions,
+  addsRuleDetailQuestsForSlotOrArea,
+  // addsVisualRuleDetailQuestions,
+  // addsBehavioralRuleQuestions,
   noCascade,
 }
 
@@ -41,12 +41,12 @@ extension QuestCascadeTypExt on QuestCascadeTyp {
   bool get addsWhichRulesForSlotsInArea =>
       this == QuestCascadeTyp.addsWhichRulesForSlotsInArea;
 
-  bool get addsVisualRuleQuestions =>
-      this == QuestCascadeTyp.addsVisualRuleQuestions;
+  bool get addsRuleDetailQuestsForSlotOrArea =>
+      this == QuestCascadeTyp.addsRuleDetailQuestsForSlotOrArea;
 
-  bool get addsVisualRuleDetailQuestions =>
-      this == QuestCascadeTyp.addsVisualRuleDetailQuestions;
+  // bool get addsVisualRuleDetailQuestions =>
+  //     this == QuestCascadeTyp.addsVisualRuleDetailQuestions;
 
-  bool get addsBehavioralRuleQuestions =>
-      this == QuestCascadeTyp.addsBehavioralRuleQuestions;
+  // bool get addsBehavioralRuleQuestions =>
+  //     this == QuestCascadeTyp.addsBehavioralRuleQuestions;
 }

@@ -161,10 +161,10 @@ class CliQuestionPresenter implements QuestionPresenter {
       // user may enter int or comma delimited list of ints
     } else if (quest.addsWhichRulesForSlotsInArea) {
       //
-    } else if (quest.addsVisualRuleQuestions) {
+    } else if (quest.addsRuleDetailQuestsForSlotOrArea) {
       // needs to produce visual formatting rules
       // user will select a widget display option
-    } else if (quest.addsBehavioralRuleQuestions) {
+    } else if (false) {
       // needs to produce behavioral rules
       // future;  not yet implemented
     }

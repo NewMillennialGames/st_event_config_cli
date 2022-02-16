@@ -31,22 +31,13 @@ class NewQuestionCollector {
     // ruleQuestions don't currently generate new questions
     // actually, a sort or group (level 2 or 3) question
     // should generate the questions under it??  TODO
-    if ((questJustAnswered.isRuleQuestion) ||
+    if (questJustAnswered.isRuleQuestion ||
         questJustAnswered.generatesNoNewQuestions) {
-      print(
-        'Quest: #${questJustAnswered.questionId} -- ${questJustAnswered.questStr} wont generate any new questions',
-      );
+      // print(
+      //   'Quest: #${questJustAnswered.questionId} -- ${questJustAnswered.questStr} wont generate any new questions',
+      // );
       return false;
     }
-
-    // if (questJustAnswered.gens2ndOr3rdSortGroupFilterQuests) {
-    //   print('gens2ndOr3rdSortGroupFilterQuests was true');
-    //   askUser2ndOr3rdFieldForSortGroupFilter(
-    //     _questMgr,
-    //     questJustAnswered as VisualRuleQuestion<String, RuleResponseWrapperIfc>,
-    //   );
-    //   return true;
-    // }
 
     bool addedNew = false;
     if (questJustAnswered.addsWhichAreaInSelectedScreenQuestions) {
@@ -87,30 +78,36 @@ class NewQuestionCollector {
       );
       addedNew = true;
       //
-    } else if (questJustAnswered.addsVisualRuleQuestions) {
-      print('calling: askWhichConfigRulesGoWithEachSlot');
+    } else if (questJustAnswered.addsRuleDetailQuestsForSlotOrArea) {
+      print('calling: genRequestedVisualRulesForAreaOrSlot');
 
-      askWhichConfigRulesGoWithEachSlot(
+      genRequestedVisualRulesForAreaOrSlot(
         _questMgr,
-        questJustAnswered as Question<String, List<ScreenAreaWidgetSlot>>,
+        questJustAnswered as Question<String, List<VisualRuleType>>,
       );
       addedNew = true;
       //
-    } else if (questJustAnswered.addsBehavioralRuleQuestions) {
-      print('calling: genRequestedBehaveRulesForAreaOrSlot');
-      genRequestedBehaveRulesForAreaOrSlot(
-        _questMgr,
-        questJustAnswered as Question<String, List<BehaviorRuleType>>,
-      );
-      addedNew = true;
+      // } else if (questJustAnswered.addsBehavioralRuleQuestions) {
+      //   print('calling: genRequestedBehaveRulesForAreaOrSlot');
+      //   genRequestedBehaveRulesForAreaOrSlot(
+      //     _questMgr,
+      //     questJustAnswered as Question<String, List<BehaviorRuleType>>,
+      //   );
+      //   addedNew = true;
       //
     } else {
+      // no new questions generated;
+      if (questJustAnswered.generatesNoNewQuestions ||
+          questJustAnswered.isRuleQuestion) return false;
+
+      print('\nWarning ****************');
       print(
-        '\n**Quest ID ${questJustAnswered.questionId} about "${questJustAnswered.questStr}" did not generate any new questions',
+        'Quest ID: ${questJustAnswered.questionId} (cascade type: ${questJustAnswered.qQuantify.cascadeType.name}) did not generate any new questions',
       );
-      print(
-        'asksDetailsForEachVisualRuleType: ${questJustAnswered.addsVisualRuleQuestions} -- ${questJustAnswered.visRuleTypeForAreaOrSlot?.name ?? 'err-missing'}',
-      );
+      print('qText: "${questJustAnswered.questStr}"');
+      // print(
+      //   '${questJustAnswered.visRuleTypeForAreaOrSlot?.name ?? 'err-missing'}',
+      // );
       // print(
       //   'Quest ID ${questJustAnswered.questionId} about "${questJustAnswered.question}" did not generate any new questions\n\n',
       // );
@@ -186,10 +183,11 @@ class NewQuestionCollector {
       if (!area.isConfigureable || applicableRuleTypes.length < 1) continue;
 
       var q = Question<String, List<VisualRuleType>>(
-        QuestionQuantifier.areaLevelRules(
+        QuestionQuantifier.ruleLevel(
           screen,
           area,
-          responseAddsWhichRuleTypeQuestsForArea: true,
+          null,
+          responseAddsRuleDetailQuestions: true,
         ),
         'Which rules would you like to add to the ${area.name} of ${screen.name}?',
         applicableRuleTypes.map((r) => r.friendlyName),

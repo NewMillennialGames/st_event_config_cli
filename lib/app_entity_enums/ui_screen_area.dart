@@ -74,7 +74,8 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
       case ScreenWidgetArea.navBar:
         return [VisualRuleType.styleOrFormat];
       case ScreenWidgetArea.filterBar:
-        return [VisualRuleType.filterCfg];
+        // all its rules are under its slots
+        return [];
       case ScreenWidgetArea.header:
         return [
           VisualRuleType.styleOrFormat,
