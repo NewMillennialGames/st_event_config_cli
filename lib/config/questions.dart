@@ -79,7 +79,7 @@ final List<Question> _questionLst = [
     questId: QuestionIds.eventName,
   ),
   // set false to shorten manual testing
-  if (false) ...[
+  if (true) ...[
     Qb<String, String>(
       QuestionQuantifier.eventLevel(),
       DlgStr.eventDescrip,
