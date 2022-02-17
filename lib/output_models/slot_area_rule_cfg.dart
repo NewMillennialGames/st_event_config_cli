@@ -1,7 +1,5 @@
 part of OutputModels;
 
-// typedef AnyRuleType = Type extends RuleResponseBase;
-
 @JsonSerializable()
 class SlotOrAreaRuleCfg {
   /*

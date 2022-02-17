@@ -6,24 +6,40 @@ part of OutputModels;
 // JsonSerializableGenerator
 // **************************************************************************
 
-TopEventCfg _$TopEventCfgFromJson(Map<String, dynamic> json) => TopEventCfg(
-      json['evTemplateName'] as String,
-      json['evTemplateDescription'] as String,
-      $enumDecode(_$EvTypeEnumMap, json['evType']),
-      evCompetitorType: $enumDecodeNullable(
-              _$EvCompetitorTypeEnumMap, json['evCompetitorType']) ??
-          EvCompetitorType.team,
-      evOpponentType: $enumDecodeNullable(
-              _$EvOpponentTypeEnumMap, json['evOpponentType']) ??
-          EvOpponentType.sameAsCompetitorType,
-      evDuration:
-          $enumDecodeNullable(_$EvDurationEnumMap, json['evDuration']) ??
-              EvDuration.oneGame,
-      evEliminationType: $enumDecodeNullable(
-              _$EvEliminationStrategyEnumMap, json['evEliminationType']) ??
-          EvEliminationStrategy.roundRobin,
-    )..applySameRowStyleToAllScreens =
-        json['applySameRowStyleToAllScreens'] as bool;
+TopEventCfg _$TopEventCfgFromJson(Map<String, dynamic> json) => $checkedCreate(
+      'TopEventCfg',
+      json,
+      ($checkedConvert) {
+        final val = TopEventCfg(
+          $checkedConvert('evTemplateName', (v) => v as String),
+          $checkedConvert('evTemplateDescription', (v) => v as String),
+          $checkedConvert('evType', (v) => $enumDecode(_$EvTypeEnumMap, v)),
+          evCompetitorType: $checkedConvert(
+              'evCompetitorType',
+              (v) =>
+                  $enumDecodeNullable(_$EvCompetitorTypeEnumMap, v) ??
+                  EvCompetitorType.team),
+          evOpponentType: $checkedConvert(
+              'evOpponentType',
+              (v) =>
+                  $enumDecodeNullable(_$EvOpponentTypeEnumMap, v) ??
+                  EvOpponentType.sameAsCompetitorType),
+          evDuration: $checkedConvert(
+              'evDuration',
+              (v) =>
+                  $enumDecodeNullable(_$EvDurationEnumMap, v) ??
+                  EvDuration.oneGame),
+          evEliminationType: $checkedConvert(
+              'evEliminationType',
+              (v) =>
+                  $enumDecodeNullable(_$EvEliminationStrategyEnumMap, v) ??
+                  EvEliminationStrategy.roundRobin),
+        );
+        $checkedConvert('applySameRowStyleToAllScreens',
+            (v) => val.applySameRowStyleToAllScreens = v as bool);
+        return val;
+      },
+    );
 
 Map<String, dynamic> _$TopEventCfgToJson(TopEventCfg instance) =>
     <String, dynamic>{
@@ -72,18 +88,30 @@ const _$EvEliminationStrategyEnumMap = {
   EvEliminationStrategy.audienceVote: 'audienceVote',
 };
 
-EventCfgTree _$EventCfgTreeFromJson(Map<String, dynamic> json) => EventCfgTree(
-      TopEventCfg.fromJson(json['eventCfg'] as Map<String, dynamic>),
-    )..screenConfigMap = (json['screenConfigMap'] as Map<String, dynamic>).map(
-        (k, e) => MapEntry($enumDecode(_$AppScreenEnumMap, k),
-            ScreenCfgByArea.fromJson(e as Map<String, dynamic>)),
-      );
+EventCfgTree _$EventCfgTreeFromJson(Map<String, dynamic> json) =>
+    $checkedCreate(
+      'EventCfgTree',
+      json,
+      ($checkedConvert) {
+        final val = EventCfgTree(
+          $checkedConvert('eventCfg',
+              (v) => TopEventCfg.fromJson(v as Map<String, dynamic>)),
+        );
+        $checkedConvert(
+            'screenConfigMap',
+            (v) => val.screenConfigMap = (v as Map<String, dynamic>).map(
+                  (k, e) => MapEntry($enumDecode(_$AppScreenEnumMap, k),
+                      ScreenCfgByArea.fromJson(e as Map<String, dynamic>)),
+                ));
+        return val;
+      },
+    );
 
 Map<String, dynamic> _$EventCfgTreeToJson(EventCfgTree instance) =>
     <String, dynamic>{
-      'eventCfg': instance.eventCfg,
+      'eventCfg': instance.eventCfg.toJson(),
       'screenConfigMap': instance.screenConfigMap
-          .map((k, e) => MapEntry(_$AppScreenEnumMap[k], e)),
+          .map((k, e) => MapEntry(_$AppScreenEnumMap[k], e.toJson())),
     };
 
 const _$AppScreenEnumMap = {
@@ -100,8 +128,16 @@ const _$AppScreenEnumMap = {
 };
 
 ScreenCfgByArea _$ScreenCfgByAreaFromJson(Map<String, dynamic> json) =>
-    ScreenCfgByArea(
-      $enumDecode(_$AppScreenEnumMap, json['appScreen']),
+    $checkedCreate(
+      'ScreenCfgByArea',
+      json,
+      ($checkedConvert) {
+        final val = ScreenCfgByArea(
+          $checkedConvert(
+              'appScreen', (v) => $enumDecode(_$AppScreenEnumMap, v)),
+        );
+        return val;
+      },
     );
 
 Map<String, dynamic> _$ScreenCfgByAreaToJson(ScreenCfgByArea instance) =>
@@ -111,27 +147,39 @@ Map<String, dynamic> _$ScreenCfgByAreaToJson(ScreenCfgByArea instance) =>
 
 CfgForAreaAndNestedSlots _$CfgForAreaAndNestedSlotsFromJson(
         Map<String, dynamic> json) =>
-    CfgForAreaAndNestedSlots(
-      $enumDecode(_$ScreenWidgetAreaEnumMap, json['screenArea']),
-    )
-      ..visCfgForArea = (json['visCfgForArea'] as Map<String, dynamic>).map(
-        (k, e) => MapEntry($enumDecode(_$VisualRuleTypeEnumMap, k),
-            SlotOrAreaRuleCfg.fromJson(e as Map<String, dynamic>)),
-      )
-      ..visCfgBySlotInArea =
-          (json['visCfgBySlotInArea'] as Map<String, dynamic>).map(
-        (k, e) => MapEntry($enumDecode(_$ScreenAreaWidgetSlotEnumMap, k),
-            SlotOrAreaRuleCfg.fromJson(e as Map<String, dynamic>)),
-      );
+    $checkedCreate(
+      'CfgForAreaAndNestedSlots',
+      json,
+      ($checkedConvert) {
+        final val = CfgForAreaAndNestedSlots(
+          $checkedConvert(
+              'screenArea', (v) => $enumDecode(_$ScreenWidgetAreaEnumMap, v)),
+        );
+        $checkedConvert(
+            'visCfgForArea',
+            (v) => val.visCfgForArea = (v as Map<String, dynamic>).map(
+                  (k, e) => MapEntry($enumDecode(_$VisualRuleTypeEnumMap, k),
+                      SlotOrAreaRuleCfg.fromJson(e as Map<String, dynamic>)),
+                ));
+        $checkedConvert(
+            'visCfgBySlotInArea',
+            (v) => val.visCfgBySlotInArea = (v as Map<String, dynamic>).map(
+                  (k, e) => MapEntry(
+                      $enumDecode(_$ScreenAreaWidgetSlotEnumMap, k),
+                      SlotOrAreaRuleCfg.fromJson(e as Map<String, dynamic>)),
+                ));
+        return val;
+      },
+    );
 
 Map<String, dynamic> _$CfgForAreaAndNestedSlotsToJson(
         CfgForAreaAndNestedSlots instance) =>
     <String, dynamic>{
       'screenArea': _$ScreenWidgetAreaEnumMap[instance.screenArea],
       'visCfgForArea': instance.visCfgForArea
-          .map((k, e) => MapEntry(_$VisualRuleTypeEnumMap[k], e)),
-      'visCfgBySlotInArea': instance.visCfgBySlotInArea
-          .map((k, e) => MapEntry(_$ScreenAreaWidgetSlotEnumMap[k], e)),
+          .map((k, e) => MapEntry(_$VisualRuleTypeEnumMap[k], e.toJson())),
+      'visCfgBySlotInArea': instance.visCfgBySlotInArea.map(
+          (k, e) => MapEntry(_$ScreenAreaWidgetSlotEnumMap[k], e.toJson())),
     };
 
 const _$ScreenWidgetAreaEnumMap = {
@@ -162,15 +210,26 @@ const _$ScreenAreaWidgetSlotEnumMap = {
 };
 
 SlotOrAreaRuleCfg _$SlotOrAreaRuleCfgFromJson(Map<String, dynamic> json) =>
-    SlotOrAreaRuleCfg(
-      $enumDecode(_$VisualRuleTypeEnumMap, json['visRuleType']),
-      (json['visRuleList'] as List<dynamic>)
-          .map((e) => RuleResponseBase.fromJson(e as Map<String, dynamic>))
-          .toList(),
+    $checkedCreate(
+      'SlotOrAreaRuleCfg',
+      json,
+      ($checkedConvert) {
+        final val = SlotOrAreaRuleCfg(
+          $checkedConvert(
+              'visRuleType', (v) => $enumDecode(_$VisualRuleTypeEnumMap, v)),
+          $checkedConvert(
+              'visRuleList',
+              (v) => (v as List<dynamic>)
+                  .map((e) =>
+                      RuleResponseBase.fromJson(e as Map<String, dynamic>))
+                  .toList()),
+        );
+        return val;
+      },
     );
 
 Map<String, dynamic> _$SlotOrAreaRuleCfgToJson(SlotOrAreaRuleCfg instance) =>
     <String, dynamic>{
       'visRuleType': _$VisualRuleTypeEnumMap[instance.visRuleType],
-      'visRuleList': instance.visRuleList,
+      'visRuleList': instance.visRuleList.map((e) => e.toJson()).toList(),
     };

@@ -13,6 +13,6 @@ import '../config/all.dart';
 part 'all.g.dart';
 part 'event_cfg.dart';
 part 'screen_cfg.dart';
-part 'area_or_slot_cfg.dart';
+part 'screen_area_cfg.dart';
 part 'slot_area_rule_cfg.dart';
 // part 'cast_propmap_to_rule.dart';

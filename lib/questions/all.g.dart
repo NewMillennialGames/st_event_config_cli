@@ -7,12 +7,23 @@ part of InputModels;
 // **************************************************************************
 
 RuleResponseBase _$RuleResponseBaseFromJson(Map<String, dynamic> json) =>
-    RuleResponseBase(
-      $enumDecode(_$VisualRuleTypeEnumMap, json['ruleType']),
-    )..userResponses = (json['userResponses'] as Map<String, dynamic>).map(
-        (k, e) =>
-            MapEntry($enumDecode(_$VisRuleQuestTypeEnumMap, k), e as String),
-      );
+    $checkedCreate(
+      'RuleResponseBase',
+      json,
+      ($checkedConvert) {
+        final val = RuleResponseBase(
+          $checkedConvert(
+              'ruleType', (v) => $enumDecode(_$VisualRuleTypeEnumMap, v)),
+        );
+        $checkedConvert(
+            'userResponses',
+            (v) => val.userResponses = (v as Map<String, dynamic>).map(
+                  (k, e) => MapEntry(
+                      $enumDecode(_$VisRuleQuestTypeEnumMap, k), e as String),
+                ));
+        return val;
+      },
+    );
 
 Map<String, dynamic> _$RuleResponseBaseToJson(RuleResponseBase instance) =>
     <String, dynamic>{
@@ -37,13 +48,24 @@ const _$VisRuleQuestTypeEnumMap = {
 };
 
 TvRowStyleCfg _$TvRowStyleCfgFromJson(Map<String, dynamic> json) =>
-    TvRowStyleCfg()
-      ..userResponses = (json['userResponses'] as Map<String, dynamic>).map(
-        (k, e) =>
-            MapEntry($enumDecode(_$VisRuleQuestTypeEnumMap, k), e as String),
-      )
-      ..selectedRowStyle =
-          $enumDecode(_$TvAreaRowStyleEnumMap, json['selectedRowStyle']);
+    $checkedCreate(
+      'TvRowStyleCfg',
+      json,
+      ($checkedConvert) {
+        final val = TvRowStyleCfg();
+        $checkedConvert(
+            'userResponses',
+            (v) => val.userResponses = (v as Map<String, dynamic>).map(
+                  (k, e) => MapEntry(
+                      $enumDecode(_$VisRuleQuestTypeEnumMap, k), e as String),
+                ));
+        $checkedConvert(
+            'selectedRowStyle',
+            (v) =>
+                val.selectedRowStyle = $enumDecode(_$TvAreaRowStyleEnumMap, v));
+        return val;
+      },
+    );
 
 Map<String, dynamic> _$TvRowStyleCfgToJson(TvRowStyleCfg instance) =>
     <String, dynamic>{
@@ -66,12 +88,23 @@ const _$TvAreaRowStyleEnumMap = {
   TvAreaRowStyle.driverVsField: 'driverVsField',
 };
 
-TvSortCfg _$TvSortCfgFromJson(Map<String, dynamic> json) => TvSortCfg()
-  ..userResponses = (json['userResponses'] as Map<String, dynamic>).map(
-    (k, e) => MapEntry($enumDecode(_$VisRuleQuestTypeEnumMap, k), e as String),
-  )
-  ..colName = $enumDecode(_$DbTableFieldNameEnumMap, json['colName'])
-  ..asc = json['asc'] as bool;
+TvSortCfg _$TvSortCfgFromJson(Map<String, dynamic> json) => $checkedCreate(
+      'TvSortCfg',
+      json,
+      ($checkedConvert) {
+        final val = TvSortCfg();
+        $checkedConvert(
+            'userResponses',
+            (v) => val.userResponses = (v as Map<String, dynamic>).map(
+                  (k, e) => MapEntry(
+                      $enumDecode(_$VisRuleQuestTypeEnumMap, k), e as String),
+                ));
+        $checkedConvert('colName',
+            (v) => val.colName = $enumDecode(_$DbTableFieldNameEnumMap, v));
+        $checkedConvert('asc', (v) => val.asc = v as bool);
+        return val;
+      },
+    );
 
 Map<String, dynamic> _$TvSortCfgToJson(TvSortCfg instance) => <String, dynamic>{
       'userResponses': instance.userResponses
@@ -96,12 +129,23 @@ const _$DbTableFieldNameEnumMap = {
   DbTableFieldName.assetPosition: 'assetPosition',
 };
 
-TvFilterCfg _$TvFilterCfgFromJson(Map<String, dynamic> json) => TvFilterCfg()
-  ..userResponses = (json['userResponses'] as Map<String, dynamic>).map(
-    (k, e) => MapEntry($enumDecode(_$VisRuleQuestTypeEnumMap, k), e as String),
-  )
-  ..colName = $enumDecode(_$DbTableFieldNameEnumMap, json['colName'])
-  ..asc = json['asc'] as bool;
+TvFilterCfg _$TvFilterCfgFromJson(Map<String, dynamic> json) => $checkedCreate(
+      'TvFilterCfg',
+      json,
+      ($checkedConvert) {
+        final val = TvFilterCfg();
+        $checkedConvert(
+            'userResponses',
+            (v) => val.userResponses = (v as Map<String, dynamic>).map(
+                  (k, e) => MapEntry(
+                      $enumDecode(_$VisRuleQuestTypeEnumMap, k), e as String),
+                ));
+        $checkedConvert('colName',
+            (v) => val.colName = $enumDecode(_$DbTableFieldNameEnumMap, v));
+        $checkedConvert('asc', (v) => val.asc = v as bool);
+        return val;
+      },
+    );
 
 Map<String, dynamic> _$TvFilterCfgToJson(TvFilterCfg instance) =>
     <String, dynamic>{
@@ -111,11 +155,21 @@ Map<String, dynamic> _$TvFilterCfgToJson(TvFilterCfg instance) =>
       'asc': instance.asc,
     };
 
-ShowHideCfg _$ShowHideCfgFromJson(Map<String, dynamic> json) => ShowHideCfg()
-  ..userResponses = (json['userResponses'] as Map<String, dynamic>).map(
-    (k, e) => MapEntry($enumDecode(_$VisRuleQuestTypeEnumMap, k), e as String),
-  )
-  ..shouldShow = json['shouldShow'] as bool;
+ShowHideCfg _$ShowHideCfgFromJson(Map<String, dynamic> json) => $checkedCreate(
+      'ShowHideCfg',
+      json,
+      ($checkedConvert) {
+        final val = ShowHideCfg();
+        $checkedConvert(
+            'userResponses',
+            (v) => val.userResponses = (v as Map<String, dynamic>).map(
+                  (k, e) => MapEntry(
+                      $enumDecode(_$VisRuleQuestTypeEnumMap, k), e as String),
+                ));
+        $checkedConvert('shouldShow', (v) => val.shouldShow = v as bool);
+        return val;
+      },
+    );
 
 Map<String, dynamic> _$ShowHideCfgToJson(ShowHideCfg instance) =>
     <String, dynamic>{

@@ -22,8 +22,7 @@ class StUiBuilderFactory {
 
       TODO:  add versioning
     */
-    this._eConfig = EventCfgTree.fromJson(eCfgJsonMap)
-      ..fillMissingWithDefaults();
+    this._eConfig = EventCfgTree.fromJson(eCfgJsonMap);
   }
 
   GroupedTableDataMgr tableviewConfigForScreen(

@@ -39,10 +39,10 @@ class TopEventCfg {
   }
 }
 
-@JsonSerializable(explicitToJson: false)
+@JsonSerializable()
 class EventCfgTree {
   //
-  TopEventCfg eventCfg;
+  final TopEventCfg eventCfg;
   // area and slot level data filled below in fillFromRuleAnswers
   Map<AppScreen, ScreenCfgByArea> screenConfigMap = {};
 
@@ -57,7 +57,7 @@ class EventCfgTree {
             .first
             .response
             ?.answers ??
-        '') as String;
+        '_eventNameMissing') as String;
 
     // declare Event level vals to be captured
     String evTemplateDescription = '';
@@ -144,14 +144,17 @@ class EventCfgTree {
     // write data out to file
     var fn = filename ?? eventCfg.evTemplateName;
     var outFile = File('st_ui_builder/assets/$fn.json');
-    var jsonData = this.toJson();
-    outFile.writeAsStringSync(jsonEncode(jsonData));
+    var jsonData = json.encode(this);
+    outFile.writeAsStringSync(jsonData, mode: FileMode.write, flush: true);
+    print('Config written (in JSON fmt) to ${outFile.path}');
     // outFile.close();
   }
 
-  void fillMissingWithDefaults() {
+  void _fillMissingWithDefaults() {
     // called automatically before conversion to JSON
     // fill out any missing rules with defaults
+    // because its called on the create-json side
+    // we dont need this on the load json side
     for (AppScreen as in AppScreen.eventConfiguration.topConfigurableScreens) {
       if (screenConfigMap.containsKey(as)) continue;
       screenConfigMap[as] = ScreenCfgByArea(as);
@@ -164,7 +167,7 @@ class EventCfgTree {
       _$EventCfgTreeFromJson(json);
 
   Map<String, dynamic> toJson() {
-    fillMissingWithDefaults();
+    _fillMissingWithDefaults();
     return _$EventCfgTreeToJson(this);
   }
 }

@@ -97,6 +97,7 @@ extension AppScreenExt1 on AppScreen {
         return [
           ScreenWidgetArea.header,
           ScreenWidgetArea.banner,
+          ScreenWidgetArea.tableview,
         ];
       case AppScreen.trading:
         return [
