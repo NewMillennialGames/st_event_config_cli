@@ -129,9 +129,9 @@ class EventCfgTree {
         that will customize the client UI
     */
     print(
-        'fillFromVisualRuleAnswers got ${answeredQuestions.length} answeredQuestions');
-    for (VisualRuleQuestion<String, RuleResponseBase> rQuest
-        in answeredQuestions) {
+      'fillFromVisualRuleAnswers got ${answeredQuestions.length} answeredQuestions',
+    );
+    for (VisRuleStyleQuest rQuest in answeredQuestions) {
       // look up or create it
       ScreenCfgByArea screenCfg = this.screenConfigMap[rQuest.appScreen] ??
           ScreenCfgByArea(rQuest.appScreen);

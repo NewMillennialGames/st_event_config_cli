@@ -87,6 +87,7 @@ const _$DbTableFieldNameEnumMap = {
   DbTableFieldName.region: 'region',
   DbTableFieldName.eventName: 'eventName',
   DbTableFieldName.gameDate: 'gameDate',
+  DbTableFieldName.gameTime: 'gameTime',
   DbTableFieldName.gameLocation: 'gameLocation',
   DbTableFieldName.imageUrl: 'imageUrl',
   DbTableFieldName.assetOpenPrice: 'assetOpenPrice',

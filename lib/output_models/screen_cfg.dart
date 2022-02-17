@@ -10,7 +10,7 @@ class ScreenCfgByArea {
     this.appScreen,
   );
 
-  void _confirmAreaIsApplicable(
+  void _confirmAreaIsApplicableToThisScreen(
     ScreenWidgetArea area, [
     bool checkExists = false,
   ]) {
@@ -28,7 +28,7 @@ class ScreenCfgByArea {
   }
 
   CfgForAreaAndNestedSlots configForArea(ScreenWidgetArea area) {
-    _confirmAreaIsApplicable(area, true);
+    _confirmAreaIsApplicableToThisScreen(area, true);
     return areaConfig[area]!;
   }
 
@@ -36,18 +36,18 @@ class ScreenCfgByArea {
     VisRuleStyleQuest rQuest,
   ) {
     //
-    _confirmAreaIsApplicable(rQuest.screenWidgetArea!, false);
+    var swa = rQuest.screenWidgetArea;
+    assert(swa != null, 'area is required at this level');
+    _confirmAreaIsApplicableToThisScreen(swa!, false);
     //
     RuleResponseBase? answer = rQuest.response?.answers;
-    ScreenWidgetArea? swa = rQuest.screenWidgetArea;
-    if (answer == null || swa == null) {
+    if (answer == null) {
       var msg =
           'Err: ${rQuest.questionId} ${rQuest.questDef.questStr} was missing key data';
       print(
         msg,
       );
       throw UnimplementedError(msg);
-      // return;
     }
 
     if (answer is Iterable) {

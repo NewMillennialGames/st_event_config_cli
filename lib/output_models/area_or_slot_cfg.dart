@@ -28,7 +28,7 @@ class CfgForAreaAndNestedSlots {
   ) =>
       visCfgBySlotInArea[slot]!;
 
-  void _validateRuleAndSlotIsApplicable(
+  void _validateRuleIsApplicableForAreaOrSlot(
     AppScreen appScreen,
     VisualRuleType rt,
     ScreenAreaWidgetSlot? slot,
@@ -66,29 +66,29 @@ class CfgForAreaAndNestedSlots {
 
   void appendAreaOrSlotRule(VisRuleStyleQuest rQuest) {
     //
+    VisualRuleType? vrt = rQuest.visRuleTypeForAreaOrSlot;
     assert(
-      rQuest.visRuleTypeForAreaOrSlot != null,
+      vrt != null,
       'cant add question that has no attached rule',
     );
     //
     ScreenAreaWidgetSlot? optSlotInArea = rQuest.slotInArea;
-    _validateRuleAndSlotIsApplicable(
+    _validateRuleIsApplicableForAreaOrSlot(
       rQuest.appScreen,
-      rQuest.visRuleTypeForAreaOrSlot!,
+      vrt!,
       optSlotInArea,
     );
 
     SlotOrAreaRuleCfg cfgForSlotOrArea;
     if (optSlotInArea == null) {
       // this is an area level rule by specific type
-      cfgForSlotOrArea = visCfgForArea[rQuest.visRuleTypeForAreaOrSlot!] ??
-          SlotOrAreaRuleCfg(rQuest.visRuleTypeForAreaOrSlot!, []);
+      cfgForSlotOrArea = visCfgForArea[vrt] ?? SlotOrAreaRuleCfg(vrt, []);
       cfgForSlotOrArea.appendQuestion(rQuest);
-      visCfgForArea[rQuest.visRuleTypeForAreaOrSlot!] = cfgForSlotOrArea;
+      visCfgForArea[vrt] = cfgForSlotOrArea;
     } else {
       // this is a slot level rule
-      cfgForSlotOrArea = visCfgBySlotInArea[optSlotInArea] ??
-          SlotOrAreaRuleCfg(rQuest.visRuleTypeForAreaOrSlot!, []);
+      cfgForSlotOrArea =
+          visCfgBySlotInArea[optSlotInArea] ?? SlotOrAreaRuleCfg(vrt, []);
       cfgForSlotOrArea.appendQuestion(rQuest);
       visCfgBySlotInArea[optSlotInArea] = cfgForSlotOrArea;
     }

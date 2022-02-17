@@ -10,8 +10,8 @@ class SlotOrAreaRuleCfg {
     parent container (collection of these instances)
     is how you know scope of "this"
   */
-  VisualRuleType visRuleType;
-  List<RuleResponseBase> visRuleList;
+  final VisualRuleType visRuleType;
+  final List<RuleResponseBase> visRuleList;
   //
   SlotOrAreaRuleCfg(
     this.visRuleType,
@@ -67,6 +67,8 @@ class SlotOrAreaRuleCfg {
   }
 
   void appendQuestion(VisRuleStyleQuest rQuest) {
+    print(
+        'adding VisRuleStyleQuest ${rQuest.questionId} in ${visRuleType.name}');
     this.visRuleList.add(rQuest.response!.answers);
   }
 
