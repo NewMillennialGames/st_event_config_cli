@@ -1,7 +1,9 @@
 part of ConfigDialogRunner;
 
 class DialogMgr {
-  /*
+  /*  not really in use much
+    none of this functionality is needed
+    --
     keeps track of Dialog Sections (aka groups of related questions)
     and also coordinates (stays in sync with) the QuestListMgr
   */
@@ -13,26 +15,16 @@ class DialogMgr {
   DialogMgr(this._questMgr);
 
   //
-  // DialogSectionCfg get _currentSectionCfg => _sections[_currSectionIdx];
-  // AppScreen get currentAppScreenTyp => _currentSectionCfg.appScreen;
-
-  // DialogSectionCfg? _getNextSection() {
-  //   //
-  //   if (_currSectionIdx + 1 >= _sections.length) return null;
-  //   ++_currSectionIdx;
-  //   return _currentSectionCfg;
-  // }
-
   Question? getNextQuestInCurrentSection() {
     // only in this section
     // return _questMgr._nextQuestionFor(currentAppScreenTyp);
     return _questMgr._nextQuestionFor();
   }
 
-  List<UserResponse> get priorAnswers {
-    //
-    return _questMgr.priorAnswers;
-  }
+  // List<UserResponse> get priorAnswers {
+  //   //
+  //   return _questMgr.priorAnswers;
+  // }
 
   void loadBeginningDialog() {
     //

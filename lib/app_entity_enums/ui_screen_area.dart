@@ -84,10 +84,10 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
       case ScreenWidgetArea.banner:
         return [VisualRuleType.showOrHide];
       case ScreenWidgetArea.tableview:
+        // sorting rules live under its slots
+        // row-style is area level
         return [
           VisualRuleType.styleOrFormat,
-          // VisualRuleType.groupCfg,
-          // VisualRuleType.sortCfg
         ];
       case ScreenWidgetArea.footer:
         return [VisualRuleType.showOrHide];

@@ -47,13 +47,14 @@ void createOutputFileFromResponses(
   //
   final List<Question> exportableQuestions = questionMgr.exportableQuestions;
 
+  print('found ${exportableQuestions.length} exportable answers to convert');
   for (Question q in exportableQuestions) {
     print(q.questStr);
     print(q.response?.answers.toString());
     print('\n\n');
   }
 
-  print('now building rules');
+  print('Now building Event Config rules...');
 
   Iterable<Question> eventConfigLevelData = exportableQuestions.where(
     (q) => q.isTopLevelConfigOrScreenQuestion,
@@ -61,7 +62,8 @@ void createOutputFileFromResponses(
   final evCfg = EventCfgTree.fromEventLevelConfig(eventConfigLevelData);
   // create the per-area or per-slot rules
   evCfg.fillFromVisualRuleAnswers(
-    exportableQuestions.whereType<VisRuleStyleQuest>(),
+    exportableQuestions
+        .whereType<VisualRuleQuestion<String, RuleResponseBase>>(),
   );
   // now dump evCfg to file
   evCfg.dumpCfgToFile(filename);

@@ -128,6 +128,8 @@ class EventCfgTree {
         out the tree of configuration data
         that will customize the client UI
     */
+    print(
+        'fillFromVisualRuleAnswers got ${answeredQuestions.length} answeredQuestions');
     for (VisualRuleQuestion<String, RuleResponseBase> rQuest
         in answeredQuestions) {
       // look up or create it

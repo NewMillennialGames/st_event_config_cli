@@ -76,51 +76,51 @@ final List<Question> _questionLst = [
     DlgStr.eventName,
     null,
     null,
-    questionId: QuestionIds.eventName,
+    questId: QuestionIds.eventName,
   ),
   // set false to shorten manual testing
-  if (true) ...[
+  if (false) ...[
     Qb<String, String>(
       QuestionQuantifier.eventLevel(),
       DlgStr.eventDescrip,
       null,
       null,
-      questionId: QuestionIds.eventDescrip,
+      questId: QuestionIds.eventDescrip,
     ),
     Qb<int, EvType>(
       QuestionQuantifier.eventLevel(),
       DlgStr.eventType,
       EvType.values.map((e) => e.name),
       (i) => EvType.values[i],
-      questionId: QuestionIds.eventType,
+      questId: QuestionIds.eventType,
     ),
     Qb<int, EvCompetitorType>(
       QuestionQuantifier.eventLevel(),
       DlgStr.eventWhosCompeting,
       EvCompetitorType.values.map((e) => e.name),
       (i) => EvCompetitorType.values[i],
-      questionId: QuestionIds.competitorType,
+      questId: QuestionIds.competitorType,
     ),
     Qb<int, EvOpponentType>(
       QuestionQuantifier.eventLevel(),
       DlgStr.eventCompPlayAgainst,
       EvOpponentType.values.map((e) => e.name),
       (i) => EvOpponentType.values[i],
-      questionId: QuestionIds.competeAgainstType,
+      questId: QuestionIds.competeAgainstType,
     ),
     Qb<int, EvDuration>(
       QuestionQuantifier.eventLevel(),
       DlgStr.eventDuration,
       EvDuration.values.map((e) => e.name),
       (i) => EvDuration.values[i],
-      questionId: QuestionIds.eventDuration,
+      questId: QuestionIds.eventDuration,
     ),
     Qb<int, EvEliminationStrategy>(
       QuestionQuantifier.eventLevel(),
       DlgStr.eventEliminationStrategy,
       EvEliminationStrategy.values.map((e) => e.name),
       (i) => EvEliminationStrategy.values[i],
-      questionId: QuestionIds.eventEliminationStrategy,
+      questId: QuestionIds.eventEliminationStrategy,
     ),
     Qb<String, bool>(
       QuestionQuantifier.eventLevel(),
@@ -128,7 +128,7 @@ final List<Question> _questionLst = [
       ['no', 'yes'],
       (i) => i == '1',
       defaultAnswerIdx: 1,
-      questionId: QuestionIds.globalRowStyle,
+      questId: QuestionIds.globalRowStyle,
     ),
   ],
   // ask which screens to configure
@@ -145,7 +145,7 @@ final List<Question> _questionLst = [
     },
     acceptsMultiResponses: true,
     isNotForOutput: true,
-    questionId: QuestionIds.selectAppScreens,
+    questId: QuestionIds.selectAppScreens,
   ),
   // after user selects desired screens to configure, then
   // which screen areas (and slots on those areas) are asked automatically;

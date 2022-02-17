@@ -14,9 +14,15 @@ class QuestListMgr {
   QuestListMgr();
 
   //
-  List<Question> get exportableQuestions => _allAnsweredQuestions
-      .where((q) => q.appliesToClientConfiguration)
-      .toList();
+  List<Question> get exportableQuestions =>
+      _allAnsweredQuestions.where(_exportFilterLogic).toList();
+
+  bool _exportFilterLogic(Question q) {
+    // print(
+    //   'QID: ${q.questionId}  runtimeType: ${q.runtimeType}  appliesToClientConfiguration: ${q.appliesToClientConfiguration}',
+    // );
+    return q.appliesToClientConfiguration;
+  }
 
   Question get _currentOrLastQuestion => _pendingQuestions[_currQuestionIdx];
   int get totalAnsweredQuestions => _answeredQuestsBySection.values
@@ -25,7 +31,7 @@ class QuestListMgr {
   List<Question> get _allAnsweredQuestions =>
       _answeredQuestsBySection.values.fold<List<Question>>(
         [],
-        (l0, l1) => l0..addAll(l1),
+        (List<Question> l0, List<Question> l1) => l0..addAll(l1),
       );
 
   List<AppScreen> get userSelectedScreens {
@@ -135,7 +141,13 @@ class QuestListMgr {
         _answeredQuestsBySection[_currentOrLastQuestion.appScreen]?.last;
     // dont store same question twice
     if (mostRecentSaved != null &&
-        mostRecentSaved.questionId == _currentOrLastQuestion.questionId) return;
+        mostRecentSaved.questionId == _currentOrLastQuestion.questionId) {
+      //
+      print(
+          'QID: ${mostRecentSaved.questionId} seemd to be duplicate & wasnt moved into _answeredQuestsBySection');
+      return;
+    }
+    ;
     // store into list for this section
     var l = _answeredQuestsBySection[_currentOrLastQuestion.appScreen] ?? [];
     l.add(_currentOrLastQuestion);

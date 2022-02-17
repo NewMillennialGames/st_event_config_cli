@@ -25,13 +25,13 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
     this.defaultAnswerIdx = 1,
     this.acceptsMultiResponses = false,
     this.isNotForOutput = false,
-    this.questionId = '',
-    // this.dynamicFromPriorState = false,
-  });
+    String? questId,
+  }) : questionId = questId == null ? qQuantify.sortKey : questId;
   // getters
   String get questStr => _questStr;
   bool get isRuleQuestion =>
       this is VisualRuleQuestion || this is BehaveRuleQuestion;
+
   bool get isTopLevelConfigOrScreenQuestion =>
       qQuantify.isTopLevelConfigOrScreenQuestion;
   List<String>? get answerChoicesList => _answerChoices?.toList();

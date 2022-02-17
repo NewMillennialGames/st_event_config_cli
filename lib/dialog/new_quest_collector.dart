@@ -225,7 +225,7 @@ class NewQuestionCollector {
           area,
           responseAddsWhichRuleQuestions: true,
         ),
-        'Which slots/widgets on the ${area.name} of ${screen.name} would you like to configure?',
+        'Which slots/widgets/sort-fields on the ${area.name} of ${screen.name} would you like to configure?',
         applicableWigetSlots.map((ScreenAreaWidgetSlot r) => r.choiceName),
         (String idxStrs) {
           return castStrOfIdxsToIterOfInts(idxStrs)
@@ -315,7 +315,7 @@ class NewQuestionCollector {
       // string is the user-input value being parsed
       // RuleResponseWrapperIfc is one of these response types:
       // TvRowStyleCfg, TvSortOrGroupCfg, TvFilterCfg, ShowHideCfg
-      var q = VisualRuleQuestion<String, RuleResponseWrapperIfc>(
+      var q = VisualRuleQuestion<String, RuleResponseBase>(
         screen,
         area,
         ruleTyp,
@@ -337,45 +337,45 @@ class NewQuestionCollector {
   }
 }
 
-// callbacks when a question needs to add other questions
-void askUser2ndOr3rdFieldForSortGroupFilter(
-  QuestListMgr _questMgr,
-  VisualRuleQuestion<String, RuleResponseWrapperIfc> questJustAnswered,
-) {
-  /*
+// // callbacks when a question needs to add other questions
+// void niu_askUser2ndOr3rdFieldForSortGroupFilter(
+//   QuestListMgr _questMgr,
+//   VisualRuleQuestion<String, RuleResponseWrapperIfc> questJustAnswered,
+// ) {
+//   /*
 
-  */
-  int curSlot = questJustAnswered.slotInArea?.index ?? 0;
-  if (curSlot > 1) return;
+//   */
+//   int curSlot = questJustAnswered.slotInArea?.index ?? 0;
+//   if (curSlot > 1) return;
 
-  // final answer = questJustAnswered.response!.answers as TvSortGroupFilterBase;
-  final nextSlot = ScreenAreaWidgetSlot.values[curSlot + 1];
-  // VisualRuleQuestion newQuestion =
-  final newQuestion = VisualRuleQuestion<String, TvSortGroupFilterBase>(
-    questJustAnswered.appScreen,
-    questJustAnswered.screenWidgetArea!,
-    questJustAnswered.visRuleTypeForAreaOrSlot!,
-    nextSlot,
-  );
-  // switch (questJustAnswered.visRuleTypeForAreaOrSlot) {
-  //   case VisualRuleType.sortCfg:
-  //     newQuestion = VisualRuleQuestion<String, RuleResponseWrapperIfc>(
-  //       questJustAnswered.appScreen,
-  //       questJustAnswered.screenWidgetArea!,
-  //       questJustAnswered.visRuleTypeForAreaOrSlot!,
-  //       nextSlot,
-  //     );
-  //     break;
-  //   case VisualRuleType.groupCfg:
-  //     break;
-  //   case VisualRuleType.filterCfg:
-  //     break;
-  //   default:
-  //     break;
-  // }
+//   // final answer = questJustAnswered.response!.answers as TvSortGroupFilterBase;
+//   final nextSlot = ScreenAreaWidgetSlot.values[curSlot + 1];
+//   // VisualRuleQuestion newQuestion =
+//   final newQuestion = VisualRuleQuestion<String, TvSortGroupFilterBase>(
+//     questJustAnswered.appScreen,
+//     questJustAnswered.screenWidgetArea!,
+//     questJustAnswered.visRuleTypeForAreaOrSlot!,
+//     nextSlot,
+//   );
+//   // switch (questJustAnswered.visRuleTypeForAreaOrSlot) {
+//   //   case VisualRuleType.sortCfg:
+//   //     newQuestion = VisualRuleQuestion<String, RuleResponseWrapperIfc>(
+//   //       questJustAnswered.appScreen,
+//   //       questJustAnswered.screenWidgetArea!,
+//   //       questJustAnswered.visRuleTypeForAreaOrSlot!,
+//   //       nextSlot,
+//   //     );
+//   //     break;
+//   //   case VisualRuleType.groupCfg:
+//   //     break;
+//   //   case VisualRuleType.filterCfg:
+//   //     break;
+//   //   default:
+//   //     break;
+//   // }
 
-  _questMgr.appendNewQuestions(
-    [newQuestion],
-    dbgNam: 'askUser2ndOr3rdFieldForSortGroupFilter',
-  );
-}
+//   _questMgr.appendNewQuestions(
+//     [newQuestion],
+//     dbgNam: 'askUser2ndOr3rdFieldForSortGroupFilter',
+//   );
+// }
