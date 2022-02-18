@@ -17,7 +17,7 @@ the UI factory   (Filter Bar and TableView)
 
 Map<String, dynamic> evCfgDataFromServer = {};
 
-Future<void> readExampleEventConfig({String filename = 'one.json'}) async {
+Future<void> readExampleEventConfig({String filename = 'three.json'}) async {
   final String response = await rootBundle.loadString('assets/$filename');
   evCfgDataFromServer = await json.decode(response);
 }

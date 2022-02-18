@@ -135,6 +135,14 @@ ScreenCfgByArea _$ScreenCfgByAreaFromJson(Map<String, dynamic> json) =>
         final val = ScreenCfgByArea(
           $checkedConvert(
               'appScreen', (v) => $enumDecode(_$AppScreenEnumMap, v)),
+          $checkedConvert(
+              'areaConfig',
+              (v) => (v as Map<String, dynamic>).map(
+                    (k, e) => MapEntry(
+                        $enumDecode(_$ScreenWidgetAreaEnumMap, k),
+                        CfgForAreaAndNestedSlots.fromJson(
+                            e as Map<String, dynamic>)),
+                  )),
         );
         return val;
       },
@@ -143,7 +151,18 @@ ScreenCfgByArea _$ScreenCfgByAreaFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$ScreenCfgByAreaToJson(ScreenCfgByArea instance) =>
     <String, dynamic>{
       'appScreen': _$AppScreenEnumMap[instance.appScreen],
+      'areaConfig': instance.areaConfig
+          .map((k, e) => MapEntry(_$ScreenWidgetAreaEnumMap[k], e.toJson())),
     };
+
+const _$ScreenWidgetAreaEnumMap = {
+  ScreenWidgetArea.navBar: 'navBar',
+  ScreenWidgetArea.filterBar: 'filterBar',
+  ScreenWidgetArea.header: 'header',
+  ScreenWidgetArea.banner: 'banner',
+  ScreenWidgetArea.tableview: 'tableview',
+  ScreenWidgetArea.footer: 'footer',
+};
 
 CfgForAreaAndNestedSlots _$CfgForAreaAndNestedSlotsFromJson(
         Map<String, dynamic> json) =>
@@ -154,20 +173,20 @@ CfgForAreaAndNestedSlots _$CfgForAreaAndNestedSlotsFromJson(
         final val = CfgForAreaAndNestedSlots(
           $checkedConvert(
               'screenArea', (v) => $enumDecode(_$ScreenWidgetAreaEnumMap, v)),
+          $checkedConvert(
+              'visCfgForArea',
+              (v) => (v as Map<String, dynamic>).map(
+                    (k, e) => MapEntry($enumDecode(_$VisualRuleTypeEnumMap, k),
+                        SlotOrAreaRuleCfg.fromJson(e as Map<String, dynamic>)),
+                  )),
+          $checkedConvert(
+              'visCfgBySlotInArea',
+              (v) => (v as Map<String, dynamic>).map(
+                    (k, e) => MapEntry(
+                        $enumDecode(_$ScreenAreaWidgetSlotEnumMap, k),
+                        SlotOrAreaRuleCfg.fromJson(e as Map<String, dynamic>)),
+                  )),
         );
-        $checkedConvert(
-            'visCfgForArea',
-            (v) => val.visCfgForArea = (v as Map<String, dynamic>).map(
-                  (k, e) => MapEntry($enumDecode(_$VisualRuleTypeEnumMap, k),
-                      SlotOrAreaRuleCfg.fromJson(e as Map<String, dynamic>)),
-                ));
-        $checkedConvert(
-            'visCfgBySlotInArea',
-            (v) => val.visCfgBySlotInArea = (v as Map<String, dynamic>).map(
-                  (k, e) => MapEntry(
-                      $enumDecode(_$ScreenAreaWidgetSlotEnumMap, k),
-                      SlotOrAreaRuleCfg.fromJson(e as Map<String, dynamic>)),
-                ));
         return val;
       },
     );
@@ -181,15 +200,6 @@ Map<String, dynamic> _$CfgForAreaAndNestedSlotsToJson(
       'visCfgBySlotInArea': instance.visCfgBySlotInArea.map(
           (k, e) => MapEntry(_$ScreenAreaWidgetSlotEnumMap[k], e.toJson())),
     };
-
-const _$ScreenWidgetAreaEnumMap = {
-  ScreenWidgetArea.navBar: 'navBar',
-  ScreenWidgetArea.filterBar: 'filterBar',
-  ScreenWidgetArea.header: 'header',
-  ScreenWidgetArea.banner: 'banner',
-  ScreenWidgetArea.tableview: 'tableview',
-  ScreenWidgetArea.footer: 'footer',
-};
 
 const _$VisualRuleTypeEnumMap = {
   VisualRuleType.sortCfg: 'sortCfg',

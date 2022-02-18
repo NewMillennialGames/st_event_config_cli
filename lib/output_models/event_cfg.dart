@@ -66,6 +66,7 @@ class EventCfgTree {
     EvOpponentType evOpponentType = EvOpponentType.sameAsCompetitorType;
     EvDuration evDuration = EvDuration.oneGame;
     EvEliminationStrategy evEliminationType = EvEliminationStrategy.singleGame;
+    bool applySameRowStyleToAllScreens = true;
     // use try to catch errs and allow easy debugging
     try {
       evTemplateDescription = (responses
@@ -115,6 +116,7 @@ class EventCfgTree {
       evOpponentType: evOpponentType,
       evDuration: evDuration,
       evEliminationType: evEliminationType,
+      // applySameRowStyleToAllScreens,
     );
 
     return EventCfgTree(eventCfg);
@@ -134,7 +136,7 @@ class EventCfgTree {
     for (VisRuleStyleQuest rQuest in answeredQuestions) {
       // look up or create it
       ScreenCfgByArea screenCfg = this.screenConfigMap[rQuest.appScreen] ??
-          ScreenCfgByArea(rQuest.appScreen);
+          ScreenCfgByArea(rQuest.appScreen, {});
       screenCfg.appendRule(rQuest);
       this.screenConfigMap[rQuest.appScreen] = screenCfg;
     }
@@ -157,7 +159,7 @@ class EventCfgTree {
     // we dont need this on the load json side
     for (AppScreen as in AppScreen.eventConfiguration.topConfigurableScreens) {
       if (screenConfigMap.containsKey(as)) continue;
-      screenConfigMap[as] = ScreenCfgByArea(as);
+      screenConfigMap[as] = ScreenCfgByArea(as, {});
     }
     this.screenConfigMap.values.forEach((sc) => sc.fillMissingWithDefaults());
   }

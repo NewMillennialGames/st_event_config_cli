@@ -21,27 +21,27 @@ abstract class AssetRowPropertyIfc {
   String get position;
   DateTime get gameDate; // rounded to midnight for row grouping
   DateTime get gameTime; // sort order within groups
-  String get gameDateStr;
+  // String get gameDateStr;
   //
   double get price;
-  String get priceStr;
+  // String get priceStr;
   double get priceDelta;
-  String get priceDeltaStr;
+  // String get priceDeltaStr;
   //
   int get rank;
-  String get rankStr;
+  // String get rankStr;
 }
 
 extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
   // sensible defaults if not overridden
   String get groupKey => '';
 
-  String get gameDateStr => '_to unwrap';
-  String get gameTimeStr => '_to unwrap';
+  String get gameDateStr => DateFormat().format(gameDate);
+  String get gameTimeStr => '_to fmt actual value';
 
-  String get priceStr => '_to unwrap';
-  String get priceDeltaStr => '_to unwrap';
-  String get rankStr => '_to unwrap';
+  String get priceStr => '_to fmt actual value';
+  String get priceDeltaStr => '_to fmt actual value';
+  String get rankStr => '_to fmt actual value';
 
   bool get canTrade => false;
 

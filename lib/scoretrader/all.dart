@@ -1,5 +1,6 @@
 library StUiController;
 
+import 'package:intl/intl.dart';
 import 'package:tuple/tuple.dart';
 //
 import '../enums/all.dart';

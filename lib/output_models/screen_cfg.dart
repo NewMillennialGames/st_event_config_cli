@@ -4,10 +4,11 @@ part of OutputModels;
 class ScreenCfgByArea {
   //
   final AppScreen appScreen;
-  final Map<ScreenWidgetArea, CfgForAreaAndNestedSlots> areaConfig = {};
+  final Map<ScreenWidgetArea, CfgForAreaAndNestedSlots> areaConfig;
 
   ScreenCfgByArea(
     this.appScreen,
+    this.areaConfig,
   );
 
   void _confirmAreaIsApplicableToThisScreen(
@@ -53,7 +54,8 @@ class ScreenCfgByArea {
     if (answer is Iterable) {
       throw UnimplementedError('todo');
     } else {
-      var areaCfg = this.areaConfig[swa] ?? CfgForAreaAndNestedSlots(swa);
+      var areaCfg =
+          this.areaConfig[swa] ?? CfgForAreaAndNestedSlots(swa, {}, {});
       areaCfg.appendAreaOrSlotRule(rQuest);
       areaConfig[swa] = areaCfg;
     }
@@ -65,7 +67,7 @@ class ScreenCfgByArea {
     // called automatically when top obj () tries to convert to JSON
     for (ScreenWidgetArea a in appScreen.configurableScreenAreas) {
       if (areaConfig.containsKey(a)) continue;
-      areaConfig[a] = CfgForAreaAndNestedSlots(a)
+      areaConfig[a] = CfgForAreaAndNestedSlots(a, {}, {})
         ..fillMissingWithDefaults(appScreen);
     }
   }

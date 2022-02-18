@@ -1,9 +1,6 @@
 import 'dart:io';
 import 'dart:core';
 import 'package:args/args.dart';
-// magic line to
-// import 'package:flutter/widgets.dart';
-
 //
 import 'lib/scoretrader/all.dart';
 import 'lib/dialog/all.dart';

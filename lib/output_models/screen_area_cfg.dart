@@ -18,6 +18,8 @@ class CfgForAreaAndNestedSlots {
 
   CfgForAreaAndNestedSlots(
     this.screenArea,
+    this.visCfgForArea,
+    this.visCfgBySlotInArea,
   );
 
   SlotOrAreaRuleCfg areaRuleByRuleType(VisualRuleType typ) =>
