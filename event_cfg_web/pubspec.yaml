@@ -32,7 +32,7 @@ dependencies:
   intl:
   flutter_riverpod: ^1.0.3
   st_ev_cfg:
-     path: ../../st_ev_cfg/
+     path: ../../st_event_config/
 
 
   # The following adds the Cupertino Icons font to your application.
