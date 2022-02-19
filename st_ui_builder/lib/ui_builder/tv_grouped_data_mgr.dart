@@ -32,8 +32,8 @@ class GroupedTableDataMgr {
     this._allAssetRows,
     this._tableViewCfg, {
     bool ascending = true,
-  })  : this.order = ascending ? GroupedListOrder.ASC : GroupedListOrder.DESC,
-        this._filteredAssetRows = _allAssetRows.toList();
+  })  : order = ascending ? GroupedListOrder.ASC : GroupedListOrder.DESC,
+        _filteredAssetRows = _allAssetRows.toList();
 
   List<TableviewDataRowTuple> get listData => _filteredAssetRows;
   // GroupingRules get groupRules => _tableViewCfg.groupByRules;
@@ -48,8 +48,10 @@ class GroupedTableDataMgr {
   // defining groupHeaderBuilder will cause groupSeparatorBuilder to be ignored
   GroupHeaderBuilder get groupHeaderBuilder {
     // copy groupBy getter to save a lookup
-    final gbFunc = groupBy;
-    return (TableviewDataRowTuple rowData) => TvGroupHeader(gbFunc(rowData));
+    final TvAreaRowStyle rowStyle = _tableViewCfg.rowStyle;
+    final GetGroupKeyFromRow gbFunc = groupBy;
+    return (TableviewDataRowTuple rowData) =>
+        TvGroupHeader(rowStyle, gbFunc(rowData));
   }
 
   // natural sorting will use my Comparator; dont need this
@@ -65,15 +67,9 @@ class GroupedTableDataMgr {
         return _tableViewCfg.rowConstructor(assets);
       };
 
-  // for sorting sections
-  SectionSortComparator get itemComparator => (
-        TableviewDataRowTuple i1,
-        TableviewDataRowTuple i2,
-      ) {
-        // TODO: base it on configured sort fields
-        // or we could add Comparable to TableviewDataRowTuple
-        return i1.item1.topName.compareTo(i2.item1.topName);
-      };
+  // for sorting recs into sections and date order
+  SectionSortComparator get itemComparator =>
+      GroupHeaderData.sortComparator(sortingRules);
 
   bool get hasFilterBar {
     // set imageUrl as first filter field to hide/disable the whole filter bar
@@ -142,12 +138,6 @@ class GroupedTableDataMgr {
     this._filteredAssetRows = _allAssetRows;
     print('you must reload your list after calling this');
   }
-
-  // NIU
-  // GroupSepRowBuilder get groupSeparatorBuilder {
-  //   // defining groupHeaderBuilder will cause groupSeparatorBuilder to be ignored
-  //   return (GroupHeaderData _) => TvGroupHeaderSep(GroupHeaderData.mockRow);
-  // }
 }
 
 
@@ -177,3 +167,10 @@ class GroupedTableDataMgr {
     //       return dr.item1.valueExtractor(colName) == selectedVal;
     //   }
     // };
+
+
+      // NIU
+  // GroupSepRowBuilder get groupSeparatorBuilder {
+  //   // defining groupHeaderBuilder will cause groupSeparatorBuilder to be ignored
+  //   return (GroupHeaderData _) => TvGroupHeaderSep(GroupHeaderData.mockRow);
+  // }

@@ -45,6 +45,7 @@ class TableviewConfigPayload {
   }
 
   TvRowBuilder get rowConstructor {
+    // row-style returned depends on the screen on this instance
     // TODO:  implement remaining row styles
 
     switch (rowStyle) {
@@ -56,7 +57,6 @@ class TableviewConfigPayload {
         return TeamVsFieldRow.new;
       case TvAreaRowStyle.teamVsFieldRanked:
         return TeamVsFieldRankedRow.new;
-
       case TvAreaRowStyle.teamDraft:
         return TeamDraftRow.new;
       case TvAreaRowStyle.teamLine:

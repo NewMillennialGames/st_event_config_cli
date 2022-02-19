@@ -179,6 +179,11 @@ extension EventCfgTreeExt1 on EventCfgTree {
   ScreenCfgByArea _fullScreenCfg(AppScreen screen) =>
       this.screenConfigMap[screen]!;
 
+  bool get marketViewIsGameCentricAndTwoPerRow =>
+      [EvCompetitorType.team, EvCompetitorType.teamPlayer]
+          .contains(eventCfg.evCompetitorType) &&
+      eventCfg.evOpponentType == EvOpponentType.sameAsCompetitorType;
+
   CfgForAreaAndNestedSlots screenAreaCfg(
     AppScreen screen,
     ScreenWidgetArea area,

@@ -15,6 +15,12 @@ class StUiBuilderFactory {
   //
   StUiBuilderFactory();
 
+  // getters
+  bool get marketViewIsGameCentricAndTwoPerRow =>
+      _eConfig!.marketViewIsGameCentricAndTwoPerRow;
+  bool get marketViewRowsAreSingleAssetOnly =>
+      !marketViewIsGameCentricAndTwoPerRow;
+
   void setConfigForCurrentEvent(Map<String, dynamic> eCfgJsonMap) {
     /* call this every time user switches events
       send api payload (upon event switching) here
@@ -43,12 +49,13 @@ class StUiBuilderFactory {
     );
   }
 
-  // SlotOrAreaRuleCfg _filterBarConfigForScreen(AppScreen screen) {
-  //   //
-  //   CfgForAreaAndNestedSlots tableCfg =
-  //       _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.filterBar);
-  //   return tableCfg.areaRuleByRuleType(VisualRuleType.filterCfg);
-  // }
+  FilterRules filterBarConfigForScreen(AppScreen screen) {
+    // this data also embedded in the GroupedTableDataMgr
+    // this is NIU I believe
+    CfgForAreaAndNestedSlots filterBarAndSlotCfg =
+        _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.filterBar);
+    return filterBarAndSlotCfg.filterRules!;
+  }
 
   SlotOrAreaRuleCfg headerConfigForScreen(AppScreen screen) {
     //

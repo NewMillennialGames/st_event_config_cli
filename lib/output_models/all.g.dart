@@ -180,11 +180,16 @@ CfgForAreaAndNestedSlots _$CfgForAreaAndNestedSlotsFromJson(
                         SlotOrAreaRuleCfg.fromJson(e as Map<String, dynamic>)),
                   )),
           $checkedConvert(
-              'visCfgBySlotInArea',
+              'visCfgForSlotsByRuleType',
               (v) => (v as Map<String, dynamic>).map(
                     (k, e) => MapEntry(
-                        $enumDecode(_$ScreenAreaWidgetSlotEnumMap, k),
-                        SlotOrAreaRuleCfg.fromJson(e as Map<String, dynamic>)),
+                        $enumDecode(_$VisualRuleTypeEnumMap, k),
+                        (e as Map<String, dynamic>).map(
+                          (k, e) => MapEntry(
+                              $enumDecode(_$ScreenAreaWidgetSlotEnumMap, k),
+                              SlotOrAreaRuleCfg.fromJson(
+                                  e as Map<String, dynamic>)),
+                        )),
                   )),
         );
         return val;
@@ -197,8 +202,11 @@ Map<String, dynamic> _$CfgForAreaAndNestedSlotsToJson(
       'screenArea': _$ScreenWidgetAreaEnumMap[instance.screenArea],
       'visCfgForArea': instance.visCfgForArea
           .map((k, e) => MapEntry(_$VisualRuleTypeEnumMap[k], e.toJson())),
-      'visCfgBySlotInArea': instance.visCfgForSlotsByRuleType.map(
-          (k, e) => MapEntry(_$ScreenAreaWidgetSlotEnumMap[k], e.toJson())),
+      'visCfgForSlotsByRuleType': instance.visCfgForSlotsByRuleType.map(
+          (k, e) => MapEntry(
+              _$VisualRuleTypeEnumMap[k],
+              e.map((k, e) =>
+                  MapEntry(_$ScreenAreaWidgetSlotEnumMap[k], e.toJson())))),
     };
 
 const _$VisualRuleTypeEnumMap = {
@@ -226,8 +234,6 @@ SlotOrAreaRuleCfg _$SlotOrAreaRuleCfgFromJson(Map<String, dynamic> json) =>
       ($checkedConvert) {
         final val = SlotOrAreaRuleCfg(
           $checkedConvert(
-              'visRuleType', (v) => $enumDecode(_$VisualRuleTypeEnumMap, v)),
-          $checkedConvert(
               'visRuleList',
               (v) => (v as List<dynamic>)
                   .map((e) =>
@@ -240,6 +246,5 @@ SlotOrAreaRuleCfg _$SlotOrAreaRuleCfgFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$SlotOrAreaRuleCfgToJson(SlotOrAreaRuleCfg instance) =>
     <String, dynamic>{
-      'visRuleType': _$VisualRuleTypeEnumMap[instance.visRuleType],
       'visRuleList': instance.visRuleList.map((e) => e.toJson()).toList(),
     };
