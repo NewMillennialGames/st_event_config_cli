@@ -31,12 +31,15 @@ class StUiBuilderFactory {
   ) {
     /* build object that wraps all data and display rules
     */
-    CfgForAreaAndNestedSlots tableCfg =
+    CfgForAreaAndNestedSlots tableAreaAndSlotCfg =
         _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.tableview);
+
+    CfgForAreaAndNestedSlots filterBarAndSlotCfg =
+        _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.filterBar);
 
     return GroupedTableDataMgr(
       rows,
-      TableviewConfigPayload(screen, tableCfg),
+      TableviewConfigPayload(screen, tableAreaAndSlotCfg, filterBarAndSlotCfg),
     );
   }
 
@@ -51,13 +54,13 @@ class StUiBuilderFactory {
     //
     CfgForAreaAndNestedSlots tableCfg =
         _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.header);
-    return tableCfg.areaRuleByRuleType(VisualRuleType.styleOrFormat);
+    return tableCfg.areaRulesByRuleType(VisualRuleType.styleOrFormat);
   }
 
   SlotOrAreaRuleCfg footerConfigForScreen(AppScreen screen) {
     //
     CfgForAreaAndNestedSlots tableCfg =
         _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.footer);
-    return tableCfg.areaRuleByRuleType(VisualRuleType.styleOrFormat);
+    return tableCfg.areaRulesByRuleType(VisualRuleType.styleOrFormat);
   }
 }

@@ -197,7 +197,7 @@ Map<String, dynamic> _$CfgForAreaAndNestedSlotsToJson(
       'screenArea': _$ScreenWidgetAreaEnumMap[instance.screenArea],
       'visCfgForArea': instance.visCfgForArea
           .map((k, e) => MapEntry(_$VisualRuleTypeEnumMap[k], e.toJson())),
-      'visCfgBySlotInArea': instance.visCfgBySlotInArea.map(
+      'visCfgBySlotInArea': instance.visCfgForSlotsByRuleType.map(
           (k, e) => MapEntry(_$ScreenAreaWidgetSlotEnumMap[k], e.toJson())),
     };
 

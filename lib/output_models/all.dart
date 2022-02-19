@@ -2,6 +2,7 @@ library OutputModels;
 
 import 'dart:io';
 import 'dart:convert';
+// import 'package:tuple/tuple.dart';
 import 'package:json_annotation/json_annotation.dart';
 //
 import '../scoretrader/all.dart';
@@ -15,4 +16,3 @@ part 'event_cfg.dart';
 part 'screen_cfg.dart';
 part 'screen_area_cfg.dart';
 part 'slot_area_rule_cfg.dart';
-// part 'cast_propmap_to_rule.dart';

@@ -23,3 +23,5 @@ typedef FilterRules = Tuple3<TvFilterCfg, TvFilterCfg?, TvFilterCfg?>;
 
 //
 typedef AddQuestChkCallbk = bool Function(RuleResponseWrapperIfc);
+
+typedef RuleQuestTypTup = Tuple2<VisualRuleType, VisRuleQuestType>;

@@ -176,48 +176,31 @@ class EventCfgTree {
 
 extension EventCfgTreeExt1 on EventCfgTree {
   // return the config data needed to provision the ST UI builder logic
-  ScreenCfgByArea fullScreenCfg(AppScreen screen) =>
+  ScreenCfgByArea _fullScreenCfg(AppScreen screen) =>
       this.screenConfigMap[screen]!;
 
   CfgForAreaAndNestedSlots screenAreaCfg(
     AppScreen screen,
     ScreenWidgetArea area,
   ) =>
-      fullScreenCfg(screen).configForArea(area);
+      _fullScreenCfg(screen).configForArea(area);
 
-  Map<VisualRuleType, SlotOrAreaRuleCfg> allVisualRulesInScreenArea(
-    AppScreen screen,
-    ScreenWidgetArea area,
-  ) =>
-      screenAreaCfg(screen, area).visCfgForArea;
-
-  // GroupingRules tvGroupingRules(AppScreen screen) {
-  //   // Map<VisualRuleType, SlotOrAreaRuleCfg> areaCfgByRuleType =
-  //   //     allVisualRulesInScreenArea(screen, ScreenWidgetArea.tableview);
-  //   return allVisualRulesInScreenArea(
-  //           screen, ScreenWidgetArea.tableview)[VisualRuleType.groupCfg]!
-  //       .groupingRules!;
-  // }
-
-  SortingRules tvSortingRules(AppScreen screen) {
-    // Map<VisualRuleType, SlotOrAreaRuleCfg> areaCfgByRuleType =
-    //     allVisualRulesInScreenArea(screen, ScreenWidgetArea.tableview);
-    return allVisualRulesInScreenArea(
-            screen, ScreenWidgetArea.tableview)[VisualRuleType.sortCfg]!
-        .sortingRules!;
+  SortingRules? tvSortingRules(AppScreen screen) {
+    //
+    return screenAreaCfg(screen, ScreenWidgetArea.tableview).sortingRules;
   }
 
-  FilterRules tvFilteringRules(AppScreen screen) {
-    // Map<VisualRuleType, SlotOrAreaRuleCfg> areaCfgByRuleType =
-    //     allVisualRulesInScreenArea(screen, ScreenWidgetArea.tableview);
-    return allVisualRulesInScreenArea(
-            screen, ScreenWidgetArea.tableview)[VisualRuleType.filterCfg]!
-        .filterRules!;
+  FilterRules? tvFilteringRules(AppScreen screen) {
+    //
+    return screenAreaCfg(screen, ScreenWidgetArea.tableview).filterRules;
   }
 
   TvAreaRowStyle tableRowStyleFor(AppScreen screen) {
-    return (allVisualRulesInScreenArea(screen, ScreenWidgetArea.tableview)[
-            VisualRuleType.styleOrFormat]! as TvRowStyleCfg)
-        .selectedRowStyle;
+    //
+    var xx = screenAreaCfg(screen, ScreenWidgetArea.tableview)
+        .visCfgForArea[VisualRuleType.styleOrFormat]!;
+    return xx.visRuleList
+        .where((e) => e.ruleType == VisualRuleType.styleOrFormat)
+        .first as TvAreaRowStyle;
   }
 }

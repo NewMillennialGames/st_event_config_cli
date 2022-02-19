@@ -9,19 +9,27 @@ class DefaultAnswerBuilder {
   factory DefaultAnswerBuilder.forMissingAreaOrSlot(
     AppScreen appScreen,
     ScreenWidgetArea screenArea,
-    VisualRuleType visRuleType,
     ScreenAreaWidgetSlot? slot,
     Set<VisRuleQuestType> needRespQuestTypes,
   ) {
-    //
+    //     VisualRuleType visRuleType,
+    List<VisualRuleType> allAreaRules =
+        screenArea.applicableRuleTypes(appScreen);
+    List<VisualRuleType> allSlotRules =
+        slot?.possibleConfigRules(screenArea) ?? [];
+
     Map<VisRuleQuestType, String> _answers = {};
     for (VisRuleQuestType ruleQuestTyp in needRespQuestTypes) {
       _answers[ruleQuestTyp] = '${ruleQuestTyp.defaultChoice}';
     }
 
-    var respContainer = visRuleType.ruleResponseContainer;
-    respContainer.castResponsesToAnswerTypes(_answers);
-    return DefaultAnswerBuilder._([respContainer]);
+    List<RuleResponseBase> _Answers = [];
+
+    // var respContainer = visRuleType.ruleResponseContainer;
+    // respContainer.castResponsesToAnswerTypes(_answers);
+    // return DefaultAnswerBuilder._([respContainer]);
+
+    return DefaultAnswerBuilder._([]);
   }
 
   List<RuleResponseBase> get defaultAnswers => _defaultAnswers;

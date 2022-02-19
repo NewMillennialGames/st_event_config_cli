@@ -14,36 +14,33 @@ class TableviewConfigPayload {
 
   final AppScreen appScreen;
   final TvAreaRowStyle rowStyle;
-  // final GroupingRules groupByRules;
   final SortingRules sortRules;
   final FilterRules filterRules;
+  // final GroupingRules groupByRules;
 
   TableviewConfigPayload._(
+    // private constructor
     this.appScreen,
     this.rowStyle,
-    // this.groupByRules,
     this.sortRules,
     this.filterRules,
+    // this.groupByRules,
   );
 
   factory TableviewConfigPayload(
     AppScreen appScreen,
     CfgForAreaAndNestedSlots tableAreaCfg,
+    CfgForAreaAndNestedSlots filterBarAreaCfg,
   ) {
     //
     assert(tableAreaCfg.screenArea == ScreenWidgetArea.tableview, 'oops!');
-    //
-    SlotOrAreaRuleCfg tableAreaRules =
-        tableAreaCfg.areaRuleByRuleType(VisualRuleType.styleOrFormat);
-    TvRowStyleCfg tvRowStyleRule = tableAreaRules
-        .rulesOfType(VisualRuleType.styleOrFormat) as TvRowStyleCfg;
+    assert(filterBarAreaCfg.screenArea == ScreenWidgetArea.filterBar, 'oops!');
 
     return TableviewConfigPayload._(
       appScreen,
-      tvRowStyleRule.selectedRowStyle,
-      // tableAreaRules.groupingRules!,
-      tableAreaRules.sortingRules!,
-      tableAreaRules.filterRules!,
+      tableAreaCfg.rowStyleCfg.selectedRowStyle,
+      tableAreaCfg.sortingRules!,
+      filterBarAreaCfg.filterRules!,
     );
   }
 
