@@ -19,10 +19,11 @@ Map<String, dynamic> evCfgDataFromServer = {};
 
 Future<void> readExampleEventConfig({String filename = 'three.json'}) async {
   final String response = await rootBundle.loadString('assets/$filename');
-  evCfgDataFromServer = await json.decode(response);
+  evCfgDataFromServer = json.decode(response);
 }
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   // pretend were loading Event from server
   await readExampleEventConfig();
   runApp(const Scoretrader());
@@ -48,7 +49,7 @@ class Scoretrader extends StatelessWidget {
 class MarketViewScreen extends StatefulWidget {
   // real MarketViewScreen will get assets list & StUiBuilderFactory
   // via a Riverpod Provider
-  final StUiBuilderFactory stBldr = StUiBuilderFactory();
+
   final List<MockAssetWrapper> assets;
 
   MarketViewScreen(
@@ -62,6 +63,7 @@ class MarketViewScreen extends StatefulWidget {
 
 class _MarketViewScreenState extends State<MarketViewScreen> {
   //
+  final StUiBuilderFactory stBldr = StUiBuilderFactory();
   late GroupedTableDataMgr tvMgr;
 
   @override
@@ -69,7 +71,7 @@ class _MarketViewScreenState extends State<MarketViewScreen> {
     // get event cfg data from api calls
 
     // call setConfigForCurrentEvent each time user changes current event
-    widget.stBldr.setConfigForCurrentEvent(evCfgDataFromServer);
+    stBldr.setConfigForCurrentEvent(evCfgDataFromServer);
     // pretend asset data sent from server
     // and wrapped in Natalia's wrapper class
     // now use this data to construct the TableviewDataRowTuple
@@ -79,7 +81,7 @@ class _MarketViewScreenState extends State<MarketViewScreen> {
         .toList();
 
     // get TableView configurator
-    tvMgr = widget.stBldr.tableviewConfigForScreen(
+    tvMgr = stBldr.tableviewConfigForScreen(
       AppScreen.marketView,
       assetRows,
     );

@@ -15,7 +15,9 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
     it implements the interface
     and calls subclass methods to do the hard work
   */
-  final VisualRuleType ruleType;
+  VisualRuleType ruleType;
+
+  // @JsonKey(ignore: true)
   late final Map<VisRuleQuestType, String> userResponses;
 
   RuleResponseBase(this.ruleType);
@@ -62,9 +64,28 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
   }
 
   // JsonSerializable
-  factory RuleResponseBase.fromJson(Map<String, dynamic> json) =>
-      _$RuleResponseBaseFromJson(json);
-  Map<String, dynamic> toJson() => _$RuleResponseBaseToJson(this);
+  factory RuleResponseBase.fromJson(Map<String, dynamic> json) {
+    //
+    // return _$RuleResponseBaseFromJson(json);
+    VisualRuleType rt =
+        VisualRuleType.values.where((e) => e.name == json['ruleType']).first;
+    switch (rt) {
+      case VisualRuleType.filterCfg:
+        return TvFilterCfg.fromJson(json);
+      case VisualRuleType.showOrHide:
+        return ShowHideCfg.fromJson(json);
+      case VisualRuleType.sortCfg:
+        return TvSortCfg.fromJson(json);
+      case VisualRuleType.styleOrFormat:
+        return TvRowStyleCfg.fromJson(json);
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    // print('######  RuleResponseBaseToJson:  did run this');
+    // return _$RuleResponseBaseToJson(this);
+    throw UnimplementedError('should only run on subclass');
+  }
 }
 
 // table row style
@@ -99,23 +120,16 @@ class TvRowStyleCfg extends RuleResponseBase {
 }
 
 // base for all classes that track these 3 fields
+// @JsonSerializable()
 class TvSortGroupFilterBase extends RuleResponseBase {
   //
   late DbTableFieldName colName;
-  // late SortOrGroupIdxOrder order;
   late bool asc = false;
 
   TvSortGroupFilterBase(VisualRuleType rt) : super(rt);
   //
   @override
   TvSortGroupFilterBase get asRuleResponse => this;
-
-  // @override
-  // bool get gens2ndOr3rdSortGroupFilterQuests => false;
-  // [
-  //       SortOrGroupIdxOrder.first,
-  //       SortOrGroupIdxOrder.second
-  //     ].contains(this.order);
 
   @override
   void _castToRealTypes() {

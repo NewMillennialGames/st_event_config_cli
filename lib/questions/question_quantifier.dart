@@ -221,6 +221,16 @@ class QuestionQuantifier extends Equatable {
     switch (this.visRuleTypeForAreaOrSlot!) {
       case VisualRuleType.filterCfg:
         list.addAll([]);
+        break;
+      case VisualRuleType.sortCfg:
+        list.addAll([]);
+        break;
+      case VisualRuleType.showOrHide:
+        list.addAll([]);
+        break;
+      case VisualRuleType.styleOrFormat:
+        list.addAll([]);
+        break;
     }
 
     return list;

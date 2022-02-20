@@ -11,7 +11,7 @@ class SlotOrAreaRuleCfg {
     parent container (collection of these instances)
     is how you know scope (area or slot) for "this"
   */
-  final List<RuleResponseBase> visRuleList;
+  List<RuleResponseBase> visRuleList;
   //
   SlotOrAreaRuleCfg(
     this.visRuleList,
