@@ -153,3 +153,28 @@ class DriverVsFieldRow extends StBaseTvRow with ShowsOneAsset {
     return Container();
   }
 }
+
+class AssetVsAssetRankedRowTest extends StBaseTvRow with ShowsTwoAssets {
+  AssetVsAssetRankedRowTest(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+
+  @override
+  Widget rowBody(BuildContext context) {
+    var firstTeam = assets.item1;
+    return Container(
+        height: 40,
+        color: Colors.blue[100],
+        child: Row(
+          // crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(firstTeam.topName),
+            Text(firstTeam.subName),
+            Text(firstTeam.regionOrConference),
+            Text(firstTeam.gameDateStr),
+          ],
+        ));
+  }
+}

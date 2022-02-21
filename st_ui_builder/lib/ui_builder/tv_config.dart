@@ -52,7 +52,11 @@ class TableviewConfigPayload {
       case TvAreaRowStyle.assetVsAsset:
         return AssetVsAssetRow.new;
       case TvAreaRowStyle.assetVsAssetRanked:
-        return AssetVsAssetRankedRow.new;
+        print(
+          'rowConstructor runnning test code with AssetVsAssetRankedRowTest',
+        );
+        return AssetVsAssetRankedRowTest.new;
+      // return AssetVsAssetRankedRow.new;
       case TvAreaRowStyle.teamVsField:
         return TeamVsFieldRow.new;
       case TvAreaRowStyle.teamVsFieldRanked:

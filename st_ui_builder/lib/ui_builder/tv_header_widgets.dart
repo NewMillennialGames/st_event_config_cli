@@ -17,7 +17,10 @@ class TvGroupHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // standard group header widget
+    print('building a TvGroupHeader first: ${headerData.first}');
     return Container(
+      height: 60,
+      color: Colors.amber[100],
       child: _rowStyleToHeaderStyle(),
     );
   }
@@ -26,9 +29,13 @@ class TvGroupHeader extends StatelessWidget {
     // TODO:  finish this below
     // temp placeholder UI
     return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
+        Text('Header Section:'),
         Text(headerData.first),
+        Spacer(),
         Text(headerData.second),
+        Spacer(),
         Text(headerData.third),
       ],
     );

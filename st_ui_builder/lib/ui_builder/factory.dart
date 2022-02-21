@@ -31,10 +31,8 @@ class StUiBuilderFactory {
     this._eConfig = EventCfgTree.fromJson(eCfgJsonMap);
   }
 
-  GroupedTableDataMgr tableviewConfigForScreen(
-    AppScreen screen,
-    List<TableviewDataRowTuple> rows,
-  ) {
+  GroupedTableDataMgr tableviewConfigForScreen(AppScreen screen,
+      List<TableviewDataRowTuple> rows, RedrawTvCallback redrawTvCallback) {
     /* build object that wraps all data and display rules
     */
     CfgForAreaAndNestedSlots tableAreaAndSlotCfg =
@@ -44,9 +42,10 @@ class StUiBuilderFactory {
         _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.filterBar);
 
     return GroupedTableDataMgr(
-      rows,
-      TableviewConfigPayload(screen, tableAreaAndSlotCfg, filterBarAndSlotCfg),
-    );
+        rows,
+        TableviewConfigPayload(
+            screen, tableAreaAndSlotCfg, filterBarAndSlotCfg),
+        redrawCallback: redrawTvCallback);
   }
 
   FilterRules filterBarConfigForScreen(AppScreen screen) {

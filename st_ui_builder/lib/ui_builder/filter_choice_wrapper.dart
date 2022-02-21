@@ -3,12 +3,10 @@ part of StUiController;
 class FilterChoiceData {
   //
   final DbTableFieldName sortKey;
-  // final SortOrGroupIdxOrder cfgOrderIdx;
   final List<String> sortedMenuOptions;
 
   FilterChoiceData._(
     this.sortKey,
-    // this.cfgOrderIdx,
     this.sortedMenuOptions,
   );
 

@@ -5,6 +5,7 @@ import 'package:st_ev_cfg/st_ev_cfg.dart';
 /*
   creating fake data for testing
 
+great!!  please send me your digits
 
 */
 
@@ -96,19 +97,19 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
 }
 
 List<MockAsset> _fakeData = [
+  MockAsset('Frank', 'Reg3', 'Dukes'),
+  MockAsset('Gil', 'Reg2', 'Dukes'),
   MockAsset('Abe', 'Reg1', 'Cowboys'),
-  MockAsset('Bob', 'Reg1', 'Cowboys'),
-  MockAsset('Charlie', 'Reg1', 'Cowboys'),
   MockAsset('David', 'Reg1', 'N. England'),
   MockAsset('Ed', 'Reg2', 'Redskins'),
   MockAsset('Frank', 'Reg2', 'Redskins'),
   MockAsset('Gil', 'Reg2', 'Redskins'),
+  MockAsset('Bob', 'Reg1', 'Cowboys'),
   MockAsset('Hank', 'Reg2', 'Saints'),
+  MockAsset('Charlie', 'Reg1', 'Cowboys'),
   MockAsset('Ive', 'Reg2', 'Saints'),
-  MockAsset('Jake', 'Reg2', 'Saints'),
-  MockAsset('Frank', 'Reg3', 'Dukes'),
-  MockAsset('Gil', 'Reg3', 'Dukes'),
   MockAsset('Hank', 'Reg3', 'Jeeps'),
+  MockAsset('Jake', 'Reg2', 'Saints'),
   MockAsset('Ive', 'Reg3', 'Jeeps'),
   MockAsset('Jake', 'Reg3', 'Ford'),
 ];

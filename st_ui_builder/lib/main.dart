@@ -66,6 +66,11 @@ class _MarketViewScreenState extends State<MarketViewScreen> {
   final StUiBuilderFactory stBldr = StUiBuilderFactory();
   late GroupedTableDataMgr tvMgr;
 
+  void _redrawCallback() {
+    //
+    setState(() {});
+  }
+
   @override
   void initState() {
     // get event cfg data from api calls
@@ -84,6 +89,7 @@ class _MarketViewScreenState extends State<MarketViewScreen> {
     tvMgr = stBldr.tableviewConfigForScreen(
       AppScreen.marketView,
       assetRows,
+      _redrawCallback,
     );
     super.initState();
   }
@@ -91,17 +97,43 @@ class _MarketViewScreenState extends State<MarketViewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Market View')),
-      body: Container(
-        padding: const EdgeInsets.only(top: 30),
-        child: GroupedListView<TableviewDataRowTuple, GroupHeaderData>(
-          elements: tvMgr.listData,
-          groupBy: tvMgr.groupBy,
-          groupHeaderBuilder: tvMgr.groupHeaderBuilder,
-          indexedItemBuilder: tvMgr.indexedItemBuilder,
-          sort: true,
+      appBar: AppBar(
+        title: const Text(
+          'Market View',
         ),
+      ),
+      body: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Container(
+            height: 40,
+            child: tvMgr.filterBarRow(),
+          ),
+          Container(
+            height: 30,
+          ),
+          Container(
+            height: 740,
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+            child: GroupedListView<TableviewDataRowTuple, GroupHeaderData>(
+              elements: tvMgr.listData,
+              groupBy: tvMgr.groupBy,
+              groupHeaderBuilder: tvMgr.groupHeaderBuilder,
+              indexedItemBuilder: tvMgr.indexedItemBuilder,
+              sort: true,
+              useStickyGroupSeparators: true,
+              // next line should not be needed??
+              // groupComparator: tvMgr.groupComparator,
+            ),
+          ),
+        ],
       ),
     );
   }
 }
+
+
+        // child: Column(
+        //   mainAxisAlignment: MainAxisAlignment.start,
+        //   mainAxisSize: MainAxisSize.min,
+        //   children: []

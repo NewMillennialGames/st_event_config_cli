@@ -1,5 +1,6 @@
 library StUiController;
 
+import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 import 'package:tuple/tuple.dart';
 //

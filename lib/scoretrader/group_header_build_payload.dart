@@ -9,7 +9,9 @@ part of StUiController;
   third value is extra
 */
 
-class GroupHeaderData implements Comparable<GroupHeaderData> {
+class GroupHeaderData
+    with EquatableMixin
+    implements Comparable<GroupHeaderData> {
   final String first;
   final String second;
   final String third;
@@ -19,9 +21,10 @@ class GroupHeaderData implements Comparable<GroupHeaderData> {
     this.first,
     this.second,
     this.third,
-  ) : this._sortKey = '$first-$second-$third';
+  ) : this._sortKey =
+            '${first.toLowerCase()}-${second.toLowerCase()}-${third.toLowerCase()}';
 
-  static GetGroupKeyFromRow keyConstructorFromCfg(
+  static GetGroupKeyFromRow groupKeyDataConstructorFromCfg(
     SortingRules sortAndGroupRules,
   ) {
     // returns a func that creates a GroupHeaderData
@@ -44,8 +47,8 @@ class GroupHeaderData implements Comparable<GroupHeaderData> {
     return (TableviewDataRowTuple row) {
       return GroupHeaderData(
         firstValFn(row.item1),
-        secondValFn(row.item1),
-        thirdValFn(row.item1),
+        col2Rule == null ? '' : secondValFn(row.item1),
+        col3Rule == null ? '' : thirdValFn(row.item1),
       );
     };
   }
@@ -70,28 +73,34 @@ class GroupHeaderData implements Comparable<GroupHeaderData> {
 
     return (TableviewDataRowTuple rec1, TableviewDataRowTuple rec2) {
       //
-      var r1v1 = firstValFn(rec1.item1);
+      var row1SortVal1 = firstValFn(rec1.item1);
       var r2v1 = firstValFn(rec2.item1);
+      int comp1 = row1SortVal1.compareTo(r2v1);
+      if (comp1 != 0 || col2Rule == null) return comp1;
 
       var r1v2 = secondValFn(rec1.item1);
       var r2v2 = secondValFn(rec2.item1);
+      int comp2 = r1v2.compareTo(r2v2);
+      if (comp2 != 0 || col3Rule == null) return comp2;
 
       var r1v3 = thirdValFn(rec1.item1);
       var r2v3 = thirdValFn(rec2.item1);
-
-      if (r1v1 != r2v1) return r1v1.compareTo(r2v1);
-      if (r1v2 != r2v2) return r1v2.compareTo(r2v2);
-      if (r1v3 != r2v3) return r1v3.compareTo(r2v3);
-      // all values the same
-      return 0;
+      return r1v3.compareTo(r2v3);
     };
   }
 
   @override
   int compareTo(GroupHeaderData other) {
     // add natural sort order to this class
+    var ct = _sortKey.compareTo(other._sortKey);
+    print(
+      '### calling GroupHeaderData compareTo ...$ct from $_sortKey vs ${other._sortKey}',
+    );
     return _sortKey.compareTo(other._sortKey);
   }
+
+  @override
+  List<Object?> get props => [_sortKey];
 
   // static GroupHeaderData get mockRow =>
   //     GroupHeaderData('first', 'second', 'third');

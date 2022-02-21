@@ -6,6 +6,8 @@ typedef TvRowBuilder = Widget Function(TableviewDataRowTuple);
 typedef GroupHeaderBuilder = Widget Function(TableviewDataRowTuple);
 typedef GroupSepRowBuilder = Widget Function(GroupHeaderData);
 
+typedef RedrawTvCallback = void Function();
+
 typedef IndexedItemRowBuilder = Widget Function(
   BuildContext,
   TableviewDataRowTuple,
@@ -13,5 +15,7 @@ typedef IndexedItemRowBuilder = Widget Function(
 );
 
 // NIU
-// typedef GroupComparatorCallback = int Function(
-//     GroupHeaderData, GroupHeaderData);
+typedef GroupComparatorCallback = int Function(
+  GroupHeaderData,
+  GroupHeaderData,
+);

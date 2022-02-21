@@ -22,6 +22,7 @@ class GroupedTableDataMgr {
 
   final List<TableviewDataRowTuple> _allAssetRows;
   final TableviewConfigPayload _tableViewCfg;
+  RedrawTvCallback? redrawCallback;
   GroupedListOrder order = GroupedListOrder.ASC;
   // rows actually rendered from _filteredAssetRows
   List<TableviewDataRowTuple> _filteredAssetRows = [];
@@ -31,6 +32,7 @@ class GroupedTableDataMgr {
   GroupedTableDataMgr(
     this._allAssetRows,
     this._tableViewCfg, {
+    this.redrawCallback,
     bool ascending = true,
   })  : order = ascending ? GroupedListOrder.ASC : GroupedListOrder.DESC,
         _filteredAssetRows = _allAssetRows.toList();
@@ -41,7 +43,8 @@ class GroupedTableDataMgr {
   FilterRules get filterRules => _tableViewCfg.filterRules;
 
   GetGroupKeyFromRow get groupBy {
-    return GroupHeaderData.keyConstructorFromCfg(_tableViewCfg.sortRules);
+    return GroupHeaderData.groupKeyDataConstructorFromCfg(
+        _tableViewCfg.sortRules);
   }
 
   // groupHeaderBuilder is function to return header widget
@@ -55,8 +58,8 @@ class GroupedTableDataMgr {
   }
 
   // natural sorting will use my Comparator; dont need this
-  // GroupComparatorCallback get groupComparator =>
-  //     (hd1, hd2) => hd1.compareTo(hd2);
+  GroupComparatorCallback? get groupComparator => null;
+  // (GroupHeaderData hdVal1, GroupHeaderData hdVal2) => hdVal1.compareTo(hdVal2);
 
   // indexedItemBuilder is function to return a Tv-Row for this screen
   IndexedItemRowBuilder get indexedItemBuilder => (
@@ -67,7 +70,7 @@ class GroupedTableDataMgr {
         return _tableViewCfg.rowConstructor(assets);
       };
 
-  // for sorting recs into sections and date order
+  // for sorting recs into order WITHIN groups/sections
   SectionSortComparator get itemComparator =>
       GroupHeaderData.sortComparator(sortingRules);
 
@@ -94,34 +97,44 @@ class GroupedTableDataMgr {
 
   DropdownButton<String> _dropMenuList(TvFilterCfg fCfg) {
     // return DropdownButton menu for filter bar slot
-    List<String> listItems = _getListItemsByCfgField(fCfg);
+    Set<String> listItems = _getListItemsByCfgField(fCfg);
+    print('Filter items for ${fCfg.colName.labelName}');
+    print(listItems);
     String headerName = fCfg.colName.labelName;
     return DropdownButton<String>(
+      value: listItems.first,
       items: listItems
-          .map((e) => DropdownMenuItem<String>(child: Text(e)))
+          .map((String val) => DropdownMenuItem<String>(
+                child: Text(val),
+                value: val,
+              ))
           .toList(),
       onChanged: (String? selectedVal) {
-        if (selectedVal == null || selectedVal == headerName) {
+        if (selectedVal == null || selectedVal == CLEAR_FILTER_LABEL) {
           clearFilters();
           return;
         }
         _doFilteringFor(fCfg.colName, selectedVal);
       },
-      value: headerName,
-      style: const TextStyle(color: Colors.grey, fontSize: 22),
+      style: const TextStyle(
+        color: Colors.grey,
+        fontSize: 22,
+      ),
     );
   }
 
-  List<String> _getListItemsByCfgField(TvFilterCfg fCfg) {
+  Set<String> _getListItemsByCfgField(TvFilterCfg fCfg) {
     // build list of unique values from selected field
     // elim dups and sort
-    return _allAssetRows
+    var l = _allAssetRows
         .map(
           (e) => e.item1.valueExtractor(fCfg.colName),
         )
         .toSet()
         .toList()
       ..sort((v1, v2) => v1.compareTo(v2));
+    l.insert(0, CLEAR_FILTER_LABEL);
+    return l.toSet();
   }
 
   void _doFilteringFor(DbTableFieldName colName, String selectedVal) {
@@ -131,12 +144,14 @@ class GroupedTableDataMgr {
             dr.item1.valueExtractor(colName) == selectedVal)
         .toList();
 
-    print('you must reload your list after calling this');
+    // print('you must reload your list after calling this');
+    if (redrawCallback != null) redrawCallback!();
   }
 
   void clearFilters() {
     this._filteredAssetRows = _allAssetRows;
-    print('you must reload your list after calling this');
+    // print('you must reload your list after calling this');
+    if (redrawCallback != null) redrawCallback!();
   }
 }
 
