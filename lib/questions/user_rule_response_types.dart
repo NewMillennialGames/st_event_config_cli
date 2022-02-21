@@ -18,7 +18,7 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
   VisualRuleType ruleType;
 
   // @JsonKey(ignore: true)
-  late final Map<VisRuleQuestType, String> userResponses;
+  late Map<VisRuleQuestType, String> userResponses;
 
   RuleResponseBase(this.ruleType);
 
@@ -127,6 +127,8 @@ class TvSortGroupFilterBase extends RuleResponseBase {
   late bool asc = false;
 
   TvSortGroupFilterBase(VisualRuleType rt) : super(rt);
+  // TvSortGroupFilterBase([VisualRuleType rt = VisualRuleType.filterCfg])
+  //   : super(rt);
   //
   @override
   TvSortGroupFilterBase get asRuleResponse => this;
@@ -163,6 +165,15 @@ class TvSortGroupFilterBase extends RuleResponseBase {
   }
 
   String get _answerSummary => '${colName.name}-$asc';
+
+  // // JsonSerializable
+  // factory TvSortGroupFilterBase.fromJson(Map<String, dynamic> json) {
+  //   return _$TvSortGroupFilterBaseFromJson(json);
+  // }
+
+  // Map<String, dynamic> toJson() {
+  //   return _$TvSortGroupFilterBaseToJson(this);
+  // }
 }
 
 @JsonSerializable()

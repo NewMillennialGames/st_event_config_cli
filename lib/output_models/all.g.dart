@@ -74,10 +74,11 @@ const _$EvEliminationStrategyEnumMap = {
 
 EventCfgTree _$EventCfgTreeFromJson(Map<String, dynamic> json) => EventCfgTree(
       TopEventCfg.fromJson(json['eventCfg'] as Map<String, dynamic>),
-    )..screenConfigMap = (json['screenConfigMap'] as Map<String, dynamic>).map(
+      (json['screenConfigMap'] as Map<String, dynamic>).map(
         (k, e) => MapEntry($enumDecode(_$AppScreenEnumMap, k),
             ScreenCfgByArea.fromJson(e as Map<String, dynamic>)),
-      );
+      ),
+    );
 
 Map<String, dynamic> _$EventCfgTreeToJson(EventCfgTree instance) =>
     <String, dynamic>{

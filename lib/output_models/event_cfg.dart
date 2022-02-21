@@ -42,12 +42,13 @@ class TopEventCfg {
 @JsonSerializable()
 class EventCfgTree {
   //
-  final TopEventCfg eventCfg;
-  // area and slot level data filled below in fillFromRuleAnswers
-  Map<AppScreen, ScreenCfgByArea> screenConfigMap = {};
+  TopEventCfg eventCfg;
+  // area and slot level data filled below in fillFromVisualRuleAnswers
+  Map<AppScreen, ScreenCfgByArea> screenConfigMap;
 
   EventCfgTree(
     this.eventCfg,
+    this.screenConfigMap,
   );
 
   factory EventCfgTree.fromEventLevelConfig(Iterable<Question> responses) {
@@ -119,7 +120,7 @@ class EventCfgTree {
       // applySameRowStyleToAllScreens,
     );
 
-    return EventCfgTree(eventCfg);
+    return EventCfgTree(eventCfg, {});
   }
 
   void fillFromVisualRuleAnswers(
@@ -146,6 +147,9 @@ class EventCfgTree {
     // write data out to file
     var fn = filename ?? eventCfg.evTemplateName;
     var outFile = File('st_ui_builder/assets/$fn.json');
+
+    // set default vals before passing to encoder
+    this._fillMissingWithDefaults();
     var jsonData = json.encode(this);
     outFile.writeAsStringSync(jsonData, mode: FileMode.write, flush: true);
     print('Config written (in JSON fmt) to ${outFile.path}');
@@ -169,7 +173,7 @@ class EventCfgTree {
       _$EventCfgTreeFromJson(json);
 
   Map<String, dynamic> toJson() {
-    _fillMissingWithDefaults();
+    // dont set defaults here
     return _$EventCfgTreeToJson(this);
   }
 }

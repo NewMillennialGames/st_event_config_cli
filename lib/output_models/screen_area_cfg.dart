@@ -15,10 +15,10 @@ class CfgForAreaAndNestedSlots {
   */
   ScreenWidgetArea screenArea;
   // area level config rules
-  Map<VisualRuleType, SlotOrAreaRuleCfg> visCfgForArea = {};
+  Map<VisualRuleType, SlotOrAreaRuleCfg> visCfgForArea;
   // slot level config (rules embedded)
   Map<VisualRuleType, Map<ScreenAreaWidgetSlot, SlotOrAreaRuleCfg>>
-      visCfgForSlotsByRuleType = {};
+      visCfgForSlotsByRuleType;
 
   CfgForAreaAndNestedSlots(
     this.screenArea,
@@ -54,7 +54,7 @@ class CfgForAreaAndNestedSlots {
     } else {
       // this is a slot level rule
       Map<ScreenAreaWidgetSlot, SlotOrAreaRuleCfg> slotCfgMap =
-          _getMapForRuleAndSlot(vrt, optSlotInArea);
+          _setAndGetMapForRuleAndSlot(vrt, optSlotInArea);
       slotCfgMap[optSlotInArea]!.appendQuestion(rQuest);
       visCfgForSlotsByRuleType[vrt] = slotCfgMap;
     }
@@ -178,11 +178,24 @@ class CfgForAreaAndNestedSlots {
     }
   }
 
-  Map<ScreenAreaWidgetSlot, SlotOrAreaRuleCfg> _getMapForRuleAndSlot(
+  Map<ScreenAreaWidgetSlot, SlotOrAreaRuleCfg> _setAndGetMapForRuleAndSlot(
     VisualRuleType vrt,
     ScreenAreaWidgetSlot slot,
-  ) =>
-      visCfgForSlotsByRuleType[vrt] ?? {slot: SlotOrAreaRuleCfg([])};
+  ) {
+    //
+    Map<ScreenAreaWidgetSlot, SlotOrAreaRuleCfg>? slotMap =
+        visCfgForSlotsByRuleType[vrt];
+    if (slotMap != null) {
+      if (slotMap.containsKey(slot)) return slotMap;
+      slotMap[slot] = SlotOrAreaRuleCfg([]);
+      return slotMap;
+    }
+
+    visCfgForSlotsByRuleType[vrt] = <ScreenAreaWidgetSlot, SlotOrAreaRuleCfg>{
+      slot: SlotOrAreaRuleCfg([])
+    };
+    return visCfgForSlotsByRuleType[vrt]!;
+  }
 
   void fillMissingWithDefaults(AppScreen appScreen) {
     //
@@ -197,13 +210,13 @@ class CfgForAreaAndNestedSlots {
     // create missing default rules for SLOTS INSIDE this screen area
     for (ScreenAreaWidgetSlot slot
         in screenArea.applicableWigetSlots(appScreen)) {
-      if (visCfgForSlotsByRuleType.containsKey(slot)) continue;
+      // if (visCfgForSlotsByRuleType.containsKey(slot)) continue;
       //
       for (VisualRuleType vrt in slot.possibleConfigRules(screenArea)) {
         Map<ScreenAreaWidgetSlot, SlotOrAreaRuleCfg> slotCfg =
-            _getMapForRuleAndSlot(vrt, slot);
-        visCfgForSlotsByRuleType[vrt] = slotCfg;
-        slotCfg[vrt]!.fillMissingWithDefaults(appScreen, screenArea, slot);
+            _setAndGetMapForRuleAndSlot(vrt, slot);
+
+        slotCfg[slot]!.fillMissingWithDefaults(appScreen, screenArea, slot);
       }
     }
   }
