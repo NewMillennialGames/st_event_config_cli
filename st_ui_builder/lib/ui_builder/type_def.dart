@@ -7,6 +7,7 @@ typedef GroupHeaderBuilder = Widget Function(TableviewDataRowTuple);
 typedef GroupSepRowBuilder = Widget Function(GroupHeaderData);
 
 typedef RedrawTvCallback = void Function();
+typedef SelectedFilterSetter = void Function(String?);
 
 typedef IndexedItemRowBuilder = Widget Function(
   BuildContext,

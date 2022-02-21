@@ -15,9 +15,13 @@ It only renders UI of it's own for testing
 the UI factory   (Filter Bar and TableView)
 */
 
+// demo example config data
+const String cfgEmpl1 = 'blueRow.json';
+const String cfgEmpl2 = 'greenRow.json';
+
 Map<String, dynamic> evCfgDataFromServer = {};
 
-Future<void> readExampleEventConfig({String filename = 'three.json'}) async {
+Future<void> readExampleEventConfig({String filename = cfgEmpl1}) async {
   final String response = await rootBundle.loadString('assets/$filename');
   evCfgDataFromServer = json.decode(response);
 }
@@ -99,16 +103,18 @@ class _MarketViewScreenState extends State<MarketViewScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Market View',
+          'Market View w grouped-list & opt filter-bar',
         ),
       ),
       body: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          Container(
-            height: 40,
-            child: tvMgr.filterBarRow(),
-          ),
+          if (tvMgr.hasFilterBar)
+            Container(
+              height: 40,
+              color: Colors.grey,
+              child: tvMgr.filterBarRow(),
+            ),
           Container(
             height: 30,
           ),

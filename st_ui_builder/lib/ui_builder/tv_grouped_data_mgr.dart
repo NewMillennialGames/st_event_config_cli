@@ -81,44 +81,91 @@ class GroupedTableDataMgr {
         : true;
   }
 
-  Widget filterBarRow() {
+  String? _filter1Selection;
+  String? _filter2Selection;
+  String? _filter3Selection;
+
+  Widget filterBarRow({double totAvailWidth = 380}) {
     // dont call this without first checking this.hasFilterBar
     TvFilterCfg i1 = filterRules.item1;
     TvFilterCfg? i2 = filterRules.item2;
     TvFilterCfg? i3 = filterRules.item3;
+    int dlCount = 1 + (i2 == null ? 0 : 1) + (i3 == null ? 0 : 1);
+    // allocated button width
+    double allocBtnWidth = totAvailWidth / dlCount;
+
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      // mainAxisSize: MainAxisSize.min,
       children: [
-        _dropMenuList(i1),
-        if (i2 != null && i2.colName != i1.colName) _dropMenuList(i2),
-        if (i3 != null && i3.colName != i2!.colName) _dropMenuList(i3),
+        _dropMenuList(
+          i1,
+          _filter1Selection,
+          (s) {
+            _filter1Selection = s;
+          },
+          allocBtnWidth,
+        ),
+        if (i2 != null && i2.colName != i1.colName)
+          _dropMenuList(
+            i2,
+            _filter2Selection,
+            (s) {
+              _filter2Selection = s;
+            },
+            allocBtnWidth,
+          ),
+        if (i3 != null && i3.colName != i2!.colName)
+          _dropMenuList(
+            i3,
+            _filter3Selection,
+            (s) {
+              _filter3Selection = s;
+            },
+            allocBtnWidth,
+          ),
       ],
     );
   }
 
-  DropdownButton<String> _dropMenuList(TvFilterCfg fCfg) {
+  Widget _dropMenuList(
+    TvFilterCfg fCfg,
+    String? curSelection,
+    SelectedFilterSetter valSetter,
+    double width,
+  ) {
     // return DropdownButton menu for filter bar slot
     Set<String> listItems = _getListItemsByCfgField(fCfg);
-    print('Filter items for ${fCfg.colName.labelName}');
-    print(listItems);
-    String headerName = fCfg.colName.labelName;
-    return DropdownButton<String>(
-      value: listItems.first,
-      items: listItems
-          .map((String val) => DropdownMenuItem<String>(
-                child: Text(val),
-                value: val,
-              ))
-          .toList(),
-      onChanged: (String? selectedVal) {
-        if (selectedVal == null || selectedVal == CLEAR_FILTER_LABEL) {
-          clearFilters();
-          return;
-        }
-        _doFilteringFor(fCfg.colName, selectedVal);
-      },
-      style: const TextStyle(
-        color: Colors.grey,
-        fontSize: 22,
+    // print('Filter items for ${fCfg.colName.labelName}');
+    // print(listItems);
+    return Container(
+      height: 46,
+      // width: width,
+      child: DropdownButton<String>(
+        value: curSelection ?? listItems.first,
+        items: listItems
+            .map((String val) => DropdownMenuItem<String>(
+                  child: Text(val),
+                  value: val,
+                ))
+            .toList(),
+        onChanged: (String? selectedVal) {
+          // store selected value for state mgmt
+          valSetter(selectedVal);
+          if (selectedVal == null ||
+              selectedVal.startsWith(CLEAR_FILTER_LABEL)) {
+            clearFilters();
+            return;
+          }
+          _doFilteringFor(fCfg.colName, selectedVal);
+        },
+        // focusColor: Colors.green,
+        dropdownColor: Colors.black38,
+        iconEnabledColor: Colors.lightBlueAccent,
+        style: const TextStyle(
+          color: Colors.lightBlueAccent,
+          fontSize: 20,
+        ),
       ),
     );
   }
@@ -133,7 +180,7 @@ class GroupedTableDataMgr {
         .toSet()
         .toList()
       ..sort((v1, v2) => v1.compareTo(v2));
-    l.insert(0, CLEAR_FILTER_LABEL);
+    l.insert(0, CLEAR_FILTER_LABEL + ' ' + fCfg.colName.labelName);
     return l.toSet();
   }
 

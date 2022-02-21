@@ -1,22 +1,24 @@
 part of StUiController;
 
-class FilterChoiceData {
-  //
-  final DbTableFieldName sortKey;
-  final List<String> sortedMenuOptions;
+// currently NIU
 
-  FilterChoiceData._(
-    this.sortKey,
-    this.sortedMenuOptions,
-  );
+// class FilterChoiceData {
+//   //
+//   final DbTableFieldName sortKey;
+//   final List<String> sortedMenuOptions;
 
-  String get dropMenuTitle => '';
+//   FilterChoiceData._(
+//     this.sortKey,
+//     this.sortedMenuOptions,
+//   );
 
-  factory FilterChoiceData.fromCfg() {
-    DbTableFieldName sortKey = DbTableFieldName.conference;
-    // SortOrGroupIdxOrder cfgOrderIdx = SortOrGroupIdxOrder.first;
-    List<String> sortedMenuOptions = [];
+//   String get dropMenuTitle => '';
 
-    return FilterChoiceData._(sortKey, sortedMenuOptions);
-  }
-}
+//   factory FilterChoiceData.fromCfg() {
+//     DbTableFieldName sortKey = DbTableFieldName.conference;
+//     // SortOrGroupIdxOrder cfgOrderIdx = SortOrGroupIdxOrder.first;
+//     List<String> sortedMenuOptions = [];
+
+//     return FilterChoiceData._(sortKey, sortedMenuOptions);
+//   }
+// }

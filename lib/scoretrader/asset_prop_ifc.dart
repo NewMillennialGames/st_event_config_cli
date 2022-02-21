@@ -51,10 +51,10 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
       what she sets in the Asset wrapper
     */
     switch (fldName) {
-      case DbTableFieldName.teamName:
+      case DbTableFieldName.assetName:
         return topName;
-      case DbTableFieldName.playerName:
-        return topName;
+      case DbTableFieldName.assetOrgName:
+        return subName;
       case DbTableFieldName.conference:
         return regionOrConference;
       case DbTableFieldName.region:
@@ -72,7 +72,7 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
       case DbTableFieldName.assetOpenPrice:
         return priceStr;
       case DbTableFieldName.assetCurrentPrice:
-        return priceStr;
+        return priceDeltaStr;
       case DbTableFieldName.assetRank:
         return rankStr;
       case DbTableFieldName.assetPosition:

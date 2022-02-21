@@ -3,7 +3,7 @@ part of StUiController;
 abstract class StBaseTvRowIfc extends StatelessWidget {
   //
   final TableviewDataRowTuple assets;
-  StBaseTvRowIfc(
+  const StBaseTvRowIfc(
     this.assets, {
     Key? key,
   }) : super(key: key);
@@ -14,7 +14,7 @@ abstract class StBaseTvRowIfc extends StatelessWidget {
 class StBaseTvRow extends StBaseTvRowIfc {
   // base class for EVERY tableview row
   // on 4 main screens of scoretrader
-  StBaseTvRow(
+  const StBaseTvRow(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(
@@ -25,7 +25,7 @@ class StBaseTvRow extends StBaseTvRowIfc {
   @override
   Widget build(BuildContext context) {
     // you can wrap row body here if needed
-    // should also use ScopedProvider to toggle
+    // should also use ScopedProvider here to toggle
     // Trade button on and off
     return rowBody(context);
   }

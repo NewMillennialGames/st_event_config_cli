@@ -154,8 +154,9 @@ class DriverVsFieldRow extends StBaseTvRow with ShowsOneAsset {
   }
 }
 
-class AssetVsAssetRankedRowTest extends StBaseTvRow with ShowsTwoAssets {
-  AssetVsAssetRankedRowTest(
+// test classes only below
+class TeamVsFieldRowTest extends StBaseTvRow with ShowsTwoAssets {
+  TeamVsFieldRowTest(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
@@ -174,6 +175,45 @@ class AssetVsAssetRankedRowTest extends StBaseTvRow with ShowsTwoAssets {
             Text(firstTeam.subName),
             Text(firstTeam.regionOrConference),
             Text(firstTeam.gameDateStr),
+          ],
+        ));
+  }
+}
+
+class TeamVsFieldRankedRowTest extends StBaseTvRow with ShowsTwoAssets {
+  TeamVsFieldRankedRowTest(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+
+  @override
+  Widget rowBody(BuildContext context) {
+    var firstTeam = assets.item1;
+    return Container(
+        height: 40,
+        color: Colors.green[100],
+        child: Row(
+          // crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              height: 26,
+              width: 26,
+              color: Colors.amber,
+              child: Text(
+                firstTeam.rankStr,
+                style: const TextStyle(
+                  fontSize: 30,
+                ),
+              ),
+            ),
+            Column(
+              children: [
+                Text(firstTeam.topName),
+                Text(firstTeam.subName),
+              ],
+            ),
+            Text(firstTeam.regionOrConference),
           ],
         ));
   }

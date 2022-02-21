@@ -2,8 +2,8 @@ part of AppEntities;
 
 @JsonEnum()
 enum DbTableFieldName {
-  teamName,
-  playerName,
+  assetName,
+  assetOrgName,
   conference,
   region,
   eventName,
@@ -21,10 +21,10 @@ extension DbTableFieldNameExt1 on DbTableFieldName {
   //
   String get labelName {
     switch (this) {
-      case DbTableFieldName.teamName:
-        return 'Team';
-      case DbTableFieldName.playerName:
-        return 'Player';
+      case DbTableFieldName.assetName:
+        return 'Team/Player';
+      case DbTableFieldName.assetOrgName:
+        return 'Org';
       case DbTableFieldName.conference:
         return 'Conference';
       case DbTableFieldName.region:
