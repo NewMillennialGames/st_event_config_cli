@@ -113,3 +113,22 @@ List<MockAsset> _fakeData = [
   MockAsset('Ive', 'Reg3', 'Jeeps'),
   MockAsset('Jake', 'Reg3', 'Ford'),
 ];
+
+// class AssetWrapper implements AssetRowPropertyIfc {
+//   final Asset asset;
+
+//   AssetWrapper._({
+//     required this.asset,
+//   });
+
+//   factory AssetWrapper.fromTeam(Asset asset) {
+//     return AssetWrapper._(asset: asset);
+//   }
+
+//   factory AssetWrapper.fromPlayer(Asset asset) {
+//     return AssetWrapper._(asset: asset);
+//   }
+
+//   @override
+//   DateTime get gameDate => asset.gameDt;
+// }

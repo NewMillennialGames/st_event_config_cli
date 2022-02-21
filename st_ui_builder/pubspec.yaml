@@ -1,5 +1,5 @@
 name: st_ui_builder
-description: A new Flutter project.
+description: Example & test usage of st_ev_cfg (CLI) project.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -30,7 +30,10 @@ dependencies:
   flutter:
     sdk: flutter
   st_ev_cfg:
-     path: ../../st_event_config/
+    git:
+      url: git@github.com:NewMillennialGames/st_event_config_cli.git
+      ref: prod
+    #  path: ../../st_event_config/
   grouped_list: ^4.2.0
   tuple: ^2.0.0
   intl:
