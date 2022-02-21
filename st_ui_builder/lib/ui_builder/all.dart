@@ -19,4 +19,3 @@ part 'tv_config.dart';
 part 'row_style_bases.dart';
 part 'row_style_mixins.dart';
 part 'type_def.dart';
-part 'filter_choice_wrapper.dart';
