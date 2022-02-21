@@ -42,10 +42,11 @@ class StUiBuilderFactory {
         _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.filterBar);
 
     return GroupedTableDataMgr(
-        rows,
-        TableviewConfigPayload(
-            screen, tableAreaAndSlotCfg, filterBarAndSlotCfg),
-        redrawCallback: redrawTvCallback);
+      screen,
+      rows,
+      TableviewConfigPayload(screen, tableAreaAndSlotCfg, filterBarAndSlotCfg),
+      redrawCallback: redrawTvCallback,
+    );
   }
 
   FilterRules filterBarConfigForScreen(AppScreen screen) {

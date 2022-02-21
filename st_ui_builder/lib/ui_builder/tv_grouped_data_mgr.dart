@@ -20,6 +20,7 @@ class GroupedTableDataMgr {
   TODO:  all the getters below must be completed to return real methods
   */
 
+  final AppScreen appScreen;
   final List<TableviewDataRowTuple> _allAssetRows;
   final TableviewConfigPayload _tableViewCfg;
   RedrawTvCallback? redrawCallback;
@@ -30,6 +31,7 @@ class GroupedTableDataMgr {
   bool disableGroupingBeyondDate = false;
 
   GroupedTableDataMgr(
+    this.appScreen,
     this._allAssetRows,
     this._tableViewCfg, {
     this.redrawCallback,
@@ -54,7 +56,7 @@ class GroupedTableDataMgr {
     final TvAreaRowStyle rowStyle = _tableViewCfg.rowStyle;
     final GetGroupKeyFromRow gbFunc = groupBy;
     return (TableviewDataRowTuple rowData) =>
-        TvGroupHeader(rowStyle, gbFunc(rowData));
+        TvGroupHeader(rowStyle, appScreen, gbFunc(rowData));
   }
 
   // natural sorting will use my Comparator; dont need this

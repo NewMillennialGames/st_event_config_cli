@@ -7,9 +7,11 @@ part of StUiController;
 class TvGroupHeader extends StatelessWidget {
   // standard group header widget
   final TvAreaRowStyle rowStyle;
+  final AppScreen appScreen;
   final GroupHeaderData headerData;
   const TvGroupHeader(
     this.rowStyle,
+    this.appScreen,
     this.headerData, {
     Key? key,
   }) : super(key: key);
