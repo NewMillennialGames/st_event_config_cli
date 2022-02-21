@@ -41,7 +41,7 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
 
   String get priceStr => '_to fmt actual value';
   String get priceDeltaStr => '_to fmt actual value';
-  String get rankStr => '_to fmt actual value';
+  String get rankStr => '3';
 
   bool get canTrade => false;
 

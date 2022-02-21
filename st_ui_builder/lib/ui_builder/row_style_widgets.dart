@@ -190,22 +190,27 @@ class TeamVsFieldRankedRowTest extends StBaseTvRow with ShowsTwoAssets {
   Widget rowBody(BuildContext context) {
     var firstTeam = assets.item1;
     return Container(
-        height: 40,
+        height: 80,
         color: Colors.green[100],
         child: Row(
           // crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-              height: 26,
-              width: 26,
-              color: Colors.amber,
-              child: Text(
-                firstTeam.rankStr,
-                style: const TextStyle(
-                  fontSize: 30,
+            Column(
+              children: [
+                const Text('Rank:'),
+                Container(
+                  height: 26,
+                  width: 26,
+                  color: Colors.amber,
+                  child: Text(
+                    firstTeam.rankStr,
+                    style: const TextStyle(
+                      fontSize: 28,
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
             Column(
               children: [
