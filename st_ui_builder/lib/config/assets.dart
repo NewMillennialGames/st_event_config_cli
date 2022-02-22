@@ -1,0 +1,23 @@
+const String kSignUpScreenLogoImage = 'assets/images/logo.png';
+const String kUserImageProfileScreenProfileImage =
+    'assets/images/user-image.png';
+const String kAppbarWidgetLeadingIcon = 'assets/images/logo_appbar.jpg';
+const String kBaseballIcon = 'assets/images/baseball.jpg';
+const String kTokensIcon = 'assets/images/tokensIcon.png';
+const String kTokensVerifiedIcon = 'assets/images/tokensVerifiedIcon.png';
+const String KIconUser = 'assets/images/icon-user.png';
+const String kIconUser2x = 'assets/images/icon-user@2x.png';
+const String kIconWinner = 'assets/images/icon-winner-1st.png';
+const String kIconWiner1st = 'assets/images/icon-winner-1st.png';
+const String kIconWiner2nd = 'assets/images/icon-winner-2nd.png';
+const String kIconWiner3st = 'assets/images/icon-winner-3st.png';
+const String KIconToken = 'assets/images/logo-scoretrader-token.png';
+const String KiconMarket = 'assets/images/tabbar-market.png';
+const String KiconNews = 'assets/images/tabbar-news.png';
+const String KiconLeader = 'assets/images/tabbar-leaders.png';
+const String KiconPortafolio = 'assets/images/tabbar-portfolio.png';
+const String kImageVsBgLeftOff = 'assets/images/vs-bg-left-off@3x.png';
+const String kImageVsBgLeftOn = 'assets/images/vs-bg-left-on@3x.png';
+const String kImageVsBgRightOff = 'assets/images/vs-bg-right-off@3x.png';
+const String kImageVsBgRightOn = 'assets/images/vs-bg-right-on@3x.png'; 
+const String kImageWebView = 'assets/images/WebView.png'; 

@@ -1,3 +1,6 @@
+import 'package:flutter/src/widgets/framework.dart';
+import 'dart:ui';
+
 import 'package:intl/intl.dart';
 //
 import 'package:st_ev_cfg/st_ev_cfg.dart';
@@ -94,6 +97,39 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
 
   @override
   String get groupKey => 'niu';
+
+  @override
+  Color get color => throw UnimplementedError();
+
+  @override
+  Color get colorImage => throw UnimplementedError();
+
+  @override
+  double get gain => throw UnimplementedError();
+
+  @override
+  double get high => throw UnimplementedError();
+
+  @override
+  Widget get icon => throw UnimplementedError();
+
+  @override
+  double get low => throw UnimplementedError();
+
+  @override
+  double get open => throw UnimplementedError();
+
+  @override
+  double get percentage => throw UnimplementedError();
+
+  @override
+  double get shares => throw UnimplementedError();
+
+  @override
+  String get teamName => throw UnimplementedError();
+
+  @override
+  double get tokens => throw UnimplementedError();
 }
 
 List<MockAsset> _fakeData = [

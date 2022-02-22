@@ -29,7 +29,19 @@ abstract class AssetRowPropertyIfc {
   // String get priceDeltaStr;
   //
   int get rank;
+  
   // String get rankStr;
+  Widget get icon;
+  Color get colorImage;
+  Color get color;
+  double get tokens;
+  double get gain;
+  double get open;
+  double get high;
+  double get low;
+  String get teamName;
+  double get percentage;
+  double get shares;
 }
 
 extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
@@ -44,6 +56,8 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
   String get rankStr => '3';
 
   bool get canTrade => false;
+
+  int get positionStr => int.parse(this.position);
 
   String valueExtractor(DbTableFieldName fldName) {
     /* need to coordinate with Natalia
