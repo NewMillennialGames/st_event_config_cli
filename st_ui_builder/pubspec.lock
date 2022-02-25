@@ -203,10 +203,10 @@ packages:
     description:
       path: "."
       ref: prod
-      resolved-ref: f4d934a361d2bfee3e843a7b0c45e26ebef964ba
+      resolved-ref: "78caafe5f612d2c7c6acc35ac8f8b7f5041cffc8"
       url: "git@github.com:NewMillennialGames/st_event_config_cli.git"
     source: git
-    version: "1.0.2"
+    version: "1.0.4"
   stack_trace:
     dependency: transitive
     description:
