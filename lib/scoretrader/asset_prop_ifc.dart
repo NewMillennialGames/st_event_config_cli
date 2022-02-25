@@ -28,6 +28,7 @@ abstract class AssetRowPropertyIfc {
   // String get priceDeltaStr;
   //
   int get rank;
+  bool get isTeam;
 
   // String get rankStr;
   // Widget get icon;
@@ -45,7 +46,8 @@ abstract class AssetRowPropertyIfc {
 
 extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
   // sensible defaults if not overridden
-  String get groupKey => '';
+  bool get isTeam => true;
+  String get groupKey => gameDateStr;
 
   String get gameDateStr => DateFormat().format(gameDate);
   String get gameTimeStr => '_to fmt actual value';

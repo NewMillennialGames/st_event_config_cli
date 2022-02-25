@@ -364,7 +364,6 @@ class TeamLineRow extends StBaseTvRow with ShowsOneAsset {
           ObjectRankRow(
             position: first.rank,
             asset: first,
-            name: first.topName,
           ),
           Padding(
             padding: const EdgeInsets.only(

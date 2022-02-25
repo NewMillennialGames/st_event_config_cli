@@ -77,12 +77,11 @@ class MktRschAsset extends StatelessWidget {
 class ObjectRankRow extends StatelessWidget {
   final int position;
   final AssetRowPropertyIfc asset;
-  final String name;
+
   const ObjectRankRow({
     Key? key,
     required this.asset,
     required this.position,
-    required this.name,
   }) : super(key: key);
 
   @override
@@ -121,11 +120,11 @@ class ObjectRankRow extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (name == 'Player Name')
+            if (!asset.isTeam)
               const SizedBox(
                 height: _rowMargin,
               ),
-            if (name == 'TeamName')
+            if (asset.isTeam)
               const SizedBox(
                 height: _rowMarginTop,
               ),
@@ -135,7 +134,7 @@ class ObjectRankRow extends StatelessWidget {
                 fontSize: 20,
               ),
             ),
-            if (name == 'Player Name')
+            if (!asset.isTeam)
               Padding(
                 padding: const EdgeInsets.only(top: 5.0),
                 child: Text(

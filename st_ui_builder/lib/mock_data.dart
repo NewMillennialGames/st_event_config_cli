@@ -130,6 +130,9 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
 
   @override
   double get tokens => throw UnimplementedError();
+
+  @override
+  bool get isTeam => throw UnimplementedError();
 }
 
 List<MockAsset> _fakeData = [
