@@ -36,6 +36,7 @@ dependencies:
     #  path: ../../st_event_config/
   grouped_list: ^4.2.0
   tuple: ^2.0.0
+  dotted_border: ^2.0.0+2
   intl:
 
 

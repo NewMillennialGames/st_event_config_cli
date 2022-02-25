@@ -1,11 +1,10 @@
 part of StUiController;
 
-
 class MktRschAsset extends StatelessWidget {
-  final rschAsset;
+  final AssetRowPropertyIfc asset;
   const MktRschAsset({
     Key? key,
-    required this.rschAsset,
+    required this.asset,
   }) : super(key: key);
 
   @override
@@ -18,13 +17,7 @@ class MktRschAsset extends StatelessWidget {
         ClipRRect(
           borderRadius: BorderRadius.circular(15),
           child: Image.asset(
-            rschAsset.isOff && rschAsset.isRight
-                ? kImageVsBgRightOff
-                : rschAsset.isOff && !rschAsset.isRight
-                    ? kImageVsBgLeftOff
-                    : !rschAsset.isOff && rschAsset.isRight
-                        ? kImageVsBgRightOn
-                        : kImageVsBgLeftOn,
+            asset.rank > 3 ? kImageVsBgRightOn : kImageVsBgLeftOn,
             height: _sizeHeightImage,
             width: size.width * 0.47,
             fit: BoxFit.fill,
@@ -51,18 +44,18 @@ class MktRschAsset extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    rschAsset.team.name,
+                    asset.topName,
                     style: StTextStyles.h4.copyWith(
                       fontSize: 18,
-                      color: rschAsset.isOff
+                      color: asset.canTrade
                           ? StColors.coolGray
                           : StTextStyles.h4.color,
                     ),
                   ),
                   Text(
-                    rschAsset.record,
+                    asset.subName,
                     style: StTextStyles.textFormField.copyWith(
-                      color: rschAsset.isOff
+                      color: asset.canTrade
                           ? StColors.coolGray
                           : StTextStyles.textFormField.color,
                     ),
@@ -71,7 +64,7 @@ class MktRschAsset extends StatelessWidget {
               ),
               Icon(
                 Icons.star_border,
-                color: rschAsset.isOff ? StColors.gray : StColors.blue,
+                color: asset.canTrade ? StColors.gray : StColors.blue,
               ),
             ],
           ),
@@ -83,11 +76,11 @@ class MktRschAsset extends StatelessWidget {
 
 class ObjectRankRow extends StatelessWidget {
   final int position;
-  final object;
+  final AssetRowPropertyIfc asset;
   final String name;
   const ObjectRankRow({
     Key? key,
-    required this.object,
+    required this.asset,
     required this.position,
     required this.name,
   }) : super(key: key);
@@ -110,7 +103,7 @@ class ObjectRankRow extends StatelessWidget {
           width: _rowMargin,
         ),
         Image.network(
-          object.urlImage,
+          asset.imgUrl,
           height: _sizeImageUrl,
           width: _sizeImageUrl - 10,
           fit: BoxFit.cover,
@@ -137,7 +130,7 @@ class ObjectRankRow extends StatelessWidget {
                 height: _rowMarginTop,
               ),
             Text(
-              object.name,
+              asset.topName,
               style: StTextStyles.textLisTileTokens.copyWith(
                 fontSize: 20,
               ),
@@ -146,7 +139,7 @@ class ObjectRankRow extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 5.0),
                 child: Text(
-                  object.team,
+                  asset.subName,
                   style: StTextStyles.textScoresEvent.copyWith(
                     fontSize: 16,
                   ),
@@ -228,14 +221,14 @@ class _PositionRankRow extends StatelessWidget {
   }
 }
 
-
 class AssetTopRow extends StatelessWidget {
+  //
   const AssetTopRow({
     Key? key,
-    required this.player,
+    required this.asset,
   }) : super(key: key);
 
-  final player;
+  final AssetRowPropertyIfc asset;
 
   @override
   Widget build(BuildContext context) {
@@ -260,19 +253,19 @@ class AssetTopRow extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    player.name,
+                    asset.topName,
                     textAlign: TextAlign.left,
-                    style: player.team != ''
+                    style: asset.subName != ''
                         ? StTextStyles.textTeamNameMarketView.copyWith(
-                            color: player.color,
+                            color: Colors.yellow,
                           )
                         : StTextStyles.textNameMarketTicker.copyWith(
-                            color: player.color,
+                            color: Colors.pink,
                             fontSize: 24,
                           ),
                   ),
                   Text(
-                    player.team,
+                    asset.subName,
                     style: StTextStyles.textTradeButtonTeamMarketView.copyWith(
                       fontSize: 16,
                       color: StColors.teamOpenHighLowMarketView,
@@ -282,7 +275,7 @@ class AssetTopRow extends StatelessWidget {
               ),
             ),
           ),
-          if (player.showButton)
+          if (asset.canTrade)
             // trade button to right of player/team name
             Padding(
               padding: const EdgeInsets.only(right: _rowRightMargin),
@@ -304,18 +297,18 @@ class AssetTopRow extends StatelessWidget {
   }
 }
 
-
 class HoldingsAndValueRow extends StatelessWidget {
+  //
   const HoldingsAndValueRow({
     Key? key,
-    required this.player,
+    required this.asset,
   }) : super(key: key);
 
-  final player;
+  final AssetRowPropertyIfc asset;
 
-  int get _sharesHeld => player.sharesHeld;
-  double get _sharePrice => player.shares[1];
-  double get _gainLoss => player.GL;
+  int get _sharesHeld => 100;
+  double get _sharePrice => asset.price;
+  double get _gainLoss => asset.priceDelta;
   String get _formattedGainLoss => _sharePrice.isNegative
       ? _sharePrice.toStringAsFixed(2)
       : '+' + _sharePrice.toStringAsFixed(2);
@@ -357,12 +350,12 @@ class HoldingsAndValueRow extends StatelessWidget {
                         ),
                       ),
                       TextSpan(
-                        text: '${player.shares[0].toStringAsFixed(2)} ',
+                        text: '${'asset.shares'} ',
                         style: StTextStyles.textNameMarketTicker.copyWith(
                           fontSize: 14,
                         ),
                       ),
-                      if (player.shares.length > 1)
+                      if (false)
                         TextSpan(
                           text: _formattedGainLoss,
                           style: StTextStyles.textGainPositiveTeamMarketView,
@@ -376,7 +369,7 @@ class HoldingsAndValueRow extends StatelessWidget {
           Column(
             children: [
               Text(
-                player.showButton
+                asset.canTrade
                     ? StStrings.portfolioPostionsRowValueText
                     : StStrings.portfolioPostionsRowProceedsText,
                 style: StTextStyles.textRichPlayerTradeView.copyWith(
@@ -384,7 +377,7 @@ class HoldingsAndValueRow extends StatelessWidget {
                 ),
               ),
               Text(
-                player.value.toStringAsFixed(2),
+                asset.priceStr,
                 style: StTextStyles.textNameMarketTicker.copyWith(
                   fontSize: 14,
                 ),

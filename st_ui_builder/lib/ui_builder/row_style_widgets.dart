@@ -30,8 +30,8 @@ class AssetVsAssetRow extends StBaseTvRow with ShowsTwoAssets {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          MktRschAsset(rschAsset: assets.item1),
-          MktRschAsset(rschAsset: assets.item2),
+          MktRschAsset(asset: first),
+          MktRschAsset(asset: second),
         ],
       ),
     );
@@ -78,20 +78,13 @@ class AssetVsAssetRankedRow extends StBaseTvRow with ShowsTwoAssets {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  assets.item1.topName +
-                      '  ' +
-                      assets.item1.shares.toStringAsFixed(2),
+                  first.topName + '  ' + '20 shares',
                   style: StTextStyles.textTeamNameMarketView.copyWith(
                     color: StColors.white,
                   ),
                 ),
                 Text(
-                  '+' +
-                      assets.item1.shares.toStringAsFixed(2) +
-                      ' ' +
-                      '(' +
-                      assets.item1.percentage.toString() +
-                      '%)',
+                  '+' + 'first.shares' + ' ' + '(' + 'first.percentage' + '%)',
                   style: StTextStyles.textTradeButtonTeamMarketView,
                   textAlign: TextAlign.left,
                 ),
@@ -146,7 +139,7 @@ class TeamVsFieldRow extends StBaseTvRow with ShowsOneAsset {
                 children: [
                   Row(
                     children: [
-                      assets.item1.icon,
+                      Image.network(first.imgUrl),
                       Padding(
                         padding: const EdgeInsets.only(
                           top: 10,
@@ -154,10 +147,10 @@ class TeamVsFieldRow extends StBaseTvRow with ShowsOneAsset {
                           right: 3,
                         ),
                         child: Image.network(
-                          assets.item1.imgUrl,
+                          first.imgUrl,
                           height: 60,
                           width: size.height <= 568 ? 40 : 50,
-                          color: assets.item1.colorImage,
+                          color: Colors.yellow,
                           colorBlendMode: BlendMode.color,
                         ),
                       ),
@@ -168,7 +161,7 @@ class TeamVsFieldRow extends StBaseTvRow with ShowsOneAsset {
                         child: Text(
                           assets.item1.topName,
                           style: StTextStyles.textTeamNameMarketView.copyWith(
-                            color: assets.item1.color,
+                            color: Colors.yellow,
                           ),
                         ),
                       ),
@@ -190,7 +183,7 @@ class TeamVsFieldRow extends StBaseTvRow with ShowsOneAsset {
                                 width: 15,
                               ),
                               Text(
-                                assets.item1.tokens.toStringAsFixed(2),
+                                'first.tokens',
                                 style:
                                     StTextStyles.textNameMarketTicker.copyWith(
                                   fontSize: 14,
@@ -199,7 +192,7 @@ class TeamVsFieldRow extends StBaseTvRow with ShowsOneAsset {
                             ],
                           ),
                           Text(
-                            '${assets.item1.gain.isNegative ? assets.item1.gain.toStringAsFixed(2) : '+' + assets.item1.gain.toStringAsFixed(2)}',
+                            '${first.priceDelta.isNegative ? first.priceDeltaStr : '+' + 'first.gain'}',
                             style: StTextStyles.textGainPositiveTeamMarketView,
                           ),
                         ],
@@ -232,7 +225,7 @@ class TeamVsFieldRow extends StBaseTvRow with ShowsOneAsset {
                       style: StTextStyles.textOpenHighLowTeamMarketView,
                     ),
                     Text(
-                      assets.item1.open.toStringAsPrecision(3),
+                      first.priceStr,
                       style: StTextStyles.textValueMarketTicker.copyWith(
                         color: StColors.white,
                       ),
@@ -245,7 +238,7 @@ class TeamVsFieldRow extends StBaseTvRow with ShowsOneAsset {
                       style: StTextStyles.textOpenHighLowTeamMarketView,
                     ),
                     Text(
-                      assets.item1.high.toStringAsPrecision(3),
+                      'first.high',
                       style: StTextStyles.textValueMarketTicker.copyWith(
                         color: StColors.white,
                       ),
@@ -260,7 +253,7 @@ class TeamVsFieldRow extends StBaseTvRow with ShowsOneAsset {
                       ),
                     ),
                     Text(
-                      assets.item1.low.toStringAsPrecision(3),
+                      'first.low',
                       style: StTextStyles.textValueMarketTicker.copyWith(
                         color: StColors.white,
                       ),
@@ -306,7 +299,7 @@ class TeamVsFieldRankedRow extends StBaseTvRow with ShowsOneAsset {
           Expanded(
             flex: 1,
             child: Image.network(
-              assets.item1.imgUrl,
+              first.imgUrl,
               fit: BoxFit.cover,
             ),
           ),
@@ -318,8 +311,8 @@ class TeamVsFieldRankedRow extends StBaseTvRow with ShowsOneAsset {
               crossAxisAlignment: CrossAxisAlignment.start,
 
               children: [
-                AssetTopRow(player: assets.item1),
-                HoldingsAndValueRow(player: assets.item1),
+                AssetTopRow(asset: first),
+                HoldingsAndValueRow(asset: first),
               ],
             ),
           ),
@@ -339,7 +332,7 @@ class TeamDraftRow extends StBaseTvRow with ShowsOneAsset {
   Widget rowBody(BuildContext context) {
     // paste row widget code here
     return Container(
-      child: Text('Awaiting UX specs for <row-style-name>'),
+      child: Text('Awaiting UX specs for <TeamDraftRow>'),
     );
   }
 }
@@ -369,9 +362,9 @@ class TeamLineRow extends StBaseTvRow with ShowsOneAsset {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           ObjectRankRow(
-            position: assets.item1.positionStr,
-            object: assets.item1.imgUrl,
-            name: assets.item1.topName,
+            position: first.rank,
+            asset: first,
+            name: first.topName,
           ),
           Padding(
             padding: const EdgeInsets.only(
@@ -379,7 +372,7 @@ class TeamLineRow extends StBaseTvRow with ShowsOneAsset {
             ),
             child: Row(
               children: [
-                if (assets.item1.rank == true)
+                if (first.rank > 3)
                   Text(
                     '＠',
                     style: StTextStyles.textLisTileTokens.copyWith(
@@ -412,7 +405,7 @@ class TeamPlayerVsFieldRow extends StBaseTvRow with ShowsOneAsset {
   Widget rowBody(BuildContext context) {
     // paste row widget code here
     return Container(
-      child: Text('Awaiting UX specs for <row-style-name>'),
+      child: Text('Awaiting UX specs for <TeamPlayerVsFieldRow>'),
     );
   }
 }
@@ -427,7 +420,7 @@ class PlayerVsFieldRow extends StBaseTvRow with ShowsOneAsset {
   Widget rowBody(BuildContext context) {
     // paste row widget code here
     return Container(
-      child: Text('Awaiting UX specs for <row-style-name>'),
+      child: Text('Awaiting UX specs for <PlayerVsFieldRow>'),
     );
   }
 }
@@ -442,7 +435,7 @@ class PlayerVsFieldRankedRow extends StBaseTvRow with ShowsOneAsset {
   Widget rowBody(BuildContext context) {
     // paste row widget code here
     return Container(
-      child: Text('Awaiting UX specs for <row-style-name>'),
+      child: Text('Awaiting UX specs for <PlayerVsFieldRankedRow>'),
     );
   }
 }
@@ -457,7 +450,7 @@ class PlayerDraftRow extends StBaseTvRow with ShowsOneAsset {
   Widget rowBody(BuildContext context) {
     // paste row widget code here
     return Container(
-      child: Text('Awaiting UX specs for <row-style-name>'),
+      child: Text('Awaiting UX specs for <PlayerDraftRow>'),
     );
   }
 }
@@ -472,13 +465,13 @@ class DriverVsFieldRow extends StBaseTvRow with ShowsOneAsset {
   Widget rowBody(BuildContext context) {
     // paste row widget code here
     return Container(
-      child: Text('Awaiting UX specs for <row-style-name>'),
+      child: Text('Awaiting UX specs for <DriverVsFieldRow>'),
     );
   }
 }
 
 // test classes only below
-class TeamVsFieldRowTest extends StBaseTvRow with ShowsTwoAssets {
+class TeamVsFieldRowTest extends StBaseTvRow with ShowsOneAsset {
   TeamVsFieldRowTest(
     TableviewDataRowTuple assets, {
     Key? key,
@@ -486,7 +479,6 @@ class TeamVsFieldRowTest extends StBaseTvRow with ShowsTwoAssets {
 
   @override
   Widget rowBody(BuildContext context) {
-    var firstTeam = assets.item1;
     return Container(
         height: 40,
         color: Colors.blue[100],
@@ -494,16 +486,16 @@ class TeamVsFieldRowTest extends StBaseTvRow with ShowsTwoAssets {
           // crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(firstTeam.topName),
-            Text(firstTeam.subName),
-            Text(firstTeam.regionOrConference),
-            Text(firstTeam.gameDateStr),
+            Text(first.topName),
+            Text(first.subName),
+            Text(first.regionOrConference),
+            Text(first.gameDateStr),
           ],
         ));
   }
 }
 
-class TeamVsFieldRankedRowTest extends StBaseTvRow with ShowsTwoAssets {
+class TeamVsFieldRankedRowTest extends StBaseTvRow with ShowsOneAsset {
   TeamVsFieldRankedRowTest(
     TableviewDataRowTuple assets, {
     Key? key,
@@ -511,7 +503,6 @@ class TeamVsFieldRankedRowTest extends StBaseTvRow with ShowsTwoAssets {
 
   @override
   Widget rowBody(BuildContext context) {
-    var firstTeam = assets.item1;
     return Container(
         height: 80,
         color: Colors.green[100],
@@ -527,7 +518,7 @@ class TeamVsFieldRankedRowTest extends StBaseTvRow with ShowsTwoAssets {
                   width: 26,
                   color: Colors.amber,
                   child: Text(
-                    firstTeam.rankStr,
+                    first.rankStr,
                     style: const TextStyle(
                       fontSize: 28,
                     ),
@@ -537,11 +528,11 @@ class TeamVsFieldRankedRowTest extends StBaseTvRow with ShowsTwoAssets {
             ),
             Column(
               children: [
-                Text(firstTeam.topName),
-                Text(firstTeam.subName),
+                Text(first.topName),
+                Text(first.subName),
               ],
             ),
-            Text(firstTeam.regionOrConference),
+            Text(first.regionOrConference),
           ],
         ));
   }
