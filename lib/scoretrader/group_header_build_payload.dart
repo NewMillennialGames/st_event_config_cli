@@ -92,10 +92,10 @@ class GroupHeaderData
   @override
   int compareTo(GroupHeaderData other) {
     // add natural sort order to this class
-    var ct = _sortKey.compareTo(other._sortKey);
-    print(
-      '### calling GroupHeaderData compareTo ...$ct from $_sortKey vs ${other._sortKey}',
-    );
+    // var ct = _sortKey.compareTo(other._sortKey);
+    // print(
+    //   '### calling GroupHeaderData compareTo ...$ct from $_sortKey vs ${other._sortKey}',
+    // );
     return _sortKey.compareTo(other._sortKey);
   }
 

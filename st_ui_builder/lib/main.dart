@@ -21,7 +21,7 @@ const String cfgEmpl2 = 'greenRow.json';
 
 Map<String, dynamic> evCfgDataFromServer = {};
 
-Future<void> readExampleEventConfig({String filename = cfgEmpl2}) async {
+Future<void> readExampleEventConfig({String filename = cfgEmpl1}) async {
   final String response = await rootBundle.loadString('assets/$filename');
   evCfgDataFromServer = json.decode(response);
 }
