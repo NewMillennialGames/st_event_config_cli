@@ -36,6 +36,8 @@ class ActiveGameDetails with EquatableMixin {
     return _gameStatus;
   }
 
+  bool get isTradable => _gameStatus == 4;
+
   String get roundName => _roundName;
   DateTime get scheduledStartDateOnly => _scheduledStartDtTm.truncateTime;
   DateTime get scheduledStartDtTm => _scheduledStartDtTm;

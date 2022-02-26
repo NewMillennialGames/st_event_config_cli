@@ -6,6 +6,8 @@ final _gameStatusProvider =
 abstract class StBaseTvRowIfc extends StatelessWidget {
   //
   final TableviewDataRowTuple assets;
+  ActiveGameDetails get gameStatus;
+  //
   const StBaseTvRowIfc(
     this.assets, {
     Key? key,
@@ -14,7 +16,7 @@ abstract class StBaseTvRowIfc extends StatelessWidget {
   Widget rowBody(BuildContext ctx);
 }
 
-class StBaseTvRow extends StBaseTvRowIfc {
+class StBaseTvRow extends StBaseTvRowIfc with IsTradeable {
   // base class for EVERY tableview row
   // on 4 main screens of scoretrader
   const StBaseTvRow(
@@ -26,26 +28,37 @@ class StBaseTvRow extends StBaseTvRowIfc {
         );
 
   @override
+  ActiveGameDetails get gameStatus => assets.item3;
+
+  @override
   Widget build(BuildContext context) {
-    // you can wrap row body here if needed
-    // should also use ScopedProvider here to toggle
-    // Trade button on and off
+    /* 
+     assets.item3 is a ActiveGameDetails() entity
+     it carries the game-state and toggles
+    Trade button on and off
+
+    I'm watching the overridden value
+    to force row-rebuild when game-status changes
+    */
     return ProviderScope(
-        overrides: [
-          _gameStatusProvider.overrideWithValue(
-            assets.item3,
-          ),
-        ],
-        child: Consumer(builder: (context, ref, child) {
+      overrides: [
+        _gameStatusProvider.overrideWithValue(
+          assets.item3,
+        ),
+      ],
+      child: Consumer(
+        builder: (context, ref, child) {
           // force rebuild when game status changes
           ref.watch(_gameStatusProvider);
           return rowBody(context);
-        }));
+        },
+      ),
+    );
   }
 
   @override
   Widget rowBody(BuildContext ctx) {
     // acatual subclass will return the specific row-type
-    throw UnimplementedError('implement in subclass');
+    throw UnimplementedError('implement in subclass  ${gameStatus.isTradable}');
   }
 }

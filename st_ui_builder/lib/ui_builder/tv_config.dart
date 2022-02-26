@@ -45,8 +45,12 @@ class TableviewConfigPayload {
   }
 
   TvRowBuilder get rowConstructor {
-    // row-style returned depends on the screen on this instance
-    // TODO:  implement remaining row styles
+    /* row-style returned depends on the screen on this instance
+       TODO:  implement remaining row styles
+
+      this is an easy place to return the correct row
+      for every screen, based on what was selected for the market-view screen
+    */
 
     switch (rowStyle) {
       case TvAreaRowStyle.assetVsAsset:

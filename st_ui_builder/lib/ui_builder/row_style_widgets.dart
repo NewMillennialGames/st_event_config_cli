@@ -30,8 +30,8 @@ class AssetVsAssetRow extends StBaseTvRow with ShowsTwoAssets {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          MktRschAsset(asset: first),
-          MktRschAsset(asset: second),
+          MktRschAsset(asset: comp1),
+          MktRschAsset(asset: comp2),
         ],
       ),
     );
@@ -78,7 +78,7 @@ class AssetVsAssetRankedRow extends StBaseTvRow with ShowsTwoAssets {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  first.topName + '  ' + '20 shares',
+                  comp1.topName + '  ' + '20 shares',
                   style: StTextStyles.textTeamNameMarketView.copyWith(
                     color: StColors.white,
                   ),
@@ -139,7 +139,7 @@ class TeamVsFieldRow extends StBaseTvRow with ShowsOneAsset {
                 children: [
                   Row(
                     children: [
-                      Image.network(first.imgUrl),
+                      Image.network(comp1.imgUrl),
                       Padding(
                         padding: const EdgeInsets.only(
                           top: 10,
@@ -147,7 +147,7 @@ class TeamVsFieldRow extends StBaseTvRow with ShowsOneAsset {
                           right: 3,
                         ),
                         child: Image.network(
-                          first.imgUrl,
+                          comp1.imgUrl,
                           height: 60,
                           width: size.height <= 568 ? 40 : 50,
                           color: Colors.yellow,
@@ -192,7 +192,7 @@ class TeamVsFieldRow extends StBaseTvRow with ShowsOneAsset {
                             ],
                           ),
                           Text(
-                            '${first.priceDelta.isNegative ? first.priceDeltaStr : '+' + 'first.gain'}',
+                            '${comp1.priceDelta.isNegative ? comp1.priceDeltaStr : '+' + 'first.gain'}',
                             style: StTextStyles.textGainPositiveTeamMarketView,
                           ),
                         ],
@@ -225,7 +225,7 @@ class TeamVsFieldRow extends StBaseTvRow with ShowsOneAsset {
                       style: StTextStyles.textOpenHighLowTeamMarketView,
                     ),
                     Text(
-                      first.priceStr,
+                      comp1.priceStr,
                       style: StTextStyles.textValueMarketTicker.copyWith(
                         color: StColors.white,
                       ),
@@ -299,7 +299,7 @@ class TeamVsFieldRankedRow extends StBaseTvRow with ShowsOneAsset {
           Expanded(
             flex: 1,
             child: Image.network(
-              first.imgUrl,
+              comp1.imgUrl,
               fit: BoxFit.cover,
             ),
           ),
@@ -311,8 +311,8 @@ class TeamVsFieldRankedRow extends StBaseTvRow with ShowsOneAsset {
               crossAxisAlignment: CrossAxisAlignment.start,
 
               children: [
-                AssetTopRow(asset: first),
-                HoldingsAndValueRow(asset: first),
+                AssetTopRow(asset: comp1),
+                HoldingsAndValueRow(asset: comp1),
               ],
             ),
           ),
@@ -362,8 +362,8 @@ class TeamLineRow extends StBaseTvRow with ShowsOneAsset {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           ObjectRankRow(
-            position: first.rank,
-            asset: first,
+            position: comp1.rank,
+            asset: comp1,
           ),
           Padding(
             padding: const EdgeInsets.only(
@@ -371,7 +371,7 @@ class TeamLineRow extends StBaseTvRow with ShowsOneAsset {
             ),
             child: Row(
               children: [
-                if (first.rank > 3)
+                if (comp1.rank > 3)
                   Text(
                     '＠',
                     style: StTextStyles.textLisTileTokens.copyWith(
@@ -485,10 +485,10 @@ class TeamVsFieldRowTest extends StBaseTvRow with ShowsOneAsset {
           // crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(first.topName),
-            Text(first.subName),
-            Text(first.regionOrConference),
-            Text(first.gameDateStr),
+            Text(comp1.topName),
+            Text(comp1.subName),
+            Text(comp1.regionOrConference),
+            Text(comp1.gameDateStr),
           ],
         ));
   }
@@ -517,7 +517,7 @@ class TeamVsFieldRankedRowTest extends StBaseTvRow with ShowsOneAsset {
                   width: 26,
                   color: Colors.amber,
                   child: Text(
-                    first.rankStr,
+                    comp1.rankStr,
                     style: const TextStyle(
                       fontSize: 28,
                     ),
@@ -527,11 +527,11 @@ class TeamVsFieldRankedRowTest extends StBaseTvRow with ShowsOneAsset {
             ),
             Column(
               children: [
-                Text(first.topName),
-                Text(first.subName),
+                Text(comp1.topName),
+                Text(comp1.subName),
               ],
             ),
-            Text(first.regionOrConference),
+            Text(comp1.regionOrConference),
           ],
         ));
   }
