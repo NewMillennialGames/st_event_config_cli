@@ -2,14 +2,14 @@ part of StUiController;
 
 class ActiveGameDetails with EquatableMixin {
   // simplified version of a Competition
-  // Equatable so Riverpod can detect changes
-  // perhaps move this to models after cleanup?
+  // must be immutable so Riverpod can detect changes
 
   final String competitionKey;
   final List<String> _participantAssetIds;
-  int _gameStatus;
-  String _roundName;
-  DateTime _scheduledStartDtTm;
+  // FIXME with Enum for CompStatus
+  final int _gameStatus;
+  final String _roundName;
+  final DateTime _scheduledStartDtTm;
 
   ActiveGameDetails(
     this.competitionKey,
@@ -20,14 +20,14 @@ class ActiveGameDetails with EquatableMixin {
   );
 
   ActiveGameDetails cloneWithUpdates(CompetitionInfo ci) {
-    _gameStatus = ci.competitionStatus.toInt();
-    _roundName = ci.currentRoundName;
+    // _gameStatus = ci.competitionStatus.toInt();
+    // _roundName = ci.currentRoundName;
     return ActiveGameDetails(
-      this.competitionKey,
-      _gameStatus,
-      _roundName,
-      this._scheduledStartDtTm,
-      this._participantAssetIds,
+      competitionKey,
+      ci.competitionStatus.toInt(),
+      ci.currentRoundName,
+      _scheduledStartDtTm,
+      _participantAssetIds,
     );
   }
 
@@ -36,18 +36,18 @@ class ActiveGameDetails with EquatableMixin {
     return _gameStatus;
   }
 
+  // FIXME with Enum for CompStatus
   bool get isTradable => _gameStatus == 4;
-
+  int get competitorCount => _participantAssetIds.length;
   String get roundName => _roundName;
   DateTime get scheduledStartDateOnly => _scheduledStartDtTm.truncateTime;
   DateTime get scheduledStartDtTm => _scheduledStartDtTm;
-
-  List<String> get participantAssetIds => _participantAssetIds;
   String get assetId1 =>
       _participantAssetIds.length > 0 ? _participantAssetIds[0] : '_';
   String get assetId2 =>
       _participantAssetIds.length > 1 ? _participantAssetIds[1] : '_';
 
+  // List<String> get participantAssetIds => _participantAssetIds;
   // String get _uniqueAssetKey => assetId1 + '-' + assetId2;
 
   bool includesParticipant(String assetId) =>
@@ -57,6 +57,7 @@ class ActiveGameDetails with EquatableMixin {
   List<Object?> get props =>
       [_scheduledStartDtTm.toIso8601String(), competitionKey];
 
+  // only for testing
   factory ActiveGameDetails.mock() =>
       ActiveGameDetails('', 0, '', DateTime.now(), []);
 }
