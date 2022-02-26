@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 //
-import 'package:st_ev_cfg/st_ev_cfg.dart';
+import 'ui_builder/all.dart';
 
 /*
   creating fake data for testing
