@@ -1,5 +1,8 @@
 part of StUiController;
 
+final _gameStatusProvider =
+    Provider<ActiveGameDetails>(((ref) => throw UnimplementedError('')));
+
 abstract class StBaseTvRowIfc extends StatelessWidget {
   //
   final TableviewDataRowTuple assets;
@@ -27,7 +30,9 @@ class StBaseTvRow extends StBaseTvRowIfc {
     // you can wrap row body here if needed
     // should also use ScopedProvider here to toggle
     // Trade button on and off
-    return rowBody(context);
+    return ProviderScope(
+        overrides: [_gameStatusProvider.overrideWithValue(assets.item1.agd)],
+        child: rowBody(context));
   }
 
   @override

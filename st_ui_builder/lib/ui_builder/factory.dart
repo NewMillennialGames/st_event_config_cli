@@ -31,8 +31,11 @@ class StUiBuilderFactory {
     this._eConfig = EventCfgTree.fromJson(eCfgJsonMap);
   }
 
-  GroupedTableDataMgr tableviewConfigForScreen(AppScreen screen,
-      List<TableviewDataRowTuple> rows, RedrawTvCallback redrawTvCallback) {
+  GroupedTableDataMgr tableviewConfigForScreen(
+    AppScreen screen,
+    List<TableviewDataRowTuple> rows,
+    RedrawTvCallback redrawTvCallback,
+  ) {
     /* build object that wraps all data and display rules
     */
     CfgForAreaAndNestedSlots tableAreaAndSlotCfg =

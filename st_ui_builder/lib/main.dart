@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grouped_list/grouped_list.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:convert';
 //
 import 'package:st_ev_cfg/st_ev_cfg.dart';
@@ -30,7 +31,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // pretend were loading Event from server
   await readExampleEventConfig();
-  runApp(const Scoretrader());
+  runApp(
+    const ProviderScope(
+      child: Scoretrader(),
+    ),
+  );
 }
 
 class Scoretrader extends StatelessWidget {
@@ -39,13 +44,12 @@ class Scoretrader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<MockAssetWrapper> assetRows = MockAsset.mockRows;
     return MaterialApp(
       title: 'St Tv Cfg Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MarketViewScreen(assetRows),
+      home: MarketViewScreen(),
     );
   }
 }
@@ -54,10 +58,9 @@ class MarketViewScreen extends StatefulWidget {
   // real MarketViewScreen will get assets list & StUiBuilderFactory
   // via a Riverpod Provider
 
-  final List<MockAssetWrapper> assets;
+  final List<MockAssetWrapper> assets = MockAsset.mockRows;
 
-  MarketViewScreen(
-    this.assets, {
+  MarketViewScreen({
     Key? key,
   }) : super(key: key);
 

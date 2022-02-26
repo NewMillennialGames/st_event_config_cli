@@ -34,9 +34,15 @@ dependencies:
       url: git@github.com:NewMillennialGames/st_event_config_cli.git
       ref: prod
     #  path: ../../st_event_config/
+  stclient:
+    git:
+      url: git@github.com:NewMillennialGames/st-client-api.git
+      path: stclient
+      ref: master
   grouped_list: ^4.2.0
   tuple: ^2.0.0
   dotted_border: ^2.0.0+2
+  flutter_riverpod: ^1.0.3
   intl:
 
 

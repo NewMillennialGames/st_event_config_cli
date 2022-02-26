@@ -1,14 +1,9 @@
-import 'package:flutter/src/widgets/framework.dart';
-import 'dart:ui';
-
 import 'package:intl/intl.dart';
 //
 import 'package:st_ev_cfg/st_ev_cfg.dart';
 
 /*
   creating fake data for testing
-
-great!!  please send me your digits
 
 */
 
@@ -99,39 +94,6 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
   String get groupKey => 'niu';
 
   @override
-  Color get color => throw UnimplementedError();
-
-  @override
-  Color get colorImage => throw UnimplementedError();
-
-  @override
-  double get gain => throw UnimplementedError();
-
-  @override
-  double get high => throw UnimplementedError();
-
-  @override
-  Widget get icon => throw UnimplementedError();
-
-  @override
-  double get low => throw UnimplementedError();
-
-  @override
-  double get open => throw UnimplementedError();
-
-  @override
-  double get percentage => throw UnimplementedError();
-
-  @override
-  double get shares => throw UnimplementedError();
-
-  @override
-  String get teamName => throw UnimplementedError();
-
-  @override
-  double get tokens => throw UnimplementedError();
-
-  @override
   bool get isTeam => throw UnimplementedError();
 }
 
@@ -152,22 +114,3 @@ List<MockAsset> _fakeData = [
   MockAsset('Ive', 'Reg3', 'Jeeps'),
   MockAsset('Jake', 'Reg3', 'Ford'),
 ];
-
-// class AssetWrapper implements AssetRowPropertyIfc {
-//   final Asset asset;
-
-//   AssetWrapper._({
-//     required this.asset,
-//   });
-
-//   factory AssetWrapper.fromTeam(Asset asset) {
-//     return AssetWrapper._(asset: asset);
-//   }
-
-//   factory AssetWrapper.fromPlayer(Asset asset) {
-//     return AssetWrapper._(asset: asset);
-//   }
-
-//   @override
-//   DateTime get gameDate => asset.gameDt;
-// }
