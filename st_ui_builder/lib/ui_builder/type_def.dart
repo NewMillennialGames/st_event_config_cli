@@ -16,6 +16,7 @@ typedef IndexedItemRowBuilder = Widget Function(
 );
 
 // this is the data sent in to build every table-view row
+// ActiveGameDetails controls when row stat changes and row rebuilds
 typedef TableviewDataRowTuple
     = Tuple3<AssetRowPropertyIfc, AssetRowPropertyIfc?, ActiveGameDetails>;
 
@@ -27,7 +28,6 @@ typedef GetGroupKeyFromRow = GroupHeaderData Function(TableviewDataRowTuple);
 typedef SectionSortComparator = int Function(
     TableviewDataRowTuple, TableviewDataRowTuple);
 
-// NIU
 typedef GroupComparatorCallback = int Function(
   GroupHeaderData,
   GroupHeaderData,

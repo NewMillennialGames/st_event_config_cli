@@ -30,11 +30,17 @@ class StBaseTvRow extends StBaseTvRowIfc {
     // you can wrap row body here if needed
     // should also use ScopedProvider here to toggle
     // Trade button on and off
-    return ProviderScope(overrides: [
-      _gameStatusProvider.overrideWithValue(
-        assets.item3,
-      ),
-    ], child: rowBody(context));
+    return ProviderScope(
+        overrides: [
+          _gameStatusProvider.overrideWithValue(
+            assets.item3,
+          ),
+        ],
+        child: Consumer(builder: (context, ref, child) {
+          // force rebuild when game status changes
+          ref.watch(_gameStatusProvider);
+          return rowBody(context);
+        }));
   }
 
   @override

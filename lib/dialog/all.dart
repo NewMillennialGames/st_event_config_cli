@@ -6,7 +6,6 @@ import '../questions/all.dart';
 import '../app_entity_enums/all.dart';
 import '../config/all.dart';
 import '../interfaces/question_presenter.dart';
-import '../util/type_def.dart';
 import '../scoretrader/all.dart';
 
 part 'quest_list_mgr.dart';
