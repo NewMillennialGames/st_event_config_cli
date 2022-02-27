@@ -219,37 +219,35 @@ class GroupedTableDataMgr {
   }
 }
 
-
 // void filterDataBy(DbTableFieldName fld, String value) {
-    //
-    // FilterRules fltrRules = this._filterRules!;
-    // // TvFilterCfg? filterCfg;
-    // SortOrGroupIdxOrder order = SortOrGroupIdxOrder.first;
+//
+// FilterRules fltrRules = this._filterRules!;
+// // TvFilterCfg? filterCfg;
+// SortOrGroupIdxOrder order = SortOrGroupIdxOrder.first;
 
-    // if (fltrRules.item1.colName == colName) {
-    //   // filterCfg = fltrRules.item1;
-    //   order = SortOrGroupIdxOrder.first;
-    // } else if (fltrRules.item2?.colName == colName) {
-    //   // filterCfg = fltrRules.item1;
-    //   order = SortOrGroupIdxOrder.first;
-    // } else if (fltrRules.item3?.colName == colName) {
-    //   // filterCfg = fltrRules.item1;
-    //   order = SortOrGroupIdxOrder.first;
-    // }
-    // // if (filterCfg == null) return;
+// if (fltrRules.item1.colName == colName) {
+//   // filterCfg = fltrRules.item1;
+//   order = SortOrGroupIdxOrder.first;
+// } else if (fltrRules.item2?.colName == colName) {
+//   // filterCfg = fltrRules.item1;
+//   order = SortOrGroupIdxOrder.first;
+// } else if (fltrRules.item3?.colName == colName) {
+//   // filterCfg = fltrRules.item1;
+//   order = SortOrGroupIdxOrder.first;
+// }
+// // if (filterCfg == null) return;
 
-    // var filterFunc = (TableviewDataRowTuple dr) {
-    //   switch (order) {
-    //     case SortOrGroupIdxOrder.first:
-    //       return dr.item1.valueExtractor(colName) == selectedVal;
-    //     case SortOrGroupIdxOrder.first:
-    //       return dr.item1.valueExtractor(colName) == selectedVal;
-    //   }
-    // };
+// var filterFunc = (TableviewDataRowTuple dr) {
+//   switch (order) {
+//     case SortOrGroupIdxOrder.first:
+//       return dr.item1.valueExtractor(colName) == selectedVal;
+//     case SortOrGroupIdxOrder.first:
+//       return dr.item1.valueExtractor(colName) == selectedVal;
+//   }
+// };
 
-
-      // NIU
-  // GroupSepRowBuilder get groupSeparatorBuilder {
-  //   // defining groupHeaderBuilder will cause groupSeparatorBuilder to be ignored
-  //   return (GroupHeaderData _) => TvGroupHeaderSep(GroupHeaderData.mockRow);
-  // }
+// NIU
+// GroupSepRowBuilder get groupSeparatorBuilder {
+//   // defining groupHeaderBuilder will cause groupSeparatorBuilder to be ignored
+//   return (GroupHeaderData _) => TvGroupHeaderSep(GroupHeaderData.mockRow);
+// }
