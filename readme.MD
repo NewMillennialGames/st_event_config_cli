@@ -129,3 +129,13 @@ and I've made the UI presenter injectible into the dialog runner
 
   In the next few weeks, this package will become a 
   dependency of ScoreTrader
+
+
+defer this until after 1st build:
+  How do I feed Competition updates
+  into the rows hidden inside GroupedTableDataMgr
+
+  I could pass a stream in and allow it to update
+  those rows ...
+
+  or update them on the outside
