@@ -6,18 +6,18 @@ class ActiveGameDetails with EquatableMixin {
   // must be immutable so Riverpod can detect changes
 
   final String competitionKey;
-  final List<String> _participantAssetIds;
+  final List<String> participantAssetIds;
   // FIXME with Enum for CompStatus
-  final int _gameStatus;
-  final String _roundName;
-  final DateTime _scheduledStartDtTm;
+  final int gameStatus;
+  final String roundName;
+  final DateTime scheduledStartDtTm;
 
   ActiveGameDetails(
     this.competitionKey,
-    this._gameStatus,
-    this._roundName,
-    this._scheduledStartDtTm,
-    this._participantAssetIds,
+    this.gameStatus,
+    this.roundName,
+    this.scheduledStartDtTm,
+    this.participantAssetIds,
   );
 
   ActiveGameDetails cloneWithUpdates(CompetitionInfo ci) {
@@ -27,36 +27,32 @@ class ActiveGameDetails with EquatableMixin {
       competitionKey,
       ci.competitionStatus.toInt(),
       ci.currentRoundName,
-      _scheduledStartDtTm,
-      _participantAssetIds,
+      scheduledStartDtTm,
+      participantAssetIds,
     );
   }
 
   // getters
-  int get gameStatus {
-    return _gameStatus;
-  }
 
   // FIXME with Enum for CompStatus
-  bool get isTradable => _gameStatus == 4;
-  int get competitorCount => _participantAssetIds.length;
-  String get roundName => _roundName;
-  DateTime get scheduledStartDateOnly => _scheduledStartDtTm.truncateTime;
-  DateTime get scheduledStartDtTm => _scheduledStartDtTm;
+  bool get isTradable => gameStatus == 4;
+  int get competitorCount => participantAssetIds.length;
+  DateTime get scheduledStartDateOnly => scheduledStartDtTm.truncateTime;
+  // DateTime get scheduledStartDtTm => scheduledStartDtTm;
   String get assetId1 =>
-      _participantAssetIds.length > 0 ? _participantAssetIds[0] : '_';
+      participantAssetIds.length > 0 ? participantAssetIds[0] : '_';
   String get assetId2 =>
-      _participantAssetIds.length > 1 ? _participantAssetIds[1] : '_';
+      participantAssetIds.length > 1 ? participantAssetIds[1] : '_';
 
   // List<String> get participantAssetIds => _participantAssetIds;
   // String get _uniqueAssetKey => assetId1 + '-' + assetId2;
 
   bool includesParticipant(String assetId) =>
-      _participantAssetIds.contains(assetId);
+      participantAssetIds.contains(assetId);
 
   @override
   List<Object?> get props =>
-      [_scheduledStartDtTm.toIso8601String(), competitionKey];
+      [scheduledStartDtTm.toIso8601String(), competitionKey];
 
   // only for testing
   factory ActiveGameDetails.mock() =>
