@@ -12,7 +12,7 @@ we have one style for each value of:
   */
 
 class AssetVsAssetRow extends StBaseTvRow with ShowsTwoAssets {
-  AssetVsAssetRow(
+  const AssetVsAssetRow(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
@@ -39,7 +39,7 @@ class AssetVsAssetRow extends StBaseTvRow with ShowsTwoAssets {
 }
 
 class AssetVsAssetRankedRow extends StBaseTvRow with ShowsTwoAssets {
-  AssetVsAssetRankedRow(
+  const AssetVsAssetRankedRow(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
@@ -109,7 +109,7 @@ class AssetVsAssetRankedRow extends StBaseTvRow with ShowsTwoAssets {
 }
 
 class TeamVsFieldRow extends StBaseTvRow with ShowsOneAsset {
-  TeamVsFieldRow(
+  const TeamVsFieldRow(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
@@ -270,7 +270,7 @@ class TeamVsFieldRow extends StBaseTvRow with ShowsOneAsset {
 }
 
 class TeamVsFieldRankedRow extends StBaseTvRow with ShowsOneAsset {
-  TeamVsFieldRankedRow(
+  const TeamVsFieldRankedRow(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
@@ -323,7 +323,7 @@ class TeamVsFieldRankedRow extends StBaseTvRow with ShowsOneAsset {
 }
 
 class TeamDraftRow extends StBaseTvRow with ShowsOneAsset {
-  TeamDraftRow(
+  const TeamDraftRow(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
@@ -338,7 +338,7 @@ class TeamDraftRow extends StBaseTvRow with ShowsOneAsset {
 }
 
 class TeamLineRow extends StBaseTvRow with ShowsOneAsset {
-  TeamLineRow(
+  const TeamLineRow(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
@@ -395,7 +395,7 @@ class TeamLineRow extends StBaseTvRow with ShowsOneAsset {
 }
 
 class TeamPlayerVsFieldRow extends StBaseTvRow with ShowsOneAsset {
-  TeamPlayerVsFieldRow(
+  const TeamPlayerVsFieldRow(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
@@ -410,7 +410,7 @@ class TeamPlayerVsFieldRow extends StBaseTvRow with ShowsOneAsset {
 }
 
 class PlayerVsFieldRow extends StBaseTvRow with ShowsOneAsset {
-  PlayerVsFieldRow(
+  const PlayerVsFieldRow(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
@@ -425,7 +425,7 @@ class PlayerVsFieldRow extends StBaseTvRow with ShowsOneAsset {
 }
 
 class PlayerVsFieldRankedRow extends StBaseTvRow with ShowsOneAsset {
-  PlayerVsFieldRankedRow(
+  const PlayerVsFieldRankedRow(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
@@ -440,7 +440,7 @@ class PlayerVsFieldRankedRow extends StBaseTvRow with ShowsOneAsset {
 }
 
 class PlayerDraftRow extends StBaseTvRow with ShowsOneAsset {
-  PlayerDraftRow(
+  const PlayerDraftRow(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
@@ -455,7 +455,7 @@ class PlayerDraftRow extends StBaseTvRow with ShowsOneAsset {
 }
 
 class DriverVsFieldRow extends StBaseTvRow with ShowsOneAsset {
-  DriverVsFieldRow(
+  const DriverVsFieldRow(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
@@ -471,7 +471,7 @@ class DriverVsFieldRow extends StBaseTvRow with ShowsOneAsset {
 
 // test classes only below
 class TeamVsFieldRowTest extends StBaseTvRow with ShowsOneAsset {
-  TeamVsFieldRowTest(
+  const TeamVsFieldRowTest(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
@@ -495,7 +495,7 @@ class TeamVsFieldRowTest extends StBaseTvRow with ShowsOneAsset {
 }
 
 class TeamVsFieldRankedRowTest extends StBaseTvRow with ShowsOneAsset {
-  TeamVsFieldRankedRowTest(
+  const TeamVsFieldRankedRowTest(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
@@ -503,36 +503,37 @@ class TeamVsFieldRankedRowTest extends StBaseTvRow with ShowsOneAsset {
   @override
   Widget rowBody(BuildContext context) {
     return Container(
-        height: 80,
-        color: Colors.green[100],
-        child: Row(
-          // crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              children: [
-                const Text('Rank:'),
-                Container(
-                  height: 26,
-                  width: 26,
-                  color: Colors.amber,
-                  child: Text(
-                    comp1.rankStr,
-                    style: const TextStyle(
-                      fontSize: 28,
-                    ),
+      height: 80,
+      color: Colors.green[100],
+      child: Row(
+        // crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            children: [
+              const Text('Rank:'),
+              Container(
+                height: 26,
+                width: 26,
+                color: Colors.amber,
+                child: Text(
+                  comp1.rankStr,
+                  style: const TextStyle(
+                    fontSize: 28,
                   ),
                 ),
-              ],
-            ),
-            Column(
-              children: [
-                Text(comp1.topName),
-                Text(comp1.subName),
-              ],
-            ),
-            Text(comp1.regionOrConference),
-          ],
-        ));
+              ),
+            ],
+          ),
+          Column(
+            children: [
+              Text(comp1.topName),
+              Text(comp1.subName),
+            ],
+          ),
+          Text(comp1.regionOrConference),
+        ],
+      ),
+    );
   }
 }

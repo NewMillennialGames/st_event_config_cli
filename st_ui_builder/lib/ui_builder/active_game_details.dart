@@ -1,5 +1,6 @@
 part of StUiController;
 
+@immutable
 class ActiveGameDetails with EquatableMixin {
   // simplified version of a Competition
   // must be immutable so Riverpod can detect changes

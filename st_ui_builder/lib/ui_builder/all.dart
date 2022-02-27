@@ -1,5 +1,6 @@
 library StUiController;
 
+import 'package:flutter/foundation.dart' show immutable;
 import 'package:flutter/material.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';

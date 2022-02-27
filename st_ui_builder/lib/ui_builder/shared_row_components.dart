@@ -31,7 +31,7 @@ class MktRschAsset extends StatelessWidget {
             children: [
               DottedBorder(
                 color: StColors.white,
-                child: Padding(
+                child: const Padding(
                   padding: const EdgeInsets.all(10),
                   child: Text(
                     StStrings.mktRschAssetVsAssetTeamImgText,
@@ -96,7 +96,7 @@ class ObjectRankRow extends StatelessWidget {
           width: _rowMargin,
         ),
         _PositionRankRow(
-          position: position,
+          rankPos: position,
         ),
         const SizedBox(
           width: _rowMargin,
@@ -152,17 +152,20 @@ class ObjectRankRow extends StatelessWidget {
 }
 
 class _PositionRankRow extends StatelessWidget {
-  final int position;
+  /*
+
+  */
+  final int rankPos;
   const _PositionRankRow({
     Key? key,
-    required this.position,
+    required this.rankPos,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     const double _sizeIconRank = 40;
     Widget positionWidget = const SizedBox();
-    switch (position) {
+    switch (rankPos) {
       case 1:
         positionWidget = Image.asset(
           kIconWiner1st,
@@ -196,7 +199,7 @@ class _PositionRankRow extends StatelessWidget {
             ),
           ),
           child: Text(
-            position.toString(),
+            rankPos.toString(),
             style: StTextStyles.textLisTileTokens.copyWith(
               fontSize: 25,
             ),
@@ -208,7 +211,7 @@ class _PositionRankRow extends StatelessWidget {
         positionWidget = Container(
           width: _sizeIconRank,
           child: Text(
-            position.toString(),
+            rankPos.toString(),
             style: StTextStyles.textLisTileTokens.copyWith(
               fontSize: 25,
             ),
