@@ -486,7 +486,7 @@ class TeamVsFieldRowTest extends StBaseTvRow with ShowsOneAsset {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(comp1.topName),
-            Text(comp1.subName),
+            Text('Round: ' + comp1.roundName),
             Text(comp1.regionOrConference),
             Text(comp1.gameDateStr),
           ],

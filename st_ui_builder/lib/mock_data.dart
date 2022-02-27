@@ -28,8 +28,14 @@ class MockAsset {
     // this.imgUrl,
   );
 
-  static List<MockAssetWrapper> get mockRows =>
-      _fakeData.map((e) => MockAssetWrapper(e)).toList();
+  static List<MockAssetWrapper> get mockRows => _fakeData
+      .map(
+        (e) => MockAssetWrapper(
+          e,
+          ActiveGameDetails.mock(),
+        ),
+      )
+      .toList();
 }
 
 class MockAssetWrapper implements AssetRowPropertyIfc {
@@ -37,8 +43,12 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
   // should return properties from asset
   // that are required by AssetRowPropertyIfc
   MockAsset asset;
+  ActiveGameDetails gameStatus;
 
-  MockAssetWrapper(this.asset);
+  MockAssetWrapper(
+    this.asset,
+    this.gameStatus,
+  );
 
   @override
   DateTime get gameDate => asset.gameDt;
@@ -95,6 +105,9 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
 
   @override
   bool get isTeam => throw UnimplementedError();
+
+  @override
+  String get roundName => gameStatus.roundName;
 }
 
 List<MockAsset> _fakeData = [

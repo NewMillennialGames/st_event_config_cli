@@ -60,5 +60,5 @@ class ActiveGameDetails with EquatableMixin {
 
   // only for testing
   factory ActiveGameDetails.mock() =>
-      ActiveGameDetails('', 0, '', DateTime.now(), []);
+      ActiveGameDetails('', 0, 'rZero', DateTime.now(), []);
 }

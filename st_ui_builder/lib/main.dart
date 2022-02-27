@@ -1,8 +1,9 @@
+import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'dart:convert';
 //
 import 'package:st_ev_cfg/st_ev_cfg.dart';
 //
@@ -139,7 +140,25 @@ class _MarketViewScreenState extends State<MarketViewScreen> {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => tvMgr.replaceGameStatusForRowRebuildTest(
+          _getRandRound(),
+        ),
+      ),
     );
+  }
+
+  String _getRandRound() {
+    var rounds = <String>[
+      'rOne',
+      'rTwo',
+      'rThree',
+      'rFour',
+      'rFive',
+      'rSix',
+    ];
+    int idx = Random().nextInt(5);
+    return rounds[idx];
   }
 }
 

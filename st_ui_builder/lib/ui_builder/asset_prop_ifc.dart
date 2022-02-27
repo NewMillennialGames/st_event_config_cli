@@ -30,6 +30,8 @@ abstract class AssetRowPropertyIfc {
   int get rank;
   bool get isTeam;
 
+  String get roundName;
+
   // String get rankStr;
   // Widget get icon;
   // Color get colorImage;

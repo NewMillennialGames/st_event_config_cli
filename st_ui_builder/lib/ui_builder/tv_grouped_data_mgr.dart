@@ -202,6 +202,21 @@ class GroupedTableDataMgr {
     // print('you must reload your list after calling this');
     if (redrawCallback != null) redrawCallback!();
   }
+
+  void replaceGameStatusForRowRebuildTest(String round) {
+    //
+    TableviewDataRowTuple drt = _allAssetRows[2];
+    ActiveGameDetails agd = drt.item3;
+    var ci = CompetitionInfo(
+      key: agd.competitionKey,
+      competitionStatus: null,
+      currentRoundName: round,
+    );
+    agd = agd.cloneWithUpdates(ci);
+
+    _allAssetRows[2] = TableviewDataRowTuple(drt.item1, drt.item2, agd);
+    print('ActiveGameDetails replaced on 2 with $round  (did row repaint?)');
+  }
 }
 
 
