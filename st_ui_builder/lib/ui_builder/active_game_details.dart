@@ -8,7 +8,7 @@ class ActiveGameDetails with EquatableMixin {
   final String competitionKey;
   final List<String> participantAssetIds;
   // FIXME with Enum for CompStatus
-  final int gameStatus;
+  final CompetitionStatus gameStatus;
   final String roundName;
   final DateTime scheduledStartDtTm;
 
@@ -25,7 +25,7 @@ class ActiveGameDetails with EquatableMixin {
     // _roundName = ci.currentRoundName;
     return ActiveGameDetails(
       competitionKey,
-      ci.competitionStatus.toInt(),
+      ci.competitionStatus,
       ci.currentRoundName,
       scheduledStartDtTm,
       participantAssetIds,
@@ -55,6 +55,6 @@ class ActiveGameDetails with EquatableMixin {
       [scheduledStartDtTm.toIso8601String(), competitionKey];
 
   // only for testing
-  factory ActiveGameDetails.mock() =>
-      ActiveGameDetails('', 0, 'rZero', DateTime.now(), []);
+  factory ActiveGameDetails.mock() => ActiveGameDetails(
+      '', CompetitionStatus.compInFuture, 'rZero', DateTime.now(), []);
 }

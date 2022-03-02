@@ -289,10 +289,10 @@ packages:
     description:
       path: stclient
       ref: master
-      resolved-ref: bdd3643dc9018262e4848dda294f991e227c119e
+      resolved-ref: "437f4be059d2ade707c716139862495974759194"
       url: "git@github.com:NewMillennialGames/st-client-api.git"
     source: git
-    version: "0.0.5"
+    version: "0.0.8"
   stream_channel:
     dependency: transitive
     description:
