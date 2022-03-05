@@ -87,7 +87,7 @@ class GroupedTableDataMgr {
   String? _filter2Selection;
   String? _filter3Selection;
 
-  Widget filterBarRow({double totAvailWidth = 380}) {
+  Widget filterBarRow({double totAvailWidth = 360}) {
     // dont call this without first checking this.hasFilterBar
     TvFilterCfg i1 = filterRules.item1;
     TvFilterCfg? i2 = filterRules.item2;

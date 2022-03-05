@@ -120,7 +120,7 @@ class TeamVsFieldRow extends StBaseTvRow with ShowsOneAsset {
     final size = MediaQuery.of(context).size;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 5),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: StColors.black,
         border: Border.symmetric(
           horizontal: BorderSide(
@@ -283,7 +283,7 @@ class TeamVsFieldRankedRow extends StBaseTvRow with ShowsOneAsset {
     return Container(
       height: _stdRowHeight,
       width: size.width,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: StColors.black,
         border: Border(
           bottom: BorderSide(
@@ -350,7 +350,7 @@ class TeamLineRow extends StBaseTvRow with ShowsOneAsset {
     const double _rowMargin = 8;
     return Container(
       height: _sizeHeightCont,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: StColors.black,
         border: Border(
           bottom: BorderSide(

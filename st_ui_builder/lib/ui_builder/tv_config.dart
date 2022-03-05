@@ -58,17 +58,17 @@ class TableviewConfigPayload {
       case TvAreaRowStyle.assetVsAssetRanked:
         return AssetVsAssetRankedRow.new;
       case TvAreaRowStyle.teamVsField:
-        // return TeamVsFieldRow.new;
-        print(
-          'rowConstructor runnning test code with TeamVsFieldRowTest',
-        );
-        return TeamVsFieldRowTest.new;
+        return TeamVsFieldRow.new;
+      // print(
+      //   'rowConstructor runnning test code with TeamVsFieldRowTest',
+      // );
+      // return TeamVsFieldRowTest.new;
       case TvAreaRowStyle.teamVsFieldRanked:
-        // return TeamVsFieldRankedRow.new;
-        print(
-          'rowConstructor runnning test code with TeamVsFieldRankedRowTest',
-        );
-        return TeamVsFieldRankedRowTest.new;
+        return TeamVsFieldRankedRow.new;
+      // print(
+      //   'rowConstructor runnning test code with TeamVsFieldRankedRowTest',
+      // );
+      // return TeamVsFieldRankedRowTest.new;
       case TvAreaRowStyle.teamDraft:
         return TeamDraftRow.new;
       case TvAreaRowStyle.teamLine:
