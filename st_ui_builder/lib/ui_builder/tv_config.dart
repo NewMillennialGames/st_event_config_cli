@@ -54,11 +54,18 @@ class TableviewConfigPayload {
 
     switch (rowStyle) {
       case TvAreaRowStyle.assetVsAsset:
-        return AssetVsAssetRow.new;
+        switch (appScreen) {
+          case AppScreen.marketView:
+            return AssetVsAssetRow_MktView.new;
+          case AppScreen.marketResearch:
+            return AssetVsAssetRow_MktResrch.new;
+          default:
+            return AssetVsAssetRow_MktView.new;
+        }
       case TvAreaRowStyle.assetVsAssetRanked:
-        return AssetVsAssetRankedRow.new;
+        return AssetVsAssetRowRanked_MktView.new;
       case TvAreaRowStyle.teamVsField:
-        return TeamVsFieldRow.new;
+        return TeamVsFieldRow_MktView.new;
       // print(
       //   'rowConstructor runnning test code with TeamVsFieldRowTest',
       // );

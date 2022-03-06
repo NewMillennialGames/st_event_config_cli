@@ -92,9 +92,9 @@ class GroupedTableDataMgr {
     TvFilterCfg i1 = filterRules.item1;
     TvFilterCfg? i2 = filterRules.item2;
     TvFilterCfg? i3 = filterRules.item3;
-    int dlCount = 1 + (i2 == null ? 0 : 1) + (i3 == null ? 0 : 1);
-    // allocated button width
-    double allocBtnWidth = totAvailWidth / dlCount;
+    int dropLstCount = 1 + (i2 == null ? 0 : 1) + (i3 == null ? 0 : 1);
+    // allocate dropdown button width
+    double allocBtnWidth = (totAvailWidth / dropLstCount) - 10;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,

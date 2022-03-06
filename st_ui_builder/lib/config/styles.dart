@@ -128,7 +128,7 @@ class StTextStyles {
   static const textValueMarketTicker = TextStyle(
     fontFamily: 'Helvetica Neue',
     fontSize: 11,
-    color: StColors.valuePositiveMarketTicker,
+    color: StColors.gainGreen,
     fontWeight: FontWeight.w700,
   );
   static const textTeamNameMarketView = TextStyle(
@@ -137,18 +137,25 @@ class StTextStyles {
     color: StColors.teamNameMarketView,
     fontWeight: FontWeight.w700,
   );
-  static const textGainPositiveTeamMarketView = TextStyle(
+  static const moneyDeltaPositive = TextStyle(
     fontFamily: 'Helvetica Neue',
     fontSize: 14,
-    color: StColors.teamGainPositiveMarketView,
+    color: StColors.gainGreen,
     fontWeight: FontWeight.w700,
   );
+  static const moneyDeltaNegative = TextStyle(
+    fontFamily: 'Helvetica Neue',
+    fontSize: 14,
+    color: StColors.lossRed,
+    fontWeight: FontWeight.w700,
+  );
+
   static const textOpenHighLowTeamMarketView = TextStyle(
     fontFamily: 'Helvetica Neue',
     fontSize: 11,
     color: StColors.teamOpenHighLowMarketView,
   );
-  static const textTradeButtonTeamMarketView = TextStyle(
+  static const tradeButton = TextStyle(
     fontFamily: 'Helvetica Neue',
     fontSize: 14,
     color: StColors.teamNameMarketView,
@@ -239,8 +246,7 @@ class StButtonStyles {
     ),
     padding: const EdgeInsets.symmetric(horizontal: 18),
   );
-  static ButtonStyle getTokensOnTapLessWith =
-      ElevatedButton.styleFrom(
+  static ButtonStyle getTokensOnTapLessWith = ElevatedButton.styleFrom(
     primary: StColors.blue,
     padding: const EdgeInsets.symmetric(horizontal: 18),
   );
@@ -251,23 +257,21 @@ class StButtonStyles {
       horizontal: 15,
     ),
   );
-  static ButtonStyle tradePlayerMarketView = TextButton.styleFrom(
+  static ButtonStyle tradeButtonCanTrade = TextButton.styleFrom(
     backgroundColor: StColors.darkGreen,
     padding: const EdgeInsets.symmetric(
       vertical: 10,
       horizontal: 15,
     ),
   );
-  static ButtonStyle tradeTeamMarketLessWidthView =
-      TextButton.styleFrom(
+  static ButtonStyle tradeTeamMarketLessWidthView = TextButton.styleFrom(
     backgroundColor: StColors.darkGreen,
     padding: const EdgeInsets.symmetric(
       vertical: 20,
       horizontal: 10,
     ),
   );
-  static ButtonStyle tradePlayerMarketLessWidthView =
-      TextButton.styleFrom(
+  static ButtonStyle tradePlayerMarketLessWidthView = TextButton.styleFrom(
     backgroundColor: StColors.darkGreen,
     padding: const EdgeInsets.symmetric(
       vertical: 10,
@@ -277,8 +281,7 @@ class StButtonStyles {
   static ButtonStyle reviewOrder = ElevatedButton.styleFrom(
     primary: StColors.backgroundColorButtonReviewOrder,
   );
-  static ButtonStyle clearButtonReviewOrderInputForm =
-      ElevatedButton.styleFrom(
+  static ButtonStyle clearButtonReviewOrderInputForm = ElevatedButton.styleFrom(
     primary: StColors.transparentColor,
     side: BorderSide(
       color: StColors.darkBlue,

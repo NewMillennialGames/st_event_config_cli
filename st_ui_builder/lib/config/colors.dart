@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class StColors {
-
   // DGNOTE: Check the colors because they are not in the provided style file
   static const transparentColor = Color(0x00000000);
   static const textHint = Color(0xff464954);
@@ -12,10 +11,10 @@ class StColors {
   static const backgroundContainer = Color(0xff323942);
   static const textEvents = Color(0xff64686e);
   static const borderTextField = Color(0xff707070);
-  static const valuePositiveMarketTicker = Color(0xff00ff3b);
-  static const valueNegativeMarketTicker = Color(0xffdf0a19);
+  // static const valuePositiveMarketTicker = Color(0xff00ff3b);
   static const teamNameMarketView = Color(0xff28f76c);
-  static const teamGainPositiveMarketView = Color(0xff29fd3a);
+  static const gainGreen = Color(0xff29fd3a);
+  static const lossRed = Color(0xffdf0a19);
   static const teamOpenHighLowMarketView = Color(0xff9da1b6);
   static const backgroundColorSearchTextFormField = Color(0xff101012);
   static const backgroundColorContainerReviewOrder = Color(0xff323842);

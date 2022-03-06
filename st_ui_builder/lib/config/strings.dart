@@ -250,33 +250,33 @@ class StStrings {
   static const String playerTradeViewAvailableText = 'Available Tokens ';
 
   // Review Order Screen
-  static const String reviewOrderScreenSellText = 'SELL';
-  static const String reviewOrderScreenBuyText = 'BUY';
-  static const String reviewOrderScreenSharesText = 'Shares';
-  static const String reviewOrderScreenMarketText = 'Market Price';
-  static const String reviewOrderScreenEstText = 'Est Cost';
-  static const String reviewOrderScreenPlaceTextButton = 'PLACE ORDER';
-  static const String reviewOrderScreenPlaceText = 'Time to closing bell';
+  static const String sellUc = 'SELL';
+  static const String buyUc = 'BUY';
+
+  static const String marketPrice = 'Market Price';
+  static const String estCost = 'Est Cost';
+  static const String placeOrderUc = 'PLACE ORDER';
+  static const String timeToClosingBell = 'Time to closing bell';
 
   // Review Order Input Form
-  static const String reviewOrderInputFormClearButton = 'Clear';
-  static const String reviewOrderInputFormReviewButton = 'Review Order';
+  static const String clear = 'Clear';
+  static const String reviewOrder = 'Review Order';
 
   // Trade Team Screen
-  static const String tradeTeamTitleAppbar = 'Trade';
+  static const String tradeLc = 'Trade';
 
   // Notification dialog order confirmed
   static const String notificationDialogTitleText = 'Trade Confirmed!';
   static const String notificationDialogYourOrderText = 'You order to ';
   static const String notificationDialogBuyText = 'BUY ';
   static const String notificationDialogSellText = 'SELL ';
-  static const String notificationDialogSharesText = ' shares of';
+  static const String sharesOf = ' shares of';
   static const String notificationDialogTeamText = 'Team Symbol';
   static const String notificationDialogWillBeText =
       'Will be posted to your portfolio shortly.';
-  static const String notificationDialogOrderText = 'Order #';
-  static const String notificationDialogOkButton = 'OK';
-  static const String notificationDialogTapButton = 'Tap';
+  static const String orderNum = 'Order #';
+  static const String niuOkUc = 'OK';
+  static const String tap = 'Tap';
 
   // Notification dialog order denied
   static const String notificationDialogDeniedSellTitleText =
@@ -287,54 +287,54 @@ class StStrings {
       'The number of shares you are attemping to buy is greater than the shares held in your account.';
   static const String notificationDialogDeniedSellText =
       'The number of shares you are attemping to sell is greater than the shares held in your account.';
-  static const String notificationDialogDeniedOkButton = 'OK';
+  static const String okUc = 'OK';
 
   // Overview section Research Screen
-  static const String overviewSectionResearchScreenGame = 'Game';
-  static const String overviewSectionResearchScreenDate = 'Date';
-  static const String overviewSectionResearchScreenTime = 'Time';
-  static const String overviewSectionResearchScreenStadium = 'Stadium';
-  static const String overviewSectionResearchScreenType = 'Type';
-  static const String overviewSectionResearchScreenSurface = 'Surface';
-  static const String overviewSectionResearchScreenWeather = 'Weather';
+  static const String game = 'Game';
+  static const String dateLc = 'Date';
+  static const String timeLc = 'Time';
+  static const String stadium = 'Stadium';
+  static const String typeLc = 'Type';
+  static const String surface = 'Surface';
+  static const String weather = 'Weather';
 
   // How to Play the Game
-  static const String howPlayGameTitleShowDialogcreenHow = 'How To Play';
-  static const String howPlayGameSubTitleShowDialogcreenWhat = 'What is ST?';
-  static const String howPlayGameContentShowDialogcreen =
+  static const String howToPlay = 'How To Play';
+  static const String whatIsScoretrader = 'What is ST?';
+  static const String scoretraderDescrip =
       'ScoreTrader is a mobile app that takes a whole new approach to Fantasy Sports by allowing the user to build a portfolio of Players of their choice. Unlike traditional fantasy sports that incorporate a salary cap model, ScoreTrader uses a market based game model very similar to what one would expect in trading stocks. Available Players for purchase will be designated by a green "Trade" button to the right of the Players name. Any eligible Player may be purchased or sold up until the time that Player\'s game begins. Users may buy or sell any eligible Player as many times as he likes (taking incremental profits along the way) prior to the close of trading. Once trading has closed, all remaining Player positions will be held in the Users Portfolio until the final game has been played in any given week. The top three Players at each position (QB, RB, WR & TE) will split the position pools created through User purchases of Players at each position and the Users shall be paid out in Tokens based upon the performance of his Players at each position. We call this rollover. When rollover happens all shares in a portfolio are liquidated and the results of the portfolio are displayed in the results tab of the portfolio view and the leaderboard is updated with the final Top Trader positions established. Rollover, or asset liquidation starts at Tuesday at Midnight EST just before the next Fantasy Football event starts.';
 
   // Portfolio Positions Row
-  static const String portfolioPostionsRowTradeText = 'TRADE';
-  static const String portfolioPostionsRowSharesText = 'shares';
-  static const String portfolioPostionsRowValueText = 'Value';
-  static const String portfolioPostionsRowProceedsText = 'Proceeds';
-  static const String portfolioPostionsRowGLText = 'G/L';
+  static const String tradeUc = 'TRADE';
+  static const String shares = 'shares';
+  static const String value = 'Value';
+  static const String proceeds = 'Proceeds';
+  static const String gainLossAbbrev = 'G/L';
 
   // Portfolio Positions Screen
-  static const String portfolioPostionsScreentTabPositions = 'POSITIONS';
-  static const String portfolioPostionsScreentTabHistory = 'HISTORY';
-  static const String portfolioPostionsScreenNoEventText =
-      'Your portfolio has no \n event positions';
-  static const String portfolioPostionsScreentNoEventText = 'Add a position';
-  static const String portfolioPostionsScreenAvailableText = 'Available Tokens';
+  static const String positionsUc = 'POSITIONS';
+  static const String historyUc = 'HISTORY';
+  static const String noPositionsInEvent =
+      'Your portfolio has no\npositions in this event';
+  static const String addAPosition = 'Add a position';
+  static const String availableTokens = 'Available Tokens';
 
   // Asset Rank Pane Widget
-  static const String assetRankPaneWidgetQBText = 'QB';
+  static const String niuSamplePlayerPosition = 'QB';
 
   // Leaders Screen
-  static const String leadersScreenTabLeaderboard = 'LEADERBOARD';
-  static const String leadersScreenTabTopTraders = 'TOP TRADERS';
-  static const String leadersScreenTabPools = 'POOLS';
-  
+  static const String leaderboardUc = 'LEADERBOARD';
+  static const String topTradersUc = 'TOP TRADERS';
+  static const String poolsUc = 'POOLS';
+
   // Mkt Rsch Asset Vs Asset Widget
-  static const String mktRschAssetVsAssetRecordText = 'RECORD';
+  static const String recordUc = 'RECORD';
   static const String mktRschAssetVsAssetTeamImgText = 'team\nimg';
 
   // Mkt Rsch Screen
-  static const String mktRschScreenTabOverview = 'OVERVIEW';
-  static const String mktRschScreenTabNews = 'NEWS';
-  static const String mktRschScreenTabChat = 'CHAT';
+  static const String overviewUc = 'OVERVIEW';
+  static const String newsUc = 'NEWS';
+  static const String chatUc = 'CHAT';
 
   // Social Screen
   static const String socialScreenTitle = '🏁Nascar';
@@ -342,15 +342,22 @@ class StStrings {
   static const String socialScreenTabAllMyChats = 'ALL MY CHATS';
   static const String socialScreenTabFavorites = '★ FAVORITES';
   static const String socialScreenTabPortafolio = '⌨ PORTAFOLIO';
-  static const String socialScreenTabContentTitle = 'Welcome to ScoreTrader Chat!';
+  static const String socialScreenTabContentTitle =
+      'Welcome to ScoreTrader Chat!';
   static const String socialScreenTabSubContent = ' to join a chat.';
-  static const String socialScreenTabContent = 'Join the conversation on \n any participating Nascar drivers.';
+  static const String socialScreenTabContent =
+      'Join the conversation on \n any participating Nascar drivers.';
   static const String socialScreenTwoTabContentTitle = 'No watched drivers';
-  static const String socialScreenTwoTabContent = 'Any you are watching \n will be automatically added here.';
-  static const String socialScreenTwoTabSubContent = 'Tap Market and flag your favorites!';
-  static const String socialScreenThreeTabContentTitle = 'No portafolio positions';
-  static const String socialScreenThreeTabContent = 'All drivers in your Portafolio \n will be automatically added here.';
-  static const String socialScreenThreeTabSubContent = 'Tap Market and start trading!';
+  static const String socialScreenTwoTabContent =
+      'Any you are watching \n will be automatically added here.';
+  static const String socialScreenTwoTabSubContent =
+      'Tap Market and flag your favorites!';
+  static const String socialScreenThreeTabContentTitle =
+      'No portafolio positions';
+  static const String socialScreenThreeTabContent =
+      'All drivers in your Portafolio \n will be automatically added here.';
+  static const String socialScreenThreeTabSubContent =
+      'Tap Market and start trading!';
 
   // Mkt Vw Dynamic Filters
   static const String mktVwDynamicFilter = 'REGION';

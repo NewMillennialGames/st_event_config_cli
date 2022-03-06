@@ -3,6 +3,7 @@ part of StUiController;
 mixin ShowsOneAsset on StBaseTvRowIfc {
   // competitors
   AssetRowPropertyIfc get comp1 => assets.item1;
+  ActiveGameDetails get gameState => assets.item3;
 }
 
 mixin ShowsTwoAssets on StBaseTvRowIfc {
@@ -10,6 +11,8 @@ mixin ShowsTwoAssets on StBaseTvRowIfc {
   // for TeamVsTeam and PlayerVsPlayer
   AssetRowPropertyIfc get comp1 => assets.item1;
   AssetRowPropertyIfc get comp2 => assets.item2!;
+
+  // ActiveGameDetails get gameStatus => assets.item3;
 }
 
 mixin IsTradeable on StBaseTvRowIfc {

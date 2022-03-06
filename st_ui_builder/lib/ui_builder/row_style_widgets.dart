@@ -11,105 +11,180 @@ we have one style for each value of:
     enum TvAreaRowStyle
   */
 
-class AssetVsAssetRow extends StBaseTvRow with ShowsTwoAssets {
-  const AssetVsAssetRow(
+class AssetVsAssetRow_MktView extends StBaseTvRow with ShowsTwoAssets {
+  //
+  bool get showRank => false;
+  //
+  const AssetVsAssetRow_MktView(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
 
   @override
   Widget rowBody(BuildContext context) {
-    // paste row widget code here
     return Container(
-      margin: const EdgeInsets.all(5),
       padding: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        color: StColors.black,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+      // margin: const EdgeInsets.all(5),
+      // decoration: BoxDecoration(
+      //   color: StColors.black,
+      //   borderRadius: BorderRadius.circular(15),
+      // ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          MktRschAsset(asset: comp1),
-          MktRschAsset(asset: comp2),
+          AssetVsAssetHalfRow(comp1, gameStatus, showRank),
+          AssetVsAssetHalfRow(comp2, gameStatus, showRank),
         ],
       ),
     );
   }
 }
 
-class AssetVsAssetRankedRow extends StBaseTvRow with ShowsTwoAssets {
-  const AssetVsAssetRankedRow(
+class AssetVsAssetRowRanked_MktView extends AssetVsAssetRow_MktView {
+  //
+  @override
+  bool get showRank => true;
+
+  AssetVsAssetRowRanked_MktView(TableviewDataRowTuple assets) : super(assets);
+}
+
+class AssetVsAssetRow_MktResrch extends StBaseTvRow with ShowsOneAsset {
+  //
+  const AssetVsAssetRow_MktResrch(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
 
   @override
   Widget rowBody(BuildContext context) {
-    // paste row widget code here
-    const double _sizeHeightCont = 60;
-    const double _rowMargin = 8;
+    // bool hasIncreased = comp1.priceDelta > 0;
+    // String sign = hasIncreased ? '+' : '-';
+
+    String priceDeltaStr = comp1.priceDeltaStr;
+    String pctIncrease =
+        (comp1.priceDelta / comp1.price).toStringAsPrecision(1);
+
     return Container(
-      height: (110 / 1.4) * 0.89,
-      padding: const EdgeInsets.only(
-        top: (110 / 2) * 0.08,
-        left: (110 / 1) * 0.08,
-      ),
-      decoration: BoxDecoration(
-        color: StColors.veryDarkGray,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.5),
-            spreadRadius: 0,
-            blurRadius: 1,
-            offset: Offset(0, 1),
+      padding: const EdgeInsets.all(5),
+      // margin: const EdgeInsets.all(5),
+      // decoration: BoxDecoration(
+      //   color: StColors.black,
+      //   borderRadius: BorderRadius.circular(15),
+      // ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Column(
+            children: [
+              Text(
+                comp1.topName + ' ' + comp1.priceStr,
+                style: StTextStyles.h3,
+              ),
+              // Row(
+              //   children: [
+              //     Text(comp1.topName),
+              //     Text(comp1.priceStr),
+              //   ],
+              // ),
+              Text(
+                '$priceDeltaStr ($pctIncrease%)',
+                style: StTextStyles.h5,
+              ),
+            ],
           ),
+          TradeButton(comp1.canTrade),
         ],
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Flexible(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
+    );
+  }
+}
+
+class AssetVsAssetRow_Portfolio extends StBaseTvRow with ShowsOneAsset {
+  // almost identical to Portfolio History (1 word delta)
+  bool get showProceeds => false;
+  const AssetVsAssetRow_Portfolio(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+
+  @override
+  Widget rowBody(BuildContext context) {
+    //
+    bool hasIncreased = comp1.priceDelta > 0;
+    String sharePrice = comp1.price.toStringAsPrecision(2);
+    String sharePriceChange = comp1.priceDeltaStr;
+    TextStyle gainLossTxtStyle = hasIncreased
+        ? StTextStyles.moneyDeltaPositive
+        : StTextStyles.moneyDeltaNegative;
+
+    // FIXME:  get position
+    String sharesOwned = '11 shares';
+    String positionValue = '\$26.32';
+    String positionGainLoss = '\$133.32';
+
+    return Row(
+      children: [
+        CompetitorImage(comp1.imgUrl),
+        Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  comp1.topName + '  ' + '20 shares',
-                  style: StTextStyles.textTeamNameMarketView.copyWith(
-                    color: StColors.white,
-                  ),
+                Text(comp1.topName),
+                TradeButton(comp1.canTrade),
+              ],
+            ),
+            Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(sharesOwned),
+                    Row(children: [
+                      Text('@ $sharePrice'),
+                      Text(
+                        sharePriceChange,
+                        style: gainLossTxtStyle,
+                      ),
+                    ]),
+                  ],
                 ),
-                Text(
-                  '+' + 'first.shares' + ' ' + '(' + 'first.percentage' + '%)',
-                  style: StTextStyles.textTradeButtonTeamMarketView,
-                  textAlign: TextAlign.left,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(showProceeds ? StStrings.proceeds : StStrings.value),
+                    Text(positionValue),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    const Text(StStrings.gainLossAbbrev),
+                    Text(positionGainLoss),
+                  ],
                 ),
               ],
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: TextButton(
-              child: Text(
-                StStrings.portfolioPostionsRowTradeText,
-                style: StTextStyles.textTradeButtonTeamMarketView,
-              ),
-              onPressed: () {},
-              style: StButtonStyles.tradePlayerMarketView,
-            ),
-          ),
-        ],
-      ),
+          ],
+        )
+      ],
     );
   }
 }
 
-class TeamVsFieldRow extends StBaseTvRow with ShowsOneAsset {
-  const TeamVsFieldRow(
+class AssetVsAssetRow_PortfolioHistory extends AssetVsAssetRow_Portfolio {
+  //
+  AssetVsAssetRow_PortfolioHistory(TableviewDataRowTuple assets)
+      : super(assets);
+
+  @override
+  bool get showProceeds => true;
+}
+//
+
+class TeamVsFieldRow_MktView extends StBaseTvRow with ShowsOneAsset {
+  //
+  const TeamVsFieldRow_MktView(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
@@ -193,7 +268,7 @@ class TeamVsFieldRow extends StBaseTvRow with ShowsOneAsset {
                           ),
                           Text(
                             '${comp1.priceDelta.isNegative ? comp1.priceDeltaStr : '+' + 'first.gain'}',
-                            style: StTextStyles.textGainPositiveTeamMarketView,
+                            style: StTextStyles.moneyDeltaPositive,
                           ),
                         ],
                       ),
@@ -207,7 +282,7 @@ class TeamVsFieldRow extends StBaseTvRow with ShowsOneAsset {
                         onPressed: () {},
                         child: Text(
                           StStrings.tradeTextTeamWidget,
-                          style: StTextStyles.textTradeButtonTeamMarketView,
+                          style: StTextStyles.tradeButton,
                         ),
                       ),
                     ],
@@ -537,3 +612,73 @@ class TeamVsFieldRankedRowTest extends StBaseTvRow with ShowsOneAsset {
     );
   }
 }
+
+// class AssetVsAssetRankedRow extends StBaseTvRow with ShowsTwoAssets {
+//   const AssetVsAssetRankedRow(
+//     TableviewDataRowTuple assets, {
+//     Key? key,
+//   }) : super(assets, key: key);
+
+//   @override
+//   Widget rowBody(BuildContext context) {
+//     // paste row widget code here
+//     const double _sizeHeightCont = 60;
+//     const double _rowMargin = 8;
+//     return Container(
+//       height: (110 / 1.4) * 0.89,
+//       padding: const EdgeInsets.only(
+//         top: (110 / 2) * 0.08,
+//         left: (110 / 1) * 0.08,
+//       ),
+//       decoration: BoxDecoration(
+//         color: StColors.veryDarkGray,
+//         boxShadow: [
+//           BoxShadow(
+//             color: Colors.black.withOpacity(0.5),
+//             spreadRadius: 0,
+//             blurRadius: 1,
+//             offset: Offset(0, 1),
+//           ),
+//         ],
+//       ),
+//       child: Row(
+//         mainAxisSize: MainAxisSize.max,
+//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//         crossAxisAlignment: CrossAxisAlignment.center,
+//         children: [
+//           Flexible(
+//             child: Column(
+//               mainAxisAlignment: MainAxisAlignment.center,
+//               mainAxisSize: MainAxisSize.min,
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Text(
+//                   comp1.topName + '  ' + '20 shares',
+//                   style: StTextStyles.textTeamNameMarketView.copyWith(
+//                     color: StColors.white,
+//                   ),
+//                 ),
+//                 Text(
+//                   '+' + 'first.shares' + ' ' + '(' + 'first.percentage' + '%)',
+//                   style: StTextStyles.tradeButton,
+//                   textAlign: TextAlign.left,
+//                 ),
+//               ],
+//             ),
+//           ),
+//           Padding(
+//             padding: const EdgeInsets.only(right: 16),
+//             child: TextButton(
+//               child: Text(
+//                 StStrings.trade,
+//                 style: StTextStyles.tradeButton,
+//               ),
+//               onPressed: () {},
+//               style: StButtonStyles.tradeButtonCanTrade,
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
