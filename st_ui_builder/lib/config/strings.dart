@@ -221,33 +221,28 @@ class StStrings {
   static const String cancelTextSearchBar = 'Cancel';
 
   // Widget Navigation Tab Bar UI
-  static const String marketTabBar = 'Market';
-  static const String socialTabBar = 'Pools';
-  static const String newsTabBar = 'News';
-  static const String leaderBoardTabBar = 'LeaderBoard';
-  static const String portfolioTabBar = 'Portfolio';
+  static const String market = 'Market';
+  static const String poolsSocial = 'Pools';
+  static const String news = 'News';
+  static const String leaderBoard = 'LeaderBoard';
+  static const String portfolio = 'Portfolio';
 
   // Widget Team Market View
-  static const tradeTextTeamWidget = 'TRADE';
-  static const openTextTeamWidget = 'Open';
-  static const highTextTeamWidget = 'High';
-  static const lowTextTeamWidget = 'Low';
+
+  static const open = 'Open';
+  static const high = 'High';
+  static const low = 'Low';
 
   // Market View Screen
-  static const refreshTextButton = 'Refresh';
+  static const refresh = 'Refresh';
 
   // Research Screen
-  static const String researchScreenTitleAppBar = 'Research';
-  static const String researchScreenLeadingAppBar = 'Market';
-  static const String researchScreenOverViewTab = 'OVERVIEW';
-  static const String researchScreenStatsTab = 'STATS';
-  static const String researchScreenScoresTab = 'SCORES';
-  static const String researchScreenNewsTab = 'NEWS';
-  static const String researchScreenChatTab = 'CHAT';
+  static const String research = 'Research';
+  static const String statsUc = 'STATS';
+  static const String scoresUc = 'SCORES';
 
   // Player Trade View
-  static const String playerTradeViewSharedText = 'Shared Held ';
-  static const String playerTradeViewAvailableText = 'Available Tokens ';
+  static const String sharesHeld = 'Shared Held ';
 
   // Review Order Screen
   static const String sellUc = 'SELL';

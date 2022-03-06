@@ -71,7 +71,7 @@ class TableviewConfigPayload {
       // );
       // return TeamVsFieldRowTest.new;
       case TvAreaRowStyle.teamVsFieldRanked:
-        return TeamVsFieldRankedRow.new;
+        return TeamVsFieldRowRanked_MktView.new;
       // print(
       //   'rowConstructor runnning test code with TeamVsFieldRankedRowTest',
       // );

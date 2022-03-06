@@ -184,6 +184,7 @@ class AssetVsAssetRow_PortfolioHistory extends AssetVsAssetRow_Portfolio {
 
 class TeamVsFieldRow_MktView extends StBaseTvRow with ShowsOneAsset {
   //
+  bool get showRanked => false;
   const TeamVsFieldRow_MktView(
     TableviewDataRowTuple assets, {
     Key? key,
@@ -191,210 +192,64 @@ class TeamVsFieldRow_MktView extends StBaseTvRow with ShowsOneAsset {
 
   @override
   Widget rowBody(BuildContext context) {
-    // paste row widget code here
+    //
     final size = MediaQuery.of(context).size;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 5),
-      decoration: const BoxDecoration(
-        color: StColors.black,
-        border: Border.symmetric(
-          horizontal: BorderSide(
-            color: StColors.borderTextField,
-          ),
-        ),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Stack(
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Image.network(comp1.imgUrl),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 10,
-                          left: 3,
-                          right: 3,
-                        ),
-                        child: Image.network(
-                          comp1.imgUrl,
-                          height: 60,
-                          width: size.height <= 568 ? 40 : 50,
-                          color: Colors.yellow,
-                          colorBlendMode: BlendMode.color,
-                        ),
-                      ),
-                      Padding(
-                        padding: size.height <= 568
-                            ? const EdgeInsets.only(bottom: 20)
-                            : const EdgeInsets.only(bottom: 30),
-                        child: Text(
-                          assets.item1.topName,
-                          style: StTextStyles.textTeamNameMarketView.copyWith(
-                            color: Colors.yellow,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Image.asset(
-                                kTokensIcon,
-                                height: 15,
-                                width: 15,
-                              ),
-                              Text(
-                                'first.tokens',
-                                style:
-                                    StTextStyles.textNameMarketTicker.copyWith(
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Text(
-                            '${comp1.priceDelta.isNegative ? comp1.priceDeltaStr : '+' + 'first.gain'}',
-                            style: StTextStyles.moneyDeltaPositive,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      TextButton(
-                        style: size.height <= 568
-                            ? StButtonStyles.tradeTeamMarketLessWidthView
-                            : StButtonStyles.tradeTeamMarketView,
-                        onPressed: () {},
-                        child: Text(
-                          StStrings.tradeTextTeamWidget,
-                          style: StTextStyles.tradeButton,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                heightFactor: 5,
-                child: Wrap(
-                  spacing: 2,
-                  children: [
-                    Text(
-                      StStrings.openTextTeamWidget,
-                      style: StTextStyles.textOpenHighLowTeamMarketView,
-                    ),
-                    Text(
-                      comp1.priceStr,
-                      style: StTextStyles.textValueMarketTicker.copyWith(
-                        color: StColors.white,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      StStrings.highTextTeamWidget,
-                      style: StTextStyles.textOpenHighLowTeamMarketView,
-                    ),
-                    Text(
-                      'first.high',
-                      style: StTextStyles.textValueMarketTicker.copyWith(
-                        color: StColors.white,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      StStrings.lowTextTeamWidget,
-                      style: StTextStyles.textValueMarketTicker.copyWith(
-                        color: StColors.white,
-                      ),
-                    ),
-                    Text(
-                      'first.low',
-                      style: StTextStyles.textValueMarketTicker.copyWith(
-                        color: StColors.white,
-                      ),
-                    ),
-                  ],
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        if (!showRanked) STAR,
+        if (showRanked) Text(comp1.rankStr),
+        CompetitorImage(comp1.imgUrl),
+        Column(
+          children: [
+            Row(
+              children: [
+                Text(
+                  comp1.topName,
+                  style: StTextStyles.h2,
                 ),
-              )
-            ],
-          ),
-        ],
-      ),
+                Column(
+                  children: [
+                    Text(comp1.priceStr),
+                    Text(comp1.priceDeltaStr),
+                  ],
+                )
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const Text(StStrings.open),
+                Text('3.00'),
+                const Text(StStrings.high),
+                Text('5.00'),
+                const Text(StStrings.low),
+                Text('3.00'),
+              ],
+            )
+          ],
+        ),
+        Column(
+          children: [
+            TradeButton(comp1.canTrade),
+            const SizedBox.expand(),
+          ],
+        ),
+      ],
     );
   }
 }
 
-class TeamVsFieldRankedRow extends StBaseTvRow with ShowsOneAsset {
-  const TeamVsFieldRankedRow(
+class TeamVsFieldRowRanked_MktView extends TeamVsFieldRow_MktView {
+  //
+  @override
+  bool get showRanked => true;
+
+  const TeamVsFieldRowRanked_MktView(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
-
-  @override
-  Widget rowBody(BuildContext context) {
-    // paste row widget code here
-    final size = MediaQuery.of(context).size;
-    const double _stdRowHeight = 110;
-    return Container(
-      height: _stdRowHeight,
-      width: size.width,
-      decoration: const BoxDecoration(
-        color: StColors.black,
-        border: Border(
-          bottom: BorderSide(
-            color: StColors.borderTextField,
-          ),
-        ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            flex: 1,
-            child: Image.network(
-              comp1.imgUrl,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Expanded(
-            flex: 5,
-            child: Column(
-              // full height column to right of player image
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-
-              children: [
-                AssetTopRow(asset: comp1),
-                HoldingsAndValueRow(asset: comp1),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 class TeamDraftRow extends StBaseTvRow with ShowsOneAsset {
@@ -613,6 +468,53 @@ class TeamVsFieldRankedRowTest extends StBaseTvRow with ShowsOneAsset {
   }
 }
 
+
+// @override
+//   Widget rowBody(BuildContext context) {
+//     // paste row widget code here
+//     final size = MediaQuery.of(context).size;
+//     const double _stdRowHeight = 110;
+//     return Container(
+//       height: _stdRowHeight,
+//       width: size.width,
+//       decoration: const BoxDecoration(
+//         color: StColors.black,
+//         border: Border(
+//           bottom: BorderSide(
+//             color: StColors.borderTextField,
+//           ),
+//         ),
+//       ),
+//       child: Row(
+//         mainAxisSize: MainAxisSize.max,
+//         mainAxisAlignment: MainAxisAlignment.start,
+//         crossAxisAlignment: CrossAxisAlignment.center,
+//         children: [
+//           Expanded(
+//             flex: 1,
+//             child: Image.network(
+//               comp1.imgUrl,
+//               fit: BoxFit.cover,
+//             ),
+//           ),
+//           Expanded(
+//             flex: 5,
+//             child: Column(
+//               // full height column to right of player image
+//               mainAxisSize: MainAxisSize.min,
+//               crossAxisAlignment: CrossAxisAlignment.start,
+
+//               children: [
+//                 AssetTopRow(asset: comp1),
+//                 HoldingsAndValueRow(asset: comp1),
+//               ],
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+
 // class AssetVsAssetRankedRow extends StBaseTvRow with ShowsTwoAssets {
 //   const AssetVsAssetRankedRow(
 //     TableviewDataRowTuple assets, {
@@ -682,3 +584,153 @@ class TeamVsFieldRankedRowTest extends StBaseTvRow with ShowsOneAsset {
 //     );
 //   }
 // }
+
+
+ // return Container(
+    //   padding: const EdgeInsets.symmetric(horizontal: 5),
+    //   decoration: const BoxDecoration(
+    //     color: StColors.black,
+    //     border: Border.symmetric(
+    //       horizontal: BorderSide(
+    //         color: StColors.borderTextField,
+    //       ),
+    //     ),
+    //   ),
+    //   child: Column(
+    //     mainAxisSize: MainAxisSize.min,
+    //     children: [
+    //       Stack(
+    //         children: [
+    //           Row(
+    //             mainAxisSize: MainAxisSize.max,
+    //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //             children: [
+    //               Row(
+    //                 children: [
+    //                   Image.network(comp1.imgUrl),
+    //                   Padding(
+    //                     padding: const EdgeInsets.only(
+    //                       top: 10,
+    //                       left: 3,
+    //                       right: 3,
+    //                     ),
+    //                     child: Image.network(
+    //                       comp1.imgUrl,
+    //                       height: 60,
+    //                       width: size.height <= 568 ? 40 : 50,
+    //                       color: Colors.yellow,
+    //                       colorBlendMode: BlendMode.color,
+    //                     ),
+    //                   ),
+    //                   Padding(
+    //                     padding: size.height <= 568
+    //                         ? const EdgeInsets.only(bottom: 20)
+    //                         : const EdgeInsets.only(bottom: 30),
+    //                     child: Text(
+    //                       assets.item1.topName,
+    //                       style: StTextStyles.textTeamNameMarketView.copyWith(
+    //                         color: Colors.yellow,
+    //                       ),
+    //                     ),
+    //                   ),
+    //                 ],
+    //               ),
+    //               Row(
+    //                 mainAxisAlignment: MainAxisAlignment.start,
+    //                 crossAxisAlignment: CrossAxisAlignment.start,
+    //                 children: [
+    //                   Column(
+    //                     crossAxisAlignment: CrossAxisAlignment.end,
+    //                     children: [
+    //                       Row(
+    //                         mainAxisSize: MainAxisSize.min,
+    //                         children: [
+    //                           Image.asset(
+    //                             kTokensIcon,
+    //                             height: 15,
+    //                             width: 15,
+    //                           ),
+    //                           Text(
+    //                             'first.tokens',
+    //                             style:
+    //                                 StTextStyles.textNameMarketTicker.copyWith(
+    //                               fontSize: 14,
+    //                             ),
+    //                           ),
+    //                         ],
+    //                       ),
+    //                       Text(
+    //                         '${comp1.priceDelta.isNegative ? comp1.priceDeltaStr : '+' + 'first.gain'}',
+    //                         style: StTextStyles.moneyDeltaPositive,
+    //                       ),
+    //                     ],
+    //                   ),
+    //                   const SizedBox(
+    //                     width: 10,
+    //                   ),
+    //                   TextButton(
+    //                     style: size.height <= 568
+    //                         ? StButtonStyles.tradeTeamMarketLessWidthView
+    //                         : StButtonStyles.tradeTeamMarketView,
+    //                     onPressed: () {},
+    //                     child: Text(
+    //                       StStrings.tradeUc,
+    //                       style: StTextStyles.tradeButton,
+    //                     ),
+    //                   ),
+    //                 ],
+    //               ),
+    //             ],
+    //           ),
+    //           Align(
+    //             alignment: Alignment.bottomCenter,
+    //             heightFactor: 5,
+    //             child: Wrap(
+    //               spacing: 2,
+    //               children: [
+    //                 Text(
+    //                   StStrings.open,
+    //                   style: StTextStyles.textOpenHighLowTeamMarketView,
+    //                 ),
+    //                 Text(
+    //                   comp1.priceStr,
+    //                   style: StTextStyles.textValueMarketTicker.copyWith(
+    //                     color: StColors.white,
+    //                   ),
+    //                 ),
+    //                 const SizedBox(
+    //                   width: 10,
+    //                 ),
+    //                 Text(
+    //                   StStrings.high,
+    //                   style: StTextStyles.textOpenHighLowTeamMarketView,
+    //                 ),
+    //                 Text(
+    //                   'first.high',
+    //                   style: StTextStyles.textValueMarketTicker.copyWith(
+    //                     color: StColors.white,
+    //                   ),
+    //                 ),
+    //                 const SizedBox(
+    //                   width: 10,
+    //                 ),
+    //                 Text(
+    //                   StStrings.low,
+    //                   style: StTextStyles.textValueMarketTicker.copyWith(
+    //                     color: StColors.white,
+    //                   ),
+    //                 ),
+    //                 Text(
+    //                   'first.low',
+    //                   style: StTextStyles.textValueMarketTicker.copyWith(
+    //                     color: StColors.white,
+    //                   ),
+    //                 ),
+    //               ],
+    //             ),
+    //           )
+    //         ],
+    //       ),
+    //     ],
+    //   ),
+    // );

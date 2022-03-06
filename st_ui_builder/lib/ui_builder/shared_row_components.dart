@@ -1,5 +1,10 @@
 part of StUiController;
 
+const STAR = Icon(
+  Icons.star_border,
+  color: StColors.blue,
+);
+
 class CompetitorImage extends StatelessWidget {
   // just the image or placeholder
   final String imgUrl;
