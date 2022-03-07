@@ -1,7 +1,7 @@
 part of StUiController;
 
 mixin ShowsOneAsset on StBaseTvRowIfc {
-  // competitors
+  // each row shows ONE competitor
   AssetRowPropertyIfc get comp1 => assets.item1;
   ActiveGameDetails get gameState => assets.item3;
 }
@@ -15,10 +15,33 @@ mixin ShowsTwoAssets on StBaseTvRowIfc {
   // ActiveGameDetails get gameStatus => assets.item3;
 }
 
-mixin IsTradeable on StBaseTvRowIfc {
-  //
-  bool get canTrade => gameStatus.isTradable;
+mixin RequiresGameStatus on StBaseTvRowIfc {
+  // row uses game details for state mgmt
+  ActiveGameDetails get gameStatus => assets.item3;
 }
+
+// mixin ObservesTradability on StBaseTvRow {
+//   // row has a tradable button that enables/disables
+//   bool get canTrade => gameStatus.isTradable;
+// }
+
+mixin RequiresPriceChangeProps on StBaseTvRowIfc {
+  // row needs price history data
+  // not every asset has this data
+  // notice the force-unpack of optional below
+  AssetPriceFluxSummaryIfc get assetPriceSummary =>
+      assets.item1.assetPriceFluxSummary!;
+}
+
+mixin RequiresUserPositionProps on StBaseTvRowIfc {
+  // row needs price history data
+  // not every asset has this data
+  // notice the force-unpack of optional below
+  AssetHoldingsSummaryIfc get assetHoldingsSummary =>
+      assets.item1.assetHoldingsSummary!;
+}
+
+
 
 // screen areas
 // mixin ForMarketView on StBaseTvRowIfc {

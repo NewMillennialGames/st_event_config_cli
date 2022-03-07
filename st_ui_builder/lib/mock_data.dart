@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 //
 import 'ui_builder/all.dart';
@@ -108,6 +109,12 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
 
   @override
   String get roundName => gameStatus.roundName;
+
+  @override
+  AssetPriceFluxSummaryIfc? get assetPriceFluxSummary => null;
+
+  @override
+  AssetHoldingsSummaryIfc? get assetHoldingsSummary => null;
 }
 
 List<MockAsset> _fakeData = [

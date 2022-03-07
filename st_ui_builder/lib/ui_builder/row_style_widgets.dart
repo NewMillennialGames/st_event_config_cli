@@ -11,7 +11,8 @@ we have one style for each value of:
     enum TvAreaRowStyle
   */
 
-class AssetVsAssetRow_MktView extends StBaseTvRow with ShowsTwoAssets {
+class AssetVsAssetRow_MktView extends StBaseTvRow
+    with ShowsTwoAssets, RequiresGameStatus {
   //
   bool get showRank => false;
   //
@@ -99,7 +100,8 @@ class AssetVsAssetRow_MktResrch extends StBaseTvRow with ShowsOneAsset {
   }
 }
 
-class AssetVsAssetRow_Portfolio extends StBaseTvRow with ShowsOneAsset {
+class AssetVsAssetRow_Portfolio extends StBaseTvRow
+    with ShowsOneAsset, RequiresUserPositionProps {
   // almost identical to Portfolio History (1 word delta)
   bool get showProceeds => false;
   const AssetVsAssetRow_Portfolio(
@@ -118,9 +120,14 @@ class AssetVsAssetRow_Portfolio extends StBaseTvRow with ShowsOneAsset {
         : StTextStyles.moneyDeltaNegative;
 
     // FIXME:  get position
-    String sharesOwned = '11 shares';
-    String positionValue = '\$26.32';
-    String positionGainLoss = '\$133.32';
+    // TODO:  mixin "RequiresUserPositionProps" will give these values
+    String sharesOwned = assetHoldingsSummary.sharesOwnedStr;
+    String positionValue = assetHoldingsSummary.positionEstValueStr;
+    String positionGainLoss = assetHoldingsSummary.positionGainLossStr;
+
+    // String sharesOwned = '11 shares';
+    // String positionValue = '\$26.32';
+    // String positionGainLoss = '\$133.32';
 
     return Row(
       children: [
@@ -182,7 +189,8 @@ class AssetVsAssetRow_PortfolioHistory extends AssetVsAssetRow_Portfolio {
 }
 //
 
-class TeamVsFieldRow_MktView extends StBaseTvRow with ShowsOneAsset {
+class TeamVsFieldRow_MktView extends StBaseTvRow
+    with ShowsOneAsset, RequiresGameStatus {
   //
   bool get showRanked => false;
   const TeamVsFieldRow_MktView(

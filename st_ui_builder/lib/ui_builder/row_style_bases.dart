@@ -6,7 +6,7 @@ final _gameStatusProvider =
 abstract class StBaseTvRowIfc extends StatelessWidget {
   //
   final TableviewDataRowTuple assets;
-  ActiveGameDetails get gameStatus;
+  // ActiveGameDetails get gameStatus; // => assets.item3;
   //
   const StBaseTvRowIfc(
     this.assets, {
@@ -16,7 +16,7 @@ abstract class StBaseTvRowIfc extends StatelessWidget {
   Widget rowBody(BuildContext ctx);
 }
 
-class StBaseTvRow extends StBaseTvRowIfc with IsTradeable {
+class StBaseTvRow extends StBaseTvRowIfc {
   // base class for EVERY tableview row
   // on 4 main screens of scoretrader
   const StBaseTvRow(
@@ -27,8 +27,8 @@ class StBaseTvRow extends StBaseTvRowIfc with IsTradeable {
           key: key,
         );
 
-  @override
-  ActiveGameDetails get gameStatus => assets.item3;
+  // @override
+  // ActiveGameDetails get gameStatus => assets.item3;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,9 @@ class StBaseTvRow extends StBaseTvRowIfc with IsTradeable {
       child: Consumer(
         builder: (context, ref, child) {
           // force rebuild when game status changes
-          ref.watch(_gameStatusProvider);
+          if (this is RequiresGameStatus) {
+            ref.watch(_gameStatusProvider);
+          }
           return rowBody(context);
         },
       ),
@@ -59,6 +61,7 @@ class StBaseTvRow extends StBaseTvRowIfc with IsTradeable {
   @override
   Widget rowBody(BuildContext ctx) {
     // acatual subclass will return the specific row-type
-    throw UnimplementedError('implement in subclass  ${gameStatus.isTradable}');
+    throw UnimplementedError(
+        'implement in subclass  ${'gameStatus.isTradable'}');
   }
 }

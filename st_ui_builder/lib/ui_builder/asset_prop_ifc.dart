@@ -8,6 +8,56 @@
 
 part of StUiController;
 
+abstract class AssetHoldingsSummaryIfc {
+  /*  per-user asset holdings summary
+
+  */
+  int get sharesOwned;
+  double get positionCost;
+  double get positionEstValue; // current estimate
+
+}
+
+extension AssetHoldingsSummaryIfcExt1 on AssetHoldingsSummaryIfc {
+  //
+  double get positionGainLoss => positionEstValue - positionCost;
+  // UI values for this
+  String get sharesOwnedStr => '$sharesOwned';
+  String get positionCostStr => '\$$positionCost';
+  String get positionEstValueStr => '\$$positionEstValue';
+  String get positionGainLossStr => '\$$positionGainLoss';
+
+  bool get returnIsPositive => positionGainLoss > 0;
+  Color get fontColor => returnIsPositive ? Colors.green : Colors.red;
+}
+
+abstract class AssetPriceFluxSummaryIfc {
+/*
+  may travel with asset for some screens
+  to describe recent price changes on this asset
+*/
+  double get currPrice;
+  double get recentDelta;
+  //
+  double get openPrice;
+  double get lowPrice;
+  double get hiPrice;
+  // int get tradeVolume;
+}
+
+extension AssetPriceFluxSummaryIfcExt1 on AssetPriceFluxSummaryIfc {
+  // UI values for this
+  String get currPriceStr => '\$$currPrice';
+  String get recentDeltaStr => '\$$recentDelta';
+  //
+  String get openPriceStr => '\$$openPrice';
+  String get lowPriceStr => '\$$lowPrice';
+  String get hiPriceStr => '\$$hiPrice';
+
+  bool get stockIsUp => currPrice > openPrice;
+  Color get fontColor => stockIsUp ? Colors.green : Colors.red;
+}
+
 abstract class AssetRowPropertyIfc {
   // must have a value for each name on:
   // enum DbTableFieldName()
@@ -31,6 +81,9 @@ abstract class AssetRowPropertyIfc {
   bool get isTeam;
 
   String get roundName;
+
+  AssetPriceFluxSummaryIfc? get assetPriceFluxSummary;
+  AssetHoldingsSummaryIfc? get assetHoldingsSummary;
 
   // String get rankStr;
   // Widget get icon;
