@@ -22,7 +22,7 @@ class TvGroupHeader extends StatelessWidget {
     // print('building a TvGroupHeader first: ${headerData.first}');
     return Container(
       height: 60,
-      color: Colors.amber[100],
+      color: Colors.black,
       child: _rowStyleToHeaderStyle(),
     );
   }
@@ -30,15 +30,22 @@ class TvGroupHeader extends StatelessWidget {
   Widget _rowStyleToHeaderStyle() {
     // TODO:  finish this below
     // temp placeholder UI
-    return Row(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Text('Header Section:'),
-        Text(headerData.first),
-        Spacer(),
-        Text(headerData.second),
-        Spacer(),
-        Text(headerData.third),
+        Text(
+          headerData.h1Displ,
+          style: StTextStyles.h3,
+        ),
+        // Spacer(),
+        Text(
+          headerData.h2Displ,
+          style: StTextStyles.h4.copyWith(
+            color: Colors.grey,
+          ),
+        ),
+        // Spacer(),
+        // Text(headerData.third),
       ],
     );
 
@@ -48,9 +55,9 @@ class TvGroupHeader extends StatelessWidget {
       case TvAreaRowStyle.assetVsAssetRanked:
         return Row(
           children: [
-            Text(headerData.first),
-            Text(headerData.second),
-            Text(headerData.third),
+            Text(headerData.h1Displ),
+            Text(headerData.h2Displ),
+            Text(headerData.h3Displ),
           ],
         );
     }

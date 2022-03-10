@@ -1,7 +1,8 @@
 part of StUiController;
 
-final _gameStatusProvider =
-    Provider<ActiveGameDetails>(((ref) => throw UnimplementedError('')));
+final _gameStatusProvider = Provider<ActiveGameDetails>(
+  ((ref) => throw UnimplementedError('')),
+);
 
 abstract class StBaseTvRowIfc extends StatelessWidget {
   //
@@ -52,6 +53,10 @@ class StBaseTvRow extends StBaseTvRowIfc {
           if (this is RequiresGameStatus) {
             ref.watch(_gameStatusProvider);
           }
+          // force rebuild when asset price changes
+          // if (this is RequiresPriceChangeProps) {
+          //   // ref.watch(_somePriceProvider);
+          // }
           return rowBody(context);
         },
       ),
@@ -60,8 +65,8 @@ class StBaseTvRow extends StBaseTvRowIfc {
 
   @override
   Widget rowBody(BuildContext ctx) {
-    // acatual subclass will return the specific row-type
     throw UnimplementedError(
-        'implement in subclass  ${'gameStatus.isTradable'}');
+      'acatual subclass should return the specific row-type; implement there',
+    );
   }
 }

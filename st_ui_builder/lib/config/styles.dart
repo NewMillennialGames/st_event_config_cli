@@ -200,6 +200,7 @@ class StTextStyles {
   static const h3 = TextStyle(
     fontFamily: 'HelveticaNeue-Medium',
     fontSize: 20,
+    color: StColors.white,
   );
   static const h4 = TextStyle(
     fontFamily: 'HelveticaNeue-condensedbold',

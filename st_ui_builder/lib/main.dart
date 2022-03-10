@@ -91,7 +91,7 @@ class _MarketViewScreenState extends State<MarketViewScreen> {
     // argument needed for the RowStyle constructors
     List<TableviewDataRowTuple> assetRows = widget.assets
         .map(
-          (e) => TableviewDataRowTuple(e, null, ActiveGameDetails.mock()),
+          (e) => TableviewDataRowTuple(e, e, ActiveGameDetails.mock()),
         )
         .toList();
 

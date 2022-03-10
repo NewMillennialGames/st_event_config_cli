@@ -1,8 +1,12 @@
 part of StUiController;
 
-const STAR = Icon(
+const kStarIcon = Icon(
   Icons.star_border,
   color: StColors.blue,
+);
+
+const kSpacerSm = SizedBox(
+  width: 6,
 );
 
 class CompetitorImage extends StatelessWidget {
@@ -21,7 +25,7 @@ class CompetitorImage extends StatelessWidget {
       width: 20,
       fit: BoxFit.cover,
       errorBuilder: (context, error, stackTrace) => const Icon(
-        Icons.circle,
+        Icons.egg_rounded,
         color: StColors.blue,
       ),
     );
@@ -72,16 +76,21 @@ class AssetVsAssetHalfRow extends StatelessWidget {
           Icons.star_border,
           color: competitor.canTrade ? StColors.gray : StColors.blue,
         ),
+        kSpacerSm,
         CompetitorImage(competitor.imgUrl),
+        kSpacerSm,
         if (showRank) Text(competitor.rankStr),
-        Text(
-          competitor.topName,
-          style: StTextStyles.h3,
+        Expanded(
+          child: Text(
+            competitor.topName,
+            style: StTextStyles.h3,
+          ),
         ),
         Text(
           competitor.priceStr,
           style: StTextStyles.h3,
         ),
+        kSpacerSm,
         TradeButton(competitor.canTrade),
       ],
     );

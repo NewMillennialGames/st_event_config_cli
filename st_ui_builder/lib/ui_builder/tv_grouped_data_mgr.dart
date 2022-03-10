@@ -76,7 +76,7 @@ class GroupedTableDataMgr {
   SectionSortComparator get itemComparator =>
       GroupHeaderData.sortComparator(sortingRules);
 
-  bool get hasFilterBar {
+  bool get hasColumnFilters {
     // set imageUrl as first filter field to hide/disable the whole filter bar
     return filterRules.item1.colName == DbTableFieldName.imageUrl
         ? false
@@ -87,89 +87,141 @@ class GroupedTableDataMgr {
   String? _filter2Selection;
   String? _filter3Selection;
 
-  Widget filterBarRow({double totAvailWidth = 360}) {
+  Widget columnFilterBarWidget({
+    double totAvailWidth = 360,
+    double barHeight = 60,
+    Color backColor = Colors.transparent,
+  }) {
     // dont call this without first checking this.hasFilterBar
     TvFilterCfg i1 = filterRules.item1;
     TvFilterCfg? i2 = filterRules.item2;
     TvFilterCfg? i3 = filterRules.item3;
-    int dropLstCount = 1 + (i2 == null ? 0 : 1) + (i3 == null ? 0 : 1);
-    // allocate dropdown button width
-    double allocBtnWidth = (totAvailWidth / dropLstCount) - 10;
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      // mainAxisSize: MainAxisSize.min,
-      children: [
-        _dropMenuList(
-          i1,
-          _filter1Selection,
-          (s) {
-            _filter1Selection = s;
-          },
-          allocBtnWidth,
-        ),
-        if (i2 != null && i2.colName != i1.colName)
+    Set<String> listItems1 = _getListItemsByCfgField(i1);
+    Set<String> listItems2 = i2 == null ? {} : _getListItemsByCfgField(i2);
+    Set<String> listItems3 = i3 == null ? {} : _getListItemsByCfgField(i3);
+
+    const _kLstMin = 2;
+
+    int dropLstCount = 1 +
+        ((i2 != null && listItems2.length > _kLstMin) ? 1 : 0) +
+        ((i3 != null && listItems3.length > _kLstMin) ? 1 : 0);
+    // allocate dropdown button width
+    double allocBtnWidth = (totAvailWidth / dropLstCount) - 24;
+
+    allocBtnWidth = dropLstCount < 2 ? totAvailWidth * 0.38 : allocBtnWidth;
+
+    return Container(
+      height: barHeight,
+      width: totAvailWidth,
+      color: backColor,
+      padding: const EdgeInsets.symmetric(vertical: 3),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        // mainAxisSize: MainAxisSize.min,
+        children: [
           _dropMenuList(
-            i2,
-            _filter2Selection,
-            (s) {
-              _filter2Selection = s;
-            },
+            listItems1,
+            i1.colName,
+            _filter1Selection,
+            (s) => _filter1Selection = s,
             allocBtnWidth,
           ),
-        if (i3 != null && i3.colName != i2!.colName)
-          _dropMenuList(
-            i3,
-            _filter3Selection,
-            (s) {
-              _filter3Selection = s;
-            },
-            allocBtnWidth,
-          ),
-      ],
+          if (i2 != null &&
+              listItems2.length > _kLstMin &&
+              i2.colName != i1.colName)
+            _dropMenuList(
+              listItems2,
+              i2.colName,
+              _filter2Selection,
+              (s) => _filter2Selection = s,
+              allocBtnWidth,
+            ),
+          if (i3 != null &&
+              listItems3.length > _kLstMin &&
+              i3.colName != i2!.colName)
+            _dropMenuList(
+              listItems3,
+              i3.colName,
+              _filter3Selection,
+              (s) => _filter3Selection = s,
+              allocBtnWidth,
+            ),
+        ],
+      ),
     );
   }
 
   Widget _dropMenuList(
-    TvFilterCfg fCfg,
+    Set<String> listItems,
+    DbTableFieldName colName,
     String? curSelection,
     SelectedFilterSetter valSetter,
     double width,
   ) {
     // return DropdownButton menu for filter bar slot
-    Set<String> listItems = _getListItemsByCfgField(fCfg);
+    // Set<String> listItems = _getListItemsByCfgField(fCfg);
     // print('Filter items for ${fCfg.colName.labelName}');
     // print(listItems);
     return Container(
-      height: 46,
-      // width: width,
-      child: DropdownButton<String>(
-        value: curSelection ?? listItems.first,
-        items: listItems
-            .map((String val) => DropdownMenuItem<String>(
-                  child: Text(val),
-                  value: val,
-                ))
-            .toList(),
-        onChanged: (String? selectedVal) {
-          // store selected value for state mgmt
-          valSetter(selectedVal);
-          if (selectedVal == null ||
-              selectedVal.startsWith(CLEAR_FILTER_LABEL)) {
-            clearFilters();
-            return;
-          }
-          _doFilteringFor(fCfg.colName, selectedVal);
-        },
-        // focusColor: Colors.green,
-        dropdownColor: Colors.black38,
-        iconEnabledColor: Colors.lightBlueAccent,
-        style: const TextStyle(
-          color: Colors.lightBlueAccent,
-          fontSize: 20,
+      width: width,
+      decoration: BoxDecoration(
+        // color: StColors.gray,
+        color: Colors.transparent,
+        border: Border.all(
+          color: StColors.gray,
+          width: 1,
+        ),
+        borderRadius: BorderRadius.all(
+          Radius.circular(8),
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: curSelection ?? listItems.first,
+          items: listItems
+              .map((String val) => DropdownMenuItem<String>(
+                    child: Text(val.toUpperCase()),
+                    value: val,
+                    alignment: AlignmentDirectional.center,
+                  ))
+              .toList(),
+          onChanged: (String? selectedVal) {
+            // store selected value for state mgmt
+            valSetter(selectedVal);
+            if (selectedVal == null ||
+                selectedVal == colName.labelName.toUpperCase() ||
+                selectedVal.startsWith(CLEAR_FILTER_LABEL)) {
+              clearFilters();
+              return;
+            }
+            _doFilteringFor(colName, selectedVal);
+          },
+          // focusColor: Colors.green,
+          dropdownColor: StColors.lightGray,
+          iconEnabledColor: StColors.gray,
+          style: const TextStyle(
+            color: StColors.gray,
+            fontSize: 16,
+          ),
+          underline: null,
         ),
       ),
     );
+  }
+
+  void setFilteredData(
+    Iterable<TableviewDataRowTuple> _assetRows, {
+    bool redraw = false,
+  }) {
+    /* external filtering
+    this may not be necessary since data is local here
+    */
+    _filteredAssetRows = _assetRows.toList();
+    if (redraw && redrawCallback != null) {
+      redrawCallback!();
+    }
   }
 
   Set<String> _getListItemsByCfgField(TvFilterCfg fCfg) {
@@ -182,12 +234,16 @@ class GroupedTableDataMgr {
         .toSet()
         .toList()
       ..sort((v1, v2) => v1.compareTo(v2));
-    l.insert(0, CLEAR_FILTER_LABEL + ' ' + fCfg.colName.labelName);
+    l.insert(0, fCfg.colName.labelName); // CLEAR_FILTER_LABEL + ' ' +
     return l.toSet();
   }
 
   void _doFilteringFor(DbTableFieldName colName, String selectedVal) {
     //
+    if (selectedVal == colName.labelName) {
+      clearFilters();
+      return;
+    }
     _filteredAssetRows = _allAssetRows
         .where((TableviewDataRowTuple dr) =>
             dr.item1.valueExtractor(colName) == selectedVal)

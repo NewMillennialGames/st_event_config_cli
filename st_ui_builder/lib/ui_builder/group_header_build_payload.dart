@@ -12,17 +12,17 @@ part of StUiController;
 class GroupHeaderData
     with EquatableMixin
     implements Comparable<GroupHeaderData> {
-  final String first;
-  final String second;
-  final String third;
+  final String h1Displ;
+  final String h2Displ;
+  final String h3Displ;
   final String _sortKey;
 
   GroupHeaderData(
-    this.first,
-    this.second,
-    this.third,
+    this.h1Displ,
+    this.h2Displ,
+    this.h3Displ,
   ) : this._sortKey =
-            '${first.toLowerCase()}-${second.toLowerCase()}-${third.toLowerCase()}';
+            '${h1Displ.toLowerCase()}-${h2Displ.toLowerCase()}-${h3Displ.toLowerCase()}';
 
   static GetGroupKeyFromRow groupKeyDataConstructorFromCfg(
     SortingRules sortAndGroupRules,

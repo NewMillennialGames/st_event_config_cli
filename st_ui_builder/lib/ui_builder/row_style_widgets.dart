@@ -24,12 +24,12 @@ class AssetVsAssetRow_MktView extends StBaseTvRow
   @override
   Widget rowBody(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(5),
       // margin: const EdgeInsets.all(5),
-      // decoration: BoxDecoration(
-      //   color: StColors.black,
-      //   borderRadius: BorderRadius.circular(15),
-      // ),
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+          color: StColors.black,
+          // borderRadius: BorderRadius.circular(15),
+          border: Border.all(color: Colors.grey)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -206,7 +206,7 @@ class TeamVsFieldRow_MktView extends StBaseTvRow
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        if (!showRanked) STAR,
+        if (!showRanked) kStarIcon,
         if (showRanked) Text(comp1.rankStr),
         CompetitorImage(comp1.imgUrl),
         Column(

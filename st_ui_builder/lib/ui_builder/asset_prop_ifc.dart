@@ -104,21 +104,23 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
   bool get isTeam => true;
   String get groupKey => gameDateStr;
 
-  String get gameDateStr => DateFormat().format(gameDate);
-  String get gameTimeStr => '_to fmt actual value';
+  String get gameDateStr => gameDate.asDtwMmDyStr;
+  String get gameTimeStr => gameDate.asTimeOnlyStr;
 
-  String get priceStr => '_to fmt actual value';
-  String get priceDeltaStr => '_to fmt actual value';
+  String get priceStr => '\$$price';
+  String get priceDeltaStr => '\$$priceDelta';
   String get rankStr => '$rank';
 
   bool get canTrade => false;
 
-  int get positionStr => int.parse(this.position);
+  int get positionStr => int.parse(position);
 
   String valueExtractor(DbTableFieldName fldName) {
     /* need to coordinate with Natalia
       to make sure values below match
       what she sets in the Asset wrapper
+
+      FIXME: for sorting will need special format
     */
     switch (fldName) {
       case DbTableFieldName.assetName:
