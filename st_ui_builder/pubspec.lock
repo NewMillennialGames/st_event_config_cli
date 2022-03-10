@@ -264,9 +264,11 @@ packages:
   st_ev_cfg:
     dependency: "direct main"
     description:
-      path: ".."
-      relative: true
-    source: path
+      path: "."
+      ref: prod
+      resolved-ref: "4ea2eb7758fafedf76c2641866b35a9c8f7ba9fe"
+      url: "git@github.com:NewMillennialGames/st_event_config_cli.git"
+    source: git
     version: "1.0.9"
   stack_trace:
     dependency: transitive

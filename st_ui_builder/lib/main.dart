@@ -115,12 +115,7 @@ class _MarketViewScreenState extends State<MarketViewScreen> {
       body: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          if (tvMgr.hasFilterBar)
-            Container(
-              height: 40,
-              color: Colors.grey,
-              child: tvMgr.filterBarRow(),
-            ),
+          if (tvMgr.hasColumnFilters) tvMgr.columnFilterBarWidget(),
           Container(
             height: 30,
           ),
