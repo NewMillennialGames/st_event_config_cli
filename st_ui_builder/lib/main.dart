@@ -74,12 +74,11 @@ class MarketViewScreen extends ConsumerStatefulWidget {
 class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
   //
   final StUiBuilderFactory stBldr = StUiBuilderFactory();
-  late GroupedTableDataMgr tvMgr;
-  // final _gameDetailsStrmCtrl = StreamController<ActiveGameDetails>();
-
-  final _gameDetailsProviders = Map<String, StateProvider<ActiveGameDetails>>();
-
+  final Map<String, StateProvider<ActiveGameDetails>> _gameDetailsProviders =
+      {};
   final List<String> gameKeys = [];
+  //
+  late GroupedTableDataMgr tvMgr;
 
   void _redrawCallback() {
     //
@@ -101,7 +100,9 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
           return ActiveGameDetails(
             gmkey,
             _getRandStatus(),
-            gmkey,
+            _getRandRound(),
+            _getRandRegion(),
+            'location',
             DateTime.now(),
             [a.asset.key],
             watchedAssetIds: [a.asset.key],
@@ -200,6 +201,11 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
   CompetitionStatus _getRandStatus() {
     int idx = Random().nextInt(6);
     return CompetitionStatus.values[idx];
+  }
+
+  String _getRandRegion() {
+    int idx = Random().nextInt(6);
+    return rounds[idx];
   }
 }
 

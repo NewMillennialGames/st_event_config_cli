@@ -102,7 +102,7 @@ class AssetVsAssetRow_MktResrch extends StBaseTvRow with ShowsOneAsset {
             ],
           ),
           TradeButton(
-            comp1.id,
+            comp1.assetKey,
             agd.gameStatus,
           ),
         ],
@@ -149,7 +149,7 @@ class AssetVsAssetRow_Portfolio extends StBaseTvRow
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(comp1.topName),
-                TradeButton(comp1.id, agd.gameStatus),
+                TradeButton(comp1.assetKey, agd.gameStatus),
               ],
             ),
             Row(
@@ -252,7 +252,7 @@ class TeamVsFieldRow_MktView extends StBaseTvRow
         Column(
           children: [
             TradeButton(
-              comp1.id,
+              comp1.assetKey,
               agd.gameStatus,
             ),
             const SizedBox.expand(),

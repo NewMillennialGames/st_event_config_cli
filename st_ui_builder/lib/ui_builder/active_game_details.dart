@@ -17,6 +17,8 @@ class ActiveGameDetails {
   final String competitionKey;
   final CompetitionStatus gameStatus;
   final String roundName;
+  final String regionOrConference;
+  final String location;
   final DateTime scheduledStartDtTm;
   final List<String> participantAssetIds;
   final List<String> ownedAssetIds;
@@ -26,6 +28,8 @@ class ActiveGameDetails {
     this.competitionKey,
     this.gameStatus,
     this.roundName,
+    this.regionOrConference,
+    this.location,
     this.scheduledStartDtTm,
     this.participantAssetIds, {
     this.ownedAssetIds = const [],
@@ -53,6 +57,8 @@ class ActiveGameDetails {
       competitionKey,
       ci.competitionStatus,
       ci.currentRoundName,
+      regionOrConference,
+      location,
       scheduledStartDtTm,
       participantAssetIds,
       ownedAssetIds: ownedAssetIds,
@@ -96,12 +102,14 @@ class ActiveGameDetails {
   // List<Object?> get props =>
   //     [scheduledStartDtTm.toIso8601String(), competitionKey];
 
-  // // only for testing
-  // factory ActiveGameDetails.mock() => ActiveGameDetails(
-  //       'abcde',
-  //       CompetitionStatus.compInFuture,
-  //       'rZero',
-  //       DateTime.now(),
-  //       const ['123'],
-  //     );
+  // only testing & error handling
+  factory ActiveGameDetails.mockOrMissingAgd() => ActiveGameDetails(
+        '_missingCompRec',
+        CompetitionStatus.compInFuture,
+        '_roundName',
+        '_region',
+        '_location',
+        DateTime.now(),
+        const ['123'],
+      );
 }

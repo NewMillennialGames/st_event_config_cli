@@ -62,23 +62,22 @@ abstract class AssetRowPropertyIfc {
   // must have a value for each name on:
   // enum DbTableFieldName()
   String get groupKey; // for grouping and sorting
-  String get id; // for unique comparison
+  String get assetKey; // for unique comparison
   String get topName;
   String get subName;
   String get imgUrl;
-  String get regionOrConference;
-  String get location;
   String get position;
-  // next property should not be on this entity
-  DateTime get gameDate; // rounded to midnight for row grouping
-  //
   int get rank;
   bool get isTeam;
 
   AssetPriceFluxSummaryIfc? get assetPriceFluxSummary;
   AssetHoldingsSummaryIfc? get assetHoldingsSummary;
 
-  // DateTime get gameTime; // sort order within groups
+  // next 3 properties are game props but needed for sorting and grouping
+  DateTime get gameDate; // rounded to midnight for row grouping
+  String get regionOrConference;
+  String get roundName;
+  String get location;
 }
 
 extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
@@ -133,7 +132,7 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
       case DbTableFieldName.gameDate:
         return gameDateStr;
       case DbTableFieldName.gameTime:
-        return 'gameTimeStr';
+        return gameDate.truncateTime.asTimeOnlyStr;
       case DbTableFieldName.eventName:
         return topName;
       case DbTableFieldName.gameLocation:

@@ -53,7 +53,7 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
   DateTime get gameDate => asset.gameDt;
 
   @override
-  String get id => asset.id;
+  String get assetKey => asset.id;
 
   @override
   String get imgUrl => asset.imgUrl;
@@ -88,6 +88,10 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
 
   @override
   AssetHoldingsSummaryIfc? get assetHoldingsSummary => null;
+
+  @override
+  // TODO: implement roundName
+  String get roundName => throw UnimplementedError();
 
   // @override
   // String get roundName => gameStatus.roundName;

@@ -80,7 +80,7 @@ class AssetVsAssetHalfRow extends StatelessWidget {
       children: [
         Icon(
           Icons.star_border,
-          color: gameDetails.isWatched(competitor.id)
+          color: gameDetails.isWatched(competitor.assetKey)
               ? StColors.gray
               : StColors.blue,
         ),
@@ -100,7 +100,7 @@ class AssetVsAssetHalfRow extends StatelessWidget {
         ),
         kSpacerSm,
         TradeButton(
-          competitor.id,
+          competitor.assetKey,
           gameDetails.gameStatus,
         ),
       ],
