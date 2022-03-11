@@ -172,7 +172,7 @@ class GroupedTableDataMgr {
           color: StColors.gray,
           width: 1,
         ),
-        borderRadius: BorderRadius.all(
+        borderRadius: const BorderRadius.all(
           Radius.circular(8),
         ),
       ),
@@ -181,11 +181,13 @@ class GroupedTableDataMgr {
         child: DropdownButton<String>(
           value: curSelection ?? listItems.first,
           items: listItems
-              .map((String val) => DropdownMenuItem<String>(
-                    child: Text(val.toUpperCase()),
-                    value: val,
-                    alignment: AlignmentDirectional.center,
-                  ))
+              .map(
+                (String val) => DropdownMenuItem<String>(
+                  child: Text(val.toUpperCase()),
+                  value: val,
+                  alignment: AlignmentDirectional.center,
+                ),
+              )
               .toList(),
           onChanged: (String? selectedVal) {
             // store selected value for state mgmt
@@ -203,7 +205,7 @@ class GroupedTableDataMgr {
           iconEnabledColor: StColors.gray,
           style: const TextStyle(
             color: StColors.gray,
-            fontSize: 16,
+            fontSize: 14,
           ),
           underline: null,
         ),
@@ -216,7 +218,7 @@ class GroupedTableDataMgr {
     bool redraw = false,
   }) {
     /* external filtering
-    this may not be necessary since data is local here
+    used by search (watched or owned) feature
     */
     _filteredAssetRows = _assetRows.toList();
     if (redraw && redrawCallback != null) {
