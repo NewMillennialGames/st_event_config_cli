@@ -155,12 +155,20 @@ class StTextStyles {
     fontSize: 11,
     color: StColors.teamOpenHighLowMarketView,
   );
-  static const tradeButton = TextStyle(
+  static const tradeButtonText = TextStyle(
     fontFamily: 'Helvetica Neue',
     fontSize: 14,
-    color: StColors.teamNameMarketView,
+    color: StColors.white,
     fontWeight: FontWeight.w700,
   );
+
+  // static const tradeButtonDisabled = TextStyle(
+  //   fontFamily: 'Helvetica Neue',
+  //   fontSize: 14,
+  //   color: StColors.gray,
+  //   fontWeight: FontWeight.w500,
+  // );
+
   static const textRichPlayerTradeView = TextStyle(
     fontFamily: 'Helvetica Neue',
     fontSize: 14,
@@ -265,6 +273,15 @@ class StButtonStyles {
       horizontal: 15,
     ),
   );
+
+  static ButtonStyle tradeButtonCannotTrade = TextButton.styleFrom(
+    backgroundColor: StColors.gray,
+    padding: const EdgeInsets.symmetric(
+      vertical: 10,
+      horizontal: 15,
+    ),
+  );
+
   static ButtonStyle tradeTeamMarketLessWidthView = TextButton.styleFrom(
     backgroundColor: StColors.darkGreen,
     padding: const EdgeInsets.symmetric(

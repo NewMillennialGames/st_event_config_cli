@@ -7,6 +7,10 @@ part of StUiController;
     todo: replace Tuple3 with a reall class
 */
 
+// final _gameStateProvider = StreamProvider<ActiveGameDetails>(
+//   (ref) => throw UnimplementedError(''),
+// );
+
 class GroupedTableDataMgr {
   /*
     this is the object returned when you want to build
@@ -263,16 +267,16 @@ class GroupedTableDataMgr {
 
   void replaceGameStatusForRowRebuildTest(String round) {
     //
-    TableviewDataRowTuple drt = _allAssetRows[2];
-    ActiveGameDetails agd = drt.item3;
-    var ci = CompetitionInfo(
-      key: agd.competitionKey,
-      competitionStatus: null,
-      currentRoundName: round,
-    );
-    agd = agd.cloneWithUpdates(ci);
+    // TableviewDataRowTuple drt = _allAssetRows[2];
+    // ActiveGameDetails agd = drt.item3;
+    // var ci = CompetitionInfo(
+    //   key: agd.competitionKey,
+    //   competitionStatus: null,
+    //   currentRoundName: round,
+    // );
+    // agd = agd.cloneWithUpdates(ci);
 
-    _allAssetRows[2] = TableviewDataRowTuple(drt.item1, drt.item2, agd);
+    // _allAssetRows[2] = TableviewDataRowTuple(drt.item1, drt.item2, agd);
     print('ActiveGameDetails replaced on 2 with $round  (did row repaint?)');
   }
 }

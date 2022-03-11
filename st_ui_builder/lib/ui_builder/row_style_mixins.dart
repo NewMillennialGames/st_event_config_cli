@@ -3,7 +3,7 @@ part of StUiController;
 mixin ShowsOneAsset on StBaseTvRowIfc {
   // each row shows ONE competitor
   AssetRowPropertyIfc get comp1 => assets.item1;
-  ActiveGameDetails get gameState => assets.item3;
+  StateProvider<ActiveGameDetails> get gameState => assets.item3;
 }
 
 mixin ShowsTwoAssets on StBaseTvRowIfc {
@@ -17,7 +17,7 @@ mixin ShowsTwoAssets on StBaseTvRowIfc {
 
 mixin RequiresGameStatus on StBaseTvRowIfc {
   // row uses game details for state mgmt
-  ActiveGameDetails get gameStatus => assets.item3;
+  StateProvider<ActiveGameDetails> get gameStatus => assets.item3;
 }
 
 // mixin ObservesTradability on StBaseTvRow {

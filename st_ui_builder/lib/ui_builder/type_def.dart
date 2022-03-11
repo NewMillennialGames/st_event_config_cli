@@ -17,8 +17,8 @@ typedef IndexedItemRowBuilder = Widget Function(
 
 // this is the data sent in to build every table-view row
 // ActiveGameDetails controls when row stat changes and row rebuilds
-typedef TableviewDataRowTuple
-    = Tuple3<AssetRowPropertyIfc, AssetRowPropertyIfc?, ActiveGameDetails>;
+typedef TableviewDataRowTuple = Tuple3<AssetRowPropertyIfc,
+    AssetRowPropertyIfc?, StateProvider<ActiveGameDetails>>;
 
 // TODO:  consider passing TableviewDataRowTuple to group functions
 // instead of first item in TableviewDataRowTuple.item1

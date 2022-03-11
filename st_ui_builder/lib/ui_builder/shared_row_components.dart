@@ -33,22 +33,29 @@ class CompetitorImage extends StatelessWidget {
 }
 
 class TradeButton extends ConsumerWidget {
-  final bool canTrade;
+  final CompetitionStatus status;
+  final String assetId;
+
   const TradeButton(
-    this.canTrade, {
+    this.assetId,
+    this.status, {
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // trade button to right of player/team name
+    // final tf = ref.read(tradeFlowProvider);
     return TextButton(
       child: const Text(
         StStrings.tradeUc,
-        style: StTextStyles.tradeButton,
+        style: StTextStyles.tradeButtonText,
       ),
-      onPressed: () {},
-      style: StButtonStyles.tradeButtonCanTrade,
+      onPressed: null,
+      // onPressed: canTrade ? () => tf.beginTradeFlow(assetId) : null,
+      style: status.isTradable
+          ? StButtonStyles.tradeButtonCanTrade
+          : StButtonStyles.tradeButtonCannotTrade,
     );
   }
 }
@@ -56,13 +63,12 @@ class TradeButton extends ConsumerWidget {
 class AssetVsAssetHalfRow extends StatelessWidget {
   //
   final AssetRowPropertyIfc competitor;
-  final ActiveGameDetails gameStatus;
+  final ActiveGameDetails gameDetails;
   final bool showRank;
-  // final bool isTeam = false;
 
   const AssetVsAssetHalfRow(
     this.competitor,
-    this.gameStatus,
+    this.gameDetails,
     this.showRank, {
     Key? key,
   }) : super(key: key);
@@ -74,7 +80,9 @@ class AssetVsAssetHalfRow extends StatelessWidget {
       children: [
         Icon(
           Icons.star_border,
-          color: competitor.canTrade ? StColors.gray : StColors.blue,
+          color: gameDetails.isWatched(competitor.id)
+              ? StColors.gray
+              : StColors.blue,
         ),
         kSpacerSm,
         CompetitorImage(competitor.imgUrl),
@@ -87,20 +95,27 @@ class AssetVsAssetHalfRow extends StatelessWidget {
           ),
         ),
         Text(
-          competitor.priceStr,
+          competitor.currPriceStr,
           style: StTextStyles.h3,
         ),
         kSpacerSm,
-        TradeButton(competitor.canTrade),
+        TradeButton(
+          competitor.id,
+          gameDetails.gameStatus,
+        ),
       ],
     );
   }
 }
 
 class MktRschAsset extends StatelessWidget {
+  //
   final AssetRowPropertyIfc competitor;
+  final ActiveGameDetails gameStatus;
+  //
   const MktRschAsset(
-    this.competitor, {
+    this.competitor,
+    this.gameStatus, {
     Key? key,
   }) : super(key: key);
 
@@ -144,7 +159,7 @@ class MktRschAsset extends StatelessWidget {
                     competitor.topName,
                     style: StTextStyles.h4.copyWith(
                       fontSize: 18,
-                      color: competitor.canTrade
+                      color: gameStatus.isTradable
                           ? StColors.coolGray
                           : StTextStyles.h4.color,
                     ),
@@ -152,7 +167,7 @@ class MktRschAsset extends StatelessWidget {
                   Text(
                     competitor.subName,
                     style: StTextStyles.textFormField.copyWith(
-                      color: competitor.canTrade
+                      color: gameStatus.isTradable
                           ? StColors.coolGray
                           : StTextStyles.textFormField.color,
                     ),
@@ -161,7 +176,7 @@ class MktRschAsset extends StatelessWidget {
               ),
               Icon(
                 Icons.star_border,
-                color: competitor.canTrade ? StColors.gray : StColors.blue,
+                color: gameStatus.isTradable ? StColors.gray : StColors.blue,
               ),
             ],
           ),
@@ -172,13 +187,14 @@ class MktRschAsset extends StatelessWidget {
 }
 
 class ObjectRankRow extends StatelessWidget {
-  final int position;
+  //
   final AssetRowPropertyIfc asset;
+  final ActiveGameDetails gameStatus;
 
-  const ObjectRankRow({
+  const ObjectRankRow(
+    this.asset,
+    this.gameStatus, {
     Key? key,
-    required this.asset,
-    required this.position,
   }) : super(key: key);
 
   @override
@@ -193,7 +209,8 @@ class ObjectRankRow extends StatelessWidget {
           width: _rowMargin,
         ),
         _PositionRankRow(
-          rankPos: position,
+          asset,
+          gameStatus,
         ),
         const SizedBox(
           width: _rowMargin,
@@ -252,17 +269,19 @@ class _PositionRankRow extends StatelessWidget {
   /*
 
   */
-  final int rankPos;
-  const _PositionRankRow({
+  final AssetRowPropertyIfc asset;
+  final ActiveGameDetails gameStatus;
+  const _PositionRankRow(
+    this.asset,
+    this.gameStatus, {
     Key? key,
-    required this.rankPos,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     const double _sizeIconRank = 40;
     Widget positionWidget = const SizedBox();
-    switch (rankPos) {
+    switch (asset.rank) {
       case 1:
         positionWidget = Image.asset(
           kIconWiner1st,
@@ -296,7 +315,7 @@ class _PositionRankRow extends StatelessWidget {
             ),
           ),
           child: Text(
-            rankPos.toString(),
+            asset.rankStr,
             style: StTextStyles.textLisTileTokens.copyWith(
               fontSize: 25,
             ),
@@ -308,7 +327,7 @@ class _PositionRankRow extends StatelessWidget {
         positionWidget = Container(
           width: _sizeIconRank,
           child: Text(
-            rankPos.toString(),
+            asset.rankStr,
             style: StTextStyles.textLisTileTokens.copyWith(
               fontSize: 25,
             ),
@@ -322,12 +341,14 @@ class _PositionRankRow extends StatelessWidget {
 
 class AssetTopRow extends StatelessWidget {
   //
-  const AssetTopRow({
-    Key? key,
-    required this.asset,
-  }) : super(key: key);
-
   final AssetRowPropertyIfc asset;
+  final ActiveGameDetails gameStatus;
+
+  const AssetTopRow(
+    this.asset,
+    this.gameStatus, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -365,7 +386,7 @@ class AssetTopRow extends StatelessWidget {
                   ),
                   Text(
                     asset.subName,
-                    style: StTextStyles.tradeButton.copyWith(
+                    style: StTextStyles.tradeButtonText.copyWith(
                       fontSize: 16,
                       color: StColors.teamOpenHighLowMarketView,
                     ),
@@ -374,14 +395,14 @@ class AssetTopRow extends StatelessWidget {
               ),
             ),
           ),
-          if (asset.canTrade)
+          if (gameStatus.isTradable)
             // trade button to right of player/team name
             Padding(
               padding: const EdgeInsets.only(right: _rowRightMargin),
               child: TextButton(
-                child: Text(
+                child: const Text(
                   StStrings.tradeUc,
-                  style: StTextStyles.tradeButton,
+                  style: StTextStyles.tradeButtonText,
                 ),
                 onPressed: () {},
                 style: StButtonStyles.tradeButtonCanTrade,
@@ -398,16 +419,19 @@ class AssetTopRow extends StatelessWidget {
 
 class HoldingsAndValueRow extends StatelessWidget {
   //
-  const HoldingsAndValueRow({
+  final AssetRowPropertyIfc asset;
+  final ActiveGameDetails gameStatus;
+
+  const HoldingsAndValueRow(
+    this.asset,
+    this.gameStatus, {
     Key? key,
-    required this.asset,
   }) : super(key: key);
 
-  final AssetRowPropertyIfc asset;
+  double get _sharePrice => asset.assetPriceFluxSummary?.currPrice ?? 0;
+  int get _sharesHeld => asset.assetHoldingsSummary?.sharesOwned ?? 0;
+  double get _gainLoss => asset.assetHoldingsSummary?.positionGainLoss ?? 0;
 
-  int get _sharesHeld => 100;
-  double get _sharePrice => asset.price;
-  double get _gainLoss => asset.priceDelta;
   String get _formattedGainLoss => _sharePrice.isNegative
       ? _sharePrice.toStringAsFixed(2)
       : '+' + _sharePrice.toStringAsFixed(2);
@@ -468,13 +492,13 @@ class HoldingsAndValueRow extends StatelessWidget {
           Column(
             children: [
               Text(
-                asset.canTrade ? StStrings.value : StStrings.proceeds,
+                gameStatus.isTradable ? StStrings.value : StStrings.proceeds,
                 style: StTextStyles.textRichPlayerTradeView.copyWith(
                   fontSize: 16,
                 ),
               ),
               Text(
-                asset.priceStr,
+                _sharePrice.toString(),
                 style: StTextStyles.textNameMarketTicker.copyWith(
                   fontSize: 14,
                 ),

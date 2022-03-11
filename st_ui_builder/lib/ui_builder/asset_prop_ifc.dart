@@ -28,7 +28,7 @@ extension AssetHoldingsSummaryIfcExt1 on AssetHoldingsSummaryIfc {
   String get positionGainLossStr => '\$$positionGainLoss';
 
   bool get returnIsPositive => positionGainLoss > 0;
-  Color get fontColor => returnIsPositive ? Colors.green : Colors.red;
+  Color get posGainSymbolColor => returnIsPositive ? Colors.green : Colors.red;
 }
 
 abstract class AssetPriceFluxSummaryIfc {
@@ -37,7 +37,7 @@ abstract class AssetPriceFluxSummaryIfc {
   to describe recent price changes on this asset
 */
   double get currPrice;
-  double get recentDelta;
+  double get recentPriceDelta;
   //
   double get openPrice;
   double get lowPrice;
@@ -48,14 +48,14 @@ abstract class AssetPriceFluxSummaryIfc {
 extension AssetPriceFluxSummaryIfcExt1 on AssetPriceFluxSummaryIfc {
   // UI values for this
   String get currPriceStr => '\$$currPrice';
-  String get recentDeltaStr => '\$$recentDelta';
+  String get recentDeltaStr => '\$$recentPriceDelta';
   //
   String get openPriceStr => '\$$openPrice';
   String get lowPriceStr => '\$$lowPrice';
   String get hiPriceStr => '\$$hiPrice';
 
   bool get stockIsUp => currPrice > openPrice;
-  Color get fontColor => stockIsUp ? Colors.green : Colors.red;
+  Color get priceFluxColor => stockIsUp ? Colors.green : Colors.red;
 }
 
 abstract class AssetRowPropertyIfc {
@@ -69,51 +69,50 @@ abstract class AssetRowPropertyIfc {
   String get regionOrConference;
   String get location;
   String get position;
+  // next property should not be on this entity
   DateTime get gameDate; // rounded to midnight for row grouping
-  DateTime get gameTime; // sort order within groups
-  //
-  double get price;
-  // String get priceStr;
-  double get priceDelta;
-  // String get priceDeltaStr;
   //
   int get rank;
   bool get isTeam;
 
-  String get roundName;
-
   AssetPriceFluxSummaryIfc? get assetPriceFluxSummary;
   AssetHoldingsSummaryIfc? get assetHoldingsSummary;
 
-  // String get rankStr;
-  // Widget get icon;
-  // Color get colorImage;
-  // Color get color;
-  // double get tokens;
-  // double get gain;
-  // double get open;
-  // double get high;
-  // double get low;
-  // String get teamName;
-  // double get percentage;
-  // double get shares;
+  // DateTime get gameTime; // sort order within groups
 }
 
 extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
   // sensible defaults if not overridden
   bool get isTeam => true;
-  String get groupKey => gameDateStr;
-
-  String get gameDateStr => gameDate.asDtwMmDyStr;
-  String get gameTimeStr => gameDate.asTimeOnlyStr;
-
-  String get priceStr => '\$$price';
-  String get priceDeltaStr => '\$$priceDelta';
+  int get rank => 0;
   String get rankStr => '$rank';
+  String get gameDateStr => gameDate.asDtwMmDyStr;
+  // String get gameTimeStr => gameDate.asTimeOnlyStr;
 
-  bool get canTrade => false;
+  // from assetHoldingsSummary
+  double get positionGainLoss => assetHoldingsSummary?.positionGainLoss ?? 0;
+  String get sharesOwnedStr => assetHoldingsSummary?.sharesOwnedStr ?? '0';
+  String get positionCostStr => assetHoldingsSummary?.positionCostStr ?? '\$0';
+  String get positionEstValueStr =>
+      assetHoldingsSummary?.positionEstValueStr ?? '\$0';
+  String get positionGainLossStr =>
+      assetHoldingsSummary?.positionGainLossStr ?? '\$0';
+  bool get returnIsPositive => assetHoldingsSummary?.returnIsPositive ?? false;
+  Color get posGainSymbolColor =>
+      assetHoldingsSummary?.posGainSymbolColor ?? Colors.grey;
 
-  int get positionStr => int.parse(position);
+  // assetPriceFluxSummary
+  double get currPrice => assetPriceFluxSummary?.currPrice ?? 0;
+  double get recentPriceDelta => assetPriceFluxSummary?.recentPriceDelta ?? 0;
+  String get currPriceStr => assetPriceFluxSummary?.currPriceStr ?? '\$0';
+  String get recentDeltaStr => assetPriceFluxSummary?.recentDeltaStr ?? '\$0';
+  String get openPriceStr => assetPriceFluxSummary?.openPriceStr ?? '\$0';
+  String get lowPriceStr => assetPriceFluxSummary?.openPriceStr ?? '\$0';
+  String get hiPriceStr => assetPriceFluxSummary?.hiPriceStr ?? '\$0';
+
+  bool get stockIsUp => assetPriceFluxSummary?.stockIsUp ?? false;
+  Color get priceFluxColor =>
+      assetPriceFluxSummary?.priceFluxColor ?? Colors.grey;
 
   String valueExtractor(DbTableFieldName fldName) {
     /* need to coordinate with Natalia
@@ -134,7 +133,7 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
       case DbTableFieldName.gameDate:
         return gameDateStr;
       case DbTableFieldName.gameTime:
-        return gameTimeStr;
+        return 'gameTimeStr';
       case DbTableFieldName.eventName:
         return topName;
       case DbTableFieldName.gameLocation:
@@ -142,9 +141,9 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
       case DbTableFieldName.imageUrl:
         return imgUrl;
       case DbTableFieldName.assetOpenPrice:
-        return priceStr;
+        return openPriceStr;
       case DbTableFieldName.assetCurrentPrice:
-        return priceDeltaStr;
+        return recentDeltaStr;
       case DbTableFieldName.assetRank:
         return rankStr;
       case DbTableFieldName.assetPosition:

@@ -1,9 +1,9 @@
 library StUiController;
 
 import 'package:flutter/foundation.dart' show immutable;
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:equatable/equatable.dart';
-import 'package:intl/intl.dart';
 import 'package:tuple/tuple.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -35,3 +35,4 @@ part 'type_def.dart';
 part 'active_game_details.dart';
 part 'asset_prop_ifc.dart';
 part 'group_header_build_payload.dart';
+part 'trade_flow_provider.dart';

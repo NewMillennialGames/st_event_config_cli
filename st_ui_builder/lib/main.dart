@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:math';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stclient/stclient.dart';
 //
 import 'package:st_ev_cfg/st_ev_cfg.dart';
 //
@@ -55,7 +57,7 @@ class Scoretrader extends StatelessWidget {
   }
 }
 
-class MarketViewScreen extends StatefulWidget {
+class MarketViewScreen extends ConsumerStatefulWidget {
   // real MarketViewScreen will get assets list & StUiBuilderFactory
   // via a Riverpod Provider
 
@@ -66,13 +68,18 @@ class MarketViewScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<MarketViewScreen> createState() => _MarketViewScreenState();
+  ConsumerState<MarketViewScreen> createState() => _MarketViewScreenState();
 }
 
-class _MarketViewScreenState extends State<MarketViewScreen> {
+class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
   //
   final StUiBuilderFactory stBldr = StUiBuilderFactory();
   late GroupedTableDataMgr tvMgr;
+  // final _gameDetailsStrmCtrl = StreamController<ActiveGameDetails>();
+
+  final _gameDetailsProviders = Map<String, StateProvider<ActiveGameDetails>>();
+
+  final List<String> gameKeys = [];
 
   void _redrawCallback() {
     //
@@ -85,13 +92,34 @@ class _MarketViewScreenState extends State<MarketViewScreen> {
 
     // call setConfigForCurrentEvent each time user changes current event
     stBldr.setConfigForCurrentEvent(evCfgDataFromServer);
+
+    for (MockAssetWrapper a in widget.assets) {
+      var gmkey = a.asset.gameKey;
+      gameKeys.add(gmkey);
+      _gameDetailsProviders[gmkey] = StateProvider<ActiveGameDetails>(
+        (ref) {
+          return ActiveGameDetails(
+            gmkey,
+            _getRandStatus(),
+            gmkey,
+            DateTime.now(),
+            [a.asset.key],
+            watchedAssetIds: [a.asset.key],
+          );
+        },
+      );
+    }
     // pretend asset data sent from server
     // and wrapped in Natalia's wrapper class
     // now use this data to construct the TableviewDataRowTuple
     // argument needed for the RowStyle constructors
     List<TableviewDataRowTuple> assetRows = widget.assets
         .map(
-          (e) => TableviewDataRowTuple(e, e, ActiveGameDetails.mock()),
+          (e) => TableviewDataRowTuple(
+            e,
+            e,
+            _gameDetailsProviders[e.asset.gameKey]!,
+          ),
         )
         .toList();
 
@@ -135,28 +163,54 @@ class _MarketViewScreenState extends State<MarketViewScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => tvMgr.replaceGameStatusForRowRebuildTest(
-          _getRandRound(),
-        ),
-      ),
+      floatingActionButton: FloatingActionButton(onPressed: _updateGameStatus),
+    );
+  }
+
+  void _updateGameStatus() {
+    //
+    //    => tvMgr.replaceGameStatusForRowRebuildTest(
+    //   _getRandRound(),
+    // ),
+    int idx = Random().nextInt(gameKeys.length);
+    String gKey = gameKeys[idx];
+    var gd = ref.read(_gameDetailsProviders[gKey]!);
+
+    var ci = CompetitionInfo(
+      key: gKey,
+      competitionStatus: _getRandStatus(),
+      currentRoundName: _getRandRound(),
+    );
+
+    bool comp1IsOwned = Random().nextBool();
+    bool comp2IsWatched = Random().nextBool();
+
+    ref.read(_gameDetailsProviders[gKey]!.notifier).state = gd.cloneWithUpdates(
+      ci,
+      comp1IsOwned: comp1IsOwned,
+      comp2IsWatched: comp2IsWatched,
     );
   }
 
   String _getRandRound() {
-    var rounds = <String>[
-      'rOne',
-      'rTwo',
-      'rThree',
-      'rFour',
-      'rFive',
-      'rSix',
-    ];
-    int idx = Random().nextInt(5);
+    int idx = Random().nextInt(6);
     return rounds[idx];
+  }
+
+  CompetitionStatus _getRandStatus() {
+    int idx = Random().nextInt(6);
+    return CompetitionStatus.values[idx];
   }
 }
 
+const rounds = <String>[
+  'rOne',
+  'rTwo',
+  'rThree',
+  'rFour',
+  'rFive',
+  'rSix',
+];
 
         // child: Column(
         //   mainAxisAlignment: MainAxisAlignment.start,

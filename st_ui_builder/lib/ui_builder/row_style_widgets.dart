@@ -22,19 +22,24 @@ class AssetVsAssetRow_MktView extends StBaseTvRow
   }) : super(assets, key: key);
 
   @override
-  Widget rowBody(BuildContext context) {
+  Widget rowBody(
+    BuildContext context,
+    ActiveGameDetails agd,
+  ) {
+    // print('AssetVsAssetRow_MktView is rebuilding');
     return Container(
       // margin: const EdgeInsets.all(5),
       padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
-          color: StColors.black,
-          // borderRadius: BorderRadius.circular(15),
-          border: Border.all(color: Colors.grey)),
+        color: StColors.black,
+        // borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: Colors.grey),
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          AssetVsAssetHalfRow(comp1, gameStatus, showRank),
-          AssetVsAssetHalfRow(comp2, gameStatus, showRank),
+          AssetVsAssetHalfRow(comp1, agd, showRank),
+          AssetVsAssetHalfRow(comp2, agd, showRank),
         ],
       ),
     );
@@ -57,13 +62,16 @@ class AssetVsAssetRow_MktResrch extends StBaseTvRow with ShowsOneAsset {
   }) : super(assets, key: key);
 
   @override
-  Widget rowBody(BuildContext context) {
+  Widget rowBody(
+    BuildContext context,
+    ActiveGameDetails agd,
+  ) {
     // bool hasIncreased = comp1.priceDelta > 0;
     // String sign = hasIncreased ? '+' : '-';
 
-    String priceDeltaStr = comp1.priceDeltaStr;
+    String priceDeltaStr = comp1.recentDeltaStr;
     String pctIncrease =
-        (comp1.priceDelta / comp1.price).toStringAsPrecision(1);
+        (comp1.recentPriceDelta / comp1.currPrice).toStringAsPrecision(1);
 
     return Container(
       padding: const EdgeInsets.all(5),
@@ -78,7 +86,7 @@ class AssetVsAssetRow_MktResrch extends StBaseTvRow with ShowsOneAsset {
           Column(
             children: [
               Text(
-                comp1.topName + ' ' + comp1.priceStr,
+                comp1.topName + ' ' + comp1.currPriceStr,
                 style: StTextStyles.h3,
               ),
               // Row(
@@ -93,7 +101,10 @@ class AssetVsAssetRow_MktResrch extends StBaseTvRow with ShowsOneAsset {
               ),
             ],
           ),
-          TradeButton(comp1.canTrade),
+          TradeButton(
+            comp1.id,
+            agd.gameStatus,
+          ),
         ],
       ),
     );
@@ -110,11 +121,11 @@ class AssetVsAssetRow_Portfolio extends StBaseTvRow
   }) : super(assets, key: key);
 
   @override
-  Widget rowBody(BuildContext context) {
+  Widget rowBody(BuildContext context, ActiveGameDetails agd) {
     //
-    bool hasIncreased = comp1.priceDelta > 0;
-    String sharePrice = comp1.price.toStringAsPrecision(2);
-    String sharePriceChange = comp1.priceDeltaStr;
+    bool hasIncreased = comp1.recentPriceDelta > 0;
+    String sharePrice = comp1.currPriceStr;
+    String sharePriceChange = comp1.recentDeltaStr;
     TextStyle gainLossTxtStyle = hasIncreased
         ? StTextStyles.moneyDeltaPositive
         : StTextStyles.moneyDeltaNegative;
@@ -138,7 +149,7 @@ class AssetVsAssetRow_Portfolio extends StBaseTvRow
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(comp1.topName),
-                TradeButton(comp1.canTrade),
+                TradeButton(comp1.id, agd.gameStatus),
               ],
             ),
             Row(
@@ -199,7 +210,7 @@ class TeamVsFieldRow_MktView extends StBaseTvRow
   }) : super(assets, key: key);
 
   @override
-  Widget rowBody(BuildContext context) {
+  Widget rowBody(BuildContext context, ActiveGameDetails agd) {
     //
     final size = MediaQuery.of(context).size;
 
@@ -219,8 +230,8 @@ class TeamVsFieldRow_MktView extends StBaseTvRow
                 ),
                 Column(
                   children: [
-                    Text(comp1.priceStr),
-                    Text(comp1.priceDeltaStr),
+                    Text(comp1.currPriceStr),
+                    Text(comp1.recentDeltaStr),
                   ],
                 )
               ],
@@ -240,7 +251,10 @@ class TeamVsFieldRow_MktView extends StBaseTvRow
         ),
         Column(
           children: [
-            TradeButton(comp1.canTrade),
+            TradeButton(
+              comp1.id,
+              agd.gameStatus,
+            ),
             const SizedBox.expand(),
           ],
         ),
@@ -267,7 +281,7 @@ class TeamDraftRow extends StBaseTvRow with ShowsOneAsset {
   }) : super(assets, key: key);
 
   @override
-  Widget rowBody(BuildContext context) {
+  Widget rowBody(BuildContext context, ActiveGameDetails agd) {
     // paste row widget code here
     return Container(
       child: Text('Awaiting UX specs for <TeamDraftRow>'),
@@ -282,7 +296,7 @@ class TeamLineRow extends StBaseTvRow with ShowsOneAsset {
   }) : super(assets, key: key);
 
   @override
-  Widget rowBody(BuildContext context) {
+  Widget rowBody(BuildContext context, ActiveGameDetails agd) {
     // paste row widget code here
     const double _sizeHeightCont = 60;
     const double _rowMargin = 8;
@@ -300,8 +314,8 @@ class TeamLineRow extends StBaseTvRow with ShowsOneAsset {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           ObjectRankRow(
-            position: comp1.rank,
-            asset: comp1,
+            comp1,
+            agd,
           ),
           Padding(
             padding: const EdgeInsets.only(
@@ -318,7 +332,7 @@ class TeamLineRow extends StBaseTvRow with ShowsOneAsset {
                     ),
                   ),
                 Text(
-                  assets.item1.priceStr,
+                  comp1.currPriceStr,
                   style: StTextStyles.textLisTileTokens.copyWith(
                     fontSize: 20,
                   ),
@@ -339,7 +353,7 @@ class TeamPlayerVsFieldRow extends StBaseTvRow with ShowsOneAsset {
   }) : super(assets, key: key);
 
   @override
-  Widget rowBody(BuildContext context) {
+  Widget rowBody(BuildContext context, ActiveGameDetails agd) {
     // paste row widget code here
     return Container(
       child: Text('Awaiting UX specs for <TeamPlayerVsFieldRow>'),
@@ -354,7 +368,7 @@ class PlayerVsFieldRow extends StBaseTvRow with ShowsOneAsset {
   }) : super(assets, key: key);
 
   @override
-  Widget rowBody(BuildContext context) {
+  Widget rowBody(BuildContext context, ActiveGameDetails agd) {
     // paste row widget code here
     return Container(
       child: Text('Awaiting UX specs for <PlayerVsFieldRow>'),
@@ -369,7 +383,7 @@ class PlayerVsFieldRankedRow extends StBaseTvRow with ShowsOneAsset {
   }) : super(assets, key: key);
 
   @override
-  Widget rowBody(BuildContext context) {
+  Widget rowBody(BuildContext context, ActiveGameDetails agd) {
     // paste row widget code here
     return Container(
       child: Text('Awaiting UX specs for <PlayerVsFieldRankedRow>'),
@@ -384,7 +398,7 @@ class PlayerDraftRow extends StBaseTvRow with ShowsOneAsset {
   }) : super(assets, key: key);
 
   @override
-  Widget rowBody(BuildContext context) {
+  Widget rowBody(BuildContext context, ActiveGameDetails agd) {
     // paste row widget code here
     return Container(
       child: Text('Awaiting UX specs for <PlayerDraftRow>'),
@@ -399,7 +413,7 @@ class DriverVsFieldRow extends StBaseTvRow with ShowsOneAsset {
   }) : super(assets, key: key);
 
   @override
-  Widget rowBody(BuildContext context) {
+  Widget rowBody(BuildContext context, ActiveGameDetails agd) {
     // paste row widget code here
     return Container(
       child: Text('Awaiting UX specs for <DriverVsFieldRow>'),
@@ -415,7 +429,7 @@ class TeamVsFieldRowTest extends StBaseTvRow with ShowsOneAsset {
   }) : super(assets, key: key);
 
   @override
-  Widget rowBody(BuildContext context) {
+  Widget rowBody(BuildContext context, ActiveGameDetails agd) {
     return Container(
         height: 40,
         color: Colors.blue[100],
@@ -424,9 +438,9 @@ class TeamVsFieldRowTest extends StBaseTvRow with ShowsOneAsset {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(comp1.topName),
-            Text('Round: ' + comp1.roundName),
+            Text('Round: ' + agd.roundName),
             Text(comp1.regionOrConference),
-            Text(comp1.gameDateStr),
+            Text(agd.scheduledStartDateOnly.asShortDtStr),
           ],
         ));
   }
@@ -439,7 +453,7 @@ class TeamVsFieldRankedRowTest extends StBaseTvRow with ShowsOneAsset {
   }) : super(assets, key: key);
 
   @override
-  Widget rowBody(BuildContext context) {
+  Widget rowBody(BuildContext context, ActiveGameDetails agd) {
     return Container(
       height: 80,
       color: Colors.green[100],

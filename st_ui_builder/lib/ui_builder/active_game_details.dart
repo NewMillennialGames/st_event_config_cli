@@ -1,60 +1,107 @@
 part of StUiController;
 
+extension CompetitionStatusExt5 on CompetitionStatus {
+  //
+  bool get isTradable => [
+        CompetitionStatus.compInFuture,
+      ].contains(this);
+}
+
 @immutable
-class ActiveGameDetails with EquatableMixin {
+class ActiveGameDetails {
+  // with EquatableMixin
   // simplified version of a Competition
+  // to update rows with status changes
   // must be immutable so Riverpod can detect changes
 
   final String competitionKey;
-  final List<String> participantAssetIds;
-  // FIXME with Enum for CompStatus
   final CompetitionStatus gameStatus;
   final String roundName;
   final DateTime scheduledStartDtTm;
+  final List<String> participantAssetIds;
+  final List<String> ownedAssetIds;
+  final List<String> watchedAssetIds;
 
-  ActiveGameDetails(
+  const ActiveGameDetails(
     this.competitionKey,
     this.gameStatus,
     this.roundName,
     this.scheduledStartDtTm,
-    this.participantAssetIds,
-  );
+    this.participantAssetIds, {
+    this.ownedAssetIds = const [],
+    this.watchedAssetIds = const [],
+  });
 
-  ActiveGameDetails cloneWithUpdates(CompetitionInfo ci) {
-    // _gameStatus = ci.competitionStatus.toInt();
-    // _roundName = ci.currentRoundName;
+  ActiveGameDetails cloneWithUpdates(
+    CompetitionInfo ci, {
+    bool? comp1IsWatched,
+    bool? comp2IsWatched,
+    bool? comp1IsOwned,
+    bool? comp2IsOwned,
+  }) {
+    // dont change owned or watched state unless explicitly set
+    List<String> watchedAssetIds = _makeLst(
+      comp1IsWatched ?? isWatched(assetId1),
+      comp2IsWatched ?? isWatched(assetId2),
+    );
+    List<String> ownedAssetIds = _makeLst(
+      comp1IsOwned ?? isOwned(assetId1),
+      comp2IsOwned ?? isOwned(assetId2),
+    );
+
     return ActiveGameDetails(
       competitionKey,
       ci.competitionStatus,
       ci.currentRoundName,
       scheduledStartDtTm,
       participantAssetIds,
+      ownedAssetIds: ownedAssetIds,
+      watchedAssetIds: watchedAssetIds,
     );
   }
 
-  // getters
+  List<String> _makeLst(
+    bool first,
+    bool second,
+  ) {
+    List<String> l = [];
+    if (first) l.add(assetId1);
+    if (second) l.add(assetId2);
+    return l;
+  }
 
-  // FIXME with Enum for CompStatus
-  bool get isTradable => gameStatus == 4;
+  // getters
+  bool get isTradable => gameStatus.isTradable;
   int get competitorCount => participantAssetIds.length;
+  //
+  String get gameDateStr => scheduledStartDtTm.asDtwMmDyStr;
+  String get gameTimeStr => scheduledStartDtTm.asTimeOnlyStr;
   DateTime get scheduledStartDateOnly => scheduledStartDtTm.truncateTime;
-  // DateTime get scheduledStartDtTm => scheduledStartDtTm;
+  //
   String get assetId1 =>
       participantAssetIds.length > 0 ? participantAssetIds[0] : '_';
   String get assetId2 =>
       participantAssetIds.length > 1 ? participantAssetIds[1] : '_';
 
-  // List<String> get participantAssetIds => _participantAssetIds;
-  // String get _uniqueAssetKey => assetId1 + '-' + assetId2;
+  bool isOwned(String assetId) => ownedAssetIds.contains(assetId);
+  bool isWatched(String assetId) => watchedAssetIds.contains(assetId);
 
   bool includesParticipant(String assetId) =>
       participantAssetIds.contains(assetId);
 
-  @override
-  List<Object?> get props =>
-      [scheduledStartDtTm.toIso8601String(), competitionKey];
+  // List<String> get participantAssetIds => _participantAssetIds;
+  // String get _uniqueAssetKey => assetId1 + '-' + assetId2;
 
-  // only for testing
-  factory ActiveGameDetails.mock() => ActiveGameDetails(
-      '', CompetitionStatus.compInFuture, 'rZero', DateTime.now(), []);
+  // @override
+  // List<Object?> get props =>
+  //     [scheduledStartDtTm.toIso8601String(), competitionKey];
+
+  // // only for testing
+  // factory ActiveGameDetails.mock() => ActiveGameDetails(
+  //       'abcde',
+  //       CompetitionStatus.compInFuture,
+  //       'rZero',
+  //       DateTime.now(),
+  //       const ['123'],
+  //     );
 }
