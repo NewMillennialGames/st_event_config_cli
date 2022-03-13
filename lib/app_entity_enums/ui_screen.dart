@@ -39,6 +39,11 @@ extension AppScreenExt1 on AppScreen {
   //
   String get includeStr => 'Configure ${this.name} section of app?';
 
+  // used to track what screen is displayed
+  AppScreen fromTabBarIndex(int idx) {
+    return AppScreen.values[idx + 1];
+  }
+
   bool get isConfigurable =>
       this.configurableScreenAreas.length > 0 ||
       this == AppScreen.eventConfiguration;

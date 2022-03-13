@@ -47,12 +47,13 @@ class TradeButton extends ConsumerWidget {
     // trade button to right of player/team name
     // final tf = ref.read(tradeFlowProvider);
     return TextButton(
-      child: const Text(
-        StStrings.tradeUc,
+      child: Text(
+        'TRADE',
+        // tf.labelForState(status),
         style: StTextStyles.tradeButtonText,
       ),
       onPressed: null,
-      // onPressed: canTrade ? () => tf.beginTradeFlow(assetId) : null,
+      // onPressed: status.isTradable ? () => tf.beginTradeFlow(assetId) : null,
       style: status.isTradable
           ? StButtonStyles.tradeButtonCanTrade
           : StButtonStyles.tradeButtonCannotTrade,
@@ -447,7 +448,7 @@ class HoldingsAndValueRow extends StatelessWidget {
       padding: const EdgeInsets.only(
         top: (_stdRowHeight / 2) * 0.08,
       ),
-      color: StColors.veryDarkGray,
+      color: StColors.primaryDarkGray,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,

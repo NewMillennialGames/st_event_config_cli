@@ -11,6 +11,18 @@ we have one style for each value of:
     enum TvAreaRowStyle
   */
 
+const kRowBorder = Border.symmetric(
+  horizontal: BorderSide(
+    color: StColors.primaryDarkGray,
+    width: 0.8,
+  ),
+);
+
+const kRowBoxDecor = BoxDecoration(
+  color: StColors.black,
+  border: kRowBorder,
+);
+
 class AssetVsAssetRow_MktView extends StBaseTvRow
     with ShowsTwoAssets, RequiresGameStatus {
   //
@@ -30,11 +42,7 @@ class AssetVsAssetRow_MktView extends StBaseTvRow
     return Container(
       // margin: const EdgeInsets.all(5),
       padding: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        color: StColors.black,
-        // borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: Colors.grey),
-      ),
+      decoration: kRowBoxDecor,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -76,10 +84,7 @@ class AssetVsAssetRow_MktResrch extends StBaseTvRow with ShowsOneAsset {
     return Container(
       padding: const EdgeInsets.all(5),
       // margin: const EdgeInsets.all(5),
-      // decoration: BoxDecoration(
-      //   color: StColors.black,
-      //   borderRadius: BorderRadius.circular(15),
-      // ),
+      decoration: kRowBoxDecor,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -302,14 +307,7 @@ class TeamLineRow extends StBaseTvRow with ShowsOneAsset {
     const double _rowMargin = 8;
     return Container(
       height: _sizeHeightCont,
-      decoration: const BoxDecoration(
-        color: StColors.black,
-        border: Border(
-          bottom: BorderSide(
-            color: StColors.borderTextField,
-          ),
-        ),
-      ),
+      decoration: kRowBoxDecor,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -372,6 +370,7 @@ class PlayerVsFieldRow extends StBaseTvRow with ShowsOneAsset {
     // paste row widget code here
     return Container(
       child: Text('Awaiting UX specs for <PlayerVsFieldRow>'),
+      decoration: kRowBoxDecor,
     );
   }
 }
@@ -402,6 +401,7 @@ class PlayerDraftRow extends StBaseTvRow with ShowsOneAsset {
     // paste row widget code here
     return Container(
       child: Text('Awaiting UX specs for <PlayerDraftRow>'),
+      decoration: kRowBoxDecor,
     );
   }
 }
@@ -417,6 +417,7 @@ class DriverVsFieldRow extends StBaseTvRow with ShowsOneAsset {
     // paste row widget code here
     return Container(
       child: Text('Awaiting UX specs for <DriverVsFieldRow>'),
+      decoration: kRowBoxDecor,
     );
   }
 }
@@ -433,6 +434,7 @@ class TeamVsFieldRowTest extends StBaseTvRow with ShowsOneAsset {
     return Container(
         height: 40,
         color: Colors.blue[100],
+        decoration: kRowBoxDecor,
         child: Row(
           // crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -456,7 +458,7 @@ class TeamVsFieldRankedRowTest extends StBaseTvRow with ShowsOneAsset {
   Widget rowBody(BuildContext context, ActiveGameDetails agd) {
     return Container(
       height: 80,
-      color: Colors.green[100],
+      decoration: kRowBoxDecor,
       child: Row(
         // crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

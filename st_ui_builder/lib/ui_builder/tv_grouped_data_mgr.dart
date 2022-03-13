@@ -82,9 +82,7 @@ class GroupedTableDataMgr {
 
   bool get hasColumnFilters {
     // set imageUrl as first filter field to hide/disable the whole filter bar
-    return filterRules.item1.colName == DbTableFieldName.imageUrl
-        ? false
-        : true;
+    return filterRules.item1.colName != DbTableFieldName.imageUrl;
   }
 
   String? _filter1Selection;
@@ -112,8 +110,8 @@ class GroupedTableDataMgr {
         ((i3 != null && listItems3.length > _kLstMin) ? 1 : 0);
     // allocate dropdown button width
     double allocBtnWidth = (totAvailWidth / dropLstCount) - 24;
-
-    allocBtnWidth = dropLstCount < 2 ? totAvailWidth * 0.38 : allocBtnWidth;
+    // one list can take 86% of space
+    allocBtnWidth = dropLstCount < 2 ? totAvailWidth * 0.86 : allocBtnWidth;
 
     return Container(
       height: barHeight,
@@ -173,8 +171,8 @@ class GroupedTableDataMgr {
         // color: StColors.gray,
         color: Colors.transparent,
         border: Border.all(
-          color: StColors.gray,
-          width: 1,
+          color: StColors.primaryDarkGray,
+          width: 0.8,
         ),
         borderRadius: const BorderRadius.all(
           Radius.circular(8),
@@ -246,7 +244,7 @@ class GroupedTableDataMgr {
 
   void _doFilteringFor(DbTableFieldName colName, String selectedVal) {
     //
-    if (selectedVal == colName.labelName) {
+    if (selectedVal.toUpperCase() == colName.labelName.toUpperCase()) {
       clearFilters();
       return;
     }
