@@ -10,6 +10,7 @@ import 'package:stclient/stclient.dart';
 import 'package:st_ev_cfg/st_ev_cfg.dart';
 //
 import 'mock_data.dart';
+import 'config/colors.dart';
 import './ui_builder/all.dart';
 /*
 this is a Flutter project
@@ -144,7 +145,10 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
       body: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          if (tvMgr.hasColumnFilters) tvMgr.columnFilterBarWidget(),
+          if (tvMgr.hasColumnFilters)
+            tvMgr.columnFilterBarWidget(
+              backColor: StColors.primaryDarkGray,
+            ),
           Container(
             height: 30,
           ),

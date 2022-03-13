@@ -21,8 +21,9 @@ class TvGroupHeader extends StatelessWidget {
     // standard group header widget
     // print('building a TvGroupHeader first: ${headerData.first}');
     return Container(
-      height: 60,
-      color: Colors.black,
+      height: 58,
+      padding: const EdgeInsets.only(top: 4),
+      color: StColors.primaryDarkGray,
       child: _rowStyleToHeaderStyle(),
     );
   }

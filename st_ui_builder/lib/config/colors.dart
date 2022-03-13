@@ -33,7 +33,7 @@ class StColors {
   static const coolGray = Color(0xff96a0b7);
   static const gray = Color(0xff68696A);
   static const darkGray = Color(0xff323B45);
-  static const veryDarkGray = Color(0xff1E2C37);
+  static const primaryDarkGray = Color(0xff1E2C37);
   static const black = Color(0xff000000);
 
   // Shades of Blue
