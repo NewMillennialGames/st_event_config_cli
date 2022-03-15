@@ -65,37 +65,32 @@ class AssetVsAssetRow_MktResrch extends StBaseTvRow with ShowsOneAsset {
     String pctIncrease =
         (comp1.recentPriceDelta / comp1.currPrice).toStringAsPrecision(1);
 
-    return Container(
-      padding: const EdgeInsets.all(5),
-      // margin: const EdgeInsets.all(5),
-      decoration: kRowBoxDecor,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Column(
-            children: [
-              Text(
-                comp1.topName + ' ' + comp1.currPriceStr,
-                style: StTextStyles.h3,
-              ),
-              // Row(
-              //   children: [
-              //     Text(comp1.topName),
-              //     Text(comp1.priceStr),
-              //   ],
-              // ),
-              Text(
-                '$priceDeltaStr ($pctIncrease%)',
-                style: StTextStyles.h5,
-              ),
-            ],
-          ),
-          TradeButton(
-            comp1.assetKey,
-            agd.gameStatus,
-          ),
-        ],
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Column(
+          children: [
+            Text(
+              comp1.topName + ' ' + comp1.currPriceStr,
+              style: StTextStyles.h3,
+            ),
+            // Row(
+            //   children: [
+            //     Text(comp1.topName),
+            //     Text(comp1.priceStr),
+            //   ],
+            // ),
+            Text(
+              '$priceDeltaStr ($pctIncrease%)',
+              style: StTextStyles.h5,
+            ),
+          ],
+        ),
+        TradeButton(
+          comp1.assetKey,
+          agd.gameStatus,
+        ),
+      ],
     );
   }
 }

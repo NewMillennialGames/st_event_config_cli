@@ -6,12 +6,12 @@ class StTextStyles {
   // Styles provided from the StylesMasterSpec file
   static const h1 = TextStyle(
     fontFamily: 'HelveticaNeue-Light',
-    fontSize: 30,
+    fontSize: 24,
     color: StColors.white,
   );
   static const h2 = TextStyle(
     fontFamily: 'HelveticaNeue-Light',
-    fontSize: 24,
+    fontSize: 22,
     color: StColors.white,
   );
   static const h3 = TextStyle(

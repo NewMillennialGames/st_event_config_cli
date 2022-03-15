@@ -8,6 +8,8 @@
 
 part of StUiController;
 
+const kMissingPrice = '0.00';
+
 abstract class AssetHoldingsSummaryIfc {
   /*  per-user asset holdings summary
 
@@ -23,9 +25,9 @@ extension AssetHoldingsSummaryIfcExt1 on AssetHoldingsSummaryIfc {
   double get positionGainLoss => positionEstValue - positionCost;
   // UI values for this
   String get sharesOwnedStr => '$sharesOwned';
-  String get positionCostStr => '\$$positionCost';
-  String get positionEstValueStr => '\$$positionEstValue';
-  String get positionGainLossStr => '\$$positionGainLoss';
+  String get positionCostStr => positionCost.toStringAsFixed(2);
+  String get positionEstValueStr => positionEstValue.toStringAsFixed(2);
+  String get positionGainLossStr => positionGainLoss.toStringAsFixed(2);
 
   bool get returnIsPositive => positionGainLoss > 0;
   Color get posGainSymbolColor => returnIsPositive ? Colors.green : Colors.red;
@@ -47,12 +49,12 @@ abstract class AssetPriceFluxSummaryIfc {
 
 extension AssetPriceFluxSummaryIfcExt1 on AssetPriceFluxSummaryIfc {
   // UI values for this
-  String get currPriceStr => '\$$currPrice';
-  String get recentDeltaStr => '\$$recentPriceDelta';
+  String get currPriceStr => currPrice.toStringAsFixed(2);
+  String get recentDeltaStr => recentPriceDelta.toStringAsFixed(2);
   //
-  String get openPriceStr => '\$$openPrice';
-  String get lowPriceStr => '\$$lowPrice';
-  String get hiPriceStr => '\$$hiPrice';
+  String get openPriceStr => openPrice.toStringAsFixed(2);
+  String get lowPriceStr => lowPrice.toStringAsFixed(2);
+  String get hiPriceStr => hiPrice.toStringAsFixed(2);
 
   bool get stockIsUp => currPrice > openPrice;
   Color get priceFluxColor => stockIsUp ? Colors.green : Colors.red;
@@ -91,11 +93,12 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
   // from assetHoldingsSummary
   double get positionGainLoss => assetHoldingsSummary?.positionGainLoss ?? 0;
   String get sharesOwnedStr => assetHoldingsSummary?.sharesOwnedStr ?? '0';
-  String get positionCostStr => assetHoldingsSummary?.positionCostStr ?? '\$0';
+  String get positionCostStr =>
+      assetHoldingsSummary?.positionCostStr ?? kMissingPrice;
   String get positionEstValueStr =>
-      assetHoldingsSummary?.positionEstValueStr ?? '\$0';
+      assetHoldingsSummary?.positionEstValueStr ?? kMissingPrice;
   String get positionGainLossStr =>
-      assetHoldingsSummary?.positionGainLossStr ?? '\$0';
+      assetHoldingsSummary?.positionGainLossStr ?? kMissingPrice;
   bool get returnIsPositive => assetHoldingsSummary?.returnIsPositive ?? false;
   Color get posGainSymbolColor =>
       assetHoldingsSummary?.posGainSymbolColor ?? Colors.grey;
@@ -103,11 +106,15 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
   // assetPriceFluxSummary
   double get currPrice => assetPriceFluxSummary?.currPrice ?? 0;
   double get recentPriceDelta => assetPriceFluxSummary?.recentPriceDelta ?? 0;
-  String get currPriceStr => assetPriceFluxSummary?.currPriceStr ?? '\$0';
-  String get recentDeltaStr => assetPriceFluxSummary?.recentDeltaStr ?? '\$0';
-  String get openPriceStr => assetPriceFluxSummary?.openPriceStr ?? '\$0';
-  String get lowPriceStr => assetPriceFluxSummary?.openPriceStr ?? '\$0';
-  String get hiPriceStr => assetPriceFluxSummary?.hiPriceStr ?? '\$0';
+  String get currPriceStr =>
+      assetPriceFluxSummary?.currPriceStr ?? kMissingPrice;
+  String get recentDeltaStr =>
+      assetPriceFluxSummary?.recentDeltaStr ?? kMissingPrice;
+  String get openPriceStr =>
+      assetPriceFluxSummary?.openPriceStr ?? kMissingPrice;
+  String get lowPriceStr =>
+      assetPriceFluxSummary?.openPriceStr ?? kMissingPrice;
+  String get hiPriceStr => assetPriceFluxSummary?.hiPriceStr ?? kMissingPrice;
 
   bool get stockIsUp => assetPriceFluxSummary?.stockIsUp ?? false;
   Color get priceFluxColor =>

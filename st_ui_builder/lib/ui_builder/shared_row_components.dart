@@ -67,7 +67,7 @@ class TradeButton extends ConsumerWidget {
       alignment: Alignment.center,
       child: Text(
         tf.labelForGameState(status),
-        style: StTextStyles.h4.copyWith(
+        style: StTextStyles.h5.copyWith(
           color: tf.colorForGameState(status),
         ),
       ),
@@ -106,14 +106,16 @@ class AssetVsAssetHalfRow extends StatelessWidget {
         Expanded(
           child: Text(
             competitor.topName,
-            style: StTextStyles.h3,
+            style: StTextStyles.h4,
           ),
         ),
         Text(
           competitor.currPriceStr,
-          style: StTextStyles.h3,
+          style: StTextStyles.h5,
         ),
-        kSpacerSm,
+        SizedBox(
+          width: 12,
+        ),
         TradeButton(
           competitor.assetKey,
           gameDetails.gameStatus,

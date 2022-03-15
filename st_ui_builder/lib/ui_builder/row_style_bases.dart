@@ -50,7 +50,7 @@ class StBaseTvRow extends StBaseTvRowIfc {
     I'm watching the overridden value
     to force row-rebuild when game-status changes
     */
-    double rowHeight = this is ShowsTwoAssets ? 124 : 68;
+    double rowHeight = this is ShowsTwoAssets ? 124 : 64;
 
     return Container(
       height: rowHeight,
