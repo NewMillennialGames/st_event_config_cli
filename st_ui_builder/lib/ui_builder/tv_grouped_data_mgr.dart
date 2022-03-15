@@ -28,10 +28,10 @@ class GroupedTableDataMgr {
   final List<TableviewDataRowTuple> _allAssetRows;
   final TableviewConfigPayload _tableViewCfg;
   RedrawTvCallback? redrawCallback;
-  GroupedListOrder order = GroupedListOrder.ASC;
+  GroupedListOrder sortOrder = GroupedListOrder.ASC;
   // rows actually rendered from _filteredAssetRows
   List<TableviewDataRowTuple> _filteredAssetRows = [];
-  // regions no longer matter when you get to final 4
+  // disableGroupingBeyondDate: regions no longer matter when you get to final 4
   bool disableGroupingBeyondDate = false;
 
   GroupedTableDataMgr(
@@ -40,7 +40,7 @@ class GroupedTableDataMgr {
     this._tableViewCfg, {
     this.redrawCallback,
     bool ascending = true,
-  })  : order = ascending ? GroupedListOrder.ASC : GroupedListOrder.DESC,
+  })  : sortOrder = ascending ? GroupedListOrder.ASC : GroupedListOrder.DESC,
         _filteredAssetRows = _allAssetRows.toList();
 
   List<TableviewDataRowTuple> get listData => _filteredAssetRows;

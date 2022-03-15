@@ -1,5 +1,17 @@
 part of StUiController;
 
+const kRowBorder = Border.symmetric(
+  horizontal: BorderSide(
+    color: StColors.lightGray,
+    width: 0.8,
+  ),
+);
+
+const kRowBoxDecor = BoxDecoration(
+  color: StColors.black,
+  border: kRowBorder,
+);
+
 final _gameStatusProvider = Provider<ActiveGameDetails>(
   ((ref) => throw UnimplementedError('')),
 );
@@ -28,9 +40,6 @@ class StBaseTvRow extends StBaseTvRowIfc {
           key: key,
         );
 
-  // @override
-  // ActiveGameDetails get gameStatus => assets.item3;
-
   @override
   Widget build(BuildContext context) {
     /* 
@@ -41,22 +50,28 @@ class StBaseTvRow extends StBaseTvRowIfc {
     I'm watching the overridden value
     to force row-rebuild when game-status changes
     */
-    return Consumer(
-      builder: (context, ref, child) {
-        // force rebuild when game status changes
-        ActiveGameDetails agd;
-        if (this is RequiresGameStatus) {
-          agd = ref.watch(assets.item3);
-        } else {
-          agd = ref.read(assets.item3);
-        }
-        // force rebuild when asset price changes
-        // if (this is RequiresPriceChangeProps) {
-        //   // ref.watch(_somePriceProvider);
-        // }
-        return rowBody(context, agd);
-      },
-      // ),
+    double rowHeight = this is ShowsTwoAssets ? 124 : 68;
+
+    return Container(
+      height: rowHeight,
+      padding: const EdgeInsets.all(5),
+      decoration: kRowBoxDecor,
+      child: Consumer(
+        builder: (context, ref, child) {
+          // force rebuild when game status changes
+          ActiveGameDetails agd;
+          if (this is RequiresGameStatus) {
+            agd = ref.watch(assets.item3);
+          } else {
+            agd = ref.read(assets.item3);
+          }
+          // force rebuild when asset price changes
+          // if (this is RequiresPriceChangeProps) {
+          //   // ref.watch(_somePriceProvider);
+          // }
+          return rowBody(context, agd);
+        },
+      ),
     );
   }
 

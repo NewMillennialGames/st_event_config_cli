@@ -23,7 +23,7 @@ class TvGroupHeader extends StatelessWidget {
     return Container(
       height: 58,
       padding: const EdgeInsets.only(top: 4),
-      color: StColors.primaryDarkGray,
+      color: StColors.black,
       child: _rowStyleToHeaderStyle(),
     );
   }

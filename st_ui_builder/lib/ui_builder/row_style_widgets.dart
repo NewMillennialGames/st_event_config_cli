@@ -11,18 +11,6 @@ we have one style for each value of:
     enum TvAreaRowStyle
   */
 
-const kRowBorder = Border.symmetric(
-  horizontal: BorderSide(
-    color: StColors.primaryDarkGray,
-    width: 0.8,
-  ),
-);
-
-const kRowBoxDecor = BoxDecoration(
-  color: StColors.black,
-  border: kRowBorder,
-);
-
 class AssetVsAssetRow_MktView extends StBaseTvRow
     with ShowsTwoAssets, RequiresGameStatus {
   //
@@ -39,17 +27,13 @@ class AssetVsAssetRow_MktView extends StBaseTvRow
     ActiveGameDetails agd,
   ) {
     // print('AssetVsAssetRow_MktView is rebuilding');
-    return Container(
-      // margin: const EdgeInsets.all(5),
-      padding: const EdgeInsets.all(5),
-      decoration: kRowBoxDecor,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          AssetVsAssetHalfRow(comp1, agd, showRank),
-          AssetVsAssetHalfRow(comp2, agd, showRank),
-        ],
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        AssetVsAssetHalfRow(comp1, agd, showRank),
+        AssetVsAssetHalfRow(comp2, agd, showRank),
+      ],
     );
   }
 }
@@ -133,7 +117,9 @@ class AssetVsAssetRow_Portfolio extends StBaseTvRow
     String sharePriceChange = comp1.recentDeltaStr;
     TextStyle gainLossTxtStyle = hasIncreased
         ? StTextStyles.moneyDeltaPositive
-        : StTextStyles.moneyDeltaNegative;
+        : StTextStyles.moneyDeltaPositive.copyWith(
+            colors: StColors.errorText,
+          );
 
     // FIXME:  get position
     // TODO:  mixin "RequiresUserPositionProps" will give these values
@@ -324,16 +310,13 @@ class TeamLineRow extends StBaseTvRow with ShowsOneAsset {
                 if (comp1.rank > 3)
                   Text(
                     '＠',
-                    style: StTextStyles.textLisTileTokens.copyWith(
-                      fontSize: 17,
+                    style: StTextStyles.h4.copyWith(
                       color: StColors.coolGray,
                     ),
                   ),
                 Text(
                   comp1.currPriceStr,
-                  style: StTextStyles.textLisTileTokens.copyWith(
-                    fontSize: 20,
-                  ),
+                  style: StTextStyles.h3.copyWith(),
                 ),
               ],
             ),
