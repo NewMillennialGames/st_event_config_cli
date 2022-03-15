@@ -33,8 +33,9 @@ class CompetitorImage extends StatelessWidget {
 }
 
 class TradeButton extends ConsumerWidget {
-  final CompetitionStatus status;
+  //
   final String assetId;
+  final CompetitionStatus status;
 
   const TradeButton(
     this.assetId,
@@ -45,18 +46,31 @@ class TradeButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // trade button to right of player/team name
-    // final tf = ref.read(tradeFlowProvider);
-    return TextButton(
+    // or simple text label if not tradable
+    final tf = ref.read(tradeFlowProvider);
+    if (status.isTradable) {
+      return Container(
+        height: 56,
+        child: TextButton(
+          child: const Text(
+            StStrings.tradeUc,
+            // tf.labelForState(status),
+            style: StTextStyles.h4,
+          ),
+          onPressed: () => tf.beginTradeFlow(assetId),
+          style: StButtonStyles.tradeButtonCanTrade,
+        ),
+      );
+    }
+    return Container(
+      height: 56,
+      alignment: Alignment.center,
       child: Text(
-        'TRADE',
-        // tf.labelForState(status),
-        style: StTextStyles.tradeButtonText,
+        tf.labelForGameState(status),
+        style: StTextStyles.h4.copyWith(
+          color: tf.colorForGameState(status),
+        ),
       ),
-      onPressed: null,
-      // onPressed: status.isTradable ? () => tf.beginTradeFlow(assetId) : null,
-      style: status.isTradable
-          ? StButtonStyles.tradeButtonCanTrade
-          : StButtonStyles.tradeButtonCannotTrade,
     );
   }
 }
@@ -245,18 +259,14 @@ class ObjectRankRow extends StatelessWidget {
               ),
             Text(
               asset.topName,
-              style: StTextStyles.textLisTileTokens.copyWith(
-                fontSize: 20,
-              ),
+              style: StTextStyles.h3,
             ),
             if (!asset.isTeam)
               Padding(
                 padding: const EdgeInsets.only(top: 5.0),
                 child: Text(
                   asset.subName,
-                  style: StTextStyles.textScoresEvent.copyWith(
-                    fontSize: 16,
-                  ),
+                  style: StTextStyles.h4,
                 ),
               )
           ],
@@ -317,9 +327,7 @@ class _PositionRankRow extends StatelessWidget {
           ),
           child: Text(
             asset.rankStr,
-            style: StTextStyles.textLisTileTokens.copyWith(
-              fontSize: 25,
-            ),
+            style: StTextStyles.h2,
             textAlign: TextAlign.center,
           ),
         );
@@ -329,9 +337,7 @@ class _PositionRankRow extends StatelessWidget {
           width: _sizeIconRank,
           child: Text(
             asset.rankStr,
-            style: StTextStyles.textLisTileTokens.copyWith(
-              fontSize: 25,
-            ),
+            style: StTextStyles.h2,
             textAlign: TextAlign.center,
           ),
         );
@@ -377,20 +383,16 @@ class AssetTopRow extends StatelessWidget {
                     asset.topName,
                     textAlign: TextAlign.left,
                     style: asset.subName != ''
-                        ? StTextStyles.textTeamNameMarketView.copyWith(
+                        ? StTextStyles.h2.copyWith(
                             color: Colors.yellow,
                           )
-                        : StTextStyles.textNameMarketTicker.copyWith(
+                        : StTextStyles.h2.copyWith(
                             color: Colors.pink,
-                            fontSize: 24,
                           ),
                   ),
                   Text(
                     asset.subName,
-                    style: StTextStyles.tradeButtonText.copyWith(
-                      fontSize: 16,
-                      color: StColors.teamOpenHighLowMarketView,
-                    ),
+                    style: StTextStyles.h5.copyWith(color: StColors.white),
                   ),
                 ],
               ),
@@ -403,7 +405,7 @@ class AssetTopRow extends StatelessWidget {
               child: TextButton(
                 child: const Text(
                   StStrings.tradeUc,
-                  style: StTextStyles.tradeButtonText,
+                  style: StTextStyles.h5,
                 ),
                 onPressed: () {},
                 style: StButtonStyles.tradeButtonCanTrade,
@@ -460,24 +462,18 @@ class HoldingsAndValueRow extends StatelessWidget {
               children: [
                 Text(
                   '${_sharesHeld.toString() + ' ' + StStrings.shares}',
-                  style: StTextStyles.textRichPlayerTradeView.copyWith(
-                    fontSize: 16,
-                  ),
+                  style: StTextStyles.h5,
                 ),
                 RichText(
                   text: TextSpan(
                     children: [
                       TextSpan(
                         text: '＠',
-                        style: StTextStyles.textNameMarketTicker.copyWith(
-                          fontSize: 10,
-                        ),
+                        style: StTextStyles.p3,
                       ),
                       TextSpan(
                         text: '${'asset.shares'} ',
-                        style: StTextStyles.textNameMarketTicker.copyWith(
-                          fontSize: 14,
-                        ),
+                        style: StTextStyles.p2,
                       ),
                       if (false)
                         TextSpan(
@@ -494,15 +490,11 @@ class HoldingsAndValueRow extends StatelessWidget {
             children: [
               Text(
                 gameStatus.isTradable ? StStrings.value : StStrings.proceeds,
-                style: StTextStyles.textRichPlayerTradeView.copyWith(
-                  fontSize: 16,
-                ),
+                style: StTextStyles.h5.copyWith(),
               ),
               Text(
                 _sharePrice.toString(),
-                style: StTextStyles.textNameMarketTicker.copyWith(
-                  fontSize: 14,
-                ),
+                style: StTextStyles.h6.copyWith(),
               ),
             ],
           ),
@@ -513,9 +505,7 @@ class HoldingsAndValueRow extends StatelessWidget {
               children: [
                 Text(
                   StStrings.gainLossAbbrev,
-                  style: StTextStyles.textRichPlayerTradeView.copyWith(
-                    fontSize: 16,
-                  ),
+                  style: StTextStyles.h6.copyWith(),
                 ),
                 Text(
                   '${_gainLoss.isNegative ? _gainLoss.toStringAsFixed(2) : '+' + _gainLoss.toStringAsFixed(2)}',
