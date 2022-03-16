@@ -32,6 +32,7 @@ class AssetVsAssetRow_MktView extends StBaseTvRow
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         AssetVsAssetHalfRow(comp1, agd, showRank),
+        const SizedBox(height: UiSizes.spaceBtwnRows),
         AssetVsAssetHalfRow(comp2, agd, showRank),
       ],
     );

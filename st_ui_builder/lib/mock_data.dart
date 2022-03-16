@@ -84,38 +84,16 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
   bool get isTeam => throw UnimplementedError();
 
   @override
-  AssetPriceFluxSummaryIfc? get assetPriceFluxSummary => null;
+  AssetPriceFluxSummaryIfc get assetPriceFluxSummary =>
+      throw UnimplementedError();
 
   @override
-  AssetHoldingsSummaryIfc? get assetHoldingsSummary => null;
+  AssetHoldingsSummaryIfc get assetHoldingsSummary =>
+      throw UnimplementedError();
 
   @override
-  // TODO: implement roundName
+  // should be on the game
   String get roundName => throw UnimplementedError();
-
-  // @override
-  // String get roundName => gameStatus.roundName;
-
-  // @override
-  // String get gameDateStr => dtFmtr.format(gameDate);
-
-  // @override
-  // DateTime get gameTime => asset.gameDt;
-
-  // @override
-  // String get gameTimeStr => dtFmtr.format(gameTime);
-
-  // @override
-  // double get price => 4.33;
-
-  // @override
-  // double get priceDelta => -0.25;
-
-  // @override
-  // String get priceDeltaStr => '$priceDelta';
-
-  // @override
-  // String get priceStr => '\$$price';
 }
 
 List<MockAsset> _fakeData = [

@@ -257,21 +257,21 @@ class StButtonStyles {
   // keep
   static ButtonStyle tradeButtonCanTrade = TextButton.styleFrom(
     backgroundColor: StColors.darkGreen,
-    padding: const EdgeInsets.symmetric(
-      vertical: 20,
-      horizontal: 15,
-    ),
+    // padding: const EdgeInsets.symmetric(
+    //   vertical: 20,
+    //   horizontal: 15,
+    // ),
   );
 
   // replace
   static ButtonStyle getTokens = ElevatedButton.styleFrom(
     primary: StColors.defaultBackgroundGray,
-    side: BorderSide(
+    side: const BorderSide(
       color: StColors.blue,
     ),
-    padding: const EdgeInsets.symmetric(
-      horizontal: 25,
-    ),
+    // padding: const EdgeInsets.symmetric(
+    //   horizontal: 25,
+    // ),
   );
   static ButtonStyle getTokensOnTap = ElevatedButton.styleFrom(
     primary: StColors.blue,
@@ -279,7 +279,7 @@ class StButtonStyles {
   );
   static ButtonStyle getTokensLessWidth = ElevatedButton.styleFrom(
     primary: StColors.defaultBackgroundGray,
-    side: BorderSide(
+    side: const BorderSide(
       color: StColors.blue,
     ),
     padding: const EdgeInsets.symmetric(horizontal: 18),

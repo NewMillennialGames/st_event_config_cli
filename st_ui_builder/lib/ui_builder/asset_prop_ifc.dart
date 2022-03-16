@@ -72,8 +72,8 @@ abstract class AssetRowPropertyIfc {
   int get rank;
   bool get isTeam;
 
-  AssetPriceFluxSummaryIfc? get assetPriceFluxSummary;
-  AssetHoldingsSummaryIfc? get assetHoldingsSummary;
+  AssetPriceFluxSummaryIfc get assetPriceFluxSummary;
+  AssetHoldingsSummaryIfc get assetHoldingsSummary;
 
   // next 3 properties are game props but needed for sorting and grouping
   DateTime get gameDate; // rounded to midnight for row grouping

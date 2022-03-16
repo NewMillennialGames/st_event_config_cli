@@ -52,19 +52,21 @@ class TradeButton extends ConsumerWidget {
     // or simple text label if not tradable
     // final size = MediaQuery.of(context).size;
     final tf = ref.read(tradeFlowProvider);
-    final eventHasStarted =
+    final eventHasStarted = true ||
         ref.read(currEventStateProvider)?.state == EventState.inProgress;
 
     return Container(
       height: UiSizes.tradeBtnHeight,
+      width: 74,
       // width: UiSizes.tradeBtnWidthPctScreen * size.width,
-      width: 56,
+      alignment: Alignment.center,
       child: (eventHasStarted && status.isTradable)
           ? TextButton(
               child: const Text(
                 StStrings.tradeUc,
                 // tf.labelForState(status),
-                style: StTextStyles.h4,
+                style: StTextStyles.h6,
+                textAlign: TextAlign.center,
               ),
               onPressed: () => tf.beginTradeFlow(assetId),
               style: StButtonStyles.tradeButtonCanTrade,
@@ -108,6 +110,7 @@ class AssetVsAssetHalfRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Icon(
           Icons.star_border,
@@ -122,14 +125,16 @@ class AssetVsAssetHalfRow extends StatelessWidget {
         Expanded(
           child: Text(
             competitor.topName,
-            style: StTextStyles.h4,
+            style: StTextStyles.h5,
+            maxLines: 1,
+            // textWidthBasis: TextWidthBasis.longestLine,
           ),
         ),
         Text(
           competitor.currPriceStr,
-          style: StTextStyles.h5,
+          style: StTextStyles.h6,
         ),
-        SizedBox(
+        const SizedBox(
           width: 12,
         ),
         TradeButton(
