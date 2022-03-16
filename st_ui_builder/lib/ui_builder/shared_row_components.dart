@@ -21,8 +21,8 @@ class CompetitorImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Image.network(
       imgUrl,
-      height: 20,
-      width: 20,
+      height: UiSizes.teamImgSide,
+      width: UiSizes.teamImgSide,
       fit: BoxFit.cover,
       errorBuilder: (context, error, stackTrace) => const Icon(
         Icons.egg_rounded,
@@ -44,35 +44,51 @@ class TradeButton extends ConsumerWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(
+    BuildContext context,
+    WidgetRef ref,
+  ) {
     // trade button to right of player/team name
     // or simple text label if not tradable
+    // final size = MediaQuery.of(context).size;
     final tf = ref.read(tradeFlowProvider);
-    if (status.isTradable) {
-      return Container(
-        height: 56,
-        child: TextButton(
-          child: const Text(
-            StStrings.tradeUc,
-            // tf.labelForState(status),
-            style: StTextStyles.h4,
-          ),
-          onPressed: () => tf.beginTradeFlow(assetId),
-          style: StButtonStyles.tradeButtonCanTrade,
-        ),
-      );
-    }
+    final eventHasStarted =
+        ref.read(currEventStateProvider)?.state == EventState.inProgress;
+
     return Container(
-      height: 56,
-      alignment: Alignment.center,
-      child: Text(
-        tf.labelForGameState(status),
-        style: StTextStyles.h5.copyWith(
-          color: tf.colorForGameState(status),
-        ),
-      ),
+      height: UiSizes.tradeBtnHeight,
+      // width: UiSizes.tradeBtnWidthPctScreen * size.width,
+      width: 56,
+      child: (eventHasStarted && status.isTradable)
+          ? TextButton(
+              child: const Text(
+                StStrings.tradeUc,
+                // tf.labelForState(status),
+                style: StTextStyles.h4,
+              ),
+              onPressed: () => tf.beginTradeFlow(assetId),
+              style: StButtonStyles.tradeButtonCanTrade,
+            )
+          : Text(
+              tf.labelForGameState(status),
+              style: StTextStyles.h5.copyWith(
+                color: tf.colorForGameState(status),
+              ),
+              textAlign: TextAlign.center,
+            ),
     );
   }
+  // return Container(
+  //   height: UiSizes.tradeBtnHeight,
+  //   alignment: Alignment.center,
+  //   child: Text(
+  //     tf.labelForGameState(status),
+  //     style: StTextStyles.h5.copyWith(
+  //       color: tf.colorForGameState(status),
+  //     ),
+  //   ),
+  // );
+  // }
 }
 
 class AssetVsAssetHalfRow extends StatelessWidget {

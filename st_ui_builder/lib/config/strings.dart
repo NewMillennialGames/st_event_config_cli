@@ -299,8 +299,13 @@ class StStrings {
   static const String scoretraderDescrip =
       'ScoreTrader is a mobile app that takes a whole new approach to Fantasy Sports by allowing the user to build a portfolio of Players of their choice. Unlike traditional fantasy sports that incorporate a salary cap model, ScoreTrader uses a market based game model very similar to what one would expect in trading stocks. Available Players for purchase will be designated by a green "Trade" button to the right of the Players name. Any eligible Player may be purchased or sold up until the time that Player\'s game begins. Users may buy or sell any eligible Player as many times as he likes (taking incremental profits along the way) prior to the close of trading. Once trading has closed, all remaining Player positions will be held in the Users Portfolio until the final game has been played in any given week. The top three Players at each position (QB, RB, WR & TE) will split the position pools created through User purchases of Players at each position and the Users shall be paid out in Tokens based upon the performance of his Players at each position. We call this rollover. When rollover happens all shares in a portfolio are liquidated and the results of the portfolio are displayed in the results tab of the portfolio view and the leaderboard is updated with the final Top Trader positions established. Rollover, or asset liquidation starts at Tuesday at Midnight EST just before the next Fantasy Football event starts.';
 
-  // Portfolio Positions Row
+  // trade button labels
   static const String tradeUc = 'TRADE';
+  // static const String preTrade = 'Pre-Trade';
+  // static const String gameOn = 'Game On';
+  // static const String gameOver = 'Game Over';
+
+  // portfolio
   static const String shares = 'shares';
   static const String value = 'Value';
   static const String proceeds = 'Proceeds';

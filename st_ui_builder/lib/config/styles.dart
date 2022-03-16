@@ -51,6 +51,12 @@ class StTextStyles {
     color: StColors.white,
   );
 
+  static const p4 = TextStyle(
+    fontFamily: 'HelveticaNeue-Medium',
+    fontSize: 9,
+    color: StColors.white,
+  );
+
   static get moneyDeltaPositive => p1.copyWith(
         color: StColors.green,
         fontSize: 14,

@@ -103,13 +103,16 @@ class ActiveGameDetails {
   //     [scheduledStartDtTm.toIso8601String(), competitionKey];
 
   // only testing & error handling
-  factory ActiveGameDetails.mockOrMissingAgd() => ActiveGameDetails(
-        '_missingCompRec',
-        CompetitionStatus.compInFuture,
-        '_roundName',
-        '_region',
-        '_location',
-        DateTime.now(),
-        const ['123'],
-      );
+  factory ActiveGameDetails.mockOrMissingAgd([String assetId = '_mock']) {
+    print('Warn:  creating ActiveGameDetails (mockOrMissing) ');
+    return ActiveGameDetails(
+      '_missingCompRec',
+      CompetitionStatus.compInFuture,
+      '_roundName',
+      '_region',
+      '_location',
+      DateTime.now(),
+      [assetId],
+    );
+  }
 }

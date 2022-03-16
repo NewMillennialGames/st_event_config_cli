@@ -3,7 +3,7 @@ part of StUiController;
 const kRowBorder = Border.symmetric(
   horizontal: BorderSide(
     color: StColors.lightGray,
-    width: 0.8,
+    width: UiSizes.rowBorderWidth,
   ),
 );
 
@@ -12,9 +12,9 @@ const kRowBoxDecor = BoxDecoration(
   border: kRowBorder,
 );
 
-final _gameStatusProvider = Provider<ActiveGameDetails>(
-  ((ref) => throw UnimplementedError('')),
-);
+// final _gameStatusProvider = Provider<ActiveGameDetails>(
+//   ((ref) => throw UnimplementedError('')),
+// );
 
 abstract class StBaseTvRowIfc extends StatelessWidget {
   //
@@ -50,11 +50,12 @@ class StBaseTvRow extends StBaseTvRowIfc {
     I'm watching the overridden value
     to force row-rebuild when game-status changes
     */
-    double rowHeight = this is ShowsTwoAssets ? 124 : 64;
+    double rowHeight =
+        this is ShowsTwoAssets ? UiSizes.dblRowHeight : UiSizes.singleRowHeight;
 
     return Container(
       height: rowHeight,
-      padding: const EdgeInsets.all(5),
+      padding: const EdgeInsets.all(2),
       decoration: kRowBoxDecor,
       child: Consumer(
         builder: (context, ref, child) {
