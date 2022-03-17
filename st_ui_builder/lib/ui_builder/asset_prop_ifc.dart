@@ -17,13 +17,14 @@ abstract class AssetHoldingsSummaryIfc {
   int get sharesOwned;
   double get positionCost;
   double get positionEstValue; // current estimate
-
+  int get tokensAvail;
 }
 
 extension AssetHoldingsSummaryIfcExt1 on AssetHoldingsSummaryIfc {
   //
   double get positionGainLoss => positionEstValue - positionCost;
   // UI values for this
+  int get tokensAvail => 0;
   String get sharesOwnedStr => '$sharesOwned';
   String get positionCostStr => positionCost.toStringAsFixed(2);
   String get positionEstValueStr => positionEstValue.toStringAsFixed(2);
@@ -39,7 +40,7 @@ abstract class AssetPriceFluxSummaryIfc {
   to describe recent price changes on this asset
 */
   double get currPrice;
-  double get recentPriceDelta;
+  double get priceDeltaSinceOpen;
   //
   double get openPrice;
   double get lowPrice;
@@ -50,7 +51,8 @@ abstract class AssetPriceFluxSummaryIfc {
 extension AssetPriceFluxSummaryIfcExt1 on AssetPriceFluxSummaryIfc {
   // UI values for this
   String get currPriceStr => currPrice.toStringAsFixed(2);
-  String get recentDeltaStr => recentPriceDelta.toStringAsFixed(2);
+  double get priceDeltaSinceOpen => currPrice - openPrice;
+  String get recentDeltaStr => priceDeltaSinceOpen.toStringAsFixed(2);
   //
   String get openPriceStr => openPrice.toStringAsFixed(2);
   String get lowPriceStr => lowPrice.toStringAsFixed(2);
@@ -91,34 +93,37 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
   // String get gameTimeStr => gameDate.asTimeOnlyStr;
 
   // from assetHoldingsSummary
-  double get positionGainLoss => assetHoldingsSummary?.positionGainLoss ?? 0;
-  String get sharesOwnedStr => assetHoldingsSummary?.sharesOwnedStr ?? '0';
+  double get positionGainLoss => assetHoldingsSummary.positionGainLoss; // ?? 0;
+  String get sharesOwnedStr => assetHoldingsSummary.sharesOwnedStr; // ?? '0';
   String get positionCostStr =>
-      assetHoldingsSummary?.positionCostStr ?? kMissingPrice;
+      assetHoldingsSummary.positionCostStr; // ?? kMissingPrice;
   String get positionEstValueStr =>
-      assetHoldingsSummary?.positionEstValueStr ?? kMissingPrice;
+      assetHoldingsSummary.positionEstValueStr; // ?? kMissingPrice;
   String get positionGainLossStr =>
-      assetHoldingsSummary?.positionGainLossStr ?? kMissingPrice;
-  bool get returnIsPositive => assetHoldingsSummary?.returnIsPositive ?? false;
+      assetHoldingsSummary.positionGainLossStr; // ?? kMissingPrice;
+  bool get returnIsPositive =>
+      assetHoldingsSummary.returnIsPositive; // ?? false;
   Color get posGainSymbolColor =>
-      assetHoldingsSummary?.posGainSymbolColor ?? Colors.grey;
+      assetHoldingsSummary.posGainSymbolColor; // ?? Colors.grey;
 
   // assetPriceFluxSummary
-  double get currPrice => assetPriceFluxSummary?.currPrice ?? 0;
-  double get recentPriceDelta => assetPriceFluxSummary?.recentPriceDelta ?? 0;
+  double get currPrice => assetPriceFluxSummary.currPrice; // ?? 0;
+  double get recentPriceDelta =>
+      assetPriceFluxSummary.priceDeltaSinceOpen; // ?? 0;
   String get currPriceStr =>
-      assetPriceFluxSummary?.currPriceStr ?? kMissingPrice;
+      assetPriceFluxSummary.currPriceStr; // ?? kMissingPrice;
   String get recentDeltaStr =>
-      assetPriceFluxSummary?.recentDeltaStr ?? kMissingPrice;
+      assetPriceFluxSummary.recentDeltaStr; // ?? kMissingPrice;
   String get openPriceStr =>
-      assetPriceFluxSummary?.openPriceStr ?? kMissingPrice;
+      assetPriceFluxSummary.openPriceStr; // ?? kMissingPrice;
   String get lowPriceStr =>
-      assetPriceFluxSummary?.openPriceStr ?? kMissingPrice;
-  String get hiPriceStr => assetPriceFluxSummary?.hiPriceStr ?? kMissingPrice;
+      assetPriceFluxSummary.openPriceStr; // ?? kMissingPrice;
+  String get hiPriceStr =>
+      assetPriceFluxSummary.hiPriceStr; // ?? kMissingPrice;
 
-  bool get stockIsUp => assetPriceFluxSummary?.stockIsUp ?? false;
+  bool get stockIsUp => assetPriceFluxSummary.stockIsUp; // ?? false;
   Color get priceFluxColor =>
-      assetPriceFluxSummary?.priceFluxColor ?? Colors.grey;
+      assetPriceFluxSummary.priceFluxColor; // ?? Colors.grey;
 
   String valueExtractor(DbTableFieldName fldName) {
     /* need to coordinate with Natalia

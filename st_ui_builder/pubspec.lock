@@ -287,10 +287,10 @@ packages:
     description:
       path: stclient
       ref: master
-      resolved-ref: "437f4be059d2ade707c716139862495974759194"
+      resolved-ref: d81b48af2f5d2aaad0224e4fc1d0ead5027b60cd
       url: "git@github.com:NewMillennialGames/st-client-api.git"
     source: git
-    version: "0.0.8"
+    version: "0.0.10"
   stream_channel:
     dependency: transitive
     description:
@@ -341,5 +341,5 @@ packages:
     source: hosted
     version: "2.1.1"
 sdks:
-  dart: ">=2.16.0 <3.0.0"
+  dart: ">=2.16.1 <3.0.0"
   flutter: ">=1.24.0-7.0"

@@ -51,9 +51,14 @@ class TradeButton extends ConsumerWidget {
     // trade button to right of player/team name
     // or simple text label if not tradable
     // final size = MediaQuery.of(context).size;
-    final tf = ref.read(tradeFlowProvider);
-    final eventHasStarted = true ||
-        ref.read(currEventStateProvider)?.state == EventState.inProgress;
+    TradeFlowBase tf = ref.read(tradeFlowProvider);
+    Event? optCurEvent = ref.read(currEventStateProvider);
+    final eventHasStarted =
+        (optCurEvent?.state ?? EventState.unpublished) == EventState.inProgress;
+
+    print(
+      '********* event.state is: ${ref.read(currEventStateProvider)?.state.name ?? 'missing'}',
+    );
 
     return Container(
       height: UiSizes.tradeBtnHeight,
@@ -73,7 +78,8 @@ class TradeButton extends ConsumerWidget {
             )
           : Text(
               tf.labelForGameState(status),
-              style: StTextStyles.h5.copyWith(
+              style: StTextStyles.h6.copyWith(
+                fontSize: 11,
                 color: tf.colorForGameState(status),
               ),
               textAlign: TextAlign.center,
@@ -454,9 +460,9 @@ class HoldingsAndValueRow extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  double get _sharePrice => asset.assetPriceFluxSummary?.currPrice ?? 0;
-  int get _sharesHeld => asset.assetHoldingsSummary?.sharesOwned ?? 0;
-  double get _gainLoss => asset.assetHoldingsSummary?.positionGainLoss ?? 0;
+  double get _sharePrice => asset.assetPriceFluxSummary.currPrice; // ?? 0;
+  int get _sharesHeld => asset.assetHoldingsSummary.sharesOwned; // ?? 0;
+  double get _gainLoss => asset.assetHoldingsSummary.positionGainLoss; // ?? 0;
 
   String get _formattedGainLoss => _sharePrice.isNegative
       ? _sharePrice.toStringAsFixed(2)

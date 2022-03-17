@@ -313,9 +313,9 @@ class StButtonStyles {
   static ButtonStyle reviewOrder = ElevatedButton.styleFrom(
     primary: StColors.backgroundColorButtonReviewOrder,
   );
-  static ButtonStyle clearButtonReviewOrderInputForm = ElevatedButton.styleFrom(
+  static ButtonStyle clearActiveForm = ElevatedButton.styleFrom(
     primary: StColors.transparentColor,
-    side: BorderSide(
+    side: const BorderSide(
       color: StColors.darkBlue,
       width: 1,
     ),
