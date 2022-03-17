@@ -50,7 +50,8 @@ class GroupedTableDataMgr {
 
   GetGroupKeyFromRow get groupBy {
     return GroupHeaderData.groupKeyDataConstructorFromCfg(
-        _tableViewCfg.sortRules);
+      _tableViewCfg.sortRules,
+    );
   }
 
   // groupHeaderBuilder is function to return header widget
@@ -64,8 +65,16 @@ class GroupedTableDataMgr {
   }
 
   // natural sorting will use my Comparator; dont need this
-  GroupComparatorCallback? get groupComparator => null;
-  // (GroupHeaderData hdVal1, GroupHeaderData hdVal2) => hdVal1.compareTo(hdVal2);
+  // GroupComparatorCallback? get groupComparator => null;
+  GroupComparatorCallback? get groupComparator {
+    if (sortOrder == GroupedListOrder.DESC) {
+      return (GroupHeaderData hdVal1, GroupHeaderData hdVal2) =>
+          hdVal2.compareTo(hdVal1);
+    } else {
+      return (GroupHeaderData hdVal1, GroupHeaderData hdVal2) =>
+          hdVal1.compareTo(hdVal2);
+    }
+  }
 
   // indexedItemBuilder is function to return a Tv-Row for this screen
   IndexedItemRowBuilder get indexedItemBuilder => (
@@ -77,8 +86,8 @@ class GroupedTableDataMgr {
       };
 
   // for sorting recs into order WITHIN groups/sections
-  SectionSortComparator get itemComparator =>
-      GroupHeaderData.sortComparator(sortingRules);
+  SectionSortComparator get itemComparator => GroupHeaderData.sortComparator(
+      sortingRules, sortOrder == GroupedListOrder.ASC);
 
   bool get hasColumnFilters {
     // set imageUrl as first filter field to hide/disable the whole filter bar
@@ -171,7 +180,7 @@ class GroupedTableDataMgr {
         // color: StColors.gray,
         color: Colors.transparent,
         border: Border.all(
-          color: StColors.primaryDarkGray,
+          color: StColors.lightGray,
           width: 0.8,
         ),
         borderRadius: const BorderRadius.all(
@@ -203,11 +212,11 @@ class GroupedTableDataMgr {
             _doFilteringFor(colName, selectedVal);
           },
           // focusColor: Colors.green,
-          dropdownColor: StColors.lightGray,
+          dropdownColor: StColors.gray,
           iconEnabledColor: StColors.gray,
           style: const TextStyle(
-            color: StColors.gray,
-            fontSize: 14,
+            color: StColors.lightGray,
+            fontSize: 16,
           ),
           underline: null,
         ),
@@ -258,7 +267,7 @@ class GroupedTableDataMgr {
   }
 
   void clearFilters() {
-    this._filteredAssetRows = _allAssetRows;
+    _filteredAssetRows = _allAssetRows;
     // print('you must reload your list after calling this');
     if (redrawCallback != null) redrawCallback!();
   }
@@ -278,36 +287,3 @@ class GroupedTableDataMgr {
     print('ActiveGameDetails replaced on 2 with $round  (did row repaint?)');
   }
 }
-
-// void filterDataBy(DbTableFieldName fld, String value) {
-//
-// FilterRules fltrRules = this._filterRules!;
-// // TvFilterCfg? filterCfg;
-// SortOrGroupIdxOrder order = SortOrGroupIdxOrder.first;
-
-// if (fltrRules.item1.colName == colName) {
-//   // filterCfg = fltrRules.item1;
-//   order = SortOrGroupIdxOrder.first;
-// } else if (fltrRules.item2?.colName == colName) {
-//   // filterCfg = fltrRules.item1;
-//   order = SortOrGroupIdxOrder.first;
-// } else if (fltrRules.item3?.colName == colName) {
-//   // filterCfg = fltrRules.item1;
-//   order = SortOrGroupIdxOrder.first;
-// }
-// // if (filterCfg == null) return;
-
-// var filterFunc = (TableviewDataRowTuple dr) {
-//   switch (order) {
-//     case SortOrGroupIdxOrder.first:
-//       return dr.item1.valueExtractor(colName) == selectedVal;
-//     case SortOrGroupIdxOrder.first:
-//       return dr.item1.valueExtractor(colName) == selectedVal;
-//   }
-// };
-
-// NIU
-// GroupSepRowBuilder get groupSeparatorBuilder {
-//   // defining groupHeaderBuilder will cause groupSeparatorBuilder to be ignored
-//   return (GroupHeaderData _) => TvGroupHeaderSep(GroupHeaderData.mockRow);
-// }

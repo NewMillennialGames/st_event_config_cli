@@ -6,12 +6,12 @@ class StTextStyles {
   // Styles provided from the StylesMasterSpec file
   static const h1 = TextStyle(
     fontFamily: 'HelveticaNeue-Light',
-    fontSize: 30,
+    fontSize: 24,
     color: StColors.white,
   );
   static const h2 = TextStyle(
     fontFamily: 'HelveticaNeue-Light',
-    fontSize: 24,
+    fontSize: 22,
     color: StColors.white,
   );
   static const h3 = TextStyle(
@@ -48,6 +48,12 @@ class StTextStyles {
   static const p3 = TextStyle(
     fontFamily: 'HelveticaNeue-Medium',
     fontSize: 12,
+    color: StColors.white,
+  );
+
+  static const p4 = TextStyle(
+    fontFamily: 'HelveticaNeue-Medium',
+    fontSize: 9,
     color: StColors.white,
   );
 
@@ -251,21 +257,21 @@ class StButtonStyles {
   // keep
   static ButtonStyle tradeButtonCanTrade = TextButton.styleFrom(
     backgroundColor: StColors.darkGreen,
-    padding: const EdgeInsets.symmetric(
-      vertical: 20,
-      horizontal: 15,
-    ),
+    // padding: const EdgeInsets.symmetric(
+    //   vertical: 20,
+    //   horizontal: 15,
+    // ),
   );
 
   // replace
   static ButtonStyle getTokens = ElevatedButton.styleFrom(
     primary: StColors.defaultBackgroundGray,
-    side: BorderSide(
+    side: const BorderSide(
       color: StColors.blue,
     ),
-    padding: const EdgeInsets.symmetric(
-      horizontal: 25,
-    ),
+    // padding: const EdgeInsets.symmetric(
+    //   horizontal: 25,
+    // ),
   );
   static ButtonStyle getTokensOnTap = ElevatedButton.styleFrom(
     primary: StColors.blue,
@@ -273,7 +279,7 @@ class StButtonStyles {
   );
   static ButtonStyle getTokensLessWidth = ElevatedButton.styleFrom(
     primary: StColors.defaultBackgroundGray,
-    side: BorderSide(
+    side: const BorderSide(
       color: StColors.blue,
     ),
     padding: const EdgeInsets.symmetric(horizontal: 18),
@@ -307,9 +313,9 @@ class StButtonStyles {
   static ButtonStyle reviewOrder = ElevatedButton.styleFrom(
     primary: StColors.backgroundColorButtonReviewOrder,
   );
-  static ButtonStyle clearButtonReviewOrderInputForm = ElevatedButton.styleFrom(
+  static ButtonStyle clearActiveForm = ElevatedButton.styleFrom(
     primary: StColors.transparentColor,
-    side: BorderSide(
+    side: const BorderSide(
       color: StColors.darkBlue,
       width: 1,
     ),

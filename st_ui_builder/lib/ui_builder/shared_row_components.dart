@@ -21,8 +21,8 @@ class CompetitorImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Image.network(
       imgUrl,
-      height: 20,
-      width: 20,
+      height: UiSizes.teamImgSide,
+      width: UiSizes.teamImgSide,
       fit: BoxFit.cover,
       errorBuilder: (context, error, stackTrace) => const Icon(
         Icons.egg_rounded,
@@ -44,35 +44,59 @@ class TradeButton extends ConsumerWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(
+    BuildContext context,
+    WidgetRef ref,
+  ) {
     // trade button to right of player/team name
     // or simple text label if not tradable
-    final tf = ref.read(tradeFlowProvider);
-    if (status.isTradable) {
-      return Container(
-        height: 56,
-        child: TextButton(
-          child: const Text(
-            StStrings.tradeUc,
-            // tf.labelForState(status),
-            style: StTextStyles.h4,
-          ),
-          onPressed: () => tf.beginTradeFlow(assetId),
-          style: StButtonStyles.tradeButtonCanTrade,
-        ),
-      );
-    }
+    // final size = MediaQuery.of(context).size;
+    TradeFlowBase tf = ref.read(tradeFlowProvider);
+    Event? optCurEvent = ref.read(currEventStateProvider);
+    final eventHasStarted =
+        (optCurEvent?.state ?? EventState.unpublished) == EventState.inProgress;
+
+    print(
+      '********* event.state is: ${ref.read(currEventStateProvider)?.state.name ?? 'missing'}',
+    );
+
     return Container(
-      height: 56,
+      height: UiSizes.tradeBtnHeight,
+      width: 74,
+      // width: UiSizes.tradeBtnWidthPctScreen * size.width,
       alignment: Alignment.center,
-      child: Text(
-        tf.labelForGameState(status),
-        style: StTextStyles.h4.copyWith(
-          color: tf.colorForGameState(status),
-        ),
-      ),
+      child: (eventHasStarted && status.isTradable)
+          ? TextButton(
+              child: const Text(
+                StStrings.tradeUc,
+                // tf.labelForState(status),
+                style: StTextStyles.h6,
+                textAlign: TextAlign.center,
+              ),
+              onPressed: () => tf.beginTradeFlow(assetId),
+              style: StButtonStyles.tradeButtonCanTrade,
+            )
+          : Text(
+              tf.labelForGameState(status),
+              style: StTextStyles.h6.copyWith(
+                fontSize: 11,
+                color: tf.colorForGameState(status),
+              ),
+              textAlign: TextAlign.center,
+            ),
     );
   }
+  // return Container(
+  //   height: UiSizes.tradeBtnHeight,
+  //   alignment: Alignment.center,
+  //   child: Text(
+  //     tf.labelForGameState(status),
+  //     style: StTextStyles.h5.copyWith(
+  //       color: tf.colorForGameState(status),
+  //     ),
+  //   ),
+  // );
+  // }
 }
 
 class AssetVsAssetHalfRow extends StatelessWidget {
@@ -92,6 +116,7 @@ class AssetVsAssetHalfRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Icon(
           Icons.star_border,
@@ -106,14 +131,18 @@ class AssetVsAssetHalfRow extends StatelessWidget {
         Expanded(
           child: Text(
             competitor.topName,
-            style: StTextStyles.h3,
+            style: StTextStyles.h5,
+            maxLines: 1,
+            // textWidthBasis: TextWidthBasis.longestLine,
           ),
         ),
         Text(
           competitor.currPriceStr,
-          style: StTextStyles.h3,
+          style: StTextStyles.h6,
         ),
-        kSpacerSm,
+        const SizedBox(
+          width: 12,
+        ),
         TradeButton(
           competitor.assetKey,
           gameDetails.gameStatus,
@@ -431,9 +460,9 @@ class HoldingsAndValueRow extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  double get _sharePrice => asset.assetPriceFluxSummary?.currPrice ?? 0;
-  int get _sharesHeld => asset.assetHoldingsSummary?.sharesOwned ?? 0;
-  double get _gainLoss => asset.assetHoldingsSummary?.positionGainLoss ?? 0;
+  double get _sharePrice => asset.assetPriceFluxSummary.currPrice; // ?? 0;
+  int get _sharesHeld => asset.assetHoldingsSummary.sharesOwned; // ?? 0;
+  double get _gainLoss => asset.assetHoldingsSummary.positionGainLoss; // ?? 0;
 
   String get _formattedGainLoss => _sharePrice.isNegative
       ? _sharePrice.toStringAsFixed(2)

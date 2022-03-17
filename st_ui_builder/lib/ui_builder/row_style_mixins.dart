@@ -30,7 +30,7 @@ mixin RequiresPriceChangeProps on StBaseTvRowIfc {
   // not every asset has this data
   // notice the force-unpack of optional below
   AssetPriceFluxSummaryIfc get assetPriceSummary =>
-      assets.item1.assetPriceFluxSummary!;
+      assets.item1.assetPriceFluxSummary;
 }
 
 mixin RequiresUserPositionProps on StBaseTvRowIfc {
@@ -38,7 +38,7 @@ mixin RequiresUserPositionProps on StBaseTvRowIfc {
   // not every asset has this data
   // notice the force-unpack of optional below
   AssetHoldingsSummaryIfc get assetHoldingsSummary =>
-      assets.item1.assetHoldingsSummary!;
+      assets.item1.assetHoldingsSummary;
 }
 
 

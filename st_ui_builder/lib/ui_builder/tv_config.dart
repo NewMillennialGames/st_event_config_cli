@@ -51,7 +51,9 @@ class TableviewConfigPayload {
       this is an easy place to return the correct row
       for every screen, based on what was selected for the market-view screen
     */
-
+    print(
+      '@@@@ getting rowStyle constructor for ${rowStyle.name} on ${appScreen.name} screen',
+    );
     switch (rowStyle) {
       case TvAreaRowStyle.assetVsAsset:
         switch (appScreen) {

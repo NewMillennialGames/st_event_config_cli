@@ -1,7 +1,7 @@
 library StUiController;
 
-import 'package:flutter/foundation.dart' show immutable;
-import 'package:intl/intl.dart';
+// import 'package:flutter/foundation.dart' show immutable;
+// import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:equatable/equatable.dart';
 import 'package:tuple/tuple.dart';
@@ -11,7 +11,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 //
 import 'package:st_ev_cfg/st_ev_cfg.dart';
 import 'package:stclient/stclient.dart';
-
+//
+import '../config/sizes.dart';
 import '../utils/dates.dart';
 import '../config/colors.dart';
 import '../config/assets.dart';
@@ -35,4 +36,5 @@ part 'type_def.dart';
 part 'active_game_details.dart';
 part 'asset_prop_ifc.dart';
 part 'group_header_build_payload.dart';
-part 'trade_flow_provider.dart';
+part 'providers.dart';
+part 'trade_flow_mgr_ifc.dart';
