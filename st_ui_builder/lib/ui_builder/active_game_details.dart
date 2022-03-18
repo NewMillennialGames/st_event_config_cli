@@ -42,14 +42,12 @@ class ActiveGameDetails with _$ActiveGameDetails {
       comp2IsOwned ?? isOwned(assetId2),
     );
 
-    return ActiveGameDetails(
-      competitionKey,
-      scheduledStartDtTm,
+    return copyWith(
       gameStatus: ci.competitionStatus,
       roundName: ci.currentRoundName,
-      regionOrConference: regionOrConference,
-      location: location,
-      participantAssetIds: participantAssetIds,
+      // regionOrConference: regionOrConference,
+      // location: location,
+      // participantAssetIds: participantAssetIds,
       ownedAssetIds: ownedAssetIds,
       watchedAssetIds: watchedAssetIds,
     );
@@ -74,7 +72,7 @@ class ActiveGameDetails with _$ActiveGameDetails {
   DateTime get scheduledStartDateOnly => scheduledStartDtTm.truncateTime;
   //
   String get assetId1 =>
-      participantAssetIds.length > 0 ? participantAssetIds[0] : '_';
+      participantAssetIds.isNotEmpty ? participantAssetIds[0] : '_';
   String get assetId2 =>
       participantAssetIds.length > 1 ? participantAssetIds[1] : '_';
 
@@ -90,7 +88,7 @@ class ActiveGameDetails with _$ActiveGameDetails {
     return ActiveGameDetails(
       '_missingCompRec',
       DateTime.now(),
-      gameStatus: CompetitionStatus.compInFuture,
+      gameStatus: CompetitionStatus.compUninitialized,
       roundName: '_roundName',
       regionOrConference: '_region',
       location: '_location',

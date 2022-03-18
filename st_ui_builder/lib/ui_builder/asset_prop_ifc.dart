@@ -86,6 +86,7 @@ abstract class AssetRowPropertyIfc {
   String get roundName;
   String get location;
   CompetitionStatus get gameStatus;
+  CompetitionType get gameType;
 }
 
 extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
@@ -126,6 +127,8 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
   bool get stockIsUp => assetPriceFluxSummary.stockIsUp; // ?? false;
   Color get priceFluxColor =>
       assetPriceFluxSummary.priceFluxColor; // ?? Colors.grey;
+
+  CompetitionType get gameType => CompetitionType.game;
 
   String valueExtractor(DbTableFieldName fldName) {
     /* need to coordinate with Natalia

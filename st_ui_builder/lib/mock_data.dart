@@ -94,6 +94,9 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
 
   @override
   CompetitionStatus get gameStatus => CompetitionStatus.compUninitialized;
+
+  @override
+  CompetitionType get gameType => CompetitionType.game;
 }
 
 List<MockAsset> _fakeData = [
