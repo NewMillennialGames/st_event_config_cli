@@ -12,17 +12,22 @@ const kSpacerSm = SizedBox(
 class CompetitorImage extends StatelessWidget {
   // just the image or placeholder
   final String imgUrl;
+  final bool shrinkForRank;
   const CompetitorImage(
-    this.imgUrl, {
+    this.imgUrl,
+    this.shrinkForRank, {
     Key? key,
   }) : super(key: key);
+
+  double get imgSize =>
+      shrinkForRank ? (UiSizes.teamImgSide * 0.84) : UiSizes.teamImgSide;
 
   @override
   Widget build(BuildContext context) {
     return Image.network(
       imgUrl,
-      height: UiSizes.teamImgSide,
-      width: UiSizes.teamImgSide,
+      height: imgSize,
+      width: imgSize,
       fit: BoxFit.cover,
       errorBuilder: (context, error, stackTrace) => const Icon(
         Icons.egg_rounded,
@@ -125,9 +130,15 @@ class AssetVsAssetHalfRow extends StatelessWidget {
               : StColors.blue,
         ),
         kSpacerSm,
-        CompetitorImage(competitor.imgUrl),
+        CompetitorImage(competitor.imgUrl, showRank),
         kSpacerSm,
-        if (showRank) Text(competitor.rankStr),
+        if (showRank) ...[
+          Text(
+            competitor.rankStr,
+            style: StTextStyles.h5,
+          ),
+          kSpacerSm,
+        ],
         Expanded(
           child: Text(
             competitor.topName,

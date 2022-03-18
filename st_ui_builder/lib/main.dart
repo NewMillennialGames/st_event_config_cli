@@ -100,12 +100,12 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
         (ref) {
           return ActiveGameDetails(
             gmkey,
-            _getRandStatus(),
-            _getRandRound(),
-            _getRandRegion(),
-            'location',
             DateTime.now(),
-            [a.asset.key],
+            gameStatus: _getRandStatus(),
+            roundName: _getRandRound(),
+            regionOrConference: _getRandRegion(),
+            location: 'location',
+            participantAssetIds: [a.asset.key],
             watchedAssetIds: [a.asset.key],
           );
         },

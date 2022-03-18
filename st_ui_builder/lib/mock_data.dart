@@ -1,6 +1,8 @@
 import 'package:intl/intl.dart';
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
 //
+import 'package:stclient/stclient.dart';
+//
 import 'ui_builder/all.dart';
 
 /*
@@ -30,13 +32,8 @@ class MockAsset {
     this.gameKey,
   );
 
-  static List<MockAssetWrapper> get mockRows => _fakeData
-      .map(
-        (e) => MockAssetWrapper(
-          e,
-        ),
-      )
-      .toList();
+  static List<MockAssetWrapper> get mockRows =>
+      _fakeData.map(MockAssetWrapper.new).toList();
 }
 
 class MockAssetWrapper implements AssetRowPropertyIfc {
@@ -94,6 +91,9 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
   @override
   // should be on the game
   String get roundName => throw UnimplementedError();
+
+  @override
+  CompetitionStatus get gameStatus => CompetitionStatus.compUninitialized;
 }
 
 List<MockAsset> _fakeData = [

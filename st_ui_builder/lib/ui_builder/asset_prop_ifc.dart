@@ -65,7 +65,6 @@ extension AssetPriceFluxSummaryIfcExt1 on AssetPriceFluxSummaryIfc {
 abstract class AssetRowPropertyIfc {
   // must have a value for each name on:
   // enum DbTableFieldName()
-  String get groupKey; // for grouping and sorting
   String get assetKey; // for unique comparison
   String get topName;
   String get subName;
@@ -73,21 +72,24 @@ abstract class AssetRowPropertyIfc {
   String get position;
   int get rank;
   bool get isTeam;
+  // String get groupKey; // for grouping and sorting
 
+  // holds asset price history
   AssetPriceFluxSummaryIfc get assetPriceFluxSummary;
+  // holds user ownership state
   AssetHoldingsSummaryIfc get assetHoldingsSummary;
 
   // next 3 properties are game props but needed for sorting and grouping
+  // shows values off the game record
   DateTime get gameDate; // rounded to midnight for row grouping
   String get regionOrConference;
   String get roundName;
   String get location;
+  CompetitionStatus get gameStatus;
 }
 
 extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
   // sensible defaults if not overridden
-  bool get isTeam => true;
-  int get rank => 0;
   String get rankStr => '$rank';
   String get gameDateStr => gameDate.asDtwMmDyStr;
   // String get gameTimeStr => gameDate.asTimeOnlyStr;

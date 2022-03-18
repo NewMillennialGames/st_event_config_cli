@@ -67,9 +67,10 @@ class GroupedTableDataMgr {
   // natural sorting will use my Comparator; dont need this
   // GroupComparatorCallback? get groupComparator => null;
   GroupComparatorCallback? get groupComparator {
-    if (sortOrder == GroupedListOrder.DESC) {
-      return (GroupHeaderData hdVal1, GroupHeaderData hdVal2) =>
-          hdVal2.compareTo(hdVal1);
+    // GroupHeaderData implements comparable
+    if (sortOrder == GroupedListOrder.ASC) {
+      return (GroupHeaderData hd1Val, GroupHeaderData hd2Val) =>
+          hd2Val.compareTo(hd1Val);
     } else {
       return (GroupHeaderData hdVal1, GroupHeaderData hdVal2) =>
           hdVal1.compareTo(hdVal2);
@@ -100,7 +101,7 @@ class GroupedTableDataMgr {
 
   Widget columnFilterBarWidget({
     double totAvailWidth = 360,
-    double barHeight = 60,
+    double barHeight = 46,
     Color backColor = Colors.transparent,
   }) {
     // dont call this without first checking this.hasFilterBar
@@ -114,11 +115,14 @@ class GroupedTableDataMgr {
 
     const _kLstMin = 2;
 
-    int dropLstCount = 1 +
-        ((i2 != null && listItems2.length > _kLstMin) ? 1 : 0) +
-        ((i3 != null && listItems3.length > _kLstMin) ? 1 : 0);
+    bool has2ndList =
+        i2 != null && listItems2.length > _kLstMin && i2.colName != i1.colName;
+    bool has3rdList =
+        i3 != null && listItems3.length > _kLstMin && i3.colName != i2!.colName;
+
+    int dropLstCount = 1 + (has2ndList ? 1 : 0) + (has3rdList ? 1 : 0);
     // allocate dropdown button width
-    double allocBtnWidth = (totAvailWidth / dropLstCount) - 24;
+    double allocBtnWidth = (totAvailWidth / dropLstCount) - 14;
     // one list can take 86% of space
     allocBtnWidth = dropLstCount < 2 ? totAvailWidth * 0.86 : allocBtnWidth;
 
@@ -138,9 +142,7 @@ class GroupedTableDataMgr {
             (s) => _filter1Selection = s,
             allocBtnWidth,
           ),
-          if (i2 != null &&
-              listItems2.length > _kLstMin &&
-              i2.colName != i1.colName)
+          if (has2ndList)
             _dropMenuList(
               listItems2,
               i2.colName,
@@ -148,9 +150,7 @@ class GroupedTableDataMgr {
               (s) => _filter2Selection = s,
               allocBtnWidth,
             ),
-          if (i3 != null &&
-              listItems3.length > _kLstMin &&
-              i3.colName != i2!.colName)
+          if (has3rdList)
             _dropMenuList(
               listItems3,
               i3.colName,

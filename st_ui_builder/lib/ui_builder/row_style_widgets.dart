@@ -129,7 +129,7 @@ class AssetVsAssetRow_Portfolio extends StBaseTvRow
 
     return Row(
       children: [
-        CompetitorImage(comp1.imgUrl),
+        CompetitorImage(comp1.imgUrl, false),
         Column(
           children: [
             Row(
@@ -206,7 +206,7 @@ class TeamVsFieldRow_MktView extends StBaseTvRow
       children: [
         if (!showRanked) kStarIcon,
         if (showRanked) Text(comp1.rankStr),
-        CompetitorImage(comp1.imgUrl),
+        CompetitorImage(comp1.imgUrl, showRanked),
         Column(
           children: [
             Row(
