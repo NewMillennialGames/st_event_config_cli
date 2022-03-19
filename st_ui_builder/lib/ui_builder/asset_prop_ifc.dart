@@ -74,6 +74,7 @@ abstract class AssetRowPropertyIfc {
   int get rank;
   bool get isTeam;
   String get searchText;
+  double get openPrice;
   //
   String get teamImgUrlWhenTradingPlayers;
   String get teamNameWhenTradingPlayers;
@@ -138,12 +139,8 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
 
   CompetitionType get gameType => CompetitionType.game;
 
-  String valueExtractor(DbTableFieldName fldName) {
-    /* need to coordinate with Natalia
-      to make sure values below match
-      what she sets in the Asset wrapper
-
-      FIXME: for sorting will need special format
+  String labelExtractor(DbTableFieldName fldName) {
+    /* header labels in list groups
     */
     switch (fldName) {
       case DbTableFieldName.assetName:
@@ -170,6 +167,41 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
         return recentDeltaStr;
       case DbTableFieldName.assetRank:
         return rankStr;
+      case DbTableFieldName.assetPosition:
+        return position;
+      // default:
+      //   return '_dfltProp';
+    }
+  }
+
+  Comparable sortValueExtractor(DbTableFieldName fldName) {
+    /* comparible values used for the actual sort
+    */
+    switch (fldName) {
+      case DbTableFieldName.assetName:
+        return topName;
+      case DbTableFieldName.assetOrgName:
+        return subName;
+      case DbTableFieldName.conference:
+        return regionOrConference;
+      case DbTableFieldName.region:
+        return regionOrConference;
+      case DbTableFieldName.gameDate:
+        return gameDate;
+      case DbTableFieldName.gameTime:
+        return gameDate.truncateTime;
+      case DbTableFieldName.eventName:
+        return topName;
+      case DbTableFieldName.gameLocation:
+        return location;
+      case DbTableFieldName.imageUrl:
+        return imgUrl;
+      case DbTableFieldName.assetOpenPrice:
+        return openPrice;
+      case DbTableFieldName.assetCurrentPrice:
+        return currPrice;
+      case DbTableFieldName.assetRank:
+        return rank;
       case DbTableFieldName.assetPosition:
         return position;
       // default:

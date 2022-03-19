@@ -111,6 +111,9 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
 
   @override
   String get ticker => 'ticker';
+
+  @override
+  double get openPrice => 2.33;
 }
 
 List<MockAsset> _fakeData = [

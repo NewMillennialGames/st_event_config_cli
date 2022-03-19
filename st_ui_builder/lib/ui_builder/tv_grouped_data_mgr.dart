@@ -48,8 +48,8 @@ class GroupedTableDataMgr {
   SortingRules get sortingRules => _tableViewCfg.sortRules;
   FilterRules get filterRules => _tableViewCfg.filterRules;
 
-  GetGroupKeyFromRow get groupBy {
-    return GroupHeaderData.groupKeyDataConstructorFromCfg(
+  GetGroupHeaderLblsFromCompetitionRow get groupBy {
+    return GroupHeaderData.groupHeaderPayloadConstructor(
       _tableViewCfg.sortRules,
     );
   }
@@ -59,7 +59,7 @@ class GroupedTableDataMgr {
   GroupHeaderBuilder get groupHeaderBuilder {
     // copy groupBy getter to save a lookup
     final TvAreaRowStyle rowStyle = _tableViewCfg.rowStyle;
-    final GetGroupKeyFromRow gbFunc = groupBy;
+    final GetGroupHeaderLblsFromCompetitionRow gbFunc = groupBy;
     return (TableviewDataRowTuple rowData) =>
         TvGroupHeader(rowStyle, appScreen, gbFunc(rowData));
   }
@@ -242,7 +242,7 @@ class GroupedTableDataMgr {
     // elim dups and sort
     var l = _allAssetRows
         .map(
-          (e) => e.item1.valueExtractor(fCfg.colName),
+          (e) => e.item1.labelExtractor(fCfg.colName),
         )
         .toSet()
         .toList()
@@ -259,7 +259,7 @@ class GroupedTableDataMgr {
     }
     _filteredAssetRows = _allAssetRows
         .where((TableviewDataRowTuple dr) =>
-            dr.item1.valueExtractor(colName) == selectedVal)
+            dr.item1.labelExtractor(colName) == selectedVal)
         .toList();
 
     // print('you must reload your list after calling this');

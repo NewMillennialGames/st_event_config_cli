@@ -24,40 +24,35 @@ class GroupHeaderData
   ) : _sortKey =
             '${h1Displ.toLowerCase()}-${h2Displ.toLowerCase()}-${h3Displ.toLowerCase()}';
 
-  static GetGroupKeyFromRow groupKeyDataConstructorFromCfg(
+  static GetGroupHeaderLblsFromCompetitionRow groupHeaderPayloadConstructor(
     SortingRules sortAndGroupRules,
   ) {
     // returns a func that creates a GroupHeaderData
-    // CastRowToSortVal
-    firstValFn(AssetRowPropertyIfc row) {
-      return row.valueExtractor(sortAndGroupRules.item1.colName);
-    }
+    // NOT the sort values (comparables) used in sortComparator below
 
-    ;
+    firstLabelFn(AssetRowPropertyIfc row) {
+      return row.labelExtractor(sortAndGroupRules.item1.colName);
+    }
 
     TvSortCfg? col2Rule = sortAndGroupRules.item2;
     // CastRowToSortVal
-    secondValFn(AssetRowPropertyIfc row) {
+    secondLabelFn(AssetRowPropertyIfc row) {
       if (col2Rule == null) return '';
-      return row.valueExtractor(col2Rule.colName);
+      return row.labelExtractor(col2Rule.colName);
     }
-
-    ;
 
     TvSortCfg? col3Rule = sortAndGroupRules.item3;
     // CastRowToSortVal
-    thirdValFn(AssetRowPropertyIfc row) {
+    thirdLabelFn(AssetRowPropertyIfc row) {
       if (col3Rule == null) return '';
-      return row.valueExtractor(col3Rule.colName);
+      return row.labelExtractor(col3Rule.colName);
     }
-
-    ;
 
     return (TableviewDataRowTuple row) {
       return GroupHeaderData(
-        firstValFn(row.item1),
-        col2Rule == null ? '' : secondValFn(row.item1),
-        col3Rule == null ? '' : thirdValFn(row.item1),
+        firstLabelFn(row.item1),
+        col2Rule == null ? '' : secondLabelFn(row.item1),
+        col3Rule == null ? '' : thirdLabelFn(row.item1),
       );
     };
   }
@@ -66,54 +61,54 @@ class GroupHeaderData
     SortingRules sr, [
     bool sortAsc = false,
   ]) {
+    // return the function that performs the sorting logic
     //
-    // CastRowToSortVal
     firstValFn(AssetRowPropertyIfc row) {
-      return row.valueExtractor(sr.item1.colName);
+      return row.sortValueExtractor(sr.item1.colName);
     }
 
     TvSortCfg? col2Rule = sr.item2;
     // CastRowToSortVal
     secondValFn(AssetRowPropertyIfc row) {
       if (col2Rule == null) return '';
-      return row.valueExtractor(col2Rule.colName);
+      return row.sortValueExtractor(col2Rule.colName);
     }
 
     TvSortCfg? col3Rule = sr.item3;
     // CastRowToSortVal
     thirdValFn(AssetRowPropertyIfc row) {
       if (col3Rule == null) return '';
-      return row.valueExtractor(col3Rule.colName);
+      return row.sortValueExtractor(col3Rule.colName);
     }
 
     return (TableviewDataRowTuple rec1, TableviewDataRowTuple rec2) {
       //
-      var row1SortVal1 = firstValFn(rec1.item1);
+      Comparable row1SortVal1 = firstValFn(rec1.item1);
       var r2v1 = firstValFn(rec2.item1);
       int comp1;
       if (sortAsc) {
-        comp1 = r2v1.compareTo(row1SortVal1);
-      } else {
         comp1 = row1SortVal1.compareTo(r2v1);
+      } else {
+        comp1 = r2v1.compareTo(row1SortVal1);
       }
       if (comp1 != 0 || col2Rule == null) return comp1;
 
-      var r1v2 = secondValFn(rec1.item1);
-      var r2v2 = secondValFn(rec2.item1);
+      Comparable r1v2 = secondValFn(rec1.item1);
+      Comparable r2v2 = secondValFn(rec2.item1);
       int comp2;
       if (sortAsc) {
-        comp2 = r2v2.compareTo(r1v2);
-      } else {
         comp2 = r1v2.compareTo(r2v2);
+      } else {
+        comp2 = r2v2.compareTo(r1v2);
       }
       if (comp2 != 0 || col3Rule == null) return comp2;
 
-      var r1v3 = thirdValFn(rec1.item1);
-      var r2v3 = thirdValFn(rec2.item1);
+      Comparable r1v3 = thirdValFn(rec1.item1);
+      Comparable r2v3 = thirdValFn(rec2.item1);
       if (sortAsc) {
-        return r2v3.compareTo(r1v3);
-      } else {
         return r1v3.compareTo(r2v3);
+      } else {
+        return r2v3.compareTo(r1v3);
       }
     };
   }
