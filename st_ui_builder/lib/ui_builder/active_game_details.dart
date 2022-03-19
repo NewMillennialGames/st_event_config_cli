@@ -43,6 +43,7 @@ class ActiveGameDetails with _$ActiveGameDetails {
       comp2IsOwned ?? isOwned(assetId2),
     );
 
+    // there are 1000000 (1 mill) nanoseconds in 1 millisecond
     return copyWith(
       gameStatus: ci.competitionStatus,
       roundName: ci.currentRoundName,
@@ -51,6 +52,9 @@ class ActiveGameDetails with _$ActiveGameDetails {
       // participantAssetIds: participantAssetIds,
       ownedAssetIds: ownedAssetIds,
       watchedAssetIds: watchedAssetIds,
+      scheduledStartDtTm: DateTime.fromMicrosecondsSinceEpoch(
+        ci.scheduledStartTime.toInt(),
+      ),
     );
   }
 
