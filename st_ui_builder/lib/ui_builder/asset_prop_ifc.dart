@@ -68,11 +68,15 @@ abstract class AssetRowPropertyIfc {
   String get assetKey; // for unique comparison
   String get topName;
   String get subName;
+  String get ticker;
   String get imgUrl;
   String get position;
   int get rank;
   bool get isTeam;
-  // String get groupKey; // for grouping and sorting
+  String get searchText;
+  //
+  String get teamImgUrlWhenTradingPlayers;
+  String get teamNameWhenTradingPlayers;
 
   // holds asset price history
   AssetPriceFluxSummaryIfc get assetPriceFluxSummary;
@@ -91,6 +95,10 @@ abstract class AssetRowPropertyIfc {
 
 extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
   // sensible defaults if not overridden
+  String get searchText =>
+      (topName + '-' + subName + '-' + teamNameWhenTradingPlayers)
+          .toUpperCase();
+
   String get rankStr => '$rank';
   String get gameDateStr => gameDate.asDtwMmDyStr;
   // String get gameTimeStr => gameDate.asTimeOnlyStr;

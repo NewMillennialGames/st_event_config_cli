@@ -17,6 +17,7 @@ class ActiveGameDetails with _$ActiveGameDetails {
     String competitionKey,
     DateTime scheduledStartDtTm, {
     @Default(CompetitionStatus.compUninitialized) CompetitionStatus gameStatus,
+    // @Default(CompetitionType.game) CompetitionType gameType,
     @Default('') String roundName,
     @Default('') String regionOrConference,
     @Default('') String location,

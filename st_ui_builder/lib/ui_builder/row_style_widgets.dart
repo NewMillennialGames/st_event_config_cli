@@ -29,7 +29,7 @@ class AssetVsAssetRow_MktView extends StBaseTvRow
     // print('AssetVsAssetRow_MktView is rebuilding');
     return Column(
       mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         AssetVsAssetHalfRow(comp1, agd, showRank),
         const SizedBox(height: UiSizes.spaceBtwnRows),

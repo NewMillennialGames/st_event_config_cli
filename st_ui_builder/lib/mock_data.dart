@@ -97,6 +97,20 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
 
   @override
   CompetitionType get gameType => CompetitionType.game;
+
+  @override
+  String get searchText =>
+      (topName + '-' + subName + '-' + teamNameWhenTradingPlayers)
+          .toUpperCase();
+
+  @override
+  String get teamImgUrlWhenTradingPlayers => '';
+
+  @override
+  String get teamNameWhenTradingPlayers => '';
+
+  @override
+  String get ticker => 'ticker';
 }
 
 List<MockAsset> _fakeData = [

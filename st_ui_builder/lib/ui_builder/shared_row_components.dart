@@ -67,7 +67,7 @@ class TradeButton extends ConsumerWidget {
 
     return Container(
       height: UiSizes.tradeBtnHeight,
-      width: 74,
+      width: 80,
       // width: UiSizes.tradeBtnWidthPctScreen * size.width,
       alignment: Alignment.center,
       child: (eventHasStarted && status.isTradable)
@@ -83,8 +83,8 @@ class TradeButton extends ConsumerWidget {
             )
           : Text(
               tf.labelForGameState(status),
-              style: StTextStyles.h6.copyWith(
-                fontSize: 11,
+              style: StTextStyles.h5.copyWith(
+                fontSize: 13,
                 color: tf.colorForGameState(status),
               ),
               textAlign: TextAlign.center,

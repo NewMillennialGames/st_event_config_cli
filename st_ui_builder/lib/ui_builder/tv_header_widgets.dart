@@ -36,7 +36,7 @@ class TvGroupHeader extends StatelessWidget {
       children: [
         Text(
           headerData.h1Displ,
-          style: StTextStyles.h5,
+          style: StTextStyles.h4,
         ),
         // Spacer(),
         Text(
