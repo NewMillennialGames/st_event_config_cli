@@ -8,7 +8,7 @@
 
 part of StUiController;
 
-const kMissingPrice = '0.00';
+const String kMissingPrice = '0.00';
 
 abstract class AssetHoldingsSummaryIfc {
   /*  per-user asset holdings summary
@@ -101,8 +101,9 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
           .toUpperCase();
 
   String get rankStr => '$rank';
-  String get gameDateStr => gameDate.asDtwMmDyStr;
-  // String get gameTimeStr => gameDate.asTimeOnlyStr;
+  String get gameDateDtwStr => gameDate.asDtwMmDyStr;
+  String get gameDateAppStr => gameDate.asShortDtStr;
+  String get gameTimeStr => gameDate.asTimeOnlyStr;
 
   // from assetHoldingsSummary
   double get positionGainLoss => assetHoldingsSummary.positionGainLoss; // ?? 0;
@@ -152,9 +153,9 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
       case DbTableFieldName.region:
         return regionOrConference;
       case DbTableFieldName.gameDate:
-        return gameDateStr;
+        return gameDateDtwStr;
       case DbTableFieldName.gameTime:
-        return gameDate.truncateTime.asTimeOnlyStr;
+        return gameDate.timeOnly.asTimeOnlyStr;
       case DbTableFieldName.eventName:
         return topName;
       case DbTableFieldName.gameLocation:
@@ -187,9 +188,9 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
       case DbTableFieldName.region:
         return regionOrConference;
       case DbTableFieldName.gameDate:
-        return gameDate;
-      case DbTableFieldName.gameTime:
         return gameDate.truncateTime;
+      case DbTableFieldName.gameTime:
+        return gameDate.timeOnly;
       case DbTableFieldName.eventName:
         return topName;
       case DbTableFieldName.gameLocation:
