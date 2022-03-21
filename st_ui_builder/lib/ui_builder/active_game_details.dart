@@ -4,13 +4,14 @@ part of StUiController;
 class AssetStateUpdates with _$AssetStateUpdates {
   /* 
   state info for each specific asset
-
+  always carried by their NEXT/CURRENT game/competition
   */
   const AssetStateUpdates._();
 
   const factory AssetStateUpdates(
     String assetKey, {
     @Default(AssetState.assetNew) AssetState assetState,
+    @Default(TradeMode.tradeMarket) TradeMode tradeMode,
     @Default(0) double curPrice,
     @Default(false) bool isWatched,
     @Default(false) bool isOwned,
@@ -42,29 +43,40 @@ class ActiveGameDetails with _$ActiveGameDetails {
     @Default([]) List<AssetStateUpdates> participantAssetInfo,
   }) = _ActiveGameDetails;
 
-  ActiveGameDetails cloneWithUpdates(
-    CompetitionInfo ci, {
-    bool? comp1IsWatched,
-    bool? comp2IsWatched,
-    bool? comp1IsOwned,
-    bool? comp2IsOwned,
-  }) {
-    // dont change owned or watched state unless explicitly set
-    List<String> watchedAssetIds = _makeLst(
-      comp1IsWatched ?? isWatched(assetId1),
-      comp2IsWatched ?? isWatched(assetId2),
-    );
-    List<String> ownedAssetIds = _makeLst(
-      comp1IsOwned ?? isOwned(assetId1),
-      comp2IsOwned ?? isOwned(assetId2),
-    );
-
+  ActiveGameDetails copyFromGameUpdates(CompetitionInfo ci) {
     // there are 1000000 (1 mill) nanoseconds in 1 millisecond
     return copyWith(
       gameStatus: ci.competitionStatus,
       roundName: ci.currentRoundName,
       scheduledStartDtTm: ci.scheduledStartTime.asDtTm,
     );
+  }
+
+  ActiveGameDetails copyFromAssetStateUpdates(AssetInfo info) {
+    // TODO:
+    return copyWith();
+  }
+
+  ActiveGameDetails copyFromAssetUserUpdates(
+    String assetKey, {
+    bool? isWatched,
+    bool? isOwned,
+  }) {
+    /*
+          TODO:
+    called when user changes state
+        dont change owned or watched state unless explicitly set
+    */
+
+    // List<String> watchedAssetIds = _makeLst(
+    //   comp1IsWatched ?? isWatched(assetId1),
+    //   comp2IsWatched ?? isWatched(assetId2),
+    // );
+    // List<String> ownedAssetIds = _makeLst(
+    //   comp1IsOwned ?? isOwned(assetId1),
+    //   comp2IsOwned ?? isOwned(assetId2),
+    // );
+    return copyWith();
   }
 
   List<String> _makeLst(

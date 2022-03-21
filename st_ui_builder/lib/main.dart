@@ -188,10 +188,11 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
     bool comp1IsOwned = Random().nextBool();
     bool comp2IsWatched = Random().nextBool();
 
-    ref.read(_gameDetailsProviders[gKey]!.notifier).state = gd.cloneWithUpdates(
+    ref.read(_gameDetailsProviders[gKey]!.notifier).state =
+        gd.copyFromGameUpdates(
       ci,
-      comp1IsOwned: comp1IsOwned,
-      comp2IsWatched: comp2IsWatched,
+      // comp1IsOwned: comp1IsOwned,
+      // comp2IsWatched: comp2IsWatched,
     );
   }
 
