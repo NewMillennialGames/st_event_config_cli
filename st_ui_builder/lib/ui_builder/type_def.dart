@@ -29,6 +29,9 @@ typedef GetGroupHeaderLblsFromCompetitionRow = GroupHeaderData Function(
 typedef SectionSortComparator = int Function(
     TableviewDataRowTuple, TableviewDataRowTuple);
 
+typedef SortValFetcherFunc = Comparable<dynamic> Function(AssetRowPropertyIfc);
+typedef SortKeyBuilderFunc = String Function(TableviewDataRowTuple);
+
 typedef GroupComparatorCallback = int Function(
   GroupHeaderData,
   GroupHeaderData,

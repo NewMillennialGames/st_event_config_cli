@@ -20,7 +20,9 @@ extension DateTimeExt1 on DateTime {
 }
 
 extension Int64ExtDate on Int64 {
-  // dates come with NANO second precision
+  // dates come as Int64 with NANO precision
+  // divide by million to get millisecs, or billion (9 0's) to get seconds
+  int get toSecsSinceEpoch => toInt() ~/ 1000000000;
   int get _toMilliSecsSinceEpoch => toInt() ~/ 1000000;
   DateTime get asDtTm =>
       DateTime.fromMillisecondsSinceEpoch(_toMilliSecsSinceEpoch);
