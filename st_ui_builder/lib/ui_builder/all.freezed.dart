@@ -15,6 +15,250 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
+class _$AssetStateUpdatesTearOff {
+  const _$AssetStateUpdatesTearOff();
+
+  _AssetStateUpdates call(String assetKey,
+      {AssetState assetState = AssetState.assetNew,
+      bool isWatched = false,
+      bool isOwned = false,
+      double curPrice = 0}) {
+    return _AssetStateUpdates(
+      assetKey,
+      assetState: assetState,
+      isWatched: isWatched,
+      isOwned: isOwned,
+      curPrice: curPrice,
+    );
+  }
+}
+
+/// @nodoc
+const $AssetStateUpdates = _$AssetStateUpdatesTearOff();
+
+/// @nodoc
+mixin _$AssetStateUpdates {
+  String get assetKey => throw _privateConstructorUsedError;
+  AssetState get assetState => throw _privateConstructorUsedError;
+  bool get isWatched => throw _privateConstructorUsedError;
+  bool get isOwned => throw _privateConstructorUsedError;
+  double get curPrice => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $AssetStateUpdatesCopyWith<AssetStateUpdates> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $AssetStateUpdatesCopyWith<$Res> {
+  factory $AssetStateUpdatesCopyWith(
+          AssetStateUpdates value, $Res Function(AssetStateUpdates) then) =
+      _$AssetStateUpdatesCopyWithImpl<$Res>;
+  $Res call(
+      {String assetKey,
+      AssetState assetState,
+      bool isWatched,
+      bool isOwned,
+      double curPrice});
+}
+
+/// @nodoc
+class _$AssetStateUpdatesCopyWithImpl<$Res>
+    implements $AssetStateUpdatesCopyWith<$Res> {
+  _$AssetStateUpdatesCopyWithImpl(this._value, this._then);
+
+  final AssetStateUpdates _value;
+  // ignore: unused_field
+  final $Res Function(AssetStateUpdates) _then;
+
+  @override
+  $Res call({
+    Object? assetKey = freezed,
+    Object? assetState = freezed,
+    Object? isWatched = freezed,
+    Object? isOwned = freezed,
+    Object? curPrice = freezed,
+  }) {
+    return _then(_value.copyWith(
+      assetKey: assetKey == freezed
+          ? _value.assetKey
+          : assetKey // ignore: cast_nullable_to_non_nullable
+              as String,
+      assetState: assetState == freezed
+          ? _value.assetState
+          : assetState // ignore: cast_nullable_to_non_nullable
+              as AssetState,
+      isWatched: isWatched == freezed
+          ? _value.isWatched
+          : isWatched // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isOwned: isOwned == freezed
+          ? _value.isOwned
+          : isOwned // ignore: cast_nullable_to_non_nullable
+              as bool,
+      curPrice: curPrice == freezed
+          ? _value.curPrice
+          : curPrice // ignore: cast_nullable_to_non_nullable
+              as double,
+    ));
+  }
+}
+
+/// @nodoc
+abstract class _$AssetStateUpdatesCopyWith<$Res>
+    implements $AssetStateUpdatesCopyWith<$Res> {
+  factory _$AssetStateUpdatesCopyWith(
+          _AssetStateUpdates value, $Res Function(_AssetStateUpdates) then) =
+      __$AssetStateUpdatesCopyWithImpl<$Res>;
+  @override
+  $Res call(
+      {String assetKey,
+      AssetState assetState,
+      bool isWatched,
+      bool isOwned,
+      double curPrice});
+}
+
+/// @nodoc
+class __$AssetStateUpdatesCopyWithImpl<$Res>
+    extends _$AssetStateUpdatesCopyWithImpl<$Res>
+    implements _$AssetStateUpdatesCopyWith<$Res> {
+  __$AssetStateUpdatesCopyWithImpl(
+      _AssetStateUpdates _value, $Res Function(_AssetStateUpdates) _then)
+      : super(_value, (v) => _then(v as _AssetStateUpdates));
+
+  @override
+  _AssetStateUpdates get _value => super._value as _AssetStateUpdates;
+
+  @override
+  $Res call({
+    Object? assetKey = freezed,
+    Object? assetState = freezed,
+    Object? isWatched = freezed,
+    Object? isOwned = freezed,
+    Object? curPrice = freezed,
+  }) {
+    return _then(_AssetStateUpdates(
+      assetKey == freezed
+          ? _value.assetKey
+          : assetKey // ignore: cast_nullable_to_non_nullable
+              as String,
+      assetState: assetState == freezed
+          ? _value.assetState
+          : assetState // ignore: cast_nullable_to_non_nullable
+              as AssetState,
+      isWatched: isWatched == freezed
+          ? _value.isWatched
+          : isWatched // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isOwned: isOwned == freezed
+          ? _value.isOwned
+          : isOwned // ignore: cast_nullable_to_non_nullable
+              as bool,
+      curPrice: curPrice == freezed
+          ? _value.curPrice
+          : curPrice // ignore: cast_nullable_to_non_nullable
+              as double,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_AssetStateUpdates extends _AssetStateUpdates
+    with DiagnosticableTreeMixin {
+  const _$_AssetStateUpdates(this.assetKey,
+      {this.assetState = AssetState.assetNew,
+      this.isWatched = false,
+      this.isOwned = false,
+      this.curPrice = 0})
+      : super._();
+
+  @override
+  final String assetKey;
+  @JsonKey()
+  @override
+  final AssetState assetState;
+  @JsonKey()
+  @override
+  final bool isWatched;
+  @JsonKey()
+  @override
+  final bool isOwned;
+  @JsonKey()
+  @override
+  final double curPrice;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'AssetStateUpdates(assetKey: $assetKey, assetState: $assetState, isWatched: $isWatched, isOwned: $isOwned, curPrice: $curPrice)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'AssetStateUpdates'))
+      ..add(DiagnosticsProperty('assetKey', assetKey))
+      ..add(DiagnosticsProperty('assetState', assetState))
+      ..add(DiagnosticsProperty('isWatched', isWatched))
+      ..add(DiagnosticsProperty('isOwned', isOwned))
+      ..add(DiagnosticsProperty('curPrice', curPrice));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _AssetStateUpdates &&
+            const DeepCollectionEquality().equals(other.assetKey, assetKey) &&
+            const DeepCollectionEquality()
+                .equals(other.assetState, assetState) &&
+            const DeepCollectionEquality().equals(other.isWatched, isWatched) &&
+            const DeepCollectionEquality().equals(other.isOwned, isOwned) &&
+            const DeepCollectionEquality().equals(other.curPrice, curPrice));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(assetKey),
+      const DeepCollectionEquality().hash(assetState),
+      const DeepCollectionEquality().hash(isWatched),
+      const DeepCollectionEquality().hash(isOwned),
+      const DeepCollectionEquality().hash(curPrice));
+
+  @JsonKey(ignore: true)
+  @override
+  _$AssetStateUpdatesCopyWith<_AssetStateUpdates> get copyWith =>
+      __$AssetStateUpdatesCopyWithImpl<_AssetStateUpdates>(this, _$identity);
+}
+
+abstract class _AssetStateUpdates extends AssetStateUpdates {
+  const factory _AssetStateUpdates(String assetKey,
+      {AssetState assetState,
+      bool isWatched,
+      bool isOwned,
+      double curPrice}) = _$_AssetStateUpdates;
+  const _AssetStateUpdates._() : super._();
+
+  @override
+  String get assetKey;
+  @override
+  AssetState get assetState;
+  @override
+  bool get isWatched;
+  @override
+  bool get isOwned;
+  @override
+  double get curPrice;
+  @override
+  @JsonKey(ignore: true)
+  _$AssetStateUpdatesCopyWith<_AssetStateUpdates> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
 class _$ActiveGameDetailsTearOff {
   const _$ActiveGameDetailsTearOff();
 
@@ -23,9 +267,7 @@ class _$ActiveGameDetailsTearOff {
       String roundName = '',
       String regionOrConference = '',
       String location = '',
-      List<String> participantAssetIds = const [],
-      List<String> ownedAssetIds = const [],
-      List<String> watchedAssetIds = const []}) {
+      List<AssetStateUpdates> participantAssetInfo = const []}) {
     return _ActiveGameDetails(
       competitionKey,
       scheduledStartDtTm,
@@ -33,9 +275,7 @@ class _$ActiveGameDetailsTearOff {
       roundName: roundName,
       regionOrConference: regionOrConference,
       location: location,
-      participantAssetIds: participantAssetIds,
-      ownedAssetIds: ownedAssetIds,
-      watchedAssetIds: watchedAssetIds,
+      participantAssetInfo: participantAssetInfo,
     );
   }
 }
@@ -47,13 +287,13 @@ const $ActiveGameDetails = _$ActiveGameDetailsTearOff();
 mixin _$ActiveGameDetails {
   String get competitionKey => throw _privateConstructorUsedError;
   DateTime get scheduledStartDtTm => throw _privateConstructorUsedError;
-  CompetitionStatus get gameStatus => throw _privateConstructorUsedError;
+  CompetitionStatus get gameStatus =>
+      throw _privateConstructorUsedError; // @Default(CompetitionType.game) CompetitionType gameType,
   String get roundName => throw _privateConstructorUsedError;
   String get regionOrConference => throw _privateConstructorUsedError;
   String get location => throw _privateConstructorUsedError;
-  List<String> get participantAssetIds => throw _privateConstructorUsedError;
-  List<String> get ownedAssetIds => throw _privateConstructorUsedError;
-  List<String> get watchedAssetIds => throw _privateConstructorUsedError;
+  List<AssetStateUpdates> get participantAssetInfo =>
+      throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ActiveGameDetailsCopyWith<ActiveGameDetails> get copyWith =>
@@ -72,9 +312,7 @@ abstract class $ActiveGameDetailsCopyWith<$Res> {
       String roundName,
       String regionOrConference,
       String location,
-      List<String> participantAssetIds,
-      List<String> ownedAssetIds,
-      List<String> watchedAssetIds});
+      List<AssetStateUpdates> participantAssetInfo});
 }
 
 /// @nodoc
@@ -94,9 +332,7 @@ class _$ActiveGameDetailsCopyWithImpl<$Res>
     Object? roundName = freezed,
     Object? regionOrConference = freezed,
     Object? location = freezed,
-    Object? participantAssetIds = freezed,
-    Object? ownedAssetIds = freezed,
-    Object? watchedAssetIds = freezed,
+    Object? participantAssetInfo = freezed,
   }) {
     return _then(_value.copyWith(
       competitionKey: competitionKey == freezed
@@ -123,18 +359,10 @@ class _$ActiveGameDetailsCopyWithImpl<$Res>
           ? _value.location
           : location // ignore: cast_nullable_to_non_nullable
               as String,
-      participantAssetIds: participantAssetIds == freezed
-          ? _value.participantAssetIds
-          : participantAssetIds // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      ownedAssetIds: ownedAssetIds == freezed
-          ? _value.ownedAssetIds
-          : ownedAssetIds // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      watchedAssetIds: watchedAssetIds == freezed
-          ? _value.watchedAssetIds
-          : watchedAssetIds // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+      participantAssetInfo: participantAssetInfo == freezed
+          ? _value.participantAssetInfo
+          : participantAssetInfo // ignore: cast_nullable_to_non_nullable
+              as List<AssetStateUpdates>,
     ));
   }
 }
@@ -153,9 +381,7 @@ abstract class _$ActiveGameDetailsCopyWith<$Res>
       String roundName,
       String regionOrConference,
       String location,
-      List<String> participantAssetIds,
-      List<String> ownedAssetIds,
-      List<String> watchedAssetIds});
+      List<AssetStateUpdates> participantAssetInfo});
 }
 
 /// @nodoc
@@ -177,9 +403,7 @@ class __$ActiveGameDetailsCopyWithImpl<$Res>
     Object? roundName = freezed,
     Object? regionOrConference = freezed,
     Object? location = freezed,
-    Object? participantAssetIds = freezed,
-    Object? ownedAssetIds = freezed,
-    Object? watchedAssetIds = freezed,
+    Object? participantAssetInfo = freezed,
   }) {
     return _then(_ActiveGameDetails(
       competitionKey == freezed
@@ -206,18 +430,10 @@ class __$ActiveGameDetailsCopyWithImpl<$Res>
           ? _value.location
           : location // ignore: cast_nullable_to_non_nullable
               as String,
-      participantAssetIds: participantAssetIds == freezed
-          ? _value.participantAssetIds
-          : participantAssetIds // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      ownedAssetIds: ownedAssetIds == freezed
-          ? _value.ownedAssetIds
-          : ownedAssetIds // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      watchedAssetIds: watchedAssetIds == freezed
-          ? _value.watchedAssetIds
-          : watchedAssetIds // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+      participantAssetInfo: participantAssetInfo == freezed
+          ? _value.participantAssetInfo
+          : participantAssetInfo // ignore: cast_nullable_to_non_nullable
+              as List<AssetStateUpdates>,
     ));
   }
 }
@@ -231,9 +447,7 @@ class _$_ActiveGameDetails extends _ActiveGameDetails
       this.roundName = '',
       this.regionOrConference = '',
       this.location = '',
-      this.participantAssetIds = const [],
-      this.ownedAssetIds = const [],
-      this.watchedAssetIds = const []})
+      this.participantAssetInfo = const []})
       : super._();
 
   @override
@@ -244,7 +458,7 @@ class _$_ActiveGameDetails extends _ActiveGameDetails
   @override
   final CompetitionStatus gameStatus;
   @JsonKey()
-  @override
+  @override // @Default(CompetitionType.game) CompetitionType gameType,
   final String roundName;
   @JsonKey()
   @override
@@ -254,17 +468,11 @@ class _$_ActiveGameDetails extends _ActiveGameDetails
   final String location;
   @JsonKey()
   @override
-  final List<String> participantAssetIds;
-  @JsonKey()
-  @override
-  final List<String> ownedAssetIds;
-  @JsonKey()
-  @override
-  final List<String> watchedAssetIds;
+  final List<AssetStateUpdates> participantAssetInfo;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ActiveGameDetails(competitionKey: $competitionKey, scheduledStartDtTm: $scheduledStartDtTm, gameStatus: $gameStatus, roundName: $roundName, regionOrConference: $regionOrConference, location: $location, participantAssetIds: $participantAssetIds, ownedAssetIds: $ownedAssetIds, watchedAssetIds: $watchedAssetIds)';
+    return 'ActiveGameDetails(competitionKey: $competitionKey, scheduledStartDtTm: $scheduledStartDtTm, gameStatus: $gameStatus, roundName: $roundName, regionOrConference: $regionOrConference, location: $location, participantAssetInfo: $participantAssetInfo)';
   }
 
   @override
@@ -278,9 +486,7 @@ class _$_ActiveGameDetails extends _ActiveGameDetails
       ..add(DiagnosticsProperty('roundName', roundName))
       ..add(DiagnosticsProperty('regionOrConference', regionOrConference))
       ..add(DiagnosticsProperty('location', location))
-      ..add(DiagnosticsProperty('participantAssetIds', participantAssetIds))
-      ..add(DiagnosticsProperty('ownedAssetIds', ownedAssetIds))
-      ..add(DiagnosticsProperty('watchedAssetIds', watchedAssetIds));
+      ..add(DiagnosticsProperty('participantAssetInfo', participantAssetInfo));
   }
 
   @override
@@ -299,11 +505,7 @@ class _$_ActiveGameDetails extends _ActiveGameDetails
                 .equals(other.regionOrConference, regionOrConference) &&
             const DeepCollectionEquality().equals(other.location, location) &&
             const DeepCollectionEquality()
-                .equals(other.participantAssetIds, participantAssetIds) &&
-            const DeepCollectionEquality()
-                .equals(other.ownedAssetIds, ownedAssetIds) &&
-            const DeepCollectionEquality()
-                .equals(other.watchedAssetIds, watchedAssetIds));
+                .equals(other.participantAssetInfo, participantAssetInfo));
   }
 
   @override
@@ -315,9 +517,7 @@ class _$_ActiveGameDetails extends _ActiveGameDetails
       const DeepCollectionEquality().hash(roundName),
       const DeepCollectionEquality().hash(regionOrConference),
       const DeepCollectionEquality().hash(location),
-      const DeepCollectionEquality().hash(participantAssetIds),
-      const DeepCollectionEquality().hash(ownedAssetIds),
-      const DeepCollectionEquality().hash(watchedAssetIds));
+      const DeepCollectionEquality().hash(participantAssetInfo));
 
   @JsonKey(ignore: true)
   @override
@@ -332,9 +532,7 @@ abstract class _ActiveGameDetails extends ActiveGameDetails {
       String roundName,
       String regionOrConference,
       String location,
-      List<String> participantAssetIds,
-      List<String> ownedAssetIds,
-      List<String> watchedAssetIds}) = _$_ActiveGameDetails;
+      List<AssetStateUpdates> participantAssetInfo}) = _$_ActiveGameDetails;
   const _ActiveGameDetails._() : super._();
 
   @override
@@ -343,18 +541,14 @@ abstract class _ActiveGameDetails extends ActiveGameDetails {
   DateTime get scheduledStartDtTm;
   @override
   CompetitionStatus get gameStatus;
-  @override
+  @override // @Default(CompetitionType.game) CompetitionType gameType,
   String get roundName;
   @override
   String get regionOrConference;
   @override
   String get location;
   @override
-  List<String> get participantAssetIds;
-  @override
-  List<String> get ownedAssetIds;
-  @override
-  List<String> get watchedAssetIds;
+  List<AssetStateUpdates> get participantAssetInfo;
   @override
   @JsonKey(ignore: true)
   _$ActiveGameDetailsCopyWith<_ActiveGameDetails> get copyWith =>

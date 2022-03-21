@@ -105,8 +105,6 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
             roundName: _getRandRound(),
             regionOrConference: _getRandRegion(),
             location: 'location',
-            participantAssetIds: [a.asset.key],
-            watchedAssetIds: [a.asset.key],
           );
         },
       );

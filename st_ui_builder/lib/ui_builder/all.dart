@@ -39,3 +39,4 @@ part 'group_header_build_payload.dart';
 part 'providers.dart';
 part 'trade_flow_mgr_ifc.dart';
 part 'all.freezed.dart';
+part 'api_type_extensions.dart';

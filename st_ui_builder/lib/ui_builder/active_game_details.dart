@@ -1,16 +1,34 @@
 part of StUiController;
 
-extension CompetitionStatusExt5 on CompetitionStatus {
-  //
-  bool get isTradable => [
-        CompetitionStatus.compInFuture,
-      ].contains(this);
+@freezed
+class AssetStateUpdates with _$AssetStateUpdates {
+  /* 
+  state info for each specific asset
+
+  */
+  const AssetStateUpdates._();
+
+  const factory AssetStateUpdates(
+    String assetKey, {
+    @Default(AssetState.assetNew) AssetState assetState,
+    @Default(0) double curPrice,
+    @Default(false) bool isWatched,
+    @Default(false) bool isOwned,
+  }) = _AssetStateUpdates;
+
+  bool get isTradable => assetState.isTradable;
 }
 
 @freezed
 class ActiveGameDetails with _$ActiveGameDetails {
-  //
-  // const constructor needed to implement ifc
+  /*
+  Row UI must update when any of the below changes:
+  Game State
+  Asset State (either of participants)
+  currentPrice
+  isWatched
+  isOwned
+  */
   const ActiveGameDetails._();
 
   const factory ActiveGameDetails(
@@ -21,9 +39,7 @@ class ActiveGameDetails with _$ActiveGameDetails {
     @Default('') String roundName,
     @Default('') String regionOrConference,
     @Default('') String location,
-    @Default([]) List<String> participantAssetIds,
-    @Default([]) List<String> ownedAssetIds,
-    @Default([]) List<String> watchedAssetIds,
+    @Default([]) List<AssetStateUpdates> participantAssetInfo,
   }) = _ActiveGameDetails;
 
   ActiveGameDetails cloneWithUpdates(
@@ -47,14 +63,7 @@ class ActiveGameDetails with _$ActiveGameDetails {
     return copyWith(
       gameStatus: ci.competitionStatus,
       roundName: ci.currentRoundName,
-      // regionOrConference: regionOrConference,
-      // location: location,
-      // participantAssetIds: participantAssetIds,
-      ownedAssetIds: ownedAssetIds,
-      watchedAssetIds: watchedAssetIds,
-      scheduledStartDtTm: DateTime.fromMicrosecondsSinceEpoch(
-        ci.scheduledStartTime.toInt(),
-      ),
+      scheduledStartDtTm: ci.scheduledStartTime.asDtTm,
     );
   }
 
@@ -69,23 +78,43 @@ class ActiveGameDetails with _$ActiveGameDetails {
   }
 
   // getters
-  bool get isTradable => gameStatus.isTradable;
-  int get competitorCount => participantAssetIds.length;
+  String get assetId1 => participantAssetInfo.isNotEmpty
+      ? participantAssetInfo.first.assetKey
+      : '_';
+  String get assetId2 =>
+      participantAssetInfo.length > 1 ? participantAssetInfo[1].assetKey : '_';
+  bool get isTradableAsset1 => participantAssetInfo.isNotEmpty
+      ? participantAssetInfo.first.isTradable && _isTradableGame
+      : false;
+
+  bool get isTradableAsset2 => participantAssetInfo.length > 1
+      ? participantAssetInfo[1].isTradable && _isTradableGame
+      : false;
+  bool get _isTradableGame => gameStatus.isTradable;
+  //
+  int get competitorCount => participantAssetInfo.length;
   //
   String get gameDateStr => scheduledStartDtTm.asDtwMmDyStr;
   String get gameTimeStr => scheduledStartDtTm.asTimeOnlyStr;
   DateTime get scheduledStartDateOnly => scheduledStartDtTm.truncateTime;
   //
-  String get assetId1 =>
-      participantAssetIds.isNotEmpty ? participantAssetIds[0] : '_';
-  String get assetId2 =>
-      participantAssetIds.length > 1 ? participantAssetIds[1] : '_';
 
-  bool isOwned(String assetId) => ownedAssetIds.contains(assetId);
-  bool isWatched(String assetId) => watchedAssetIds.contains(assetId);
-
+  Set<String> get _participantAssetIds =>
+      participantAssetInfo.map((ai) => ai.assetKey).toSet();
   bool includesParticipant(String assetId) =>
-      participantAssetIds.contains(assetId);
+      _participantAssetIds.contains(assetId);
+
+  Set<String> get _ownedAssetIds => participantAssetInfo
+      .where((ai) => ai.isOwned)
+      .map((ai) => ai.assetKey)
+      .toSet();
+  Set<String> get _watchedAssetIds => participantAssetInfo
+      .where((ai) => ai.isWatched)
+      .map((ai) => ai.assetKey)
+      .toSet();
+
+  bool isOwned(String assetId) => _ownedAssetIds.contains(assetId);
+  bool isWatched(String assetId) => _watchedAssetIds.contains(assetId);
 
   // only testing & error handling
   factory ActiveGameDetails.mockOrMissingAgd([String assetId = '_mock']) {
@@ -97,7 +126,7 @@ class ActiveGameDetails with _$ActiveGameDetails {
       roundName: '_roundName',
       regionOrConference: '_region',
       location: '_location',
-      participantAssetIds: [assetId],
+      participantAssetInfo: [],
     );
   }
 }

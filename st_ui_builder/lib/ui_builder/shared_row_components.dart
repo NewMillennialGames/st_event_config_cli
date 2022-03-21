@@ -214,7 +214,7 @@ class MktRschAsset extends StatelessWidget {
                     competitor.topName,
                     style: StTextStyles.h4.copyWith(
                       fontSize: 18,
-                      color: gameStatus.isTradable
+                      color: gameStatus._isTradableGame
                           ? StColors.coolGray
                           : StTextStyles.h4.color,
                     ),
@@ -222,7 +222,7 @@ class MktRschAsset extends StatelessWidget {
                   Text(
                     competitor.subName,
                     style: StTextStyles.textFormField.copyWith(
-                      color: gameStatus.isTradable
+                      color: gameStatus._isTradableGame
                           ? StColors.coolGray
                           : StTextStyles.textFormField.color,
                     ),
@@ -231,7 +231,8 @@ class MktRschAsset extends StatelessWidget {
               ),
               Icon(
                 Icons.star_border,
-                color: gameStatus.isTradable ? StColors.gray : StColors.blue,
+                color:
+                    gameStatus._isTradableGame ? StColors.gray : StColors.blue,
               ),
             ],
           ),
@@ -438,7 +439,7 @@ class AssetTopRow extends StatelessWidget {
               ),
             ),
           ),
-          if (gameStatus.isTradable)
+          if (gameStatus._isTradableGame)
             // trade button to right of player/team name
             Padding(
               padding: const EdgeInsets.only(right: _rowRightMargin),
@@ -529,7 +530,9 @@ class HoldingsAndValueRow extends StatelessWidget {
           Column(
             children: [
               Text(
-                gameStatus.isTradable ? StStrings.value : StStrings.proceeds,
+                gameStatus._isTradableGame
+                    ? StStrings.value
+                    : StStrings.proceeds,
                 style: StTextStyles.h5.copyWith(),
               ),
               Text(
