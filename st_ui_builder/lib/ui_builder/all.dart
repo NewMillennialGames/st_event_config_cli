@@ -41,3 +41,4 @@ part 'providers.dart';
 part 'trade_flow_mgr_ifc.dart';
 part 'all.freezed.dart';
 part 'api_type_extensions.dart';
+part 'row_data_interfaces.dart';

@@ -29,8 +29,7 @@ mixin RequiresPriceChangeProps on StBaseTvRowIfc {
   // row needs price history data
   // not every asset has this data
   // notice the force-unpack of optional below
-  AssetPriceFluxSummaryIfc get assetPriceSummary =>
-      assets.item1.assetPriceFluxSummary;
+  AssetStateUpdates get assetPriceSummary => assets.item1.assetStateUpdates;
 }
 
 mixin RequiresUserPositionProps on StBaseTvRowIfc {

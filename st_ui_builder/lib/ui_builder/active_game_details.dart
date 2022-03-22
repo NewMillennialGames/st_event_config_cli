@@ -5,6 +5,8 @@ class AssetStateUpdates with _$AssetStateUpdates {
   /* 
   state info for each specific asset is always
   carried by their NEXT/CURRENT game/competition
+
+  carries vals that may change & cause row-redraw
   */
   const AssetStateUpdates._();
 
@@ -12,12 +14,22 @@ class AssetStateUpdates with _$AssetStateUpdates {
     String assetKey, {
     @Default(AssetState.assetNew) AssetState assetState,
     @Default(TradeMode.tradeMarket) TradeMode tradeMode,
-    @Default(0) double curPrice,
     @Default(false) bool isWatched,
     @Default(false) bool isOwned,
+    @Default(0) double curPrice,
+    @Default(0) double hiPrice,
+    @Default(0) double lowPrice,
+    @Default(0) double openPrice,
   }) = _AssetStateUpdates;
 
   bool get isTradable => assetState.isTradable;
+  bool get stockIsUp => curPrice > openPrice;
+
+  double get priceDeltaSinceOpen => curPrice - openPrice;
+  String get priceDeltaSinceOpenStr =>
+      priceDeltaSinceOpen.toStringAsPrecision(2);
+  String get curPriceStr => curPrice.toStringAsPrecision(2);
+  Color get priceFluxColor => stockIsUp ? Colors.green : Colors.red;
 }
 
 @freezed

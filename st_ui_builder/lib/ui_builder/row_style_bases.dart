@@ -59,7 +59,7 @@ class StBaseTvRow extends StBaseTvRowIfc {
       decoration: kRowBoxDecor,
       child: Consumer(
         builder: (context, ref, child) {
-          // force rebuild when game status changes
+          // force rebuild when key state changes
           ActiveGameDetails agd;
           if (this is RequiresGameStatus) {
             agd = ref.watch(assets.item3);

@@ -472,7 +472,7 @@ class HoldingsAndValueRow extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  double get _sharePrice => asset.assetPriceFluxSummary.currPrice; // ?? 0;
+  double get _sharePrice => asset.assetStateUpdates.curPrice; // ?? 0;
   int get _sharesHeld => asset.assetHoldingsSummary.sharesOwned; // ?? 0;
   double get _gainLoss => asset.assetHoldingsSummary.positionGainLoss; // ?? 0;
 

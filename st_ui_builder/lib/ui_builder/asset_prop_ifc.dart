@@ -10,58 +10,6 @@ part of StUiController;
 
 const String kMissingPrice = '0.00';
 
-abstract class AssetHoldingsSummaryIfc {
-  /*  per-user asset holdings summary
-
-  */
-  int get sharesOwned;
-  double get positionCost;
-  double get positionEstValue; // current estimate
-  int get tokensAvail;
-}
-
-extension AssetHoldingsSummaryIfcExt1 on AssetHoldingsSummaryIfc {
-  //
-  double get positionGainLoss => positionEstValue - positionCost;
-  // UI values for this
-  int get tokensAvail => 0;
-  String get sharesOwnedStr => '$sharesOwned';
-  String get positionCostStr => positionCost.toStringAsFixed(2);
-  String get positionEstValueStr => positionEstValue.toStringAsFixed(2);
-  String get positionGainLossStr => positionGainLoss.toStringAsFixed(2);
-
-  bool get returnIsPositive => positionGainLoss > 0;
-  Color get posGainSymbolColor => returnIsPositive ? Colors.green : Colors.red;
-}
-
-abstract class AssetPriceFluxSummaryIfc {
-/*
-  may travel with asset for some screens
-  to describe recent price changes on this asset
-*/
-  double get currPrice;
-  double get priceDeltaSinceOpen;
-  //
-  double get openPrice;
-  double get lowPrice;
-  double get hiPrice;
-  // int get tradeVolume;
-}
-
-extension AssetPriceFluxSummaryIfcExt1 on AssetPriceFluxSummaryIfc {
-  // UI values for this
-  String get currPriceStr => currPrice.toStringAsFixed(2);
-  double get priceDeltaSinceOpen => currPrice - openPrice;
-  String get recentDeltaStr => priceDeltaSinceOpen.toStringAsFixed(2);
-  //
-  String get openPriceStr => openPrice.toStringAsFixed(2);
-  String get lowPriceStr => lowPrice.toStringAsFixed(2);
-  String get hiPriceStr => hiPrice.toStringAsFixed(2);
-
-  bool get stockIsUp => currPrice > openPrice;
-  Color get priceFluxColor => stockIsUp ? Colors.green : Colors.red;
-}
-
 abstract class AssetRowPropertyIfc {
   // must have a value for each name on:
   // enum DbTableFieldName()
@@ -76,11 +24,11 @@ abstract class AssetRowPropertyIfc {
   String get searchText;
   double get openPrice;
   //
-  String get teamImgUrlWhenTradingPlayers;
   String get teamNameWhenTradingPlayers;
+  String get teamImgUrlWhenTradingPlayers;
 
   // holds asset price history
-  AssetPriceFluxSummaryIfc get assetPriceFluxSummary;
+  AssetStateUpdates get assetStateUpdates;
   // holds user ownership state
   AssetHoldingsSummaryIfc get assetHoldingsSummary;
 
@@ -120,23 +68,18 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
       assetHoldingsSummary.posGainSymbolColor; // ?? Colors.grey;
 
   // assetPriceFluxSummary
-  double get currPrice => assetPriceFluxSummary.currPrice; // ?? 0;
-  double get recentPriceDelta =>
-      assetPriceFluxSummary.priceDeltaSinceOpen; // ?? 0;
-  String get currPriceStr =>
-      assetPriceFluxSummary.currPriceStr; // ?? kMissingPrice;
+  double get currPrice => assetStateUpdates.curPrice; // ?? 0;
+  double get recentPriceDelta => assetStateUpdates.priceDeltaSinceOpen; // ?? 0;
+  String get currPriceStr => assetStateUpdates.curPriceStr; // ?? kMissingPrice;
   String get recentDeltaStr =>
-      assetPriceFluxSummary.recentDeltaStr; // ?? kMissingPrice;
-  String get openPriceStr =>
-      assetPriceFluxSummary.openPriceStr; // ?? kMissingPrice;
-  String get lowPriceStr =>
-      assetPriceFluxSummary.openPriceStr; // ?? kMissingPrice;
-  String get hiPriceStr =>
-      assetPriceFluxSummary.hiPriceStr; // ?? kMissingPrice;
+      assetStateUpdates.priceDeltaSinceOpenStr; // ?? kMissingPrice;
+  String get openPriceStr => assetStateUpdates.openPrice.toStringAsPrecision(2);
+  String get lowPriceStr => assetStateUpdates.lowPrice.toStringAsPrecision(2);
+  String get hiPriceStr => assetStateUpdates.hiPrice.toStringAsPrecision(2);
 
-  bool get stockIsUp => assetPriceFluxSummary.stockIsUp; // ?? false;
+  bool get stockIsUp => assetStateUpdates.stockIsUp; // ?? false;
   Color get priceFluxColor =>
-      assetPriceFluxSummary.priceFluxColor; // ?? Colors.grey;
+      assetStateUpdates.priceFluxColor; // ?? Colors.grey;
 
   CompetitionType get gameType => CompetitionType.game;
 

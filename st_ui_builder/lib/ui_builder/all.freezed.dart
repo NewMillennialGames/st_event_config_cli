@@ -21,16 +21,22 @@ class _$AssetStateUpdatesTearOff {
   _AssetStateUpdates call(String assetKey,
       {AssetState assetState = AssetState.assetNew,
       TradeMode tradeMode = TradeMode.tradeMarket,
-      double curPrice = 0,
       bool isWatched = false,
-      bool isOwned = false}) {
+      bool isOwned = false,
+      double curPrice = 0,
+      double hiPrice = 0,
+      double lowPrice = 0,
+      double openPrice = 0}) {
     return _AssetStateUpdates(
       assetKey,
       assetState: assetState,
       tradeMode: tradeMode,
-      curPrice: curPrice,
       isWatched: isWatched,
       isOwned: isOwned,
+      curPrice: curPrice,
+      hiPrice: hiPrice,
+      lowPrice: lowPrice,
+      openPrice: openPrice,
     );
   }
 }
@@ -43,9 +49,12 @@ mixin _$AssetStateUpdates {
   String get assetKey => throw _privateConstructorUsedError;
   AssetState get assetState => throw _privateConstructorUsedError;
   TradeMode get tradeMode => throw _privateConstructorUsedError;
-  double get curPrice => throw _privateConstructorUsedError;
   bool get isWatched => throw _privateConstructorUsedError;
   bool get isOwned => throw _privateConstructorUsedError;
+  double get curPrice => throw _privateConstructorUsedError;
+  double get hiPrice => throw _privateConstructorUsedError;
+  double get lowPrice => throw _privateConstructorUsedError;
+  double get openPrice => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AssetStateUpdatesCopyWith<AssetStateUpdates> get copyWith =>
@@ -61,9 +70,12 @@ abstract class $AssetStateUpdatesCopyWith<$Res> {
       {String assetKey,
       AssetState assetState,
       TradeMode tradeMode,
-      double curPrice,
       bool isWatched,
-      bool isOwned});
+      bool isOwned,
+      double curPrice,
+      double hiPrice,
+      double lowPrice,
+      double openPrice});
 }
 
 /// @nodoc
@@ -80,9 +92,12 @@ class _$AssetStateUpdatesCopyWithImpl<$Res>
     Object? assetKey = freezed,
     Object? assetState = freezed,
     Object? tradeMode = freezed,
-    Object? curPrice = freezed,
     Object? isWatched = freezed,
     Object? isOwned = freezed,
+    Object? curPrice = freezed,
+    Object? hiPrice = freezed,
+    Object? lowPrice = freezed,
+    Object? openPrice = freezed,
   }) {
     return _then(_value.copyWith(
       assetKey: assetKey == freezed
@@ -97,10 +112,6 @@ class _$AssetStateUpdatesCopyWithImpl<$Res>
           ? _value.tradeMode
           : tradeMode // ignore: cast_nullable_to_non_nullable
               as TradeMode,
-      curPrice: curPrice == freezed
-          ? _value.curPrice
-          : curPrice // ignore: cast_nullable_to_non_nullable
-              as double,
       isWatched: isWatched == freezed
           ? _value.isWatched
           : isWatched // ignore: cast_nullable_to_non_nullable
@@ -109,6 +120,22 @@ class _$AssetStateUpdatesCopyWithImpl<$Res>
           ? _value.isOwned
           : isOwned // ignore: cast_nullable_to_non_nullable
               as bool,
+      curPrice: curPrice == freezed
+          ? _value.curPrice
+          : curPrice // ignore: cast_nullable_to_non_nullable
+              as double,
+      hiPrice: hiPrice == freezed
+          ? _value.hiPrice
+          : hiPrice // ignore: cast_nullable_to_non_nullable
+              as double,
+      lowPrice: lowPrice == freezed
+          ? _value.lowPrice
+          : lowPrice // ignore: cast_nullable_to_non_nullable
+              as double,
+      openPrice: openPrice == freezed
+          ? _value.openPrice
+          : openPrice // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
@@ -124,9 +151,12 @@ abstract class _$AssetStateUpdatesCopyWith<$Res>
       {String assetKey,
       AssetState assetState,
       TradeMode tradeMode,
-      double curPrice,
       bool isWatched,
-      bool isOwned});
+      bool isOwned,
+      double curPrice,
+      double hiPrice,
+      double lowPrice,
+      double openPrice});
 }
 
 /// @nodoc
@@ -145,9 +175,12 @@ class __$AssetStateUpdatesCopyWithImpl<$Res>
     Object? assetKey = freezed,
     Object? assetState = freezed,
     Object? tradeMode = freezed,
-    Object? curPrice = freezed,
     Object? isWatched = freezed,
     Object? isOwned = freezed,
+    Object? curPrice = freezed,
+    Object? hiPrice = freezed,
+    Object? lowPrice = freezed,
+    Object? openPrice = freezed,
   }) {
     return _then(_AssetStateUpdates(
       assetKey == freezed
@@ -162,10 +195,6 @@ class __$AssetStateUpdatesCopyWithImpl<$Res>
           ? _value.tradeMode
           : tradeMode // ignore: cast_nullable_to_non_nullable
               as TradeMode,
-      curPrice: curPrice == freezed
-          ? _value.curPrice
-          : curPrice // ignore: cast_nullable_to_non_nullable
-              as double,
       isWatched: isWatched == freezed
           ? _value.isWatched
           : isWatched // ignore: cast_nullable_to_non_nullable
@@ -174,6 +203,22 @@ class __$AssetStateUpdatesCopyWithImpl<$Res>
           ? _value.isOwned
           : isOwned // ignore: cast_nullable_to_non_nullable
               as bool,
+      curPrice: curPrice == freezed
+          ? _value.curPrice
+          : curPrice // ignore: cast_nullable_to_non_nullable
+              as double,
+      hiPrice: hiPrice == freezed
+          ? _value.hiPrice
+          : hiPrice // ignore: cast_nullable_to_non_nullable
+              as double,
+      lowPrice: lowPrice == freezed
+          ? _value.lowPrice
+          : lowPrice // ignore: cast_nullable_to_non_nullable
+              as double,
+      openPrice: openPrice == freezed
+          ? _value.openPrice
+          : openPrice // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
@@ -185,9 +230,12 @@ class _$_AssetStateUpdates extends _AssetStateUpdates
   const _$_AssetStateUpdates(this.assetKey,
       {this.assetState = AssetState.assetNew,
       this.tradeMode = TradeMode.tradeMarket,
-      this.curPrice = 0,
       this.isWatched = false,
-      this.isOwned = false})
+      this.isOwned = false,
+      this.curPrice = 0,
+      this.hiPrice = 0,
+      this.lowPrice = 0,
+      this.openPrice = 0})
       : super._();
 
   @override
@@ -200,17 +248,26 @@ class _$_AssetStateUpdates extends _AssetStateUpdates
   final TradeMode tradeMode;
   @JsonKey()
   @override
-  final double curPrice;
-  @JsonKey()
-  @override
   final bool isWatched;
   @JsonKey()
   @override
   final bool isOwned;
+  @JsonKey()
+  @override
+  final double curPrice;
+  @JsonKey()
+  @override
+  final double hiPrice;
+  @JsonKey()
+  @override
+  final double lowPrice;
+  @JsonKey()
+  @override
+  final double openPrice;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'AssetStateUpdates(assetKey: $assetKey, assetState: $assetState, tradeMode: $tradeMode, curPrice: $curPrice, isWatched: $isWatched, isOwned: $isOwned)';
+    return 'AssetStateUpdates(assetKey: $assetKey, assetState: $assetState, tradeMode: $tradeMode, isWatched: $isWatched, isOwned: $isOwned, curPrice: $curPrice, hiPrice: $hiPrice, lowPrice: $lowPrice, openPrice: $openPrice)';
   }
 
   @override
@@ -221,9 +278,12 @@ class _$_AssetStateUpdates extends _AssetStateUpdates
       ..add(DiagnosticsProperty('assetKey', assetKey))
       ..add(DiagnosticsProperty('assetState', assetState))
       ..add(DiagnosticsProperty('tradeMode', tradeMode))
-      ..add(DiagnosticsProperty('curPrice', curPrice))
       ..add(DiagnosticsProperty('isWatched', isWatched))
-      ..add(DiagnosticsProperty('isOwned', isOwned));
+      ..add(DiagnosticsProperty('isOwned', isOwned))
+      ..add(DiagnosticsProperty('curPrice', curPrice))
+      ..add(DiagnosticsProperty('hiPrice', hiPrice))
+      ..add(DiagnosticsProperty('lowPrice', lowPrice))
+      ..add(DiagnosticsProperty('openPrice', openPrice));
   }
 
   @override
@@ -235,9 +295,12 @@ class _$_AssetStateUpdates extends _AssetStateUpdates
             const DeepCollectionEquality()
                 .equals(other.assetState, assetState) &&
             const DeepCollectionEquality().equals(other.tradeMode, tradeMode) &&
-            const DeepCollectionEquality().equals(other.curPrice, curPrice) &&
             const DeepCollectionEquality().equals(other.isWatched, isWatched) &&
-            const DeepCollectionEquality().equals(other.isOwned, isOwned));
+            const DeepCollectionEquality().equals(other.isOwned, isOwned) &&
+            const DeepCollectionEquality().equals(other.curPrice, curPrice) &&
+            const DeepCollectionEquality().equals(other.hiPrice, hiPrice) &&
+            const DeepCollectionEquality().equals(other.lowPrice, lowPrice) &&
+            const DeepCollectionEquality().equals(other.openPrice, openPrice));
   }
 
   @override
@@ -246,9 +309,12 @@ class _$_AssetStateUpdates extends _AssetStateUpdates
       const DeepCollectionEquality().hash(assetKey),
       const DeepCollectionEquality().hash(assetState),
       const DeepCollectionEquality().hash(tradeMode),
-      const DeepCollectionEquality().hash(curPrice),
       const DeepCollectionEquality().hash(isWatched),
-      const DeepCollectionEquality().hash(isOwned));
+      const DeepCollectionEquality().hash(isOwned),
+      const DeepCollectionEquality().hash(curPrice),
+      const DeepCollectionEquality().hash(hiPrice),
+      const DeepCollectionEquality().hash(lowPrice),
+      const DeepCollectionEquality().hash(openPrice));
 
   @JsonKey(ignore: true)
   @override
@@ -260,9 +326,12 @@ abstract class _AssetStateUpdates extends AssetStateUpdates {
   const factory _AssetStateUpdates(String assetKey,
       {AssetState assetState,
       TradeMode tradeMode,
-      double curPrice,
       bool isWatched,
-      bool isOwned}) = _$_AssetStateUpdates;
+      bool isOwned,
+      double curPrice,
+      double hiPrice,
+      double lowPrice,
+      double openPrice}) = _$_AssetStateUpdates;
   const _AssetStateUpdates._() : super._();
 
   @override
@@ -272,11 +341,17 @@ abstract class _AssetStateUpdates extends AssetStateUpdates {
   @override
   TradeMode get tradeMode;
   @override
-  double get curPrice;
-  @override
   bool get isWatched;
   @override
   bool get isOwned;
+  @override
+  double get curPrice;
+  @override
+  double get hiPrice;
+  @override
+  double get lowPrice;
+  @override
+  double get openPrice;
   @override
   @JsonKey(ignore: true)
   _$AssetStateUpdatesCopyWith<_AssetStateUpdates> get copyWith =>
