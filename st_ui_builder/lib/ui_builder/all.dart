@@ -14,6 +14,7 @@ import 'package:stclient/stclient.dart';
 //
 import '../config/sizes.dart';
 import '../utils/dates.dart';
+import '../utils/prices.dart';
 import '../config/colors.dart';
 import '../config/assets.dart';
 import '../config/strings.dart';

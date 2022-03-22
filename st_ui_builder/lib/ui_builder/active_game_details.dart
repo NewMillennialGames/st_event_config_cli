@@ -3,8 +3,8 @@ part of StUiController;
 @freezed
 class AssetStateUpdates with _$AssetStateUpdates {
   /* 
-  state info for each specific asset
-  always carried by their NEXT/CURRENT game/competition
+  state info for each specific asset is always
+  carried by their NEXT/CURRENT game/competition
   */
   const AssetStateUpdates._();
 
@@ -24,7 +24,7 @@ class AssetStateUpdates with _$AssetStateUpdates {
 class ActiveGameDetails with _$ActiveGameDetails {
   /*
   Row UI must update when any of the below changes:
-  Game State
+  Game CompetitionStatus
   Asset State (either of participants)
   currentPrice
   isWatched
@@ -43,50 +43,72 @@ class ActiveGameDetails with _$ActiveGameDetails {
     @Default([]) List<AssetStateUpdates> participantAssetInfo,
   }) = _ActiveGameDetails;
 
-  ActiveGameDetails copyFromGameUpdates(CompetitionInfo ci) {
+  factory ActiveGameDetails.createNew(
+    String competitionKey,
+    DateTime scheduledStartDtTm,
+    CompetitionStatus gameStatus,
+    AssetStateUpdates asu1,
+    AssetStateUpdates asu2,
+  ) {
+    return ActiveGameDetails(
+      competitionKey,
+      scheduledStartDtTm,
+      gameStatus: gameStatus,
+      participantAssetInfo: [asu1, asu2],
+    );
+  }
+
+  ActiveGameDetails copyFromGameUpdates(
+    CompetitionInfo ci,
+  ) {
     // there are 1000000 (1 mill) nanoseconds in 1 millisecond
     return copyWith(
       gameStatus: ci.competitionStatus,
       roundName: ci.currentRoundName,
       scheduledStartDtTm: ci.scheduledStartTime.asDtTm,
+      // regionOrConference: ci.region
     );
   }
 
-  ActiveGameDetails copyFromAssetStateUpdates(AssetInfo info) {
-    // TODO:
-    return copyWith();
+  ActiveGameDetails copyFromAssetStateUpdates(
+    AssetInfo info,
+  ) {
+    /* called when server stream changes state
+    */
+    int rowIdx =
+        participantAssetInfo.indexWhere((ai) => ai.assetKey == info.key);
+    if (rowIdx < 0) return this;
+    //
+    AssetStateUpdates newAsu = participantAssetInfo[rowIdx].copyWith(
+      curPrice: info.price.asPrice2d,
+      tradeMode: info.mode,
+      assetState: info.state,
+    );
+    List<AssetStateUpdates> lstCopy = participantAssetInfo.toList();
+    lstCopy[rowIdx] = newAsu;
+    return copyWith(participantAssetInfo: lstCopy);
   }
 
-  ActiveGameDetails copyFromAssetUserUpdates(
+  ActiveGameDetails copyFromUserUpdates(
     String assetKey, {
     bool? isWatched,
     bool? isOwned,
   }) {
-    /*
-          TODO:
-    called when user changes state
+    /* called when user changes state
         dont change owned or watched state unless explicitly set
     */
-
-    // List<String> watchedAssetIds = _makeLst(
-    //   comp1IsWatched ?? isWatched(assetId1),
-    //   comp2IsWatched ?? isWatched(assetId2),
-    // );
-    // List<String> ownedAssetIds = _makeLst(
-    //   comp1IsOwned ?? isOwned(assetId1),
-    //   comp2IsOwned ?? isOwned(assetId2),
-    // );
-    return copyWith();
-  }
-
-  List<String> _makeLst(
-    bool first,
-    bool second,
-  ) {
-    List<String> l = [];
-    if (first) l.add(assetId1);
-    if (second) l.add(assetId2);
-    return l;
+    int rowIdx =
+        participantAssetInfo.indexWhere((ai) => ai.assetKey == assetKey);
+    if (rowIdx < 0) return this;
+    //
+    AssetStateUpdates newAsu = participantAssetInfo[rowIdx];
+    newAsu = newAsu.copyWith(
+      isOwned: isOwned ?? newAsu.isOwned,
+      isWatched: isWatched ?? newAsu.isWatched,
+    );
+    List<AssetStateUpdates> lstCopy = participantAssetInfo.toList();
+    lstCopy[rowIdx] = newAsu;
+    return copyWith(participantAssetInfo: lstCopy);
   }
 
   // getters
@@ -142,6 +164,27 @@ class ActiveGameDetails with _$ActiveGameDetails {
     );
   }
 }
+
+
+  // List<String> _makeLst(
+  //   bool first,
+  //   bool second,
+  // ) {
+  //       // List<String> watchedAssetIds = _makeLst(
+  //   //   comp1IsWatched ?? isWatched(assetId1),
+  //   //   comp2IsWatched ?? isWatched(assetId2),
+  //   // );
+  //   // List<String> ownedAssetIds = _makeLst(
+  //   //   comp1IsOwned ?? isOwned(assetId1),
+  //   //   comp2IsOwned ?? isOwned(assetId2),
+  //   // );
+  //   List<String> l = [];
+  //   if (first) l.add(assetId1);
+  //   if (second) l.add(assetId2);
+  //   return l;
+  // }
+
+
 
 // @immutable
 // class old_ActiveGameDetails {
