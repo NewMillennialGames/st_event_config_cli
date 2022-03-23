@@ -3,15 +3,25 @@ part of StUiController;
 @freezed
 class AssetStateUpdates with _$AssetStateUpdates {
   /* 
+  carries Asset vals that may change & cause row-redraw
+
   state info for each specific asset is always
   carried by their NEXT/CURRENT game/competition
 
-  carries vals that may change & cause row-redraw
+    AssetState vals are:
+      assetNew,
+      assetPretrade,
+      assetOpen,
+      assetClosed,
+      assetArchived,
+      assetFinished,
   */
+
   const AssetStateUpdates._();
 
   const factory AssetStateUpdates(
-    String assetKey, {
+    String assetKey,
+    String name, {
     @Default(AssetState.assetNew) AssetState assetState,
     @Default(TradeMode.tradeMarket) TradeMode tradeMode,
     @Default(false) bool isWatched,
@@ -22,8 +32,32 @@ class AssetStateUpdates with _$AssetStateUpdates {
     @Default(0) double openPrice,
   }) = _AssetStateUpdates;
 
+  factory AssetStateUpdates.fromAsset(Asset a) {
+    return AssetStateUpdates(
+      a.key,
+      a.name,
+      assetState: a.state,
+      tradeMode: a.tradeMode,
+      openPrice: a.openingPrice.asPrice2d,
+      curPrice: a.openingPrice.asPrice2d,
+    );
+  }
+
+  AssetStateUpdates replaceFromPriceUpdate(AssetInfo ai) {
+    //
+    return copyWith(
+      curPrice: ai.price.asPrice2d,
+      assetState: ai.state,
+      tradeMode: ai.mode,
+    );
+  }
+
   bool get isTradable => assetState.isTradable;
   bool get stockIsUp => curPrice > openPrice;
+  bool get isDecreasing => !stockIsUp;
+
+  String get formattedChangeStr =>
+      (isDecreasing ? '' : '+') + priceDeltaSinceOpenStr;
 
   double get priceDeltaSinceOpen => curPrice - openPrice;
   String get priceDeltaSinceOpenStr =>

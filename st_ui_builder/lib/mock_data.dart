@@ -20,6 +20,7 @@ class MockAsset {
   String region;
   String teamName;
   String imgUrl = 'https://ui-avatars.com/api/?name=John+Doe';
+  // reall assets DO NOT have game key
   String gameKey;
 
   DateTime get gameDt => _today;

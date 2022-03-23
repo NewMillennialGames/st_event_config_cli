@@ -31,6 +31,12 @@ Future<void> readExampleEventConfig({String filename = cfgEmpl1}) async {
   evCfgDataFromServer = json.decode(response);
 }
 
+final _dynGameStateFamProv =
+    StateProviderFamily<ActiveGameDetails, String>((ref, gameKey) {
+  // doesnt work;  just mock to get packages building
+  return ActiveGameDetails(gameKey, DateTime.now());
+});
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // pretend were loading Event from server
@@ -118,7 +124,8 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
           (e) => TableviewDataRowTuple(
             e,
             e,
-            _gameDetailsProviders[e.asset.gameKey]!,
+            e.asset.gameKey,
+            _dynGameStateFamProv,
           ),
         )
         .toList();

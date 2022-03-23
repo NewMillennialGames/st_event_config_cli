@@ -77,10 +77,8 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
   String get lowPriceStr => assetStateUpdates.lowPrice.toStringAsPrecision(2);
   String get hiPriceStr => assetStateUpdates.hiPrice.toStringAsPrecision(2);
 
-  bool get stockIsUp => assetStateUpdates.stockIsUp; // ?? false;
-  Color get priceFluxColor =>
-      assetStateUpdates.priceFluxColor; // ?? Colors.grey;
-
+  bool get stockIsUp => assetStateUpdates.stockIsUp;
+  Color get priceFluxColor => assetStateUpdates.priceFluxColor;
   CompetitionType get gameType => CompetitionType.game;
 
   String labelExtractor(DbTableFieldName fldName) {

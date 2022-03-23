@@ -15,10 +15,14 @@ typedef IndexedItemRowBuilder = Widget Function(
   int,
 );
 
+typedef GameKey = String;
+// function to return provider
+typedef DynRowStateFamProvBuilder = StateProvider<ActiveGameDetails> Function(
+    GameKey);
 // this is the data sent in to build every table-view row
 // ActiveGameDetails controls when row stat changes and row rebuilds
-typedef TableviewDataRowTuple = Tuple3<AssetRowPropertyIfc,
-    AssetRowPropertyIfc?, StateProvider<ActiveGameDetails>>;
+typedef TableviewDataRowTuple = Tuple4<AssetRowPropertyIfc,
+    AssetRowPropertyIfc?, GameKey, DynRowStateFamProvBuilder>;
 
 // TODO:  consider passing TableviewDataRowTuple to group functions
 // instead of first item in TableviewDataRowTuple.item1

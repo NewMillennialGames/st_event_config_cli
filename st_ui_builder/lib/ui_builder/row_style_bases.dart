@@ -40,6 +40,9 @@ class StBaseTvRow extends StBaseTvRowIfc {
           key: key,
         );
 
+  StateProvider<ActiveGameDetails> get dynStateProv =>
+      assets.item4(assets.item3);
+
   @override
   Widget build(BuildContext context) {
     /* 
@@ -62,9 +65,9 @@ class StBaseTvRow extends StBaseTvRowIfc {
           // force rebuild when key state changes
           ActiveGameDetails agd;
           if (this is RequiresGameStatus) {
-            agd = ref.watch(assets.item3);
+            agd = ref.watch(dynStateProv);
           } else {
-            agd = ref.read(assets.item3);
+            agd = ref.read(dynStateProv);
           }
           // force rebuild when asset price changes
           // if (this is RequiresPriceChangeProps) {

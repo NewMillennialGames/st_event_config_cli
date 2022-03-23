@@ -103,9 +103,10 @@ class GroupHeaderData
       String _sortKey =
           v1.toString() + '_' + v2.toString() + '_' + v3.toString();
 
-      print(
-          '${cd1.runtimeType} ${cd1 is DateTime}  ${cd1 is Comparable<DateTime>}');
-      print('_sortKey: $_sortKey');
+      // print(
+      //   '${cd1.runtimeType} ${cd1 is DateTime}  ${cd1 is Comparable<DateTime>}',
+      // );
+      // print('_sortKey: $_sortKey');
       return _sortKey;
 
       // use this after debug completed

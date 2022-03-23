@@ -25,6 +25,7 @@ class GroupedTableDataMgr {
   */
 
   final AppScreen appScreen;
+  // _allAssetRows will need to be updated as Event-rounds change
   final List<TableviewDataRowTuple> _allAssetRows;
   final TableviewConfigPayload _tableViewCfg;
   RedrawTvCallback? redrawCallback;
@@ -68,7 +69,7 @@ class GroupedTableDataMgr {
   // GroupComparatorCallback? get groupComparator => null;
   GroupComparatorCallback? get groupComparator {
     // GroupHeaderData implements comparable
-    if (sortOrder == GroupedListOrder.ASC) {
+    if (sortOrder == GroupedListOrder.DESC) {
       return (GroupHeaderData hd1Val, GroupHeaderData hd2Val) =>
           hd2Val.compareTo(hd1Val);
     } else {
