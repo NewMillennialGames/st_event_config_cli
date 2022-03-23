@@ -123,7 +123,7 @@ class GroupedTableDataMgr {
 
     int dropLstCount = 1 + (has2ndList ? 1 : 0) + (has3rdList ? 1 : 0);
     // allocate dropdown button width
-    double allocBtnWidth = (totAvailWidth / dropLstCount) - 14;
+    double allocBtnWidth = (totAvailWidth / dropLstCount) - 4;
     // one list can take 86% of space
     allocBtnWidth = dropLstCount < 2 ? totAvailWidth * 0.86 : allocBtnWidth;
 

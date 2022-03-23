@@ -40,6 +40,8 @@ abstract class AssetRowPropertyIfc {
   String get location;
   CompetitionStatus get gameStatus;
   CompetitionType get gameType;
+
+  void updateDynamicState(ActiveGameDetails agd);
 }
 
 extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
@@ -73,9 +75,9 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
   String get currPriceStr => assetStateUpdates.curPriceStr; // ?? kMissingPrice;
   String get recentDeltaStr =>
       assetStateUpdates.priceDeltaSinceOpenStr; // ?? kMissingPrice;
-  String get openPriceStr => assetStateUpdates.openPrice.toStringAsPrecision(2);
-  String get lowPriceStr => assetStateUpdates.lowPrice.toStringAsPrecision(2);
-  String get hiPriceStr => assetStateUpdates.hiPrice.toStringAsPrecision(2);
+  String get openPriceStr => assetStateUpdates.openPrice.toStringAsFixed(2);
+  String get lowPriceStr => assetStateUpdates.lowPrice.toStringAsFixed(2);
+  String get hiPriceStr => assetStateUpdates.hiPrice.toStringAsFixed(2);
 
   bool get stockIsUp => assetStateUpdates.stockIsUp;
   Color get priceFluxColor => assetStateUpdates.priceFluxColor;

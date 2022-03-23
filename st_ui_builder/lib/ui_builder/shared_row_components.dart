@@ -62,7 +62,7 @@ class TradeButton extends ConsumerWidget {
         (optCurEvent?.state ?? EventState.unpublished) == EventState.inProgress;
 
     print(
-      '********* event.state is: ${ref.read(currEventStateProvider)?.state.name ?? 'missing'}',
+      '********* event.state is: ${optCurEvent?.state.name ?? 'missing'}',
     );
 
     return Container(
@@ -142,17 +142,18 @@ class AssetVsAssetHalfRow extends StatelessWidget {
         Expanded(
           child: Text(
             competitor.topName,
-            style: StTextStyles.h5,
+            style: StTextStyles.h5.copyWith(fontSize: 15),
             maxLines: 1,
+            // textScaleFactor: 0.96,
             // textWidthBasis: TextWidthBasis.longestLine,
           ),
         ),
         Text(
           competitor.currPriceStr,
-          style: StTextStyles.h6,
+          style: StTextStyles.h6.copyWith(fontSize: 13),
         ),
         const SizedBox(
-          width: 12,
+          width: 4,
         ),
         TradeButton(
           competitor.assetKey,

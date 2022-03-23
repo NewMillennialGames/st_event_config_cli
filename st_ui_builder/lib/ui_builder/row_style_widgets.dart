@@ -64,7 +64,7 @@ class AssetVsAssetRow_MktResrch extends StBaseTvRow with ShowsOneAsset {
 
     String priceDeltaStr = comp1.recentDeltaStr;
     String pctIncrease =
-        (comp1.recentPriceDelta / comp1.currPrice).toStringAsPrecision(1);
+        (comp1.recentPriceDelta / comp1.currPrice).toStringAsFixed(1);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,

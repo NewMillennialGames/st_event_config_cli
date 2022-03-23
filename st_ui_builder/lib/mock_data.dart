@@ -47,6 +47,10 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
     this.asset,
   );
 
+  void updateDynamicState(ActiveGameDetails agd) {
+    //
+  }
+
   @override
   DateTime get gameDate => asset.gameDt;
 

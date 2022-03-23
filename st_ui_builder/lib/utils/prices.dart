@@ -13,5 +13,5 @@ extension Int64ExtPrice on Int64 {
   //
   double get _priceWithDecimals => toDouble() / 100.00;
   double get asPrice2d => _roundDouble(_priceWithDecimals, 2);
-  String get asPrice2dStr => asPrice2d.toStringAsPrecision(2);
+  String get asPrice2dStr => asPrice2d.toStringAsFixed(2);
 }

@@ -60,9 +60,8 @@ class AssetStateUpdates with _$AssetStateUpdates {
       (isDecreasing ? '' : '+') + priceDeltaSinceOpenStr;
 
   double get priceDeltaSinceOpen => curPrice - openPrice;
-  String get priceDeltaSinceOpenStr =>
-      priceDeltaSinceOpen.toStringAsPrecision(2);
-  String get curPriceStr => curPrice.toStringAsPrecision(2);
+  String get priceDeltaSinceOpenStr => priceDeltaSinceOpen.toStringAsFixed(2);
+  String get curPriceStr => curPrice.toStringAsFixed(2);
   Color get priceFluxColor => stockIsUp ? Colors.green : Colors.red;
 }
 
