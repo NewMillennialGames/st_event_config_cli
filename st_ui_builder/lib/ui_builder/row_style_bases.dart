@@ -63,12 +63,16 @@ class StBaseTvRow extends StBaseTvRowIfc {
       child: Consumer(
         builder: (context, ref, child) {
           // force rebuild when key state changes
-          ActiveGameDetails agd;
-          if (this is RequiresGameStatus) {
-            agd = ref.watch(dynStateProv);
-          } else {
-            agd = ref.read(dynStateProv);
-          }
+          Event? ev = ref.watch(currEventStateProvider.notifier).state;
+          ActiveGameDetails agd = ref.watch(dynStateProv.notifier).state;
+          print(
+            'StBaseTvRow is rebuilding for ${agd.competitionKey} in event ${ev?.title ?? '_missing'}',
+          );
+          // if (this is RequiresGameStatus) {
+          //   agd = ref.watch(dynStateProv);
+          // } else {
+          //   agd = ref.read(dynStateProv);
+          // }
           // force rebuild when asset price changes
           // if (this is RequiresPriceChangeProps) {
           //   // ref.watch(_somePriceProvider);

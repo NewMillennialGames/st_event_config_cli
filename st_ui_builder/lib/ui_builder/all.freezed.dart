@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$AssetStateUpdatesTearOff {
   const _$AssetStateUpdatesTearOff();
 
-  _AssetStateUpdates call(String assetKey, String name,
+  _AssetStateUpdates call(String assetKey, String name, String ticker,
       {AssetState assetState = AssetState.assetNew,
       TradeMode tradeMode = TradeMode.tradeMarket,
       bool isWatched = false,
@@ -30,6 +30,7 @@ class _$AssetStateUpdatesTearOff {
     return _AssetStateUpdates(
       assetKey,
       name,
+      ticker,
       assetState: assetState,
       tradeMode: tradeMode,
       isWatched: isWatched,
@@ -49,6 +50,7 @@ const $AssetStateUpdates = _$AssetStateUpdatesTearOff();
 mixin _$AssetStateUpdates {
   String get assetKey => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
+  String get ticker => throw _privateConstructorUsedError;
   AssetState get assetState => throw _privateConstructorUsedError;
   TradeMode get tradeMode => throw _privateConstructorUsedError;
   bool get isWatched => throw _privateConstructorUsedError;
@@ -71,6 +73,7 @@ abstract class $AssetStateUpdatesCopyWith<$Res> {
   $Res call(
       {String assetKey,
       String name,
+      String ticker,
       AssetState assetState,
       TradeMode tradeMode,
       bool isWatched,
@@ -94,6 +97,7 @@ class _$AssetStateUpdatesCopyWithImpl<$Res>
   $Res call({
     Object? assetKey = freezed,
     Object? name = freezed,
+    Object? ticker = freezed,
     Object? assetState = freezed,
     Object? tradeMode = freezed,
     Object? isWatched = freezed,
@@ -111,6 +115,10 @@ class _$AssetStateUpdatesCopyWithImpl<$Res>
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      ticker: ticker == freezed
+          ? _value.ticker
+          : ticker // ignore: cast_nullable_to_non_nullable
               as String,
       assetState: assetState == freezed
           ? _value.assetState
@@ -158,6 +166,7 @@ abstract class _$AssetStateUpdatesCopyWith<$Res>
   $Res call(
       {String assetKey,
       String name,
+      String ticker,
       AssetState assetState,
       TradeMode tradeMode,
       bool isWatched,
@@ -183,6 +192,7 @@ class __$AssetStateUpdatesCopyWithImpl<$Res>
   $Res call({
     Object? assetKey = freezed,
     Object? name = freezed,
+    Object? ticker = freezed,
     Object? assetState = freezed,
     Object? tradeMode = freezed,
     Object? isWatched = freezed,
@@ -200,6 +210,10 @@ class __$AssetStateUpdatesCopyWithImpl<$Res>
       name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      ticker == freezed
+          ? _value.ticker
+          : ticker // ignore: cast_nullable_to_non_nullable
               as String,
       assetState: assetState == freezed
           ? _value.assetState
@@ -241,7 +255,7 @@ class __$AssetStateUpdatesCopyWithImpl<$Res>
 
 class _$_AssetStateUpdates extends _AssetStateUpdates
     with DiagnosticableTreeMixin {
-  const _$_AssetStateUpdates(this.assetKey, this.name,
+  const _$_AssetStateUpdates(this.assetKey, this.name, this.ticker,
       {this.assetState = AssetState.assetNew,
       this.tradeMode = TradeMode.tradeMarket,
       this.isWatched = false,
@@ -256,6 +270,8 @@ class _$_AssetStateUpdates extends _AssetStateUpdates
   final String assetKey;
   @override
   final String name;
+  @override
+  final String ticker;
   @JsonKey()
   @override
   final AssetState assetState;
@@ -283,7 +299,7 @@ class _$_AssetStateUpdates extends _AssetStateUpdates
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'AssetStateUpdates(assetKey: $assetKey, name: $name, assetState: $assetState, tradeMode: $tradeMode, isWatched: $isWatched, isOwned: $isOwned, curPrice: $curPrice, hiPrice: $hiPrice, lowPrice: $lowPrice, openPrice: $openPrice)';
+    return 'AssetStateUpdates(assetKey: $assetKey, name: $name, ticker: $ticker, assetState: $assetState, tradeMode: $tradeMode, isWatched: $isWatched, isOwned: $isOwned, curPrice: $curPrice, hiPrice: $hiPrice, lowPrice: $lowPrice, openPrice: $openPrice)';
   }
 
   @override
@@ -293,6 +309,7 @@ class _$_AssetStateUpdates extends _AssetStateUpdates
       ..add(DiagnosticsProperty('type', 'AssetStateUpdates'))
       ..add(DiagnosticsProperty('assetKey', assetKey))
       ..add(DiagnosticsProperty('name', name))
+      ..add(DiagnosticsProperty('ticker', ticker))
       ..add(DiagnosticsProperty('assetState', assetState))
       ..add(DiagnosticsProperty('tradeMode', tradeMode))
       ..add(DiagnosticsProperty('isWatched', isWatched))
@@ -310,6 +327,7 @@ class _$_AssetStateUpdates extends _AssetStateUpdates
             other is _AssetStateUpdates &&
             const DeepCollectionEquality().equals(other.assetKey, assetKey) &&
             const DeepCollectionEquality().equals(other.name, name) &&
+            const DeepCollectionEquality().equals(other.ticker, ticker) &&
             const DeepCollectionEquality()
                 .equals(other.assetState, assetState) &&
             const DeepCollectionEquality().equals(other.tradeMode, tradeMode) &&
@@ -326,6 +344,7 @@ class _$_AssetStateUpdates extends _AssetStateUpdates
       runtimeType,
       const DeepCollectionEquality().hash(assetKey),
       const DeepCollectionEquality().hash(name),
+      const DeepCollectionEquality().hash(ticker),
       const DeepCollectionEquality().hash(assetState),
       const DeepCollectionEquality().hash(tradeMode),
       const DeepCollectionEquality().hash(isWatched),
@@ -342,7 +361,7 @@ class _$_AssetStateUpdates extends _AssetStateUpdates
 }
 
 abstract class _AssetStateUpdates extends AssetStateUpdates {
-  const factory _AssetStateUpdates(String assetKey, String name,
+  const factory _AssetStateUpdates(String assetKey, String name, String ticker,
       {AssetState assetState,
       TradeMode tradeMode,
       bool isWatched,
@@ -357,6 +376,8 @@ abstract class _AssetStateUpdates extends AssetStateUpdates {
   String get assetKey;
   @override
   String get name;
+  @override
+  String get ticker;
   @override
   AssetState get assetState;
   @override

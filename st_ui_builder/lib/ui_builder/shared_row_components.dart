@@ -57,13 +57,15 @@ class TradeButton extends ConsumerWidget {
     // or simple text label if not tradable
     // final size = MediaQuery.of(context).size;
     TradeFlowBase tf = ref.read(tradeFlowProvider);
-    Event? optCurEvent = ref.read(currEventStateProvider);
-    final eventHasStarted =
-        (optCurEvent?.state ?? EventState.unpublished) == EventState.inProgress;
-
+    Event? optCurEvent = ref.watch(currEventStateProvider.notifier).state;
+    if (optCurEvent == null) {
+      print('No event loaded??');
+    }
     print(
       '********* event.state is: ${optCurEvent?.state.name ?? 'missing'}',
     );
+    bool eventHasStarted = true;
+    // (optCurEvent?.state ?? EventState.unpublished) == EventState.inProgress;
 
     return Container(
       height: UiSizes.tradeBtnHeight,
@@ -91,17 +93,6 @@ class TradeButton extends ConsumerWidget {
             ),
     );
   }
-  // return Container(
-  //   height: UiSizes.tradeBtnHeight,
-  //   alignment: Alignment.center,
-  //   child: Text(
-  //     tf.labelForGameState(status),
-  //     style: StTextStyles.h5.copyWith(
-  //       color: tf.colorForGameState(status),
-  //     ),
-  //   ),
-  // );
-  // }
 }
 
 class AssetVsAssetHalfRow extends StatelessWidget {
@@ -567,3 +558,16 @@ class HoldingsAndValueRow extends StatelessWidget {
     );
   }
 }
+
+
+  // return Container(
+  //   height: UiSizes.tradeBtnHeight,
+  //   alignment: Alignment.center,
+  //   child: Text(
+  //     tf.labelForGameState(status),
+  //     style: StTextStyles.h5.copyWith(
+  //       color: tf.colorForGameState(status),
+  //     ),
+  //   ),
+  // );
+  // }

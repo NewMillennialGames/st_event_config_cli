@@ -511,7 +511,7 @@ packages:
     description:
       path: stclient
       ref: master
-      resolved-ref: "1542852cc9c3b55c03dd296d2462cc0aaf0f432a"
+      resolved-ref: a866e21c5d43d3cc2515bed30191d08e06d29a12
       url: "git@github.com:NewMillennialGames/st-client-api.git"
     source: git
     version: "0.0.12"

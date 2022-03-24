@@ -21,7 +21,8 @@ class AssetStateUpdates with _$AssetStateUpdates {
 
   const factory AssetStateUpdates(
     String assetKey,
-    String name, {
+    String name,
+    String ticker, {
     @Default(AssetState.assetNew) AssetState assetState,
     @Default(TradeMode.tradeMarket) TradeMode tradeMode,
     @Default(false) bool isWatched,
@@ -36,10 +37,13 @@ class AssetStateUpdates with _$AssetStateUpdates {
     return AssetStateUpdates(
       a.key,
       a.name,
+      a.ticker,
       assetState: a.state,
       tradeMode: a.tradeMode,
       openPrice: a.openingPrice.asPrice2d,
-      curPrice: a.openingPrice.asPrice2d,
+      curPrice: a.currentPrice > 0
+          ? a.currentPrice.asPrice2d
+          : a.openingPrice.asPrice2d,
     );
   }
 
