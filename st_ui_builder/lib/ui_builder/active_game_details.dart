@@ -110,7 +110,7 @@ class ActiveGameDetails with _$ActiveGameDetails {
   ActiveGameDetails copyFromGameUpdates(
     CompetitionInfo ci,
   ) {
-    // there are 1000000 (1 mill) nanoseconds in 1 millisecond
+    // FIXME:  need to update participants
     return copyWith(
       gameStatus: ci.competitionStatus,
       roundName: ci.currentRoundName,
@@ -145,6 +145,8 @@ class ActiveGameDetails with _$ActiveGameDetails {
   }) {
     /* called when user changes state
         dont change owned or watched state unless explicitly set
+
+        really just changes a sub-rec (AssetStateUpdates) in the list
     */
     int rowIdx =
         participantAssetInfo.indexWhere((ai) => ai.assetKey == assetKey);
@@ -199,6 +201,18 @@ class ActiveGameDetails with _$ActiveGameDetails {
   bool isOwned(String assetId) => _ownedAssetIds.contains(assetId);
   bool isWatched(String assetId) => _watchedAssetIds.contains(assetId);
 
+  ActiveGameDetails updateAsset(AssetStateUpdates asu) {
+    //
+    List<AssetStateUpdates> pLst = participantAssetInfo.toList();
+    int idx = pLst.indexWhere((a) => a.assetKey == asu.assetKey);
+    if (idx < 0) {
+      pLst.add(asu);
+    } else {
+      pLst[idx] = asu;
+    }
+    return copyWith(participantAssetInfo: pLst);
+  }
+
   // only testing & error handling
   factory ActiveGameDetails.mockOrMissingAgd([String assetId = '_mock']) {
     print('Warn:  creating ActiveGameDetails (mockOrMissing) ');
@@ -213,7 +227,6 @@ class ActiveGameDetails with _$ActiveGameDetails {
     );
   }
 }
-
 
   // List<String> _makeLst(
   //   bool first,

@@ -131,7 +131,7 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
         .toList();
 
     // get TableView configurator
-    tvMgr = stBldr.tableviewConfigForScreen(
+    tvMgr = stBldr.groupedTvConfigForScreen(
       AppScreen.marketView,
       assetRows,
       _redrawCallback,
