@@ -14,8 +14,18 @@ intended to radically customize the UI of
 the Scoretrader app, based on the current event
 selected by the user
 
+#### Understanding organization of logic
+1. understand a generic app UI hierarchy:
+    screen
+    screen-area (eg ListView;   filter bar with slots (eg search field and drop-menu)
+    area-slot   (the specific field or drop menu in the area)
+2.  recognize that UI-factory rules can be attached to either of b) area or c) slot
+    example: row style config-rule might go with listView  and  selected-filter-field might go with the drop list
+3.  run the CLI configurator & study the JSON output
+4.  then run the demo client (to see the factory switch out the row-style dynamically based on different JSON payloads)
+
 #### Structure and Design
-Questions are nested into a hierarchy as follows:
+Questions (and rules created from answers) are nested into a hierarchy as follows:
 
     Event Config -- (basic ?? about event setup;  Event level)
     App Screen (any UI that domniates the viewport )  App Screen level

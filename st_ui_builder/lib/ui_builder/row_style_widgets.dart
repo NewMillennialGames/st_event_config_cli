@@ -29,7 +29,7 @@ class AssetVsAssetRow_MktView extends StBaseTvRow
     // print('AssetVsAssetRow_MktView is rebuilding');
     return Column(
       mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         AssetVsAssetHalfRow(comp1, agd, showRank),
         const SizedBox(height: UiSizes.spaceBtwnRows),
@@ -64,7 +64,7 @@ class AssetVsAssetRow_MktResrch extends StBaseTvRow with ShowsOneAsset {
 
     String priceDeltaStr = comp1.recentDeltaStr;
     String pctIncrease =
-        (comp1.recentPriceDelta / comp1.currPrice).toStringAsPrecision(1);
+        (comp1.recentPriceDelta / comp1.currPrice).toStringAsFixed(1);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -129,7 +129,7 @@ class AssetVsAssetRow_Portfolio extends StBaseTvRow
 
     return Row(
       children: [
-        CompetitorImage(comp1.imgUrl),
+        CompetitorImage(comp1.imgUrl, false),
         Column(
           children: [
             Row(
@@ -206,7 +206,7 @@ class TeamVsFieldRow_MktView extends StBaseTvRow
       children: [
         if (!showRanked) kStarIcon,
         if (showRanked) Text(comp1.rankStr),
-        CompetitorImage(comp1.imgUrl),
+        CompetitorImage(comp1.imgUrl, showRanked),
         Column(
           children: [
             Row(

@@ -1,6 +1,8 @@
 import 'package:intl/intl.dart';
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
 //
+import 'package:stclient/stclient.dart';
+//
 import 'ui_builder/all.dart';
 
 /*
@@ -18,6 +20,7 @@ class MockAsset {
   String region;
   String teamName;
   String imgUrl = 'https://ui-avatars.com/api/?name=John+Doe';
+  // reall assets DO NOT have game key
   String gameKey;
 
   DateTime get gameDt => _today;
@@ -30,13 +33,8 @@ class MockAsset {
     this.gameKey,
   );
 
-  static List<MockAssetWrapper> get mockRows => _fakeData
-      .map(
-        (e) => MockAssetWrapper(
-          e,
-        ),
-      )
-      .toList();
+  static List<MockAssetWrapper> get mockRows =>
+      _fakeData.map(MockAssetWrapper.new).toList();
 }
 
 class MockAssetWrapper implements AssetRowPropertyIfc {
@@ -48,6 +46,10 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
   MockAssetWrapper(
     this.asset,
   );
+
+  void updateDynamicState(ActiveGameDetails agd) {
+    //
+  }
 
   @override
   DateTime get gameDate => asset.gameDt;
@@ -84,8 +86,7 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
   bool get isTeam => throw UnimplementedError();
 
   @override
-  AssetPriceFluxSummaryIfc get assetPriceFluxSummary =>
-      throw UnimplementedError();
+  AssetStateUpdates get assetStateUpdates => throw UnimplementedError();
 
   @override
   AssetHoldingsSummaryIfc get assetHoldingsSummary =>
@@ -94,6 +95,29 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
   @override
   // should be on the game
   String get roundName => throw UnimplementedError();
+
+  @override
+  CompetitionStatus get gameStatus => CompetitionStatus.compUninitialized;
+
+  @override
+  CompetitionType get gameType => CompetitionType.game;
+
+  @override
+  String get searchText =>
+      (topName + '-' + subName + '-' + teamNameWhenTradingPlayers)
+          .toUpperCase();
+
+  @override
+  String get teamImgUrlWhenTradingPlayers => '';
+
+  @override
+  String get teamNameWhenTradingPlayers => '';
+
+  @override
+  String get ticker => 'ticker';
+
+  @override
+  double get openPrice => 2.33;
 }
 
 List<MockAsset> _fakeData = [

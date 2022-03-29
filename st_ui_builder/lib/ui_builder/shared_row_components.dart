@@ -12,17 +12,22 @@ const kSpacerSm = SizedBox(
 class CompetitorImage extends StatelessWidget {
   // just the image or placeholder
   final String imgUrl;
+  final bool shrinkForRank;
   const CompetitorImage(
-    this.imgUrl, {
+    this.imgUrl,
+    this.shrinkForRank, {
     Key? key,
   }) : super(key: key);
+
+  double get imgSize =>
+      shrinkForRank ? (UiSizes.teamImgSide * 0.84) : UiSizes.teamImgSide;
 
   @override
   Widget build(BuildContext context) {
     return Image.network(
       imgUrl,
-      height: UiSizes.teamImgSide,
-      width: UiSizes.teamImgSide,
+      height: imgSize,
+      width: imgSize,
       fit: BoxFit.cover,
       errorBuilder: (context, error, stackTrace) => const Icon(
         Icons.egg_rounded,
@@ -52,17 +57,19 @@ class TradeButton extends ConsumerWidget {
     // or simple text label if not tradable
     // final size = MediaQuery.of(context).size;
     TradeFlowBase tf = ref.read(tradeFlowProvider);
-    Event? optCurEvent = ref.read(currEventStateProvider);
-    final eventHasStarted =
-        (optCurEvent?.state ?? EventState.unpublished) == EventState.inProgress;
-
+    Event? optCurEvent = ref.watch(currEventStateProvider.notifier).state;
+    if (optCurEvent == null) {
+      print('No event loaded??');
+    }
     print(
-      '********* event.state is: ${ref.read(currEventStateProvider)?.state.name ?? 'missing'}',
+      '********* event.state is: ${optCurEvent?.state.name ?? 'missing'}',
     );
+    bool eventHasStarted = true;
+    // (optCurEvent?.state ?? EventState.unpublished) == EventState.inProgress;
 
     return Container(
       height: UiSizes.tradeBtnHeight,
-      width: 74,
+      width: 80,
       // width: UiSizes.tradeBtnWidthPctScreen * size.width,
       alignment: Alignment.center,
       child: (eventHasStarted && status.isTradable)
@@ -78,25 +85,14 @@ class TradeButton extends ConsumerWidget {
             )
           : Text(
               tf.labelForGameState(status),
-              style: StTextStyles.h6.copyWith(
-                fontSize: 11,
+              style: StTextStyles.h5.copyWith(
+                fontSize: 13,
                 color: tf.colorForGameState(status),
               ),
               textAlign: TextAlign.center,
             ),
     );
   }
-  // return Container(
-  //   height: UiSizes.tradeBtnHeight,
-  //   alignment: Alignment.center,
-  //   child: Text(
-  //     tf.labelForGameState(status),
-  //     style: StTextStyles.h5.copyWith(
-  //       color: tf.colorForGameState(status),
-  //     ),
-  //   ),
-  // );
-  // }
 }
 
 class AssetVsAssetHalfRow extends StatelessWidget {
@@ -125,23 +121,30 @@ class AssetVsAssetHalfRow extends StatelessWidget {
               : StColors.blue,
         ),
         kSpacerSm,
-        CompetitorImage(competitor.imgUrl),
+        CompetitorImage(competitor.imgUrl, showRank),
         kSpacerSm,
-        if (showRank) Text(competitor.rankStr),
+        if (showRank) ...[
+          Text(
+            competitor.rankStr,
+            style: StTextStyles.h5,
+          ),
+          kSpacerSm,
+        ],
         Expanded(
           child: Text(
             competitor.topName,
-            style: StTextStyles.h5,
+            style: StTextStyles.h5.copyWith(fontSize: 15),
             maxLines: 1,
+            // textScaleFactor: 0.96,
             // textWidthBasis: TextWidthBasis.longestLine,
           ),
         ),
         Text(
           competitor.currPriceStr,
-          style: StTextStyles.h6,
+          style: StTextStyles.h6.copyWith(fontSize: 13),
         ),
         const SizedBox(
-          width: 12,
+          width: 4,
         ),
         TradeButton(
           competitor.assetKey,
@@ -203,7 +206,7 @@ class MktRschAsset extends StatelessWidget {
                     competitor.topName,
                     style: StTextStyles.h4.copyWith(
                       fontSize: 18,
-                      color: gameStatus.isTradable
+                      color: gameStatus._isTradableGame
                           ? StColors.coolGray
                           : StTextStyles.h4.color,
                     ),
@@ -211,7 +214,7 @@ class MktRschAsset extends StatelessWidget {
                   Text(
                     competitor.subName,
                     style: StTextStyles.textFormField.copyWith(
-                      color: gameStatus.isTradable
+                      color: gameStatus._isTradableGame
                           ? StColors.coolGray
                           : StTextStyles.textFormField.color,
                     ),
@@ -220,7 +223,8 @@ class MktRschAsset extends StatelessWidget {
               ),
               Icon(
                 Icons.star_border,
-                color: gameStatus.isTradable ? StColors.gray : StColors.blue,
+                color:
+                    gameStatus._isTradableGame ? StColors.gray : StColors.blue,
               ),
             ],
           ),
@@ -427,7 +431,7 @@ class AssetTopRow extends StatelessWidget {
               ),
             ),
           ),
-          if (gameStatus.isTradable)
+          if (gameStatus._isTradableGame)
             // trade button to right of player/team name
             Padding(
               padding: const EdgeInsets.only(right: _rowRightMargin),
@@ -460,7 +464,7 @@ class HoldingsAndValueRow extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  double get _sharePrice => asset.assetPriceFluxSummary.currPrice; // ?? 0;
+  double get _sharePrice => asset.assetStateUpdates.curPrice; // ?? 0;
   int get _sharesHeld => asset.assetHoldingsSummary.sharesOwned; // ?? 0;
   double get _gainLoss => asset.assetHoldingsSummary.positionGainLoss; // ?? 0;
 
@@ -518,7 +522,9 @@ class HoldingsAndValueRow extends StatelessWidget {
           Column(
             children: [
               Text(
-                gameStatus.isTradable ? StStrings.value : StStrings.proceeds,
+                gameStatus._isTradableGame
+                    ? StStrings.value
+                    : StStrings.proceeds,
                 style: StTextStyles.h5.copyWith(),
               ),
               Text(
@@ -552,3 +558,16 @@ class HoldingsAndValueRow extends StatelessWidget {
     );
   }
 }
+
+
+  // return Container(
+  //   height: UiSizes.tradeBtnHeight,
+  //   alignment: Alignment.center,
+  //   child: Text(
+  //     tf.labelForGameState(status),
+  //     style: StTextStyles.h5.copyWith(
+  //       color: tf.colorForGameState(status),
+  //     ),
+  //   ),
+  // );
+  // }

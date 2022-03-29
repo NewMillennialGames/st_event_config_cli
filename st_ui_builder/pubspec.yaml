@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+492
+version: 1.0.0+513
 
 environment:
   sdk: ">=2.16.1 <3.0.0"
@@ -30,16 +30,17 @@ dependencies:
   flutter:
     sdk: flutter
   st_ev_cfg:
-    git:
-      url: git@github.com:NewMillennialGames/st_event_config_cli.git
-      ref: prod
-    #  path: ../../st_event_config/
+    # git:
+    #   url: git@github.com:NewMillennialGames/st_event_config_cli.git
+    #   ref: prod
+     path: ../../st_event_config_cli/
   stclient:
     git:
       url: git@github.com:NewMillennialGames/st-client-api.git
       path: stclient
       ref: master
   grouped_list: ^4.2.0
+  freezed: ^1.1.1
   tuple: ^2.0.0
   dotted_border: ^2.0.0+2
   flutter_riverpod: ^1.0.3
@@ -53,6 +54,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  build_runner: 2.1.8
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

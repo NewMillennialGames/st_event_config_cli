@@ -37,7 +37,7 @@ class StUiBuilderFactory {
     }
   }
 
-  GroupedTableDataMgr tableviewConfigForScreen(
+  GroupedTableDataMgr groupedTvConfigForScreen(
     AppScreen screen,
     List<TableviewDataRowTuple> rows,
     RedrawTvCallback redrawTvCallback,
@@ -58,25 +58,46 @@ class StUiBuilderFactory {
     );
   }
 
-  FilterRules filterBarConfigForScreen(AppScreen screen) {
-    // this data also embedded in the GroupedTableDataMgr
-    // this is NIU I believe
-    CfgForAreaAndNestedSlots filterBarAndSlotCfg =
-        _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.filterBar);
-    return filterBarAndSlotCfg.filterRules!;
+  TableRowDataMgr listTvConfigForScreen(
+    AppScreen screen,
+    List<TableviewDataRowTuple> rows,
+    RedrawTvCallback redrawTvCallback,
+  ) {
+    CfgForAreaAndNestedSlots tableAreaAndSlotCfg = _eConfig!.screenAreaCfg(
+      screen,
+      ScreenWidgetArea.tableview,
+    );
+    return TableRowDataMgr(
+      screen,
+      rows,
+      TableviewConfigPayload(
+        screen,
+        tableAreaAndSlotCfg,
+        tableAreaAndSlotCfg,
+      ),
+      redrawCallback: redrawTvCallback,
+    );
   }
 
-  SlotOrAreaRuleCfg headerConfigForScreen(AppScreen screen) {
-    //
-    CfgForAreaAndNestedSlots tableCfg =
-        _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.header);
-    return tableCfg.areaRulesByRuleType(VisualRuleType.styleOrFormat);
-  }
+  // FilterRules filterBarConfigForScreen(AppScreen screen) {
+  //   // this data also embedded in the GroupedTableDataMgr
+  //   // this is NIU I believe
+  //   CfgForAreaAndNestedSlots filterBarAndSlotCfg =
+  //       _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.filterBar);
+  //   return filterBarAndSlotCfg.filterRules!;
+  // }
 
-  SlotOrAreaRuleCfg footerConfigForScreen(AppScreen screen) {
-    //
-    CfgForAreaAndNestedSlots tableCfg =
-        _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.footer);
-    return tableCfg.areaRulesByRuleType(VisualRuleType.styleOrFormat);
-  }
+  // SlotOrAreaRuleCfg headerConfigForScreen(AppScreen screen) {
+  //   //
+  //   CfgForAreaAndNestedSlots tableCfg =
+  //       _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.header);
+  //   return tableCfg.areaRulesByRuleType(VisualRuleType.styleOrFormat);
+  // }
+
+  // SlotOrAreaRuleCfg footerConfigForScreen(AppScreen screen) {
+  //   //
+  //   CfgForAreaAndNestedSlots tableCfg =
+  //       _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.footer);
+  //   return tableCfg.areaRulesByRuleType(VisualRuleType.styleOrFormat);
+  // }
 }

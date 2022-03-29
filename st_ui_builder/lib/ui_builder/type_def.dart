@@ -15,18 +15,26 @@ typedef IndexedItemRowBuilder = Widget Function(
   int,
 );
 
+typedef GameKey = String;
+// function to return provider
+typedef DynRowStateFamProvBuilder = StateProvider<ActiveGameDetails> Function(
+    GameKey);
 // this is the data sent in to build every table-view row
 // ActiveGameDetails controls when row stat changes and row rebuilds
-typedef TableviewDataRowTuple = Tuple3<AssetRowPropertyIfc,
-    AssetRowPropertyIfc?, StateProvider<ActiveGameDetails>>;
+typedef TableviewDataRowTuple = Tuple4<AssetRowPropertyIfc,
+    AssetRowPropertyIfc?, GameKey, DynRowStateFamProvBuilder>;
 
 // TODO:  consider passing TableviewDataRowTuple to group functions
 // instead of first item in TableviewDataRowTuple.item1
-typedef CastRowToSortVal = String Function(AssetRowPropertyIfc);
-typedef GetGroupKeyFromRow = GroupHeaderData Function(TableviewDataRowTuple);
+// typedef CastRowToSortVal = String Function(AssetRowPropertyIfc);
+typedef GetGroupHeaderLblsFromCompetitionRow = GroupHeaderData Function(
+    TableviewDataRowTuple);
 
 typedef SectionSortComparator = int Function(
     TableviewDataRowTuple, TableviewDataRowTuple);
+
+typedef SortValFetcherFunc = Comparable<dynamic> Function(AssetRowPropertyIfc);
+typedef SortKeyBuilderFunc = String Function(TableviewDataRowTuple);
 
 typedef GroupComparatorCallback = int Function(
   GroupHeaderData,

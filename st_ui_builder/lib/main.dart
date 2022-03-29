@@ -31,6 +31,12 @@ Future<void> readExampleEventConfig({String filename = cfgEmpl1}) async {
   evCfgDataFromServer = json.decode(response);
 }
 
+final _dynGameStateFamProv =
+    StateProviderFamily<ActiveGameDetails, String>((ref, gameKey) {
+  // doesnt work;  just mock to get packages building
+  return ActiveGameDetails(gameKey, DateTime.now());
+});
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // pretend were loading Event from server
@@ -100,13 +106,11 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
         (ref) {
           return ActiveGameDetails(
             gmkey,
-            _getRandStatus(),
-            _getRandRound(),
-            _getRandRegion(),
-            'location',
             DateTime.now(),
-            [a.asset.key],
-            watchedAssetIds: [a.asset.key],
+            gameStatus: _getRandStatus(),
+            roundName: _getRandRound(),
+            regionOrConference: _getRandRegion(),
+            location: 'location',
           );
         },
       );
@@ -120,13 +124,14 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
           (e) => TableviewDataRowTuple(
             e,
             e,
-            _gameDetailsProviders[e.asset.gameKey]!,
+            e.asset.gameKey,
+            _dynGameStateFamProv,
           ),
         )
         .toList();
 
     // get TableView configurator
-    tvMgr = stBldr.tableviewConfigForScreen(
+    tvMgr = stBldr.groupedTvConfigForScreen(
       AppScreen.marketView,
       assetRows,
       _redrawCallback,
@@ -190,10 +195,11 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
     bool comp1IsOwned = Random().nextBool();
     bool comp2IsWatched = Random().nextBool();
 
-    ref.read(_gameDetailsProviders[gKey]!.notifier).state = gd.cloneWithUpdates(
+    ref.read(_gameDetailsProviders[gKey]!.notifier).state =
+        gd.copyFromGameUpdates(
       ci,
-      comp1IsOwned: comp1IsOwned,
-      comp2IsWatched: comp2IsWatched,
+      // comp1IsOwned: comp1IsOwned,
+      // comp2IsWatched: comp2IsWatched,
     );
   }
 

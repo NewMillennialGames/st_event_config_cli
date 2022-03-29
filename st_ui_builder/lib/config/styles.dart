@@ -53,7 +53,7 @@ class StTextStyles {
 
   static const p4 = TextStyle(
     fontFamily: 'HelveticaNeue-Medium',
-    fontSize: 9,
+    fontSize: 10,
     color: StColors.white,
   );
 
