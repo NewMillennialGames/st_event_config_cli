@@ -441,7 +441,7 @@
     },
     {
       "name": "stclient",
-      "rootUri": "file:///Users/Priscilla/Development/flutter/.pub-cache/git/st-client-api-a866e21c5d43d3cc2515bed30191d08e06d29a12/stclient",
+      "rootUri": "file:///Users/Priscilla/Development/flutter/.pub-cache/git/st-client-api-04ca8a81115680f03b175a458162da4307afe447/stclient",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -524,7 +524,7 @@
       "languageVersion": "2.16"
     }
   ],
-  "generated": "2022-03-29T19:06:06.185515Z",
+  "generated": "2022-03-29T19:27:09.288841Z",
   "generator": "pub",
   "generatorVersion": "2.16.2"
 }

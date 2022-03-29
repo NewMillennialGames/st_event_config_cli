@@ -16,6 +16,9 @@ class TradeFlowBase {
       throw UnimplementedError('should call subclass');
 
   void beginTradeFlow(String assetId) {
-    throw UnimplementedError('');
+    throw UnimplementedError('should call subclass');
   }
+
+  bool toggleWatchValue(String assetKey) =>
+      throw UnimplementedError('should call subclass');
 }
