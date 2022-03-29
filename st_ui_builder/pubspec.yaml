@@ -33,7 +33,7 @@ dependencies:
     # git:
     #   url: git@github.com:NewMillennialGames/st_event_config_cli.git
     #   ref: prod
-     path: ../../st_event_config/
+      path: ../../st_event_config_cli/
   stclient:
     git:
       url: git@github.com:NewMillennialGames/st-client-api.git
