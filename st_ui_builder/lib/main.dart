@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+//
 import 'package:stclient/stclient.dart';
 //
 import 'package:st_ev_cfg/st_ev_cfg.dart';
@@ -22,8 +23,10 @@ the UI factory   (Filter Bar and TableView)
 
 // demo example config data
 const String cfgEmpl1 = 'blueRow.json';
-const String cfgEmpl2 = 'greenRow.json';
+// cfgEmpl2 seems to be invalid json; replace it to continue testing
+const String cfgEmpl2 = 'five.json';
 
+// evCfgDataFromServer contains the JSON payload produced by the CLI configurator
 Map<String, dynamic> evCfgDataFromServer = {};
 
 Future<void> readExampleEventConfig({String filename = cfgEmpl1}) async {
@@ -37,13 +40,20 @@ final _dynGameStateFamProv =
   return ActiveGameDetails(gameKey, DateTime.now());
 });
 
+final _redrawUiFlagProvider = StateProvider<bool>((ref) => false);
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // pretend were loading Event from server
   await readExampleEventConfig();
   runApp(
-    const ProviderScope(
+    ProviderScope(
       child: Scoretrader(),
+      overrides: [
+        currEventStateProvider
+            .overrideWithValue(StateController<Event>(Event())),
+        tradeFlowProvider.overrideWithValue(TradeFlowForDemo()),
+      ],
     ),
   );
 }
@@ -89,7 +99,10 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
 
   void _redrawCallback() {
     //
-    setState(() {});
+    // setState(() {});
+    // flip this bool to force a redraw
+    ref.read(_redrawUiFlagProvider.notifier).state =
+        !ref.read(_redrawUiFlagProvider);
   }
 
   @override
@@ -119,18 +132,8 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
     // and wrapped in Natalia's wrapper class
     // now use this data to construct the TableviewDataRowTuple
     // argument needed for the RowStyle constructors
-    List<TableviewDataRowTuple> assetRows = widget.assets
-        .map(
-          (e) => TableviewDataRowTuple(
-            e,
-            e,
-            e.asset.gameKey,
-            _dynGameStateFamProv,
-          ),
-        )
-        .toList();
 
-    // get TableView configurator
+    // get TableView configurator from the UI Factory
     tvMgr = stBldr.groupedTvConfigForScreen(
       AppScreen.marketView,
       assetRows,
@@ -139,8 +142,21 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
     super.initState();
   }
 
+  List<TableviewDataRowTuple> get assetRows => widget.assets
+      .map(
+        (e) => TableviewDataRowTuple(
+          e,
+          e,
+          e.asset.gameKey,
+          _dynGameStateFamProv,
+        ),
+      )
+      .toList();
+
   @override
   Widget build(BuildContext context) {
+    bool hasColumnFilters = tvMgr.hasColumnFilters;
+    ref.watch(_redrawUiFlagProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -148,9 +164,9 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
         ),
       ),
       body: Column(
-        mainAxisSize: MainAxisSize.max,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          if (tvMgr.hasColumnFilters)
+          if (hasColumnFilters)
             tvMgr.columnFilterBarWidget(
               backColor: StColors.primaryDarkGray,
             ),
@@ -158,7 +174,7 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
             height: 30,
           ),
           Container(
-            height: 740,
+            height: hasColumnFilters ? 500 : 740,
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
             child: GroupedListView<TableviewDataRowTuple, GroupHeaderData>(
               elements: tvMgr.listData,
@@ -173,15 +189,30 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(onPressed: _updateGameStatus),
+      // floatingActionButton: FloatingActionButton(onPressed: _updateGameStatus),
+      floatingActionButton:
+          FloatingActionButton(onPressed: _toggleLoadedConfigAndRedraw),
+    );
+  }
+
+  void _toggleLoadedConfigAndRedraw() {
+    //
+    bool redrawBool = ref.read(_redrawUiFlagProvider);
+    readExampleEventConfig(filename: redrawBool ? cfgEmpl1 : cfgEmpl2).then(
+      (_) {
+        stBldr.setConfigForCurrentEvent(evCfgDataFromServer);
+        tvMgr = stBldr.groupedTvConfigForScreen(
+          AppScreen.marketView,
+          assetRows,
+          _redrawCallback,
+        );
+        _redrawCallback();
+      },
     );
   }
 
   void _updateGameStatus() {
     //
-    //    => tvMgr.replaceGameStatusForRowRebuildTest(
-    //   _getRandRound(),
-    // ),
     int idx = Random().nextInt(gameKeys.length);
     String gKey = gameKeys[idx];
     var gd = ref.read(_gameDetailsProviders[gKey]!);
@@ -228,7 +259,7 @@ const rounds = <String>[
   'rSix',
 ];
 
-        // child: Column(
-        //   mainAxisAlignment: MainAxisAlignment.start,
-        //   mainAxisSize: MainAxisSize.min,
-        //   children: []
+// child: Column(
+//   mainAxisAlignment: MainAxisAlignment.start,
+//   mainAxisSize: MainAxisSize.min,
+//   children: []
