@@ -29,6 +29,13 @@ class CfgForAreaAndNestedSlots {
   SlotOrAreaRuleCfg areaRulesByRuleType(VisualRuleType typ) =>
       visCfgForArea[typ]!;
 
+  bool isMissingRuleTyp(VisualRuleType typ) => visCfgForArea[typ] == null;
+
+  // void copyStyleFromCfg(TvRowStyleCfg rowCfg) {
+  //   //
+  //   visCfgForArea[VisualRuleType.styleOrFormat] = SlotOrAreaRuleCfg([]);
+  // }
+
   //add rules to this object
   void appendAreaOrSlotRule(VisRuleStyleQuest rQuest) {
     //
@@ -80,7 +87,8 @@ class CfgForAreaAndNestedSlots {
       'method only works for TableVw areas',
     );
 
-    var definedSortRules = _loadRulesInOrder<TvSortCfg>(VisualRuleType.sortCfg);
+    List<TvSortCfg> definedSortRules =
+        _loadRulesInOrder<TvSortCfg>(VisualRuleType.sortCfg);
     int sortRuleCnt = definedSortRules.length;
     if (sortRuleCnt < 1) return null;
 
@@ -127,6 +135,7 @@ class CfgForAreaAndNestedSlots {
     // takes response from _allRulesForTypeInSlots and sorts it
     Map<ScreenAreaWidgetSlot, SlotOrAreaRuleCfg> ruleCfgBySlot =
         _allRulesForTypeInSlots(typ, slots);
+    if (ruleCfgBySlot.length < 1) return [];
 
     List<ScreenAreaWidgetSlot> slotsSorted = (ruleCfgBySlot.keys.toList())
       ..sort((ws1, ws2) => ws1.index.compareTo(ws2.index));
@@ -149,7 +158,7 @@ class CfgForAreaAndNestedSlots {
     );
 
     int sortRuleCnt = ruleByPos.length;
-    if (sortRuleCnt < 1) return [];
+    if (sortRuleCnt < 1 || ruleByPos[0].visRuleList.length < 1) return [];
 
     List<CastType> definedSortRules = [
       ruleByPos[0].visRuleList.where((e) => e.ruleType == ruleType).first
