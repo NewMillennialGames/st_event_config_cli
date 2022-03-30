@@ -22,3 +22,26 @@ class TradeFlowBase {
   bool toggleWatchValue(String assetKey) =>
       throw UnimplementedError('should call subclass');
 }
+
+class TradeFlowForDemo extends TradeFlowBase {
+  //
+  @override
+  String labelForGameState(
+    CompetitionStatus status, {
+    bool eventIsStarted = false,
+  }) =>
+      'demo label';
+
+  @override
+  Color colorForGameState(
+    CompetitionStatus status, {
+    bool eventIsStarted = false,
+  }) =>
+      Colors.blue;
+
+  @override
+  void beginTradeFlow(String assetId) {}
+
+  @override
+  bool toggleWatchValue(String assetKey) => true;
+}

@@ -33,7 +33,28 @@ class StUiBuilderFactory {
     } catch (e) {
       // will fall to the catch block in calling method
       throw UnimplementedError(
-          'UI Config JSON failed to parse!! server sent invalid payload');
+        'UI Config JSON failed to parse!! server sent invalid payload',
+      );
+    }
+    //
+    if (_eConfig!.eventCfg.applySameRowStyleToAllScreens) {
+      _readRowStyleFromMarketViewAndClone();
+    }
+  }
+
+  void _readRowStyleFromMarketViewAndClone() {
+    //
+    CfgForAreaAndNestedSlots mktViewTableAreaAndSlotCfg =
+        _eConfig!.screenAreaCfg(
+      AppScreen.marketView,
+      ScreenWidgetArea.tableview,
+    );
+    TvAreaRowStyle rowStyle =
+        mktViewTableAreaAndSlotCfg.rowStyleCfg.selectedRowStyle;
+    for (AppScreen scr in AppScreen.values) {
+      if (scr == AppScreen.marketView) continue;
+
+      _eConfig?.setConfigFor(scr, ScreenWidgetArea.tableview, rowStyle);
     }
   }
 
@@ -67,13 +88,25 @@ class StUiBuilderFactory {
       screen,
       ScreenWidgetArea.tableview,
     );
+
+    // cloning row-style
+    // if ((_eConfig?.eventCfg.applySameRowStyleToAllScreens ?? false) &&
+    //     tableAreaAndSlotCfg.isMissingRuleTyp(VisualRuleType.styleOrFormat)) {
+    //   //
+    //   CfgForAreaAndNestedSlots mktViewTableAreaAndSlotCfg = _eConfig!.screenAreaCfg(
+    //   AppScreen.marketView,
+    //   ScreenWidgetArea.tableview,
+    // );
+    //   tableAreaAndSlotCfg.copyStyleFromCfg(mktViewTableAreaAndSlotCfg.rowStyleCfg);
+    // }
+
     return TableRowDataMgr(
       screen,
       rows,
       TableviewConfigPayload(
         screen,
         tableAreaAndSlotCfg,
-        tableAreaAndSlotCfg,
+        null,
       ),
       redrawCallback: redrawTvCallback,
     );

@@ -123,6 +123,26 @@ class EventCfgTree {
     return EventCfgTree(eventCfg, {});
   }
 
+  void setConfigFor(
+    AppScreen scr,
+    ScreenWidgetArea area,
+    TvAreaRowStyle rowStyle,
+  ) {
+    //
+    ScreenCfgByArea? screenCfg = screenConfigMap[scr];
+    if (screenCfg == null) {
+      screenCfg = ScreenCfgByArea(scr, {});
+    }
+    CfgForAreaAndNestedSlots? areaCfg = screenCfg.areaConfig[area];
+    if (areaCfg == null) {
+      areaCfg = CfgForAreaAndNestedSlots(area, {}, {});
+      screenCfg.areaConfig[area] = areaCfg;
+    }
+    areaCfg.visCfgForArea[VisualRuleType.styleOrFormat] = SlotOrAreaRuleCfg(
+      [TvRowStyleCfg.explicit(rowStyle)],
+    );
+  }
+
   void fillFromVisualRuleAnswers(
     Iterable<VisRuleStyleQuest> answeredQuestions,
   ) {

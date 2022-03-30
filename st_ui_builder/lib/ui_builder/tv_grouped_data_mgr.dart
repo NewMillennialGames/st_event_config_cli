@@ -47,7 +47,7 @@ class GroupedTableDataMgr {
   List<TableviewDataRowTuple> get listData => _filteredAssetRows;
   // GroupingRules get groupRules => _tableViewCfg.groupByRules;
   SortingRules get sortingRules => _tableViewCfg.sortRules;
-  FilterRules get filterRules => _tableViewCfg.filterRules;
+  FilterRules? get filterRules => _tableViewCfg.filterRules;
 
   GetGroupHeaderLblsFromCompetitionRow get groupBy {
     return GroupHeaderData.groupHeaderPayloadConstructor(
@@ -93,7 +93,7 @@ class GroupedTableDataMgr {
 
   bool get hasColumnFilters {
     // set imageUrl as first filter field to hide/disable the whole filter bar
-    return filterRules.item1.colName != DbTableFieldName.imageUrl;
+    return filterRules?.item1.colName != DbTableFieldName.imageUrl;
   }
 
   String? _filter1Selection;
@@ -106,9 +106,11 @@ class GroupedTableDataMgr {
     Color backColor = Colors.transparent,
   }) {
     // dont call this without first checking this.hasFilterBar
-    TvFilterCfg i1 = filterRules.item1;
-    TvFilterCfg? i2 = filterRules.item2;
-    TvFilterCfg? i3 = filterRules.item3;
+    if (filterRules == null) return SizedBox();
+
+    TvFilterCfg i1 = filterRules!.item1;
+    TvFilterCfg? i2 = filterRules!.item2;
+    TvFilterCfg? i3 = filterRules!.item3;
 
     Set<String> listItems1 = _getListItemsByCfgField(i1);
     Set<String> listItems2 = i2 == null ? {} : _getListItemsByCfgField(i2);

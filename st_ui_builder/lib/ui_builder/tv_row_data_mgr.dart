@@ -29,7 +29,7 @@ class TableRowDataMgr {
   // List<TableviewDataRowTuple> get listData => _filteredAssetRows;
   // GroupingRules get groupRules => _tableViewCfg.groupByRules;
   SortingRules get sortingRules => _tableViewCfg.sortRules;
-  FilterRules get filterRules => _tableViewCfg.filterRules;
+  // FilterRules get filterRules => _tableViewCfg.filterRules;
 
   // rowBuilder is function to return a Tv-Row for this screen
   IndexedWidgetBuilder get rowBuilder => (BuildContext ctx, int i) {

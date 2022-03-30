@@ -94,7 +94,12 @@ class TvRowStyleCfg extends RuleResponseBase {
   //
   late TvAreaRowStyle selectedRowStyle;
 
+  TvRowStyleCfg._(this.selectedRowStyle) : super(VisualRuleType.styleOrFormat);
   TvRowStyleCfg() : super(VisualRuleType.styleOrFormat);
+
+  factory TvRowStyleCfg.explicit(TvAreaRowStyle rowStyle) {
+    return TvRowStyleCfg._(rowStyle);
+  }
 
   TvRowStyleCfg get asRuleResponse => this;
 
@@ -126,7 +131,10 @@ class TvSortGroupFilterBase extends RuleResponseBase {
   late DbTableFieldName colName;
   late bool asc = false;
 
-  TvSortGroupFilterBase(VisualRuleType rt) : super(rt);
+  TvSortGroupFilterBase(
+    VisualRuleType rt, [
+    DbTableFieldName colName = DbTableFieldName.assetName,
+  ]) : super(rt);
   // TvSortGroupFilterBase([VisualRuleType rt = VisualRuleType.filterCfg])
   //   : super(rt);
   //
@@ -179,7 +187,13 @@ class TvSortGroupFilterBase extends RuleResponseBase {
 @JsonSerializable()
 class TvSortCfg extends TvSortGroupFilterBase {
   //
+  TvSortCfg._(DbTableFieldName colName)
+      : super(VisualRuleType.sortCfg, colName);
   TvSortCfg() : super(VisualRuleType.sortCfg);
+
+  factory TvSortCfg.noop() {
+    return TvSortCfg._(DbTableFieldName.imageUrl);
+  }
   //
   // JsonSerializable
   factory TvSortCfg.fromJson(Map<String, dynamic> json) =>
