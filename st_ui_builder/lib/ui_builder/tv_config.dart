@@ -58,6 +58,8 @@ class TableviewConfigPayload {
     print(
       '@@@@ getting rowStyle constructor for ${rowStyle.name} on ${appScreen.name} screen',
     );
+    // TODO:  lets swap order of the switch to test appScreen first
+    // that will let us simplifly and consolidate logic for identical rows
     switch (rowStyle) {
       case TvAreaRowStyle.assetVsAsset:
         switch (appScreen) {
@@ -65,11 +67,22 @@ class TableviewConfigPayload {
             return AssetVsAssetRow_MktView.new;
           case AppScreen.marketResearch:
             return AssetVsAssetRow_MktResrch.new;
+          case AppScreen.portfolio:
+            return AssetVsAssetRow_Portfolio.new;
           default:
             return AssetVsAssetRow_MktView.new;
         }
       case TvAreaRowStyle.assetVsAssetRanked:
-        return AssetVsAssetRowRanked_MktView.new;
+        switch (appScreen) {
+          case AppScreen.marketView:
+            return AssetVsAssetRow_MktView.new;
+          case AppScreen.marketResearch:
+            return AssetVsAssetRow_MktResrch.new;
+          case AppScreen.portfolio:
+            return AssetVsAssetRow_Portfolio.new;
+          default:
+            return AssetVsAssetRow_MktView.new;
+        }
       case TvAreaRowStyle.teamVsField:
         return TeamVsFieldRow_MktView.new;
       // print(
