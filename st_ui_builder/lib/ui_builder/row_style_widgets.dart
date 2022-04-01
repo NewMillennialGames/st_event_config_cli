@@ -191,6 +191,9 @@ class TeamVsFieldRow_MktView extends StBaseTvRow
     with ShowsOneAsset, RequiresGameStatus {
   //
   bool get showRanked => false;
+  bool get isBasic => true;
+  bool get isDriverVsField => false;
+  bool get isTeamPlayerVsField => false;
   const TeamVsFieldRow_MktView(
     TableviewDataRowTuple assets, {
     Key? key,
@@ -200,7 +203,8 @@ class TeamVsFieldRow_MktView extends StBaseTvRow
   Widget rowBody(BuildContext ctx, ActiveGameDetails agd) {
     //
     final size = MediaQuery.of(ctx).size;
-
+    // var lst = comp1.topName.split('');
+    // String lastName = lst[1];
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -211,19 +215,37 @@ class TeamVsFieldRow_MktView extends StBaseTvRow
           children: [
             Row(
               children: [
-                Column(
-                  children: [
-                    Text(
-                      comp1.topName,
-                      style: StTextStyles.h2,
-                    ),
-                    if (showRanked)
+                if (isBasic)
+                  Column(
+                    children: [
+                      Text(
+                        comp1.topName,
+                        style: StTextStyles.h2,
+                      ),
+                      if (showRanked)
+                        Text(
+                          comp1.rankStr,
+                          style: StTextStyles.h6,
+                        ),
+                    ],
+                  ),
+                if (isDriverVsField)
+                  Row(
+                    children: [
                       Text(
                         comp1.rankStr,
-                        style: StTextStyles.h6,
+                        style: StTextStyles.h1,
                       ),
-                  ],
-                ),
+                      Column(
+                        children: [
+                          Text(comp1.topName.toUpperCase(),
+                              style: StTextStyles.h6),
+                          Text(comp1.topName.toUpperCase(),
+                              style: StTextStyles.h3)
+                        ],
+                      )
+                    ],
+                  ),
                 Column(
                   children: [
                     Text(
@@ -414,20 +436,15 @@ class PlayerDraftRow extends StBaseTvRow with ShowsOneAsset {
   }
 }
 
-class DriverVsFieldRow extends StBaseTvRow with ShowsOneAsset {
+class DriverVsFieldRow extends TeamVsFieldRow_MktView {
+  @override
+  bool get isBasic => false;
+  @override
+  bool get isDriverVsField => true;
   const DriverVsFieldRow(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
-
-  @override
-  Widget rowBody(BuildContext context, ActiveGameDetails agd) {
-    // paste row widget code here
-    return Container(
-      child: Text('Awaiting UX specs for <DriverVsFieldRow>'),
-      decoration: kRowBoxDecor,
-    );
-  }
 }
 
 // test classes only below
