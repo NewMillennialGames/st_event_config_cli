@@ -197,9 +197,9 @@ class TeamVsFieldRow_MktView extends StBaseTvRow
   }) : super(assets, key: key);
 
   @override
-  Widget rowBody(BuildContext context, ActiveGameDetails agd) {
+  Widget rowBody(BuildContext ctx, ActiveGameDetails agd) {
     //
-    final size = MediaQuery.of(context).size;
+    final size = MediaQuery.of(ctx).size;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -217,21 +217,45 @@ class TeamVsFieldRow_MktView extends StBaseTvRow
                 ),
                 Column(
                   children: [
-                    Text(comp1.currPriceStr),
-                    Text(comp1.recentDeltaStr),
+                    Text(
+                      comp1.currPriceStr,
+                      style: StTextStyles.h6,
+                    ),
+                    Text(
+                      comp1.recentDeltaStr,
+                      style: StTextStyles.h6,
+                    ),
                   ],
                 )
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const Text(StStrings.open),
-                Text('3.00'),
-                const Text(StStrings.high),
-                Text('5.00'),
-                const Text(StStrings.low),
-                Text('3.00'),
+              children: const [
+                Text(
+                  StStrings.open,
+                  style: StTextStyles.h6,
+                ),
+                Text(
+                  '3.00',
+                  style: StTextStyles.h6,
+                ),
+                Text(
+                  StStrings.high,
+                  style: StTextStyles.h6,
+                ),
+                Text(
+                  '5.00',
+                  style: StTextStyles.h6,
+                ),
+                Text(
+                  StStrings.low,
+                  style: StTextStyles.h6,
+                ),
+                Text(
+                  '3.00',
+                  style: StTextStyles.h6,
+                ),
               ],
             )
           ],
@@ -242,7 +266,7 @@ class TeamVsFieldRow_MktView extends StBaseTvRow
               comp1.assetKey,
               agd.gameStatus,
             ),
-            const SizedBox.expand(),
+            const Expanded(child: SizedBox()),
           ],
         ),
       ],
@@ -271,8 +295,9 @@ class TeamDraftRow extends StBaseTvRow with ShowsOneAsset {
   Widget rowBody(BuildContext context, ActiveGameDetails agd) {
     // paste row widget code here
     return Container(
-      child: Text('Awaiting UX specs for <TeamDraftRow>'),
-    );
+        child: Text(
+      'Awaiting UX specs for <TeamDraftRow>',
+    ));
   }
 }
 

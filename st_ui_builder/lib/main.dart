@@ -48,7 +48,7 @@ void main() async {
   await readExampleEventConfig();
   runApp(
     ProviderScope(
-      child: Scoretrader(),
+      child: const Scoretrader(),
       overrides: [
         currEventStateProvider
             .overrideWithValue(StateController<Event>(Event())),
