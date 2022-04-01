@@ -203,12 +203,12 @@ class TeamVsFieldRow_MktView extends StBaseTvRow
   Widget rowBody(BuildContext ctx, ActiveGameDetails agd) {
     //
     final size = MediaQuery.of(ctx).size;
-    // var lst = comp1.topName.split('');
-    // String lastName = lst[1];
+    var lst = comp1.topName.split('');
+    String lastName = lst[1];
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        if (showRanked) kStarIcon,
+        if (!showRanked) kStarIcon,
         CompetitorImage(comp1.imgUrl, showRanked),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -240,10 +240,23 @@ class TeamVsFieldRow_MktView extends StBaseTvRow
                         children: [
                           Text(comp1.topName.toUpperCase(),
                               style: StTextStyles.h6),
-                          Text(comp1.topName.toUpperCase(),
-                              style: StTextStyles.h3)
+                          Text(lastName.toUpperCase(), style: StTextStyles.h3)
                         ],
                       )
+                    ],
+                  ),
+                if (isTeamPlayerVsField)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(comp1.topName, style: StTextStyles.h1),
+                      Row(
+                        children: [
+                          Text(comp1.teamNameWhenTradingPlayers,
+                              style: StTextStyles.h6),
+                          Text(comp1.position, style: StTextStyles.h6)
+                        ],
+                      ),
                     ],
                   ),
                 Column(
@@ -379,19 +392,15 @@ class TeamLineRow extends StBaseTvRow with ShowsOneAsset {
   }
 }
 
-class TeamPlayerVsFieldRow extends StBaseTvRow with ShowsOneAsset {
+class TeamPlayerVsFieldRow extends TeamVsFieldRow_MktView {
+  @override
+  bool get isBasic => false;
+  @override
+  bool get isTeamPlayerVsField => true;
   const TeamPlayerVsFieldRow(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
-
-  @override
-  Widget rowBody(BuildContext context, ActiveGameDetails agd) {
-    // paste row widget code here
-    return Container(
-      child: Text('Awaiting UX specs for <TeamPlayerVsFieldRow>'),
-    );
-  }
 }
 
 class PlayerVsFieldRow extends StBaseTvRow with ShowsOneAsset {
