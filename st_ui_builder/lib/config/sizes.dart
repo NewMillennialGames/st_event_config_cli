@@ -2,8 +2,8 @@
 // (singleRowHeight - tradeBtnHeight) / 2
 
 class UiSizes {
-  static const double dblRowHeight = 116;
-  static const double singleRowHeight = 58;
+  static const double dblRowHeight = 140;
+  static const double singleRowHeight = 70;
   // see above
   static const double spaceBtwnRows = 6;
 

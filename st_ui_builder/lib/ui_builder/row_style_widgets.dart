@@ -204,16 +204,25 @@ class TeamVsFieldRow_MktView extends StBaseTvRow
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        if (!showRanked) kStarIcon,
-        if (showRanked) Text(comp1.rankStr),
+        if (showRanked) kStarIcon,
         CompetitorImage(comp1.imgUrl, showRanked),
         Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                Text(
-                  comp1.topName,
-                  style: StTextStyles.h2,
+                Column(
+                  children: [
+                    Text(
+                      comp1.topName,
+                      style: StTextStyles.h2,
+                    ),
+                    if (showRanked)
+                      Text(
+                        comp1.rankStr,
+                        style: StTextStyles.h6,
+                      ),
+                  ],
                 ),
                 Column(
                   children: [
@@ -379,19 +388,14 @@ class PlayerVsFieldRow extends StBaseTvRow with ShowsOneAsset {
   }
 }
 
-class PlayerVsFieldRankedRow extends StBaseTvRow with ShowsOneAsset {
+class PlayerVsFieldRankedRow extends TeamVsFieldRow_MktView {
+  @override
+  bool get showRanked => true;
+
   const PlayerVsFieldRankedRow(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
-
-  @override
-  Widget rowBody(BuildContext context, ActiveGameDetails agd) {
-    // paste row widget code here
-    return Container(
-      child: Text('Awaiting UX specs for <PlayerVsFieldRankedRow>'),
-    );
-  }
 }
 
 class PlayerDraftRow extends StBaseTvRow with ShowsOneAsset {
