@@ -3,7 +3,7 @@
 
 class UiSizes {
   static const double dblRowHeight = 84;
-  static const double singleRowHeight = 44;
+  static const double singleRowHeight = 74;
   // see above
   static const double spaceBtwnRows = 6;
 
