@@ -184,7 +184,6 @@ class AssetVsAssetRow_Portfolio extends StBaseTvRow
     with ShowsOneAsset, RequiresUserPositionProps {
   // almost identical to Portfolio History (1 word delta)
 
-  bool get isBasic => true;
   bool get isDriverVsField => false;
   bool get isTeamPlayerVsField => false;
   bool get showProceeds => false;
@@ -204,9 +203,6 @@ class AssetVsAssetRow_Portfolio extends StBaseTvRow
         : StTextStyles.moneyDeltaPositive.copyWith(
             colors: StColors.errorText,
           );
-
-    var lst = comp1.topName.split('');
-    String lastName = lst[1];
     // FIXME:  get position
     // TODO:  mixin "RequiresUserPositionProps" will give these values
     String sharesOwned = assetHoldingsSummary.sharesOwnedStr;
@@ -225,37 +221,11 @@ class AssetVsAssetRow_Portfolio extends StBaseTvRow
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (isBasic) Text(comp1.topName),
-                if (isDriverVsField)
-                  Row(
-                    children: [
-                      Text(
-                        comp1.rankStr,
-                        style: StTextStyles.h1,
-                      ),
-                      Column(
-                        children: [
-                          Text(comp1.topName.toUpperCase(),
-                              style: StTextStyles.h6),
-                          Text(lastName.toUpperCase(), style: StTextStyles.h3)
-                        ],
-                      )
-                    ],
-                  ),
-                if (isTeamPlayerVsField)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(comp1.topName, style: StTextStyles.h1),
-                      Row(
-                        children: [
-                          Text(comp1.teamNameWhenTradingPlayers,
-                              style: StTextStyles.h6),
-                          Text(comp1.position, style: StTextStyles.h6)
-                        ],
-                      ),
-                    ],
-                  ),
+                CheckAssetType(
+                  competitor: comp1,
+                  isDriverVsField: isDriverVsField,
+                  isTeamPlayerVsField: isTeamPlayerVsField,
+                ),
                 TradeButton(comp1.assetKey, agd.gameStatus),
               ],
             ),
@@ -299,8 +269,6 @@ class AssetVsAssetRow_Portfolio extends StBaseTvRow
 
 class DriverVsFieldRow_Portfolio extends AssetVsAssetRow_Portfolio {
   DriverVsFieldRow_Portfolio(TableviewDataRowTuple assets) : super(assets);
-  @override
-  bool get isBasic => false;
 
   @override
   bool get isDriverVsField => true;
@@ -308,8 +276,6 @@ class DriverVsFieldRow_Portfolio extends AssetVsAssetRow_Portfolio {
 
 class TeamPlayerVsFieldRow_Portfolio extends AssetVsAssetRow_Portfolio {
   TeamPlayerVsFieldRow_Portfolio(TableviewDataRowTuple assets) : super(assets);
-  @override
-  bool get isBasic => false;
 
   @override
   bool get isTeamPlayerVsField => true;
@@ -329,9 +295,6 @@ class DriverVsFieldRow_PortfolioHistory extends AssetVsAssetRow_Portfolio {
   DriverVsFieldRow_PortfolioHistory(TableviewDataRowTuple assets)
       : super(assets);
   @override
-  bool get isBasic => false;
-
-  @override
   bool get isDriverVsField => true;
 
   @override
@@ -342,9 +305,6 @@ class TeamPlayerVsFieldRow_PortfolioHistory extends AssetVsAssetRow_Portfolio {
   TeamPlayerVsFieldRow_PortfolioHistory(TableviewDataRowTuple assets)
       : super(assets);
   @override
-  bool get isBasic => false;
-
-  @override
   bool get isTeamPlayerVsField => true;
   @override
   bool get showProceeds => true;
@@ -354,7 +314,6 @@ class TeamVsFieldRow_MktView extends StBaseTvRow
     with ShowsOneAsset, RequiresGameStatus {
   //
   bool get showRanked => false;
-  bool get isBasic => true;
   bool get isDriverVsField => false;
   bool get isTeamPlayerVsField => false;
   const TeamVsFieldRow_MktView(
@@ -366,8 +325,6 @@ class TeamVsFieldRow_MktView extends StBaseTvRow
   Widget rowBody(BuildContext ctx, ActiveGameDetails agd) {
     //
     final size = MediaQuery.of(ctx).size;
-    var lst = comp1.topName.split('');
-    String lastName = lst[1];
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -378,50 +335,12 @@ class TeamVsFieldRow_MktView extends StBaseTvRow
           children: [
             Row(
               children: [
-                if (isBasic)
-                  Column(
-                    children: [
-                      Text(
-                        comp1.topName,
-                        style: StTextStyles.h2,
-                      ),
-                      if (showRanked)
-                        Text(
-                          comp1.rankStr,
-                          style: StTextStyles.h6,
-                        ),
-                    ],
-                  ),
-                if (isDriverVsField)
-                  Row(
-                    children: [
-                      Text(
-                        comp1.rankStr,
-                        style: StTextStyles.h1,
-                      ),
-                      Column(
-                        children: [
-                          Text(comp1.topName.toUpperCase(),
-                              style: StTextStyles.h6),
-                          Text(lastName.toUpperCase(), style: StTextStyles.h3)
-                        ],
-                      )
-                    ],
-                  ),
-                if (isTeamPlayerVsField)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(comp1.topName, style: StTextStyles.h1),
-                      Row(
-                        children: [
-                          Text(comp1.teamNameWhenTradingPlayers,
-                              style: StTextStyles.h6),
-                          Text(comp1.position, style: StTextStyles.h6)
-                        ],
-                      ),
-                    ],
-                  ),
+                CheckAssetType(
+                  competitor: comp1,
+                  isDriverVsField: isDriverVsField,
+                  isTeamPlayerVsField: isTeamPlayerVsField,
+                ),
+                kSpacerLarge,
                 Column(
                   children: [
                     Text(
@@ -555,12 +474,10 @@ class TeamLineRow extends StBaseTvRow with ShowsOneAsset {
   }
 }
 
-class TeamPlayerVsFieldRow extends TeamVsFieldRow_MktView {
-  @override
-  bool get isBasic => false;
+class TeamPlayerVsFieldRow_MktView extends TeamVsFieldRow_MktView {
   @override
   bool get isTeamPlayerVsField => true;
-  const TeamPlayerVsFieldRow(
+  const TeamPlayerVsFieldRow_MktView(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
@@ -608,12 +525,10 @@ class PlayerDraftRow extends StBaseTvRow with ShowsOneAsset {
   }
 }
 
-class DriverVsFieldRow extends TeamVsFieldRow_MktView {
-  @override
-  bool get isBasic => false;
+class DriverVsFieldRow_MktView extends TeamVsFieldRow_MktView {
   @override
   bool get isDriverVsField => true;
-  const DriverVsFieldRow(
+  const DriverVsFieldRow_MktView(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);

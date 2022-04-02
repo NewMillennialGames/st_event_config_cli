@@ -87,7 +87,7 @@ class TableviewConfigPayload {
       case TvAreaRowStyle.teamLine:
         return TeamLineRow.new;
       case TvAreaRowStyle.teamPlayerVsField:
-        return TeamPlayerVsFieldRow.new;
+        return TeamPlayerVsFieldRow_MktView.new;
       case TvAreaRowStyle.playerVsField:
         return PlayerVsFieldRow.new;
       case TvAreaRowStyle.playerVsFieldRanked:
@@ -95,7 +95,7 @@ class TableviewConfigPayload {
       case TvAreaRowStyle.playerDraft:
         return PlayerDraftRow.new;
       case TvAreaRowStyle.driverVsField:
-        return DriverVsFieldRow.new;
+        return DriverVsFieldRow_MktView.new;
       // default:
       //   return TeamVsTeamRow.new;
     }
