@@ -201,7 +201,7 @@ class AssetVsAssetRow_Portfolio extends StBaseTvRow
     TextStyle gainLossTxtStyle = hasIncreased
         ? StTextStyles.moneyDeltaPositive
         : StTextStyles.moneyDeltaPositive.copyWith(
-            colors: StColors.errorText,
+            color: StColors.errorText,
           );
     // FIXME:  get position
     // TODO:  mixin "RequiresUserPositionProps" will give these values
@@ -209,17 +209,16 @@ class AssetVsAssetRow_Portfolio extends StBaseTvRow
     String positionValue = assetHoldingsSummary.positionEstValueStr;
     String positionGainLoss = assetHoldingsSummary.positionGainLossStr;
 
-    // String sharesOwned = '11 shares';
-    // String positionValue = '\$26.32';
-    // String positionGainLoss = '\$133.32';
-
     return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         CompetitorImage(comp1.imgUrl, false),
+        const SizedBox(width: 12),
         Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 CheckAssetType(
                   competitor: comp1,
@@ -230,13 +229,20 @@ class AssetVsAssetRow_Portfolio extends StBaseTvRow
               ],
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(sharesOwned),
+                    Text(
+                      sharesOwned + ' shares',
+                      style: StTextStyles.p3,
+                    ),
                     Row(children: [
-                      Text('@ $sharePrice'),
+                      Text(
+                        '@ $sharePrice ',
+                        style: StTextStyles.p3,
+                      ),
                       Text(
                         sharePriceChange,
                         style: gainLossTxtStyle,
@@ -244,18 +250,32 @@ class AssetVsAssetRow_Portfolio extends StBaseTvRow
                     ]),
                   ],
                 ),
+                const SizedBox(width: 24),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(showProceeds ? StStrings.proceeds : StStrings.value),
-                    Text(positionValue),
+                    Text(
+                      showProceeds ? StStrings.proceeds : StStrings.value,
+                      style: StTextStyles.p3,
+                    ),
+                    Text(
+                      positionValue,
+                      style: StTextStyles.p3,
+                    ),
                   ],
                 ),
+                const SizedBox(width: 24),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    const Text(StStrings.gainLossAbbrev),
-                    Text(positionGainLoss),
+                    const Text(
+                      StStrings.gainLossAbbrev,
+                      style: StTextStyles.p3,
+                    ),
+                    Text(
+                      positionGainLoss,
+                      style: StTextStyles.p3,
+                    ),
                   ],
                 ),
               ],
