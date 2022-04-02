@@ -23,7 +23,7 @@ class AssetVsAssetRow_MktView extends StBaseTvRow
 
   @override
   Widget rowBody(
-    BuildContext context,
+    BuildContext ctx,
     ActiveGameDetails agd,
   ) {
     // print('AssetVsAssetRow_MktView is rebuilding');
@@ -95,10 +95,21 @@ class AssetVsAssetRow_MktResrch extends StBaseTvRow with ShowsOneAsset {
     );
   }
 }
-
+class DriverVsFieldRow_Portfolio extends AssetVsAssetRow_Portfolio {
+  DriverVsFieldRow_Portfolio(TableviewDataRowTuple assets) : super(assets);
+   @override
+  bool get isBasic => false; 
+  
+  @override
+  bool get isDriverVsField => true;
+}
 class AssetVsAssetRow_Portfolio extends StBaseTvRow
     with ShowsOneAsset, RequiresUserPositionProps {
   // almost identical to Portfolio History (1 word delta)
+
+  bool get isBasic => true;
+  bool get isDriverVsField => false;
+  bool get isTeamPlayerVsField => false;
   bool get showProceeds => false;
   const AssetVsAssetRow_Portfolio(
     TableviewDataRowTuple assets, {
@@ -117,6 +128,8 @@ class AssetVsAssetRow_Portfolio extends StBaseTvRow
             colors: StColors.errorText,
           );
 
+    var lst = comp1.topName.split('');
+    String lastName = lst[1];
     // FIXME:  get position
     // TODO:  mixin "RequiresUserPositionProps" will give these values
     String sharesOwned = assetHoldingsSummary.sharesOwnedStr;
@@ -135,7 +148,38 @@ class AssetVsAssetRow_Portfolio extends StBaseTvRow
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                if (isBasic) 
                 Text(comp1.topName),
+                if (isDriverVsField)
+                  Row(
+                    children: [
+                      Text(
+                        comp1.rankStr,
+                        style: StTextStyles.h1,
+                      ),
+                      Column(
+                        children: [
+                          Text(comp1.topName.toUpperCase(),
+                              style: StTextStyles.h6),
+                          Text(lastName.toUpperCase(), style: StTextStyles.h3)
+                        ],
+                      )
+                    ],
+                  ),
+                if (isTeamPlayerVsField)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(comp1.topName, style: StTextStyles.h1),
+                      Row(
+                        children: [
+                          Text(comp1.teamNameWhenTradingPlayers,
+                              style: StTextStyles.h6),
+                          Text(comp1.position, style: StTextStyles.h6)
+                        ],
+                      ),
+                    ],
+                  ),
                 TradeButton(comp1.assetKey, agd.gameStatus),
               ],
             ),
