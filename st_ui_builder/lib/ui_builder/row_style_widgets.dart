@@ -39,6 +39,90 @@ class AssetVsAssetRow_MktView extends StBaseTvRow
   }
 }
 
+class AssetVsAssetRow_LeaderBoardView extends StBaseTvRow with ShowsTwoAssets {
+  //
+  const AssetVsAssetRow_LeaderBoardView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+
+  @override
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        LeaderboardHalfRow(
+          competitor: comp1,
+          showLeaderBoardIcon: true,
+        ),
+        const SizedBox(height: UiSizes.spaceBtwnRows),
+        LeaderboardHalfRow(competitor: comp2)
+      ],
+    );
+  }
+}
+
+class DriverVsFieldRow_LeaderBoardView extends StBaseTvRow with ShowsTwoAssets {
+  //
+  const DriverVsFieldRow_LeaderBoardView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+
+  @override
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        LeaderboardHalfRow(
+          competitor: comp1,
+          showLeaderBoardIcon: true,
+          isDriverVsField: true,
+        ),
+        const SizedBox(height: UiSizes.spaceBtwnRows),
+        LeaderboardHalfRow(competitor: comp2, isDriverVsField: true)
+      ],
+    );
+  }
+}
+
+class TeamPlayerVsField_LeaderBoardView extends StBaseTvRow
+    with ShowsTwoAssets {
+  //
+  const TeamPlayerVsField_LeaderBoardView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+
+  @override
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        LeaderboardHalfRow(
+          competitor: comp1,
+          showLeaderBoardIcon: true,
+          isTeamPlayerVsField: true,
+        ),
+        const SizedBox(height: UiSizes.spaceBtwnRows),
+        LeaderboardHalfRow(competitor: comp2, isTeamPlayerVsField: true)
+      ],
+    );
+  }
+}
+
 class AssetVsAssetRowRanked_MktView extends AssetVsAssetRow_MktView {
   //
   @override
@@ -141,8 +225,7 @@ class AssetVsAssetRow_Portfolio extends StBaseTvRow
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (isBasic) 
-                Text(comp1.topName),
+                if (isBasic) Text(comp1.topName),
                 if (isDriverVsField)
                   Row(
                     children: [
@@ -216,18 +299,18 @@ class AssetVsAssetRow_Portfolio extends StBaseTvRow
 
 class DriverVsFieldRow_Portfolio extends AssetVsAssetRow_Portfolio {
   DriverVsFieldRow_Portfolio(TableviewDataRowTuple assets) : super(assets);
-   @override
-  bool get isBasic => false; 
-  
+  @override
+  bool get isBasic => false;
+
   @override
   bool get isDriverVsField => true;
 }
 
 class TeamPlayerVsFieldRow_Portfolio extends AssetVsAssetRow_Portfolio {
   TeamPlayerVsFieldRow_Portfolio(TableviewDataRowTuple assets) : super(assets);
-   @override
-  bool get isBasic => false; 
-  
+  @override
+  bool get isBasic => false;
+
   @override
   bool get isTeamPlayerVsField => true;
 }
@@ -240,29 +323,33 @@ class AssetVsAssetRow_PortfolioHistory extends AssetVsAssetRow_Portfolio {
   @override
   bool get showProceeds => true;
 }
+
 //
 class DriverVsFieldRow_PortfolioHistory extends AssetVsAssetRow_Portfolio {
-  DriverVsFieldRow_PortfolioHistory(TableviewDataRowTuple assets) : super(assets);
-   @override
-  bool get isBasic => false; 
-  
+  DriverVsFieldRow_PortfolioHistory(TableviewDataRowTuple assets)
+      : super(assets);
+  @override
+  bool get isBasic => false;
+
   @override
   bool get isDriverVsField => true;
 
-   @override
+  @override
   bool get showProceeds => true;
 }
 
 class TeamPlayerVsFieldRow_PortfolioHistory extends AssetVsAssetRow_Portfolio {
-  TeamPlayerVsFieldRow_PortfolioHistory(TableviewDataRowTuple assets) : super(assets);
-   @override
-  bool get isBasic => false; 
-  
+  TeamPlayerVsFieldRow_PortfolioHistory(TableviewDataRowTuple assets)
+      : super(assets);
+  @override
+  bool get isBasic => false;
+
   @override
   bool get isTeamPlayerVsField => true;
-   @override
+  @override
   bool get showProceeds => true;
 }
+
 class TeamVsFieldRow_MktView extends StBaseTvRow
     with ShowsOneAsset, RequiresGameStatus {
   //

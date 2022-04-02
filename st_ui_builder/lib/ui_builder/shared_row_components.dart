@@ -9,6 +9,10 @@ const kSpacerSm = SizedBox(
   width: 6,
 );
 
+const kSpacerLarge = SizedBox(
+  width: 20,
+);
+
 class CompetitorImage extends StatelessWidget {
   // just the image or placeholder
   final String imgUrl;
@@ -95,18 +99,13 @@ class TradeButton extends ConsumerWidget {
   }
 }
 
-class LeaderboardHalfRow extends StatelessWidget {
-  //
+class CheckAssetType extends StatelessWidget {
   final AssetRowPropertyIfc competitor;
-  final bool? showLeadingIcon;
-  final bool? isBasic;
   final bool? isDriverVsField;
   final bool? isTeamPlayerVsField;
-  const LeaderboardHalfRow(
+  const CheckAssetType(
       {Key? key,
       required this.competitor,
-      this.showLeadingIcon = false,
-      this.isBasic = false,
       this.isDriverVsField = false,
       this.isTeamPlayerVsField = false})
       : super(key: key);
@@ -115,62 +114,89 @@ class LeaderboardHalfRow extends StatelessWidget {
   Widget build(BuildContext context) {
     var lst = competitor.topName.split('');
     String lastName = lst[1];
+    if (isDriverVsField!) {
+      return Row(
+        children: [
+          Text(
+            competitor.rankStr,
+            style: StTextStyles.h1,
+          ),
+          kSpacerSm,
+          Column(
+            children: [
+              Text(competitor.topName.toUpperCase(), style: StTextStyles.h6),
+              Text(lastName.toUpperCase(), style: StTextStyles.h3)
+            ],
+          )
+        ],
+      );
+    }
+    if (isTeamPlayerVsField!) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(competitor.topName, style: StTextStyles.h1),
+          Row(
+            children: [
+              Text(competitor.teamNameWhenTradingPlayers,
+                  style: StTextStyles.h6),
+              Text(competitor.position, style: StTextStyles.h6)
+            ],
+          ),
+        ],
+      );
+    }
+    return Text(
+      competitor.topName,
+      style: StTextStyles.p1,
+    );
+  }
+}
+
+class LeaderboardHalfRow extends StatelessWidget {
+  //
+  final AssetRowPropertyIfc competitor;
+  final bool? showLeaderBoardIcon;
+  final bool? isDriverVsField;
+  final bool? isTeamPlayerVsField;
+  const LeaderboardHalfRow(
+      {Key? key,
+      required this.competitor,
+      this.showLeaderBoardIcon = false,
+      this.isDriverVsField = false,
+      this.isTeamPlayerVsField = false})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       children: [
+        kSpacerSm,
         SizedBox(
           width: 10,
-          child: showLeadingIcon!
+          child: showLeaderBoardIcon!
               ? const Icon(
                   Icons.leaderboard,
                   color: StColors.green,
                 )
               : null,
         ),
-        kSpacerSm,
+        kSpacerLarge,
         CompetitorImage(competitor.imgUrl, true),
         kSpacerSm,
         CompetitorImage(competitor.imgUrl, true),
-        kSpacerSm,
-        if (isBasic!)
-          Text(
-            competitor.topName,
-            style: StTextStyles.p1,
-          ),
-        if (isDriverVsField!)
-          Row(
-            children: [
-              Text(
-                competitor.rankStr,
-                style: StTextStyles.h1,
-              ),
-              Column(
-                children: [
-                  Text(competitor.topName.toUpperCase(),
-                      style: StTextStyles.h6),
-                  Text(lastName.toUpperCase(), style: StTextStyles.h3)
-                ],
-              )
-            ],
-          ),
-        if (isTeamPlayerVsField!)
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(competitor.topName, style: StTextStyles.h1),
-              Row(
-                children: [
-                  Text(competitor.teamNameWhenTradingPlayers,
-                      style: StTextStyles.h6),
-                  Text(competitor.position, style: StTextStyles.h6)
-                ],
-              ),
-            ],
-          ),
-        kSpacerSm,
+        kSpacerLarge,
+        CheckAssetType(
+          competitor: competitor,
+          isDriverVsField: isDriverVsField,
+          isTeamPlayerVsField: isTeamPlayerVsField,
+        ),
+        const Spacer(),
         Text(
           competitor.currPriceStr,
           style: StTextStyles.h6,
-        )
+        ),
+        kSpacerSm
       ],
     );
   }
