@@ -103,6 +103,15 @@ class DriverVsFieldRow_Portfolio extends AssetVsAssetRow_Portfolio {
   @override
   bool get isDriverVsField => true;
 }
+
+class TeamPlayerVsFieldRow_Portfolio extends AssetVsAssetRow_Portfolio {
+  TeamPlayerVsFieldRow_Portfolio(TableviewDataRowTuple assets) : super(assets);
+   @override
+  bool get isBasic => false; 
+  
+  @override
+  bool get isTeamPlayerVsField => true;
+}
 class AssetVsAssetRow_Portfolio extends StBaseTvRow
     with ShowsOneAsset, RequiresUserPositionProps {
   // almost identical to Portfolio History (1 word delta)
