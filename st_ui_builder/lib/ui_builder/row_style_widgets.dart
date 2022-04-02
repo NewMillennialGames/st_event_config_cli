@@ -519,11 +519,11 @@ class PlayerVsFieldRow extends StBaseTvRow with ShowsOneAsset {
   }
 }
 
-class PlayerVsFieldRankedRow extends TeamVsFieldRow_MktView {
+class PlayerVsFieldRankedRow_MktView extends TeamVsFieldRow_MktView {
   @override
   bool get showRanked => true;
 
-  const PlayerVsFieldRankedRow(
+  const PlayerVsFieldRankedRow_MktView(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
