@@ -95,6 +95,87 @@ class TradeButton extends ConsumerWidget {
   }
 }
 
+class LeaderboardHalfRow extends StatelessWidget {
+  //
+  final AssetRowPropertyIfc competitor;
+  final bool? showLeadingIcon;
+  final bool? isBasic;
+  final bool? isDriverVsField;
+  final bool? isTeamPlayerVsField;
+  const LeaderboardHalfRow(
+      {Key? key,
+      required this.competitor,
+      this.showLeadingIcon = false,
+      this.isBasic = false,
+      this.isDriverVsField = false,
+      this.isTeamPlayerVsField = false})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var lst = competitor.topName.split('');
+    String lastName = lst[1];
+    return Row(
+      children: [
+        SizedBox(
+          width: 10,
+          child: showLeadingIcon!
+              ? const Icon(
+                  Icons.leaderboard,
+                  color: StColors.green,
+                )
+              : null,
+        ),
+        kSpacerSm,
+        CompetitorImage(competitor.imgUrl, true),
+        kSpacerSm,
+        CompetitorImage(competitor.imgUrl, true),
+        kSpacerSm,
+        if (isBasic!)
+          Text(
+            competitor.topName,
+            style: StTextStyles.p1,
+          ),
+        if (isDriverVsField!)
+          Row(
+            children: [
+              Text(
+                competitor.rankStr,
+                style: StTextStyles.h1,
+              ),
+              Column(
+                children: [
+                  Text(competitor.topName.toUpperCase(),
+                      style: StTextStyles.h6),
+                  Text(lastName.toUpperCase(), style: StTextStyles.h3)
+                ],
+              )
+            ],
+          ),
+        if (isTeamPlayerVsField!)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(competitor.topName, style: StTextStyles.h1),
+              Row(
+                children: [
+                  Text(competitor.teamNameWhenTradingPlayers,
+                      style: StTextStyles.h6),
+                  Text(competitor.position, style: StTextStyles.h6)
+                ],
+              ),
+            ],
+          ),
+        kSpacerSm,
+        Text(
+          competitor.currPriceStr,
+          style: StTextStyles.h6,
+        )
+      ],
+    );
+  }
+}
+
 class AssetVsAssetHalfRow extends StatelessWidget {
   //
   final AssetRowPropertyIfc competitor;
@@ -559,15 +640,14 @@ class HoldingsAndValueRow extends StatelessWidget {
   }
 }
 
-
-  // return Container(
-  //   height: UiSizes.tradeBtnHeight,
-  //   alignment: Alignment.center,
-  //   child: Text(
-  //     tf.labelForGameState(status),
-  //     style: StTextStyles.h5.copyWith(
-  //       color: tf.colorForGameState(status),
-  //     ),
-  //   ),
-  // );
-  // }
+// return Container(
+//   height: UiSizes.tradeBtnHeight,
+//   alignment: Alignment.center,
+//   child: Text(
+//     tf.labelForGameState(status),
+//     style: StTextStyles.h5.copyWith(
+//       color: tf.colorForGameState(status),
+//     ),
+//   ),
+// );
+// }
