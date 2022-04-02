@@ -95,23 +95,7 @@ class AssetVsAssetRow_MktResrch extends StBaseTvRow with ShowsOneAsset {
     );
   }
 }
-class DriverVsFieldRow_Portfolio extends AssetVsAssetRow_Portfolio {
-  DriverVsFieldRow_Portfolio(TableviewDataRowTuple assets) : super(assets);
-   @override
-  bool get isBasic => false; 
-  
-  @override
-  bool get isDriverVsField => true;
-}
 
-class TeamPlayerVsFieldRow_Portfolio extends AssetVsAssetRow_Portfolio {
-  TeamPlayerVsFieldRow_Portfolio(TableviewDataRowTuple assets) : super(assets);
-   @override
-  bool get isBasic => false; 
-  
-  @override
-  bool get isTeamPlayerVsField => true;
-}
 class AssetVsAssetRow_Portfolio extends StBaseTvRow
     with ShowsOneAsset, RequiresUserPositionProps {
   // almost identical to Portfolio History (1 word delta)
@@ -230,6 +214,24 @@ class AssetVsAssetRow_Portfolio extends StBaseTvRow
   }
 }
 
+class DriverVsFieldRow_Portfolio extends AssetVsAssetRow_Portfolio {
+  DriverVsFieldRow_Portfolio(TableviewDataRowTuple assets) : super(assets);
+   @override
+  bool get isBasic => false; 
+  
+  @override
+  bool get isDriverVsField => true;
+}
+
+class TeamPlayerVsFieldRow_Portfolio extends AssetVsAssetRow_Portfolio {
+  TeamPlayerVsFieldRow_Portfolio(TableviewDataRowTuple assets) : super(assets);
+   @override
+  bool get isBasic => false; 
+  
+  @override
+  bool get isTeamPlayerVsField => true;
+}
+
 class AssetVsAssetRow_PortfolioHistory extends AssetVsAssetRow_Portfolio {
   //
   AssetVsAssetRow_PortfolioHistory(TableviewDataRowTuple assets)
@@ -239,7 +241,28 @@ class AssetVsAssetRow_PortfolioHistory extends AssetVsAssetRow_Portfolio {
   bool get showProceeds => true;
 }
 //
+class DriverVsFieldRow_PortfolioHistory extends AssetVsAssetRow_Portfolio {
+  DriverVsFieldRow_PortfolioHistory(TableviewDataRowTuple assets) : super(assets);
+   @override
+  bool get isBasic => false; 
+  
+  @override
+  bool get isDriverVsField => true;
 
+   @override
+  bool get showProceeds => true;
+}
+
+class TeamPlayerVsFieldRow_PortfolioHistory extends AssetVsAssetRow_Portfolio {
+  TeamPlayerVsFieldRow_PortfolioHistory(TableviewDataRowTuple assets) : super(assets);
+   @override
+  bool get isBasic => false; 
+  
+  @override
+  bool get isTeamPlayerVsField => true;
+   @override
+  bool get showProceeds => true;
+}
 class TeamVsFieldRow_MktView extends StBaseTvRow
     with ShowsOneAsset, RequiresGameStatus {
   //
