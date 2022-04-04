@@ -130,9 +130,39 @@ class AssetVsAssetRowRanked_MktView extends AssetVsAssetRow_MktView {
   AssetVsAssetRowRanked_MktView(TableviewDataRowTuple assets) : super(assets);
 }
 
-class AssetVsAssetRow_MktResrch extends StBaseTvRow with ShowsOneAsset {
+class TeamVsFieldRow_MktResearchView extends TeamVsFieldRow_MktView {
+  TeamVsFieldRow_MktResearchView(TableviewDataRowTuple assets) : super(assets);
+}
+
+class PlayerVsFieldRanked_MktResearchView extends TeamVsFieldRow_MktView {
+  PlayerVsFieldRanked_MktResearchView(TableviewDataRowTuple assets) : super(assets);
+}
+class PlayerVsFieldRow_MktResearchView extends TeamVsFieldRow_MktView {
+  PlayerVsFieldRow_MktResearchView(TableviewDataRowTuple assets) : super(assets);
+}
+class DriverVsFieldRow_MktResearchView extends DriverVsFieldRow_MktView {
+  DriverVsFieldRow_MktResearchView(TableviewDataRowTuple assets) : super(assets);
+}
+class TeamPlayerVsFieldRow_MktResearchView extends TeamPlayerVsFieldRow_MktView {
+  TeamPlayerVsFieldRow_MktResearchView(TableviewDataRowTuple assets) : super(assets);
+}
+
+class AssetVsAssetRowRanked_PortfolioView extends AssetVsAssetRow_PortfolioView {
+  AssetVsAssetRowRanked_PortfolioView(TableviewDataRowTuple assets) : super(assets);
+}
+
+class TeamVsFieldRow_PortfolioView extends AssetVsAssetRow_PortfolioView {
+  TeamVsFieldRow_PortfolioView(TableviewDataRowTuple assets) : super(assets);
+}
+class PlayerVsFieldRanked_PortfolioView extends AssetVsAssetRow_PortfolioView {
+  PlayerVsFieldRanked_PortfolioView(TableviewDataRowTuple assets) : super(assets);
+}
+class PlayerVsFieldRow_PortfolioView extends AssetVsAssetRow_PortfolioView {
+  PlayerVsFieldRow_PortfolioView(TableviewDataRowTuple assets) : super(assets);
+}
+class AssetVsAssetRow_MktResearchView extends StBaseTvRow with ShowsOneAsset {
   //
-  const AssetVsAssetRow_MktResrch(
+  const AssetVsAssetRow_MktResearchView(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
@@ -179,14 +209,14 @@ class AssetVsAssetRow_MktResrch extends StBaseTvRow with ShowsOneAsset {
   }
 }
 
-class AssetVsAssetRow_Portfolio extends StBaseTvRow
+class AssetVsAssetRow_PortfolioView extends StBaseTvRow
     with ShowsOneAsset, RequiresUserPositionProps {
   // almost identical to Portfolio History (1 word delta)
 
   bool get isDriverVsField => false;
   bool get isTeamPlayerVsField => false;
   bool get showProceeds => false;
-  const AssetVsAssetRow_Portfolio(
+  const AssetVsAssetRow_PortfolioView(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
@@ -286,21 +316,21 @@ class AssetVsAssetRow_Portfolio extends StBaseTvRow
   }
 }
 
-class DriverVsFieldRow_Portfolio extends AssetVsAssetRow_Portfolio {
+class DriverVsFieldRow_Portfolio extends AssetVsAssetRow_PortfolioView {
   DriverVsFieldRow_Portfolio(TableviewDataRowTuple assets) : super(assets);
 
   @override
   bool get isDriverVsField => true;
 }
 
-class TeamPlayerVsFieldRow_Portfolio extends AssetVsAssetRow_Portfolio {
+class TeamPlayerVsFieldRow_Portfolio extends AssetVsAssetRow_PortfolioView {
   TeamPlayerVsFieldRow_Portfolio(TableviewDataRowTuple assets) : super(assets);
 
   @override
   bool get isTeamPlayerVsField => true;
 }
 
-class AssetVsAssetRow_PortfolioHistory extends AssetVsAssetRow_Portfolio {
+class AssetVsAssetRow_PortfolioHistory extends AssetVsAssetRow_PortfolioView {
   //
   AssetVsAssetRow_PortfolioHistory(TableviewDataRowTuple assets)
       : super(assets);
@@ -310,7 +340,7 @@ class AssetVsAssetRow_PortfolioHistory extends AssetVsAssetRow_Portfolio {
 }
 
 //
-class DriverVsFieldRow_PortfolioHistory extends AssetVsAssetRow_Portfolio {
+class DriverVsFieldRow_PortfolioHistory extends AssetVsAssetRow_PortfolioView {
   DriverVsFieldRow_PortfolioHistory(TableviewDataRowTuple assets)
       : super(assets);
   @override
@@ -320,7 +350,7 @@ class DriverVsFieldRow_PortfolioHistory extends AssetVsAssetRow_Portfolio {
   bool get showProceeds => true;
 }
 
-class TeamPlayerVsFieldRow_PortfolioHistory extends AssetVsAssetRow_Portfolio {
+class TeamPlayerVsFieldRow_PortfolioHistory extends AssetVsAssetRow_PortfolioView {
   TeamPlayerVsFieldRow_PortfolioHistory(TableviewDataRowTuple assets)
       : super(assets);
   @override
@@ -527,7 +557,9 @@ class PlayerVsFieldRankedRow_MktView extends TeamVsFieldRow_MktView {
     Key? key,
   }) : super(assets, key: key);
 }
-
+class PlayerVsFieldRow_MktView extends TeamVsFieldRow_MktView {
+  PlayerVsFieldRow_MktView(TableviewDataRowTuple assets) : super(assets);
+}
 class PlayerDraftRow extends StBaseTvRow with ShowsOneAsset {
   const PlayerDraftRow(
     TableviewDataRowTuple assets, {
