@@ -36,4 +36,18 @@ extension TvAreaRowStyleExt1 on TvAreaRowStyle {
         _Rs.assetVsAsset,
         _Rs.assetVsAssetRanked,
       ].contains(this);
+
+  bool get _participantBasedListview => this.name.contains('Field');
+  // bool get _gameBasedListview => !_participantBasedListview;
+
+  TvRowStyle get rowFormatStyle => _participantBasedListview
+      ? TvRowStyle.participantBased
+      : TvRowStyle.gameBased;
+}
+
+enum TvRowStyle { gameBased, participantBased }
+
+extension TvRowStyleExt1 on TvRowStyle {
+  //
+
 }

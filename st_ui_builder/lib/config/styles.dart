@@ -57,7 +57,7 @@ class StTextStyles {
     color: StColors.white,
   );
 
-  static get moneyDeltaPositive => p1.copyWith(
+  static TextStyle get moneyDeltaPositive => p2.copyWith(
         color: StColors.green,
         fontSize: 14,
       );

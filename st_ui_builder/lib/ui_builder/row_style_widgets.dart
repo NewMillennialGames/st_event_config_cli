@@ -6,7 +6,6 @@ part of StUiController;
     Leaderboard
     Portfolio
     MarketResearch
-
 we have one style for each value of:
     enum TvAreaRowStyle
   */
@@ -23,7 +22,7 @@ class AssetVsAssetRow_MktView extends StBaseTvRow
 
   @override
   Widget rowBody(
-    BuildContext context,
+    BuildContext ctx,
     ActiveGameDetails agd,
   ) {
     // print('AssetVsAssetRow_MktView is rebuilding');
@@ -34,6 +33,90 @@ class AssetVsAssetRow_MktView extends StBaseTvRow
         AssetVsAssetHalfRow(comp1, agd, showRank),
         const SizedBox(height: UiSizes.spaceBtwnRows),
         AssetVsAssetHalfRow(comp2, agd, showRank),
+      ],
+    );
+  }
+}
+
+class AssetVsAssetRow_LeaderBoardView extends StBaseTvRow with ShowsTwoAssets {
+  //
+  const AssetVsAssetRow_LeaderBoardView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+
+  @override
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        LeaderboardHalfRow(
+          competitor: comp1,
+          showLeaderBoardIcon: true,
+        ),
+        const SizedBox(height: UiSizes.spaceBtwnRows),
+        LeaderboardHalfRow(competitor: comp2)
+      ],
+    );
+  }
+}
+
+class DriverVsFieldRow_LeaderBoardView extends StBaseTvRow with ShowsTwoAssets {
+  //
+  const DriverVsFieldRow_LeaderBoardView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+
+  @override
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        LeaderboardHalfRow(
+          competitor: comp1,
+          showLeaderBoardIcon: true,
+          isDriverVsField: true,
+        ),
+        const SizedBox(height: UiSizes.spaceBtwnRows),
+        LeaderboardHalfRow(competitor: comp2, isDriverVsField: true)
+      ],
+    );
+  }
+}
+
+class TeamPlayerVsField_LeaderBoardView extends StBaseTvRow
+    with ShowsTwoAssets {
+  //
+  const TeamPlayerVsField_LeaderBoardView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+
+  @override
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        LeaderboardHalfRow(
+          competitor: comp1,
+          showLeaderBoardIcon: true,
+          isTeamPlayerVsField: true,
+        ),
+        const SizedBox(height: UiSizes.spaceBtwnRows),
+        LeaderboardHalfRow(competitor: comp2, isTeamPlayerVsField: true)
       ],
     );
   }
@@ -99,6 +182,9 @@ class AssetVsAssetRow_MktResrch extends StBaseTvRow with ShowsOneAsset {
 class AssetVsAssetRow_Portfolio extends StBaseTvRow
     with ShowsOneAsset, RequiresUserPositionProps {
   // almost identical to Portfolio History (1 word delta)
+
+  bool get isDriverVsField => false;
+  bool get isTeamPlayerVsField => false;
   bool get showProceeds => false;
   const AssetVsAssetRow_Portfolio(
     TableviewDataRowTuple assets, {
@@ -114,39 +200,48 @@ class AssetVsAssetRow_Portfolio extends StBaseTvRow
     TextStyle gainLossTxtStyle = hasIncreased
         ? StTextStyles.moneyDeltaPositive
         : StTextStyles.moneyDeltaPositive.copyWith(
-            colors: StColors.errorText,
+            color: StColors.errorText,
           );
-
     // FIXME:  get position
     // TODO:  mixin "RequiresUserPositionProps" will give these values
     String sharesOwned = assetHoldingsSummary.sharesOwnedStr;
     String positionValue = assetHoldingsSummary.positionEstValueStr;
     String positionGainLoss = assetHoldingsSummary.positionGainLossStr;
 
-    // String sharesOwned = '11 shares';
-    // String positionValue = '\$26.32';
-    // String positionGainLoss = '\$133.32';
-
     return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         CompetitorImage(comp1.imgUrl, false),
+        const SizedBox(width: 12),
         Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text(comp1.topName),
+                CheckAssetType(
+                  competitor: comp1,
+                  isDriverVsField: isDriverVsField,
+                  isTeamPlayerVsField: isTeamPlayerVsField,
+                ),
                 TradeButton(comp1.assetKey, agd.gameStatus),
               ],
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(sharesOwned),
+                    Text(
+                      sharesOwned + ' shares',
+                      style: StTextStyles.p3,
+                    ),
                     Row(children: [
-                      Text('@ $sharePrice'),
+                      Text(
+                        '@ $sharePrice ',
+                        style: StTextStyles.p3,
+                      ),
                       Text(
                         sharePriceChange,
                         style: gainLossTxtStyle,
@@ -154,18 +249,32 @@ class AssetVsAssetRow_Portfolio extends StBaseTvRow
                     ]),
                   ],
                 ),
+                const SizedBox(width: 24),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(showProceeds ? StStrings.proceeds : StStrings.value),
-                    Text(positionValue),
+                    Text(
+                      showProceeds ? StStrings.proceeds : StStrings.value,
+                      style: StTextStyles.p3,
+                    ),
+                    Text(
+                      positionValue,
+                      style: StTextStyles.p3,
+                    ),
                   ],
                 ),
+                const SizedBox(width: 24),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    const Text(StStrings.gainLossAbbrev),
-                    Text(positionGainLoss),
+                    const Text(
+                      StStrings.gainLossAbbrev,
+                      style: StTextStyles.p3,
+                    ),
+                    Text(
+                      positionGainLoss,
+                      style: StTextStyles.p3,
+                    ),
                   ],
                 ),
               ],
@@ -177,6 +286,20 @@ class AssetVsAssetRow_Portfolio extends StBaseTvRow
   }
 }
 
+class DriverVsFieldRow_Portfolio extends AssetVsAssetRow_Portfolio {
+  DriverVsFieldRow_Portfolio(TableviewDataRowTuple assets) : super(assets);
+
+  @override
+  bool get isDriverVsField => true;
+}
+
+class TeamPlayerVsFieldRow_Portfolio extends AssetVsAssetRow_Portfolio {
+  TeamPlayerVsFieldRow_Portfolio(TableviewDataRowTuple assets) : super(assets);
+
+  @override
+  bool get isTeamPlayerVsField => true;
+}
+
 class AssetVsAssetRow_PortfolioHistory extends AssetVsAssetRow_Portfolio {
   //
   AssetVsAssetRow_PortfolioHistory(TableviewDataRowTuple assets)
@@ -185,53 +308,99 @@ class AssetVsAssetRow_PortfolioHistory extends AssetVsAssetRow_Portfolio {
   @override
   bool get showProceeds => true;
 }
+
 //
+class DriverVsFieldRow_PortfolioHistory extends AssetVsAssetRow_Portfolio {
+  DriverVsFieldRow_PortfolioHistory(TableviewDataRowTuple assets)
+      : super(assets);
+  @override
+  bool get isDriverVsField => true;
+
+  @override
+  bool get showProceeds => true;
+}
+
+class TeamPlayerVsFieldRow_PortfolioHistory extends AssetVsAssetRow_Portfolio {
+  TeamPlayerVsFieldRow_PortfolioHistory(TableviewDataRowTuple assets)
+      : super(assets);
+  @override
+  bool get isTeamPlayerVsField => true;
+  @override
+  bool get showProceeds => true;
+}
 
 class TeamVsFieldRow_MktView extends StBaseTvRow
     with ShowsOneAsset, RequiresGameStatus {
   //
   bool get showRanked => false;
+  bool get isDriverVsField => false;
+  bool get isTeamPlayerVsField => false;
   const TeamVsFieldRow_MktView(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
 
   @override
-  Widget rowBody(BuildContext context, ActiveGameDetails agd) {
+  Widget rowBody(BuildContext ctx, ActiveGameDetails agd) {
     //
-    final size = MediaQuery.of(context).size;
-
+    final size = MediaQuery.of(ctx).size;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         if (!showRanked) kStarIcon,
-        if (showRanked) Text(comp1.rankStr),
         CompetitorImage(comp1.imgUrl, showRanked),
         Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                Text(
-                  comp1.topName,
-                  style: StTextStyles.h2,
+                CheckAssetType(
+                  competitor: comp1,
+                  isDriverVsField: isDriverVsField,
+                  isTeamPlayerVsField: isTeamPlayerVsField,
                 ),
+                kSpacerLarge,
                 Column(
                   children: [
-                    Text(comp1.currPriceStr),
-                    Text(comp1.recentDeltaStr),
+                    Text(
+                      comp1.currPriceStr,
+                      style: StTextStyles.h6,
+                    ),
+                    Text(
+                      comp1.recentDeltaStr,
+                      style: StTextStyles.h6,
+                    ),
                   ],
                 )
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const Text(StStrings.open),
-                Text('3.00'),
-                const Text(StStrings.high),
-                Text('5.00'),
-                const Text(StStrings.low),
-                Text('3.00'),
+              children: const [
+                Text(
+                  StStrings.open,
+                  style: StTextStyles.h6,
+                ),
+                Text(
+                  '3.00',
+                  style: StTextStyles.h6,
+                ),
+                Text(
+                  StStrings.high,
+                  style: StTextStyles.h6,
+                ),
+                Text(
+                  '5.00',
+                  style: StTextStyles.h6,
+                ),
+                Text(
+                  StStrings.low,
+                  style: StTextStyles.h6,
+                ),
+                Text(
+                  '3.00',
+                  style: StTextStyles.h6,
+                ),
               ],
             )
           ],
@@ -242,7 +411,7 @@ class TeamVsFieldRow_MktView extends StBaseTvRow
               comp1.assetKey,
               agd.gameStatus,
             ),
-            const SizedBox.expand(),
+            const Expanded(child: SizedBox()),
           ],
         ),
       ],
@@ -271,8 +440,9 @@ class TeamDraftRow extends StBaseTvRow with ShowsOneAsset {
   Widget rowBody(BuildContext context, ActiveGameDetails agd) {
     // paste row widget code here
     return Container(
-      child: Text('Awaiting UX specs for <TeamDraftRow>'),
-    );
+        child: Text(
+      'Awaiting UX specs for <TeamDraftRow>',
+    ));
   }
 }
 
@@ -323,19 +493,13 @@ class TeamLineRow extends StBaseTvRow with ShowsOneAsset {
   }
 }
 
-class TeamPlayerVsFieldRow extends StBaseTvRow with ShowsOneAsset {
-  const TeamPlayerVsFieldRow(
+class TeamPlayerVsFieldRow_MktView extends TeamVsFieldRow_MktView {
+  @override
+  bool get isTeamPlayerVsField => true;
+  const TeamPlayerVsFieldRow_MktView(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
-
-  @override
-  Widget rowBody(BuildContext context, ActiveGameDetails agd) {
-    // paste row widget code here
-    return Container(
-      child: Text('Awaiting UX specs for <TeamPlayerVsFieldRow>'),
-    );
-  }
 }
 
 class PlayerVsFieldRow extends StBaseTvRow with ShowsOneAsset {
@@ -354,19 +518,14 @@ class PlayerVsFieldRow extends StBaseTvRow with ShowsOneAsset {
   }
 }
 
-class PlayerVsFieldRankedRow extends StBaseTvRow with ShowsOneAsset {
-  const PlayerVsFieldRankedRow(
+class PlayerVsFieldRankedRow_MktView extends TeamVsFieldRow_MktView {
+  @override
+  bool get showRanked => true;
+
+  const PlayerVsFieldRankedRow_MktView(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
-
-  @override
-  Widget rowBody(BuildContext context, ActiveGameDetails agd) {
-    // paste row widget code here
-    return Container(
-      child: Text('Awaiting UX specs for <PlayerVsFieldRankedRow>'),
-    );
-  }
 }
 
 class PlayerDraftRow extends StBaseTvRow with ShowsOneAsset {
@@ -385,20 +544,13 @@ class PlayerDraftRow extends StBaseTvRow with ShowsOneAsset {
   }
 }
 
-class DriverVsFieldRow extends StBaseTvRow with ShowsOneAsset {
-  const DriverVsFieldRow(
+class DriverVsFieldRow_MktView extends TeamVsFieldRow_MktView {
+  @override
+  bool get isDriverVsField => true;
+  const DriverVsFieldRow_MktView(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
-
-  @override
-  Widget rowBody(BuildContext context, ActiveGameDetails agd) {
-    // paste row widget code here
-    return Container(
-      child: Text('Awaiting UX specs for <DriverVsFieldRow>'),
-      decoration: kRowBoxDecor,
-    );
-  }
 }
 
 // test classes only below
@@ -470,6 +622,7 @@ class TeamVsFieldRankedRowTest extends StBaseTvRow with ShowsOneAsset {
     );
   }
 }
+
 
 
 // @override

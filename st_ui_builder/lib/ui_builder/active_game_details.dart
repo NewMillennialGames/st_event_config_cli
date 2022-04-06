@@ -78,6 +78,15 @@ class ActiveGameDetails with _$ActiveGameDetails {
   currentPrice
   isWatched
   isOwned
+
+  what happens when an asset listed in the Portfolio HAS NO current Game??
+  In that case, the visibility of the Trade button should be 
+  based on the Asset-State, and NOT the game-State.
+
+  But, with NO CURRENT GAME, how will the row lookup this info?
+  we'll need an entry in the Game-Details-State-Provider
+  which is keyed off the AssetKey, and not the GameKey to load this data
+  for assets without any current Game
   */
   const ActiveGameDetails._();
 

@@ -1,7 +1,6 @@
 part of StUiController;
 
 /*
-
 */
 
 class TableviewConfigPayload {
@@ -51,52 +50,71 @@ class TableviewConfigPayload {
   TvRowBuilder get rowConstructor {
     /* row-style returned depends on the screen on this instance
        TODO:  implement remaining row styles
-
       this is an easy place to return the correct row
       for every screen, based on what was selected for the market-view screen
     */
     print(
       '@@@@ getting rowStyle constructor for ${rowStyle.name} on ${appScreen.name} screen',
     );
-    switch (rowStyle) {
-      case TvAreaRowStyle.assetVsAsset:
-        switch (appScreen) {
-          case AppScreen.marketView:
+    // TODO:  lets swap order of the switch to test appScreen first
+    // that will let us simplifly and consolidate logic for identical rows
+    switch (appScreen) {
+      case AppScreen.marketView:
+        switch (rowStyle) {
+          case TvAreaRowStyle.assetVsAsset:
             return AssetVsAssetRow_MktView.new;
-          case AppScreen.marketResearch:
-            return AssetVsAssetRow_MktResrch.new;
+          case TvAreaRowStyle.assetVsAssetRanked:
+            return AssetVsAssetRowRanked_MktView.new;
+          case TvAreaRowStyle.teamVsField:
+            return TeamVsFieldRow_MktView.new;
+          case TvAreaRowStyle.playerVsFieldRanked:
+            return PlayerVsFieldRankedRow_MktView.new;
+          case TvAreaRowStyle.driverVsField:
+            return DriverVsFieldRow_MktView.new;
+          case TvAreaRowStyle.teamPlayerVsField:
+            return TeamPlayerVsFieldRow_MktView.new;
           default:
             return AssetVsAssetRow_MktView.new;
         }
-      case TvAreaRowStyle.assetVsAssetRanked:
-        return AssetVsAssetRowRanked_MktView.new;
-      case TvAreaRowStyle.teamVsField:
-        return TeamVsFieldRow_MktView.new;
-      // print(
-      //   'rowConstructor runnning test code with TeamVsFieldRowTest',
-      // );
-      // return TeamVsFieldRowTest.new;
-      case TvAreaRowStyle.teamVsFieldRanked:
-        return TeamVsFieldRowRanked_MktView.new;
-      // print(
-      //   'rowConstructor runnning test code with TeamVsFieldRankedRowTest',
-      // );
-      // return TeamVsFieldRankedRowTest.new;
-      case TvAreaRowStyle.teamDraft:
-        return TeamDraftRow.new;
-      case TvAreaRowStyle.teamLine:
-        return TeamLineRow.new;
-      case TvAreaRowStyle.teamPlayerVsField:
-        return TeamPlayerVsFieldRow.new;
-      case TvAreaRowStyle.playerVsField:
-        return PlayerVsFieldRow.new;
-      case TvAreaRowStyle.playerVsFieldRanked:
-        return PlayerVsFieldRankedRow.new;
-      case TvAreaRowStyle.playerDraft:
-        return PlayerDraftRow.new;
-      case TvAreaRowStyle.driverVsField:
-        return DriverVsFieldRow.new;
-      // default:
+      case AppScreen.marketResearch:
+        switch (rowStyle) {
+          case TvAreaRowStyle.assetVsAsset:
+            return AssetVsAssetRow_MktResrch.new;
+          case TvAreaRowStyle.assetVsAssetRanked:
+            return AssetVsAssetRow_MktResrch.new;
+          case TvAreaRowStyle.teamVsField:
+            return TeamVsFieldRow_MktView.new;
+          case TvAreaRowStyle.playerVsFieldRanked:
+            return TeamVsFieldRow_MktView.new;
+          case TvAreaRowStyle.driverVsField:
+            return DriverVsFieldRow_MktView.new;
+          case TvAreaRowStyle.teamPlayerVsField:
+            return TeamPlayerVsFieldRow_MktView.new;
+          default:
+            return AssetVsAssetRow_MktResrch.new;
+        }
+      case AppScreen.portfolio:
+        switch (rowStyle) {
+          case TvAreaRowStyle.assetVsAsset:
+            return AssetVsAssetRow_Portfolio.new;
+          case TvAreaRowStyle.assetVsAssetRanked:
+            return AssetVsAssetRow_Portfolio.new;
+          case TvAreaRowStyle.teamVsField:
+            return AssetVsAssetRow_Portfolio.new;
+          case TvAreaRowStyle.playerVsFieldRanked:
+            return AssetVsAssetRow_Portfolio.new;
+          case TvAreaRowStyle.driverVsField:
+            return DriverVsFieldRow_Portfolio.new;
+          case TvAreaRowStyle.teamPlayerVsField:
+            return TeamPlayerVsFieldRow_Portfolio.new;
+          default:
+            return AssetVsAssetRow_Portfolio.new;
+        }
+
+      default:
+        return AssetVsAssetRow_MktView.new;
+      // case AppScreen.portfolioHistory:
+
       //   return TeamVsTeamRow.new;
     }
   }
