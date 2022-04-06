@@ -58,6 +58,12 @@ class StUiBuilderFactory {
     }
   }
 
+  TvRowStyle tvRowStyleForScreen(AppScreen screen) {
+    CfgForAreaAndNestedSlots tableAreaAndSlotCfg =
+        _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.tableview);
+    return tableAreaAndSlotCfg.rowStyleCfg.selectedRowStyle.rowFormatStyle;
+  }
+
   GroupedTableDataMgr groupedTvConfigForScreen(
     AppScreen screen,
     List<TableviewDataRowTuple> rows,
