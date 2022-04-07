@@ -62,63 +62,63 @@ class TableviewConfigPayload {
       case AppScreen.marketView:
         switch (rowStyle) {
           case TvAreaRowStyle.assetVsAsset:
-            return AssetVsAssetRow_MktView.new;
+            return AssetVsAssetRowMktView.new;
           case TvAreaRowStyle.assetVsAssetRanked:
-            return AssetVsAssetRowRanked_MktView.new;
+            return AssetVsAssetRowRankedMktView.new;
           case TvAreaRowStyle.teamVsField:
-            return TeamVsFieldRow_MktView.new;
+            return TeamVsFieldRowMktView.new;
           case TvAreaRowStyle.playerVsField:
-            return PlayerVsFieldRow_MktView.new;
+            return PlayerVsFieldRowMktView.new;
           case TvAreaRowStyle.playerVsFieldRanked:
-            return PlayerVsFieldRankedRow_MktView.new;
+            return PlayerVsFieldRankedRowMktView.new;
           case TvAreaRowStyle.driverVsField:
-            return DriverVsFieldRow_MktView.new;
+            return DriverVsFieldRowMktView.new;
           case TvAreaRowStyle.teamPlayerVsField:
-            return TeamPlayerVsFieldRow_MktView.new;
+            return TeamPlayerVsFieldRowMktView.new;
           default:
-            return AssetVsAssetRow_MktView.new;
+            return AssetVsAssetRowMktView.new;
         }
       case AppScreen.marketResearch:
         switch (rowStyle) {
           case TvAreaRowStyle.assetVsAsset:
-            return AssetVsAssetRow_MktResearchView.new;
+            return AssetVsAssetRowMktResearchView.new;
           case TvAreaRowStyle.assetVsAssetRanked:
-            return AssetVsAssetRow_MktResearchView.new;
+            return AssetVsAssetRowMktResearchView.new;
           case TvAreaRowStyle.teamVsField:
-            return TeamVsFieldRow_MktResearchView.new;
+            return TeamVsFieldRowMktResearchView.new;
           case TvAreaRowStyle.playerVsField:
-            return PlayerVsFieldRow_MktResearchView.new;
+            return PlayerVsFieldRowMktResearchView.new;
           case TvAreaRowStyle.playerVsFieldRanked:
-            return PlayerVsFieldRanked_MktResearchView.new;
+            return PlayerVsFieldRankedMktResearchView.new;
           case TvAreaRowStyle.driverVsField:
-            return DriverVsFieldRow_MktResearchView.new;
+            return DriverVsFieldRowMktResearchView.new;
           case TvAreaRowStyle.teamPlayerVsField:
-            return TeamPlayerVsFieldRow_MktResearchView.new;
+            return TeamPlayerVsFieldRowMktResearchView.new;
           default:
-            return AssetVsAssetRow_MktResearchView.new;
+            return AssetVsAssetRowMktResearchView.new;
         }
       case AppScreen.portfolio:
         switch (rowStyle) {
           case TvAreaRowStyle.assetVsAsset:
-            return AssetVsAssetRow_PortfolioView.new;
+            return AssetVsAssetRowPortfolioView.new;
           case TvAreaRowStyle.assetVsAssetRanked:
-            return AssetVsAssetRowRanked_PortfolioView.new;
+            return AssetVsAssetRowRankedPortfolioView.new;
           case TvAreaRowStyle.teamVsField:
-            return TeamVsFieldRow_PortfolioView.new;
+            return TeamVsFieldRowPortfolioView.new;
           case TvAreaRowStyle.playerVsField:
-            return PlayerVsFieldRow_PortfolioView.new;
+            return PlayerVsFieldRowPortfolioView.new;
           case TvAreaRowStyle.playerVsFieldRanked:
-            return PlayerVsFieldRanked_PortfolioView.new;
+            return PlayerVsFieldRankedPortfolioView.new;
           case TvAreaRowStyle.driverVsField:
-            return DriverVsFieldRow_Portfolio.new;
+            return DriverVsFieldRowPortfolio.new;
           case TvAreaRowStyle.teamPlayerVsField:
-            return TeamPlayerVsFieldRow_Portfolio.new;
+            return TeamPlayerVsFieldRowPortfolio.new;
           default:
-            return AssetVsAssetRow_PortfolioView.new;
+            return AssetVsAssetRowPortfolioView.new;
         }
 
       default:
-        return AssetVsAssetRow_MktView.new;
+        return AssetVsAssetRowMktView.new;
       // case AppScreen.portfolioHistory:
 
       //   return TeamVsTeamRow.new;
