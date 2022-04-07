@@ -58,7 +58,7 @@ class StUiBuilderFactory {
     }
   }
 
-  TvRowStyle tvRowStyleForScreen(AppScreen screen) {
+  TvBasisForRow tvRowStyleForScreen(AppScreen screen) {
     CfgForAreaAndNestedSlots tableAreaAndSlotCfg =
         _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.tableview);
     return tableAreaAndSlotCfg.rowStyleCfg.selectedRowStyle.rowFormatStyle;
