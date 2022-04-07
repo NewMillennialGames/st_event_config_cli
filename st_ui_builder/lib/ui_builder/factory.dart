@@ -33,7 +33,7 @@ class StUiBuilderFactory {
     } catch (e) {
       // will fall to the catch block in calling method
       throw UnimplementedError(
-        'UI Config JSON failed to parse!! server sent invalid payload',
+        'UI Config JSON failed to parse!! server sent invalid payload ${e.toString()}',
       );
     }
     //
