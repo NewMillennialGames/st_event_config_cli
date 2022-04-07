@@ -40,14 +40,14 @@ extension TvAreaRowStyleExt1 on TvAreaRowStyle {
   bool get _participantBasedListview => this.name.contains('Field');
   // bool get _gameBasedListview => !_participantBasedListview;
 
-  TvRowStyle get rowFormatStyle => _participantBasedListview
-      ? TvRowStyle.participantBased
-      : TvRowStyle.gameBased;
+  TvBasisForRow get rowFormatStyle => _participantBasedListview
+      ? TvBasisForRow.participantBased
+      : TvBasisForRow.gameBased;
 }
 
-enum TvRowStyle { gameBased, participantBased }
+enum TvBasisForRow { gameBased, participantBased }
 
-extension TvRowStyleExt1 on TvRowStyle {
-  //
+// extension TvBasisForRowExt1 on TvBasisForRow {
+//   //
 
-}
+// }

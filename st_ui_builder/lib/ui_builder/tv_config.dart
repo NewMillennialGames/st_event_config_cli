@@ -43,7 +43,7 @@ class TableviewConfigPayload {
       appScreen,
       tableAreaCfg.rowStyleCfg.selectedRowStyle,
       tableAreaCfg.sortingRules ?? SortingRules(TvSortCfg.noop(), null, null),
-      filterBarAreaCfg?.filterRules!,
+      filterBarAreaCfg?.filterRules,
     );
   }
 

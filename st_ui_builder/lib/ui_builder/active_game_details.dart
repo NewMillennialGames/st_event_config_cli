@@ -101,7 +101,7 @@ class ActiveGameDetails with _$ActiveGameDetails {
     @Default([]) List<AssetStateUpdates> participantAssetInfo,
   }) = _ActiveGameDetails;
 
-  factory ActiveGameDetails.createNew(
+  factory ActiveGameDetails.createFromTwo(
     String competitionKey,
     DateTime scheduledStartDtTm,
     CompetitionStatus gameStatus,
@@ -113,6 +113,20 @@ class ActiveGameDetails with _$ActiveGameDetails {
       scheduledStartDtTm,
       gameStatus: gameStatus,
       participantAssetInfo: [asu1, asu2],
+    );
+  }
+
+  factory ActiveGameDetails.createFromMany(
+      String competitionKey,
+      DateTime scheduledStartDtTm,
+      CompetitionStatus gameStatus,
+      Iterable<AssetStateUpdates> asus) {
+    //
+    return ActiveGameDetails(
+      competitionKey,
+      scheduledStartDtTm,
+      gameStatus: gameStatus,
+      participantAssetInfo: asus.toList(),
     );
   }
 

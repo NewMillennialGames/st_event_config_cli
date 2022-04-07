@@ -1,7 +1,7 @@
 st_ev_cfg
 2.15
-file:///Users/dgaedcke/dev/st_event_config/
-file:///Users/dgaedcke/dev/st_event_config/lib/
+file:///Users/dgaedcke/dev/st_event_config_cli/
+file:///Users/dgaedcke/dev/st_event_config_cli/lib/
 _fe_analyzer_shared
 2.12
 file:///Users/dgaedcke/flutter/.pub-cache/hosted/pub.dartlang.org/_fe_analyzer_shared-36.0.0/

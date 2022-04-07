@@ -25,11 +25,12 @@ the UI factory   (Filter Bar and TableView)
 const String cfgEmpl1 = 'blueRow.json';
 // cfgEmpl2 seems to be invalid json; replace it to continue testing
 const String cfgEmpl2 = 'five.json';
+const String cfgEmpl3 = 'NASCAR.json';
 
 // evCfgDataFromServer contains the JSON payload produced by the CLI configurator
 Map<String, dynamic> evCfgDataFromServer = {};
 
-Future<void> readExampleEventConfig({String filename = cfgEmpl1}) async {
+Future<void> readExampleEventConfig({String filename = cfgEmpl3}) async {
   final String response = await rootBundle.loadString('assets/$filename');
   evCfgDataFromServer = json.decode(response);
 }
