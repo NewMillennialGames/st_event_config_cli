@@ -103,11 +103,13 @@ class CheckAssetType extends StatelessWidget {
   final AssetRowPropertyIfc competitor;
   final bool? isDriverVsField;
   final bool? isTeamPlayerVsField;
+  final bool? isPlayerVsFieldRanked;
   const CheckAssetType(
       {Key? key,
       required this.competitor,
       this.isDriverVsField = false,
-      this.isTeamPlayerVsField = false})
+      this.isTeamPlayerVsField = false,
+      this.isPlayerVsFieldRanked = false})
       : super(key: key);
 
   @override
@@ -119,13 +121,15 @@ class CheckAssetType extends StatelessWidget {
         children: [
           Text(
             competitor.rankStr,
-            style: StTextStyles.h1,
+            style: StTextStyles.h1
+                .copyWith(fontWeight: FontWeight.w900, fontSize: 30),
           ),
           kSpacerSm,
           Column(
             children: [
-              Text(competitor.topName.toUpperCase(), style: StTextStyles.h6),
-              Text(lastName.toUpperCase(), style: StTextStyles.h3)
+              Text(competitor.topName.toUpperCase(), style: StTextStyles.p2),
+              Text(lastName.toUpperCase(),
+                  style: StTextStyles.h2.copyWith(fontWeight: FontWeight.w700))
             ],
           )
         ],
@@ -135,20 +139,34 @@ class CheckAssetType extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(competitor.topName, style: StTextStyles.h1),
+          Text(competitor.topName, style: StTextStyles.h4),
           Row(
             children: [
               Text(competitor.teamNameWhenTradingPlayers,
-                  style: StTextStyles.h6),
-              Text(competitor.position, style: StTextStyles.h6)
+                  style: StTextStyles.p2.copyWith(color: StColors.coolGray)),
+              kSpacerSm,
+              Text(competitor.position,
+                  style: StTextStyles.p2.copyWith(color: StColors.coolGray))
             ],
+          ),
+        ],
+      );
+    }
+    if (isPlayerVsFieldRanked!) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(competitor.topName, style: StTextStyles.h4),
+          Text(
+            competitor.rankStr,
+            style: StTextStyles.p2.copyWith(color: StColors.coolGray),
           ),
         ],
       );
     }
     return Text(
       competitor.topName,
-      style: StTextStyles.p1,
+      style: StTextStyles.h4,
     );
   }
 }
