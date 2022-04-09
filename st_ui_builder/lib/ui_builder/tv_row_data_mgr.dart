@@ -48,4 +48,11 @@ class TableRowDataMgr {
       redrawCallback!();
     }
   }
+
+  void endGeographicGrouping() {
+    // games now happening between/across regions
+    // so it not longer makes sense to group or sort geographically
+
+    _tableViewCfg.endGeographicGrouping();
+  }
 }

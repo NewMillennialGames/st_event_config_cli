@@ -96,6 +96,12 @@ class GroupedTableDataMgr {
     return filterRules?.item1.colName != DbTableFieldName.imageUrl;
   }
 
+  void endGeographicGrouping() {
+    // games now happening between/across regions
+    // so it not longer makes sense to group or sort geographically
+    _tableViewCfg.endGeographicGrouping();
+  }
+
   String? _filter1Selection;
   String? _filter2Selection;
   String? _filter3Selection;

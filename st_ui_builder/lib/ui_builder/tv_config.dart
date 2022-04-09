@@ -47,6 +47,14 @@ class TableviewConfigPayload {
     );
   }
 
+  void endGeographicGrouping() {
+    // games now happening between/across regions
+    // so it not longer makes sense to group or sort geographically
+    print('called endGeographicGrouping;  not yet implemented');
+    // sortRules.removeByField(DbTableFieldName.gameLocation);
+    // groupByRules.removeByField(DbTableFieldName.gameLocation);
+  }
+
   TvRowBuilder get rowConstructor {
     /* row-style returned depends on the screen on this instance
        TODO:  implement remaining row styles
