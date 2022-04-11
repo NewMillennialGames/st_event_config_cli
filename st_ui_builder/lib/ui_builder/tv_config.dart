@@ -10,9 +10,11 @@ class TableviewConfigPayload {
       row-style
       and filter options
   */
-
+  // which screen this cfg applies to
   final AppScreen appScreen;
+  // style / appearance of rows in its listview
   final TvAreaRowStyle rowStyle;
+  //
   final SortingRules sortRules;
   final FilterRules? filterRules;
   // final GroupingRules groupByRules;

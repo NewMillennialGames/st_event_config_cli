@@ -27,14 +27,14 @@ enum TvAreaRowStyle {
   driverVsField,
 }
 
-typedef _Rs = TvAreaRowStyle;
+// typedef _Rs = TvAreaRowStyle;
 
 extension TvAreaRowStyleExt1 on TvAreaRowStyle {
   //
   bool get twoPerRowOnMarketViewScreen => [
         // applies only to MarketView
-        _Rs.assetVsAsset,
-        _Rs.assetVsAssetRanked,
+        TvAreaRowStyle.assetVsAsset,
+        TvAreaRowStyle.assetVsAssetRanked,
       ].contains(this);
 
   bool get _participantBasedListview => this.name.contains('Field');

@@ -27,7 +27,7 @@ class TableRowDataMgr {
   // _filteredAssetRows = _allAssetRows.toList();
 
   // List<TableviewDataRowTuple> get listData => _filteredAssetRows;
-  // GroupingRules get groupRules => _tableViewCfg.groupByRules;
+  // ``GroupingRules`` get groupRules => _tableViewCfg.groupByRules;
   SortingRules get sortingRules => _tableViewCfg.sortRules;
   // FilterRules get filterRules => _tableViewCfg.filterRules;
 

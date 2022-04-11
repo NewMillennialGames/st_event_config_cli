@@ -74,7 +74,7 @@ class ActiveGameDetails with _$ActiveGameDetails {
   /*
   Row UI must update when any of the below changes:
   Game CompetitionStatus
-  Asset State (either of participants)
+  Asset State (any of participants)
   currentPrice
   isWatched
   isOwned

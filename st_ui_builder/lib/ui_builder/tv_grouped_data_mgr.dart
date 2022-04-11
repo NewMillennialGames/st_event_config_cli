@@ -111,7 +111,7 @@ class GroupedTableDataMgr {
     double barHeight = 46,
     Color backColor = Colors.transparent,
   }) {
-    // dont call this without first checking this.hasFilterBar
+    // dont call this method without first checking this.hasColumnFilters
     if (filterRules == null) return SizedBox();
 
     TvFilterCfg i1 = filterRules!.item1;

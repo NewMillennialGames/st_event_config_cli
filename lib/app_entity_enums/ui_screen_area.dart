@@ -2,7 +2,7 @@ part of AppEntities;
 
 @JsonEnum()
 enum ScreenWidgetArea {
-  // each part in a section of the app
+  // each configurable area in a screen/section of the app
   // each below has subset of UiComponentSlotName
   navBar,
   filterBar,

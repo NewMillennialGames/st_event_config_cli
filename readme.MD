@@ -40,7 +40,7 @@ Questions (and rules created from answers) are nested into a hierarchy as follow
     "cd" into this project folder
     run these cmds:
         dart pub get
-        dart lib/evCdg.dart
+        dart evCfg.dart
 
 ### General flow of app
 App Feeds question to user
