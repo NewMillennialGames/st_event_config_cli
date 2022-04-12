@@ -28,6 +28,8 @@ class QuestListMgr {
   int get totalAnsweredQuestions => _answeredQuestsBySection.values
       .fold<int>(0, (r, qLst) => r + qLst.length);
 
+  int get pendingQuestionCount => _pendingQuestions.length - _currQuestionIdx;
+
   List<Question> get _allAnsweredQuestions =>
       _answeredQuestsBySection.values.fold<List<Question>>(
         [],
@@ -144,11 +146,12 @@ class QuestListMgr {
         mostRecentSaved.questionId == _currentOrLastQuestion.questionId) {
       //
       print(
-          'QID: ${mostRecentSaved.questionId} seemd to be duplicate & wasnt moved into _answeredQuestsBySection');
+        'Error: QID: ${mostRecentSaved.questionId} seemd to be duplicate & wasnt moved into _answeredQuestsBySection',
+      );
       return;
     }
     ;
-    // store into list for this section
+    // store into list for this section;  but DO NOT remove from pendingQuestions or messes up cur_idx tracking
     var l = _answeredQuestsBySection[_currentOrLastQuestion.appScreen] ?? [];
     l.add(_currentOrLastQuestion);
     _answeredQuestsBySection[_currentOrLastQuestion.appScreen] = l;
@@ -159,7 +162,7 @@ class QuestListMgr {
     _pendingQuestions = loadInitialConfigQuestions();
     _questCountBySection[AppScreen.eventConfiguration] =
         _pendingQuestions.length;
-    int c = 0;
+    // int c = 0;
     // _pendingQuestions.forEach((q) {
     //   q.questionId = ++c;
     // });

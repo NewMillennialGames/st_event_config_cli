@@ -11,7 +11,7 @@ void appendNewQuestsOrInsertImplicitAnswers(QuestListMgr questListMgr) {
         questListMgr.appendNewQuestions(matchTest.pendingQuests);
       }
       if (matchTest.createsImplicitAnswers) {
-        questListMgr.addImplicitAnswers(matchTest._answeredQuests);
+        questListMgr.addImplicitAnswers(matchTest.answeredQuests);
       }
     }
   }
@@ -56,7 +56,7 @@ class QuestMatcher<AnsType> {
   Type? typ = UserResponse<AnsType>;
   //
   List<Question> pendingQuests = [];
-  List<Question> _answeredQuests = [];
+  List<Question> answeredQuests = [];
 
   QuestMatcher(
     this.matcherBehavior,
@@ -69,8 +69,10 @@ class QuestMatcher<AnsType> {
     this.visRuleTypeForAreaOrSlot,
     this.behRuleTypeForAreaOrSlot,
     this.isRuleQuestion = false,
-    this.pendingQuests = const [],
-  });
+    List<Question>? pendingQuests,
+    List<Question>? answeredQuests,
+  })  : this.pendingQuests = pendingQuests ?? [],
+        this.answeredQuests = answeredQuests ?? [];
 
   // getters
   bool get addsPendingQuestions => matcherBehavior.addsPendingQuestions;
@@ -79,7 +81,13 @@ class QuestMatcher<AnsType> {
   bool doesMatch(Question quest) {
     bool dMatch = quest.questionId == this.questionId || _doDeeperMatch(quest);
 
-    if (dMatch && addQuestChkCallbk(quest.response!.answers!)) {
+    bool subMatch = false;
+    if (quest.response!.answers! is RuleResponseWrapperIfc) {
+      subMatch = addQuestChkCallbk(quest.response!.answers!);
+    } else {
+      subMatch = addQuestChkCallbk(quest.response!.answers!);
+    }
+    if (dMatch && subMatch) {
       // it was a mach and answer value indicates that
       // new questions /answers SHOULD be created
       if (this.addsPendingQuestions) {
@@ -90,7 +98,7 @@ class QuestMatcher<AnsType> {
         );
       }
       if (this.createsImplicitAnswers) {
-        _answeredQuests.addAll(
+        answeredQuests.addAll(
           DerivedQuestions.impliedAnswersFromAnswer(
             quest,
           ),
