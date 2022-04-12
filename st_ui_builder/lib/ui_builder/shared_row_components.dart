@@ -1,9 +1,25 @@
 part of StUiController;
 
-const kStarIcon = Icon(
-  Icons.star_border,
-  color: StColors.blue,
-);
+class WatchButton extends ConsumerWidget {
+  const WatchButton({Key? key, required this.assetKey, this.isWatched = false})
+      : super(key: key);
+
+  final String assetKey;
+  final bool isWatched;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final tradeFlow = ref.read(tradeFlowProvider);
+
+    return InkWell(
+      onTap: () => tradeFlow.toggleWatchValue(assetKey),
+      child: Icon(
+        Icons.star_border,
+        color: isWatched ? StColors.yellow : StColors.blue,
+      ),
+    );
+  }
+}
 
 const kSpacerSm = SizedBox(
   width: 6,
@@ -17,6 +33,7 @@ class CompetitorImage extends StatelessWidget {
   // just the image or placeholder
   final String imgUrl;
   final bool shrinkForRank;
+
   const CompetitorImage(
     this.imgUrl,
     this.shrinkForRank, {
@@ -104,6 +121,7 @@ class CheckAssetType extends StatelessWidget {
   final bool? isDriverVsField;
   final bool? isTeamPlayerVsField;
   final bool? isPlayerVsFieldRanked;
+
   const CheckAssetType(
       {Key? key,
       required this.competitor,
@@ -177,6 +195,7 @@ class LeaderboardHalfRow extends StatelessWidget {
   final bool? showLeaderBoardIcon;
   final bool? isDriverVsField;
   final bool? isTeamPlayerVsField;
+
   const LeaderboardHalfRow(
       {Key? key,
       required this.competitor,
@@ -239,11 +258,9 @@ class AssetVsAssetHalfRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Icon(
-          Icons.star_border,
-          color: gameDetails.isWatched(competitor.assetKey)
-              ? StColors.gray
-              : StColors.blue,
+        WatchButton(
+          assetKey: competitor.assetKey,
+          isWatched: gameDetails.isWatched(competitor.assetKey),
         ),
         kSpacerSm,
         CompetitorImage(competitor.imgUrl, showRank),
@@ -284,6 +301,7 @@ class MktRschAsset extends StatelessWidget {
   //
   final AssetRowPropertyIfc competitor;
   final ActiveGameDetails gameStatus;
+
   //
   const MktRschAsset(
     this.competitor,
@@ -439,6 +457,7 @@ class _PositionRankRow extends StatelessWidget {
   */
   final AssetRowPropertyIfc asset;
   final ActiveGameDetails gameStatus;
+
   const _PositionRankRow(
     this.asset,
     this.gameStatus, {
@@ -683,15 +702,14 @@ class HoldingsAndValueRow extends StatelessWidget {
   }
 }
 
-
-  // return Container(
-  //   height: UiSizes.tradeBtnHeight,
-  //   alignment: Alignment.center,
-  //   child: Text(
-  //     tf.labelForGameState(status),
-  //     style: StTextStyles.h5.copyWith(
-  //       color: tf.colorForGameState(status),
-  //     ),
-  //   ),
-  // );
-  // }
+// return Container(
+//   height: UiSizes.tradeBtnHeight,
+//   alignment: Alignment.center,
+//   child: Text(
+//     tf.labelForGameState(status),
+//     style: StTextStyles.h5.copyWith(
+//       color: tf.colorForGameState(status),
+//     ),
+//   ),
+// );
+// }
