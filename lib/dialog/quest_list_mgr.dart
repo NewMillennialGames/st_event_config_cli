@@ -117,7 +117,7 @@ class QuestListMgr {
       ..addAll(unaskedQuests));
   }
 
-  Question? _nextQuestionFor() {
+  Question? nextQuestionToAnswer() {
     // AppScreen section
     _moveCurrentQuestToAnswered();
     //

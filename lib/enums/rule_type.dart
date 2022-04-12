@@ -7,11 +7,11 @@ const List<VisualRuleType> _unconfigurableFutureRules = [
 
 @JsonEnum()
 enum VisualRuleType {
-  sortCfg,
-  // groupCfg,
-  filterCfg,
-  styleOrFormat,
-  showOrHide,
+  sortCfg, // global or within groups
+  groupCfg, // how to group rows
+  filterCfg, // to create filter menus
+  styleOrFormat, // select rowStyle for ListView
+  showOrHide, // control visibility
 }
 
 extension VisualRuleTypeExt1 on VisualRuleType {
@@ -23,8 +23,8 @@ extension VisualRuleTypeExt1 on VisualRuleType {
     switch (this) {
       case VisualRuleType.sortCfg:
         return TvSortCfg();
-      // case VisualRuleType.groupCfg:
-      //   return TvGroupCfg();
+      case VisualRuleType.groupCfg:
+        return TvGroupCfg();
       case VisualRuleType.filterCfg:
         return TvFilterCfg();
       case VisualRuleType.styleOrFormat:
@@ -42,8 +42,8 @@ extension VisualRuleTypeExt1 on VisualRuleType {
     switch (this) {
       case VisualRuleType.sortCfg:
         return nm + ' (config row order)';
-      // case VisualRuleType.groupCfg:
-      //   return nm + ' (config row grouping)';
+      case VisualRuleType.groupCfg:
+        return nm + ' (config row grouping)';
       case VisualRuleType.filterCfg:
         return nm + ' (config filtering options)';
       case VisualRuleType.styleOrFormat:
@@ -58,12 +58,12 @@ extension VisualRuleTypeExt1 on VisualRuleType {
     switch (this) {
       case VisualRuleType.sortCfg:
         return [Vrq.selectDataFieldName, Vrq.specifySortAscending];
-      // case VisualRuleType.groupCfg:
-      //   return [
-      //     Vrq.selectDataFieldName,
-      //     // Vrq.specifyPositionInGroup,
-      //     Vrq.specifySortAscending
-      //   ];
+      case VisualRuleType.groupCfg:
+        return [
+          Vrq.askCountOfSlotsToConfigure,
+          Vrq.selectDataFieldName,
+          Vrq.specifySortAscending
+        ];
       case VisualRuleType.filterCfg:
         return [
           Vrq.selectDataFieldName,

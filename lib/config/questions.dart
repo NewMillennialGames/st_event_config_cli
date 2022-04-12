@@ -124,7 +124,7 @@ final List<Question> _questionLst = [
     ),
     Qb<String, bool>(
       QuestionQuantifier.eventLevel(),
-      'Apply 1st selected TblView row style to all other screens?',
+      DlgStr.useSameRowStyleForAllScreens,
       ['no', 'yes'],
       (i) => i == '1',
       defaultAnswerIdx: 1,
@@ -134,7 +134,7 @@ final List<Question> _questionLst = [
   // ask which screens to configure
   Qb<String, List<AppScreen>>(
     QuestionQuantifier.eventLevel(responseAddsWhichAreaQuestions: true),
-    'Select the app screens you`d like to configure?',
+    DlgStr.selectAppScreens,
     AppScreen.eventConfiguration.topConfigurableScreens.map((e) => e.name),
     (String strLstIdxs) {
       //

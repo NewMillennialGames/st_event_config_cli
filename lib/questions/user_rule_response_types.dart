@@ -76,6 +76,8 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
         return ShowHideCfg.fromJson(json);
       case VisualRuleType.sortCfg:
         return TvSortCfg.fromJson(json);
+      case VisualRuleType.groupCfg:
+        return TvGroupCfg.fromJson(json);
       case VisualRuleType.styleOrFormat:
         return TvRowStyleCfg.fromJson(json);
     }
@@ -192,6 +194,7 @@ class TvSortCfg extends TvSortGroupFilterBase {
   TvSortCfg() : super(VisualRuleType.sortCfg);
 
   factory TvSortCfg.noop() {
+    // cancels all sorting when this is the first sort-param
     return TvSortCfg._(DbTableFieldName.imageUrl);
   }
   //
@@ -201,17 +204,17 @@ class TvSortCfg extends TvSortGroupFilterBase {
   Map<String, dynamic> toJson() => _$TvSortCfgToJson(this);
 }
 
-// @JsonSerializable()
-// class TvGroupCfg extends TvSortGroupFilterBase {
-//   //
-//   TvGroupCfg() : super(VisualRuleType.groupCfg);
-//   //
+@JsonSerializable()
+class TvGroupCfg extends TvSortGroupFilterBase {
+  //
+  TvGroupCfg() : super(VisualRuleType.groupCfg);
+  //
 
-//   // JsonSerializable
-//   factory TvGroupCfg.fromJson(Map<String, dynamic> json) =>
-//       _$TvGroupCfgFromJson(json);
-//   Map<String, dynamic> toJson() => _$TvGroupCfgToJson(this);
-// }
+  // JsonSerializable
+  factory TvGroupCfg.fromJson(Map<String, dynamic> json) =>
+      _$TvGroupCfgFromJson(json);
+  Map<String, dynamic> toJson() => _$TvGroupCfgToJson(this);
+}
 
 @JsonSerializable()
 class TvFilterCfg extends TvSortGroupFilterBase {

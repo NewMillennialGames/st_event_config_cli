@@ -49,15 +49,11 @@ class DialogRunner {
     //
     // logic to add new questions based on user response
     // two different methods
-    bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(
-      // _questGroupMgr,
-      _questMgr,
-    );
-    if (!didAddNew & false) {
+    bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(_questMgr);
+    if (!didAddNew) {
       // new version of handleAcquiringNewQuestions
       // run it only if handleAcquiringNewQuestions does no work
-      appendNewQuestsOrInsertImplicitAnswers(
-          _questMgr, _questMgr._currentOrLastQuestion);
+      appendNewQuestsOrInsertImplicitAnswers(_questMgr);
     }
     // end of logic to add new questions based on user response
 
@@ -90,7 +86,7 @@ class DialogRunner {
       if (!didAddNew && _quest.isRuleQuestion) {
         // new version of handleAcquiringNewQuestions
         // run it only if handleAcquiringNewQuestions does no work
-        appendNewQuestsOrInsertImplicitAnswers(_questMgr, _quest);
+        appendNewQuestsOrInsertImplicitAnswers(_questMgr);
       }
       // end of logic to add new questions based on user response
 

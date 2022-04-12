@@ -6,7 +6,7 @@ class QuestionQuantifier extends Equatable {
     made it equatable to enable searching Q-list
   */
 
-  final QuestCascadeTyp cascadeType;
+  final QuestCascadeTypEnum cascadeType;
   final AppScreen appScreen;
   /* properties below are in ORDER
   if any property is set (not null)
@@ -88,8 +88,8 @@ class QuestionQuantifier extends Equatable {
     */
     return QuestionQuantifier._(
       responseAddsWhichAreaQuestions
-          ? QuestCascadeTyp.addsWhichAreaInSelectedScreenQuestions
-          : QuestCascadeTyp.noCascade,
+          ? QuestCascadeTypEnum.addsWhichAreaInSelectedScreenQuestions
+          : QuestCascadeTypEnum.noCascade,
       AppScreen.eventConfiguration,
       null,
       null,
@@ -110,8 +110,8 @@ class QuestionQuantifier extends Equatable {
     */
     return QuestionQuantifier._(
       responseAddsWhichRuleAndSlotQuestions
-          ? QuestCascadeTyp.addsWhichRulesForSelectedAreaQuestions
-          : QuestCascadeTyp.noCascade,
+          ? QuestCascadeTypEnum.addsWhichRulesForSelectedAreaQuestions
+          : QuestCascadeTypEnum.noCascade,
       appScreen,
       null,
       null,
@@ -156,8 +156,8 @@ class QuestionQuantifier extends Equatable {
     */
     return QuestionQuantifier._(
       responseAddsWhichRuleQuestions
-          ? QuestCascadeTyp.addsWhichRulesForSlotsInArea
-          : QuestCascadeTyp.noCascade,
+          ? QuestCascadeTypEnum.addsWhichRulesForSlotsInArea
+          : QuestCascadeTypEnum.noCascade,
       appScreen,
       screenArea,
       null,
@@ -180,8 +180,8 @@ class QuestionQuantifier extends Equatable {
     */
     return QuestionQuantifier._(
       responseAddsRuleDetailQuestions
-          ? QuestCascadeTyp.addsRuleDetailQuestsForSlotOrArea
-          : QuestCascadeTyp.noCascade,
+          ? QuestCascadeTypEnum.addsRuleDetailQuestsForSlotOrArea
+          : QuestCascadeTypEnum.noCascade,
       appScreen,
       screenArea,
       slot,
@@ -203,9 +203,9 @@ class QuestionQuantifier extends Equatable {
     return QuestionQuantifier._(
       addsMoreRuleQuestions
           ? (isVisual
-              ? QuestCascadeTyp.addsRuleDetailQuestsForSlotOrArea
-              : QuestCascadeTyp.addsRuleDetailQuestsForSlotOrArea)
-          : QuestCascadeTyp.noCascade,
+              ? QuestCascadeTypEnum.addsRuleDetailQuestsForSlotOrArea
+              : QuestCascadeTypEnum.addsRuleDetailQuestsForSlotOrArea)
+          : QuestCascadeTypEnum.noCascade,
       appScreen,
       screenWidgetArea,
       slot,

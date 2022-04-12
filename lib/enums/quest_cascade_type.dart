@@ -1,6 +1,6 @@
 part of EvCfgEnums;
 
-enum QuestCascadeTyp {
+enum QuestCascadeTypEnum {
   /* Cascade Type defines:
     how does response from user
     to a current question
@@ -21,28 +21,28 @@ enum QuestCascadeTyp {
   noCascade,
 }
 
-extension QuestCascadeTypExt on QuestCascadeTyp {
+extension QuestCascadeTypExt on QuestCascadeTypEnum {
   /*
   properties exposed to Question up thru the QuestionQuantifier
   these properties describe CURRENT question 
   (not the ones they will be creating)
   */
-  bool get generatesNoNewQuestions => this == QuestCascadeTyp.noCascade;
+  bool get generatesNoNewQuestions => this == QuestCascadeTypEnum.noCascade;
 
   bool get addsWhichAreaInSelectedScreenQuestions =>
-      this == QuestCascadeTyp.addsWhichAreaInSelectedScreenQuestions;
+      this == QuestCascadeTypEnum.addsWhichAreaInSelectedScreenQuestions;
 
   bool get addsWhichRulesForSelectedAreaQuestions =>
-      this == QuestCascadeTyp.addsWhichRulesForSelectedAreaQuestions;
+      this == QuestCascadeTypEnum.addsWhichRulesForSelectedAreaQuestions;
 
   bool get addsWhichSlotOfSelectedAreaQuestions =>
-      this == QuestCascadeTyp.addsWhichSlotOfSelectedAreaQuestions;
+      this == QuestCascadeTypEnum.addsWhichSlotOfSelectedAreaQuestions;
 
   bool get addsWhichRulesForSlotsInArea =>
-      this == QuestCascadeTyp.addsWhichRulesForSlotsInArea;
+      this == QuestCascadeTypEnum.addsWhichRulesForSlotsInArea;
 
   bool get addsRuleDetailQuestsForSlotOrArea =>
-      this == QuestCascadeTyp.addsRuleDetailQuestsForSlotOrArea;
+      this == QuestCascadeTypEnum.addsRuleDetailQuestsForSlotOrArea;
 
   // bool get addsVisualRuleDetailQuestions =>
   //     this == QuestCascadeTyp.addsVisualRuleDetailQuestions;

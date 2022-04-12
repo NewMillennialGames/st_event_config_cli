@@ -1,4 +1,4 @@
-part of EvCfgEnums;
+part of AppEntities;
 
 @JsonEnum()
 enum TvAreaRowStyle {

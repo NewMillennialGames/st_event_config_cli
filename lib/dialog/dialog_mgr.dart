@@ -18,7 +18,7 @@ class DialogMgr {
   Question? getNextQuestInCurrentSection() {
     // only in this section
     // return _questMgr._nextQuestionFor(currentAppScreenTyp);
-    return _questMgr._nextQuestionFor();
+    return _questMgr.nextQuestionToAnswer();
   }
 
   // List<UserResponse> get priorAnswers {

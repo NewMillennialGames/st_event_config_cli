@@ -1,4 +1,4 @@
-part of EvCfgEnums;
+part of AppEntities;
 
 // describe event at high level
 @JsonEnum()

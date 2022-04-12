@@ -10,6 +10,11 @@ class DlgStr {
   static String eventDuration = 'How long will event last';
   static String eventEliminationStrategy =
       'How does competitor elimination work';
+
+  static String useSameRowStyleForAllScreens =
+      'Apply 1st selected TblView row style to all other screens?';
+  static String selectAppScreens =
+      'Select the app screens you`d like to configure?';
   // static String eventName = 'Enter Event Template Name';
   // static String eventName = 'Enter Event Template Name';
   // static String eventName = 'Enter Event Template Name';
@@ -18,6 +23,8 @@ class DlgStr {
 
 class RuleTemplStr {
   //
+  static String howManyRulesForArea =
+      'How many rules will you add to area {0}? (0-3 {1} fields) -- group/sort/filter';
 
   static String sort =
       'Select field name for {0} rule in the {1} area of screen {2}';
@@ -44,7 +51,7 @@ class QuestionIds {
   static String competeAgainstType = 'competeAgainstType';
   static String eventDuration = 'eventDuration';
   static String eventEliminationStrategy = 'eventEliminationStrategy';
-  static String selectAppScreens = 'selectAppScreens';
-
+  //
   static String globalRowStyle = 'globalRowStyle';
+  static String selectAppScreens = 'selectAppScreens';
 }

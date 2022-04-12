@@ -23,6 +23,7 @@ Map<String, dynamic> _$RuleResponseBaseToJson(RuleResponseBase instance) =>
 
 const _$VisualRuleTypeEnumMap = {
   VisualRuleType.sortCfg: 'sortCfg',
+  VisualRuleType.groupCfg: 'groupCfg',
   VisualRuleType.filterCfg: 'filterCfg',
   VisualRuleType.styleOrFormat: 'styleOrFormat',
   VisualRuleType.showOrHide: 'showOrHide',
@@ -30,6 +31,7 @@ const _$VisualRuleTypeEnumMap = {
 
 const _$VisRuleQuestTypeEnumMap = {
   VisRuleQuestType.selectDataFieldName: 'selectDataFieldName',
+  VisRuleQuestType.askCountOfSlotsToConfigure: 'askCountOfSlotsToConfigure',
   VisRuleQuestType.specifySortAscending: 'specifySortAscending',
   VisRuleQuestType.selectVisualComponentOrStyle: 'selectVisualComponentOrStyle',
   VisRuleQuestType.controlsVisibilityOfAreaOrSlot:
@@ -99,6 +101,23 @@ const _$DbTableFieldNameEnumMap = {
   DbTableFieldName.assetRank: 'assetRank',
   DbTableFieldName.assetPosition: 'assetPosition',
 };
+
+TvGroupCfg _$TvGroupCfgFromJson(Map<String, dynamic> json) => TvGroupCfg()
+  ..ruleType = $enumDecode(_$VisualRuleTypeEnumMap, json['ruleType'])
+  ..userResponses = (json['userResponses'] as Map<String, dynamic>).map(
+    (k, e) => MapEntry($enumDecode(_$VisRuleQuestTypeEnumMap, k), e as String),
+  )
+  ..colName = $enumDecode(_$DbTableFieldNameEnumMap, json['colName'])
+  ..asc = json['asc'] as bool;
+
+Map<String, dynamic> _$TvGroupCfgToJson(TvGroupCfg instance) =>
+    <String, dynamic>{
+      'ruleType': _$VisualRuleTypeEnumMap[instance.ruleType],
+      'userResponses': instance.userResponses
+          .map((k, e) => MapEntry(_$VisRuleQuestTypeEnumMap[k], e)),
+      'colName': _$DbTableFieldNameEnumMap[instance.colName],
+      'asc': instance.asc,
+    };
 
 TvFilterCfg _$TvFilterCfgFromJson(Map<String, dynamic> json) => TvFilterCfg()
   ..ruleType = $enumDecode(_$VisualRuleTypeEnumMap, json['ruleType'])

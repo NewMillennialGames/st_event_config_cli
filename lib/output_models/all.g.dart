@@ -158,6 +158,7 @@ Map<String, dynamic> _$CfgForAreaAndNestedSlotsToJson(
 
 const _$VisualRuleTypeEnumMap = {
   VisualRuleType.sortCfg: 'sortCfg',
+  VisualRuleType.groupCfg: 'groupCfg',
   VisualRuleType.filterCfg: 'filterCfg',
   VisualRuleType.styleOrFormat: 'styleOrFormat',
   VisualRuleType.showOrHide: 'showOrHide',

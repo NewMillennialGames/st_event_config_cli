@@ -1,19 +1,14 @@
 part of ConfigDialogRunner;
 
 // top level function to add new questions or implicit answers
-void appendNewQuestsOrInsertImplicitAnswers(
-  QuestListMgr questListMgr,
-  Question questJustAnswered,
-) {
-  // feature deprecated for now
-  return;
+void appendNewQuestsOrInsertImplicitAnswers(QuestListMgr questListMgr) {
   //
-  // Question questJustAnswered = questListMgr._currentOrLastQuestion;
+  Question questJustAnswered = questListMgr._currentOrLastQuestion;
 
   for (QuestMatcher matchTest in _matcherList) {
     if (matchTest.doesMatch(questJustAnswered)) {
       if (matchTest.addsPendingQuestions) {
-        questListMgr.appendNewQuestions(matchTest._pendingQuests);
+        questListMgr.appendNewQuestions(matchTest.pendingQuests);
       }
       if (matchTest.createsImplicitAnswers) {
         questListMgr.addImplicitAnswers(matchTest._answeredQuests);
@@ -22,17 +17,35 @@ void appendNewQuestsOrInsertImplicitAnswers(
   }
 }
 
-enum MatcherBehavior {
+enum MatcherBehaviorEnum {
   addPendingQuestions,
   addImplicitAnswers,
   addQuestsAndAnswers, // aka BOTH
 }
 
-class QuestMatcher<AnsType> {
+extension MatcherBehaviorEnumExt1 on MatcherBehaviorEnum {
   //
-  final MatcherBehavior matcherBehavior;
+  bool get addsPendingQuestions => [
+        MatcherBehaviorEnum.addPendingQuestions,
+        MatcherBehaviorEnum.addQuestsAndAnswers
+      ].contains(this);
+
+  bool get createsImplicitAnswers => [
+        MatcherBehaviorEnum.addImplicitAnswers,
+        MatcherBehaviorEnum.addQuestsAndAnswers
+      ].contains(this);
+}
+
+class QuestMatcher<AnsType> {
+  /*
+  define all properties a matcher may need to eval
+  in order to verify it's a match
+
+  */
+  final MatcherBehaviorEnum matcherBehavior;
+  // AddQuestChkCallbk is for doing more advanced analysis to verify a match
   final AddQuestChkCallbk addQuestChkCallbk;
-  final QuestCascadeTyp? cascadeType;
+  final QuestCascadeTypEnum? cascadeType;
   final AppScreen? appScreen;
   final ScreenWidgetArea? screenWidgetArea;
   final ScreenAreaWidgetSlot? slotInArea;
@@ -40,9 +53,9 @@ class QuestMatcher<AnsType> {
   final BehaviorRuleType? behRuleTypeForAreaOrSlot;
   final bool isRuleQuestion;
   final String questionId;
-  // Type? typ = UserResponse<AnsType>;
+  Type? typ = UserResponse<AnsType>;
   //
-  List<Question> _pendingQuests = [];
+  List<Question> pendingQuests = [];
   List<Question> _answeredQuests = [];
 
   QuestMatcher(
@@ -56,18 +69,12 @@ class QuestMatcher<AnsType> {
     this.visRuleTypeForAreaOrSlot,
     this.behRuleTypeForAreaOrSlot,
     this.isRuleQuestion = false,
-    // this.typ,
+    this.pendingQuests = const [],
   });
 
   // getters
-  bool get addsPendingQuestions => [
-        MatcherBehavior.addPendingQuestions,
-        MatcherBehavior.addQuestsAndAnswers
-      ].contains(matcherBehavior);
-  bool get createsImplicitAnswers => [
-        MatcherBehavior.addImplicitAnswers,
-        MatcherBehavior.addQuestsAndAnswers
-      ].contains(matcherBehavior);
+  bool get addsPendingQuestions => matcherBehavior.addsPendingQuestions;
+  bool get createsImplicitAnswers => matcherBehavior.createsImplicitAnswers;
 
   bool doesMatch(Question quest) {
     bool dMatch = quest.questionId == this.questionId || _doDeeperMatch(quest);
@@ -76,7 +83,7 @@ class QuestMatcher<AnsType> {
       // it was a mach and answer value indicates that
       // new questions /answers SHOULD be created
       if (this.addsPendingQuestions) {
-        _pendingQuests.addAll(
+        pendingQuests.addAll(
           DerivedQuestions.pendingQuestsFromAnswer(
             quest,
           ),
@@ -129,19 +136,18 @@ class QuestMatcher<AnsType> {
 
 List<QuestMatcher> _matcherList = [
   // defines rules for adding new questions or implicit answers
-  QuestMatcher<bool>(
+  QuestMatcher<int>(
     // question asking about 1st selected row-style being global
-    MatcherBehavior.addImplicitAnswers,
-    (ans) => ans as bool,
+    MatcherBehaviorEnum.addPendingQuestions,
+    (ans) => true,
     questionId: QuestionIds.globalRowStyle,
   ),
   QuestMatcher<bool>(
     // question asking about 1st selected row-style being global
-    MatcherBehavior.addImplicitAnswers,
+    MatcherBehaviorEnum.addImplicitAnswers,
     (_) => true,
-    cascadeType: QuestCascadeTyp.noCascade,
-    appScreen: AppScreen.eventConfiguration,
+    cascadeType: QuestCascadeTypEnum.addsRuleDetailQuestsForSlotOrArea,
+    visRuleTypeForAreaOrSlot: VisualRuleType.groupCfg,
     screenWidgetArea: ScreenWidgetArea.tableview,
-    visRuleTypeForAreaOrSlot: VisualRuleType.sortCfg,
   ),
 ];

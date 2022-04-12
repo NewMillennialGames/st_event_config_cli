@@ -7,12 +7,10 @@ import '../app_entity_enums/all.dart';
 import '../enums/all.dart';
 import '../util/type_cast.dart';
 import '../util/string_ext.dart';
-// import '../output_models/all.dart';
 //
 part 'all.g.dart';
 part 'user_response.dart';
-// part 'rule_resp_wrapper.dart';
-part 'section.dart';
+part 'niu_section.dart';
 part 'question_quantifier.dart';
 part 'question_base.dart';
 part 'question_visual_rule.dart';
