@@ -167,9 +167,9 @@ const _$VisualRuleTypeEnumMap = {
 const _$ScreenAreaWidgetSlotEnumMap = {
   ScreenAreaWidgetSlot.header: 'header',
   ScreenAreaWidgetSlot.footer: 'footer',
-  ScreenAreaWidgetSlot.menuSortPosOrSlot1: 'menuSortPosOrSlot1',
-  ScreenAreaWidgetSlot.menuSortPosOrSlot2: 'menuSortPosOrSlot2',
-  ScreenAreaWidgetSlot.menuSortPosOrSlot3: 'menuSortPosOrSlot3',
+  ScreenAreaWidgetSlot.slot1: 'menuSortPosOrSlot1',
+  ScreenAreaWidgetSlot.slot2: 'menuSortPosOrSlot2',
+  ScreenAreaWidgetSlot.slot3: 'menuSortPosOrSlot3',
   ScreenAreaWidgetSlot.title: 'title',
   ScreenAreaWidgetSlot.subtitle: 'subtitle',
   ScreenAreaWidgetSlot.bannerUrl: 'bannerUrl',

@@ -36,9 +36,9 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
         ];
       case ScreenWidgetArea.filterBar:
         return [
-          ScreenAreaWidgetSlot.menuSortPosOrSlot1,
-          ScreenAreaWidgetSlot.menuSortPosOrSlot2,
-          ScreenAreaWidgetSlot.menuSortPosOrSlot3,
+          // ScreenAreaWidgetSlot.menuSortPosOrSlot1,
+          // ScreenAreaWidgetSlot.menuSortPosOrSlot2,
+          // ScreenAreaWidgetSlot.menuSortPosOrSlot3,
         ];
       case ScreenWidgetArea.header:
         return [
@@ -51,9 +51,9 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
         ];
       case ScreenWidgetArea.tableview:
         return [
-          ScreenAreaWidgetSlot.menuSortPosOrSlot1,
-          ScreenAreaWidgetSlot.menuSortPosOrSlot2,
-          ScreenAreaWidgetSlot.menuSortPosOrSlot3,
+          // ScreenAreaWidgetSlot.menuSortPosOrSlot1,
+          // ScreenAreaWidgetSlot.menuSortPosOrSlot2,
+          // ScreenAreaWidgetSlot.menuSortPosOrSlot3,
         ];
       case ScreenWidgetArea.footer:
         return [
@@ -74,8 +74,7 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
       case ScreenWidgetArea.navBar:
         return [VisualRuleType.styleOrFormat];
       case ScreenWidgetArea.filterBar:
-        // all its rules are under its slots
-        return [];
+        return [VisualRuleType.filterCfg];
       case ScreenWidgetArea.header:
         return [
           VisualRuleType.styleOrFormat,
@@ -84,10 +83,15 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
       case ScreenWidgetArea.banner:
         return [VisualRuleType.showOrHide];
       case ScreenWidgetArea.tableview:
-        // sorting rules live under its slots
-        // row-style is area level
+        // tables (listviews) have no slots
+        // if user picks any of (filter, sort, group)
+        // we'll ask how many (of 0-3 options) they wish to configure
+        // for that specific rule
         return [
           VisualRuleType.styleOrFormat,
+          VisualRuleType.filterCfg,
+          VisualRuleType.sortCfg,
+          VisualRuleType.groupCfg,
         ];
       case ScreenWidgetArea.footer:
         return [VisualRuleType.showOrHide];

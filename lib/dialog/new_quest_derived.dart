@@ -12,14 +12,20 @@ part of ConfigDialogRunner;
 */
 
 class DerivedQuestions {
-  //
+  /*
+    intersection of an answered question, plus a QuestMatcher
+    should indicate what new questions to ask
+  */
 
-  static List<Question> pendingQuestsFromAnswer(Question quest) {
-    List<VisualRuleType> vrts = quest.qQuantify.relatedSubVisualRules(quest);
-    return [];
-  }
-
-  static List<Question> impliedAnswersFromAnswer(Question quest) {
-    return [];
-  }
 }
+
+
+
+  // static List<Question> pendingQuestsFromAnswer(Question quest) {
+  //   List<VisualRuleType> vrts = quest.qQuantify.relatedSubVisualRules(quest);
+  //   return [];
+  // }
+
+  // static List<Question> impliedAnswersFromAnswer(Question quest) {
+  //   return [];
+  // }

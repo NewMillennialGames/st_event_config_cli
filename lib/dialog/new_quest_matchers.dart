@@ -1,5 +1,15 @@
 part of ConfigDialogRunner;
 
+/*  questions about ListView area (aka TableView)
+  sorting, grouping or filtering pose a new requirement
+  we need to know HOW MANY (from 0-3) fields they want to specify
+  under that respective rule
+
+  for example, under grouping, if they say 2, then we should add 2 questions
+  to let them specify the grouping-key (some asset field/property)
+  
+*/
+
 // top level function to add new questions or implicit answers
 void appendNewQuestsOrInsertImplicitAnswers(QuestListMgr questListMgr) {
   //
@@ -42,9 +52,9 @@ class QuestMatcher<AnsType> {
   in order to verify it's a match
 
   */
-  final MatcherBehaviorEnum matcherBehavior;
+  final MatcherBehaviorEnum matcherMatchBehavior;
   // AddQuestChkCallbk is for doing more advanced analysis to verify a match
-  final AddQuestChkCallbk addQuestChkCallbk;
+  final AddQuestChkCallbk chkAnswAfterMatchTrueCallback;
   final QuestCascadeTypEnum? cascadeType;
   final AppScreen? appScreen;
   final ScreenWidgetArea? screenWidgetArea;
@@ -59,8 +69,8 @@ class QuestMatcher<AnsType> {
   List<Question> answeredQuests = [];
 
   QuestMatcher(
-    this.matcherBehavior,
-    this.addQuestChkCallbk, {
+    this.matcherMatchBehavior,
+    this.chkAnswAfterMatchTrueCallback, {
     this.cascadeType,
     this.questionId = '-na',
     this.appScreen,
@@ -75,37 +85,44 @@ class QuestMatcher<AnsType> {
         this.answeredQuests = answeredQuests ?? [];
 
   // getters
-  bool get addsPendingQuestions => matcherBehavior.addsPendingQuestions;
-  bool get createsImplicitAnswers => matcherBehavior.createsImplicitAnswers;
+  bool get addsPendingQuestions => matcherMatchBehavior.addsPendingQuestions;
+  bool get createsImplicitAnswers =>
+      matcherMatchBehavior.createsImplicitAnswers;
 
   bool doesMatch(Question quest) {
-    bool dMatch = quest.questionId == this.questionId || _doDeeperMatch(quest);
+    bool isAPatternMatch =
+        quest.questionId == this.questionId || _doDeeperMatch(quest);
+    // doesnt match so exit early
+    if (!isAPatternMatch) return isAPatternMatch;
 
-    bool subMatch = false;
-    if (quest.response!.answers! is RuleResponseWrapperIfc) {
-      subMatch = addQuestChkCallbk(quest.response!.answers!);
-    } else {
-      subMatch = addQuestChkCallbk(quest.response!.answers!);
-    }
-    if (dMatch && subMatch) {
-      // it was a mach and answer value indicates that
-      // new questions /answers SHOULD be created
-      if (this.addsPendingQuestions) {
-        pendingQuests.addAll(
-          DerivedQuestions.pendingQuestsFromAnswer(
-            quest,
-          ),
-        );
-      }
-      if (this.createsImplicitAnswers) {
-        answeredQuests.addAll(
-          DerivedQuestions.impliedAnswersFromAnswer(
-            quest,
-          ),
-        );
-      }
-    }
-    return dMatch;
+    // bool userResponseIsAMatch = true;
+    // if (quest.response!.answers! is RuleResponseWrapperIfc) {
+    //   userResponseIsAMatch = addQuestChkCallbk(quest.response!.answers!);
+    // } else {
+    //   userResponseIsAMatch = addQuestChkCallbk(quest.response!.answers!);
+    // }
+    bool userRespValueIsAMatch =
+        chkAnswAfterMatchTrueCallback(quest.response!.answers!);
+    isAPatternMatch = isAPatternMatch && userRespValueIsAMatch;
+    // if (isAPatternMatch && userRespValueIsAMatch) {
+    //   // it was a mach and answer value indicates that
+    //   // new questions /answers SHOULD be created
+    //   if (this.addsPendingQuestions) {
+    //     pendingQuests.addAll(
+    //       DerivedQuestions.pendingQuestsFromAnswer(
+    //         quest,
+    //       ),
+    //     );
+    //   }
+    //   if (this.createsImplicitAnswers) {
+    //     answeredQuests.addAll(
+    //       DerivedQuestions.impliedAnswersFromAnswer(
+    //         quest,
+    //       ),
+    //     );
+    //   }
+    // }
+    return isAPatternMatch;
   }
 
   bool _doDeeperMatch(Question quest) {
@@ -144,18 +161,15 @@ class QuestMatcher<AnsType> {
 
 List<QuestMatcher> _matcherList = [
   // defines rules for adding new questions or implicit answers
-  QuestMatcher<int>(
-    // question asking about 1st selected row-style being global
-    MatcherBehaviorEnum.addPendingQuestions,
-    (ans) => true,
-    questionId: QuestionIds.globalRowStyle,
-  ),
+
   QuestMatcher<bool>(
-    // question asking about 1st selected row-style being global
-    MatcherBehaviorEnum.addImplicitAnswers,
-    (_) => true,
+    // if user wants to perform grouping on a ListView
+    // lets ask how many grouping positions are reqired
+    MatcherBehaviorEnum.addPendingQuestions,
+    (ans) => (int.tryParse(ans as String) ?? 0) > 0,
     cascadeType: QuestCascadeTypEnum.addsRuleDetailQuestsForSlotOrArea,
-    visRuleTypeForAreaOrSlot: VisualRuleType.groupCfg,
     screenWidgetArea: ScreenWidgetArea.tableview,
+    visRuleTypeForAreaOrSlot: VisualRuleType.groupCfg,
+    pendingQuests: [],
   ),
 ];

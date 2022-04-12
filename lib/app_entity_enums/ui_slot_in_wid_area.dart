@@ -10,11 +10,9 @@ enum ScreenAreaWidgetSlot {
   // ui-sub-area of the UI component
   header,
   footer,
-  // fixme:  slots on tableview should be sort or group
-  // below should only apply to parts of filter bar
-  menuSortPosOrSlot1,
-  menuSortPosOrSlot2,
-  menuSortPosOrSlot3,
+  slot1,
+  slot2,
+  slot3,
 
   // data property of the component
   title,
@@ -43,17 +41,17 @@ extension ScreenAreaWidgetSlotExt1 on ScreenAreaWidgetSlot {
         return [
           VisualRuleType.showOrHide,
         ];
-      case ScreenAreaWidgetSlot.menuSortPosOrSlot1:
+      case ScreenAreaWidgetSlot.slot1:
         return [
           if (forArea == ScreenWidgetArea.filterBar) VisualRuleType.filterCfg,
           if (forArea == ScreenWidgetArea.tableview) VisualRuleType.sortCfg,
         ];
-      case ScreenAreaWidgetSlot.menuSortPosOrSlot2:
+      case ScreenAreaWidgetSlot.slot2:
         return [
           if (forArea == ScreenWidgetArea.filterBar) VisualRuleType.filterCfg,
           if (forArea == ScreenWidgetArea.tableview) VisualRuleType.sortCfg,
         ];
-      case ScreenAreaWidgetSlot.menuSortPosOrSlot3:
+      case ScreenAreaWidgetSlot.slot3:
         return [
           if (forArea == ScreenWidgetArea.filterBar) VisualRuleType.filterCfg,
           if (forArea == ScreenWidgetArea.tableview) VisualRuleType.sortCfg,

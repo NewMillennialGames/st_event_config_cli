@@ -1,5 +1,14 @@
 part of InputModels;
 
+/*
+  answers within regular Questions stored in UserResponse<AnsTyp>
+  answers within VisualRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseWrapperIfc>
+    extends Question<ConvertTyp, AnsTyp>
+    are stored in RuleResponseBase subclasses as below
+
+ConvertTyp is always a String or int in current CLI
+*/
+
 abstract class RuleResponseWrapperIfc {
   // handles answers for real Rule questions
   // receive user-answers IN

@@ -24,12 +24,12 @@ class NewQuestionCollector {
   to those areas and/or area-slots on each respective screen
   */
 
-  bool handleAcquiringNewQuestions(
-    QuestListMgr _questMgr,
-  ) {
+  bool handleAcquiringNewQuestions(QuestListMgr _questMgr) {
+    // returns whether true if new questions were added
+
     Question questJustAnswered = _questMgr._currentOrLastQuestion;
     // ruleQuestions don't currently generate new questions
-    // actually, a sort or group (level 2 or 3) question
+    // actually, a filter, sort or group (level 2 or 3) question
     // should generate the questions under it??  TODO
     if (questJustAnswered.isRuleQuestion ||
         questJustAnswered.generatesNoNewQuestions) {
@@ -105,12 +105,6 @@ class NewQuestionCollector {
         'Quest ID: ${questJustAnswered.questionId} (cascade type: ${questJustAnswered.qQuantify.cascadeType.name}) did not generate any new questions',
       );
       print('qText: "${questJustAnswered.questStr}"');
-      // print(
-      //   '${questJustAnswered.visRuleTypeForAreaOrSlot?.name ?? 'err-missing'}',
-      // );
-      // print(
-      //   'Quest ID ${questJustAnswered.questionId} about "${questJustAnswered.question}" did not generate any new questions\n\n',
-      // );
     }
 
     return addedNew;

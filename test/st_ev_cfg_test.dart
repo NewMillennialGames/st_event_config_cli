@@ -21,6 +21,7 @@ void main() {
       (selCount) => int.tryParse(selCount) ?? 0,
     );
     _questMgr.appendNewQuestions([askNumSlots]);
+    // next 2 lines are virtually the same test
     expect(_questMgr.priorAnswers.length, 0);
     expect(_questMgr.totalAnsweredQuestions, 0);
 

@@ -15,7 +15,14 @@ enum VisualRuleType {
 }
 
 extension VisualRuleTypeExt1 on VisualRuleType {
-  // TODO: fix types returned below
+  //
+
+  bool get hasVariableSubRuleCount => [
+        // these rules can configure 0-3 slots
+        VisualRuleType.sortCfg,
+        VisualRuleType.groupCfg,
+        VisualRuleType.filterCfg
+      ].contains(this);
 
   RuleResponseBase get ruleResponseContainer {
     // return special types to contain answers
@@ -57,12 +64,14 @@ extension VisualRuleTypeExt1 on VisualRuleType {
   List<VisRuleQuestType> get requiredQuestions {
     switch (this) {
       case VisualRuleType.sortCfg:
-        return [Vrq.selectDataFieldName, Vrq.specifySortAscending];
+        return [
+          Vrq.askCountOfSlotsToConfigure,
+        ];
       case VisualRuleType.groupCfg:
         return [
           Vrq.askCountOfSlotsToConfigure,
-          Vrq.selectDataFieldName,
-          Vrq.specifySortAscending
+          // Vrq.selectDataFieldName,
+          // Vrq.specifySortAscending
         ];
       case VisualRuleType.filterCfg:
         return [

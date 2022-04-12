@@ -151,9 +151,9 @@ class CfgForAreaAndNestedSlots {
     List<SlotOrAreaRuleCfg> ruleByPos = _slotRuleCollectionInOrder(
       ruleType,
       [
-        ScreenAreaWidgetSlot.menuSortPosOrSlot1,
-        ScreenAreaWidgetSlot.menuSortPosOrSlot2,
-        ScreenAreaWidgetSlot.menuSortPosOrSlot3,
+        ScreenAreaWidgetSlot.slot1,
+        ScreenAreaWidgetSlot.slot2,
+        ScreenAreaWidgetSlot.slot3,
       ],
     );
 
