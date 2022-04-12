@@ -14,7 +14,7 @@ class WatchButton extends ConsumerWidget {
     return InkWell(
       onTap: () => tradeFlow.toggleWatchValue(assetKey),
       child: Icon(
-        Icons.star_border,
+        isWatched ? Icons.star_outlined : Icons.star_border,
         color: isWatched ? StColors.yellow : StColors.blue,
       ),
     );
