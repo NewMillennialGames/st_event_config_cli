@@ -199,7 +199,7 @@ class GroupedTableDataMgr {
                 (String val) => DropdownMenuItem<String>(
                   child: Text(val.toUpperCase()),
                   value: val,
-                  alignment: AlignmentDirectional.center,
+                  alignment: AlignmentDirectional.centerStart,
                 ),
               )
               .toList(),
@@ -215,7 +215,7 @@ class GroupedTableDataMgr {
             _doFilteringFor(colName, selectedVal);
           },
           // focusColor: Colors.green,
-          dropdownColor: StColors.gray,
+          dropdownColor: StColors.black,
           iconEnabledColor: StColors.gray,
           style: const TextStyle(
             color: StColors.lightGray,
