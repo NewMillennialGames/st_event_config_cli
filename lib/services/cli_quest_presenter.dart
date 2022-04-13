@@ -181,5 +181,5 @@ class CliQuestionPresenter implements QuestionPresenter {
     }
   }
 
-  void informUiWeAreDone() {}
+  void informUiThatDialogIsComplete() {}
 }

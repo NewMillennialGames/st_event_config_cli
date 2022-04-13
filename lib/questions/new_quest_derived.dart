@@ -48,12 +48,10 @@ class DerivedQuestGenerator {
   NewQuestArgGen newQuestArgGen;
   List<PerQuestGenOptions> perQuestGenOptions;
 
-  DerivedQuestGenerator(
-    this.questTemplate,
-    this.newQuestCountCalculator,
-    this.newQuestArgGen,
-    this.perQuestGenOptions,
-  );
+  DerivedQuestGenerator(this.questTemplate,
+      {required this.newQuestCountCalculator,
+      required this.newQuestArgGen,
+      required this.perQuestGenOptions});
 
   List<Question> generatedQuestions(
     Question answeredQuest,

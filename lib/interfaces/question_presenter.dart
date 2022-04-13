@@ -23,5 +23,5 @@ abstract class QuestionPresenter {
     Question quest,
   );
 
-  void informUiWeAreDone();
+  void informUiThatDialogIsComplete();
 }

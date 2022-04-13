@@ -7,21 +7,28 @@ part of ConfigDialogRunner;
 
   for example, under grouping, if they say 2, then we should add 2 questions
   to let them specify the grouping-key (some asset field/property)
-  
+
 */
 
 // top level function to add new questions or implicit answers
 void appendNewQuestsOrInsertImplicitAnswers(QuestListMgr questListMgr) {
   //
   Question questJustAnswered = questListMgr._currentOrLastQuestion;
-
+  print(
+    'comparing "${questJustAnswered.questStr}" to ${_matcherList.length} matchers for new quests',
+  );
   for (QuestMatcher matchTest in _matcherList) {
     if (matchTest.doesMatch(questJustAnswered)) {
+      print(
+        '*** it does match!!  addsPendingQuestions: ${matchTest.addsPendingQuestions}  createsImplicitAnswers: ${matchTest.createsImplicitAnswers}',
+      );
       if (matchTest.addsPendingQuestions) {
-        questListMgr.appendNewQuestions(matchTest.pendingQuests);
+        questListMgr.appendNewQuestions(
+            matchTest.generatedQuestionsFor(questJustAnswered));
       }
       if (matchTest.createsImplicitAnswers) {
-        questListMgr.addImplicitAnswers(matchTest.answeredQuests);
+        questListMgr.addImplicitAnswers(
+            matchTest.generatedQuestionsFor(questJustAnswered));
       }
     }
   }
@@ -54,8 +61,10 @@ class QuestMatcher<AnsType> {
   */
   final MatcherBehaviorEnum matcherMatchBehavior;
   // AddQuestChkCallbk is for doing more advanced analysis to verify a match
-  final AddQuestChkCallbk chkAnswAfterMatchTrueCallback;
+  final AddQuestChkCallbk validateUserAnswerAfterPatternMatchIsTrueCallback;
+  // cascadeType indicates whether we add new questions, auto-answers or both
   final QuestCascadeTypEnum? cascadeType;
+  // pattern matching values;  leave null to not match on them
   final AppScreen? appScreen;
   final ScreenWidgetArea? screenWidgetArea;
   final ScreenAreaWidgetSlot? slotInArea;
@@ -63,14 +72,15 @@ class QuestMatcher<AnsType> {
   final BehaviorRuleType? behRuleTypeForAreaOrSlot;
   final bool isRuleQuestion;
   final String questionId;
-  Type? typ = UserResponse<AnsType>;
+  final DerivedQuestGenerator derQuestGen;
+  late Type? typ = UserResponse<AnsType>;
+  final String matcherDescrip;
   //
-  List<Question> pendingQuests = [];
-  List<Question> answeredQuests = [];
-
   QuestMatcher(
+    this.matcherDescrip,
     this.matcherMatchBehavior,
-    this.chkAnswAfterMatchTrueCallback, {
+    this.derQuestGen, {
+    required this.validateUserAnswerAfterPatternMatchIsTrueCallback,
     this.cascadeType,
     this.questionId = '-na',
     this.appScreen,
@@ -79,49 +89,28 @@ class QuestMatcher<AnsType> {
     this.visRuleTypeForAreaOrSlot,
     this.behRuleTypeForAreaOrSlot,
     this.isRuleQuestion = false,
-    List<Question>? pendingQuests,
-    List<Question>? answeredQuests,
-  })  : this.pendingQuests = pendingQuests ?? [],
-        this.answeredQuests = answeredQuests ?? [];
+  });
 
   // getters
   bool get addsPendingQuestions => matcherMatchBehavior.addsPendingQuestions;
   bool get createsImplicitAnswers =>
       matcherMatchBehavior.createsImplicitAnswers;
 
+  // public methods
+  List<Question> generatedQuestionsFor(Question quest) =>
+      derQuestGen.generatedQuestions(quest, this);
+
   bool doesMatch(Question quest) {
     bool isAPatternMatch =
         quest.questionId == this.questionId || _doDeeperMatch(quest);
-    // doesnt match so exit early
-    if (!isAPatternMatch) return isAPatternMatch;
+    // pattern doesnt match so exit early
+    if (!isAPatternMatch) return false;
 
-    // bool userResponseIsAMatch = true;
-    // if (quest.response!.answers! is RuleResponseWrapperIfc) {
-    //   userResponseIsAMatch = addQuestChkCallbk(quest.response!.answers!);
-    // } else {
-    //   userResponseIsAMatch = addQuestChkCallbk(quest.response!.answers!);
-    // }
+    // pattern match succeeded, so now validate user answer
     bool userRespValueIsAMatch =
-        chkAnswAfterMatchTrueCallback(quest.response!.answers!);
+        validateUserAnswerAfterPatternMatchIsTrueCallback(
+            quest.response!.answers!);
     isAPatternMatch = isAPatternMatch && userRespValueIsAMatch;
-    // if (isAPatternMatch && userRespValueIsAMatch) {
-    //   // it was a mach and answer value indicates that
-    //   // new questions /answers SHOULD be created
-    //   if (this.addsPendingQuestions) {
-    //     pendingQuests.addAll(
-    //       DerivedQuestions.pendingQuestsFromAnswer(
-    //         quest,
-    //       ),
-    //     );
-    //   }
-    //   if (this.createsImplicitAnswers) {
-    //     answeredQuests.addAll(
-    //       DerivedQuestions.impliedAnswersFromAnswer(
-    //         quest,
-    //       ),
-    //     );
-    //   }
-    // }
     return isAPatternMatch;
   }
 
@@ -161,15 +150,24 @@ class QuestMatcher<AnsType> {
 
 List<QuestMatcher> _matcherList = [
   // defines rules for adding new questions or implicit answers
+  // based on answers to prior questions
 
   QuestMatcher<bool>(
-    // if user wants to perform grouping on a ListView
-    // lets ask how many grouping positions are reqired
+    'if user wants to perform grouping on a ListView, ask how many grouping cols are required & add a question for each',
     MatcherBehaviorEnum.addPendingQuestions,
-    (ans) => (int.tryParse(ans as String) ?? 0) > 0,
+    DerivedQuestGenerator(
+      'Select field #{0} to use for row-grouping on {1} screen',
+      newQuestCountCalculator: (q) => q.response?.answers as int,
+      newQuestArgGen: (quest, idx) => <String>[],
+      perQuestGenOptions: [
+        PerQuestGenOptions([], (qq) => qq, (ansr) => ansr),
+      ],
+    ),
+    validateUserAnswerAfterPatternMatchIsTrueCallback: (ans) =>
+        (int.tryParse(ans as String) ?? 0) > 0,
     cascadeType: QuestCascadeTypEnum.addsRuleDetailQuestsForSlotOrArea,
     screenWidgetArea: ScreenWidgetArea.tableview,
     visRuleTypeForAreaOrSlot: VisualRuleType.groupCfg,
-    pendingQuests: [],
+    isRuleQuestion: true,
   ),
 ];

@@ -39,7 +39,7 @@ class WebQuestionPresenter implements QuestionPresenter {
     dRunner!.advanceToNextQuestion();
   }
 
-  void informUiWeAreDone() {
+  void informUiThatDialogIsComplete() {
     questDispatcher.close();
     // need to save generated file to user desktop
   }

@@ -46,20 +46,29 @@ class DialogRunner {
   }
 
   void advanceToNextQuestion() {
-    //
-    // logic to add new questions based on user response
-    // two different methods
+    /*
+      run logic to add new questions based on user response to current question
+      we currently have two different methods:
+        1) _newQuestComposer.handleAcquiringNewQuestions() was my original brute-force approach
+          it's brittle and hard to test (will remove this eventually)
+        2) appendNewQuestsOrInsertImplicitAnswers is a much more elegant and flexible
+          approach based on pattern matching and Question generation functions
+
+      I'm leaving both in place right now because we don't currently have this
+      package under test and I don't want to break existing functionality
+      but new auto-generated questions should be placed under #2 (appendNewQuestsOrInsertImplicitAnswers)
+    */
+
     bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(_questMgr);
     if (!didAddNew) {
-      // new version of handleAcquiringNewQuestions
-      // run it only if handleAcquiringNewQuestions does no work
+      // run appendNewQuestsOrInsertImplicitAnswers only if handleAcquiringNewQuestions does no work
       appendNewQuestsOrInsertImplicitAnswers(_questMgr);
     }
     // end of logic to add new questions based on user response
 
     bool hasNextQuest = serveNextQuestionToGui();
     if (!hasNextQuest) {
-      questFormatter.informUiWeAreDone();
+      questFormatter.informUiThatDialogIsComplete();
     }
   }
 
