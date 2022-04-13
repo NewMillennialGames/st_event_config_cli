@@ -1,4 +1,4 @@
-import '../enums/all.dart';
+// import '../enums/all.dart';
 
 extension StringFormating on String {
   // hacky templating system for rule templates
@@ -17,7 +17,8 @@ extension StringFormating on String {
       final mapped = mappedValues[match[1]];
       if (mapped == null)
         throw ArgumentError(
-            '$mappedValues does not contain the key "${match[1]}"');
+          '$mappedValues does not contain the key "${match[1]}"',
+        );
       return mapped;
     });
   }

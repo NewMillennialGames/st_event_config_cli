@@ -1,7 +1,7 @@
 part of InputModels;
 
 // to load prior answers for some questions
-typedef PriorAnswersCallback = List<UserResponse> Function();
+// typedef PriorAnswersCallback = List<UserResponse> Function();
 
 class Question<ConvertTyp, AnsTyp> extends Equatable {
   //
@@ -116,6 +116,25 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
     this.response = UserResponse<AnsTyp>(derivedUserResponse);
   }
 
+  Question fromExisting(
+    String quStr,
+    PerQuestGenOptions pqt,
+  ) {
+    // used to create derived questions from existing answers
+    var newQq = pqt.qQuantifierRevisor(this.qQuantify);
+    String newId = pqt.questId.isNotEmpty
+        ? pqt.questId
+        : (this.questionId + ':' + newQq.sortKey);
+    return Question<String, dynamic>(
+      newQq,
+      quStr,
+      pqt.answerChoices,
+      pqt.castFunc,
+      defaultAnswerIdx: pqt.defaultAnswerIdx,
+      questId: newId,
+    );
+  }
+
   AnsTyp? _castResponseToAnswer(ConvertTyp convertibleVal) {
     // ConvertTyp must be either String or int
     // AnsTyp is typically a string or whatever returned from: castFunc()
@@ -150,26 +169,6 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
     return answer;
   }
 
-  // next two methods are for possible future usage?
-  void configSelfIfNecessary(PriorAnswersCallback getPriorAnswersList) {
-    // some questions are based on what answers came before
-    if (false) {
-      // dynamicFromPriorState
-      // assert(getPriorAnswersList != null,
-      //     'this question needs to examine prior answers to decide what to ask');
-      _deriveFromPriorAnswers(getPriorAnswersList());
-    }
-  }
-
-  void _deriveFromPriorAnswers(List<UserResponse> answers) {
-    /* 
-    some questions need to review prior state
-    before we know their shape or whether they
-    should even be asked
-    */
-    // this.shouldSkip = true;
-  }
-
   // impl for equatable
   // but really being used as a search filter
   // to find questions in a specific granularity
@@ -179,3 +178,26 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
   @override
   bool get stringify => true;
 }
+
+
+
+
+  // // next two methods are for possible future usage?
+  // void configSelfIfNecessary(PriorAnswersCallback getPriorAnswersList) {
+  //   // some questions are based on what answers came before
+  //   if (false) {
+  //     // dynamicFromPriorState
+  //     // assert(getPriorAnswersList != null,
+  //     //     'this question needs to examine prior answers to decide what to ask');
+  //     _deriveFromPriorAnswers(getPriorAnswersList());
+  //   }
+  // }
+
+  // void _deriveFromPriorAnswers(List<UserResponse> answers) {
+  //   /* 
+  //   some questions need to review prior state
+  //   before we know their shape or whether they
+  //   should even be asked
+  //   */
+  //   // this.shouldSkip = true;
+  // }

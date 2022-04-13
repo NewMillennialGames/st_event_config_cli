@@ -13,4 +13,4 @@ part 'dialog_runner.dart';
 part 'dialog_mgr.dart';
 part 'new_quest_collector.dart';
 part 'new_quest_matchers.dart';
-part 'new_quest_derived.dart';
+// part '../questions/new_quest_derived.dart';

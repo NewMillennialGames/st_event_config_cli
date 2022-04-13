@@ -82,7 +82,7 @@ class CliQuestionPresenter implements QuestionPresenter {
     Question quest,
   ) {
     //
-    quest.configSelfIfNecessary(dlogRunner.getPriorAnswersList);
+    // quest.configSelfIfNecessary(dlogRunner.getPriorAnswersList);
 
     String userResp = stdin.readLineSync() ?? '';
     // print("You entered: '$userResp'");
