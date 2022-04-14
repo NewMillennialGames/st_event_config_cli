@@ -57,9 +57,8 @@ class StTextStyles {
     color: StColors.white,
   );
 
-  static TextStyle get moneyDeltaPositive => p2.copyWith(
+  static TextStyle get moneyDeltaPositive => p1.copyWith(
         color: StColors.green,
-        fontSize: 14,
       );
 
   //     static const moneyDeltaPositive = TextStyle(
