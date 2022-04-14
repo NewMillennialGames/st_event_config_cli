@@ -10,6 +10,8 @@ enum ScreenAreaWidgetSlot {
   // ui-sub-area of the UI component
   header,
   footer,
+  // fixme:  slots on tableview should be sort or group
+  // below should only apply to parts of filter bar
   menuSortPosOrSlot1,
   menuSortPosOrSlot2,
   menuSortPosOrSlot3,

@@ -96,6 +96,12 @@ class GroupedTableDataMgr {
     return filterRules?.item1.colName != DbTableFieldName.imageUrl;
   }
 
+  void endGeographicGrouping() {
+    // games now happening between/across regions
+    // so it not longer makes sense to group or sort geographically
+    _tableViewCfg.endGeographicGrouping();
+  }
+
   String? _filter1Selection;
   String? _filter2Selection;
   String? _filter3Selection;
@@ -105,7 +111,7 @@ class GroupedTableDataMgr {
     double barHeight = 46,
     Color backColor = Colors.transparent,
   }) {
-    // dont call this without first checking this.hasFilterBar
+    // dont call this method without first checking this.hasColumnFilters
     if (filterRules == null) return SizedBox();
 
     TvFilterCfg i1 = filterRules!.item1;

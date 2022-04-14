@@ -27,7 +27,7 @@ class TableRowDataMgr {
   // _filteredAssetRows = _allAssetRows.toList();
 
   // List<TableviewDataRowTuple> get listData => _filteredAssetRows;
-  // GroupingRules get groupRules => _tableViewCfg.groupByRules;
+  // ``GroupingRules`` get groupRules => _tableViewCfg.groupByRules;
   SortingRules get sortingRules => _tableViewCfg.sortRules;
   // FilterRules get filterRules => _tableViewCfg.filterRules;
 
@@ -47,5 +47,12 @@ class TableRowDataMgr {
     if (redraw && redrawCallback != null) {
       redrawCallback!();
     }
+  }
+
+  void endGeographicGrouping() {
+    // games now happening between/across regions
+    // so it not longer makes sense to group or sort geographically
+
+    _tableViewCfg.endGeographicGrouping();
   }
 }

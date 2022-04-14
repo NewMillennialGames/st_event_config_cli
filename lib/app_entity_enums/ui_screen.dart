@@ -22,8 +22,9 @@ const List<AppScreen> _notCurrentlyConfigurable = [
 
 @JsonEnum()
 enum AppScreen {
-  // major screens or app-areas that user may wish to configure
-  eventConfiguration, // general setup; not really a section
+  // top-level screens or app-section that user may wish to configure
+  eventConfiguration, // general rules setup; not really a screen or
+  // below are true app screens or app-sections
   eventSelection,
   poolSelection,
   marketView,

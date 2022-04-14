@@ -10,9 +10,11 @@ class TableviewConfigPayload {
       row-style
       and filter options
   */
-
+  // which screen this cfg applies to
   final AppScreen appScreen;
+  // style / appearance of rows in its listview
   final TvAreaRowStyle rowStyle;
+  //
   final SortingRules sortRules;
   final FilterRules? filterRules;
   // final GroupingRules groupByRules;
@@ -45,6 +47,14 @@ class TableviewConfigPayload {
       tableAreaCfg.sortingRules ?? SortingRules(TvSortCfg.noop(), null, null),
       filterBarAreaCfg?.filterRules,
     );
+  }
+
+  void endGeographicGrouping() {
+    // games now happening between/across regions
+    // so it not longer makes sense to group or sort geographically
+    print('called endGeographicGrouping;  not yet implemented');
+    // sortRules.removeByField(DbTableFieldName.gameLocation);
+    // groupByRules.removeByField(DbTableFieldName.gameLocation);
   }
 
   TvRowBuilder get rowConstructor {
