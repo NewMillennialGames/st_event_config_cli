@@ -24,7 +24,9 @@ class WatchButton extends ConsumerWidget {
 const kSpacerSm = SizedBox(
   width: 6,
 );
-
+const kVerticalSpacerSm = SizedBox(
+  height: 3,
+);
 const kSpacerLarge = SizedBox(
   width: 20,
 );
@@ -144,10 +146,11 @@ class CheckAssetType extends StatelessWidget {
           ),
           kSpacerSm,
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(competitor.topName.toUpperCase(), style: StTextStyles.p2),
-              Text(lastName.toUpperCase(),
-                  style: StTextStyles.h2.copyWith(fontWeight: FontWeight.w700))
+              Text(competitor.subName.toUpperCase(),
+                  style: StTextStyles.h3.copyWith(fontWeight: FontWeight.w700))
             ],
           )
         ],
