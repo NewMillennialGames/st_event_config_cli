@@ -19,7 +19,7 @@ class _$QuestionQuantifierTearOff {
   const _$QuestionQuantifierTearOff();
 
   _QuestionQuantifier call(
-      QuestCascadeTypEnum cascadeType,
+      UserResponseCascadePatternEm cascadeType,
       AppScreen appScreen,
       ScreenWidgetArea? screenWidgetArea,
       ScreenAreaWidgetSlot? slotInArea,
@@ -41,7 +41,8 @@ const $QuestionQuantifier = _$QuestionQuantifierTearOff();
 
 /// @nodoc
 mixin _$QuestionQuantifier {
-  QuestCascadeTypEnum get cascadeType => throw _privateConstructorUsedError;
+  UserResponseCascadePatternEm get cascadeType =>
+      throw _privateConstructorUsedError;
   AppScreen get appScreen => throw _privateConstructorUsedError;
   ScreenWidgetArea? get screenWidgetArea => throw _privateConstructorUsedError;
   ScreenAreaWidgetSlot? get slotInArea => throw _privateConstructorUsedError;
@@ -61,7 +62,7 @@ abstract class $QuestionQuantifierCopyWith<$Res> {
           QuestionQuantifier value, $Res Function(QuestionQuantifier) then) =
       _$QuestionQuantifierCopyWithImpl<$Res>;
   $Res call(
-      {QuestCascadeTypEnum cascadeType,
+      {UserResponseCascadePatternEm cascadeType,
       AppScreen appScreen,
       ScreenWidgetArea? screenWidgetArea,
       ScreenAreaWidgetSlot? slotInArea,
@@ -91,7 +92,7 @@ class _$QuestionQuantifierCopyWithImpl<$Res>
       cascadeType: cascadeType == freezed
           ? _value.cascadeType
           : cascadeType // ignore: cast_nullable_to_non_nullable
-              as QuestCascadeTypEnum,
+              as UserResponseCascadePatternEm,
       appScreen: appScreen == freezed
           ? _value.appScreen
           : appScreen // ignore: cast_nullable_to_non_nullable
@@ -124,7 +125,7 @@ abstract class _$QuestionQuantifierCopyWith<$Res>
       __$QuestionQuantifierCopyWithImpl<$Res>;
   @override
   $Res call(
-      {QuestCascadeTypEnum cascadeType,
+      {UserResponseCascadePatternEm cascadeType,
       AppScreen appScreen,
       ScreenWidgetArea? screenWidgetArea,
       ScreenAreaWidgetSlot? slotInArea,
@@ -156,7 +157,7 @@ class __$QuestionQuantifierCopyWithImpl<$Res>
       cascadeType == freezed
           ? _value.cascadeType
           : cascadeType // ignore: cast_nullable_to_non_nullable
-              as QuestCascadeTypEnum,
+              as UserResponseCascadePatternEm,
       appScreen == freezed
           ? _value.appScreen
           : appScreen // ignore: cast_nullable_to_non_nullable
@@ -194,7 +195,7 @@ class _$_QuestionQuantifier extends _QuestionQuantifier {
       : super._();
 
   @override
-  final QuestCascadeTypEnum cascadeType;
+  final UserResponseCascadePatternEm cascadeType;
   @override
   final AppScreen appScreen;
   @override
@@ -214,7 +215,7 @@ class _$_QuestionQuantifier extends _QuestionQuantifier {
 
 abstract class _QuestionQuantifier extends QuestionQuantifier {
   factory _QuestionQuantifier(
-      QuestCascadeTypEnum cascadeType,
+      UserResponseCascadePatternEm cascadeType,
       AppScreen appScreen,
       ScreenWidgetArea? screenWidgetArea,
       ScreenAreaWidgetSlot? slotInArea,
@@ -223,7 +224,7 @@ abstract class _QuestionQuantifier extends QuestionQuantifier {
   _QuestionQuantifier._() : super._();
 
   @override
-  QuestCascadeTypEnum get cascadeType;
+  UserResponseCascadePatternEm get cascadeType;
   @override
   AppScreen get appScreen;
   @override

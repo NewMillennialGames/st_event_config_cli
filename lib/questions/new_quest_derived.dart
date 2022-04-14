@@ -20,19 +20,24 @@ typedef QuestionQuantifierRevisor = QuestionQuantifier Function(
     QuestionQuantifier);
 
 class PerQuestGenOptions<AnsType> {
-  //
-  Iterable<String> answerChoices;
-  AnsType Function(String) castFunc;
-  QuestionQuantifierRevisor qQuantifierRevisor;
-  int defaultAnswerIdx = 0;
-  String questId;
+  /*
+  describes logic and rules for a single auto-generated question
+  instance lives inside DerivedQuestGenerator.perQuestGenOptions
+  */
+  final Iterable<String> answerChoices;
+  final AnsType Function(String) castFunc;
+  late final QuestionQuantifierRevisor qQuantUpdater;
+  final int defaultAnswerIdx = 0;
+  final String questId;
+  final bool genRuleQuestion;
 
   PerQuestGenOptions({
     required this.answerChoices,
     required this.castFunc,
     QuestionQuantifierRevisor? qQuantRev,
     this.questId = '',
-  }) : this.qQuantifierRevisor = qQuantRev == null ? _noOp : qQuantRev;
+    this.genRuleQuestion = false,
+  }) : this.qQuantUpdater = qQuantRev == null ? _noOp : qQuantRev;
 
   Type get genType => AnsType;
 
@@ -61,7 +66,10 @@ class DerivedQuestGenerator {
     Question answeredQuest,
     QuestMatcher? matcher,
   ) {
-    //
+    /* use existing answered question
+    plus logic defined in both this and PerQuestGenOptions
+    to build and return a list of new questions
+    */
     int toCreate = newQuestCountCalculator(answeredQuest);
     if (toCreate < 1) return [];
 
@@ -71,12 +79,13 @@ class DerivedQuestGenerator {
       List<String> templArgs = newQuestArgGen(answeredQuest, i);
       String newQuestStr = questTemplate.format(templArgs);
 
-      PerQuestGenOptions pqo = perQuestGenOptions.length <= i
+      PerQuestGenOptions genOptionsAtIdx = perQuestGenOptions.length <= i
           ? perQuestGenOptions.last
           : perQuestGenOptions[i];
+      //
       Question nxtQuest = answeredQuest.fromExisting(
         newQuestStr,
-        pqo,
+        genOptionsAtIdx,
       );
 
       createdQuest.add(nxtQuest);

@@ -11,7 +11,7 @@ class QuestionQuantifier extends Equatable with _$QuestionQuantifier {
   QuestionQuantifier._();
 
   factory QuestionQuantifier(
-    QuestCascadeTypEnum cascadeType,
+    UserResponseCascadePatternEm cascadeType,
     AppScreen appScreen,
     ScreenWidgetArea? screenWidgetArea,
     ScreenAreaWidgetSlot? slotInArea,
@@ -79,8 +79,8 @@ class QuestionQuantifier extends Equatable with _$QuestionQuantifier {
     */
     return QuestionQuantifier(
       responseAddsWhichAreaQuestions
-          ? QuestCascadeTypEnum.addsWhichAreaInSelectedScreenQuestions
-          : QuestCascadeTypEnum.noCascade,
+          ? UserResponseCascadePatternEm.addsWhichAreaInSelectedScreenQuestions
+          : UserResponseCascadePatternEm.noCascade,
       AppScreen.eventConfiguration,
       null,
       null,
@@ -101,8 +101,8 @@ class QuestionQuantifier extends Equatable with _$QuestionQuantifier {
     */
     return QuestionQuantifier(
       responseAddsWhichRuleAndSlotQuestions
-          ? QuestCascadeTypEnum.addsWhichRulesForSelectedAreaQuestions
-          : QuestCascadeTypEnum.noCascade,
+          ? UserResponseCascadePatternEm.addsWhichRulesForSelectedAreaQuestions
+          : UserResponseCascadePatternEm.noCascade,
       appScreen,
       null,
       null,
@@ -111,28 +111,30 @@ class QuestionQuantifier extends Equatable with _$QuestionQuantifier {
     );
   }
 
-  // factory QuestionQuantifier.areaLevelRules(
-  //   AppScreen appScreen,
-  //   ScreenWidgetArea screenArea, {
-  //   bool responseAddsRuleDetailQuests = false,
-  // }) {
-  //   /*
-  //     sample question:
-  //      'Which rules would you like to add to the ${area.name} of ${screen.name}?',
-  //     when responseAddsWhichRuleTypeQuestsForArea is true
-  //     this answer will build "rule detail ?? for area" questions
-  //   */
-  //   return QuestionQuantifier._(
-  //     responseAddsRuleDetailQuests
-  //         ? QuestCascadeTyp.addsRuleDetailQuestsForSlotOrArea
-  //         : QuestCascadeTyp.noCascade,
-  //     appScreen,
-  //     screenArea,
-  //     null,
-  //     null,
-  //     null,
-  //   );
-  // }
+  factory QuestionQuantifier.areaLevelRules(
+    AppScreen appScreen,
+    ScreenWidgetArea screenArea, {
+    bool responseAddsRuleDetailQuests = false,
+  }) {
+    /*  DG note 4/14/22 -> this constructor was commented and removed previously
+          don't remember why or how it's not in use, but I am using it now in tests
+
+      sample question:
+       'Which rules would you like to add to the ${area.name} of ${screen.name}?',
+      when responseAddsWhichRuleTypeQuestsForArea is true
+      this answer will build "rule detail ?? for area" questions
+    */
+    return QuestionQuantifier(
+      responseAddsRuleDetailQuests
+          ? UserResponseCascadePatternEm.addsRuleDetailQuestsForSlotOrArea
+          : UserResponseCascadePatternEm.noCascade,
+      appScreen,
+      screenArea,
+      null,
+      null,
+      null,
+    );
+  }
 
   factory QuestionQuantifier.areaLevelSlots(
     AppScreen appScreen,
@@ -147,8 +149,8 @@ class QuestionQuantifier extends Equatable with _$QuestionQuantifier {
     */
     return QuestionQuantifier(
       responseAddsWhichRuleQuestions
-          ? QuestCascadeTypEnum.addsWhichRulesForSlotsInArea
-          : QuestCascadeTypEnum.noCascade,
+          ? UserResponseCascadePatternEm.addsWhichRulesForSlotsInArea
+          : UserResponseCascadePatternEm.noCascade,
       appScreen,
       screenArea,
       null,
@@ -171,8 +173,8 @@ class QuestionQuantifier extends Equatable with _$QuestionQuantifier {
     */
     return QuestionQuantifier(
       responseAddsRuleDetailQuestions
-          ? QuestCascadeTypEnum.addsRuleDetailQuestsForSlotOrArea
-          : QuestCascadeTypEnum.noCascade,
+          ? UserResponseCascadePatternEm.addsRuleDetailQuestsForSlotOrArea
+          : UserResponseCascadePatternEm.noCascade,
       appScreen,
       screenArea,
       slot,
@@ -194,9 +196,9 @@ class QuestionQuantifier extends Equatable with _$QuestionQuantifier {
     return QuestionQuantifier(
       addsMoreRuleQuestions
           ? (isVisual
-              ? QuestCascadeTypEnum.addsRuleDetailQuestsForSlotOrArea
-              : QuestCascadeTypEnum.addsRuleDetailQuestsForSlotOrArea)
-          : QuestCascadeTypEnum.noCascade,
+              ? UserResponseCascadePatternEm.addsRuleDetailQuestsForSlotOrArea
+              : UserResponseCascadePatternEm.addsRuleDetailQuestsForSlotOrArea)
+          : UserResponseCascadePatternEm.noCascade,
       appScreen,
       screenWidgetArea,
       slot,

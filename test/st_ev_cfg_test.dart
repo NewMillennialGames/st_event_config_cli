@@ -9,16 +9,19 @@ void main() {
     final _questMgr = QuestListMgr();
     expect(_questMgr.totalAnsweredQuestions, 0);
 
-    final qq = QuestionQuantifier.areaLevelSlots(
+    final qq = QuestionQuantifier.areaLevelRules(
       AppScreen.marketView,
       ScreenWidgetArea.tableview,
-      responseAddsWhichRuleQuestions: true,
+      responseAddsRuleDetailQuests: true,
     );
     final askNumSlots = Question<String, int>(
       qq,
       'how many Grouping positions would you like to configure?',
       ['0', '1', '$k_quests_created_in_test', '3'],
-      (selCount) => int.tryParse(selCount) ?? 0,
+      (selCount) {
+        print('running convert on $selCount');
+        return int.tryParse(selCount) ?? 0;
+      },
     );
     _questMgr.appendNewQuestions([askNumSlots]);
     // next 2 lines are virtually the same test
@@ -41,6 +44,6 @@ void main() {
     // now check that k_quests_created_in_test questions were created
     // since there was no 2nd INITIAL question, nextQuestionToAnswer did not move index
     // so we subtract one from pending ...
-    // expect(_questMgr.pendingQuestionCount - 1, k_quests_created_in_test);
+    expect(_questMgr.pendingQuestionCount - 1, k_quests_created_in_test);
   });
 }

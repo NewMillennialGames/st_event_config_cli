@@ -121,7 +121,7 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
     PerQuestGenOptions pqt,
   ) {
     // used to create derived questions from existing answers
-    var newQq = pqt.qQuantifierRevisor(this.qQuantify);
+    QuestionQuantifier newQq = pqt.qQuantUpdater(this.qQuantify);
     String newId = pqt.questId.isNotEmpty
         ? pqt.questId
         : (this.questionId + ':' + newQq.sortKey);

@@ -9,7 +9,7 @@ import '../questions/all.dart';
 // part '../app_entity_enums/tv_area_row_style.dart';
 part 'rule_type.dart';
 part 'sort_group_idx_order.dart';
-part 'quest_cascade_type.dart';
+part 'response_cascade_type.dart';
 part 'rule_quest_type.dart';
 
 typedef Vrq = VisRuleQuestType;

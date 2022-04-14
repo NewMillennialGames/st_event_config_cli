@@ -1,7 +1,7 @@
 part of EvCfgEnums;
 
-enum QuestCascadeTypEnum {
-  /* Cascade Type defines:
+enum UserResponseCascadePatternEm {
+  /* UserResponseCascadePattern defines:
     how does response from user
     to a current question
     impact future questions in the pending list
@@ -13,7 +13,7 @@ enum QuestCascadeTypEnum {
    */
   addsWhichAreaInSelectedScreenQuestions,
   addsWhichRulesForSelectedAreaQuestions, // for each area of each screen
-  addsWhichSlotOfSelectedAreaQuestions, // for each screen
+  addsWhichSlotOfSelectedAreaQuestions, // for each screen & area
   addsWhichRulesForSlotsInArea, // for each slot in area
   addsRuleDetailQuestsForSlotOrArea,
   // addsVisualRuleDetailQuestions,
@@ -21,28 +21,31 @@ enum QuestCascadeTypEnum {
   noCascade,
 }
 
-extension QuestCascadeTypExt on QuestCascadeTypEnum {
+extension UserResponseCascadePatternExt on UserResponseCascadePatternEm {
   /*
   properties exposed to Question up thru the QuestionQuantifier
   these properties describe CURRENT question 
   (not the ones they will be creating)
   */
-  bool get generatesNoNewQuestions => this == QuestCascadeTypEnum.noCascade;
+  bool get generatesNoNewQuestions =>
+      this == UserResponseCascadePatternEm.noCascade;
 
   bool get addsWhichAreaInSelectedScreenQuestions =>
-      this == QuestCascadeTypEnum.addsWhichAreaInSelectedScreenQuestions;
+      this ==
+      UserResponseCascadePatternEm.addsWhichAreaInSelectedScreenQuestions;
 
   bool get addsWhichRulesForSelectedAreaQuestions =>
-      this == QuestCascadeTypEnum.addsWhichRulesForSelectedAreaQuestions;
+      this ==
+      UserResponseCascadePatternEm.addsWhichRulesForSelectedAreaQuestions;
 
   bool get addsWhichSlotOfSelectedAreaQuestions =>
-      this == QuestCascadeTypEnum.addsWhichSlotOfSelectedAreaQuestions;
+      this == UserResponseCascadePatternEm.addsWhichSlotOfSelectedAreaQuestions;
 
   bool get addsWhichRulesForSlotsInArea =>
-      this == QuestCascadeTypEnum.addsWhichRulesForSlotsInArea;
+      this == UserResponseCascadePatternEm.addsWhichRulesForSlotsInArea;
 
   bool get addsRuleDetailQuestsForSlotOrArea =>
-      this == QuestCascadeTypEnum.addsRuleDetailQuestsForSlotOrArea;
+      this == UserResponseCascadePatternEm.addsRuleDetailQuestsForSlotOrArea;
 
   // bool get addsVisualRuleDetailQuestions =>
   //     this == QuestCascadeTyp.addsVisualRuleDetailQuestions;

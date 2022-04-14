@@ -63,7 +63,7 @@ class QuestMatcher<AnsType> {
   // AddQuestChkCallbk is for doing more advanced analysis to verify a match
   final AddQuestChkCallbk validateUserAnswerAfterPatternMatchIsTrueCallback;
   // cascadeType indicates whether we add new questions, auto-answers or both
-  final QuestCascadeTypEnum? cascadeType;
+  final UserResponseCascadePatternEm? cascadeType;
   // pattern matching values;  leave null to not match on them
   final AppScreen? appScreen;
   final ScreenWidgetArea? screenWidgetArea;
@@ -152,7 +152,7 @@ List<QuestMatcher> _matcherList = [
   // defines rules for adding new questions or implicit answers
   // based on answers to prior questions
 
-  QuestMatcher<bool>(
+  QuestMatcher<int>(
     'if user wants to perform grouping on a ListView, ask how many grouping cols are required & add a question for each',
     MatcherBehaviorEnum.addPendingQuestions,
     DerivedQuestGenerator(
@@ -163,17 +163,20 @@ List<QuestMatcher> _matcherList = [
       perQuestGenOptions: [
         PerQuestGenOptions(
           answerChoices: DbTableFieldName.values.map((e) => e.name),
-          castFunc: (ansr) =>
-              DbTableFieldName.values[int.tryParse(ansr as String) ?? 0],
-          qQuantRev: (qq) => qq,
+          castFunc: (ansr) => DbTableFieldName
+              .values[int.tryParse(ansr) ?? CfgConst.cancelSortIndex],
+          qQuantRev: (qq) => qq.copyWith(),
         ),
       ],
     ),
-    validateUserAnswerAfterPatternMatchIsTrueCallback: (ans) =>
-        (int.tryParse(ans as String) ?? 0) > 0,
-    cascadeType: QuestCascadeTypEnum.addsRuleDetailQuestsForSlotOrArea,
+
+    cascadeType: UserResponseCascadePatternEm.addsRuleDetailQuestsForSlotOrArea,
     screenWidgetArea: ScreenWidgetArea.tableview,
     visRuleTypeForAreaOrSlot: VisualRuleType.groupCfg,
-    isRuleQuestion: true,
+    // if existing question is for grouping on ListView
+    // make sure user said YES (they want grouping)
+    validateUserAnswerAfterPatternMatchIsTrueCallback: (ans) =>
+        (int.tryParse(ans as String) ?? 0) > 0,
+    isRuleQuestion: false,
   ),
 ];
