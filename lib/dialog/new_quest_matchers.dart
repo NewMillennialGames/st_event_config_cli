@@ -157,10 +157,16 @@ List<QuestMatcher> _matcherList = [
     MatcherBehaviorEnum.addPendingQuestions,
     DerivedQuestGenerator(
       'Select field #{0} to use for row-grouping on {1} screen',
-      newQuestCountCalculator: (q) => q.response?.answers as int,
-      newQuestArgGen: (quest, idx) => <String>[],
+      newQuestCountCalculator: (q) => (q.response?.answers ?? 0) as int,
+      newQuestArgGen: (quest, idx) =>
+          <String>['${idx + 1}', quest.appScreen.name],
       perQuestGenOptions: [
-        PerQuestGenOptions([], (qq) => qq, (ansr) => ansr),
+        PerQuestGenOptions(
+          answerChoices: DbTableFieldName.values.map((e) => e.name),
+          castFunc: (ansr) =>
+              DbTableFieldName.values[int.tryParse(ansr as String) ?? 0],
+          qQuantRev: (qq) => qq,
+        ),
       ],
     ),
     validateUserAnswerAfterPatternMatchIsTrueCallback: (ans) =>

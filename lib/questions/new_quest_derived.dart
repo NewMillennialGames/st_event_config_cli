@@ -22,19 +22,21 @@ typedef QuestionQuantifierRevisor = QuestionQuantifier Function(
 class PerQuestGenOptions<AnsType> {
   //
   Iterable<String> answerChoices;
-  QuestionQuantifierRevisor qQuantifierRevisor;
   AnsType Function(String) castFunc;
+  QuestionQuantifierRevisor qQuantifierRevisor;
   int defaultAnswerIdx = 0;
   String questId;
 
-  PerQuestGenOptions(
-    this.answerChoices,
-    this.qQuantifierRevisor,
-    this.castFunc, {
+  PerQuestGenOptions({
+    required this.answerChoices,
+    required this.castFunc,
+    QuestionQuantifierRevisor? qQuantRev,
     this.questId = '',
-  });
+  }) : this.qQuantifierRevisor = qQuantRev == null ? _noOp : qQuantRev;
 
   Type get genType => AnsType;
+
+  static QuestionQuantifier _noOp(QuestionQuantifier qq) => qq;
 }
 
 class DerivedQuestGenerator {
@@ -48,10 +50,12 @@ class DerivedQuestGenerator {
   NewQuestArgGen newQuestArgGen;
   List<PerQuestGenOptions> perQuestGenOptions;
 
-  DerivedQuestGenerator(this.questTemplate,
-      {required this.newQuestCountCalculator,
-      required this.newQuestArgGen,
-      required this.perQuestGenOptions});
+  DerivedQuestGenerator(
+    this.questTemplate, {
+    required this.newQuestCountCalculator,
+    required this.newQuestArgGen,
+    required this.perQuestGenOptions,
+  });
 
   List<Question> generatedQuestions(
     Question answeredQuest,
@@ -59,6 +63,8 @@ class DerivedQuestGenerator {
   ) {
     //
     int toCreate = newQuestCountCalculator(answeredQuest);
+    if (toCreate < 1) return [];
+
     List<Question> createdQuest = [];
     for (int i = 0; i < toCreate; i++) {
       //

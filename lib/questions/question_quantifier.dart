@@ -1,32 +1,23 @@
 part of InputModels;
 
-class QuestionQuantifier extends Equatable {
+@freezed
+class QuestionQuantifier extends Equatable with _$QuestionQuantifier {
   /* describes what a question is about
     it's purpose, behavior and output
     made it equatable to enable searching Q-list
+    for filtering and generating new questions reactively
   */
 
-  final QuestCascadeTypEnum cascadeType;
-  final AppScreen appScreen;
-  /* properties below are in ORDER
-  if any property is set (not null)
-  then all properties ABOVE it must also be non-null
-  */
-  final ScreenWidgetArea? screenWidgetArea;
-  final ScreenAreaWidgetSlot? slotInArea;
-  // a rule-type applies to all of:
-  //    appScreen, screenWidgetArea, slotInArea
-  final VisualRuleType? visRuleTypeForAreaOrSlot;
-  final BehaviorRuleType? behRuleTypeForAreaOrSlot;
+  QuestionQuantifier._();
 
-  const QuestionQuantifier._(
-    this.cascadeType,
-    this.appScreen,
-    this.screenWidgetArea,
-    this.slotInArea,
-    this.visRuleTypeForAreaOrSlot,
-    this.behRuleTypeForAreaOrSlot,
-  );
+  factory QuestionQuantifier(
+    QuestCascadeTypEnum cascadeType,
+    AppScreen appScreen,
+    ScreenWidgetArea? screenWidgetArea,
+    ScreenAreaWidgetSlot? slotInArea,
+    VisualRuleType? visRuleTypeForAreaOrSlot,
+    BehaviorRuleType? behRuleTypeForAreaOrSlot,
+  ) = _QuestionQuantifier;
 
   String get sortKey {
     // makes equatable work for searching & sorting question list
@@ -86,7 +77,7 @@ class QuestionQuantifier extends Equatable {
       when responseAddsWhichAreaQuestions is true
       this answer will build "which area" questions
     */
-    return QuestionQuantifier._(
+    return QuestionQuantifier(
       responseAddsWhichAreaQuestions
           ? QuestCascadeTypEnum.addsWhichAreaInSelectedScreenQuestions
           : QuestCascadeTypEnum.noCascade,
@@ -108,7 +99,7 @@ class QuestionQuantifier extends Equatable {
       when responseAddsWhichRuleAndSlotQuestions is true
       this answer will build "which rule for area" questions
     */
-    return QuestionQuantifier._(
+    return QuestionQuantifier(
       responseAddsWhichRuleAndSlotQuestions
           ? QuestCascadeTypEnum.addsWhichRulesForSelectedAreaQuestions
           : QuestCascadeTypEnum.noCascade,
@@ -154,7 +145,7 @@ class QuestionQuantifier extends Equatable {
       when responseAddsWhichRuleQuestions is true
       this answer will build "rule detail ?? for slot" questions
     */
-    return QuestionQuantifier._(
+    return QuestionQuantifier(
       responseAddsWhichRuleQuestions
           ? QuestCascadeTypEnum.addsWhichRulesForSlotsInArea
           : QuestCascadeTypEnum.noCascade,
@@ -178,7 +169,7 @@ class QuestionQuantifier extends Equatable {
       when responseAddsRuleDetailQuestions is true
       this answer will build "rule detail ?? for slot" questions
     */
-    return QuestionQuantifier._(
+    return QuestionQuantifier(
       responseAddsRuleDetailQuestions
           ? QuestCascadeTypEnum.addsRuleDetailQuestsForSlotOrArea
           : QuestCascadeTypEnum.noCascade,
@@ -200,7 +191,7 @@ class QuestionQuantifier extends Equatable {
     bool addsMoreRuleQuestions = false,
   }) {
     bool isVisual = visRuleTypeForSlotInArea != null;
-    return QuestionQuantifier._(
+    return QuestionQuantifier(
       addsMoreRuleQuestions
           ? (isVisual
               ? QuestCascadeTypEnum.addsRuleDetailQuestsForSlotOrArea
@@ -238,11 +229,35 @@ class QuestionQuantifier extends Equatable {
 
   // impl for equatable
   @override
-  List<Object> get props => [equatableKey];
+  List<Object> get props => [equatableKey]; // equatableKey
 
   @override
   bool get stringify => true;
 }
+
+
+
+  // final QuestCascadeTypEnum cascadeType;
+  // final AppScreen appScreen;
+  // /* properties below are in ORDER
+  // if any property is set (not null)
+  // then all properties ABOVE it must also be non-null
+  // */
+  // final ScreenWidgetArea? screenWidgetArea;
+  // final ScreenAreaWidgetSlot? slotInArea;
+  // // a rule-type applies to all of:
+  // //    appScreen, screenWidgetArea, slotInArea
+  // final VisualRuleType? visRuleTypeForAreaOrSlot;
+  // final BehaviorRuleType? behRuleTypeForAreaOrSlot;
+
+  // const QuestionQuantifier._(
+  //   this.cascadeType,
+  //   this.appScreen,
+  //   this.screenWidgetArea,
+  //   this.slotInArea,
+  //   this.visRuleTypeForAreaOrSlot,
+  //   this.behRuleTypeForAreaOrSlot,
+  // );
 
 
 
