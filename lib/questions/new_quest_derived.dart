@@ -29,14 +29,14 @@ class PerQuestGenOptions<AnsType> {
   late final QuestionQuantifierRevisor qQuantUpdater;
   final int defaultAnswerIdx = 0;
   final String questId;
-  final bool genRuleQuestion;
+  final bool genAsRuleQuestion;
 
   PerQuestGenOptions({
     required this.answerChoices,
     required this.castFunc,
     QuestionQuantifierRevisor? qQuantRev,
     this.questId = '',
-    this.genRuleQuestion = false,
+    this.genAsRuleQuestion = false,
   }) : this.qQuantUpdater = qQuantRev == null ? _noOp : qQuantRev;
 
   Type get genType => AnsType;

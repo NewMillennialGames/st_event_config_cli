@@ -24,6 +24,7 @@ class QuestListMgr {
     return q.appliesToClientConfiguration;
   }
 
+  List<Question> get pendingQuestions => _pendingQuestions;
   Question get _currentOrLastQuestion => _pendingQuestions[_currQuestionIdx];
   int get totalAnsweredQuestions => _answeredQuestsBySection.values
       .fold<int>(0, (r, qLst) => r + qLst.length);

@@ -113,11 +113,15 @@ class QuestionQuantifier extends Equatable with _$QuestionQuantifier {
 
   factory QuestionQuantifier.areaLevelRules(
     AppScreen appScreen,
-    ScreenWidgetArea screenArea, {
+    ScreenWidgetArea screenArea,
+    VisualRuleType ruleType, {
     bool responseAddsRuleDetailQuests = false,
   }) {
     /*  DG note 4/14/22 -> this constructor was commented and removed previously
           don't remember why or how it's not in use, but I am using it now in tests
+
+    I think this method was deprecated when I switched to sloppy pattern of treating
+    Listview rules as slot rules rather than answers under an area level rule
 
       sample question:
        'Which rules would you like to add to the ${area.name} of ${screen.name}?',
@@ -131,7 +135,7 @@ class QuestionQuantifier extends Equatable with _$QuestionQuantifier {
       appScreen,
       screenArea,
       null,
-      null,
+      ruleType,
       null,
     );
   }
