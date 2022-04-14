@@ -120,27 +120,33 @@ class QuestMatcher<AnsType> {
     dMatch = dMatch &&
         (this.cascadeType == null ||
             this.cascadeType == quest.qQuantify.cascadeType);
-
+    print('Cascade matches: $dMatch');
     dMatch =
         dMatch && (this.appScreen == null || this.appScreen == quest.appScreen);
+    print('appScreen matches: $dMatch');
 
     dMatch = dMatch &&
         (this.screenWidgetArea == null ||
             this.screenWidgetArea == quest.screenWidgetArea);
+    print('screenWidgetArea matches: $dMatch');
 
     dMatch = dMatch &&
         (this.slotInArea == null || this.slotInArea == quest.slotInArea);
+    print('slotInArea matches: $dMatch');
 
     dMatch = dMatch &&
         (this.visRuleTypeForAreaOrSlot == null ||
             this.visRuleTypeForAreaOrSlot == quest.visRuleTypeForAreaOrSlot);
+    print('visRuleTypeForAreaOrSlot matches: $dMatch');
 
-    dMatch = dMatch &&
-        (this.behRuleTypeForAreaOrSlot == null ||
-            this.behRuleTypeForAreaOrSlot == quest.behRuleTypeForAreaOrSlot);
+    // dMatch = dMatch &&
+    //     (this.behRuleTypeForAreaOrSlot == null ||
+    //         this.behRuleTypeForAreaOrSlot == quest.behRuleTypeForAreaOrSlot);
+    // print('behRuleTypeForAreaOrSlot matches: $dMatch');
 
     dMatch = dMatch &&
         (this.isRuleQuestion == false || quest.isRuleQuestion == true);
+    print('isRuleQuestion matches: $dMatch');
 
     // dMatch =
     //     dMatch && (this.typ == null || quest.response.runtimeType == this.typ);
@@ -172,11 +178,10 @@ List<QuestMatcher> _matcherList = [
 
     cascadeType: UserResponseCascadePatternEm.addsRuleDetailQuestsForSlotOrArea,
     screenWidgetArea: ScreenWidgetArea.tableview,
-    visRuleTypeForAreaOrSlot: VisualRuleType.groupCfg,
+    // visRuleTypeForAreaOrSlot: VisualRuleType.groupCfg,
     // if existing question is for grouping on ListView
     // make sure user said YES (they want grouping)
-    validateUserAnswerAfterPatternMatchIsTrueCallback: (ans) =>
-        (int.tryParse(ans as String) ?? 0) > 0,
+    validateUserAnswerAfterPatternMatchIsTrueCallback: (ans) => (ans ?? 0) > 0,
     isRuleQuestion: false,
   ),
 ];
