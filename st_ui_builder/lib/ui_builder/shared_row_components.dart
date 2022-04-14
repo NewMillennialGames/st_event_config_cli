@@ -4,7 +4,7 @@ class WatchButton extends ConsumerWidget {
   const WatchButton({Key? key, required this.assetKey, this.isWatched = false})
       : super(key: key);
 
-  final String assetKey;
+  final AssetKey assetKey;
   final bool isWatched;
 
   @override
@@ -12,7 +12,7 @@ class WatchButton extends ConsumerWidget {
     final tradeFlow = ref.read(tradeFlowProvider);
 
     return InkWell(
-      onTap: () => tradeFlow.toggleWatchValue(AssetKey(assetKey)),
+      onTap: () => tradeFlow.toggleWatchValue(assetKey),
       child: Icon(
         isWatched ? Icons.star_outlined : Icons.star_border,
         color: isWatched ? StColors.yellow : StColors.blue,
@@ -62,7 +62,7 @@ class CompetitorImage extends StatelessWidget {
 
 class TradeButton extends ConsumerWidget {
   //
-  final String assetId;
+  final AssetKey assetId;
   final CompetitionStatus status;
 
   const TradeButton(

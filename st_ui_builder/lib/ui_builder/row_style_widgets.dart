@@ -413,6 +413,7 @@ class DriverVsFieldRowPortfolioHistory extends AssetVsAssetRowPortfolioView {
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
+
   @override
   bool get isDriverVsField => true;
 
@@ -426,6 +427,7 @@ class TeamPlayerVsFieldRowPortfolioHistory
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
+
   @override
   bool get isTeamPlayerVsField => true;
 
@@ -460,7 +462,7 @@ class TeamVsFieldRowMktView extends StBaseTvRow
         if (showRanked)
           WatchButton(
             assetKey: comp1.assetKey,
-            isWatched: agd.isWatched(comp1.assetKey),
+            isWatched: comp1.assetStateUpdates.isWatched,
           ),
         CompetitorImage(comp1.imgUrl, showRanked),
         SizedBox(
