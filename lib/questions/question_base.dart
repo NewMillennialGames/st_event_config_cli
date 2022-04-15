@@ -119,9 +119,6 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
   Question fromExisting(
     String quStr,
     PerQuestGenOptions pqt,
-    // {
-    // bool asRuleQuestion = false,
-    // }
   ) {
     // used to create derived questions from existing answers
     QuestionQuantifier newQq = pqt.qQuantUpdater(this.qQuantify);
