@@ -74,7 +74,7 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
   double get recentPriceDelta => assetStateUpdates.priceDeltaSinceOpen; // ?? 0;
   String get currPriceStr => assetStateUpdates.curPriceStr; // ?? kMissingPrice;
   String get recentDeltaStr =>
-      assetStateUpdates.priceDeltaSinceOpenStr; // ?? kMissingPrice;
+      assetStateUpdates.formattedChangeStr; // ?? kMissingPrice;
   String get openPriceStr => assetStateUpdates.openPrice.toStringAsFixed(2);
   String get lowPriceStr => assetStateUpdates.lowPrice.toStringAsFixed(2);
   String get hiPriceStr => assetStateUpdates.hiPrice.toStringAsFixed(2);

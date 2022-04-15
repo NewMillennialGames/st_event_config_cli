@@ -134,43 +134,58 @@ class CheckAssetType extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var lst = competitor.topName.split('');
-    String lastName = lst[1];
+    var lst = competitor.topName.split(' ');
+    String lastName;
+    lst.length >= 2 ? lastName = lst[1] : lastName = '';
+    String firstName = lst[0];
     if (isDriverVsField!) {
       return Row(
         children: [
           Text(
             competitor.rankStr,
             style: StTextStyles.h1
-                .copyWith(fontWeight: FontWeight.w900, fontSize: 30),
+                .copyWith(fontWeight: FontWeight.w900, fontSize: 40),
           ),
           kSpacerSm,
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(competitor.topName.toUpperCase(), style: StTextStyles.p2),
-              Text(competitor.subName.toUpperCase(),
-                  style: StTextStyles.h3.copyWith(fontWeight: FontWeight.w700))
-            ],
+          ConstrainedBox(
+            constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width * .3),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(firstName.toUpperCase(),
+                    overflow: TextOverflow.ellipsis, style: StTextStyles.p2),
+                Text(lastName.toUpperCase(),
+                    overflow: TextOverflow.ellipsis,
+                    style:
+                        StTextStyles.h3.copyWith(fontWeight: FontWeight.w700))
+              ],
+            ),
           )
         ],
       );
     }
     if (isTeamPlayerVsField!) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(competitor.topName, style: StTextStyles.h4),
-          Row(
-            children: [
-              Text(competitor.teamNameWhenTradingPlayers,
-                  style: StTextStyles.p2.copyWith(color: StColors.coolGray)),
-              kSpacerSm,
-              Text(competitor.position,
-                  style: StTextStyles.p2.copyWith(color: StColors.coolGray))
-            ],
-          ),
-        ],
+      return ConstrainedBox(
+        constraints:
+            BoxConstraints(maxWidth: MediaQuery.of(context).size.width * .3),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(competitor.topName, style: StTextStyles.h4),
+            Row(
+              children: [
+                Text(competitor.teamNameWhenTradingPlayers,
+                    overflow: TextOverflow.ellipsis,
+                    style: StTextStyles.p2.copyWith(color: StColors.coolGray)),
+                kSpacerSm,
+                Text(competitor.position,
+                    overflow: TextOverflow.ellipsis,
+                    style: StTextStyles.p2.copyWith(color: StColors.coolGray))
+              ],
+            ),
+          ],
+        ),
       );
     }
     if (isPlayerVsFieldRanked!) {
@@ -185,9 +200,14 @@ class CheckAssetType extends StatelessWidget {
         ],
       );
     }
-    return Text(
-      competitor.topName,
-      style: StTextStyles.h4,
+    return ConstrainedBox(
+      constraints:
+          BoxConstraints(maxWidth: MediaQuery.of(context).size.width * .3),
+      child: Text(
+        competitor.topName,
+        overflow: TextOverflow.ellipsis,
+        style: StTextStyles.h4,
+      ),
     );
   }
 }
@@ -280,6 +300,7 @@ class AssetVsAssetHalfRow extends StatelessWidget {
             competitor.topName,
             style: StTextStyles.h5.copyWith(fontSize: 15),
             maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             // textScaleFactor: 0.96,
             // textWidthBasis: TextWidthBasis.longestLine,
           ),
@@ -328,7 +349,7 @@ class MktRschAsset extends StatelessWidget {
             fit: BoxFit.fill,
           ),
         ),
-        Container(
+        SizedBox(
           height: _sizeHeightImage,
           width: size.width * 0.47,
           child: Column(
@@ -337,7 +358,7 @@ class MktRschAsset extends StatelessWidget {
               DottedBorder(
                 color: StColors.white,
                 child: const Padding(
-                  padding: const EdgeInsets.all(10),
+                  padding: EdgeInsets.all(10),
                   child: Text(
                     StStrings.mktRschAssetVsAssetTeamImgText,
                     style: StTextStyles.textFormField,
@@ -512,7 +533,7 @@ class _PositionRankRow extends StatelessWidget {
         );
         break;
       default:
-        positionWidget = Container(
+        positionWidget = SizedBox(
           width: _sizeIconRank,
           child: Text(
             asset.rankStr,
@@ -640,7 +661,7 @@ class HoldingsAndValueRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${_sharesHeld.toString() + ' ' + StStrings.shares}',
+                  _sharesHeld.toString() + ' ' + StStrings.shares,
                   style: StTextStyles.h5,
                 ),
                 RichText(
@@ -689,7 +710,9 @@ class HoldingsAndValueRow extends StatelessWidget {
                   style: StTextStyles.h6.copyWith(),
                 ),
                 Text(
-                  '${_gainLoss.isNegative ? _gainLoss.toStringAsFixed(2) : '+' + _gainLoss.toStringAsFixed(2)}',
+                  _gainLoss.isNegative
+                      ? _gainLoss.toStringAsFixed(2)
+                      : '+' + _gainLoss.toStringAsFixed(2),
                   style: _gainLoss.isNegative
                       ? StTextStyles.moneyDeltaPositive.copyWith(
                           color: StColors.errorText,

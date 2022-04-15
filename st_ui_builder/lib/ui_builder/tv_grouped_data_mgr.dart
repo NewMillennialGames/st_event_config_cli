@@ -203,12 +203,32 @@ class GroupedTableDataMgr {
           items: listItems
               .map(
                 (String val) => DropdownMenuItem<String>(
-                  child: Text(val.toUpperCase()),
+                  child: Container(
+                      color: curSelection == val
+                          ? StColors.primaryDarkGray
+                          : StColors.black,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Text(val.toUpperCase()),
+                          ],
+                        ),
+                      )),
                   value: val,
                   alignment: AlignmentDirectional.centerStart,
                 ),
               )
               .toList(),
+          selectedItemBuilder: (BuildContext context) {
+            return listItems.map((String value) {
+              return Center(
+                child: Text(
+                  value.toUpperCase(),
+                ),
+              );
+            }).toList();
+          },
           onChanged: (String? selectedVal) {
             // store selected value for state mgmt
             valSetter(selectedVal);
@@ -220,7 +240,6 @@ class GroupedTableDataMgr {
             }
             _doFilteringFor(colName, selectedVal);
           },
-          // focusColor: Colors.green,
           dropdownColor: StColors.black,
           iconEnabledColor: StColors.gray,
           style: const TextStyle(
