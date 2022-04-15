@@ -13,7 +13,7 @@ const String kMissingPrice = '0.00';
 abstract class AssetRowPropertyIfc {
   // must have a value for each name on:
   // enum DbTableFieldName()
-  String get assetKey; // for unique comparison
+  AssetKey get assetKey; // for unique comparison
   String get topName;
   String get subName;
   String get ticker;
