@@ -15,11 +15,11 @@ class TradeFlowBase {
   }) =>
       throw UnimplementedError('should call subclass');
 
-  void beginTradeFlow(String assetId) {
+  void beginTradeFlow(AssetKey assetId) {
     throw UnimplementedError('should call subclass');
   }
 
-  bool toggleWatchValue(String assetKey) =>
+  bool toggleWatchValue(AssetKey assetKey) =>
       throw UnimplementedError('should call subclass');
 }
 
@@ -40,8 +40,8 @@ class TradeFlowForDemo extends TradeFlowBase {
       Colors.blue;
 
   @override
-  void beginTradeFlow(String assetId) {}
+  void beginTradeFlow(AssetKey assetId) {}
 
   @override
-  bool toggleWatchValue(String assetKey) => true;
+  bool toggleWatchValue(AssetKey assetKey) => true;
 }
