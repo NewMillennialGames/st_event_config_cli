@@ -173,7 +173,8 @@ List<QuestMatcher> _matcherList = [
               .values[int.tryParse(ansr) ?? CfgConst.cancelSortIndex],
           qQuantRev: (qq) =>
               qq.copyWith(visRuleTypeForAreaOrSlot: VisualRuleType.groupCfg),
-          genAsRuleQuestion: true,
+          ruleType: VisualRuleType.groupCfg,
+          ruleQuestType: VisRuleQuestType.selectDataFieldName,
         ),
       ],
     ),

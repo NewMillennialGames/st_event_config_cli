@@ -170,9 +170,14 @@ class EventCfgTree {
 
     // set default vals before passing to encoder
     this._fillMissingWithDefaults();
-    var jsonData = json.encode(this);
+
+    // try {
+    String jsonData = json.encode(this);
     outFile.writeAsStringSync(jsonData, mode: FileMode.write, flush: true);
     print('Config written (in JSON fmt) to ${outFile.path}');
+    // } catch (e) {
+    //   print(e.toString());
+    // }
     // outFile.close();
   }
 
@@ -217,6 +222,11 @@ extension EventCfgTreeExt1 on EventCfgTree {
   SortingRules? tvSortingRules(AppScreen screen) {
     //
     return screenAreaCfg(screen, ScreenWidgetArea.tableview).sortingRules;
+  }
+
+  GroupingRules? tvGroupingRules(AppScreen screen) {
+    //
+    return screenAreaCfg(screen, ScreenWidgetArea.tableview).groupingRules;
   }
 
   FilterRules? tvFilteringRules(AppScreen screen) {

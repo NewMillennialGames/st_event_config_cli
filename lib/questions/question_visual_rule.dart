@@ -1,4 +1,4 @@
-part of InputModels;
+part of QuestionsLib;
 
 class VisualRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseWrapperIfc>
     extends Question<ConvertTyp, AnsTyp> {
@@ -10,7 +10,7 @@ class VisualRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseWrapperIfc>
 
     must collect enough data to render the full rule
   */
-  late final VisRuleChoiceConfig _questDef;
+  late VisRuleChoiceConfig _questDef;
 
   VisualRuleQuestion(
     AppScreen appSection,
@@ -59,5 +59,23 @@ class VisualRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseWrapperIfc>
     // store user answers
     (this.response?.answers as RuleResponseWrapperIfc)
         .castResponsesToAnswerTypes(multiAnswerMap);
+  }
+
+  static Question makeFromExisting(
+    Question ques,
+    String newQuestStr,
+    PerQuestGenOptions genOpt,
+  ) {
+    //
+    QuestionQuantifier qq = ques.qQuantify.copyWith();
+    var vrq = VisualRuleQuestion(
+      ques.appScreen,
+      ques.screenWidgetArea!,
+      qq.visRuleTypeForAreaOrSlot!,
+      ques.slotInArea,
+    );
+    vrq._questDef = VisRuleChoiceConfig.fromGenOptions(genOpt);
+
+    return vrq;
   }
 }

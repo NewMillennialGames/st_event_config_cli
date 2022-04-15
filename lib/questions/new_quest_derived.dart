@@ -1,4 +1,4 @@
-part of InputModels;
+part of QuestionsLib;
 
 /*   not sure if this is needed
   QuestMatcher() may be all we need
@@ -29,17 +29,20 @@ class PerQuestGenOptions<AnsType> {
   late final QuestionQuantifierRevisor qQuantUpdater;
   final int defaultAnswerIdx = 0;
   final String questId;
-  final bool genAsRuleQuestion;
+  final VisualRuleType? ruleType;
+  final VisRuleQuestType? ruleQuestType;
 
   PerQuestGenOptions({
     required this.answerChoices,
     required this.castFunc,
     QuestionQuantifierRevisor? qQuantRev,
     this.questId = '',
-    this.genAsRuleQuestion = false,
+    this.ruleType,
+    this.ruleQuestType,
   }) : this.qQuantUpdater = qQuantRev == null ? _noOp : qQuantRev;
 
   Type get genType => AnsType;
+  bool get genAsRuleQuestion => ruleType != null;
 
   static QuestionQuantifier _noOp(QuestionQuantifier qq) => qq;
 }
@@ -83,10 +86,19 @@ class DerivedQuestGenerator {
           ? perQuestGenOptions.last
           : perQuestGenOptions[i];
       //
-      Question nxtQuest = answeredQuest.fromExisting(
-        newQuestStr,
-        genOptionsAtIdx,
-      );
+      Question nxtQuest;
+      if (genOptionsAtIdx.genAsRuleQuestion) {
+        nxtQuest = VisualRuleQuestion.makeFromExisting(
+          answeredQuest,
+          newQuestStr,
+          genOptionsAtIdx,
+        );
+      } else {
+        nxtQuest = answeredQuest.fromExisting(
+          newQuestStr,
+          genOptionsAtIdx,
+        );
+      }
 
       createdQuest.add(nxtQuest);
     }

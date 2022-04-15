@@ -1,4 +1,4 @@
-part of InputModels;
+part of QuestionsLib;
 
 class UserResponse<AnsTyp> {
   /*  holds answers to normal (NON Rule-Based) questions

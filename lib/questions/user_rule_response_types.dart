@@ -1,4 +1,4 @@
-part of InputModels;
+part of QuestionsLib;
 
 /*
   answers within regular Questions stored in UserResponse<AnsTyp>

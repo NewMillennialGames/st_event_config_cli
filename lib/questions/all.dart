@@ -1,8 +1,6 @@
-library InputModels;
+library QuestionsLib;
 
 import 'package:equatable/equatable.dart';
-// import 'package:freezed/builder.dart';
-// import 'package:json_annotation/json_annotation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 //
 import '../app_entity_enums/all.dart';

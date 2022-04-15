@@ -1,4 +1,4 @@
-part of InputModels;
+part of QuestionsLib;
 
 class BehaveRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseBase>
     extends Question<ConvertTyp, AnsTyp> {

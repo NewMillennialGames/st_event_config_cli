@@ -89,7 +89,7 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
         // for that specific rule
         return [
           VisualRuleType.styleOrFormat,
-          VisualRuleType.filterCfg,
+          // VisualRuleType.filterCfg,
           VisualRuleType.sortCfg,
           VisualRuleType.groupCfg,
         ];

@@ -1,4 +1,4 @@
-part of InputModels;
+part of QuestionsLib;
 
 class VisRuleQuestWithChoices {
   //
@@ -60,6 +60,13 @@ class VisRuleChoiceConfig {
     List<VisRuleQuestWithChoices> questsAndChoices =
         getSubQuestionsAndChoiceOptions(ruleTyp);
     return VisRuleChoiceConfig._(ruleTyp, questsAndChoices);
+  }
+
+  factory VisRuleChoiceConfig.fromGenOptions(PerQuestGenOptions genOpt) {
+    //
+    var qwc = VisRuleQuestWithChoices(
+        genOpt.ruleQuestType!, genOpt.answerChoices.toList());
+    return VisRuleChoiceConfig._(genOpt.ruleType!, [qwc]);
   }
 
   static List<VisRuleQuestWithChoices> getSubQuestionsAndChoiceOptions(

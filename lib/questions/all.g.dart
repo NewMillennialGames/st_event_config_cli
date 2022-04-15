@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of InputModels;
+part of QuestionsLib;
 
 // **************************************************************************
 // JsonSerializableGenerator

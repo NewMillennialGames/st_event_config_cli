@@ -1,4 +1,4 @@
-part of InputModels;
+part of QuestionsLib;
 
 @freezed
 class QuestionQuantifier extends Equatable with _$QuestionQuantifier {
