@@ -52,7 +52,7 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
   DateTime get gameDate => asset.gameDt;
 
   @override
-  AssetKey get assetKey => AssetKey(asset.id);
+  String get assetKey => asset.id;
 
   @override
   String get imgUrl => asset.imgUrl;

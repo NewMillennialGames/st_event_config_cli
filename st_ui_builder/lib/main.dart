@@ -36,9 +36,9 @@ Future<void> readExampleEventConfig({String filename = cfgEmpl3}) async {
 }
 
 final _dynGameStateFamProv =
-    StateProviderFamily<ActiveGameDetails, StKey>((ref, gameKey) {
+    StateProviderFamily<ActiveGameDetails, String>((ref, gameKey) {
   // doesnt work;  just mock to get packages building
-  return ActiveGameDetails(gameKey.value, DateTime.now());
+  return ActiveGameDetails(gameKey, DateTime.now());
 });
 
 final _redrawUiFlagProvider = StateProvider<bool>((ref) => false);
@@ -148,7 +148,7 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
         (e) => TableviewDataRowTuple(
           e,
           e,
-          GameKey(e.asset.gameKey),
+          e.asset.gameKey,
           _dynGameStateFamProv,
         ),
       )

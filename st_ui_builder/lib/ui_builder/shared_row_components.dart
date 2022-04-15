@@ -4,7 +4,7 @@ class WatchButton extends ConsumerWidget {
   const WatchButton({Key? key, required this.assetKey, this.isWatched = false})
       : super(key: key);
 
-  final AssetKey assetKey;
+  final String assetKey;
   final bool isWatched;
 
   @override
@@ -62,7 +62,7 @@ class CompetitorImage extends StatelessWidget {
 
 class TradeButton extends ConsumerWidget {
   //
-  final AssetKey assetId;
+  final String assetId;
   final CompetitionStatus status;
 
   const TradeButton(
