@@ -212,17 +212,17 @@ class ActiveGameDetails with _$ActiveGameDetails {
   bool includesParticipant(String assetId) =>
       _participantAssetIds.contains(assetId);
 
-  Set<AssetKey> get _ownedAssetIds => participantAssetInfo
+  Set<String> get _ownedAssetIds => participantAssetInfo
       .where((ai) => ai.isOwned)
-      .map((ai) => AssetKey(ai.assetKey))
+      .map((ai) => ai.assetKey)
       .toSet();
-  Set<AssetKey> get _watchedAssetIds => participantAssetInfo
+  Set<String> get _watchedAssetIds => participantAssetInfo
       .where((ai) => ai.isWatched)
-      .map((ai) => AssetKey(ai.assetKey))
+      .map((ai) => ai.assetKey)
       .toSet();
 
-  bool isOwned(AssetKey assetId) => _ownedAssetIds.contains(assetId);
-  bool isWatched(AssetKey assetId) => _watchedAssetIds.contains(assetId);
+  bool isOwned(String assetId) => _ownedAssetIds.contains(assetId);
+  bool isWatched(String assetId) => _watchedAssetIds.contains(assetId);
 
   ActiveGameDetails updateAsset(AssetStateUpdates asu) {
     //

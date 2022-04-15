@@ -15,6 +15,7 @@ typedef IndexedItemRowBuilder = Widget Function(
   int,
 );
 
+typedef GameKey = String;
 // function to return provider
 typedef DynRowStateFamProvBuilder = StateProvider<ActiveGameDetails> Function(
     GameKey);
@@ -39,52 +40,3 @@ typedef GroupComparatorCallback = int Function(
   GroupHeaderData,
   GroupHeaderData,
 );
-
-abstract class StKey {
-  const StKey(this._value);
-
-  final String _value;
-
-  String get value => _value;
-
-  @override
-  String toString() => value;
-
-  @override
-  int get hashCode => value.hashCode;
-
-  @override
-  bool operator ==(Object other) {
-    return other is StKey &&
-        other.runtimeType == runtimeType &&
-        other.value == value;
-  }
-}
-
-class AssetKey extends StKey {
-  const AssetKey(String value) : super(value);
-
-  @override
-  int get hashCode => value.hashCode;
-
-  @override
-  bool operator ==(Object other) {
-    return other is AssetKey &&
-        other.runtimeType == runtimeType &&
-        other.value == value;
-  }
-}
-
-class GameKey extends StKey {
-  const GameKey(String value) : super(value);
-
-  @override
-  int get hashCode => value.hashCode;
-
-  @override
-  bool operator ==(Object other) {
-    return other is GameKey &&
-        other.runtimeType == runtimeType &&
-        other.value == value;
-  }
-}
