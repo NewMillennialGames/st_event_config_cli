@@ -216,10 +216,12 @@ class AssetVsAssetRowMktResearchView extends StBaseTvRow with ShowsOneAsset {
         (comp1.recentPriceDelta / comp1.currPrice).toStringAsFixed(1);
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               comp1.topName + ' ' + comp1.currPriceStr,
@@ -505,8 +507,8 @@ class TeamVsFieldRowMktView extends StBaseTvRow
                     style: StTextStyles.p3.copyWith(color: StColors.coolGray),
                   ),
                   kSpacerSm,
-                  const Text(
-                    '3.00',
+                  Text(
+                    comp1.openPriceStr,
                     style: StTextStyles.p3,
                   ),
                   const Spacer(),
@@ -515,8 +517,8 @@ class TeamVsFieldRowMktView extends StBaseTvRow
                     style: StTextStyles.p3.copyWith(color: StColors.coolGray),
                   ),
                   kSpacerSm,
-                  const Text(
-                    '5.00',
+                  Text(
+                    comp1.hiPriceStr,
                     style: StTextStyles.p3,
                   ),
                   const Spacer(),
@@ -525,8 +527,8 @@ class TeamVsFieldRowMktView extends StBaseTvRow
                     style: StTextStyles.p3.copyWith(color: StColors.coolGray),
                   ),
                   kSpacerSm,
-                  const Text(
-                    '3.00',
+                  Text(
+                    comp1.lowPriceStr,
                     style: StTextStyles.p3,
                   ),
                 ],
@@ -681,6 +683,9 @@ class PlayerDraftRow extends StBaseTvRow with ShowsOneAsset {
 class DriverVsFieldRowMktView extends TeamVsFieldRowMktView {
   @override
   bool get isDriverVsField => true;
+
+  @override
+  bool get showRanked => true;
 
   const DriverVsFieldRowMktView(
     TableviewDataRowTuple assets, {
