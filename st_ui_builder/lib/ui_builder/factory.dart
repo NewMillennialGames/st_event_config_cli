@@ -6,10 +6,10 @@ class StUiBuilderFactory {
     this object will be global
     and served by a riverpod provider
 
-    it will be refreshed every time the user changes events
+    it will be refreshed every time the user changes selected Event
 
     when each screen inits, they will request
-    the configuration objs they need fromt the methods below
+    the configuration objs they need from the methods below
   */
   EventCfgTree? _eConfig;
   //
@@ -29,7 +29,7 @@ class StUiBuilderFactory {
       TODO:  add versioning
     */
     try {
-      this._eConfig = EventCfgTree.fromJson(eCfgJsonMap);
+      _eConfig = EventCfgTree.fromJson(eCfgJsonMap);
     } catch (e) {
       // will fall to the catch block in calling method
       throw UnimplementedError(
@@ -77,11 +77,16 @@ class StUiBuilderFactory {
     CfgForAreaAndNestedSlots filterBarAndSlotCfg =
         _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.filterBar);
 
+    // hack for Nascar b4 configurator is updated
+    bool disableAllGrouping = _eConfig!.eventCfg.skipGroupingOnScreen(screen) ||
+        _eConfig!.eventCfg.skipGroupingForName('nascar');
+
     return GroupedTableDataMgr(
       screen,
       rows,
       TableviewConfigPayload(screen, tableAreaAndSlotCfg, filterBarAndSlotCfg),
       redrawCallback: redrawTvCallback,
+      disableAllGrouping: disableAllGrouping,
     );
   }
 

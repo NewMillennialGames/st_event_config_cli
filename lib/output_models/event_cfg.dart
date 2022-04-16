@@ -30,6 +30,16 @@ class TopEventCfg {
     this.evEliminationType = EvEliminationStrategy.roundRobin,
   });
 
+  bool skipGroupingOnScreen(AppScreen screen) =>
+      evCompetitorType.skipGroupingOnMarketView;
+
+  bool skipGroupingForName(String evNameSubStr) {
+    return evTemplateName.toLowerCase().contains(evNameSubStr.toLowerCase()) ||
+        evTemplateDescription
+            .toLowerCase()
+            .contains(evNameSubStr.toLowerCase());
+  }
+
   // impl for JsonSerializable above
   factory TopEventCfg.fromJson(Map<String, dynamic> json) =>
       _$TopEventCfgFromJson(json);
