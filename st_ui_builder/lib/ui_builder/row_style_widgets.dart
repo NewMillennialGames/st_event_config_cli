@@ -466,11 +466,16 @@ class TeamVsFieldRowMktView extends StBaseTvRow
             assetKey: comp1.assetKey,
             isWatched: comp1.assetStateUpdates.isWatched,
           ),
-        CompetitorImage(comp1.imgUrl, showRanked),
+        kSpacerSm,
+        CompetitorImage(comp1.imgUrl, false),
+        const SizedBox(
+          width: 12,
+        ),
         SizedBox(
-          width: size.width * .5,
+          width: size.width * .55,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const SizedBox(
                 height: 4,
@@ -492,7 +497,8 @@ class TeamVsFieldRowMktView extends StBaseTvRow
                       ),
                       Text(
                         comp1.recentDeltaStr,
-                        style: StTextStyles.h5,
+                        style: StTextStyles.h5
+                            .copyWith(color: comp1.priceFluxColor),
                       ),
                     ],
                   )

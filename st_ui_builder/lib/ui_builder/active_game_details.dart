@@ -57,7 +57,7 @@ class AssetStateUpdates with _$AssetStateUpdates {
   }
 
   bool get isTradable => assetState.isTradable;
-  bool get stockIsUp => curPrice > openPrice;
+  bool get stockIsUp => curPrice > openPrice || curPrice - openPrice == 0;
   bool get isDecreasing => !stockIsUp;
 
   String get formattedChangeStr =>
