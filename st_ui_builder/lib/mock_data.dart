@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
 //
@@ -118,6 +119,9 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
 
   @override
   double get openPrice => 2.33;
+
+  @override
+  int get displayNumber => 5;
 }
 
 List<MockAsset> _fakeData = [

@@ -321,85 +321,85 @@ class AssetVsAssetHalfRow extends StatelessWidget {
   }
 }
 
-class MktRschAsset extends StatelessWidget {
-  //
-  final AssetRowPropertyIfc competitor;
-  final ActiveGameDetails gameStatus;
+// class MktRschAsset extends StatelessWidget {
+//   //
+//   final AssetRowPropertyIfc competitor;
+//   final ActiveGameDetails gameStatus;
 
-  //
-  const MktRschAsset(
-    this.competitor,
-    this.gameStatus, {
-    Key? key,
-  }) : super(key: key);
+//   //
+//   const MktRschAsset(
+//     this.competitor,
+//     this.gameStatus, {
+//     Key? key,
+//   }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    // paste row widget code here
-    final size = MediaQuery.of(context).size;
-    const double _sizeHeightImage = 150;
-    return Stack(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(15),
-          child: Image.asset(
-            competitor.rank > 3 ? kImageVsBgRightOn : kImageVsBgLeftOn,
-            height: _sizeHeightImage,
-            width: size.width * 0.47,
-            fit: BoxFit.fill,
-          ),
-        ),
-        SizedBox(
-          height: _sizeHeightImage,
-          width: size.width * 0.47,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              DottedBorder(
-                color: StColors.white,
-                child: const Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Text(
-                    StStrings.mktRschAssetVsAssetTeamImgText,
-                    style: StTextStyles.textFormField,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    competitor.topName,
-                    style: StTextStyles.h4.copyWith(
-                      fontSize: 18,
-                      color: gameStatus._isTradableGame
-                          ? StColors.coolGray
-                          : StTextStyles.h4.color,
-                    ),
-                  ),
-                  Text(
-                    competitor.subName,
-                    style: StTextStyles.textFormField.copyWith(
-                      color: gameStatus._isTradableGame
-                          ? StColors.coolGray
-                          : StTextStyles.textFormField.color,
-                    ),
-                  ),
-                ],
-              ),
-              Icon(
-                Icons.star_border,
-                color:
-                    gameStatus._isTradableGame ? StColors.gray : StColors.blue,
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     // paste row widget code here
+//     final size = MediaQuery.of(context).size;
+//     const double _sizeHeightImage = 150;
+//     return Stack(
+//       children: [
+//         ClipRRect(
+//           borderRadius: BorderRadius.circular(15),
+//           child: Image.asset(
+//             competitor.rank > 3 ? kImageVsBgRightOn : kImageVsBgLeftOn,
+//             height: _sizeHeightImage,
+//             width: size.width * 0.47,
+//             fit: BoxFit.fill,
+//           ),
+//         ),
+//         SizedBox(
+//           height: _sizeHeightImage,
+//           width: size.width * 0.47,
+//           child: Column(
+//             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//             children: [
+//               DottedBorder(
+//                 color: StColors.white,
+//                 child: const Padding(
+//                   padding: EdgeInsets.all(10),
+//                   child: Text(
+//                     StStrings.mktRschAssetVsAssetTeamImgText,
+//                     style: StTextStyles.textFormField,
+//                     textAlign: TextAlign.center,
+//                   ),
+//                 ),
+//               ),
+//               Column(
+//                 mainAxisSize: MainAxisSize.min,
+//                 children: [
+//                   Text(
+//                     competitor.topName,
+//                     style: StTextStyles.h4.copyWith(
+//                       fontSize: 18,
+//                       color: gameStatus._isTradableGame
+//                           ? StColors.coolGray
+//                           : StTextStyles.h4.color,
+//                     ),
+//                   ),
+//                   Text(
+//                     competitor.subName,
+//                     style: StTextStyles.textFormField.copyWith(
+//                       color: gameStatus._isTradableGame
+//                           ? StColors.coolGray
+//                           : StTextStyles.textFormField.color,
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//               Icon(
+//                 Icons.star_border,
+//                 color:
+//                     gameStatus._isTradableGame ? StColors.gray : StColors.blue,
+//               ),
+//             ],
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }
 
 class ObjectRankRow extends StatelessWidget {
   //

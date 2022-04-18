@@ -38,6 +38,7 @@ abstract class AssetRowPropertyIfc {
   String get regionOrConference;
   String get roundName;
   String get location;
+  int get displayNumber;
   CompetitionStatus get gameStatus;
   CompetitionType get gameType;
 
@@ -51,6 +52,7 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
           .toUpperCase();
 
   String get rankStr => '$rank';
+  String get displayNumberStr => '$displayNumber';
   String get gameDateDtwStr => gameDate.asDtwMmDyStr;
   String get gameDateAppStr => gameDate.asShortDtStr;
   String get gameTimeStr => gameDate.asTimeOnlyStr;

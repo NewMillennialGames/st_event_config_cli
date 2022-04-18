@@ -50,6 +50,8 @@ abstract class StKey {
   @override
   String toString() => value;
 
+  // int get hashCode;
+  // bool operator ==(Object other);
   @override
   int get hashCode => value.hashCode;
 
@@ -60,6 +62,17 @@ abstract class StKey {
         other.value == value;
   }
 }
+
+// extension StKeyExt1 on StKey {
+//   //
+//   // @override
+//   int get hashCode => value.hashCode;
+
+//   @override
+//   bool operator ==(Object other) {
+//     return other.runtimeType == runtimeType && other.value == value;
+//   }
+// }
 
 class AssetKey extends StKey {
   const AssetKey(String value) : super(value);
