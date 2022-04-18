@@ -140,25 +140,37 @@ class CheckAssetType extends StatelessWidget {
     String firstName = lst[0];
     if (isDriverVsField!) {
       return Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            competitor.rankStr,
-            style: StTextStyles.h1
-                .copyWith(fontWeight: FontWeight.w900, fontSize: 40),
+          SizedBox(
+            height: 50,
+            child: FittedBox(
+              fit: BoxFit.fitHeight,
+              child: Text(
+                competitor.rankStr,
+                style: StTextStyles.h6.copyWith(
+                    fontWeight: FontWeight.w800, fontSize: 28, height: 1),
+              ),
+            ),
           ),
           kSpacerSm,
           ConstrainedBox(
             constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width * .3),
+                maxWidth: MediaQuery.of(context).size.width * .3,
+                minHeight: 50,
+                maxHeight: 50),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(firstName.toUpperCase(),
-                    overflow: TextOverflow.ellipsis, style: StTextStyles.p2),
+                    overflow: TextOverflow.ellipsis,
+                    style: StTextStyles.p2
+                        .copyWith(fontWeight: FontWeight.w500, fontSize: 12)),
                 Text(lastName.toUpperCase(),
                     overflow: TextOverflow.ellipsis,
-                    style:
-                        StTextStyles.h3.copyWith(fontWeight: FontWeight.w700))
+                    style: StTextStyles.h3
+                        .copyWith(fontWeight: FontWeight.w800, fontSize: 18))
               ],
             ),
           )

@@ -10,7 +10,7 @@ class UiSizes {
   static const double tradeBtnWidthPctScreen = 0.26;
   // next two same size
   static const double tradeBtnHeight = 34;
-  static const double teamImgSide = 34;
+  static const double teamImgSide = 65;
   // light gray border
   static const double rowBorderWidth = 0.7;
 }
