@@ -45,7 +45,7 @@ class StBaseTvRow extends StBaseTvRowIfc {
 
   @override
   Widget build(BuildContext context) {
-    /* 
+    /*
      assets.item3 is a ActiveGameDetails() entity
      it carries the game-state and toggles
     Trade button on and off
@@ -63,8 +63,8 @@ class StBaseTvRow extends StBaseTvRowIfc {
       child: Consumer(
         builder: (context, ref, child) {
           // force rebuild when key state changes
-          Event? ev = ref.watch(currEventStateProvider.notifier).state;
-          ActiveGameDetails agd = ref.watch(dynStateProv.notifier).state;
+          Event? ev = ref.watch(currEventProvider);
+          ActiveGameDetails agd = ref.watch(dynStateProv);
           print(
             'StBaseTvRow is rebuilding for ${agd.competitionKey} in event ${ev?.title ?? '_missing'}',
           );

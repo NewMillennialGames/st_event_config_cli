@@ -80,14 +80,14 @@ class TradeButton extends ConsumerWidget {
     // or simple text label if not tradable
     // final size = MediaQuery.of(context).size;
     TradeFlowBase tf = ref.read(tradeFlowProvider);
-    Event? optCurEvent = ref.watch(currEventStateProvider.notifier).state;
+    Event? optCurEvent = ref.watch(currEventProvider);
     if (optCurEvent == null) {
       print('No event loaded??');
     }
     print(
       '********* event.state is: ${optCurEvent?.state.name ?? 'missing'}',
     );
-    bool eventHasStarted = true;
+    bool eventHasStarted = optCurEvent?.state == EventState.inProgress;
     // (optCurEvent?.state ?? EventState.unpublished) == EventState.inProgress;
 
     return Container(
