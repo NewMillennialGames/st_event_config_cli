@@ -4,6 +4,6 @@ final tradeFlowProvider = Provider<TradeFlowBase>(
   (ref) => throw UnimplementedError('should override with subclass'),
 );
 
-final currEventStateProvider = StateProvider<Event?>((ref) {
-  throw UnimplementedError('should override with selectedEventStateProvider');
+final currEventProvider = Provider<Event?>((ref) {
+  throw UnimplementedError('should override with selectedEventProvider');
 });
