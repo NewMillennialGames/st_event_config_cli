@@ -220,7 +220,7 @@ class CheckAssetType extends StatelessWidget {
     }
     return ConstrainedBox(
       constraints:
-          BoxConstraints(maxWidth: MediaQuery.of(context).size.width * .3),
+          BoxConstraints(maxWidth: MediaQuery.of(context).size.width * .35),
       child: Text(
         competitor.topName,
         overflow: TextOverflow.ellipsis,
