@@ -349,10 +349,11 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
                       isDriverVsField: isDriverVsField,
                       isTeamPlayerVsField: isTeamPlayerVsField,
                     ),
-                    if (showProceeds)
+                    if (!showProceeds)
                       TradeButton(comp1.assetKey, agd.gameStatus),
                   ],
                 ),
+                kVerticalSpacerSm,
                 Expanded(
                   child: Container(
                     padding: const EdgeInsets.only(top: 5, left: 10, right: 10),
@@ -408,8 +409,10 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
                                     .copyWith(color: StColors.coolGray)),
                             kVerticalSpacerSm,
                             Text(
-                              positionGainLoss,
-                              style: gainLossTxtStyle,
+                              showProceeds ? positionGainLoss : "N/A",
+                              style: showProceeds
+                                  ? gainLossTxtStyle
+                                  : StTextStyles.p1,
                             ),
                           ],
                         ),
