@@ -499,6 +499,10 @@ class TeamVsFieldRowMktView extends StBaseTvRow
 
   bool get isTeamPlayerVsField => false;
 
+  // FIXME:  should be:
+  // bool get isPlayerVsFieldRanked => isPlayerVsField && showRanked;
+  // thats more flexible since you already have a showRanked boolean
+  // rename property below to isPlayerVsField
   bool get isPlayerVsFieldRanked => false;
 
   bool get shouldShrinkParticipantImage => showRanked || isDriverVsField;

@@ -140,30 +140,31 @@ class CheckAssetType extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var lst = competitor.topName.split(' ');
-    String lastName;
-    lst.length >= 2 ? lastName = lst[1] : lastName = '';
     String firstName = lst[0];
+    String lastName = lst.length >= 2 ? lst[1] : '';
     if (isDriverVsField!) {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
-            height: 50,
+            height: 40,
             child: FittedBox(
               fit: BoxFit.fitHeight,
               child: Text(
                 competitor.displayNumberStr,
-                style: StTextStyles.h6.copyWith(
-                    fontWeight: FontWeight.w800, fontSize: 28, height: 1),
+                style: StTextStyles.h2.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
           ),
           kSpacerSm,
           ConstrainedBox(
             constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width * .3,
-                minHeight: 50,
-                maxHeight: 50),
+              maxWidth: MediaQuery.of(context).size.width * .3,
+              minHeight: 50,
+              maxHeight: 50,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
