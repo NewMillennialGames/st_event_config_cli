@@ -43,7 +43,7 @@ class CompetitorImage extends StatelessWidget {
   }) : super(key: key);
 
   double get imgSize =>
-      shrinkForRank ? (UiSizes.teamImgSide * 0.84) : UiSizes.teamImgSide;
+      shrinkForRank ? (UiSizes.teamImgSide * 0.7) : UiSizes.teamImgSide;
 
   @override
   Widget build(BuildContext context) {
@@ -147,7 +147,7 @@ class CheckAssetType extends StatelessWidget {
             child: FittedBox(
               fit: BoxFit.fitHeight,
               child: Text(
-                competitor.rankStr,
+                competitor.displayNumberStr,
                 style: StTextStyles.h6.copyWith(
                     fontWeight: FontWeight.w800, fontSize: 28, height: 1),
               ),
@@ -298,7 +298,7 @@ class AssetVsAssetHalfRow extends StatelessWidget {
           isWatched: gameDetails.isWatched(competitor.assetKey),
         ),
         kSpacerSm,
-        CompetitorImage(competitor.imgUrl, showRank),
+        CompetitorImage(competitor.imgUrl, true),
         kSpacerSm,
         if (showRank) ...[
           Text(
@@ -333,6 +333,140 @@ class AssetVsAssetHalfRow extends StatelessWidget {
   }
 }
 
+class MktRschAsset extends ConsumerWidget {
+  //
+
+  final AssetRowPropertyIfc competitor;
+  final ActiveGameDetails gameDetails;
+  final Color color;
+  final BorderRadiusGeometry borderRadius;
+  //
+  const MktRschAsset(
+    this.competitor,
+    this.color,
+    this.gameDetails,
+    this.borderRadius, {
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    //
+    final size = MediaQuery.of(context).size;
+    const double _sizeHeightImage = 150;
+
+    bool isTradable = gameDetails.assetId1 == competitor.assetKey
+        ? gameDetails.isTradableAsset1
+        : gameDetails.isTradableAsset2;
+    return Container(
+      height: _sizeHeightImage,
+      width: size.width * 0.47,
+      decoration: BoxDecoration(color: color, borderRadius: borderRadius),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Container(
+              height: _sizeHeightImage * .28,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: NetworkImage(competitor.imgUrl),
+                    fit: BoxFit.fitHeight),
+              )),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                competitor.topName,
+                style: StTextStyles.h4.copyWith(
+                  fontSize: 18,
+                  color: isTradable ? StColors.coolGray : StTextStyles.h4.color,
+                ),
+              ),
+              Text(
+                competitor.subName,
+                style: StTextStyles.textFormField.copyWith(
+                  color: isTradable
+                      ? StColors.coolGray
+                      : StTextStyles.textFormField.color,
+                ),
+              ),
+            ],
+          ),
+          Icon(
+            Icons.star_border,
+            color: isTradable ? StColors.gray : StColors.blue,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class RowControl extends StatelessWidget {
+  final AssetRowPropertyIfc competitor;
+  final ActiveGameDetails gameDetails;
+  const RowControl({
+    Key? key,
+    required this.competitor,
+    required this.gameDetails,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: (110 / 1.4) * 0.89,
+      padding: const EdgeInsets.only(
+        top: (110 / 2) * 0.08,
+        left: (110 / 1) * 0.08,
+      ),
+      decoration: BoxDecoration(
+        color: StColors.primaryDarkGray,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.5),
+            spreadRadius: 0,
+            blurRadius: 1,
+            offset: Offset(0, 1),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Flexible(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  competitor.topName + '  ' + competitor.sharesOwnedStr,
+                  style: StTextStyles.h4,
+                ),
+                Text(
+                  '+' +
+                      competitor.sharesOwnedStr +
+                      ' ' +
+                      '(' +
+                      competitor.positionGainLossStr.toString() +
+                      '%)',
+                  style: StTextStyles.p2,
+                  textAlign: TextAlign.left,
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: TradeButton(competitor.assetKey, gameDetails.gameStatus),
+          ),
+        ],
+      ),
+    );
+  }
+}
 // class MktRschAsset extends StatelessWidget {
 //   //
 //   final AssetRowPropertyIfc competitor;

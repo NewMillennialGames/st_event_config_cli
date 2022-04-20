@@ -84,7 +84,7 @@ class StBaseTvRow extends StBaseTvRowIfc {
   }
 
   @override
-  Widget rowBody(BuildContext ctx, ActiveGameDetails agd) {
+  Widget rowBody(BuildContext ctx, ActiveGameDetails agd) { 
     throw UnimplementedError(
       'acatual subclass should return the specific row-type; implement there',
     );
