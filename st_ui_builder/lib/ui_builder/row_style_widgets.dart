@@ -24,7 +24,10 @@ class AssetVsAssetRowMktView extends StBaseTvRow
   }) : super(assets, key: key);
 
   @override
-  Widget rowBody(BuildContext ctx, ActiveGameDetails agd, WidgetRef ref) {
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
     // print('AssetVsAssetRow_MktView is rebuilding');
     return Column(
       mainAxisSize: MainAxisSize.max,
@@ -46,7 +49,10 @@ class AssetVsAssetRowLeaderBoardView extends StBaseTvRow with ShowsTwoAssets {
   }) : super(assets, key: key);
 
   @override
-  Widget rowBody(BuildContext ctx, ActiveGameDetails agd, WidgetRef ref) {
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -70,7 +76,10 @@ class DriverVsFieldRowLeaderBoardView extends StBaseTvRow with ShowsTwoAssets {
   }) : super(assets, key: key);
 
   @override
-  Widget rowBody(BuildContext ctx, ActiveGameDetails agd, WidgetRef ref) {
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -95,7 +104,10 @@ class TeamPlayerVsFieldLeaderBoardView extends StBaseTvRow with ShowsTwoAssets {
   }) : super(assets, key: key);
 
   @override
-  Widget rowBody(BuildContext ctx, ActiveGameDetails agd, WidgetRef ref) {
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -192,82 +204,92 @@ class AssetVsAssetRowMktResearchView extends StBaseTvRow with ShowsTwoAssets {
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
-  void _assetTapHandler(bool showFirst, WidgetRef ref) {
-    //
-    ref.read(_redrawAssetRowProvider.notifier).state = showFirst;
-  }
 
   @override
-  Widget rowBody(BuildContext ctx, ActiveGameDetails agd, WidgetRef ref) {
-    bool show2ndAsset = ref.watch(_redrawAssetRowProvider)!;
-    AssetRowPropertyIfc selectedCompetitor = show2ndAsset ? comp2 : comp1;
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
     const Radius radius = Radius.circular(20);
-    return Container(
-      margin: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        color: StColors.black,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5.0),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      child: MktRschAsset(
-                          comp1,
-                          show2ndAsset
-                              ? StColors.veryDarkGray
-                              : StColors.primaryDarkGray,
-                          agd,
-                          const BorderRadius.only(
-                              topLeft: radius, bottomLeft: radius)),
-                      onTap: () => _assetTapHandler(false, ref),
-                    ),
-                    GestureDetector(
-                      child: MktRschAsset(
-                          comp2,
-                          show2ndAsset
-                              ? StColors.primaryDarkGray
-                              : StColors.veryDarkGray,
-                          agd,
-                          const BorderRadius.only(
-                              topRight: radius, bottomRight: radius)),
-                      onTap: () => _assetTapHandler(true, ref),
-                    ),
-                  ],
-                ),
-                Align(
-                  alignment: Alignment.center,
-                  child: Container(
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: StColors.black, width: 3),
-                        shape: BoxShape.circle,
-                        color: StColors.darkGreen),
-                    child: const Center(
-                        child: Text(
-                      StStrings.versus,
-                      style: StTextStyles.p2,
-                    )),
+    return Consumer(
+        builder: (BuildContext context, WidgetRef ref, Widget? child) {
+      void _assetTapHandler(
+        bool showFirst,
+      ) {
+        //
+        ref.read(_redrawAssetRowProvider.notifier).state = showFirst;
+      }
+
+      bool show2ndAsset = ref.watch(_redrawAssetRowProvider)!;
+      AssetRowPropertyIfc selectedCompetitor = show2ndAsset ? comp2 : comp1;
+
+      return Container(
+        margin: const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          color: StColors.black,
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5.0),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        child: MktRschAsset(
+                            comp1,
+                            show2ndAsset
+                                ? StColors.veryDarkGray
+                                : StColors.primaryDarkGray,
+                            agd,
+                            const BorderRadius.only(
+                                topLeft: radius, bottomLeft: radius)),
+                        onTap: () => _assetTapHandler(false),
+                      ),
+                      GestureDetector(
+                        child: MktRschAsset(
+                            comp2,
+                            show2ndAsset
+                                ? StColors.primaryDarkGray
+                                : StColors.veryDarkGray,
+                            agd,
+                            const BorderRadius.only(
+                                topRight: radius, bottomRight: radius)),
+                        onTap: () => _assetTapHandler(true),
+                      ),
+                    ],
                   ),
-                )
-              ],
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      height: 40,
+                      width: 40,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: StColors.black, width: 3),
+                          shape: BoxShape.circle,
+                          color: StColors.darkGreen),
+                      child: const Center(
+                          child: Text(
+                        StStrings.versus,
+                        style: StTextStyles.p2,
+                      )),
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-          RowControl(
-            competitor: selectedCompetitor,
-            gameDetails: agd,
-          ),
-        ],
-      ),
-    );
+            RowControl(
+              competitor: selectedCompetitor,
+              gameDetails: agd,
+            ),
+          ],
+        ),
+      );
+    });
   }
 }
 
@@ -287,7 +309,10 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
   }) : super(assets, key: key);
 
   @override
-  Widget rowBody(BuildContext ctx, ActiveGameDetails agd, WidgetRef ref) {
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
     //
     bool hasIncreased = comp1.recentPriceDelta > 0;
     String sharePrice = comp1.currPriceStr;
@@ -477,7 +502,10 @@ class TeamVsFieldRowMktView extends StBaseTvRow
   }) : super(assets, key: key);
 
   @override
-  Widget rowBody(BuildContext ctx, ActiveGameDetails agd, WidgetRef ref) {
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
     //
     final size = MediaQuery.of(ctx).size;
     return Row(
@@ -593,7 +621,10 @@ class TeamDraftRow extends StBaseTvRow with ShowsOneAsset {
   }) : super(assets, key: key);
 
   @override
-  Widget rowBody(BuildContext ctx, ActiveGameDetails agd, WidgetRef ref) {
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
     // paste row widget code here
     return const SizedBox(
       child: Text(
@@ -610,7 +641,10 @@ class TeamLineRow extends StBaseTvRow with ShowsOneAsset {
   }) : super(assets, key: key);
 
   @override
-  Widget rowBody(BuildContext ctx, ActiveGameDetails agd, WidgetRef ref) {
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
     // paste row widget code here
     const double _sizeHeightCont = 60;
     const double _rowMargin = 8;
@@ -668,7 +702,10 @@ class PlayerVsFieldRow extends StBaseTvRow with ShowsOneAsset {
   }) : super(assets, key: key);
 
   @override
-  Widget rowBody(BuildContext ctx, ActiveGameDetails agd, WidgetRef ref) {
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
     // paste row widget code here
     return Container(
       child: const Text('Awaiting UX specs for <PlayerVsFieldRow>'),
@@ -701,7 +738,10 @@ class PlayerDraftRow extends StBaseTvRow with ShowsOneAsset {
   }) : super(assets, key: key);
 
   @override
-  Widget rowBody(BuildContext ctx, ActiveGameDetails agd, WidgetRef ref) {
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
     // paste row widget code here
     return Container(
       child: const Text('Awaiting UX specs for <PlayerDraftRow>'),
@@ -731,7 +771,10 @@ class TeamVsFieldRowTest extends StBaseTvRow with ShowsOneAsset {
   }) : super(assets, key: key);
 
   @override
-  Widget rowBody(BuildContext ctx, ActiveGameDetails agd, WidgetRef ref) {
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
     return Container(
         height: 40,
         color: Colors.blue[100],
@@ -756,7 +799,10 @@ class TeamVsFieldRankedRowTest extends StBaseTvRow with ShowsOneAsset {
   }) : super(assets, key: key);
 
   @override
-  Widget rowBody(BuildContext ctx, ActiveGameDetails agd, WidgetRef ref) {
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
     return Container(
       height: 80,
       decoration: kRowBoxDecor,
