@@ -21,15 +21,13 @@ class MockAsset {
   String region;
   String teamName;
   String imgUrl = 'https://ui-avatars.com/api/?name=John+Doe';
-  String displayNumer;
   // reall assets DO NOT have game key
   String gameKey;
 
   DateTime get gameDt => _today;
   String get key => id;
 
-  MockAsset(
-      this.name, this.region, this.teamName, this.gameKey, this.displayNumer);
+  MockAsset(this.name, this.region, this.teamName, this.gameKey);
 
   static List<MockAssetWrapper> get mockRows =>
       _fakeData.map(MockAssetWrapper.new).toList();
@@ -78,7 +76,11 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
   String get topName => asset.name;
 
   @override
-  String get displayNumer => asset.displayNumer;
+  String get liveStatsUrl => "https://google.com";
+
+  @override
+  String get marketResearchUrl => "https://google.com";
+  
   @override
   String get groupKey => 'niu';
 
@@ -125,12 +127,12 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
 }
 
 List<MockAsset> _fakeData = [
-  MockAsset('Frankf Collin', 'Reg3', 'Dukes', '1', '3'),
-  MockAsset('Gil', 'Reg2', 'Dukes', '2', '9'),
-  MockAsset('Abe', 'Reg1', 'Cowboys', '3', '4'),
-  MockAsset('David', 'Reg1', 'N. England', '4', '6'),
-  MockAsset('Ed', 'Reg2', 'Redskins', '5', '7'),
-  MockAsset('Frank', 'Reg2', 'Redskins', '6', '8'),
+  MockAsset('Frankf Collin', 'Reg3', 'Dukes', '1'),
+  MockAsset('Gil', 'Reg2', 'Dukes', '2'),
+  MockAsset('Abe', 'Reg1', 'Cowboys', '3'),
+  MockAsset('David', 'Reg1', 'N. England', '4'),
+  MockAsset('Ed', 'Reg2', 'Redskins', '5'),
+  MockAsset('Frank', 'Reg2', 'Redskins', '6'),
   // MockAsset('Gil', 'Reg2', 'Redskins', '7'),
   // MockAsset('Bob', 'Reg1', 'Cowboys', '8'),
   // MockAsset('Hank', 'Reg2', 'Saints', '9'),

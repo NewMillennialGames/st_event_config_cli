@@ -17,6 +17,8 @@ abstract class AssetRowPropertyIfc {
   String get topName;
   String get subName;
   String get ticker;
+  String get marketResearchUrl;
+  String get liveStatsUrl;
   String get imgUrl;
   String get position;
   int get rank;

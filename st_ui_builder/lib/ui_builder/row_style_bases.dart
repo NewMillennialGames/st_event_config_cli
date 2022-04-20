@@ -26,7 +26,7 @@ abstract class StBaseTvRowIfc extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  Widget rowBody(BuildContext ctx, ActiveGameDetails agd);
+  Widget rowBody(BuildContext ctx, ActiveGameDetails agd, WidgetRef ref);
 }
 
 class StBaseTvRow extends StBaseTvRowIfc {
@@ -77,14 +77,14 @@ class StBaseTvRow extends StBaseTvRowIfc {
           // if (this is RequiresPriceChangeProps) {
           //   // ref.watch(_somePriceProvider);
           // }
-          return rowBody(context, agd);
+          return rowBody(context, agd, ref);
         },
       ),
     );
   }
 
   @override
-  Widget rowBody(BuildContext ctx, ActiveGameDetails agd) {
+  Widget rowBody(BuildContext ctx, ActiveGameDetails agd, WidgetRef ref) { 
     throw UnimplementedError(
       'acatual subclass should return the specific row-type; implement there',
     );

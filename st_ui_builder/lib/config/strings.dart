@@ -240,6 +240,7 @@ class StStrings {
   static const String research = 'Research';
   static const String statsUc = 'STATS';
   static const String scoresUc = 'SCORES';
+  static const String versus = 'VS';
 
   // Player Trade View
   static const String sharesHeld = 'Shared Held ';
