@@ -353,8 +353,7 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
                       isDriverVsField: isDriverVsField,
                       isTeamPlayerVsField: isTeamPlayerVsField,
                     ),
-                    if (showProceeds)
-                      TradeButton(comp1.assetKey, agd.gameStatus),
+                    if (showProceeds) TradeButton(comp1.assetStateUpdates, agd.gameStatus),
                   ],
                 ),
                 Expanded(
@@ -609,10 +608,7 @@ class TeamVsFieldRowMktView extends StBaseTvRow
             ],
           ),
         ),
-        TradeButton(
-          comp1.assetKey,
-          agd.gameStatus,
-        ),
+        TradeButton(comp1.assetStateUpdates, agd.gameStatus),
       ],
     );
   }
