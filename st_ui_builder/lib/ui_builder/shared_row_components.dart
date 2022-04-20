@@ -67,12 +67,12 @@ class CompetitorImage extends StatelessWidget {
 
 class TradeButton extends ConsumerWidget {
   //
-  final AssetKey assetId;
-  final CompetitionStatus status;
+  final AssetStateUpdates assetState;
+  final CompetitionStatus competitionStatus;
 
   const TradeButton(
-    this.assetId,
-    this.status, {
+    this.assetState,
+    this.competitionStatus, {
     Key? key,
   }) : super(key: key);
 
@@ -85,14 +85,14 @@ class TradeButton extends ConsumerWidget {
     // or simple text label if not tradable
     // final size = MediaQuery.of(context).size;
     TradeFlowBase tf = ref.read(tradeFlowProvider);
-    Event? optCurEvent = ref.watch(currEventProvider);
-    if (optCurEvent == null) {
-      print('No event loaded??');
-    }
-    print(
-      '********* event.state is: ${optCurEvent?.state.name ?? 'missing'}',
-    );
-    bool eventHasStarted = optCurEvent?.state == EventState.inProgress;
+    // Event? optCurEvent = ref.watch(currEventProvider);
+    // if (optCurEvent == null) {
+    //   print('No event loaded??');
+    // }
+    // print(
+    //   '********* event.state is: ${optCurEvent?.state.name ?? 'missing'}',
+    // );
+    // bool eventHasStarted = optCurEvent?.state == EventState.inProgress;
     // (optCurEvent?.state ?? EventState.unpublished) == EventState.inProgress;
 
     return Container(
@@ -100,7 +100,7 @@ class TradeButton extends ConsumerWidget {
       width: 80,
       // width: UiSizes.tradeBtnWidthPctScreen * size.width,
       alignment: Alignment.center,
-      child: (eventHasStarted && status.isTradable)
+      child: (assetState.isTradable)
           ? TextButton(
               child: const Text(
                 StStrings.tradeUc,
@@ -108,14 +108,14 @@ class TradeButton extends ConsumerWidget {
                 style: StTextStyles.h6,
                 textAlign: TextAlign.center,
               ),
-              onPressed: () => tf.beginTradeFlow(assetId),
+              onPressed: () => tf.beginTradeFlow(AssetKey(assetState.assetKey)),
               style: StButtonStyles.tradeButtonCanTrade,
             )
           : Text(
-              tf.labelForGameState(status),
+              tf.labelForGameState(competitionStatus),
               style: StTextStyles.h5.copyWith(
                 fontSize: 15,
-                color: tf.colorForGameState(status),
+                color: tf.colorForGameState(competitionStatus),
               ),
               textAlign: TextAlign.center,
             ),
@@ -330,10 +330,7 @@ class AssetVsAssetHalfRow extends StatelessWidget {
         const SizedBox(
           width: 4,
         ),
-        TradeButton(
-          competitor.assetKey,
-          gameDetails.gameStatus,
-        ),
+        TradeButton(competitor.assetStateUpdates, gameDetails.gameStatus),
       ],
     );
   }
@@ -346,6 +343,7 @@ class MktRschAsset extends ConsumerWidget {
   final ActiveGameDetails gameDetails;
   final Color color;
   final BorderRadiusGeometry borderRadius;
+
   //
   const MktRschAsset(
     this.competitor,
@@ -411,6 +409,7 @@ class MktRschAsset extends ConsumerWidget {
 class RowControl extends StatelessWidget {
   final AssetRowPropertyIfc competitor;
   final ActiveGameDetails gameDetails;
+
   const RowControl({
     Key? key,
     required this.competitor,
@@ -466,7 +465,8 @@ class RowControl extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(right: 16),
-            child: TradeButton(competitor.assetKey, gameDetails.gameStatus),
+            child: TradeButton(
+                competitor.assetStateUpdates, gameDetails.gameStatus),
           ),
         ],
       ),
