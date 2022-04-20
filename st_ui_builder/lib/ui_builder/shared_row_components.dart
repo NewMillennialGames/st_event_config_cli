@@ -22,7 +22,7 @@ class WatchButton extends ConsumerWidget {
 }
 
 const kSpacerSm = SizedBox(
-  width: 6,
+  width: 4,
 );
 const kVerticalSpacerSm = SizedBox(
   height: 3,
@@ -35,15 +35,20 @@ class CompetitorImage extends StatelessWidget {
   // just the image or placeholder
   final String imgUrl;
   final bool shrinkForRank;
+  final bool isTwoAssetRow;
 
   const CompetitorImage(
     this.imgUrl,
     this.shrinkForRank, {
+    this.isTwoAssetRow = false,
     Key? key,
   }) : super(key: key);
 
-  double get imgSize =>
-      shrinkForRank ? (UiSizes.teamImgSide * 0.7) : UiSizes.teamImgSide;
+  double get _shrinkSize => shrinkForRank
+      ? (isTwoAssetRow ? 0.56 : 0.78)
+      : (isTwoAssetRow ? 0.78 : 1);
+
+  double get imgSize => UiSizes.teamImgSide * _shrinkSize;
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +114,7 @@ class TradeButton extends ConsumerWidget {
           : Text(
               tf.labelForGameState(status),
               style: StTextStyles.h5.copyWith(
-                fontSize: 13,
+                fontSize: 15,
                 color: tf.colorForGameState(status),
               ),
               textAlign: TextAlign.center,
@@ -298,7 +303,7 @@ class AssetVsAssetHalfRow extends StatelessWidget {
           isWatched: gameDetails.isWatched(competitor.assetKey),
         ),
         kSpacerSm,
-        CompetitorImage(competitor.imgUrl, true),
+        CompetitorImage(competitor.imgUrl, showRank),
         kSpacerSm,
         if (showRank) ...[
           Text(
@@ -310,7 +315,7 @@ class AssetVsAssetHalfRow extends StatelessWidget {
         Expanded(
           child: Text(
             competitor.topName,
-            style: StTextStyles.h5.copyWith(fontSize: 15),
+            style: StTextStyles.h5,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             // textScaleFactor: 0.96,
@@ -319,7 +324,7 @@ class AssetVsAssetHalfRow extends StatelessWidget {
         ),
         Text(
           competitor.currPriceStr,
-          style: StTextStyles.h6.copyWith(fontSize: 13),
+          style: StTextStyles.h5,
         ),
         const SizedBox(
           width: 4,

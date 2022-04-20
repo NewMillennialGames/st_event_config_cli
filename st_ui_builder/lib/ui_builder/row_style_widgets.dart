@@ -335,7 +335,11 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          CompetitorImage(comp1.imgUrl, false),
+          CompetitorImage(
+            comp1.imgUrl,
+            false,
+            isTwoAssetRow: this is ShowsTwoAssets,
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -459,6 +463,7 @@ class AssetVsAssetRowPortfolioHistory extends AssetVsAssetRowPortfolioView {
 
 //
 class DriverVsFieldRowPortfolioHistory extends AssetVsAssetRowPortfolioView {
+  //
   const DriverVsFieldRowPortfolioHistory(
     TableviewDataRowTuple assets, {
     Key? key,
@@ -496,6 +501,8 @@ class TeamVsFieldRowMktView extends StBaseTvRow
 
   bool get isPlayerVsFieldRanked => false;
 
+  bool get shouldShrinkParticipantImage => showRanked || isDriverVsField;
+
   const TeamVsFieldRowMktView(
     TableviewDataRowTuple assets, {
     Key? key,
@@ -517,12 +524,16 @@ class TeamVsFieldRowMktView extends StBaseTvRow
           isWatched: comp1.assetStateUpdates.isWatched,
         ),
         kSpacerSm,
-        CompetitorImage(comp1.imgUrl, false),
+        CompetitorImage(
+          comp1.imgUrl,
+          shouldShrinkParticipantImage,
+          isTwoAssetRow: this is ShowsTwoAssets,
+        ),
         const SizedBox(
           width: 12,
         ),
         SizedBox(
-          width: size.width * .52,
+          width: size.width * .50,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
