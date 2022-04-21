@@ -19,6 +19,7 @@ const kRowBoxDecor = BoxDecoration(
 abstract class StBaseTvRowIfc extends StatelessWidget {
   //
   final TableviewDataRowTuple assets;
+
   // ActiveGameDetails get gameStatus; // => assets.item3;
   //
   const StBaseTvRowIfc(
@@ -77,7 +78,9 @@ class StBaseTvRow extends StBaseTvRowIfc {
           // if (this is RequiresPriceChangeProps) {
           //   // ref.watch(_somePriceProvider);
           // }
-          return rowBody(context, agd);
+          return IntrinsicHeight(
+            child: rowBody(context, agd),
+          );
         },
       ),
     );
@@ -91,11 +94,10 @@ class StBaseTvRow extends StBaseTvRowIfc {
   }
 }
 
-
-    // return ProviderScope(
-    //   overrides: [
-    //     _gameStatusProvider.overrideWithValue(
-    //       assets.item3,
-    //     ),
-    //   ],
-    //   child:
+// return ProviderScope(
+//   overrides: [
+//     _gameStatusProvider.overrideWithValue(
+//       assets.item3,
+//     ),
+//   ],
+//   child:
