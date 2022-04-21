@@ -335,7 +335,11 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          CompetitorImage(comp1.imgUrl, false),
+          CompetitorImage(
+            comp1.imgUrl,
+            false,
+            isTwoAssetRow: this is ShowsTwoAssets,
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -349,8 +353,7 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
                       isDriverVsField: isDriverVsField,
                       isTeamPlayerVsField: isTeamPlayerVsField,
                     ),
-                    if (!showProceeds)
-                      TradeButton(comp1.assetKey, agd.gameStatus),
+                    if (showProceeds) TradeButton(comp1.assetStateUpdates, agd.gameStatus),
                   ],
                 ),
                 kVerticalSpacerSm,
@@ -462,6 +465,7 @@ class AssetVsAssetRowPortfolioHistory extends AssetVsAssetRowPortfolioView {
 
 //
 class DriverVsFieldRowPortfolioHistory extends AssetVsAssetRowPortfolioView {
+  //
   const DriverVsFieldRowPortfolioHistory(
     TableviewDataRowTuple assets, {
     Key? key,
@@ -497,7 +501,13 @@ class TeamVsFieldRowMktView extends StBaseTvRow
 
   bool get isTeamPlayerVsField => false;
 
+  // FIXME:  should be:
+  // bool get isPlayerVsFieldRanked => isPlayerVsField && showRanked;
+  // thats more flexible since you already have a showRanked boolean
+  // rename property below to isPlayerVsField
   bool get isPlayerVsFieldRanked => false;
+
+  bool get shouldShrinkParticipantImage => showRanked || isDriverVsField;
 
   const TeamVsFieldRowMktView(
     TableviewDataRowTuple assets, {
@@ -520,12 +530,16 @@ class TeamVsFieldRowMktView extends StBaseTvRow
           isWatched: comp1.assetStateUpdates.isWatched,
         ),
         kSpacerSm,
-        CompetitorImage(comp1.imgUrl, false),
+        CompetitorImage(
+          comp1.imgUrl,
+          shouldShrinkParticipantImage,
+          isTwoAssetRow: this is ShowsTwoAssets,
+        ),
         const SizedBox(
           width: 12,
         ),
         SizedBox(
-          width: size.width * .52,
+          width: size.width * .50,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -597,10 +611,7 @@ class TeamVsFieldRowMktView extends StBaseTvRow
             ],
           ),
         ),
-        TradeButton(
-          comp1.assetKey,
-          agd.gameStatus,
-        ),
+        TradeButton(comp1.assetStateUpdates, agd.gameStatus),
       ],
     );
   }

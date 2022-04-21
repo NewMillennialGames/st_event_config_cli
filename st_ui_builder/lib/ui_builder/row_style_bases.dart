@@ -19,6 +19,7 @@ const kRowBoxDecor = BoxDecoration(
 abstract class StBaseTvRowIfc extends StatelessWidget {
   //
   final TableviewDataRowTuple assets;
+
   // ActiveGameDetails get gameStatus; // => assets.item3;
   //
   const StBaseTvRowIfc(
@@ -57,7 +58,7 @@ class StBaseTvRow extends StBaseTvRowIfc {
         this is ShowsTwoAssets ? UiSizes.dblRowHeight : UiSizes.singleRowHeight;
 
     return Container(
-      height: rowHeight,
+      // height: rowHeight,
       padding: const EdgeInsets.all(2),
       decoration: kRowBoxDecor,
       child: Consumer(
@@ -77,25 +78,26 @@ class StBaseTvRow extends StBaseTvRowIfc {
           // if (this is RequiresPriceChangeProps) {
           //   // ref.watch(_somePriceProvider);
           // }
-          return rowBody(context, agd);
+          return IntrinsicHeight(
+            child: rowBody(context, agd),
+          );
         },
       ),
     );
   }
 
   @override
-  Widget rowBody(BuildContext ctx, ActiveGameDetails agd) { 
+  Widget rowBody(BuildContext ctx, ActiveGameDetails agd) {
     throw UnimplementedError(
       'acatual subclass should return the specific row-type; implement there',
     );
   }
 }
 
-
-    // return ProviderScope(
-    //   overrides: [
-    //     _gameStatusProvider.overrideWithValue(
-    //       assets.item3,
-    //     ),
-    //   ],
-    //   child:
+// return ProviderScope(
+//   overrides: [
+//     _gameStatusProvider.overrideWithValue(
+//       assets.item3,
+//     ),
+//   ],
+//   child:
