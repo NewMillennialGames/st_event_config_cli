@@ -20,7 +20,7 @@ extension AssetHoldingsSummaryIfcExt1 on AssetHoldingsSummaryIfc {
   String get positionEstValueStr => positionEstValue.toStringAsFixed(2);
   String get positionGainLossStr => positionGainLoss.toStringAsFixed(2);
 
-  bool get returnIsPositive => positionGainLoss > 0;
+  bool get returnIsPositive => positionGainLoss >= 0;
   Color get posGainSymbolColor => returnIsPositive ? Colors.green : Colors.red;
 }
 
