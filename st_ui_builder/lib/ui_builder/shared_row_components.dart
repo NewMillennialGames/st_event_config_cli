@@ -300,7 +300,7 @@ class AssetVsAssetHalfRow extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         gameDetails.isOwned(competitor.assetKey)
-            ? Icon(Icons.lock_clock)
+            ? const Icon(Icons.work, color: StColors.green)
             : WatchButton(
                 assetKey: competitor.assetKey,
                 isWatched: gameDetails.isWatched(competitor.assetKey),
