@@ -282,6 +282,7 @@ class LeaderboardHalfRow extends StatelessWidget {
 
 class AssetVsAssetHalfRow extends StatelessWidget {
   //
+  final AssetHoldingsSummaryIfc assetHoldingsInterface;
   final AssetRowPropertyIfc competitor;
   final ActiveGameDetails gameDetails;
   final bool showRank;
@@ -289,7 +290,8 @@ class AssetVsAssetHalfRow extends StatelessWidget {
   const AssetVsAssetHalfRow(
     this.competitor,
     this.gameDetails,
-    this.showRank, {
+    this.showRank,
+    this.assetHoldingsInterface, {
     Key? key,
   }) : super(key: key);
 
@@ -299,7 +301,7 @@ class AssetVsAssetHalfRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        gameDetails.isOwned(competitor.assetKey)
+       assetHoldingsInterface.sharesOwned > 0
             ? const Icon(Icons.work, color: StColors.green)
             : WatchButton(
                 assetKey: competitor.assetKey,
