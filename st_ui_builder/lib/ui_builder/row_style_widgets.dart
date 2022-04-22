@@ -13,7 +13,7 @@ we have one style for each value of:
 final _redrawAssetRowProvider = StateProvider<bool>((ref) => false);
 
 class AssetVsAssetRowMktView extends StBaseTvRow
-    with ShowsTwoAssets, RequiresGameStatus {
+    with ShowsTwoAssets, RequiresGameStatus, RequiresUserPositionProps {
   //
   bool get showRank => false;
 
@@ -33,9 +33,9 @@ class AssetVsAssetRowMktView extends StBaseTvRow
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        AssetVsAssetHalfRow(comp1, agd, showRank),
+        AssetVsAssetHalfRow(comp1, agd, showRank, assetHoldingsSummary),
         const SizedBox(height: UiSizes.spaceBtwnRows),
-        AssetVsAssetHalfRow(comp2, agd, showRank),
+        AssetVsAssetHalfRow(comp2, agd, showRank, assetHoldingsSummary),
       ],
     );
   }
@@ -353,7 +353,8 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
                       isDriverVsField: isDriverVsField,
                       isTeamPlayerVsField: isTeamPlayerVsField,
                     ),
-                    if (showProceeds) TradeButton(comp1.assetStateUpdates, agd.gameStatus),
+                    if (showProceeds)
+                      TradeButton(comp1.assetStateUpdates, agd.gameStatus),
                   ],
                 ),
                 kVerticalSpacerSm,
@@ -493,7 +494,7 @@ class TeamPlayerVsFieldRowPortfolioHistory
 }
 
 class TeamVsFieldRowMktView extends StBaseTvRow
-    with ShowsOneAsset, RequiresGameStatus {
+    with ShowsOneAsset, RequiresGameStatus, RequiresUserPositionProps {
   //
   bool get showRanked => false;
 
@@ -521,14 +522,17 @@ class TeamVsFieldRowMktView extends StBaseTvRow
   ) {
     //
     final size = MediaQuery.of(ctx).size;
+    print("Shares owned int: ${assetHoldingsSummary.sharesOwnedStr.toString()}");
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        WatchButton(
-          assetKey: comp1.assetKey,
-          isWatched: comp1.assetStateUpdates.isWatched,
-        ),
+        assetHoldingsSummary.sharesOwned > 0
+            ? const Icon(Icons.work, color: StColors.green)
+            : WatchButton(
+                assetKey: comp1.assetKey,
+                isWatched: comp1.assetStateUpdates.isWatched,
+              ),
         kSpacerSm,
         CompetitorImage(
           comp1.imgUrl,
