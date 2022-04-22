@@ -22,7 +22,7 @@ class WatchButton extends ConsumerWidget {
 }
 
 const kSpacerSm = SizedBox(
-  width: 6,
+  width: 4,
 );
 const kVerticalSpacerSm = SizedBox(
   height: 3,
@@ -35,15 +35,20 @@ class CompetitorImage extends StatelessWidget {
   // just the image or placeholder
   final String imgUrl;
   final bool shrinkForRank;
+  final bool isTwoAssetRow;
 
   const CompetitorImage(
     this.imgUrl,
     this.shrinkForRank, {
+    this.isTwoAssetRow = false,
     Key? key,
   }) : super(key: key);
 
-  double get imgSize =>
-      shrinkForRank ? (UiSizes.teamImgSide * 0.7) : UiSizes.teamImgSide;
+  double get _shrinkSize => shrinkForRank
+      ? (isTwoAssetRow ? 0.56 : 0.78)
+      : (isTwoAssetRow ? 0.78 : 1);
+
+  double get imgSize => UiSizes.teamImgSide * _shrinkSize;
 
   @override
   Widget build(BuildContext context) {
@@ -62,12 +67,12 @@ class CompetitorImage extends StatelessWidget {
 
 class TradeButton extends ConsumerWidget {
   //
-  final AssetKey assetId;
-  final CompetitionStatus status;
+  final AssetStateUpdates assetState;
+  final CompetitionStatus competitionStatus;
 
   const TradeButton(
-    this.assetId,
-    this.status, {
+    this.assetState,
+    this.competitionStatus, {
     Key? key,
   }) : super(key: key);
 
@@ -80,14 +85,14 @@ class TradeButton extends ConsumerWidget {
     // or simple text label if not tradable
     // final size = MediaQuery.of(context).size;
     TradeFlowBase tf = ref.read(tradeFlowProvider);
-    Event? optCurEvent = ref.watch(currEventProvider);
-    if (optCurEvent == null) {
-      print('No event loaded??');
-    }
-    print(
-      '********* event.state is: ${optCurEvent?.state.name ?? 'missing'}',
-    );
-    bool eventHasStarted = optCurEvent?.state == EventState.inProgress;
+    // Event? optCurEvent = ref.watch(currEventProvider);
+    // if (optCurEvent == null) {
+    //   print('No event loaded??');
+    // }
+    // print(
+    //   '********* event.state is: ${optCurEvent?.state.name ?? 'missing'}',
+    // );
+    // bool eventHasStarted = optCurEvent?.state == EventState.inProgress;
     // (optCurEvent?.state ?? EventState.unpublished) == EventState.inProgress;
 
     return Container(
@@ -95,7 +100,7 @@ class TradeButton extends ConsumerWidget {
       width: 80,
       // width: UiSizes.tradeBtnWidthPctScreen * size.width,
       alignment: Alignment.center,
-      child: (eventHasStarted && status.isTradable)
+      child: (assetState.isTradable)
           ? TextButton(
               child: const Text(
                 StStrings.tradeUc,
@@ -103,14 +108,14 @@ class TradeButton extends ConsumerWidget {
                 style: StTextStyles.h6,
                 textAlign: TextAlign.center,
               ),
-              onPressed: () => tf.beginTradeFlow(assetId),
+              onPressed: () => tf.beginTradeFlow(AssetKey(assetState.assetKey)),
               style: StButtonStyles.tradeButtonCanTrade,
             )
           : Text(
-              tf.labelForGameState(status),
+              tf.labelForGameState(competitionStatus),
               style: StTextStyles.h5.copyWith(
-                fontSize: 13,
-                color: tf.colorForGameState(status),
+                fontSize: 15,
+                color: tf.colorForGameState(competitionStatus),
               ),
               textAlign: TextAlign.center,
             ),
@@ -135,30 +140,31 @@ class CheckAssetType extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var lst = competitor.topName.split(' ');
-    String lastName;
-    lst.length >= 2 ? lastName = lst[1] : lastName = '';
     String firstName = lst[0];
+    String lastName = lst.length >= 2 ? lst[1] : '';
     if (isDriverVsField!) {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
-            height: 50,
+            height: 40,
             child: FittedBox(
               fit: BoxFit.fitHeight,
               child: Text(
                 competitor.displayNumberStr,
-                style: StTextStyles.h6.copyWith(
-                    fontWeight: FontWeight.w800, fontSize: 28, height: 1),
+                style: StTextStyles.h2.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
           ),
           kSpacerSm,
           ConstrainedBox(
             constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width * .3,
-                minHeight: 50,
-                maxHeight: 50),
+              maxWidth: MediaQuery.of(context).size.width * .3,
+              minHeight: 50,
+              maxHeight: 50,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -214,7 +220,7 @@ class CheckAssetType extends StatelessWidget {
     }
     return ConstrainedBox(
       constraints:
-          BoxConstraints(maxWidth: MediaQuery.of(context).size.width * .35),
+          BoxConstraints(maxWidth: MediaQuery.of(context).size.width * .3),
       child: Text(
         competitor.topName,
         overflow: TextOverflow.ellipsis,
@@ -293,12 +299,14 @@ class AssetVsAssetHalfRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        WatchButton(
-          assetKey: competitor.assetKey,
-          isWatched: gameDetails.isWatched(competitor.assetKey),
-        ),
+        gameDetails.isOwned(competitor.assetKey)
+            ? Icon(Icons.lock_clock)
+            : WatchButton(
+                assetKey: competitor.assetKey,
+                isWatched: gameDetails.isWatched(competitor.assetKey),
+              ),
         kSpacerSm,
-        CompetitorImage(competitor.imgUrl, true),
+        CompetitorImage(competitor.imgUrl, showRank),
         kSpacerSm,
         if (showRank) ...[
           Text(
@@ -310,7 +318,7 @@ class AssetVsAssetHalfRow extends StatelessWidget {
         Expanded(
           child: Text(
             competitor.topName,
-            style: StTextStyles.h5.copyWith(fontSize: 15),
+            style: StTextStyles.h5,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             // textScaleFactor: 0.96,
@@ -319,15 +327,12 @@ class AssetVsAssetHalfRow extends StatelessWidget {
         ),
         Text(
           competitor.currPriceStr,
-          style: StTextStyles.h6.copyWith(fontSize: 13),
+          style: StTextStyles.h5,
         ),
         const SizedBox(
           width: 4,
         ),
-        TradeButton(
-          competitor.assetKey,
-          gameDetails.gameStatus,
-        ),
+        TradeButton(competitor.assetStateUpdates, gameDetails.gameStatus),
       ],
     );
   }
@@ -340,6 +345,7 @@ class MktRschAsset extends ConsumerWidget {
   final ActiveGameDetails gameDetails;
   final Color color;
   final BorderRadiusGeometry borderRadius;
+
   //
   const MktRschAsset(
     this.competitor,
@@ -405,6 +411,7 @@ class MktRschAsset extends ConsumerWidget {
 class RowControl extends StatelessWidget {
   final AssetRowPropertyIfc competitor;
   final ActiveGameDetails gameDetails;
+
   const RowControl({
     Key? key,
     required this.competitor,
@@ -460,7 +467,8 @@ class RowControl extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(right: 16),
-            child: TradeButton(competitor.assetKey, gameDetails.gameStatus),
+            child: TradeButton(
+                competitor.assetStateUpdates, gameDetails.gameStatus),
           ),
         ],
       ),
