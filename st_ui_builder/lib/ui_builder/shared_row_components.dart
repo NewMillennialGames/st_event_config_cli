@@ -299,10 +299,12 @@ class AssetVsAssetHalfRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        WatchButton(
-          assetKey: competitor.assetKey,
-          isWatched: gameDetails.isWatched(competitor.assetKey),
-        ),
+        gameDetails.isOwned(competitor.assetKey)
+            ? const Icon(Icons.work, color: StColors.green)
+            : WatchButton(
+                assetKey: competitor.assetKey,
+                isWatched: gameDetails.isWatched(competitor.assetKey),
+              ),
         kSpacerSm,
         CompetitorImage(competitor.imgUrl, showRank),
         kSpacerSm,

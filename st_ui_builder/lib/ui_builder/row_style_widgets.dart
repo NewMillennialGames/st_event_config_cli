@@ -356,6 +356,7 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
                     if (showProceeds) TradeButton(comp1.assetStateUpdates, agd.gameStatus),
                   ],
                 ),
+                kVerticalSpacerSm,
                 Expanded(
                   child: Container(
                     padding: const EdgeInsets.only(top: 5, left: 10, right: 10),
@@ -411,8 +412,10 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
                                     .copyWith(color: StColors.coolGray)),
                             kVerticalSpacerSm,
                             Text(
-                              positionGainLoss,
-                              style: gainLossTxtStyle,
+                              showProceeds ? positionGainLoss : "N/A",
+                              style: showProceeds
+                                  ? gainLossTxtStyle
+                                  : StTextStyles.p1,
                             ),
                           ],
                         ),
