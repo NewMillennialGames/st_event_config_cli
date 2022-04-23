@@ -301,7 +301,10 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
 
   bool get isTeamPlayerVsField => false;
 
+  // proceeds apply to a SALE
   bool get showProceeds => true;
+  // holdings apply to what you currently own
+  bool get showHoldingsValue => !showProceeds;
 
   const AssetVsAssetRowPortfolioView(
     TableviewDataRowTuple assets, {
@@ -327,8 +330,9 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
     String sharesOwned = assetHoldingsSummary.sharesOwnedStr;
     String positionValue = assetHoldingsSummary.positionEstValueStr;
     String positionGainLoss = assetHoldingsSummary.positionGainLossStr;
-    Color gainLossColor =
-        assetHoldingsSummary.positionGainLoss >= 0 ? StColors.green : StColors.errorText;
+    Color gainLossColor = assetHoldingsSummary.positionGainLoss >= 0
+        ? StColors.green
+        : StColors.errorText;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -355,7 +359,8 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
                       isDriverVsField: isDriverVsField,
                       isTeamPlayerVsField: isTeamPlayerVsField,
                     ),
-                    if (showProceeds)
+                    if (showHoldingsValue)
+                      // this is a portfolio positions row; show trade
                       TradeButton(comp1.assetStateUpdates, agd.gameStatus),
                   ],
                 ),
@@ -385,8 +390,9 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
                                       style: StTextStyles.p1,
                                     ),
                                     TextSpan(
-                                        text: " $sharePriceChange",
-                                        style: gainLossTxtStyle)
+                                      text: " $sharePriceChange",
+                                      style: gainLossTxtStyle,
+                                    )
                                   ]),
                             ),
                           ],
@@ -395,11 +401,13 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                                showProceeds
-                                    ? StStrings.proceeds
-                                    : StStrings.value,
-                                style: StTextStyles.p1
-                                    .copyWith(color: StColors.coolGray)),
+                              showProceeds
+                                  ? StStrings.proceeds
+                                  : StStrings.value,
+                              style: StTextStyles.p1.copyWith(
+                                color: StColors.coolGray,
+                              ),
+                            ),
                             kVerticalSpacerSm,
                             Text(
                               positionValue,
@@ -415,8 +423,9 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
                                     .copyWith(color: StColors.coolGray)),
                             kVerticalSpacerSm,
                             Text(
-                              showProceeds ? positionGainLoss : "N/A",
-                              style: StTextStyles.p1.copyWith(color: gainLossColor),
+                              positionGainLoss,
+                              style: StTextStyles.p1
+                                  .copyWith(color: gainLossColor),
                             ),
                           ],
                         ),
@@ -434,6 +443,7 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
 }
 
 class DriverVsFieldRowPortfolio extends AssetVsAssetRowPortfolioView {
+  // this is portfolio POSITIONS
   const DriverVsFieldRowPortfolio(
     TableviewDataRowTuple assets, {
     Key? key,
@@ -441,6 +451,8 @@ class DriverVsFieldRowPortfolio extends AssetVsAssetRowPortfolioView {
 
   @override
   bool get isDriverVsField => true;
+  @override
+  bool get showProceeds => false;
 }
 
 class TeamPlayerVsFieldRowPortfolio extends AssetVsAssetRowPortfolioView {
