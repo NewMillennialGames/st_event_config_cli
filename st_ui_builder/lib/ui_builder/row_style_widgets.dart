@@ -301,7 +301,7 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
 
   bool get isTeamPlayerVsField => false;
 
-  bool get showProceeds => false;
+  bool get showProceeds => true;
 
   const AssetVsAssetRowPortfolioView(
     TableviewDataRowTuple assets, {
@@ -327,6 +327,8 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
     String sharesOwned = assetHoldingsSummary.sharesOwnedStr;
     String positionValue = assetHoldingsSummary.positionEstValueStr;
     String positionGainLoss = assetHoldingsSummary.positionGainLossStr;
+
+    print('SHOW PROCEEDS: $showProceeds');
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8),
