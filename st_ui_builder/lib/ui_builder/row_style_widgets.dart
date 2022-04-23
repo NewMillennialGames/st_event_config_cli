@@ -327,8 +327,8 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
     String sharesOwned = assetHoldingsSummary.sharesOwnedStr;
     String positionValue = assetHoldingsSummary.positionEstValueStr;
     String positionGainLoss = assetHoldingsSummary.positionGainLossStr;
-
-    print('SHOW PROCEEDS: $showProceeds');
+    Color gainLossColor =
+        assetHoldingsSummary.positionGainLoss >= 0 ? Colors.green : Colors.red;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -416,9 +416,7 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
                             kVerticalSpacerSm,
                             Text(
                               showProceeds ? positionGainLoss : "N/A",
-                              style: showProceeds
-                                  ? gainLossTxtStyle
-                                  : StTextStyles.p1,
+                              style: StTextStyles.p1.copyWith(color: gainLossColor),
                             ),
                           ],
                         ),
@@ -524,7 +522,8 @@ class TeamVsFieldRowMktView extends StBaseTvRow
   ) {
     //
     final size = MediaQuery.of(ctx).size;
-    print("Shares owned int: ${assetHoldingsSummary.sharesOwnedStr.toString()}");
+    print(
+        "Shares owned int: ${assetHoldingsSummary.sharesOwnedStr.toString()}");
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
