@@ -137,7 +137,7 @@ and I've made the UI presenter injectible into the dialog runner
   send PR to dewey to merge your code to "master" branch
   NEVER merge your code to the "prod" branch
 
-  In the next few weeks, this package will become a 
+  After several months, this package MAY become a 
   dependency of ScoreTrader
 
 
@@ -149,3 +149,22 @@ defer this until after 1st build:
   those rows ...
 
   or update them on the outside
+
+
+  Testing:
+
+  Things we need to test in the:
+
+  CLI
+
+  1) user answers produce new questions & add to pending Queue
+  2) answers produce IMPLICIT answers (create new question and AUTO-SET answers)
+  3) answers make some pending questions IRRELEVANT  (take them out of pending queue)
+  4) all relevant answers written to JSON file
+
+  ui_builder_factory
+
+  1) multiple different JSON config files can be loaded
+  2) row-builder-function matches the app-screen for which it applies  (eg grouped or ungrouped)
+  3) filtering logic also fits app-screen & config requirements
+  4) sorting & grouping output matches json config
