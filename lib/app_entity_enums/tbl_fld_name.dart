@@ -28,11 +28,11 @@ extension DbTableFieldNameExt1 on DbTableFieldName {
       case DbTableFieldName.conference:
         return 'Conference';
       case DbTableFieldName.region:
-        return 'Region';
+        return 'All Regions';
       case DbTableFieldName.eventName:
         return 'Event Name';
       case DbTableFieldName.gameDate:
-        return 'Date';
+        return 'All Dates';
       case DbTableFieldName.gameTime:
         return 'Game Time';
       case DbTableFieldName.gameLocation:

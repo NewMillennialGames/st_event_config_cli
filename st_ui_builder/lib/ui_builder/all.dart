@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:equatable/equatable.dart';
 import 'package:tuple/tuple.dart';
 import 'package:grouped_list/grouped_list.dart';
-import 'package:dotted_border/dotted_border.dart';
+// import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 //

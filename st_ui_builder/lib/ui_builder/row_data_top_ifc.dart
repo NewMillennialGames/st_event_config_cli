@@ -13,10 +13,12 @@ const String kMissingPrice = '0.00';
 abstract class AssetRowPropertyIfc {
   // must have a value for each name on:
   // enum DbTableFieldName()
-  String get assetKey; // for unique comparison
+  AssetKey get assetKey; // for unique comparison
   String get topName;
   String get subName;
   String get ticker;
+  String get marketResearchUrl;
+  String get liveStatsUrl;
   String get imgUrl;
   String get position;
   int get rank;
@@ -38,6 +40,7 @@ abstract class AssetRowPropertyIfc {
   String get regionOrConference;
   String get roundName;
   String get location;
+  int get displayNumber;
   CompetitionStatus get gameStatus;
   CompetitionType get gameType;
 
@@ -51,6 +54,7 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
           .toUpperCase();
 
   String get rankStr => '$rank';
+  String get displayNumberStr => '$displayNumber';
   String get gameDateDtwStr => gameDate.asDtwMmDyStr;
   String get gameDateAppStr => gameDate.asShortDtStr;
   String get gameTimeStr => gameDate.asTimeOnlyStr;
@@ -58,6 +62,7 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
   // from assetHoldingsSummary
   double get positionGainLoss => assetHoldingsSummary.positionGainLoss; // ?? 0;
   String get sharesOwnedStr => assetHoldingsSummary.sharesOwnedStr; // ?? '0';
+  int get sharesOwnedInt => assetHoldingsSummary.sharesOwned;
   String get positionCostStr =>
       assetHoldingsSummary.positionCostStr; // ?? kMissingPrice;
   String get positionEstValueStr =>
@@ -74,7 +79,7 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
   double get recentPriceDelta => assetStateUpdates.priceDeltaSinceOpen; // ?? 0;
   String get currPriceStr => assetStateUpdates.curPriceStr; // ?? kMissingPrice;
   String get recentDeltaStr =>
-      assetStateUpdates.priceDeltaSinceOpenStr; // ?? kMissingPrice;
+      assetStateUpdates.formattedChangeStr; // ?? kMissingPrice;
   String get openPriceStr => assetStateUpdates.openPrice.toStringAsFixed(2);
   String get lowPriceStr => assetStateUpdates.lowPrice.toStringAsFixed(2);
   String get hiPriceStr => assetStateUpdates.hiPrice.toStringAsFixed(2);

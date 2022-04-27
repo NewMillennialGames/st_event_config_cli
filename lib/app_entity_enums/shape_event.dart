@@ -31,11 +31,17 @@ enum EvEliminationStrategy {
 // define assets
 @JsonEnum()
 enum EvCompetitorType {
+  // aka participant
   // EvCompetitionStyle will tell you how they face-off each other
   team,
-  teamPlayer, // aka player
+  teamPlayer, // aka player & fantasy
   soloPlayer,
   other,
+}
+
+extension EvCompetitorTypeExt1 on EvCompetitorType {
+  // temp code for Nascar
+  bool get skipGroupingOnMarketView => this == EvCompetitorType.soloPlayer;
 }
 
 @JsonEnum()

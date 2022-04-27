@@ -57,7 +57,7 @@ class AssetStateUpdates with _$AssetStateUpdates {
   }
 
   bool get isTradable => assetState.isTradable;
-  bool get stockIsUp => curPrice > openPrice;
+  bool get stockIsUp => curPrice >= openPrice;
   bool get isDecreasing => !stockIsUp;
 
   String get formattedChangeStr =>
@@ -212,17 +212,17 @@ class ActiveGameDetails with _$ActiveGameDetails {
   bool includesParticipant(String assetId) =>
       _participantAssetIds.contains(assetId);
 
-  Set<String> get _ownedAssetIds => participantAssetInfo
+  Set<AssetKey> get _ownedAssetIds => participantAssetInfo
       .where((ai) => ai.isOwned)
-      .map((ai) => ai.assetKey)
+      .map((ai) => AssetKey(ai.assetKey))
       .toSet();
-  Set<String> get _watchedAssetIds => participantAssetInfo
+  Set<AssetKey> get _watchedAssetIds => participantAssetInfo
       .where((ai) => ai.isWatched)
-      .map((ai) => ai.assetKey)
+      .map((ai) => AssetKey(ai.assetKey))
       .toSet();
 
-  bool isOwned(String assetId) => _ownedAssetIds.contains(assetId);
-  bool isWatched(String assetId) => _watchedAssetIds.contains(assetId);
+  bool isOwned(AssetKey assetId) => _ownedAssetIds.contains(assetId);
+  bool isWatched(AssetKey assetId) => _watchedAssetIds.contains(assetId);
 
   ActiveGameDetails updateAsset(AssetStateUpdates asu) {
     //

@@ -17,7 +17,6 @@ class TableviewConfigPayload {
   //
   final SortingRules sortRules;
   final FilterRules? filterRules;
-  // final GroupingRules groupByRules;
 
   TableviewConfigPayload._(
     // private constructor

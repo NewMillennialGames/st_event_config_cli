@@ -32,6 +32,7 @@ class GroupedTableDataMgr {
   GroupedListOrder sortOrder = GroupedListOrder.ASC;
   // rows actually rendered from _filteredAssetRows
   List<TableviewDataRowTuple> _filteredAssetRows = [];
+  bool disableAllGrouping = false;
   // disableGroupingBeyondDate: regions no longer matter when you get to final 4
   bool disableGroupingBeyondDate = false;
 
@@ -40,6 +41,7 @@ class GroupedTableDataMgr {
     this._allAssetRows,
     this._tableViewCfg, {
     this.redrawCallback,
+    this.disableAllGrouping = false,
     bool ascending = true,
   })  : sortOrder = ascending ? GroupedListOrder.ASC : GroupedListOrder.DESC,
         _filteredAssetRows = _allAssetRows.toList();
@@ -58,6 +60,8 @@ class GroupedTableDataMgr {
   // groupHeaderBuilder is function to return header widget
   // defining groupHeaderBuilder will cause groupSeparatorBuilder to be ignored
   GroupHeaderBuilder get groupHeaderBuilder {
+    if (disableAllGrouping) return (_) => const SizedBox.shrink();
+
     // copy groupBy getter to save a lookup
     final TvAreaRowStyle rowStyle = _tableViewCfg.rowStyle;
     final GetGroupHeaderLblsFromCompetitionRow gbFunc = groupBy;
@@ -69,6 +73,8 @@ class GroupedTableDataMgr {
   // GroupComparatorCallback? get groupComparator => null;
   GroupComparatorCallback? get groupComparator {
     // GroupHeaderData implements comparable
+    if (disableAllGrouping) return null;
+
     if (sortOrder == GroupedListOrder.DESC) {
       return (GroupHeaderData hd1Val, GroupHeaderData hd2Val) =>
           hd2Val.compareTo(hd1Val);
@@ -87,13 +93,25 @@ class GroupedTableDataMgr {
         return _tableViewCfg.rowConstructor(assets);
       };
 
+  // IndexedItemRowBuilder wrappedIndexedItemBuilder(
+  //   IndexedItemRowBuilder wrapper,
+  // ) =>
+  //     (
+  //       BuildContext ctx,
+  //       TableviewDataRowTuple assets,
+  //       int i,
+  //     ) {
+  //       return wrapper(ctx, assets, i);
+  //     };
+
   // for sorting recs into order WITHIN groups/sections
   SectionSortComparator get itemComparator => GroupHeaderData.sortComparator(
       sortingRules, sortOrder == GroupedListOrder.ASC);
 
   bool get hasColumnFilters {
     // set imageUrl as first filter field to hide/disable the whole filter bar
-    return filterRules?.item1.colName != DbTableFieldName.imageUrl;
+    return filterRules?.item1.colName != DbTableFieldName.imageUrl &&
+        !disableAllGrouping;
   }
 
   void endGeographicGrouping() {
@@ -112,7 +130,8 @@ class GroupedTableDataMgr {
     Color backColor = Colors.transparent,
   }) {
     // dont call this method without first checking this.hasColumnFilters
-    if (filterRules == null) return SizedBox();
+    if (filterRules == null || disableAllGrouping)
+      return const SizedBox.shrink();
 
     TvFilterCfg i1 = filterRules!.item1;
     TvFilterCfg? i2 = filterRules!.item2;
@@ -203,12 +222,32 @@ class GroupedTableDataMgr {
           items: listItems
               .map(
                 (String val) => DropdownMenuItem<String>(
-                  child: Text(val.toUpperCase()),
+                  child: Container(
+                      color: curSelection == val
+                          ? StColors.primaryDarkGray
+                          : StColors.black,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Text(val.toUpperCase()),
+                          ],
+                        ),
+                      )),
                   value: val,
                   alignment: AlignmentDirectional.centerStart,
                 ),
               )
               .toList(),
+          selectedItemBuilder: (BuildContext context) {
+            return listItems.map((String value) {
+              return Center(
+                child: Text(
+                  value.toUpperCase(),
+                ),
+              );
+            }).toList();
+          },
           onChanged: (String? selectedVal) {
             // store selected value for state mgmt
             valSetter(selectedVal);
@@ -220,7 +259,6 @@ class GroupedTableDataMgr {
             }
             _doFilteringFor(colName, selectedVal);
           },
-          // focusColor: Colors.green,
           dropdownColor: StColors.black,
           iconEnabledColor: StColors.gray,
           style: const TextStyle(

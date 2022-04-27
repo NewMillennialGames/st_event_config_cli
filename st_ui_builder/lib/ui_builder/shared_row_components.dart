@@ -4,7 +4,7 @@ class WatchButton extends ConsumerWidget {
   const WatchButton({Key? key, required this.assetKey, this.isWatched = false})
       : super(key: key);
 
-  final String assetKey;
+  final AssetKey assetKey;
   final bool isWatched;
 
   @override
@@ -22,9 +22,11 @@ class WatchButton extends ConsumerWidget {
 }
 
 const kSpacerSm = SizedBox(
-  width: 6,
+  width: 4,
 );
-
+const kVerticalSpacerSm = SizedBox(
+  height: 3,
+);
 const kSpacerLarge = SizedBox(
   width: 20,
 );
@@ -33,15 +35,20 @@ class CompetitorImage extends StatelessWidget {
   // just the image or placeholder
   final String imgUrl;
   final bool shrinkForRank;
+  final bool isTwoAssetRow;
 
   const CompetitorImage(
     this.imgUrl,
     this.shrinkForRank, {
+    this.isTwoAssetRow = false,
     Key? key,
   }) : super(key: key);
 
-  double get imgSize =>
-      shrinkForRank ? (UiSizes.teamImgSide * 0.84) : UiSizes.teamImgSide;
+  double get _shrinkSize => shrinkForRank
+      ? (isTwoAssetRow ? 0.56 : 0.78)
+      : (isTwoAssetRow ? 0.78 : 1);
+
+  double get imgSize => UiSizes.teamImgSide * _shrinkSize;
 
   @override
   Widget build(BuildContext context) {
@@ -60,12 +67,12 @@ class CompetitorImage extends StatelessWidget {
 
 class TradeButton extends ConsumerWidget {
   //
-  final String assetId;
-  final CompetitionStatus status;
+  final AssetStateUpdates assetState;
+  final CompetitionStatus competitionStatus;
 
   const TradeButton(
-    this.assetId,
-    this.status, {
+    this.assetState,
+    this.competitionStatus, {
     Key? key,
   }) : super(key: key);
 
@@ -78,14 +85,14 @@ class TradeButton extends ConsumerWidget {
     // or simple text label if not tradable
     // final size = MediaQuery.of(context).size;
     TradeFlowBase tf = ref.read(tradeFlowProvider);
-    Event? optCurEvent = ref.watch(currEventStateProvider.notifier).state;
-    if (optCurEvent == null) {
-      print('No event loaded??');
-    }
-    print(
-      '********* event.state is: ${optCurEvent?.state.name ?? 'missing'}',
-    );
-    bool eventHasStarted = true;
+    // Event? optCurEvent = ref.watch(currEventProvider);
+    // if (optCurEvent == null) {
+    //   print('No event loaded??');
+    // }
+    // print(
+    //   '********* event.state is: ${optCurEvent?.state.name ?? 'missing'}',
+    // );
+    // bool eventHasStarted = optCurEvent?.state == EventState.inProgress;
     // (optCurEvent?.state ?? EventState.unpublished) == EventState.inProgress;
 
     return Container(
@@ -93,7 +100,7 @@ class TradeButton extends ConsumerWidget {
       width: 80,
       // width: UiSizes.tradeBtnWidthPctScreen * size.width,
       alignment: Alignment.center,
-      child: (eventHasStarted && status.isTradable)
+      child: (assetState.isTradable)
           ? TextButton(
               child: const Text(
                 StStrings.tradeUc,
@@ -101,14 +108,14 @@ class TradeButton extends ConsumerWidget {
                 style: StTextStyles.h6,
                 textAlign: TextAlign.center,
               ),
-              onPressed: () => tf.beginTradeFlow(assetId),
+              onPressed: () => tf.beginTradeFlow(AssetKey(assetState.assetKey)),
               style: StButtonStyles.tradeButtonCanTrade,
             )
           : Text(
-              tf.labelForGameState(status),
+              tf.labelForGameState(competitionStatus),
               style: StTextStyles.h5.copyWith(
-                fontSize: 13,
-                color: tf.colorForGameState(status),
+                fontSize: 15,
+                color: tf.colorForGameState(competitionStatus),
               ),
               textAlign: TextAlign.center,
             ),
@@ -132,42 +139,71 @@ class CheckAssetType extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var lst = competitor.topName.split('');
-    String lastName = lst[1];
+    var lst = competitor.topName.split(' ');
+    String firstName = lst[0];
+    String lastName = lst.length >= 2 ? lst[1] : '';
     if (isDriverVsField!) {
       return Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            competitor.rankStr,
-            style: StTextStyles.h1
-                .copyWith(fontWeight: FontWeight.w900, fontSize: 30),
+          SizedBox(
+            height: 40,
+            child: FittedBox(
+              fit: BoxFit.fitHeight,
+              child: Text(
+                competitor.displayNumberStr,
+                style: StTextStyles.h2.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
           ),
           kSpacerSm,
-          Column(
-            children: [
-              Text(competitor.topName.toUpperCase(), style: StTextStyles.p2),
-              Text(lastName.toUpperCase(),
-                  style: StTextStyles.h2.copyWith(fontWeight: FontWeight.w700))
-            ],
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.width * .3,
+              minHeight: 50,
+              maxHeight: 50,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(firstName.toUpperCase(),
+                    overflow: TextOverflow.ellipsis,
+                    style: StTextStyles.p2
+                        .copyWith(fontWeight: FontWeight.w500, fontSize: 12)),
+                Text(lastName.toUpperCase(),
+                    overflow: TextOverflow.ellipsis,
+                    style: StTextStyles.h3
+                        .copyWith(fontWeight: FontWeight.w800, fontSize: 18))
+              ],
+            ),
           )
         ],
       );
     }
     if (isTeamPlayerVsField!) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(competitor.topName, style: StTextStyles.h4),
-          Row(
-            children: [
-              Text(competitor.teamNameWhenTradingPlayers,
-                  style: StTextStyles.p2.copyWith(color: StColors.coolGray)),
-              kSpacerSm,
-              Text(competitor.position,
-                  style: StTextStyles.p2.copyWith(color: StColors.coolGray))
-            ],
-          ),
-        ],
+      return ConstrainedBox(
+        constraints:
+            BoxConstraints(maxWidth: MediaQuery.of(context).size.width * .3),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(competitor.topName, style: StTextStyles.h4),
+            Row(
+              children: [
+                Text(competitor.teamNameWhenTradingPlayers,
+                    overflow: TextOverflow.ellipsis,
+                    style: StTextStyles.p2.copyWith(color: StColors.coolGray)),
+                kSpacerSm,
+                Text(competitor.position,
+                    overflow: TextOverflow.ellipsis,
+                    style: StTextStyles.p2.copyWith(color: StColors.coolGray))
+              ],
+            ),
+          ],
+        ),
       );
     }
     if (isPlayerVsFieldRanked!) {
@@ -182,9 +218,14 @@ class CheckAssetType extends StatelessWidget {
         ],
       );
     }
-    return Text(
-      competitor.topName,
-      style: StTextStyles.h4,
+    return ConstrainedBox(
+      constraints:
+          BoxConstraints(maxWidth: MediaQuery.of(context).size.width * .3),
+      child: Text(
+        competitor.topName,
+        overflow: TextOverflow.ellipsis,
+        style: StTextStyles.h4,
+      ),
     );
   }
 }
@@ -241,6 +282,7 @@ class LeaderboardHalfRow extends StatelessWidget {
 
 class AssetVsAssetHalfRow extends StatelessWidget {
   //
+  final AssetHoldingsSummaryIfc assetHoldingsInterface;
   final AssetRowPropertyIfc competitor;
   final ActiveGameDetails gameDetails;
   final bool showRank;
@@ -248,7 +290,8 @@ class AssetVsAssetHalfRow extends StatelessWidget {
   const AssetVsAssetHalfRow(
     this.competitor,
     this.gameDetails,
-    this.showRank, {
+    this.showRank,
+    this.assetHoldingsInterface, {
     Key? key,
   }) : super(key: key);
 
@@ -258,10 +301,12 @@ class AssetVsAssetHalfRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        WatchButton(
-          assetKey: competitor.assetKey,
-          isWatched: gameDetails.isWatched(competitor.assetKey),
-        ),
+       assetHoldingsInterface.sharesOwned > 0
+            ? const Icon(Icons.work, color: StColors.green)
+            : WatchButton(
+                assetKey: competitor.assetKey,
+                isWatched: gameDetails.isWatched(competitor.assetKey),
+              ),
         kSpacerSm,
         CompetitorImage(competitor.imgUrl, showRank),
         kSpacerSm,
@@ -275,107 +320,242 @@ class AssetVsAssetHalfRow extends StatelessWidget {
         Expanded(
           child: Text(
             competitor.topName,
-            style: StTextStyles.h5.copyWith(fontSize: 15),
+            style: StTextStyles.h5,
             maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             // textScaleFactor: 0.96,
             // textWidthBasis: TextWidthBasis.longestLine,
           ),
         ),
         Text(
           competitor.currPriceStr,
-          style: StTextStyles.h6.copyWith(fontSize: 13),
+          style: StTextStyles.h5,
         ),
         const SizedBox(
           width: 4,
         ),
-        TradeButton(
-          competitor.assetKey,
-          gameDetails.gameStatus,
-        ),
+        TradeButton(competitor.assetStateUpdates, gameDetails.gameStatus),
       ],
     );
   }
 }
 
-class MktRschAsset extends StatelessWidget {
+class MktRschAsset extends ConsumerWidget {
   //
+
   final AssetRowPropertyIfc competitor;
-  final ActiveGameDetails gameStatus;
+  final ActiveGameDetails gameDetails;
+  final Color color;
+  final BorderRadiusGeometry borderRadius;
 
   //
   const MktRschAsset(
     this.competitor,
-    this.gameStatus, {
+    this.color,
+    this.gameDetails,
+    this.borderRadius, {
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    // paste row widget code here
+  Widget build(BuildContext context, WidgetRef ref) {
+    //
     final size = MediaQuery.of(context).size;
     const double _sizeHeightImage = 150;
-    return Stack(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(15),
-          child: Image.asset(
-            competitor.rank > 3 ? kImageVsBgRightOn : kImageVsBgLeftOn,
-            height: _sizeHeightImage,
-            width: size.width * 0.47,
-            fit: BoxFit.fill,
-          ),
-        ),
-        Container(
-          height: _sizeHeightImage,
-          width: size.width * 0.47,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+    bool isTradable = gameDetails.assetId1 == competitor.assetKey
+        ? gameDetails.isTradableAsset1
+        : gameDetails.isTradableAsset2;
+    return Container(
+      height: _sizeHeightImage,
+      width: size.width * 0.47,
+      decoration: BoxDecoration(color: color, borderRadius: borderRadius),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Container(
+              height: _sizeHeightImage * .28,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: NetworkImage(competitor.imgUrl),
+                    fit: BoxFit.fitHeight),
+              )),
+          Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              DottedBorder(
-                color: StColors.white,
-                child: const Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Text(
-                    StStrings.mktRschAssetVsAssetTeamImgText,
-                    style: StTextStyles.textFormField,
-                    textAlign: TextAlign.center,
-                  ),
+              Text(
+                competitor.topName,
+                style: StTextStyles.h4.copyWith(
+                  fontSize: 18,
+                  color: isTradable ? StColors.coolGray : StTextStyles.h4.color,
                 ),
               ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    competitor.topName,
-                    style: StTextStyles.h4.copyWith(
-                      fontSize: 18,
-                      color: gameStatus._isTradableGame
-                          ? StColors.coolGray
-                          : StTextStyles.h4.color,
-                    ),
-                  ),
-                  Text(
-                    competitor.subName,
-                    style: StTextStyles.textFormField.copyWith(
-                      color: gameStatus._isTradableGame
-                          ? StColors.coolGray
-                          : StTextStyles.textFormField.color,
-                    ),
-                  ),
-                ],
-              ),
-              Icon(
-                Icons.star_border,
-                color:
-                    gameStatus._isTradableGame ? StColors.gray : StColors.blue,
+              Text(
+                competitor.subName,
+                style: StTextStyles.textFormField.copyWith(
+                  color: isTradable
+                      ? StColors.coolGray
+                      : StTextStyles.textFormField.color,
+                ),
               ),
             ],
           ),
-        ),
-      ],
+          Icon(
+            Icons.star_border,
+            color: isTradable ? StColors.gray : StColors.blue,
+          ),
+        ],
+      ),
     );
   }
 }
+
+class RowControl extends StatelessWidget {
+  final AssetRowPropertyIfc competitor;
+  final ActiveGameDetails gameDetails;
+
+  const RowControl({
+    Key? key,
+    required this.competitor,
+    required this.gameDetails,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: (110 / 1.4) * 0.89,
+      padding: const EdgeInsets.only(
+        top: (110 / 2) * 0.08,
+        left: (110 / 1) * 0.08,
+      ),
+      decoration: BoxDecoration(
+        color: StColors.primaryDarkGray,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.5),
+            spreadRadius: 0,
+            blurRadius: 1,
+            offset: Offset(0, 1),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Flexible(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  competitor.topName + '  ' + competitor.sharesOwnedStr,
+                  style: StTextStyles.h4,
+                ),
+                Text(
+                  '+' +
+                      competitor.sharesOwnedStr +
+                      ' ' +
+                      '(' +
+                      competitor.positionGainLossStr.toString() +
+                      '%)',
+                  style: StTextStyles.p2,
+                  textAlign: TextAlign.left,
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: TradeButton(
+                competitor.assetStateUpdates, gameDetails.gameStatus),
+          ),
+        ],
+      ),
+    );
+  }
+}
+// class MktRschAsset extends StatelessWidget {
+//   //
+//   final AssetRowPropertyIfc competitor;
+//   final ActiveGameDetails gameStatus;
+
+//   //
+//   const MktRschAsset(
+//     this.competitor,
+//     this.gameStatus, {
+//     Key? key,
+//   }) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     // paste row widget code here
+//     final size = MediaQuery.of(context).size;
+//     const double _sizeHeightImage = 150;
+//     return Stack(
+//       children: [
+//         ClipRRect(
+//           borderRadius: BorderRadius.circular(15),
+//           child: Image.asset(
+//             competitor.rank > 3 ? kImageVsBgRightOn : kImageVsBgLeftOn,
+//             height: _sizeHeightImage,
+//             width: size.width * 0.47,
+//             fit: BoxFit.fill,
+//           ),
+//         ),
+//         SizedBox(
+//           height: _sizeHeightImage,
+//           width: size.width * 0.47,
+//           child: Column(
+//             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//             children: [
+//               DottedBorder(
+//                 color: StColors.white,
+//                 child: const Padding(
+//                   padding: EdgeInsets.all(10),
+//                   child: Text(
+//                     StStrings.mktRschAssetVsAssetTeamImgText,
+//                     style: StTextStyles.textFormField,
+//                     textAlign: TextAlign.center,
+//                   ),
+//                 ),
+//               ),
+//               Column(
+//                 mainAxisSize: MainAxisSize.min,
+//                 children: [
+//                   Text(
+//                     competitor.topName,
+//                     style: StTextStyles.h4.copyWith(
+//                       fontSize: 18,
+//                       color: gameStatus._isTradableGame
+//                           ? StColors.coolGray
+//                           : StTextStyles.h4.color,
+//                     ),
+//                   ),
+//                   Text(
+//                     competitor.subName,
+//                     style: StTextStyles.textFormField.copyWith(
+//                       color: gameStatus._isTradableGame
+//                           ? StColors.coolGray
+//                           : StTextStyles.textFormField.color,
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//               Icon(
+//                 Icons.star_border,
+//                 color:
+//                     gameStatus._isTradableGame ? StColors.gray : StColors.blue,
+//               ),
+//             ],
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }
 
 class ObjectRankRow extends StatelessWidget {
   //
@@ -509,7 +689,7 @@ class _PositionRankRow extends StatelessWidget {
         );
         break;
       default:
-        positionWidget = Container(
+        positionWidget = SizedBox(
           width: _sizeIconRank,
           child: Text(
             asset.rankStr,
@@ -637,7 +817,7 @@ class HoldingsAndValueRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${_sharesHeld.toString() + ' ' + StStrings.shares}',
+                  _sharesHeld.toString() + ' ' + StStrings.shares,
                   style: StTextStyles.h5,
                 ),
                 RichText(
@@ -686,7 +866,9 @@ class HoldingsAndValueRow extends StatelessWidget {
                   style: StTextStyles.h6.copyWith(),
                 ),
                 Text(
-                  '${_gainLoss.isNegative ? _gainLoss.toStringAsFixed(2) : '+' + _gainLoss.toStringAsFixed(2)}',
+                  _gainLoss.isNegative
+                      ? _gainLoss.toStringAsFixed(2)
+                      : '+' + _gainLoss.toStringAsFixed(2),
                   style: _gainLoss.isNegative
                       ? StTextStyles.moneyDeltaPositive.copyWith(
                           color: StColors.errorText,

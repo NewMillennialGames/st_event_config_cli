@@ -5,10 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 //
 import 'package:stclient/stclient.dart';
+
 //
 import 'package:st_ev_cfg/st_ev_cfg.dart';
+
 //
 import 'mock_data.dart';
 import 'config/colors.dart';
@@ -36,9 +39,9 @@ Future<void> readExampleEventConfig({String filename = cfgEmpl3}) async {
 }
 
 final _dynGameStateFamProv =
-    StateProviderFamily<ActiveGameDetails, String>((ref, gameKey) {
+    StateProviderFamily<ActiveGameDetails, StKey>((ref, gameKey) {
   // doesnt work;  just mock to get packages building
-  return ActiveGameDetails(gameKey, DateTime.now());
+  return ActiveGameDetails(gameKey.value, DateTime.now());
 });
 
 final _redrawUiFlagProvider = StateProvider<bool>((ref) => false);
@@ -49,10 +52,9 @@ void main() async {
   await readExampleEventConfig();
   runApp(
     ProviderScope(
-      child: Scoretrader(),
+      child: const Scoretrader(),
       overrides: [
-        currEventStateProvider
-            .overrideWithValue(StateController<Event>(Event())),
+        currEventProvider.overrideWithValue(Event()),
         tradeFlowProvider.overrideWithValue(TradeFlowForDemo()),
       ],
     ),
@@ -95,6 +97,7 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
   final Map<String, StateProvider<ActiveGameDetails>> _gameDetailsProviders =
       {};
   final List<String> gameKeys = [];
+
   //
   late GroupedTableDataMgr tvMgr;
 
@@ -148,7 +151,7 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
         (e) => TableviewDataRowTuple(
           e,
           e,
-          e.asset.gameKey,
+          GameKey(e.asset.gameKey),
           _dynGameStateFamProv,
         ),
       )
