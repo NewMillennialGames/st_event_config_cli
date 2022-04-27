@@ -276,39 +276,39 @@ class StButtonStyles {
   );
   static ButtonStyle getTokensOnTap = ElevatedButton.styleFrom(
     primary: StColors.blue,
-    padding: const EdgeInsets.symmetric(horizontal: 25),
+    padding: EdgeInsets.symmetric(horizontal: 25.w),
   );
   static ButtonStyle getTokensLessWidth = ElevatedButton.styleFrom(
     primary: StColors.defaultBackgroundGray,
     side: const BorderSide(
       color: StColors.blue,
     ),
-    padding: const EdgeInsets.symmetric(horizontal: 18),
+    padding: EdgeInsets.symmetric(horizontal: 18.w),
   );
   static ButtonStyle getTokensOnTapLessWith = ElevatedButton.styleFrom(
     primary: StColors.blue,
-    padding: const EdgeInsets.symmetric(horizontal: 18),
+    padding: EdgeInsets.symmetric(horizontal: 18.w),
   );
 
   static ButtonStyle tradePlayerMarketView = TextButton.styleFrom(
     backgroundColor: StColors.darkGreen,
-    padding: const EdgeInsets.symmetric(
-      vertical: 10,
-      horizontal: 15,
+    padding: EdgeInsets.symmetric(
+      vertical: 10.h,
+      horizontal: 15.w,
     ),
   );
   static ButtonStyle tradeTeamMarketLessWidthView = TextButton.styleFrom(
     backgroundColor: StColors.darkGreen,
-    padding: const EdgeInsets.symmetric(
-      vertical: 20,
-      horizontal: 10,
+    padding: EdgeInsets.symmetric(
+      vertical: 20.h,
+      horizontal: 10.w,
     ),
   );
   static ButtonStyle tradePlayerMarketLessWidthView = TextButton.styleFrom(
     backgroundColor: StColors.darkGreen,
-    padding: const EdgeInsets.symmetric(
-      vertical: 10,
-      horizontal: 10,
+    padding: EdgeInsets.symmetric(
+      vertical: 10.h,
+      horizontal: 10.w,
     ),
   );
   static ButtonStyle reviewOrder = ElevatedButton.styleFrom(

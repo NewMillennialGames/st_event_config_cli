@@ -182,8 +182,8 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
             height: 30,
           ),
           Container(
-            height: hasColumnFilters ? 500 : 740,
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+            height: hasColumnFilters ? 500.h : 740.h,
+            padding:  EdgeInsets.fromLTRB(20.w, 0, 20.w, 10.h),
             child: GroupedListView<TableviewDataRowTuple, GroupHeaderData>(
               elements: tvMgr.listData,
               groupBy: tvMgr.groupBy,
