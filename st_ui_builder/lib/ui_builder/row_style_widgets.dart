@@ -34,7 +34,7 @@ class AssetVsAssetRowMktView extends StBaseTvRow
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         AssetVsAssetHalfRow(comp1, agd, showRank, assetHoldingsSummary),
-        const SizedBox(height: UiSizes.spaceBtwnRows),
+        SizedBox(height: UiSizes.spaceBtwnRows),
         AssetVsAssetHalfRow(comp2, agd, showRank, assetHoldingsSummary),
       ],
     );
@@ -61,7 +61,7 @@ class AssetVsAssetRowLeaderBoardView extends StBaseTvRow with ShowsTwoAssets {
           competitor: comp1,
           showLeaderBoardIcon: true,
         ),
-        const SizedBox(height: UiSizes.spaceBtwnRows),
+        SizedBox(height: UiSizes.spaceBtwnRows),
         LeaderboardHalfRow(competitor: comp2)
       ],
     );
@@ -89,7 +89,7 @@ class DriverVsFieldRowLeaderBoardView extends StBaseTvRow with ShowsTwoAssets {
           showLeaderBoardIcon: true,
           isDriverVsField: true,
         ),
-        const SizedBox(height: UiSizes.spaceBtwnRows),
+        SizedBox(height: UiSizes.spaceBtwnRows),
         LeaderboardHalfRow(competitor: comp2, isDriverVsField: true)
       ],
     );
@@ -117,7 +117,7 @@ class TeamPlayerVsFieldLeaderBoardView extends StBaseTvRow with ShowsTwoAssets {
           showLeaderBoardIcon: true,
           isTeamPlayerVsField: true,
         ),
-        const SizedBox(height: UiSizes.spaceBtwnRows),
+        SizedBox(height: UiSizes.spaceBtwnRows),
         LeaderboardHalfRow(competitor: comp2, isTeamPlayerVsField: true)
       ],
     );
@@ -272,7 +272,7 @@ class AssetVsAssetRowMktResearchView extends StBaseTvRow with ShowsTwoAssets {
                           border: Border.all(color: StColors.black, width: 3),
                           shape: BoxShape.circle,
                           color: StColors.darkGreen),
-                      child: const Center(
+                      child: Center(
                           child: Text(
                         StStrings.versus,
                         style: StTextStyles.p2,
@@ -835,7 +835,7 @@ class TeamVsFieldRankedRowTest extends StBaseTvRow with ShowsOneAsset {
     ActiveGameDetails agd,
   ) {
     return Container(
-      height: 80,
+      height: 80.h,
       decoration: kRowBoxDecor,
       child: Row(
         // crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -845,13 +845,13 @@ class TeamVsFieldRankedRowTest extends StBaseTvRow with ShowsOneAsset {
             children: [
               const Text('Rank:'),
               Container(
-                height: 26,
-                width: 26,
+                height: 26.h,
+                width: 26.h,
                 color: Colors.amber,
                 child: Text(
                   comp1.rankStr,
-                  style: const TextStyle(
-                    fontSize: 28,
+                  style: TextStyle(
+                    fontSize: 28.sp,
                   ),
                 ),
               ),
@@ -1054,7 +1054,7 @@ class TeamVsFieldRankedRowTest extends StBaseTvRow with ShowsOneAsset {
 //                             'first.tokens',
 //                             style:
 //                                 StTextStyles.textNameMarketTicker.copyWith(
-//                               fontSize: 14,
+//                               fontSize: 14.sp,
 //                             ),
 //                           ),
 //                         ],

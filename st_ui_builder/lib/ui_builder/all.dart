@@ -3,6 +3,7 @@ library StUiController;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tuple/tuple.dart';
 import 'package:grouped_list/grouped_list.dart';
 // import 'package:dotted_border/dotted_border.dart';

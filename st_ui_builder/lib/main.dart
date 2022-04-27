@@ -3,6 +3,7 @@ import 'dart:math';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -52,7 +53,10 @@ void main() async {
   await readExampleEventConfig();
   runApp(
     ProviderScope(
-      child: const Scoretrader(),
+      child: ScreenUtilInit(
+        designSize: const Size(360, 630),
+        builder: (context) => const Scoretrader(),
+      ),
       overrides: [
         currEventProvider.overrideWithValue(Event()),
         tradeFlowProvider.overrideWithValue(TradeFlowForDemo()),
