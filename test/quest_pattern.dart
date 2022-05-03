@@ -9,6 +9,12 @@ class TestQuestRespGen implements QuestionPresenter {
 
   List<WhenQuestLike> _lookForResponseGenerators(Question quest) {
     //
+    if (!(quest is VisualRuleQuestion)) {
+      //
+      print('Warn: called _lookForResponseGenerators with top-level question');
+      return [];
+    }
+
     List<WhenQuestLike> lqm = [];
     for (WhenQuestLike qm in questionMatchers) {
       //
@@ -24,10 +30,24 @@ class TestQuestRespGen implements QuestionPresenter {
     List<WhenQuestLike> responseGenerators,
   ) {
     //
+    assert(quest is VisualRuleQuestion, 'bad argument');
+    VisualRuleQuestion vrq = quest as VisualRuleQuestion;
+
+    List<VisRuleQuestType> questTypes = vrq.questDef.visQuestTypes;
+
     String userAnswer = '';
-    // for (WhenQuestLike wql in responseGenerators) {
-    //   userAnswer += wql.answerFor((quest as VisualRuleQuestion).) + ', ';
-    // }
+    for (WhenQuestLike wql in responseGenerators) {
+      for (VisRuleQuestType qt in questTypes) {
+        var s = wql.answerFor(qt);
+        if (s.isNotEmpty) {
+          userAnswer += s + ',';
+        }
+      }
+    }
+    // remove any adjacent comma's
+    // userAnswer = userAnswer.replaceAll(',,,', ',');
+    // userAnswer = userAnswer.replaceAll(',,', ',');
+    // userAnswer = userAnswer.replaceAll(',,', ',');
     return userAnswer;
   }
 
