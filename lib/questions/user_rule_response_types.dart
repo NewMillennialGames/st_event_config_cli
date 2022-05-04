@@ -1,12 +1,7 @@
 part of QuestionsLib;
 
 /*
-  answers within regular Questions stored in UserResponse<AnsTyp>
-  answers within VisualRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseWrapperIfc>
-    extends Question<ConvertTyp, AnsTyp>
-    are stored in RuleResponseBase subclasses as below
-
-ConvertTyp is always a String or int in current CLI
+  data-types of all user answers must implement RuleResponseWrapperIfc Ifc
 */
 
 abstract class RuleResponseWrapperIfc {

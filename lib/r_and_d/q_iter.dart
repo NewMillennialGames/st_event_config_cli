@@ -1,6 +1,6 @@
 part of RandDee;
 
-typedef CastStrToAnswTypCallback<T> = T Function(UserChoiceCollection, String);
+typedef CastStrToAnswTypCallback<T> = T Function(QTypeWrapper, String);
 
 class UserChoice {
   //
@@ -13,8 +13,8 @@ class UserChoice {
   );
 }
 
-class UserChoiceCollection<T> {
-  //
+class UserChoiceCollection {
+  // <RespOutTyp>
   final List<UserChoice> answChoices;
   final int idxOfDefaultAnsw;
   final bool multiAllowed;
@@ -45,18 +45,21 @@ class UserChoiceCollection<T> {
   }
 
   bool get hasChoices => answChoices.length > 0;
+  Iterable<String> get choices => answChoices.map((e) => e.displayStr);
 }
 
-class SingleQuestIteration<RespOutTyp> {
+class SingleQuestIteration<RespOutTyp extends RuleResponseWrapperIfc> {
   /* describes each part of a question iteration
     including 
   */
+  final QTypeWrapper<RespOutTyp> qType;
   final String userPrompt;
-  final UserChoiceCollection<RespOutTyp> answChoiceCollection;
+  final UserChoiceCollection answChoiceCollection;
   final CastStrToAnswTypCallback<RespOutTyp> castUserRespCallbk;
   late final RespOutTyp userAnswChoice;
 
   SingleQuestIteration(
+    this.qType,
     this.userPrompt,
     this.answChoiceCollection,
     this.castUserRespCallbk,
@@ -65,14 +68,36 @@ class SingleQuestIteration<RespOutTyp> {
   // getters
   bool get hasChoices => answChoiceCollection.hasChoices;
   Type get answType => RespOutTyp;
+  VisRuleQuestType get visRuleQuestType =>
+      qType.visRuleQuestType ?? VisRuleQuestType.dialogStruct;
 
   RespOutTyp typedUserAnsw(String userResponses) {
-    this.userAnswChoice =
-        castUserRespCallbk(answChoiceCollection, userResponses);
+    this.userAnswChoice = castUserRespCallbk(qType, userResponses);
     return userAnswChoice;
   }
 
   AnswTypValMap get answerPayload => AnswTypValMap<RespOutTyp>(userAnswChoice);
+
+  String get questStr => 'QwC: ' + qType.ruleName + '\n' + _subQuests;
+  String get _subQuests => answChoiceCollection.toString();
+
+  String createFormattedQuestion(VisualRuleQuestion rQuest) {
+    String templ =
+        visRuleQuestType.questTemplByRuleType(rQuest.visRuleTypeForAreaOrSlot!);
+
+    String slotStr =
+        rQuest.slotInArea == null ? '' : rQuest.slotInArea!.name + ' on';
+    Map<String, String> templFillerVals = {
+      'slot': slotStr,
+      'area':
+          rQuest.screenWidgetArea?.name ?? 'error -- vis rule quest w no area?',
+      'screen': rQuest.appScreen.name,
+    };
+    templ = templ.formatWithMap(templFillerVals);
+    return templ;
+  }
+
+  Iterable<String> get choices => answChoiceCollection.choices;
 }
 
 class QuestIterDef {

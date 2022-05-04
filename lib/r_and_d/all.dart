@@ -12,6 +12,7 @@ import '../util/string_ext.dart';
 part 'quest.dart';
 part 'q_iter.dart';
 part 'ans_typ_val_map.dart';
+part 'q_type_wrapper.dart';
 
 /*
   attempt to create a new question structure

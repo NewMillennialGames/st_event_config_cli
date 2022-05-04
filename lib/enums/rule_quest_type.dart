@@ -10,6 +10,7 @@ enum VisRuleQuestType {
     collected to properly build a complete rule
   */
   // getTableName,
+  dialogStruct,
   selectDataFieldName,
   askCountOfSlotsToConfigure,
   specifySortAscending,
@@ -27,8 +28,8 @@ extension VisRuleQuestTypeExt1 on VisRuleQuestType {
     */
     String resp = '_unset';
     switch (this) {
-      // case VisRuleQuestType.getTableName:
-      //   return 'Select Table that contains required value';
+      case VisRuleQuestType.dialogStruct:
+        return 'Only relates to dialog structure;  not building real config rules';
       case VisRuleQuestType.selectDataFieldName:
         return 'Select field containg relevant value';
       case VisRuleQuestType.askCountOfSlotsToConfigure:
@@ -53,8 +54,8 @@ extension VisRuleQuestTypeExt1 on VisRuleQuestType {
 
   List<String> get choices {
     switch (this) {
-      // case VisRuleQuestType.getTableName:
-      //   return DbRowType.values.map((e) => e.name).toList();
+      case VisRuleQuestType.dialogStruct:
+        return [];
       case VisRuleQuestType.selectDataFieldName:
         return DbTableFieldName.values.map((e) => e.name).toList();
       case VisRuleQuestType.askCountOfSlotsToConfigure:

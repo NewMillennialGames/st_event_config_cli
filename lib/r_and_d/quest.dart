@@ -1,28 +1,35 @@
 part of RandDee;
 
 class Quest2 extends Equatable {
-  // largely a wrapper around qIterDef && qQuantify
+  /* 
+    cleaner and more testable replacement for:
+    Question<ConvertTyp, AnsTyp> and VisualRuleQuestion<>
+    largely a wrapper around qIterDef && qQuantify
+  */
   final QuestionQuantifier qQuantify;
   final QuestIterDef qIterDef;
-  final bool additiveToConfigRules;
+  final bool addsToUiFactoryConfigRules;
 
-// unique value for expedited matching
+// optional unique value for expedited matching
   String questionId = '';
-  // working state
+  // _currQuestion is active working state
   SingleQuestIteration? _currQuestion;
 
   Quest2(
     this.qQuantify,
     this.qIterDef, {
-    this.additiveToConfigRules = true,
+    this.addsToUiFactoryConfigRules = true,
     String? questId,
   }) : questionId = questId == null ? qQuantify.sortKey : questId {
+    // now select first question to be ready for display
     _currQuestion = qIterDef.nextPart;
   }
 
   // getters
   Type get expectedAnswerType => _currQuestion?.answType ?? int;
-  bool get isNotForOutput => !additiveToConfigRules;
+  bool get existsONLYToGenDialogStructure => !addsToUiFactoryConfigRules;
+  bool get isNotForOutput => !addsToUiFactoryConfigRules;
+
   Iterable<UserResponse> get allAnswers => qIterDef.allTypedAnswers;
   bool get isMultiPart => qIterDef.isMultiPart;
   SingleQuestIteration? get currQuestion => _currQuestion;
@@ -44,32 +51,8 @@ class Quest2 extends Equatable {
 
   // below controls how each question causes cascade creation of new questions
   bool get generatesNoNewQuestions => qQuantify.generatesNoNewQuestions;
-
-  bool get asksWhichScreensToConfig =>
-      qQuantify.appScreen == AppScreen.eventConfiguration &&
-      expectedAnswerType == List<AppScreen>;
-
-  bool get addsWhichAreaInSelectedScreenQuestions =>
-      qQuantify.addsWhichAreaInSelectedScreenQuestions &&
-      appScreen == AppScreen.eventConfiguration &&
-      expectedAnswerType == List<AppScreen>;
-
-  bool get addsWhichRulesForSelectedAreaQuestions =>
-      qQuantify.addsWhichRulesForSelectedAreaQuestions &&
-      expectedAnswerType == List<ScreenWidgetArea>;
-
-  bool get addsWhichSlotOfSelectedAreaQuestions =>
-      qQuantify.addsWhichSlotOfSelectedAreaQuestions &&
-      expectedAnswerType == List<ScreenWidgetArea>;
-
-  bool get addsWhichRulesForSlotsInArea =>
-      qQuantify.addsWhichRulesForSlotsInArea &&
-      expectedAnswerType == List<ScreenAreaWidgetSlot>;
-
   bool get addsRuleDetailQuestsForSlotOrArea =>
       qQuantify.addsRuleDetailQuestsForSlotOrArea;
-
-  // bool get addsBehavioralRuleQuestions => qQuantify.addsBehavioralRuleQuestions;
 
   String get sortKey => qQuantify.sortKey;
   // ask 2nd & 3rd position for (sort, group, filter)
@@ -79,9 +62,32 @@ class Quest2 extends Equatable {
   bool get appliesToClientConfiguration =>
       qIterDef.isRuleQuestion || appScreen == AppScreen.eventConfiguration;
 
+  // ARE BELOW needed with new approach??
+
+  // bool get asksWhichScreensToConfig =>
+  //     qQuantify.appScreen == AppScreen.eventConfiguration &&
+  //     expectedAnswerType is List<AppScreen>;
+
+  // bool get addsWhichAreaInSelectedScreenQuestions =>
+  //     qQuantify.addsWhichAreaInSelectedScreenQuestions &&
+  //     appScreen == AppScreen.eventConfiguration &&
+  //     expectedAnswerType is List<AppScreen>;
+
+  // bool get addsWhichRulesForSelectedAreaQuestions =>
+  //     qQuantify.addsWhichRulesForSelectedAreaQuestions &&
+  //     expectedAnswerType is List<ScreenWidgetArea>;
+
+  // bool get addsWhichSlotOfSelectedAreaQuestions =>
+  //     qQuantify.addsWhichSlotOfSelectedAreaQuestions &&
+  //     expectedAnswerType is List<ScreenWidgetArea>;
+
+  // bool get addsWhichRulesForSlotsInArea =>
+  //     qQuantify.addsWhichRulesForSlotsInArea &&
+  //     expectedAnswerType is List<ScreenAreaWidgetSlot>;
+
   void convertAndStoreUserResponse(String userResp) {
     //
-    _currQuestion?.typedUserAnsw(userResp);
+    RuleResponseWrapperIfc? typedResp = _currQuestion?.typedUserAnsw(userResp);
     if (_currQuestion == null) {
       print('Err:  answer $userResp sent with no current question');
     }
