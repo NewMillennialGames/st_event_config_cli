@@ -2,74 +2,30 @@ part of RandDee;
 
 typedef CastStrToAnswTypCallback<T> = T Function(QTypeWrapper, String);
 
-class UserChoice {
-  //
-  final String displayStr;
-  final String selectVal;
-
-  UserChoice(
-    this.displayStr,
-    this.selectVal,
-  );
-}
-
-class UserChoiceCollection {
-  // <RespOutTyp>
-  final List<UserChoice> answChoices;
-  final int idxOfDefaultAnsw;
-  final bool multiAllowed;
-
-  UserChoiceCollection(
-    this.answChoices, {
-    this.idxOfDefaultAnsw = 0,
-    this.multiAllowed = false,
-  });
-
-  factory UserChoiceCollection.fromList(
-    List<String> strChoices, {
-    int defaultIdx = 0,
-    bool multiAllowed = false,
-  }) {
-    //
-    List<UserChoice> answChoices = [];
-    int idx = 0;
-    strChoices.forEach((s) {
-      answChoices.add(UserChoice(s, '$idx'));
-      idx++;
-    });
-    return UserChoiceCollection(
-      answChoices,
-      idxOfDefaultAnsw: defaultIdx,
-      multiAllowed: multiAllowed,
-    );
-  }
-
-  bool get hasChoices => answChoices.length > 0;
-  Iterable<String> get choices => answChoices.map((e) => e.displayStr);
-}
-
 class SingleQuestIteration<RespOutTyp extends RuleResponseWrapperIfc> {
   /* describes each part of a question iteration
     including 
   */
+  // final VisualRuleType visRuleType;
   final QTypeWrapper<RespOutTyp> qType;
   final String userPrompt;
-  final UserChoiceCollection answChoiceCollection;
+  final VisQuestChoiceCollection answChoiceCollection;
   final CastStrToAnswTypCallback<RespOutTyp> castUserRespCallbk;
   late final RespOutTyp userAnswChoice;
 
   SingleQuestIteration(
-    this.qType,
     this.userPrompt,
     this.answChoiceCollection,
+    // this.visRuleType,
+    this.qType,
     this.castUserRespCallbk,
   );
 
   // getters
   bool get hasChoices => answChoiceCollection.hasChoices;
   Type get answType => RespOutTyp;
-  VisRuleQuestType get visRuleQuestType =>
-      qType.visRuleQuestType ?? VisRuleQuestType.dialogStruct;
+  VisualRuleType get visRuleType => qType.visRuleType;
+  List<QuestOption> get questsAndChoices => answChoiceCollection.answerOptions;
 
   RespOutTyp typedUserAnsw(String userResponses) {
     this.userAnswChoice = castUserRespCallbk(qType, userResponses);
@@ -78,26 +34,47 @@ class SingleQuestIteration<RespOutTyp extends RuleResponseWrapperIfc> {
 
   AnswTypValMap get answerPayload => AnswTypValMap<RespOutTyp>(userAnswChoice);
 
-  String get questStr => 'QwC: ' + qType.ruleName + '\n' + _subQuests;
   String get _subQuests => answChoiceCollection.toString();
-
-  String createFormattedQuestion(VisualRuleQuestion rQuest) {
-    String templ =
-        visRuleQuestType.questTemplByRuleType(rQuest.visRuleTypeForAreaOrSlot!);
+  String createFormattedQuestion(Quest2 quest) {
+    String templ = answChoiceCollection
+        .questTemplByRuleType(quest.visRuleTypeForAreaOrSlot!);
 
     String slotStr =
-        rQuest.slotInArea == null ? '' : rQuest.slotInArea!.name + ' on';
+        quest.slotInArea == null ? '' : quest.slotInArea!.name + ' on';
     Map<String, String> templFillerVals = {
       'slot': slotStr,
       'area':
-          rQuest.screenWidgetArea?.name ?? 'error -- vis rule quest w no area?',
-      'screen': rQuest.appScreen.name,
+          quest.screenWidgetArea?.name ?? 'error -- vis rule quest w no area?',
+      'screen': quest.appScreen.name,
     };
     templ = templ.formatWithMap(templFillerVals);
     return templ;
   }
 
   Iterable<String> get choices => answChoiceCollection.choices;
+
+  String get choiceName => visRuleType.friendlyName;
+  // String get questStr => 'QwC: ' + qType.visRuleName + '\n' + _subQuests;
+  String get questStr =>
+      'Rule: $choiceName:  SubQs: "${questsAndChoices.fold<String>(
+        '',
+        (ac, uc) => ac + '' + uc.selectVal + ', ' + uc.displayStr,
+      )}"';
+
+  VisRuleQuestType get visQuestType => answChoiceCollection.visRuleQuestType;
+
+  static List<VisRuleQuestWithChoices> getSubQuestionsAndChoiceOptions(
+    VisualRuleType rt,
+  ) {
+    return rt.requiredQuestions
+        .map(
+          (qrq) => VisRuleQuestWithChoices(
+            qrq,
+            qrq.choices,
+          ),
+        )
+        .toList();
+  }
 }
 
 class QuestIterDef {
@@ -134,6 +111,24 @@ class QuestIterDef {
     return questIterations[_curPartIdx];
   }
 
+  Iterable<VisRuleQuestType> get visQuestTypes =>
+      questIterations.map((e) => e.visQuestType);
+
   Iterable<AnswTypValMap> get allTypedAnswers =>
       questIterations.map((sqi) => sqi.answerPayload);
+
+  // factory QuestIterDef.fromRuleTyp(VisualRuleType ruleTyp) {
+  //   // use VisualRuleType to get list of sub-questions
+  //   // and their respective choice options
+  //   List<VisRuleQuestWithChoices> questsAndChoices =
+  //       getSubQuestionsAndChoiceOptions(ruleTyp);
+  //   return QuestIterDef._(ruleTyp, questsAndChoices);
+  // }
+
+  // factory QuestIterDef.fromGenOptions(PerQuestGenOptions genOpt) {
+  //   //
+  //   var qwc = VisRuleQuestWithChoices(
+  //       genOpt.ruleQuestType!, genOpt.answerChoices.toList());
+  //   return QuestIterDef._(genOpt.ruleType!, [qwc]);
+  // }
 }

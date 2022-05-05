@@ -7,6 +7,7 @@ const List<VisualRuleType> _unconfigurableFutureRules = [
 
 @JsonEnum()
 enum VisualRuleType {
+  topDialogStruct, // not a real rule at all.  question at higher level
   sortCfg, // global or within groups
   groupCfg, // how to group rows
   filterCfg, // to create filter menus
@@ -28,6 +29,8 @@ extension VisualRuleTypeExt1 on VisualRuleType {
     // return special types to contain answers
     // instance of the class that parses user response
     switch (this) {
+      case VisualRuleType.topDialogStruct:
+        return TvSortCfg();
       case VisualRuleType.sortCfg:
         return TvSortCfg();
       case VisualRuleType.groupCfg:
@@ -47,6 +50,8 @@ extension VisualRuleTypeExt1 on VisualRuleType {
     //
     String nm = this.name;
     switch (this) {
+      case VisualRuleType.topDialogStruct:
+        return nm + ' (configs cfg dialog)';
       case VisualRuleType.sortCfg:
         return nm + ' (config row order)';
       case VisualRuleType.groupCfg:
@@ -63,6 +68,8 @@ extension VisualRuleTypeExt1 on VisualRuleType {
 
   List<VisRuleQuestType> get requiredQuestions {
     switch (this) {
+      case VisualRuleType.topDialogStruct:
+        return [];
       case VisualRuleType.sortCfg:
         return [
           Vrq.askCountOfSlotsToConfigure,
@@ -98,50 +105,49 @@ extension BehaviorRuleTypeExt1 on BehaviorRuleType {
 
 }
 
+// String questionStr(
+//   AppScreen screen,
+//   ScreenWidgetArea screenArea,
+//   ScreenAreaWidgetSlot? slotInArea,
+// ) {
+//   bool isAreaScopedRule = slotInArea == null;
+//   final List<dynamic> valsDyn = [
+//     screen,
+//     screenArea,
+//     // valsDyn.length (of 2 or3) will inform depth of rule being created
+//     if (!isAreaScopedRule) slotInArea,
+//   ];
 
- // String questionStr(
-  //   AppScreen screen,
-  //   ScreenWidgetArea screenArea,
-  //   ScreenAreaWidgetSlot? slotInArea,
-  // ) {
-  //   bool isAreaScopedRule = slotInArea == null;
-  //   final List<dynamic> valsDyn = [
-  //     screen,
-  //     screenArea,
-  //     // valsDyn.length (of 2 or3) will inform depth of rule being created
-  //     if (!isAreaScopedRule) slotInArea,
-  //   ];
-
-  //   switch (this) {
-  //     case VisualRuleType.sort:
-  //       return RuleTemplStr.sort.makeRuleQuestionStr(
-  //         this,
-  //         isAreaScopedRule,
-  //         valsDyn,
-  //       );
-  //     case VisualRuleType.group:
-  //       return RuleTemplStr.group.makeRuleQuestionStr(
-  //         this,
-  //         isAreaScopedRule,
-  //         valsDyn,
-  //       );
-  //     case VisualRuleType.filter:
-  //       return RuleTemplStr.filter.makeRuleQuestionStr(
-  //         this,
-  //         isAreaScopedRule,
-  //         valsDyn,
-  //       );
-  //     case VisualRuleType.format:
-  //       return RuleTemplStr.format.makeRuleQuestionStr(
-  //         this,
-  //         isAreaScopedRule,
-  //         valsDyn,
-  //       );
-  //     case VisualRuleType.show:
-  //       return RuleTemplStr.show.makeRuleQuestionStr(
-  //         this,
-  //         isAreaScopedRule,
-  //         valsDyn,
-  //       );
-  //   }
-  // }
+//   switch (this) {
+//     case VisualRuleType.sort:
+//       return RuleTemplStr.sort.makeRuleQuestionStr(
+//         this,
+//         isAreaScopedRule,
+//         valsDyn,
+//       );
+//     case VisualRuleType.group:
+//       return RuleTemplStr.group.makeRuleQuestionStr(
+//         this,
+//         isAreaScopedRule,
+//         valsDyn,
+//       );
+//     case VisualRuleType.filter:
+//       return RuleTemplStr.filter.makeRuleQuestionStr(
+//         this,
+//         isAreaScopedRule,
+//         valsDyn,
+//       );
+//     case VisualRuleType.format:
+//       return RuleTemplStr.format.makeRuleQuestionStr(
+//         this,
+//         isAreaScopedRule,
+//         valsDyn,
+//       );
+//     case VisualRuleType.show:
+//       return RuleTemplStr.show.makeRuleQuestionStr(
+//         this,
+//         isAreaScopedRule,
+//         valsDyn,
+//       );
+//   }
+// }

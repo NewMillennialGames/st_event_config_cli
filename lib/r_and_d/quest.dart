@@ -4,6 +4,8 @@ class Quest2 extends Equatable {
   /* 
     cleaner and more testable replacement for:
     Question<ConvertTyp, AnsTyp> and VisualRuleQuestion<>
+    it combines those classes so there is no fundamental distinction
+    between
     largely a wrapper around qIterDef && qQuantify
   */
   final QuestionQuantifier qQuantify;

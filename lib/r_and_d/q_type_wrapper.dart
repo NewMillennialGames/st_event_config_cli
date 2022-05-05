@@ -6,18 +6,18 @@ class QTypeWrapper<RespOutTyp> {
     SingleQuestIteration
     and RespOutTyp tells you the kind of answer expected
   */
-  final bool topLevelQuest;
-  final VisRuleQuestType? visRuleQuestType;
+  final VisualRuleType visRuleType;
+
   // final BehRuleQuestType? behRuleQuestType;
 
   QTypeWrapper({
-    this.topLevelQuest = true,
-    this.visRuleQuestType = null,
+    this.visRuleType = VisualRuleType.topDialogStruct,
   });
 
-  String get ruleName => topLevelQuest
-      ? VisRuleQuestType.dialogStruct.name
-      : (visRuleQuestType != null
-          ? visRuleQuestType!.name
-          : 'behRuleQuestTypeName');
+  bool get isTopLevelQuest => visRuleType == VisualRuleType.topDialogStruct;
+
+  String get visRuleName => visRuleType.name;
+
+  // String get visRuleQuestName =>
+  //     visRuleQuestType?.name ?? 'behRuleQuestTypeName';
 }
