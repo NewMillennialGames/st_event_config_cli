@@ -9,7 +9,7 @@ enum VisRuleQuestType {
     in other words, HOW MANY pieces of data needs to be
     collected to properly build a complete rule
   */
-  // getTableName,
+  dialogStruct,
   selectDataFieldName,
   askCountOfSlotsToConfigure,
   specifySortAscending,
@@ -27,8 +27,8 @@ extension VisRuleQuestTypeExt1 on VisRuleQuestType {
     */
     String resp = '_unset';
     switch (this) {
-      // case VisRuleQuestType.dialogStruct:
-      //   return 'Only relates to dialog structure;  not building real config rules';
+      case VisRuleQuestType.dialogStruct:
+        return 'Only relates to dialog structure;  not building real config rules';
       case VisRuleQuestType.selectDataFieldName:
         return 'Select field containg relevant value';
       case VisRuleQuestType.askCountOfSlotsToConfigure:
@@ -53,8 +53,8 @@ extension VisRuleQuestTypeExt1 on VisRuleQuestType {
 
   List<String> get choices {
     switch (this) {
-      // case VisRuleQuestType.dialogStruct:
-      //   return [];
+      case VisRuleQuestType.dialogStruct:
+        return [];
       case VisRuleQuestType.selectDataFieldName:
         return DbTableFieldName.values.map((e) => e.name).toList();
       case VisRuleQuestType.askCountOfSlotsToConfigure:

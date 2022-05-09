@@ -1,36 +1,35 @@
 part of RandDee;
 
-typedef CastStrToAnswTypCallback<T> = T Function(QTypeWrapper, String);
-
 class SingleQuestIteration<RespOutTyp extends RuleResponseWrapperIfc> {
   /* describes each part of a question iteration
     including 
   */
   // final VisualRuleType visRuleType;
-  final QTypeWrapper<RespOutTyp> qType;
+  // final QTypeWrapper<RespOutTyp> qType;
   final String userPrompt;
   final VisQuestChoiceCollection answChoiceCollection;
-  final CastStrToAnswTypCallback<RespOutTyp> castUserRespCallbk;
+  // final CastStrToAnswTypCallback<RespOutTyp> castUserRespCallbk;
   late final RespOutTyp userAnswChoice;
 
   SingleQuestIteration(
     this.userPrompt,
     this.answChoiceCollection,
     // this.visRuleType,
-    this.qType,
-    this.castUserRespCallbk,
+    // this.qType,
+    // this.castUserRespCallbk,
   );
 
   // getters
   bool get hasChoices => answChoiceCollection.hasChoices;
   Type get answType => RespOutTyp;
-  VisualRuleType get visRuleType => qType.visRuleType;
+  // VisualRuleType get visRuleType => qType.visRuleType;
   List<QuestOption> get questsAndChoices => answChoiceCollection.answerOptions;
+  // CastStrToAnswTypCallback<RespOutTyp> get castUserRespCallbk
 
-  RespOutTyp typedUserAnsw(String userResponses) {
-    this.userAnswChoice = castUserRespCallbk(qType, userResponses);
-    return userAnswChoice;
-  }
+  // RespOutTyp typedUserAnsw(String userResponses) {
+  //   this.userAnswChoice = castUserRespCallbk(userResponses);
+  //   return userAnswChoice;
+  // }
 
   AnswTypValMap get answerPayload => AnswTypValMap<RespOutTyp>(userAnswChoice);
 
@@ -53,9 +52,9 @@ class SingleQuestIteration<RespOutTyp extends RuleResponseWrapperIfc> {
 
   Iterable<String> get choices => answChoiceCollection.choices;
 
-  String get choiceName => visRuleType.friendlyName;
+  // String get choiceName => visRuleType.friendlyName;
   // String get questStr => 'QwC: ' + qType.visRuleName + '\n' + _subQuests;
-  String get questStr =>
+  String questStr(String choiceName) =>
       'Rule: $choiceName:  SubQs: "${questsAndChoices.fold<String>(
         '',
         (ac, uc) => ac + '' + uc.selectVal + ', ' + uc.displayStr,

@@ -6,7 +6,7 @@ import '../questions/all.dart';
 import '../app_entity_enums/all.dart';
 import '../enums/all.dart';
 import '../util/string_ext.dart';
-import '../util/type_cast.dart';
+import '../scoretrader/all.dart';
 import '../dialog/all.dart';
 
 part 'quest.dart';
@@ -14,6 +14,7 @@ part 'q_iter.dart';
 part 'ans_typ_val_map.dart';
 part 'q_type_wrapper.dart';
 part 'q_choice_collection.dart';
+part 'q_intent.dart';
 
 /*
   attempt to create a new question structure

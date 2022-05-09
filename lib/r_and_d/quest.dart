@@ -27,6 +27,43 @@ class Quest2 extends Equatable {
     _currQuestion = qIterDef.nextPart;
   }
 
+  // factory constructors
+  factory Quest2.asTopLevel(
+    QuestionQuantifier qQuan,
+    String userPrompt,
+    List<String> choices,
+    Type ansTyp, {
+    bool acceptsMultiResponses = true,
+    bool isNotForOutput = true,
+    String questId = '',
+  }) {
+    var choiceColl = VisQuestChoiceCollection.fromList(
+        VisRuleQuestType.dialogStruct, choices);
+    // var respWrap = QTypeWrapper<RuleResponseBase>();
+
+    // var xxx = (QTypeWrapper qw, String s) {
+    //   var rrb = RuleResponseBase(VisualRuleType.filterCfg);
+    //   return rrb;
+    // };
+    List<SingleQuestIteration> q = [
+      SingleQuestIteration(
+        userPrompt,
+        choiceColl,
+      ),
+    ];
+    var qIterDef = QuestIterDef.fromList(q);
+    return Quest2(
+      qQuan,
+      qIterDef,
+      addsToUiFactoryConfigRules: !isNotForOutput,
+      questId: questId,
+    );
+  }
+
+  //   factory Quest2.asVisualRule() {
+
+  // }
+
   // getters
   Type get expectedAnswerType => _currQuestion?.answType ?? int;
   bool get existsONLYToGenDialogStructure => !addsToUiFactoryConfigRules;

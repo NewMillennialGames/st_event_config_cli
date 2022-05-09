@@ -7,12 +7,32 @@ the per-event UI in Scoretrader
 the final output of this dialog is a
 JSON configuration payload that
 describes how the App UI should behave
-for a given ST Event
+for a given specific ST Event
 
-these created rules are
-intended to radically customize the UI of 
+a parent project "st_ui_builder" interprets this JSON
+and these created rules can radically customize the UI of 
 the Scoretrader app, based on the current event
 selected by the user
+
+#### Hard problems that must be solved for this to work well
+
+Division between questions that exist ONLY to structure an efficient dialog
+and those that actually produce rule-output data (ui or behavioral config)
+for a specific screen, screen-area, or area-slot regions of the app
+
+Questions that receive SINGLE answer user-input
+And those that are multi-part  (sort on this field, plus descending vs ascending)
+
+Questions that are part of a group  (sort field #1, #2, #3)
+
+Variable output data-types (enum, class-instance, string, etc) between all possible answers
+
+Answers that generate either:
+ 1. more new questions
+ 2. cascading implicit answers to new or pending questions
+
+Casting answers to and from a JSON data structure
+
 
 #### Understanding organization of logic
 1. understand a generic app UI hierarchy:
@@ -23,6 +43,15 @@ selected by the user
     example: row style config-rule might go with listView  and  selected-filter-field might go with the drop list
 3.  run the CLI configurator & study the JSON output
 4.  then run the demo client (to see the factory switch out the row-style dynamically based on different JSON payloads)
+
+#### Building blocks of every question
+1. user-prompt(s)
+2. answer-choices
+3. specify output data-type (generic)
+4. cast user-answer (string) into output data-type
+5. targetting user-answer to some specific screen region
+6. 
+
 
 #### Structure and Design
 Questions (and rules created from answers) are nested into a hierarchy as follows:
@@ -151,7 +180,7 @@ defer this until after 1st build:
   or update them on the outside
 
 
-  Testing:
+  #### Testing requirements
 
   Things we need to test in the:
 
@@ -168,3 +197,32 @@ defer this until after 1st build:
   2) row-builder-function matches the app-screen for which it applies  (eg grouped or ungrouped)
   3) filtering logic also fits app-screen & config requirements
   4) sorting & grouping output matches json config
+
+
+#### For future
+1. id love to convert this into a DSL  (target this area of app with this type of rule governed by these cfg-args)
+2. 
+
+
+####  WIP notes
+
+  Latest structural thinking for abstract question & answer handling:
+
+Intent --
+    QIntentCfg describes the general purpose of the question
+    it also handles CONVERTING user-string-response into typed-answer
+
+Quantify --
+    QuestionQuantifier defines WHICH specific parts of the app
+    the question pertains to
+
+Specifics --
+    Quest2 wraps
+
+
+Creating a question requires specification for each category below:
+
+1. intent  (what does this question do in the overall scheme; includes cast to desired output type)
+2. prompt & answer details  (what to display for configurator  (CLI or web) user)
+3. target area  (which area of the app will answer apply to)
+4. response handling  (what to do with the user-answer)

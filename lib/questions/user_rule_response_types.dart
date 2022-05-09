@@ -13,6 +13,10 @@ abstract class RuleResponseWrapperIfc {
   // bool get gens2ndOr3rdSortGroupFilterQuests;
 }
 
+// extension IntExt1 on int  RuleResponseWrapperIfc {
+
+// }
+
 @JsonSerializable()
 class RuleResponseBase implements RuleResponseWrapperIfc {
   /* base class for user answers to rule questions
@@ -97,6 +101,34 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
     throw UnimplementedError('should only run on subclass');
   }
 }
+
+// typedef ConverterFunc<T> = T Function(String st);
+
+// class QuestResponseGeneric<T> extends RuleResponseBase {
+//   //
+//   final ConverterFunc<T> _confFunc;
+//   late T typedAnswer;
+
+//   QuestResponseGeneric(
+//     VisualRuleType vrt,
+//     this._confFunc,
+//   ) : super(vrt);
+//   //
+//   T inputToType(String s) => _confFunc(s);
+
+//   @override
+//   void castResponsesToAnswerTypes(Map<VisRuleQuestType, String> responses) {
+//     //
+//     this.userResponses = responses;
+//     _castToRealTypes();
+//   }
+
+//   @override
+//   void _castToRealTypes() {
+//     MapEntry me = userResponses.entries.first;
+//     this.typedAnswer = _confFunc(me.value);
+//   }
+// }
 
 // table row style
 @JsonSerializable()
