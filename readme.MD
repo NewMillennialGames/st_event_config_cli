@@ -119,10 +119,14 @@ there are currently TWO code-pathways to creating new questions
 
 Both are working fine but I may want to clean this up in the future
 
+to rebuild Freezed models in CLI:  
+    cd projectRoot (above lib/)
+    dart run build_runner build --delete-conflicting-outputs
+
+
 to rebuild JSON models:  
     cd projectRoot (above lib/)
     flutter pub run build_runner build --delete-conflicting-outputs
-
 
 ###### Examples:
 Questions:

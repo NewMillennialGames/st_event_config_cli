@@ -30,48 +30,48 @@ class Quest2 extends Equatable implements QuestionIfc {
   }
 
   // factory constructors
-  factory Quest2.asTopLevel(
-    QTargetQuantify qQuan,
-    String userPrompt,
-    List<String> choices,
-    Type ansTyp, {
-    bool acceptsMultiResponses = true,
-    bool isNotForOutput = true,
-    String questId = '',
-  }) {
-    var choiceColl = VisQuestChoiceCollection.fromList(
-        VisRuleQuestType.dialogStruct, choices);
-    // var respWrap = QTypeWrapper<RuleResponseBase>();
+  // factory Quest2.asTopLevel(
+  //   QTargetQuantify qQuan,
+  //   String userPrompt,
+  //   List<String> choices,
+  //   Type ansTyp, {
+  //   bool acceptsMultiResponses = true,
+  //   bool isNotForOutput = true,
+  //   String questId = '',
+  // }) {
+  //   var choiceColl = VisQuestChoiceCollection.fromList(
+  //       VisRuleQuestType.dialogStruct, choices);
+  //   // var respWrap = QTypeWrapper<RuleResponseBase>();
 
-    // var xxx = (QTypeWrapper qw, String s) {
-    //   var rrb = RuleResponseBase(VisualRuleType.filterCfg);
-    //   return rrb;
-    // };
-    List<QuestPromptInstance> q = [
-      QuestPromptInstance(
-        userPrompt,
-        choiceColl,
-      ),
-    ];
-    var qIterDef = QDefCollection.fromMap(q);
-    return Quest2(
-      qQuan,
-      qIterDef,
-      addsToUiFactoryConfigRules: !isNotForOutput,
-      questId: questId,
-    );
-  }
+  //   // var xxx = (QTypeWrapper qw, String s) {
+  //   //   var rrb = RuleResponseBase(VisualRuleType.filterCfg);
+  //   //   return rrb;
+  //   // };
+  //   List<QuestPromptInstance> q = [
+  //     QuestPromptInstance(
+  //       userPrompt,
+  //       choiceColl,
+  //     ),
+  //   ];
+  //   var qIterDef = QDefCollection.fromMap(q);
+  //   return Quest2(
+  //     qQuan,
+  //     qIterDef,
+  //     addsToUiFactoryConfigRules: !isNotForOutput,
+  //     questId: questId,
+  //   );
+  // }
 
   //   factory Quest2.asVisualRule() {
 
   // }
 
   // getters
-  Type get expectedAnswerType => _currQuestion?.answType ?? int;
+  // Type get expectedAnswerType => _currQuestion?.answType ?? int;
   bool get existsONLYToGenDialogStructure => !addsToUiFactoryConfigRules;
   bool get isNotForOutput => !addsToUiFactoryConfigRules;
 
-  Iterable<UserResponse> get allAnswers => qDefCollection.allTypedAnswers;
+  // Iterable<UserResponse> get allAnswers => qDefCollection.allTypedAnswers;
   bool get isMultiPart => qDefCollection.isMultiPart;
   QuestPromptInstance? get currQuestion => _currQuestion;
 
@@ -129,15 +129,15 @@ class Quest2 extends Equatable implements QuestionIfc {
 
   void convertAndStoreUserResponse(String userResp) {
     //
-    RuleResponseWrapperIfc? typedResp = _currQuestion?.typedUserAnsw(userResp);
-    if (_currQuestion == null) {
-      print('Err:  answer $userResp sent with no current question');
-    }
-    _currQuestion = qDefCollection.nextPart;
+    // RuleResponseWrapperIfc? typedResp = _currQuestion?.typedUserAnsw(userResp);
+    // if (_currQuestion == null) {
+    //   print('Err:  answer $userResp sent with no current question');
+    // }
+    // _currQuestion = qDefCollection.nextPart;
 
-    if (_currQuestion == null) {
-      print('Quest def $questionId is done!! ');
-    }
+    // if (_currQuestion == null) {
+    //   print('Quest def $questionId is done!! ');
+    // }
   }
 
   Question fromExisting(
@@ -178,6 +178,5 @@ class Quest2 extends Equatable implements QuestionIfc {
   String? get nextUserPrompt => qDefCollection.nextPart?.userPrompt;
 
   @override
-  SubmitUserResponseFunc get storeUserReponse =>
-      qDefCollection.storeUserReponse;
+  SubmitUserResponseFunc get storeUserReponse => throw UnimplementedError('');
 }

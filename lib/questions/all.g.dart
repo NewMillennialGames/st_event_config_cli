@@ -22,14 +22,17 @@ Map<String, dynamic> _$RuleResponseBaseToJson(RuleResponseBase instance) =>
     };
 
 const _$VisualRuleTypeEnumMap = {
+  VisualRuleType.topDialogStruct: 'topDialogStruct',
   VisualRuleType.sortCfg: 'sortCfg',
   VisualRuleType.groupCfg: 'groupCfg',
   VisualRuleType.filterCfg: 'filterCfg',
   VisualRuleType.styleOrFormat: 'styleOrFormat',
   VisualRuleType.showOrHide: 'showOrHide',
+  VisualRuleType.themePreference: 'themePreference',
 };
 
 const _$VisRuleQuestTypeEnumMap = {
+  VisRuleQuestType.dialogStruct: 'dialogStruct',
   VisRuleQuestType.selectDataFieldName: 'selectDataFieldName',
   VisRuleQuestType.askCountOfSlotsToConfigure: 'askCountOfSlotsToConfigure',
   VisRuleQuestType.specifySortAscending: 'specifySortAscending',

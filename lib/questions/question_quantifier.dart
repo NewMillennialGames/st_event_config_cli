@@ -1,7 +1,7 @@
 part of QuestionsLib;
 
 @freezed
-class QTargetQuantify extends Equatable with _$QuestionQuantifier {
+class QTargetQuantify extends Equatable with _$QTargetQuantify {
   /* describes what a question is about
     it's purpose, behavior and output
     made it equatable to enable searching Q-list
@@ -18,7 +18,7 @@ class QTargetQuantify extends Equatable with _$QuestionQuantifier {
     ScreenAreaWidgetSlot? slotInArea,
     VisualRuleType? visRuleTypeForAreaOrSlot,
     BehaviorRuleType? behRuleTypeForAreaOrSlot,
-  ) = _QuestionQuantifier;
+  ) = _QTargetQuantify;
 
   String get sortKey {
     // makes equatable work for searching & sorting question list
@@ -79,6 +79,7 @@ class QTargetQuantify extends Equatable with _$QuestionQuantifier {
       this answer will build "which area" questions
     */
     return QTargetQuantify(
+      QIntentCfg.eventLevel(),
       responseAddsWhichAreaQuestions
           ? UserResponseCascadePatternEm.addsWhichAreaInSelectedScreenQuestions
           : UserResponseCascadePatternEm.noCascade,
@@ -101,6 +102,7 @@ class QTargetQuantify extends Equatable with _$QuestionQuantifier {
       this answer will build "which rule for area" questions
     */
     return QTargetQuantify(
+      QIntentCfg.eventLevel(),
       responseAddsWhichRuleAndSlotQuestions
           ? UserResponseCascadePatternEm.addsWhichRulesForSelectedAreaQuestions
           : UserResponseCascadePatternEm.noCascade,
@@ -130,6 +132,7 @@ class QTargetQuantify extends Equatable with _$QuestionQuantifier {
       this answer will build "rule detail ?? for area" questions
     */
     return QTargetQuantify(
+      QIntentCfg.areaLevelRules(ruleType),
       responseAddsRuleDetailQuests
           ? UserResponseCascadePatternEm.addsRuleDetailQuestsForSlotOrArea
           : UserResponseCascadePatternEm.noCascade,
@@ -153,6 +156,7 @@ class QTargetQuantify extends Equatable with _$QuestionQuantifier {
       this answer will build "rule detail ?? for slot" questions
     */
     return QTargetQuantify(
+      QIntentCfg.areaLevelSlots(),
       responseAddsWhichRuleQuestions
           ? UserResponseCascadePatternEm.addsWhichRulesForSlotsInArea
           : UserResponseCascadePatternEm.noCascade,
@@ -177,6 +181,7 @@ class QTargetQuantify extends Equatable with _$QuestionQuantifier {
       this answer will build "rule detail ?? for slot" questions
     */
     return QTargetQuantify(
+      QIntentCfg.ruleLevel(),
       responseAddsRuleDetailQuestions
           ? UserResponseCascadePatternEm.addsRuleDetailQuestsForSlotOrArea
           : UserResponseCascadePatternEm.noCascade,
@@ -199,6 +204,8 @@ class QTargetQuantify extends Equatable with _$QuestionQuantifier {
   }) {
     bool isVisual = visRuleTypeForSlotInArea != null;
     return QTargetQuantify(
+      QIntentCfg.ruleDetailMultiResponse(
+          visRuleTypeForSlotInArea ?? VisualRuleType.topDialogStruct),
       addsMoreRuleQuestions
           ? (isVisual
               ? UserResponseCascadePatternEm.addsRuleDetailQuestsForSlotOrArea

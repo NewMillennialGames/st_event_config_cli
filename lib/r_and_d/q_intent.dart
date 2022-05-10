@@ -4,7 +4,7 @@ part of RandDee;
 
 
 */
-
+@JsonEnum()
 enum QIntent {
   infoOrCliCfg, // behavior of CLI or name of output file
   structural, // governs future questions
@@ -12,21 +12,6 @@ enum QIntent {
   behavioral, // ceates behavioral rules
   diagnostic, // for debugging or testing purposes
 }
-
-// enum QVisSubtype {
-//   // types of visual rules
-//   sort,
-//   group,
-//   filter,
-//   formatOrStyle,
-//   showOrHide,
-//   themePreference,
-// }
-
-// enum QVBehSubtype {
-//   // behavioral types
-//   notifyHandling,
-// }
 
 class QIntentWrapper {
   QIntent intent;
@@ -47,9 +32,30 @@ class QIntentWrapper {
     );
   }
 
-  factory QIntentWrapper.visRules(VisualRuleType ruleSubtype) {
-    return QIntentWrapper(QIntent.visual, visSubtype: ruleSubtype);
+  factory QIntentWrapper.screenLevel(VisualRuleType visRuleSubtype) {
+    return QIntentWrapper(QIntent.visual, visSubtype: visRuleSubtype);
   }
+
+  factory QIntentWrapper.areaLevelRules(VisualRuleType visRuleSubtype) {
+    return QIntentWrapper(QIntent.visual, visSubtype: visRuleSubtype);
+  }
+
+  factory QIntentWrapper.areaLevelSlots(VisualRuleType visRuleSubtype) {
+    return QIntentWrapper(QIntent.visual, visSubtype: visRuleSubtype);
+  }
+
+  factory QIntentWrapper.ruleLevel(VisualRuleType visRuleSubtype) {
+    return QIntentWrapper(QIntent.visual, visSubtype: visRuleSubtype);
+  }
+
+  factory QIntentWrapper.ruleDetailMultiResponse(
+      VisualRuleType visRuleSubtype) {
+    return QIntentWrapper(QIntent.visual, visSubtype: visRuleSubtype);
+  }
+
+  //   factory QIntentWrapper.visRules(VisualRuleType visRuleSubtype) {
+  //   return QIntentWrapper(QIntent.visual, visSubtype: visRuleSubtype);
+  // }
 
   // getters
   bool get isDialogLevel => !isVisual && !isBehavioral;
@@ -57,6 +63,7 @@ class QIntentWrapper {
   bool get isBehavioral => behSubtype != null;
 }
 
+// @JsonEnum()
 enum QTargetLevel {
   /* what level or scope is this question
     operating on
@@ -67,15 +74,15 @@ enum QTargetLevel {
   slotRule,
 }
 
-class QIntentCfg {
+@freezed
+class QIntentCfg with _$QIntentCfg {
   //
-  final QIntentWrapper intentWrapper;
-  final QTargetLevel tLevel;
+  factory QIntentCfg(
+    QIntentWrapper intentWrapper,
+    QTargetLevel tLevel,
+  ) = _QIntentCfg;
 
-  QIntentCfg._(
-    this.intentWrapper,
-    this.tLevel,
-  );
+  QIntentCfg._();
 
   // getters
   bool get isDialogLevel => intentWrapper.isDialogLevel;
@@ -85,55 +92,59 @@ class QIntentCfg {
   factory QIntentCfg.eventLevel({
     bool infoOrCfg = false,
   }) {
-    return QIntentCfg._(
+    return QIntentCfg(
       QIntentWrapper.eventLevel(),
       QTargetLevel.notAnAppRule,
     );
   }
 
-  factory QIntentCfg.screenLevel() {
-    return QIntentCfg._(
-      QIntentWrapper.screenLevel(),
+  factory QIntentCfg.screenLevel(VisualRuleType vrt) {
+    return QIntentCfg(
+      QIntentWrapper.screenLevel(vrt),
       QTargetLevel.screenRule,
     );
   }
 
-  factory QIntentCfg.areaLevelRules({
+  factory QIntentCfg.areaLevelRules(
+    VisualRuleType vrt, {
     bool infoOrCfg = false,
   }) {
     //
-    return QIntentCfg._(
-      QIntentWrapper.areaLevelRules(),
+    return QIntentCfg(
+      QIntentWrapper.areaLevelRules(vrt),
       QTargetLevel.notAnAppRule,
     );
   }
 
-  factory QIntentCfg.areaLevelSlots({
+  factory QIntentCfg.areaLevelSlots(
+    VisualRuleType vrt, {
     bool infoOrCfg = false,
   }) {
     //
-    return QIntentCfg._(
-      QIntentWrapper.areaLevelSlots(),
+    return QIntentCfg(
+      QIntentWrapper.areaLevelSlots(vrt),
       QTargetLevel.notAnAppRule,
     );
   }
 
-  factory QIntentCfg.ruleLevel({
+  factory QIntentCfg.ruleLevel(
+    VisualRuleType vrt, {
     bool infoOrCfg = false,
   }) {
     //
-    return QIntentCfg._(
-      QIntentWrapper.ruleLevel(),
+    return QIntentCfg(
+      QIntentWrapper.ruleLevel(vrt),
       QTargetLevel.notAnAppRule,
     );
   }
 
-  factory QIntentCfg.ruleDetailMultiResponse({
+  factory QIntentCfg.ruleDetailMultiResponse(
+    VisualRuleType vrt, {
     bool infoOrCfg = false,
   }) {
     //
-    return QIntentCfg._(
-      QIntentWrapper.ruleDetailMultiResponse(),
+    return QIntentCfg(
+      QIntentWrapper.ruleDetailMultiResponse(vrt),
       QTargetLevel.notAnAppRule,
     );
   }

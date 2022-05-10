@@ -15,17 +15,19 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-class _$QuestionQuantifierTearOff {
-  const _$QuestionQuantifierTearOff();
+class _$QTargetQuantifyTearOff {
+  const _$QTargetQuantifyTearOff();
 
-  _QuestionQuantifier call(
+  _QTargetQuantify call(
+      QIntentCfg intentCfg,
       UserResponseCascadePatternEm cascadeType,
       AppScreen appScreen,
       ScreenWidgetArea? screenWidgetArea,
       ScreenAreaWidgetSlot? slotInArea,
       VisualRuleType? visRuleTypeForAreaOrSlot,
       BehaviorRuleType? behRuleTypeForAreaOrSlot) {
-    return _QuestionQuantifier(
+    return _QTargetQuantify(
+      intentCfg,
       cascadeType,
       appScreen,
       screenWidgetArea,
@@ -37,10 +39,11 @@ class _$QuestionQuantifierTearOff {
 }
 
 /// @nodoc
-const $QuestionQuantifier = _$QuestionQuantifierTearOff();
+const $QTargetQuantify = _$QTargetQuantifyTearOff();
 
 /// @nodoc
-mixin _$QuestionQuantifier {
+mixin _$QTargetQuantify {
+  QIntentCfg get intentCfg => throw _privateConstructorUsedError;
   UserResponseCascadePatternEm get cascadeType =>
       throw _privateConstructorUsedError;
   AppScreen get appScreen => throw _privateConstructorUsedError;
@@ -52,28 +55,31 @@ mixin _$QuestionQuantifier {
       throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $QuestionQuantifierCopyWith<QTargetQuantify> get copyWith =>
+  $QTargetQuantifyCopyWith<QTargetQuantify> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $QuestionQuantifierCopyWith<$Res> {
-  factory $QuestionQuantifierCopyWith(
+abstract class $QTargetQuantifyCopyWith<$Res> {
+  factory $QTargetQuantifyCopyWith(
           QTargetQuantify value, $Res Function(QTargetQuantify) then) =
-      _$QuestionQuantifierCopyWithImpl<$Res>;
+      _$QTargetQuantifyCopyWithImpl<$Res>;
   $Res call(
-      {UserResponseCascadePatternEm cascadeType,
+      {QIntentCfg intentCfg,
+      UserResponseCascadePatternEm cascadeType,
       AppScreen appScreen,
       ScreenWidgetArea? screenWidgetArea,
       ScreenAreaWidgetSlot? slotInArea,
       VisualRuleType? visRuleTypeForAreaOrSlot,
       BehaviorRuleType? behRuleTypeForAreaOrSlot});
+
+  $QIntentCfgCopyWith<$Res> get intentCfg;
 }
 
 /// @nodoc
-class _$QuestionQuantifierCopyWithImpl<$Res>
-    implements $QuestionQuantifierCopyWith<$Res> {
-  _$QuestionQuantifierCopyWithImpl(this._value, this._then);
+class _$QTargetQuantifyCopyWithImpl<$Res>
+    implements $QTargetQuantifyCopyWith<$Res> {
+  _$QTargetQuantifyCopyWithImpl(this._value, this._then);
 
   final QTargetQuantify _value;
   // ignore: unused_field
@@ -81,6 +87,7 @@ class _$QuestionQuantifierCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? intentCfg = freezed,
     Object? cascadeType = freezed,
     Object? appScreen = freezed,
     Object? screenWidgetArea = freezed,
@@ -89,6 +96,10 @@ class _$QuestionQuantifierCopyWithImpl<$Res>
     Object? behRuleTypeForAreaOrSlot = freezed,
   }) {
     return _then(_value.copyWith(
+      intentCfg: intentCfg == freezed
+          ? _value.intentCfg
+          : intentCfg // ignore: cast_nullable_to_non_nullable
+              as QIntentCfg,
       cascadeType: cascadeType == freezed
           ? _value.cascadeType
           : cascadeType // ignore: cast_nullable_to_non_nullable
@@ -115,37 +126,49 @@ class _$QuestionQuantifierCopyWithImpl<$Res>
               as BehaviorRuleType?,
     ));
   }
+
+  @override
+  $QIntentCfgCopyWith<$Res> get intentCfg {
+    return $QIntentCfgCopyWith<$Res>(_value.intentCfg, (value) {
+      return _then(_value.copyWith(intentCfg: value));
+    });
+  }
 }
 
 /// @nodoc
-abstract class _$QuestionQuantifierCopyWith<$Res>
-    implements $QuestionQuantifierCopyWith<$Res> {
-  factory _$QuestionQuantifierCopyWith(
-          _QuestionQuantifier value, $Res Function(_QuestionQuantifier) then) =
-      __$QuestionQuantifierCopyWithImpl<$Res>;
+abstract class _$QTargetQuantifyCopyWith<$Res>
+    implements $QTargetQuantifyCopyWith<$Res> {
+  factory _$QTargetQuantifyCopyWith(
+          _QTargetQuantify value, $Res Function(_QTargetQuantify) then) =
+      __$QTargetQuantifyCopyWithImpl<$Res>;
   @override
   $Res call(
-      {UserResponseCascadePatternEm cascadeType,
+      {QIntentCfg intentCfg,
+      UserResponseCascadePatternEm cascadeType,
       AppScreen appScreen,
       ScreenWidgetArea? screenWidgetArea,
       ScreenAreaWidgetSlot? slotInArea,
       VisualRuleType? visRuleTypeForAreaOrSlot,
       BehaviorRuleType? behRuleTypeForAreaOrSlot});
+
+  @override
+  $QIntentCfgCopyWith<$Res> get intentCfg;
 }
 
 /// @nodoc
-class __$QuestionQuantifierCopyWithImpl<$Res>
-    extends _$QuestionQuantifierCopyWithImpl<$Res>
-    implements _$QuestionQuantifierCopyWith<$Res> {
-  __$QuestionQuantifierCopyWithImpl(
-      _QuestionQuantifier _value, $Res Function(_QuestionQuantifier) _then)
-      : super(_value, (v) => _then(v as _QuestionQuantifier));
+class __$QTargetQuantifyCopyWithImpl<$Res>
+    extends _$QTargetQuantifyCopyWithImpl<$Res>
+    implements _$QTargetQuantifyCopyWith<$Res> {
+  __$QTargetQuantifyCopyWithImpl(
+      _QTargetQuantify _value, $Res Function(_QTargetQuantify) _then)
+      : super(_value, (v) => _then(v as _QTargetQuantify));
 
   @override
-  _QuestionQuantifier get _value => super._value as _QuestionQuantifier;
+  _QTargetQuantify get _value => super._value as _QTargetQuantify;
 
   @override
   $Res call({
+    Object? intentCfg = freezed,
     Object? cascadeType = freezed,
     Object? appScreen = freezed,
     Object? screenWidgetArea = freezed,
@@ -153,7 +176,11 @@ class __$QuestionQuantifierCopyWithImpl<$Res>
     Object? visRuleTypeForAreaOrSlot = freezed,
     Object? behRuleTypeForAreaOrSlot = freezed,
   }) {
-    return _then(_QuestionQuantifier(
+    return _then(_QTargetQuantify(
+      intentCfg == freezed
+          ? _value.intentCfg
+          : intentCfg // ignore: cast_nullable_to_non_nullable
+              as QIntentCfg,
       cascadeType == freezed
           ? _value.cascadeType
           : cascadeType // ignore: cast_nullable_to_non_nullable
@@ -184,8 +211,9 @@ class __$QuestionQuantifierCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_QuestionQuantifier extends _QuestionQuantifier {
-  _$_QuestionQuantifier(
+class _$_QTargetQuantify extends _QTargetQuantify {
+  _$_QTargetQuantify(
+      this.intentCfg,
       this.cascadeType,
       this.appScreen,
       this.screenWidgetArea,
@@ -194,6 +222,8 @@ class _$_QuestionQuantifier extends _QuestionQuantifier {
       this.behRuleTypeForAreaOrSlot)
       : super._();
 
+  @override
+  final QIntentCfg intentCfg;
   @override
   final UserResponseCascadePatternEm cascadeType;
   @override
@@ -209,20 +239,23 @@ class _$_QuestionQuantifier extends _QuestionQuantifier {
 
   @JsonKey(ignore: true)
   @override
-  _$QuestionQuantifierCopyWith<_QuestionQuantifier> get copyWith =>
-      __$QuestionQuantifierCopyWithImpl<_QuestionQuantifier>(this, _$identity);
+  _$QTargetQuantifyCopyWith<_QTargetQuantify> get copyWith =>
+      __$QTargetQuantifyCopyWithImpl<_QTargetQuantify>(this, _$identity);
 }
 
-abstract class _QuestionQuantifier extends QTargetQuantify {
-  factory _QuestionQuantifier(
+abstract class _QTargetQuantify extends QTargetQuantify {
+  factory _QTargetQuantify(
+      QIntentCfg intentCfg,
       UserResponseCascadePatternEm cascadeType,
       AppScreen appScreen,
       ScreenWidgetArea? screenWidgetArea,
       ScreenAreaWidgetSlot? slotInArea,
       VisualRuleType? visRuleTypeForAreaOrSlot,
-      BehaviorRuleType? behRuleTypeForAreaOrSlot) = _$_QuestionQuantifier;
-  _QuestionQuantifier._() : super._();
+      BehaviorRuleType? behRuleTypeForAreaOrSlot) = _$_QTargetQuantify;
+  _QTargetQuantify._() : super._();
 
+  @override
+  QIntentCfg get intentCfg;
   @override
   UserResponseCascadePatternEm get cascadeType;
   @override
@@ -237,6 +270,6 @@ abstract class _QuestionQuantifier extends QTargetQuantify {
   BehaviorRuleType? get behRuleTypeForAreaOrSlot;
   @override
   @JsonKey(ignore: true)
-  _$QuestionQuantifierCopyWith<_QuestionQuantifier> get copyWith =>
+  _$QTargetQuantifyCopyWith<_QTargetQuantify> get copyWith =>
       throw _privateConstructorUsedError;
 }

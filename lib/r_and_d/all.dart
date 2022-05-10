@@ -1,6 +1,7 @@
 library RandDee; // R and D -- research and development
 
 import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 //
 import '../questions/all.dart';
 import '../app_entity_enums/all.dart';
@@ -9,6 +10,7 @@ import '../util/string_ext.dart';
 import '../scoretrader/all.dart';
 import '../interfaces/question.dart';
 
+part 'all.freezed.dart';
 part 'quest.dart';
 part 'q_collection.dart';
 part 'q_prompt_instance.dart';

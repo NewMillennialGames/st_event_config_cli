@@ -27,7 +27,7 @@ class QFactory {
     QIntentWrapper intentWrapper,
     QTargetLevel level,
   ) {
-    intent = QIntentCfg._(intentWrapper, level);
+    intent = QIntentCfg(intentWrapper, level);
     return this;
   }
 
