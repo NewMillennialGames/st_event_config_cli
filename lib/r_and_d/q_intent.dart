@@ -1,5 +1,10 @@
 part of RandDee;
 
+/*
+
+
+*/
+
 enum QIntent {
   infoOrCliCfg, // behavior of CLI or name of output file
   structural, // governs future questions
@@ -8,25 +13,25 @@ enum QIntent {
   diagnostic, // for debugging or testing purposes
 }
 
-enum QVisSubtype {
-  // types of visual rules
-  sort,
-  group,
-  filter,
-  formatOrStyle,
-  showOrHide,
-  themePreference,
-}
+// enum QVisSubtype {
+//   // types of visual rules
+//   sort,
+//   group,
+//   filter,
+//   formatOrStyle,
+//   showOrHide,
+//   themePreference,
+// }
 
-enum QVBehSubtype {
-  // behavioral types
-  notifyHandling,
-}
+// enum QVBehSubtype {
+//   // behavioral types
+//   notifyHandling,
+// }
 
 class QIntentWrapper {
   QIntent intent;
-  QVisSubtype? visSubtype;
-  QVBehSubtype? behSubtype;
+  VisualRuleType? visSubtype;
+  BehaviorRuleType? behSubtype;
 
   QIntentWrapper(
     this.intent, {
@@ -34,7 +39,7 @@ class QIntentWrapper {
     this.behSubtype,
   });
 
-  factory QIntentWrapper.topLevel({
+  factory QIntentWrapper.eventLevel({
     bool infoOrCfg = true,
   }) {
     return QIntentWrapper(
@@ -42,7 +47,7 @@ class QIntentWrapper {
     );
   }
 
-  factory QIntentWrapper.visRules(QVisSubtype ruleSubtype) {
+  factory QIntentWrapper.visRules(VisualRuleType ruleSubtype) {
     return QIntentWrapper(QIntent.visual, visSubtype: ruleSubtype);
   }
 
@@ -50,8 +55,6 @@ class QIntentWrapper {
   bool get isDialogLevel => !isVisual && !isBehavioral;
   bool get isVisual => visSubtype != null;
   bool get isBehavioral => behSubtype != null;
-
-  // List<VisRuleQuestType> get questsToAsk => isVisual ? [] : [];
 }
 
 enum QTargetLevel {
@@ -64,16 +67,14 @@ enum QTargetLevel {
   slotRule,
 }
 
-class QIntentCfg<AnswType> {
+class QIntentCfg {
   //
   final QIntentWrapper intentWrapper;
-  final QTargetLevel level;
-  final CastStrToAnswTypCallback<AnswType> answerConverter;
+  final QTargetLevel tLevel;
 
   QIntentCfg._(
     this.intentWrapper,
-    this.level,
-    this.answerConverter,
+    this.tLevel,
   );
 
   // getters
@@ -81,26 +82,59 @@ class QIntentCfg<AnswType> {
   bool get isVisual => intentWrapper.isVisual;
   bool get isBehavioral => intentWrapper.isBehavioral;
 
-  factory QIntentCfg.topLevel(
-      CastStrToAnswTypCallback<AnswType> answerConverter,
-      {bool infoOrCfg = false}) {
+  factory QIntentCfg.eventLevel({
+    bool infoOrCfg = false,
+  }) {
+    return QIntentCfg._(
+      QIntentWrapper.eventLevel(),
+      QTargetLevel.notAnAppRule,
+    );
+  }
+
+  factory QIntentCfg.screenLevel() {
+    return QIntentCfg._(
+      QIntentWrapper.screenLevel(),
+      QTargetLevel.screenRule,
+    );
+  }
+
+  factory QIntentCfg.areaLevelRules({
+    bool infoOrCfg = false,
+  }) {
     //
     return QIntentCfg._(
-      QIntentWrapper.topLevel(),
+      QIntentWrapper.areaLevelRules(),
       QTargetLevel.notAnAppRule,
-      answerConverter,
+    );
+  }
+
+  factory QIntentCfg.areaLevelSlots({
+    bool infoOrCfg = false,
+  }) {
+    //
+    return QIntentCfg._(
+      QIntentWrapper.areaLevelSlots(),
+      QTargetLevel.notAnAppRule,
+    );
+  }
+
+  factory QIntentCfg.ruleLevel({
+    bool infoOrCfg = false,
+  }) {
+    //
+    return QIntentCfg._(
+      QIntentWrapper.ruleLevel(),
+      QTargetLevel.notAnAppRule,
+    );
+  }
+
+  factory QIntentCfg.ruleDetailMultiResponse({
+    bool infoOrCfg = false,
+  }) {
+    //
+    return QIntentCfg._(
+      QIntentWrapper.ruleDetailMultiResponse(),
+      QTargetLevel.notAnAppRule,
     );
   }
 }
-
-
-
-
-/*
-    sortCfg, // global or within groups
-  groupCfg, // how to group rows
-  filterCfg, // to create filter menus
-  styleOrFormat, // select rowStyle for ListView
-  showOrHide, // control visibility
-
-*/

@@ -7,14 +7,15 @@ import '../app_entity_enums/all.dart';
 import '../enums/all.dart';
 import '../util/string_ext.dart';
 import '../scoretrader/all.dart';
-import '../dialog/all.dart';
+import '../interfaces/question.dart';
 
 part 'quest.dart';
-part 'q_iter.dart';
-part 'ans_typ_val_map.dart';
-part 'q_type_wrapper.dart';
+part 'q_collection.dart';
+part 'q_prompt_instance.dart';
 part 'q_choice_collection.dart';
 part 'q_intent.dart';
+part 'q_factory.dart';
+part 'answ_capture_cast.dart';
 
 /*
   attempt to create a new question structure
@@ -28,8 +29,8 @@ part 'q_intent.dart';
 
 
     todo:
-    rename QuestionQuantifier to QuestScopeQuantifier
-
+    rename QuestionQuantifier to QTargetQuantify
+    rename QuestionPresenter to QuestionPresenterIfc
 
 */
 

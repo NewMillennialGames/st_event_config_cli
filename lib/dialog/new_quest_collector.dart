@@ -126,7 +126,7 @@ class NewQuestionCollector {
       if (!scr.isConfigurable) continue;
 
       var q = Question<String, List<ScreenWidgetArea>>(
-        QuestionQuantifier.screenLevel(
+        QTargetQuantify.screenLevel(
           scr,
           responseAddsWhichRuleAndSlotQuestions: true,
         ),
@@ -177,7 +177,7 @@ class NewQuestionCollector {
       if (!area.isConfigureable || applicableRuleTypes.length < 1) continue;
 
       var q = Question<String, List<VisualRuleType>>(
-        QuestionQuantifier.ruleLevel(
+        QTargetQuantify.ruleLevel(
           screen,
           area,
           null,
@@ -214,7 +214,7 @@ class NewQuestionCollector {
       if (!area.isConfigureable || applicableWigetSlots.length < 1) continue;
 
       var q = Question<String, List<ScreenAreaWidgetSlot>>(
-        QuestionQuantifier.areaLevelSlots(
+        QTargetQuantify.areaLevelSlots(
           screen,
           area,
           responseAddsWhichRuleQuestions: true,
@@ -261,7 +261,7 @@ class NewQuestionCollector {
         continue;
 
       var q = Question<String, List<VisualRuleType>>(
-        QuestionQuantifier.ruleLevel(
+        QTargetQuantify.ruleLevel(
           screen,
           screenArea,
           slotInArea,

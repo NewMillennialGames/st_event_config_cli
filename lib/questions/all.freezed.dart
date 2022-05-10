@@ -52,14 +52,14 @@ mixin _$QuestionQuantifier {
       throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $QuestionQuantifierCopyWith<QuestionQuantifier> get copyWith =>
+  $QuestionQuantifierCopyWith<QTargetQuantify> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $QuestionQuantifierCopyWith<$Res> {
   factory $QuestionQuantifierCopyWith(
-          QuestionQuantifier value, $Res Function(QuestionQuantifier) then) =
+          QTargetQuantify value, $Res Function(QTargetQuantify) then) =
       _$QuestionQuantifierCopyWithImpl<$Res>;
   $Res call(
       {UserResponseCascadePatternEm cascadeType,
@@ -75,9 +75,9 @@ class _$QuestionQuantifierCopyWithImpl<$Res>
     implements $QuestionQuantifierCopyWith<$Res> {
   _$QuestionQuantifierCopyWithImpl(this._value, this._then);
 
-  final QuestionQuantifier _value;
+  final QTargetQuantify _value;
   // ignore: unused_field
-  final $Res Function(QuestionQuantifier) _then;
+  final $Res Function(QTargetQuantify) _then;
 
   @override
   $Res call({
@@ -213,7 +213,7 @@ class _$_QuestionQuantifier extends _QuestionQuantifier {
       __$QuestionQuantifierCopyWithImpl<_QuestionQuantifier>(this, _$identity);
 }
 
-abstract class _QuestionQuantifier extends QuestionQuantifier {
+abstract class _QuestionQuantifier extends QTargetQuantify {
   factory _QuestionQuantifier(
       UserResponseCascadePatternEm cascadeType,
       AppScreen appScreen,

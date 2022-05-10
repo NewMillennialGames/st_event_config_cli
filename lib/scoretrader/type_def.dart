@@ -4,7 +4,8 @@ part of StUiController;
 typedef VisRuleStyleQuest = VisualRuleQuestion<String, RuleResponseBase>;
 
 // R&D
-typedef CastStrToAnswTypCallback<T> = T Function(String);
+typedef CastStrToAnswTypCallback<T> = T Function(List<String>);
+// typedef CastListToType<T> = T Function(List<String>);
 
 typedef AddQuestChkCallbk = bool Function(dynamic);
 typedef GroupingRules = Tuple3<TvGroupCfg, TvGroupCfg?, TvGroupCfg?>;

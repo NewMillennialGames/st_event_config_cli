@@ -1,16 +1,17 @@
 part of QuestionsLib;
 
 @freezed
-class QuestionQuantifier extends Equatable with _$QuestionQuantifier {
+class QTargetQuantify extends Equatable with _$QuestionQuantifier {
   /* describes what a question is about
     it's purpose, behavior and output
     made it equatable to enable searching Q-list
     for filtering and generating new questions reactively
   */
 
-  QuestionQuantifier._();
+  QTargetQuantify._();
 
-  factory QuestionQuantifier(
+  factory QTargetQuantify(
+    QIntentCfg intentCfg,
     UserResponseCascadePatternEm cascadeType,
     AppScreen appScreen,
     ScreenWidgetArea? screenWidgetArea,
@@ -68,7 +69,7 @@ class QuestionQuantifier extends Equatable with _$QuestionQuantifier {
       can generate questions for levels below them
   */
 
-  factory QuestionQuantifier.eventLevel({
+  factory QTargetQuantify.eventLevel({
     bool responseAddsWhichAreaQuestions = false,
   }) {
     /*
@@ -77,7 +78,7 @@ class QuestionQuantifier extends Equatable with _$QuestionQuantifier {
       when responseAddsWhichAreaQuestions is true
       this answer will build "which area" questions
     */
-    return QuestionQuantifier(
+    return QTargetQuantify(
       responseAddsWhichAreaQuestions
           ? UserResponseCascadePatternEm.addsWhichAreaInSelectedScreenQuestions
           : UserResponseCascadePatternEm.noCascade,
@@ -89,7 +90,7 @@ class QuestionQuantifier extends Equatable with _$QuestionQuantifier {
     );
   }
 
-  factory QuestionQuantifier.screenLevel(
+  factory QTargetQuantify.screenLevel(
     AppScreen appScreen, {
     bool responseAddsWhichRuleAndSlotQuestions = false,
   }) {
@@ -99,7 +100,7 @@ class QuestionQuantifier extends Equatable with _$QuestionQuantifier {
       when responseAddsWhichRuleAndSlotQuestions is true
       this answer will build "which rule for area" questions
     */
-    return QuestionQuantifier(
+    return QTargetQuantify(
       responseAddsWhichRuleAndSlotQuestions
           ? UserResponseCascadePatternEm.addsWhichRulesForSelectedAreaQuestions
           : UserResponseCascadePatternEm.noCascade,
@@ -111,7 +112,7 @@ class QuestionQuantifier extends Equatable with _$QuestionQuantifier {
     );
   }
 
-  factory QuestionQuantifier.areaLevelRules(
+  factory QTargetQuantify.areaLevelRules(
     AppScreen appScreen,
     ScreenWidgetArea screenArea,
     VisualRuleType ruleType, {
@@ -128,7 +129,7 @@ class QuestionQuantifier extends Equatable with _$QuestionQuantifier {
       when responseAddsWhichRuleTypeQuestsForArea is true
       this answer will build "rule detail ?? for area" questions
     */
-    return QuestionQuantifier(
+    return QTargetQuantify(
       responseAddsRuleDetailQuests
           ? UserResponseCascadePatternEm.addsRuleDetailQuestsForSlotOrArea
           : UserResponseCascadePatternEm.noCascade,
@@ -140,7 +141,7 @@ class QuestionQuantifier extends Equatable with _$QuestionQuantifier {
     );
   }
 
-  factory QuestionQuantifier.areaLevelSlots(
+  factory QTargetQuantify.areaLevelSlots(
     AppScreen appScreen,
     ScreenWidgetArea screenArea, {
     bool responseAddsWhichRuleQuestions = false,
@@ -151,7 +152,7 @@ class QuestionQuantifier extends Equatable with _$QuestionQuantifier {
       when responseAddsWhichRuleQuestions is true
       this answer will build "rule detail ?? for slot" questions
     */
-    return QuestionQuantifier(
+    return QTargetQuantify(
       responseAddsWhichRuleQuestions
           ? UserResponseCascadePatternEm.addsWhichRulesForSlotsInArea
           : UserResponseCascadePatternEm.noCascade,
@@ -163,7 +164,7 @@ class QuestionQuantifier extends Equatable with _$QuestionQuantifier {
     );
   }
 
-  factory QuestionQuantifier.ruleLevel(
+  factory QTargetQuantify.ruleLevel(
     AppScreen appScreen,
     ScreenWidgetArea screenArea,
     ScreenAreaWidgetSlot? slot, {
@@ -175,7 +176,7 @@ class QuestionQuantifier extends Equatable with _$QuestionQuantifier {
       when responseAddsRuleDetailQuestions is true
       this answer will build "rule detail ?? for slot" questions
     */
-    return QuestionQuantifier(
+    return QTargetQuantify(
       responseAddsRuleDetailQuestions
           ? UserResponseCascadePatternEm.addsRuleDetailQuestsForSlotOrArea
           : UserResponseCascadePatternEm.noCascade,
@@ -187,7 +188,7 @@ class QuestionQuantifier extends Equatable with _$QuestionQuantifier {
     );
   }
 
-  factory QuestionQuantifier.ruleDetailMultiResponse(
+  factory QTargetQuantify.ruleDetailMultiResponse(
     AppScreen appScreen,
     ScreenWidgetArea screenWidgetArea,
     VisualRuleType? visRuleTypeForSlotInArea,
@@ -197,7 +198,7 @@ class QuestionQuantifier extends Equatable with _$QuestionQuantifier {
     bool addsMoreRuleQuestions = false,
   }) {
     bool isVisual = visRuleTypeForSlotInArea != null;
-    return QuestionQuantifier(
+    return QTargetQuantify(
       addsMoreRuleQuestions
           ? (isVisual
               ? UserResponseCascadePatternEm.addsRuleDetailQuestsForSlotOrArea

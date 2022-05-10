@@ -4,7 +4,7 @@ import 'dart:ffi';
 
 import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:riverpod/riverpod.dart';
+// import 'package:riverpod/riverpod.dart';
 //
 import '../app_entity_enums/all.dart';
 import '../enums/all.dart';

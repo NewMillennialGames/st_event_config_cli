@@ -1,11 +1,11 @@
 part of RandDee;
 
-class QuestOption {
+class QuestChoiceOption {
   //
   final String displayStr;
   final String selectVal;
 
-  QuestOption(
+  QuestChoiceOption(
     this.displayStr,
     this.selectVal,
   );
@@ -13,7 +13,7 @@ class QuestOption {
 
 class QuestChoiceCollectionBase {
   //
-  final List<QuestOption> answerOptions;
+  final List<QuestChoiceOption> answerOptions;
   final int idxOfDefaultAnsw;
   final bool multiAllowed;
 
@@ -49,10 +49,10 @@ class VisQuestChoiceCollection extends QuestChoiceCollectionBase {
     bool multiAllowed = false,
   }) {
     //
-    List<QuestOption> answChoices = [];
+    List<QuestChoiceOption> answChoices = [];
     int idx = 0;
     strChoices.forEach((s) {
-      answChoices.add(QuestOption(s, '$idx'));
+      answChoices.add(QuestChoiceOption(s, '$idx'));
       idx++;
     });
     return VisQuestChoiceCollection(

@@ -226,3 +226,16 @@ Creating a question requires specification for each category below:
 2. prompt & answer details  (what to display for configurator  (CLI or web) user)
 3. target area  (which area of the app will answer apply to)
 4. response handling  (what to do with the user-answer)
+
+
+##### How does response handling work?
+
+Dialog manager has a Question presenter
+Question presenter is responsible for rendering each question
+Each Question has 1->n parts
+Presenter show's each part and stores user response on the question
+Once all parts have been asked and answered, question is finalized
+This passes all answered parts to the Intent-obj castCallback method
+this method returns the type expected for this group of answers
+
+that response-type is stored with the question

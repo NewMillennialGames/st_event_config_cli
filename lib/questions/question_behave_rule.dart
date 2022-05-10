@@ -15,7 +15,7 @@ class BehaveRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseBase>
     ScreenAreaWidgetSlot? slot,
     // CastUserInputToTyp<ConvertTyp, AnsTyp>? castFunc,
   ) : super(
-          QuestionQuantifier.ruleDetailMultiResponse(
+          QTargetQuantify.ruleDetailMultiResponse(
             appSection,
             screenArea,
             visRuleType,

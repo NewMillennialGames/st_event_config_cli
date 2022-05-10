@@ -5,7 +5,7 @@ part of QuestionsLib;
 
 class Question<ConvertTyp, AnsTyp> extends Equatable {
   //
-  final QuestionQuantifier qQuantify;
+  final QTargetQuantify qQuantify;
   final String _questStr;
   final Iterable<String>? _answerChoices;
   // castFunc not used on Rule-Type-Questions
@@ -121,7 +121,7 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
     PerQuestGenOptions pqt,
   ) {
     // used to create derived questions from existing answers
-    QuestionQuantifier newQq = pqt.qQuantUpdater(this.qQuantify);
+    QTargetQuantify newQq = pqt.qQuantUpdater(this.qQuantify);
     String newId = pqt.questId.isNotEmpty
         ? pqt.questId
         : (this.questionId + ':' + newQq.sortKey);

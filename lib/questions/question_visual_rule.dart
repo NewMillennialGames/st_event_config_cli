@@ -19,7 +19,7 @@ class VisualRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseWrapperIfc>
     ScreenAreaWidgetSlot? slot,
     // CastUserInputToTyp<ConvertTyp, AnsTyp>? castFunc,
   ) : super(
-          QuestionQuantifier.ruleDetailMultiResponse(
+          QTargetQuantify.ruleDetailMultiResponse(
             appSection,
             screenArea,
             visRuleType,
@@ -67,7 +67,7 @@ class VisualRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseWrapperIfc>
     PerQuestGenOptions genOpt,
   ) {
     //
-    QuestionQuantifier qq = ques.qQuantify.copyWith();
+    QTargetQuantify qq = ques.qQuantify.copyWith();
     var vrq = VisualRuleQuestion(
       ques.appScreen,
       ques.screenWidgetArea!,

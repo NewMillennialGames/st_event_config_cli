@@ -9,7 +9,7 @@ void main() {
     final _questMgr = QuestListMgr();
     expect(_questMgr.totalAnsweredQuestions, 0);
 
-    final qq = QuestionQuantifier.areaLevelRules(
+    final qq = QTargetQuantify.areaLevelRules(
       AppScreen.marketView,
       ScreenWidgetArea.tableview,
       VisualRuleType.groupCfg,

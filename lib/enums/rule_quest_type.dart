@@ -8,6 +8,7 @@ enum VisRuleQuestType {
 
     in other words, HOW MANY pieces of data needs to be
     collected to properly build a complete rule
+
   */
   dialogStruct,
   selectDataFieldName,

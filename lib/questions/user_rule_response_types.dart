@@ -92,6 +92,8 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
         return TvGroupCfg.fromJson(json);
       case VisualRuleType.styleOrFormat:
         return TvRowStyleCfg.fromJson(json);
+      case VisualRuleType.themePreference:
+        return TvRowStyleCfg.fromJson(json);
     }
   }
 

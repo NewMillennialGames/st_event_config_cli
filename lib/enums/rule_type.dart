@@ -13,6 +13,7 @@ enum VisualRuleType {
   filterCfg, // to create filter menus
   styleOrFormat, // select rowStyle for ListView
   showOrHide, // control visibility
+  themePreference,
 }
 
 extension VisualRuleTypeExt1 on VisualRuleType {
@@ -41,6 +42,8 @@ extension VisualRuleTypeExt1 on VisualRuleType {
         return TvRowStyleCfg();
       case VisualRuleType.showOrHide:
         return ShowHideCfg();
+      case VisualRuleType.themePreference:
+        return ShowHideCfg();
     }
   }
 
@@ -62,6 +65,8 @@ extension VisualRuleTypeExt1 on VisualRuleType {
         return nm + ' (set style or appearance)';
       case VisualRuleType.showOrHide:
         return nm + ' (hide or show)';
+      case VisualRuleType.themePreference:
+        return nm + ' (themePreference)';
     }
   }
   //
@@ -92,6 +97,8 @@ extension VisualRuleTypeExt1 on VisualRuleType {
         return [
           Vrq.controlsVisibilityOfAreaOrSlot,
         ];
+      case VisualRuleType.themePreference:
+        return [];
     }
   }
 }
