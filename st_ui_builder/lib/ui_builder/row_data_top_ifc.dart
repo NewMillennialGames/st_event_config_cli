@@ -34,6 +34,8 @@ abstract class AssetRowPropertyIfc {
   // holds user ownership state
   AssetHoldingsSummaryIfc get assetHoldingsSummary;
 
+  UserEventSummaryIfc get userEventSummary;
+
   // next 3 properties are game props but needed for sorting and grouping
   // shows values off the game record
   DateTime get gameDate; // rounded to midnight for row grouping
