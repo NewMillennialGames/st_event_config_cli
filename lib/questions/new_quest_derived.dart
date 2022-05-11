@@ -16,7 +16,7 @@ typedef NewQuestCount = int Function(Question);
 // pass question + newIndx, return list of args for question template
 typedef NewQuestArgGen = List<String> Function(Question, int);
 
-typedef QuestionQuantifierRevisor = QTargetQuantify Function(QTargetQuantify);
+typedef QuestionQuantifierRevisor = QTargetIntent Function(QTargetIntent);
 
 class PerQuestGenOptions<AnsType> {
   /*
@@ -43,7 +43,7 @@ class PerQuestGenOptions<AnsType> {
   Type get genType => AnsType;
   bool get genAsRuleQuestion => ruleType != null;
 
-  static QTargetQuantify _noOp(QTargetQuantify qq) => qq;
+  static QTargetIntent _noOp(QTargetIntent qq) => qq;
 }
 
 class DerivedQuestGenerator {

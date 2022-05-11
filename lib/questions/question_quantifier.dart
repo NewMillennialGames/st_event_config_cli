@@ -1,24 +1,44 @@
 part of QuestionsLib;
 
 @freezed
-class QTargetQuantify extends Equatable with _$QTargetQuantify {
+class QTargetIntent extends Equatable with _$QTargetQuantify {
   /* describes what a question is about
     it's purpose, behavior and output
     made it equatable to enable searching Q-list
     for filtering and generating new questions reactively
   */
 
-  QTargetQuantify._();
+  QTargetIntent._();
 
-  factory QTargetQuantify(
-    QIntentCfg intentCfg,
-    UserResponseCascadePatternEm cascadeType,
+  factory QTargetIntent(
+    QRespCascadePatternEm cascadeType,
     AppScreen appScreen,
-    ScreenWidgetArea? screenWidgetArea,
+    ScreenWidgetArea? screenWidgetArea, {
     ScreenAreaWidgetSlot? slotInArea,
     VisualRuleType? visRuleTypeForAreaOrSlot,
     BehaviorRuleType? behRuleTypeForAreaOrSlot,
-  ) = _QTargetQuantify;
+    @Default(false) bool cliConfig,
+  }) = _QTargetQuantify;
+
+  QIntentEm get intent {
+    //
+    bool noAppRules =
+        visRuleTypeForAreaOrSlot == null && behRuleTypeForAreaOrSlot == null;
+    if (noAppRules)
+      return cliConfig ? QIntentEm.infoOrCliCfg : QIntentEm.structural;
+    if (visRuleTypeForAreaOrSlot != null) return QIntentEm.visual;
+    if (behRuleTypeForAreaOrSlot != null) return QIntentEm.behavioral;
+    return QIntentEm.diagnostic;
+  }
+
+  QTargetLevelEm get tLevel {
+    //
+    if (appScreen == AppScreen.eventConfiguration)
+      return QTargetLevelEm.notAnAppRule;
+    if (screenWidgetArea == null) return QTargetLevelEm.screenRule;
+    if (slotInArea == null) return QTargetLevelEm.areaRule;
+    return QTargetLevelEm.slotRule;
+  }
 
   String get sortKey {
     // makes equatable work for searching & sorting question list
@@ -69,7 +89,7 @@ class QTargetQuantify extends Equatable with _$QTargetQuantify {
       can generate questions for levels below them
   */
 
-  factory QTargetQuantify.eventLevel({
+  factory QTargetIntent.eventLevel({
     bool responseAddsWhichAreaQuestions = false,
   }) {
     /*
@@ -78,20 +98,17 @@ class QTargetQuantify extends Equatable with _$QTargetQuantify {
       when responseAddsWhichAreaQuestions is true
       this answer will build "which area" questions
     */
-    return QTargetQuantify(
-      QIntentCfg.eventLevel(),
+    return QTargetIntent(
+      // QIntentCfg.eventLevel(),
       responseAddsWhichAreaQuestions
-          ? UserResponseCascadePatternEm.addsWhichAreaInSelectedScreenQuestions
-          : UserResponseCascadePatternEm.noCascade,
+          ? QRespCascadePatternEm.addsWhichAreaInSelectedScreenQuestions
+          : QRespCascadePatternEm.noCascade,
       AppScreen.eventConfiguration,
-      null,
-      null,
-      null,
       null,
     );
   }
 
-  factory QTargetQuantify.screenLevel(
+  factory QTargetIntent.screenLevel(
     AppScreen appScreen, {
     bool responseAddsWhichRuleAndSlotQuestions = false,
   }) {
@@ -101,20 +118,17 @@ class QTargetQuantify extends Equatable with _$QTargetQuantify {
       when responseAddsWhichRuleAndSlotQuestions is true
       this answer will build "which rule for area" questions
     */
-    return QTargetQuantify(
-      QIntentCfg.eventLevel(),
+    return QTargetIntent(
+      // QIntentCfg.eventLevel(),
       responseAddsWhichRuleAndSlotQuestions
-          ? UserResponseCascadePatternEm.addsWhichRulesForSelectedAreaQuestions
-          : UserResponseCascadePatternEm.noCascade,
+          ? QRespCascadePatternEm.addsWhichRulesForSelectedAreaQuestions
+          : QRespCascadePatternEm.noCascade,
       appScreen,
-      null,
-      null,
-      null,
       null,
     );
   }
 
-  factory QTargetQuantify.areaLevelRules(
+  factory QTargetIntent.areaLevelRules(
     AppScreen appScreen,
     ScreenWidgetArea screenArea,
     VisualRuleType ruleType, {
@@ -131,20 +145,18 @@ class QTargetQuantify extends Equatable with _$QTargetQuantify {
       when responseAddsWhichRuleTypeQuestsForArea is true
       this answer will build "rule detail ?? for area" questions
     */
-    return QTargetQuantify(
-      QIntentCfg.areaLevelRules(ruleType),
+    return QTargetIntent(
+      // QIntentCfg.areaLevelRules(ruleType),
       responseAddsRuleDetailQuests
-          ? UserResponseCascadePatternEm.addsRuleDetailQuestsForSlotOrArea
-          : UserResponseCascadePatternEm.noCascade,
+          ? QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea
+          : QRespCascadePatternEm.noCascade,
       appScreen,
       screenArea,
-      null,
-      ruleType,
-      null,
+      visRuleTypeForAreaOrSlot: ruleType,
     );
   }
 
-  factory QTargetQuantify.areaLevelSlots(
+  factory QTargetIntent.areaLevelSlots(
     AppScreen appScreen,
     ScreenWidgetArea screenArea, {
     bool responseAddsWhichRuleQuestions = false,
@@ -155,20 +167,17 @@ class QTargetQuantify extends Equatable with _$QTargetQuantify {
       when responseAddsWhichRuleQuestions is true
       this answer will build "rule detail ?? for slot" questions
     */
-    return QTargetQuantify(
-      QIntentCfg.areaLevelSlots(VisualRuleType.topDialogStruct),
+    return QTargetIntent(
+      // QIntentCfg.areaLevelSlots(VisualRuleType.topDialogStruct),
       responseAddsWhichRuleQuestions
-          ? UserResponseCascadePatternEm.addsWhichRulesForSlotsInArea
-          : UserResponseCascadePatternEm.noCascade,
+          ? QRespCascadePatternEm.addsWhichRulesForSlotsInArea
+          : QRespCascadePatternEm.noCascade,
       appScreen,
       screenArea,
-      null,
-      null,
-      null,
     );
   }
 
-  factory QTargetQuantify.ruleLevel(
+  factory QTargetIntent.ruleLevel(
     AppScreen appScreen,
     ScreenWidgetArea screenArea,
     ScreenAreaWidgetSlot? slot, {
@@ -180,20 +189,18 @@ class QTargetQuantify extends Equatable with _$QTargetQuantify {
       when responseAddsRuleDetailQuestions is true
       this answer will build "rule detail ?? for slot" questions
     */
-    return QTargetQuantify(
-      QIntentCfg.ruleLevel(VisualRuleType.topDialogStruct),
+    return QTargetIntent(
+      // QIntentCfg.ruleLevel(VisualRuleType.topDialogStruct),
       responseAddsRuleDetailQuestions
-          ? UserResponseCascadePatternEm.addsRuleDetailQuestsForSlotOrArea
-          : UserResponseCascadePatternEm.noCascade,
+          ? QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea
+          : QRespCascadePatternEm.noCascade,
       appScreen,
       screenArea,
-      slot,
-      null,
-      null,
+      slotInArea: slot,
     );
   }
 
-  factory QTargetQuantify.ruleDetailMultiResponse(
+  factory QTargetIntent.ruleDetailMultiResponse(
     AppScreen appScreen,
     ScreenWidgetArea screenWidgetArea,
     VisualRuleType? visRuleTypeForSlotInArea,
@@ -203,19 +210,19 @@ class QTargetQuantify extends Equatable with _$QTargetQuantify {
     bool addsMoreRuleQuestions = false,
   }) {
     bool isVisual = visRuleTypeForSlotInArea != null;
-    return QTargetQuantify(
-      QIntentCfg.ruleDetailMultiResponse(
-          visRuleTypeForSlotInArea ?? VisualRuleType.topDialogStruct),
+    return QTargetIntent(
+      // QIntentCfg.ruleDetailMultiResponse(
+      //     visRuleTypeForSlotInArea ?? VisualRuleType.topDialogStruct),
       addsMoreRuleQuestions
           ? (isVisual
-              ? UserResponseCascadePatternEm.addsRuleDetailQuestsForSlotOrArea
-              : UserResponseCascadePatternEm.addsRuleDetailQuestsForSlotOrArea)
-          : UserResponseCascadePatternEm.noCascade,
+              ? QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea
+              : QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea)
+          : QRespCascadePatternEm.noCascade,
       appScreen,
       screenWidgetArea,
-      slot,
-      visRuleTypeForSlotInArea,
-      behRuleTypeForSlotInArea,
+      slotInArea: slot,
+      visRuleTypeForAreaOrSlot: visRuleTypeForSlotInArea,
+      behRuleTypeForAreaOrSlot: behRuleTypeForSlotInArea,
     );
   }
 

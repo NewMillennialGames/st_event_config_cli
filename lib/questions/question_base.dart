@@ -5,7 +5,7 @@ part of QuestionsLib;
 
 class Question<ConvertTyp, AnsTyp> extends Equatable {
   //
-  final QTargetQuantify qQuantify;
+  final QTargetIntent qQuantify;
   final String _questStr;
   final Iterable<String>? _answerChoices;
   // castFunc not used on Rule-Type-Questions
@@ -30,7 +30,7 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
   // getters
   String get questStr => _questStr;
   bool get isRuleQuestion =>
-      this is VisualRuleQuestion || this is BehaveRuleQuestion;
+      this is VisualRuleQuestion; // || this is BehaveRuleQuestion;
 
   bool get isTopLevelConfigOrScreenQuestion =>
       qQuantify.isTopLevelConfigOrScreenQuestion;
@@ -121,7 +121,7 @@ class Question<ConvertTyp, AnsTyp> extends Equatable {
     PerQuestGenOptions pqt,
   ) {
     // used to create derived questions from existing answers
-    QTargetQuantify newQq = pqt.qQuantUpdater(this.qQuantify);
+    QTargetIntent newQq = pqt.qQuantUpdater(this.qQuantify);
     String newId = pqt.questId.isNotEmpty
         ? pqt.questId
         : (this.questionId + ':' + newQq.sortKey);

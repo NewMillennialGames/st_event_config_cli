@@ -63,7 +63,7 @@ class QuestMatcher<AnsType> {
   // AddQuestChkCallbk is for doing more advanced analysis to verify a match
   final AddQuestChkCallbk validateUserAnswerAfterPatternMatchIsTrueCallback;
   // cascadeType indicates whether we add new questions, auto-answers or both
-  final UserResponseCascadePatternEm? cascadeType;
+  final QRespCascadePatternEm? cascadeType;
   // pattern matching values;  leave null to not match on them
   final AppScreen? appScreen;
   final ScreenWidgetArea? screenWidgetArea;
@@ -179,7 +179,7 @@ List<QuestMatcher> _matcherList = [
       ],
     ),
 
-    cascadeType: UserResponseCascadePatternEm.addsRuleDetailQuestsForSlotOrArea,
+    cascadeType: QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea,
     screenWidgetArea: ScreenWidgetArea.tableview,
     visRuleTypeForAreaOrSlot: VisualRuleType.groupCfg,
     // if existing question is for grouping on ListView

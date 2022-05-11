@@ -17,7 +17,8 @@ class QDefCollection {
   int get _partCount => questIterations.length;
   bool get isCompleted => _curPartIdx >= _partCount - 1;
   bool get isMultiPart => _partCount > 1;
-  QuestPromptInstance? get nextPart {
+  // QuestPromptInstance get _curQuestion => questIterations[_curPartIdx];
+  QuestPromptInstance? getNextUserPromptIfExists() {
     _curPartIdx++;
     if (_curPartIdx > _partCount - 1) return null;
     return questIterations[_curPartIdx];
@@ -29,8 +30,7 @@ class QDefCollection {
   // Iterable<AnswTypValMap> get allTypedAnswers =>
   //     questIterations.map((sqi) => sqi.answerPayload);
 
-  List<QuestChoiceOption> get curQAnswerOptions =>
-      nextPart?.questsAndChoices ?? [];
+  // List<QuestChoiceOption> get curQAnswerOptions => _curQuestion.questsAndChoices;
 
   // SubmitUserResponseFunc get storeUserReponse => _storeUserReponse;
 

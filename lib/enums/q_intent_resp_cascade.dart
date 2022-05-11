@@ -1,6 +1,26 @@
 part of EvCfgEnums;
 
-enum UserResponseCascadePatternEm {
+// @JsonEnum()
+enum QIntentEm {
+  infoOrCliCfg, // behavior of CLI or name of output file
+  structural, // governs future questions
+  visual, // creates visual rules
+  behavioral, // ceates behavioral rules
+  diagnostic, // for debugging or testing purposes
+}
+
+// @JsonEnum()
+enum QTargetLevelEm {
+  /* what level or scope is this question
+    operating on
+  */
+  notAnAppRule,
+  screenRule,
+  areaRule,
+  slotRule,
+}
+
+enum QRespCascadePatternEm {
   /* UserResponseCascadePattern defines:
     how does response from user
     to a current question
@@ -21,31 +41,28 @@ enum UserResponseCascadePatternEm {
   noCascade,
 }
 
-extension UserResponseCascadePatternExt on UserResponseCascadePatternEm {
+extension UserResponseCascadePatternExt on QRespCascadePatternEm {
   /*
   properties exposed to Question up thru the QuestionQuantifier
   these properties describe CURRENT question 
   (not the ones they will be creating)
   */
-  bool get generatesNoNewQuestions =>
-      this == UserResponseCascadePatternEm.noCascade;
+  bool get generatesNoNewQuestions => this == QRespCascadePatternEm.noCascade;
 
   bool get addsWhichAreaInSelectedScreenQuestions =>
-      this ==
-      UserResponseCascadePatternEm.addsWhichAreaInSelectedScreenQuestions;
+      this == QRespCascadePatternEm.addsWhichAreaInSelectedScreenQuestions;
 
   bool get addsWhichRulesForSelectedAreaQuestions =>
-      this ==
-      UserResponseCascadePatternEm.addsWhichRulesForSelectedAreaQuestions;
+      this == QRespCascadePatternEm.addsWhichRulesForSelectedAreaQuestions;
 
   bool get addsWhichSlotOfSelectedAreaQuestions =>
-      this == UserResponseCascadePatternEm.addsWhichSlotOfSelectedAreaQuestions;
+      this == QRespCascadePatternEm.addsWhichSlotOfSelectedAreaQuestions;
 
   bool get addsWhichRulesForSlotsInArea =>
-      this == UserResponseCascadePatternEm.addsWhichRulesForSlotsInArea;
+      this == QRespCascadePatternEm.addsWhichRulesForSlotsInArea;
 
   bool get addsRuleDetailQuestsForSlotOrArea =>
-      this == UserResponseCascadePatternEm.addsRuleDetailQuestsForSlotOrArea;
+      this == QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea;
 
   // bool get addsVisualRuleDetailQuestions =>
   //     this == QuestCascadeTyp.addsVisualRuleDetailQuestions;

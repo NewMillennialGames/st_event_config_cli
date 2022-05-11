@@ -18,16 +18,15 @@ class QFactory {
   now specify cascade effects from the question
 
   */
-  late QIntentCfg intent;
+  // late QIntentCfg intent;
   late QDefCollection iterDef;
-  late QTargetQuantify targetArea;
+  late QTargetIntent targetArea;
   late List<QuestPromptInstance> promptIters;
 
-  QFactory startGroupWithIntent<AnswType>(
-    QIntentWrapper intentWrapper,
-    QTargetLevel level,
+  QFactory startGroupWithTarget<AnswType>(
+    QTargetIntent _targetArea,
   ) {
-    intent = QIntentCfg(intentWrapper, level);
+    targetArea = _targetArea;
     return this;
   }
 
@@ -45,7 +44,7 @@ class QFactory {
   }
 
   Quest2 getAssembledQuestion() {
-    return Quest2(intent, targetArea, iterDef);
+    return Quest2(targetArea, iterDef);
   }
 }
 

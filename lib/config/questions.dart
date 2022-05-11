@@ -72,7 +72,7 @@ final List<Question> _questionLst = [
     of my Qb.castFunc code
   */
   Qb<String, String>(
-    QTargetQuantify.eventLevel(),
+    QTargetIntent.eventLevel(),
     DlgStr.eventName,
     null,
     null,
@@ -81,49 +81,49 @@ final List<Question> _questionLst = [
   // set true false to shorten manual testing
   if (false) ...[
     Qb<String, String>(
-      QTargetQuantify.eventLevel(),
+      QTargetIntent.eventLevel(),
       DlgStr.eventDescrip,
       null,
       null,
       questId: QuestionIds.eventDescrip,
     ),
     Qb<int, EvType>(
-      QTargetQuantify.eventLevel(),
+      QTargetIntent.eventLevel(),
       DlgStr.eventType,
       EvType.values.map((e) => e.name),
       (i) => EvType.values[i],
       questId: QuestionIds.eventType,
     ),
     Qb<int, EvCompetitorType>(
-      QTargetQuantify.eventLevel(),
+      QTargetIntent.eventLevel(),
       DlgStr.eventWhosCompeting,
       EvCompetitorType.values.map((e) => e.name),
       (i) => EvCompetitorType.values[i],
       questId: QuestionIds.competitorType,
     ),
     Qb<int, EvOpponentType>(
-      QTargetQuantify.eventLevel(),
+      QTargetIntent.eventLevel(),
       DlgStr.eventCompPlayAgainst,
       EvOpponentType.values.map((e) => e.name),
       (i) => EvOpponentType.values[i],
       questId: QuestionIds.competeAgainstType,
     ),
     Qb<int, EvDuration>(
-      QTargetQuantify.eventLevel(),
+      QTargetIntent.eventLevel(),
       DlgStr.eventDuration,
       EvDuration.values.map((e) => e.name),
       (i) => EvDuration.values[i],
       questId: QuestionIds.eventDuration,
     ),
     Qb<int, EvEliminationStrategy>(
-      QTargetQuantify.eventLevel(),
+      QTargetIntent.eventLevel(),
       DlgStr.eventEliminationStrategy,
       EvEliminationStrategy.values.map((e) => e.name),
       (i) => EvEliminationStrategy.values[i],
       questId: QuestionIds.eventEliminationStrategy,
     ),
     Qb<String, bool>(
-      QTargetQuantify.eventLevel(),
+      QTargetIntent.eventLevel(),
       DlgStr.useSameRowStyleForAllScreens,
       ['no', 'yes'],
       (i) => i == '1',
@@ -133,7 +133,7 @@ final List<Question> _questionLst = [
   ],
   // ask which screens to configure
   Qb<String, List<AppScreen>>(
-    QTargetQuantify.eventLevel(responseAddsWhichAreaQuestions: true),
+    QTargetIntent.eventLevel(responseAddsWhichAreaQuestions: true),
     DlgStr.selectAppScreens,
     AppScreen.eventConfiguration.topConfigurableScreens.map((e) => e.name),
     (String strLstIdxs) {
