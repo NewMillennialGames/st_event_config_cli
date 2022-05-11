@@ -303,6 +303,7 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
 
   // proceeds apply to a SALE
   bool get showProceeds => true;
+
   // holdings apply to what you currently own
   bool get showHoldingsValue => !showProceeds;
 
@@ -451,6 +452,7 @@ class DriverVsFieldRowPortfolio extends AssetVsAssetRowPortfolioView {
 
   @override
   bool get isDriverVsField => true;
+
   @override
   bool get showProceeds => false;
 }

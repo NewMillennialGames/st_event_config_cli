@@ -5,7 +5,9 @@ abstract class AssetHoldingsSummaryIfc {
 
   */
   int get sharesOwned;
+
   double get positionCost;
+
   double get positionEstValue; // current estimate
   int get tokensAvail;
 }
@@ -13,15 +15,35 @@ abstract class AssetHoldingsSummaryIfc {
 extension AssetHoldingsSummaryIfcExt1 on AssetHoldingsSummaryIfc {
   //
   double get positionGainLoss => positionEstValue - positionCost;
+
   // UI values for this
   int get tokensAvail => 0;
+
   String get sharesOwnedStr => '$sharesOwned';
+
   String get positionCostStr => positionCost.toStringAsFixed(2);
+
   String get positionEstValueStr => positionEstValue.toStringAsFixed(2);
+
   String get positionGainLossStr => positionGainLoss.toStringAsFixed(2);
 
   bool get returnIsPositive => positionGainLoss >= 0;
+
   Color get posGainSymbolColor => returnIsPositive ? Colors.green : Colors.red;
+}
+
+abstract class UserEventSummaryIfc {
+  String get key;
+
+  String get userID;
+
+  String get eventKey;
+
+  int get positionCount;
+
+  int get unrealizedGainLoss;
+
+  int get currentPortfolioValue;
 }
 
 // abstract class AssetPriceFluxSummaryIfc {

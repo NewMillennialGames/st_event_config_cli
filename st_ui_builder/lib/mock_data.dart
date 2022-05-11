@@ -1,8 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
 //
 import 'package:stclient/stclient.dart';
+
 //
 import 'ui_builder/all.dart';
 
@@ -21,11 +23,13 @@ class MockAsset {
   String region;
   String teamName;
   String imgUrl = 'https://ui-avatars.com/api/?name=John+Doe';
+
   // reall assets DO NOT have game key
   String gameKey;
   String displayNumber;
 
   DateTime get gameDt => _today;
+
   String get key => id;
 
   MockAsset(
@@ -66,6 +70,7 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
 
   @override
   int get rank => 3;
+
   String get rankStr => '$rank';
 
   @override
@@ -98,6 +103,8 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
       throw UnimplementedError();
 
   @override
+  UserEventSummaryIfc get userEventSummary => throw UnimplementedError();
+
   // should be on the game
   String get roundName => throw UnimplementedError();
 
