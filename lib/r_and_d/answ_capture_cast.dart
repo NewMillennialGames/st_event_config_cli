@@ -1,17 +1,20 @@
 part of RandDee;
 
 class CaptureAndCast<T> {
-  //
-  List<String> _answers = [];
-  CastStrToAnswTypCallback<T> castFunc;
+  /* _castFunc signature is:
+      typedef CastStrToAnswTypCallback<T> = T Function(List<String>);
 
-  CaptureAndCast(this.castFunc);
+  */
+  List<String> _answers = [];
+  CastStrToAnswTypCallback<T> _castFunc;
+
+  CaptureAndCast(this._castFunc);
 
   void capture(String s) {
     _answers.add(s);
   }
 
   T cast() {
-    return castFunc(_answers);
+    return _castFunc(_answers);
   }
 }

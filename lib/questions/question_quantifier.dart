@@ -156,7 +156,7 @@ class QTargetQuantify extends Equatable with _$QTargetQuantify {
       this answer will build "rule detail ?? for slot" questions
     */
     return QTargetQuantify(
-      QIntentCfg.areaLevelSlots(),
+      QIntentCfg.areaLevelSlots(VisualRuleType.topDialogStruct),
       responseAddsWhichRuleQuestions
           ? UserResponseCascadePatternEm.addsWhichRulesForSlotsInArea
           : UserResponseCascadePatternEm.noCascade,
@@ -181,7 +181,7 @@ class QTargetQuantify extends Equatable with _$QTargetQuantify {
       this answer will build "rule detail ?? for slot" questions
     */
     return QTargetQuantify(
-      QIntentCfg.ruleLevel(),
+      QIntentCfg.ruleLevel(VisualRuleType.topDialogStruct),
       responseAddsRuleDetailQuestions
           ? UserResponseCascadePatternEm.addsRuleDetailQuestsForSlotOrArea
           : UserResponseCascadePatternEm.noCascade,
