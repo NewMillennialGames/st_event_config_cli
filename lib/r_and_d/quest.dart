@@ -14,8 +14,6 @@ class Quest2 extends Equatable {
 
 // optional unique value for expedited matching
   String questionId = '';
-  // _currQuestion is active working state
-  // QuestPromptInstance? _currQuestion;
 
   Quest2(
     this.qTargetIntent,
@@ -28,14 +26,11 @@ class Quest2 extends Equatable {
 
   QuestPromptInstance? getNextUserPromptIfExists() {
     //
-    QuestPromptInstance? qpi = qDefCollection.getNextUserPromptIfExists();
-
-    if (qpi == null) {
+    QuestPromptInstance? nextQpi = qDefCollection.getNextUserPromptIfExists();
+    if (nextQpi == null) {
       // out of questions
-
     }
-
-    return qpi;
+    return nextQpi;
   }
 
   // getters

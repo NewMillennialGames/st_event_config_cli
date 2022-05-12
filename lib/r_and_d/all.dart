@@ -8,7 +8,7 @@ import '../app_entity_enums/all.dart';
 import '../enums/all.dart';
 import '../util/string_ext.dart';
 import '../scoretrader/all.dart';
-import '../interfaces/question.dart';
+import '../interfaces/q_prompt_instance.dart';
 
 // part 'all.freezed.dart';
 part 'quest.dart';

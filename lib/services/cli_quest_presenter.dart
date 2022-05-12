@@ -1,7 +1,7 @@
 import "dart:io";
 import 'package:collection/collection.dart';
 //
-import '../interfaces/question_presenter.dart';
+import '../interfaces/q_presenter.dart';
 import '../questions/all.dart';
 import '../dialog/all.dart';
 import '../enums/all.dart';

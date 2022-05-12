@@ -1,5 +1,5 @@
 import 'package:st_ev_cfg/st_ev_cfg.dart';
-import 'package:st_ev_cfg/interfaces/question_presenter.dart';
+import 'package:st_ev_cfg/interfaces/q_presenter.dart';
 
 class TestQuestRespGen implements QuestionPresenter {
   // receives questions for test-automation

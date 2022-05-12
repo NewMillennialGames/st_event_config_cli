@@ -1,6 +1,6 @@
 part of RandDee;
 
-class QuestPromptInstance<T> {
+class QuestPromptInstance<T> implements QPromptIfc {
   /* describes each part of a question iteration
     including list of prompts
     does NOTHING with answers
@@ -30,15 +30,25 @@ class QuestPromptInstance<T> {
     );
   }
 
+  // begin QPromptIfc impl
+  @override
+  void collectResponse(String s) {
+    // accumulate user answers in list of strings
+    _userAnswers.capture(s);
+  }
+
   // getters
   bool get hasChoices => answChoiceCollection.hasChoices;
   List<QuestChoiceOption> get questsAndChoices =>
       answChoiceCollection.answerOptions;
+  // end QPromptIfc impl
 
-  String get _subQuests => answChoiceCollection.toString();
+  Iterable<String> get choices => answChoiceCollection.choices;
+
   String createFormattedQuestion(Quest2 quest) {
-    String templ = answChoiceCollection
-        .questTemplByRuleType(quest.visRuleTypeForAreaOrSlot!);
+    String templ = answChoiceCollection.questTemplByRuleType(
+      quest.visRuleTypeForAreaOrSlot!,
+    );
 
     String slotStr =
         quest.slotInArea == null ? '' : quest.slotInArea!.name + ' on';
@@ -52,8 +62,7 @@ class QuestPromptInstance<T> {
     return templ;
   }
 
-  Iterable<String> get choices => answChoiceCollection.choices;
-
+  // String get _subQuests => answChoiceCollection.toString();
   // String get choiceName => visRuleType.friendlyName;
   // String get questStr => 'QwC: ' + qType.visRuleName + '\n' + _subQuests;
   String questStr(String choiceName) =>
