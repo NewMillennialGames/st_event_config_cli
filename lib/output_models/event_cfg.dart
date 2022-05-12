@@ -61,13 +61,12 @@ class EventCfgTree {
     this.screenConfigMap,
   );
 
-  factory EventCfgTree.fromEventLevelConfig(Iterable<Question> responses) {
+  factory EventCfgTree.fromEventLevelConfig(Iterable<Quest2> responses) {
     //
     String evTemplateName = (responses
-            .where((q) => q.questionId == QuestionIds.eventName)
+            .where((q) => q.questId == Quest2Ids.eventName)
             .first
-            .response
-            ?.answers ??
+            .mainAnswer ??
         '_eventNameMissing') as String;
 
     // declare Event level vals to be captured
@@ -81,38 +80,30 @@ class EventCfgTree {
     // use try to catch errs and allow easy debugging
     try {
       evTemplateDescription = (responses
-              .where((q) => q.questionId == QuestionIds.eventDescrip)
+              .where((q) => q.questId == Quest2Ids.eventDescrip)
               .first
-              .response
-              ?.answers ??
+              .mainAnswer ??
           '') as String;
 
-      evType = responses
-          .where((q) => q.response?.answers is EvType)
-          .first
-          .response!
-          .answers as EvType;
+      evType = responses.where((q) => q.mainAnswer is EvType).first.mainAnswer
+          as EvType;
       //
       evCompetitorType = responses
-          .where((q) => q.response?.answers is EvCompetitorType)
+          .where((q) => q.mainAnswer is EvCompetitorType)
           .first
-          .response!
-          .answers as EvCompetitorType;
+          .mainAnswer as EvCompetitorType;
       evOpponentType = responses
-          .where((q) => q.response?.answers is EvOpponentType)
+          .where((q) => q.mainAnswer is EvOpponentType)
           .first
-          .response!
-          .answers as EvOpponentType;
+          .mainAnswer as EvOpponentType;
       evDuration = responses
-          .where((q) => q.response?.answers is EvDuration)
+          .where((q) => q.mainAnswer is EvDuration)
           .first
-          .response!
-          .answers as EvDuration;
+          .mainAnswer as EvDuration;
       evEliminationType = responses
-          .where((q) => q.response?.answers is EvEliminationStrategy)
+          .where((q) => q.mainAnswer is EvEliminationStrategy)
           .first
-          .response!
-          .answers as EvEliminationStrategy;
+          .mainAnswer as EvEliminationStrategy;
     } catch (e) {
       print(
         'Warnnig:  key Event level quests/fields missing.  Hope you are debugging',
@@ -154,17 +145,17 @@ class EventCfgTree {
   }
 
   void fillFromVisualRuleAnswers(
-    Iterable<VisRuleStyleQuest> answeredQuestions,
+    Iterable<Quest2> answeredQuest2s,
   ) {
     /*  part of instance construction
-      receive all vis-rule-questions, and fill
+      receive all vis-rule-Quest2s, and fill
         out the tree of configuration data
         that will customize the client UI
     */
     print(
-      'fillFromVisualRuleAnswers got ${answeredQuestions.length} answeredQuestions',
+      'fillFromVisualRuleAnswers got ${answeredQuest2s.length} answeredQuest2s',
     );
-    for (VisRuleStyleQuest rQuest in answeredQuestions) {
+    for (Quest2 rQuest in answeredQuest2s) {
       // look up or create it
       ScreenCfgByArea screenCfg = this.screenConfigMap[rQuest.appScreen] ??
           ScreenCfgByArea(rQuest.appScreen, {});

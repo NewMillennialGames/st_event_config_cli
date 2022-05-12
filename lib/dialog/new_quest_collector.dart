@@ -1,21 +1,21 @@
 part of ConfigDialogRunner;
 
-class NewQuestionCollector {
+class NewQuest2Collector {
   /*
-    each answered question is passed to this object
-    then the scope and context of the question is reviewed
+    each answered Quest2 is passed to this object
+    then the scope and context of the Quest2 is reviewed
 
-    for certain questions, this NQCollector will auto-generate
-    many related sub-questions
+    for certain Quest2s, this NQCollector will auto-generate
+    many related sub-Quest2s
 
-    new questions are passed to QuestListMgr
-    which assigns them a questionId
+    new Quest2s are passed to QuestListMgr
+    which assigns them a Quest2Id
     and appends them to the to-be-answered list
 
-    at some point, we may wish to sort questions
+    at some point, we may wish to sort Quest2s
     into sensible order, but that process might
-    put already answered questions after the current
-    question index  (I've solved this but not tested)
+    put already answered Quest2s after the current
+    Quest2 index  (I've solved this but not tested)
 
   Summary:
   after user selects desired screens to configure, then we ask
@@ -24,36 +24,36 @@ class NewQuestionCollector {
   to those areas and/or area-slots on each respective screen
   */
 
-  bool handleAcquiringNewQuestions(QuestListMgr _questMgr) {
-    // returns whether true if new questions were added
+  bool handleAcquiringNewQuest2s(QuestListMgr _questMgr) {
+    // returns whether true if new Quest2s were added
 
-    Question questJustAnswered = _questMgr._currentOrLastQuestion;
-    // ruleQuestions don't currently generate new questions
-    // actually, a filter, sort or group (level 2 or 3) question
-    // should generate the questions under it??  TODO
-    if (questJustAnswered.isRuleQuestion ||
-        questJustAnswered.generatesNoNewQuestions) {
+    Quest2 questJustAnswered = _questMgr._currentOrLastQuest2;
+    // ruleQuest2s don't currently generate new Quest2s
+    // actually, a filter, sort or group (level 2 or 3) Quest2
+    // should generate the Quest2s under it??  TODO
+    if (questJustAnswered.addsRuleDetailQuestsForSlotOrArea ||
+        questJustAnswered.generatesNoNewQuest2s) {
       // print(
-      //   'Quest: #${questJustAnswered.questionId} -- ${questJustAnswered.questStr} wont generate any new questions',
+      //   'Quest: #${questJustAnswered.Quest2Id} -- ${questJustAnswered.questStr} wont generate any new Quest2s',
       // );
       return false;
     }
 
     bool addedNew = false;
-    if (questJustAnswered.addsWhichAreaInSelectedScreenQuestions) {
-      /* called by the last question in hard-coded event list
+    if (questJustAnswered.addsWhichAreaInSelectedScreenQuest2s) {
+      /* called by the last Quest2 in hard-coded event list
         user has given us full list of screens they want to configure
         so we don't need to ask individual screens again
        */
       print('calling: askUserWhichAreasOfSelectedScreensToConfigure');
       askUserWhichAreasOfSelectedScreensToConfigure(
         _questMgr,
-        questJustAnswered.response as UserResponse<List<AppScreen>>,
+        questJustAnswered.mainAnswer as UserResponse<List<AppScreen>>,
       );
       addedNew = true;
       //
-    } else if (questJustAnswered.addsWhichRulesForSelectedAreaQuestions ||
-        questJustAnswered.addsWhichSlotOfSelectedAreaQuestions) {
+    } else if (questJustAnswered.addsWhichRulesForSelectedAreaQuest2s ||
+        questJustAnswered.addsWhichSlotOfSelectedAreaQuest2s) {
       /*  for all the areas (to be configured) of all of the selected screens
           we need to know which slot(s) on each area they want to configure
 
@@ -65,7 +65,7 @@ class NewQuestionCollector {
       print('calling: askeWhichRulesGoWithAreaAndWhichSlotsToConfig');
       askWhichRulesGoWithAreaAndWhichSlotsToConfig(
         _questMgr,
-        questJustAnswered as Question<String, List<ScreenWidgetArea>>,
+        questJustAnswered, // <String, List<ScreenWidgetArea>>
       );
       addedNew = true;
       //
@@ -74,7 +74,7 @@ class NewQuestionCollector {
       print('calling: askWhichConfigRulesGoWithEachSlot');
       askWhichConfigRulesGoWithEachSlot(
         _questMgr,
-        questJustAnswered as Question<String, List<ScreenAreaWidgetSlot>>,
+        questJustAnswered as Quest2<String, List<ScreenAreaWidgetSlot>>,
       );
       addedNew = true;
       //
@@ -83,26 +83,26 @@ class NewQuestionCollector {
 
       genRequestedVisualRulesForAreaOrSlot(
         _questMgr,
-        questJustAnswered as Question<String, List<VisualRuleType>>,
+        questJustAnswered as Quest2<String, List<VisualRuleType>>,
       );
       addedNew = true;
       //
-      // } else if (questJustAnswered.addsBehavioralRuleQuestions) {
+      // } else if (questJustAnswered.addsBehavioralRuleQuest2s) {
       //   print('calling: genRequestedBehaveRulesForAreaOrSlot');
       //   genRequestedBehaveRulesForAreaOrSlot(
       //     _questMgr,
-      //     questJustAnswered as Question<String, List<BehaviorRuleType>>,
+      //     questJustAnswered as Quest2<String, List<BehaviorRuleType>>,
       //   );
       //   addedNew = true;
       //
     } else {
-      // no new questions generated;
-      if (questJustAnswered.generatesNoNewQuestions ||
-          questJustAnswered.isRuleQuestion) return false;
+      // no new Quest2s generated;
+      if (questJustAnswered.generatesNoNewQuest2s ||
+          questJustAnswered.isRuleQuest2) return false;
 
       print('\nWarning ****************');
       print(
-        'Quest ID: ${questJustAnswered.questionId} (cascade type: ${questJustAnswered.qQuantify.cascadeType.name}) did not generate any new questions',
+        'Quest ID: ${questJustAnswered.Quest2Id} (cascade type: ${questJustAnswered.qQuantify.cascadeType.name}) did not generate any new Quest2s',
       );
       print('qText: "${questJustAnswered.questStr}"');
     }
@@ -110,25 +110,25 @@ class NewQuestionCollector {
     return addedNew;
   }
 
-  // callbacks when a question needs to add other questions
+  // callbacks when a Quest2 needs to add other Quest2s
   void askUserWhichAreasOfSelectedScreensToConfigure(
     QuestListMgr _questMgr,
     UserResponse<List<AppScreen>> response,
   ) {
     // receives list of multiple screens user wants to configure
-    // create "include" questions for all areas in selected screens
-    // user response to each of these questions will cause a call to:
+    // create "include" Quest2s for all areas in selected screens
+    // user response to each of these Quest2s will cause a call to:
     // askeUserWhichSlotsOnSelectedAreasToConfigure() below
-    // note that these questions have appScreen set, but no ScreenWidgetArea
-    List<Question> newQuestions = [];
+    // note that these Quest2s have appScreen set, but no ScreenWidgetArea
+    List<Quest2> newQuest2s = [];
     for (AppScreen scr in response.answers) {
       // skip screens that dont have configurable areas
       if (!scr.isConfigurable) continue;
 
-      var q = Question<String, List<ScreenWidgetArea>>(
+      var q = Quest2<String, List<ScreenWidgetArea>>(
         QTargetIntent.screenLevel(
           scr,
-          responseAddsWhichRuleAndSlotQuestions: true,
+          responseAddsWhichRuleAndSlotQuest2s: true,
         ),
         'For the ${scr.name} screen, select the areas you`d like to configure?',
         scr.configurableScreenAreas.map((e) => e.name),
@@ -139,49 +139,50 @@ class NewQuestionCollector {
         },
         acceptsMultiResponses: true,
       );
-      newQuestions.add(q);
+      newQuest2s.add(q);
     }
-    // now put these questions in the queue
-    _questMgr.appendNewQuestions(
-      newQuestions,
+    // now put these Quest2s in the queue
+    _questMgr.appendNewQuest2s(
+      newQuest2s,
       dbgNam: 'askUserWhichAreasOfSelectedScreensToConfigure',
     );
   }
 
   void askWhichRulesGoWithAreaAndWhichSlotsToConfig(
     QuestListMgr _questMgr,
-    Question<String, List<ScreenWidgetArea>> quest,
+    Quest2 quest,
   ) {
     /*  receives 1 screen but multiple areas
 
-    questions created in this section should GENERATE
-    the VisualRuleType questions for areas
+    Quest2s created in this section should GENERATE
+    the VisualRuleType Quest2s for areas
     that ask user to provide specific rule-args
 
-    and "which slot" style questions for each slot in an area
+    and "which slot" style Quest2s for each slot in an area
     */
     AppScreen screen = quest.appScreen;
-    assert(quest.response?.answers is List<ScreenWidgetArea>);
+    assert(quest.mainAnswer is List<ScreenWidgetArea>);
 
     var areasSelectedForScreenInLastQuest =
-        quest.response?.answers as List<ScreenWidgetArea>;
+        quest.mainAnswer as List<ScreenWidgetArea>;
     if (areasSelectedForScreenInLastQuest.length < 1) return;
 
     // for each configurable area in current screen
-    // make a question about it's possible rule-types
-    List<Question> newQuestions = [];
+    // make a Quest2 about it's possible rule-types
+    List<Quest2> newQuest2s = [];
 
     // ask rules for each area
     for (ScreenWidgetArea area in areasSelectedForScreenInLastQuest) {
       var applicableRuleTypes = area.applicableRuleTypes(screen);
       if (!area.isConfigureable || applicableRuleTypes.length < 1) continue;
 
-      var q = Question<String, List<VisualRuleType>>(
+      var q = Quest2(
+        // <String, List<VisualRuleType>>
         QTargetIntent.ruleLevel(
           screen,
           area,
           null,
-          responseAddsRuleDetailQuestions: true,
+          responseAddsRuleDetailQuest2s: true,
         ),
         'Which rules would you like to add to the ${area.name} of ${screen.name}?',
         applicableRuleTypes.map((r) => r.friendlyName),
@@ -199,7 +200,7 @@ class NewQuestionCollector {
       //   askWhichConfigRulesGoWithEachSlot(_questMgr, q);
       //   continue;
       // }
-      newQuestions.add(q);
+      newQuest2s.add(q);
     }
 
     // ask which slots user would like to configure within each area
@@ -213,11 +214,12 @@ class NewQuestionCollector {
       );
       if (!area.isConfigureable || applicableWigetSlots.length < 1) continue;
 
-      var q = Question<String, List<ScreenAreaWidgetSlot>>(
+      var q = Quest2(
+        // <String, List<ScreenAreaWidgetSlot>>
         QTargetIntent.areaLevelSlots(
           screen,
           area,
-          responseAddsWhichRuleQuestions: true,
+          responseAddsWhichRuleQuest2s: true,
         ),
         'Which slots/widgets/sort-fields on the ${area.name} of ${screen.name} would you like to configure?',
         applicableWigetSlots.map((ScreenAreaWidgetSlot r) => r.choiceName),
@@ -228,44 +230,44 @@ class NewQuestionCollector {
         },
         acceptsMultiResponses: true,
       );
-      newQuestions.add(q);
+      newQuest2s.add(q);
     }
 
-    _questMgr.appendNewQuestions(
-      newQuestions,
+    _questMgr.appendNewQuest2s(
+      newQuest2s,
       dbgNam: 'askWhichRulesGoWithAreaAndWhichSlotsToConfig',
     );
     print(
-      'askWhichRulesGoWithAreaAndWhichSlotsToConfig adding ${newQuestions.length} rule questions',
+      'askWhichRulesGoWithAreaAndWhichSlotsToConfig adding ${newQuest2s.length} rule Quest2s',
     );
   }
 
   void askWhichConfigRulesGoWithEachSlot(
     QuestListMgr _questMgr,
-    Question<String, List<ScreenAreaWidgetSlot>> quest,
+    Quest2 quest, // <String, List<ScreenAreaWidgetSlot>>
   ) {
     // receives 1 screen & 1 area but multiple slots
 
     AppScreen screen = quest.appScreen;
     ScreenWidgetArea screenArea = quest.screenWidgetArea!;
 
-    List<ScreenAreaWidgetSlot> selectedSlotsInArea =
-        quest.response?.answers ?? [];
+    List<ScreenAreaWidgetSlot> selectedSlotsInArea = quest.mainAnswer ?? [];
     if (selectedSlotsInArea.length < 1) return;
 
-    List<Question> newQuestions = [];
+    List<Quest2> newQuest2s = [];
     for (ScreenAreaWidgetSlot slotInArea in selectedSlotsInArea) {
       //
       var possibleConfigRules = slotInArea.possibleConfigRules(screenArea);
       if (!slotInArea.isConfigurable || possibleConfigRules.length < 1)
         continue;
 
-      var q = Question<String, List<VisualRuleType>>(
+      var q = Quest2(
+        // <String, List<VisualRuleType>>
         QTargetIntent.ruleLevel(
           screen,
           screenArea,
           slotInArea,
-          responseAddsRuleDetailQuestions: true,
+          responseAddsRuleDetailQuest2s: true,
         ),
         'Which rules would you like to add to the ${slotInArea.name} area of ${screenArea.name} on screen ${screen.name}?',
         possibleConfigRules.map((r) => r.friendlyName),
@@ -275,18 +277,18 @@ class NewQuestionCollector {
               .toList();
         },
       );
-      newQuestions.add(q);
+      newQuest2s.add(q);
     }
 
-    _questMgr.appendNewQuestions(
-      newQuestions,
+    _questMgr.appendNewQuest2s(
+      newQuest2s,
       dbgNam: 'askWhichConfigRulesGoWithEachSlot',
     );
   }
 
   void genRequestedVisualRulesForAreaOrSlot(
     QuestListMgr _questMgr,
-    Question<String, List<VisualRuleType>> quest,
+    Quest2 quest, // <String, List<VisualRuleType>>
   ) {
     /*
       user has responded WHICH rules they would like to apply
@@ -294,47 +296,47 @@ class NewQuestionCollector {
       usually should be just one ruleType for each
       screen location
     */
-    List<VisualRuleType> rulesToCreateForAreaOrSlot =
-        quest.response?.answers ?? [];
+    List<VisualRuleType> rulesToCreateForAreaOrSlot = quest.mainAnswer ?? [];
     if (rulesToCreateForAreaOrSlot.length < 1) return;
 
     AppScreen screen = quest.appScreen;
     ScreenWidgetArea area = quest.screenWidgetArea!;
     ScreenAreaWidgetSlot? areaSlot = quest.slotInArea;
     //
-    List<VisualRuleQuestion> newQuestions = [];
-    // VisualRuleQuestions figure out their questions &
+    List<Quest2> newQuest2s = [];
+    // Quest2s figure out their Quest2s &
     // select options from the rule-type being passed
     for (VisualRuleType ruleTyp in rulesToCreateForAreaOrSlot) {
       // string is the user-input value being parsed
       // RuleResponseWrapperIfc is one of these response types:
       // TvRowStyleCfg, TvSortOrGroupCfg, TvFilterCfg, ShowHideCfg
-      var q = VisualRuleQuestion<String, RuleResponseBase>(
+      var q = Quest2(
+        // <String, RuleResponseBase>
         screen,
         area,
         ruleTyp,
         areaSlot,
       );
-      newQuestions.add(q);
+      newQuest2s.add(q);
     }
-    _questMgr.appendNewQuestions(
-      newQuestions,
+    _questMgr.appendNewQuest2s(
+      newQuest2s,
       dbgNam: 'genRequestedVisualRulesForAreaOrSlot',
     );
   }
 
   void genRequestedBehaveRulesForAreaOrSlot(
     QuestListMgr _questMgr,
-    Question<String, List<BehaviorRuleType>> quest,
+    Quest2 quest, // <String, List<BehaviorRuleType>>
   ) {
     // use example above for this pattern
   }
 }
 
-// // callbacks when a question needs to add other questions
+// // callbacks when a Quest2 needs to add other Quest2s
 // void niu_askUser2ndOr3rdFieldForSortGroupFilter(
 //   QuestListMgr _questMgr,
-//   VisualRuleQuestion<String, RuleResponseWrapperIfc> questJustAnswered,
+//   Quest2<String, RuleResponseWrapperIfc> questJustAnswered,
 // ) {
 //   /*
 
@@ -344,8 +346,8 @@ class NewQuestionCollector {
 
 //   // final answer = questJustAnswered.response!.answers as TvSortGroupFilterBase;
 //   final nextSlot = ScreenAreaWidgetSlot.values[curSlot + 1];
-//   // VisualRuleQuestion newQuestion =
-//   final newQuestion = VisualRuleQuestion<String, TvSortGroupFilterBase>(
+//   // Quest2 newQuest2 =
+//   final newQuest2 = Quest2<String, TvSortGroupFilterBase>(
 //     questJustAnswered.appScreen,
 //     questJustAnswered.screenWidgetArea!,
 //     questJustAnswered.visRuleTypeForAreaOrSlot!,
@@ -353,7 +355,7 @@ class NewQuestionCollector {
 //   );
 //   // switch (questJustAnswered.visRuleTypeForAreaOrSlot) {
 //   //   case VisualRuleType.sortCfg:
-//   //     newQuestion = VisualRuleQuestion<String, RuleResponseWrapperIfc>(
+//   //     newQuest2 = Quest2<String, RuleResponseWrapperIfc>(
 //   //       questJustAnswered.appScreen,
 //   //       questJustAnswered.screenWidgetArea!,
 //   //       questJustAnswered.visRuleTypeForAreaOrSlot!,
@@ -368,8 +370,8 @@ class NewQuestionCollector {
 //   //     break;
 //   // }
 
-//   _questMgr.appendNewQuestions(
-//     [newQuestion],
+//   _questMgr.appendNewQuest2s(
+//     [newQuest2],
 //     dbgNam: 'askUser2ndOr3rdFieldForSortGroupFilter',
 //   );
 // }

@@ -1,4 +1,4 @@
-part of QuestionsLib;
+part of Quest2sLib;
 
 /*   not sure if this is needed
   QuestMatcher() may be all we need
@@ -11,21 +11,21 @@ part of QuestionsLib;
 
 */
 
-// pass question, return how many new questions to create
-typedef NewQuestCount = int Function(Question);
-// pass question + newIndx, return list of args for question template
-typedef NewQuestArgGen = List<String> Function(Question, int);
+// pass Quest2, return how many new Quest2s to create
+typedef NewQuestCount = int Function(Quest2);
+// pass Quest2 + newIndx, return list of args for Quest2 template
+typedef NewQuestArgGen = List<String> Function(Quest2, int);
 
-typedef QuestionQuantifierRevisor = QTargetIntent Function(QTargetIntent);
+typedef Quest2QuantifierRevisor = QTargetIntent Function(QTargetIntent);
 
 class PerQuestGenOptions<AnsType> {
   /*
-  describes logic and rules for a single auto-generated question
+  describes logic and rules for a single auto-generated Quest2
   instance lives inside DerivedQuestGenerator.perQuestGenOptions
   */
   final Iterable<String> answerChoices;
   final AnsType Function(String) castFunc;
-  late final QuestionQuantifierRevisor qQuantUpdater;
+  late final Quest2QuantifierRevisor qQuantUpdater;
   final int defaultAnswerIdx = 0;
   final String questId;
   final VisualRuleType? ruleType;
@@ -34,22 +34,22 @@ class PerQuestGenOptions<AnsType> {
   PerQuestGenOptions({
     required this.answerChoices,
     required this.castFunc,
-    QuestionQuantifierRevisor? qQuantRev,
+    Quest2QuantifierRevisor? qQuantRev,
     this.questId = '',
     this.ruleType,
     this.ruleQuestType,
   }) : this.qQuantUpdater = qQuantRev == null ? _noOp : qQuantRev;
 
   Type get genType => AnsType;
-  bool get genAsRuleQuestion => ruleType != null;
+  bool get genAsRuleQuest2 => ruleType != null;
 
   static QTargetIntent _noOp(QTargetIntent qq) => qq;
 }
 
 class DerivedQuestGenerator {
   /*
-    intersection of an answered question, plus a QuestMatcher
-    should indicate what new questions to ask
+    intersection of an answered Quest2, plus a QuestMatcher
+    should indicate what new Quest2s to ask
   */
 
   String questTemplate;
@@ -64,18 +64,18 @@ class DerivedQuestGenerator {
     required this.perQuestGenOptions,
   });
 
-  List<Question> generatedQuestions(
-    Question answeredQuest,
+  List<Quest2> generatedQuest2s(
+    Quest2 answeredQuest,
     QuestMatcher? matcher,
   ) {
-    /* use existing answered question
+    /* use existing answered Quest2
     plus logic defined in both this and PerQuestGenOptions
-    to build and return a list of new questions
+    to build and return a list of new Quest2s
     */
     int toCreate = newQuestCountCalculator(answeredQuest);
     if (toCreate < 1) return [];
 
-    List<Question> createdQuest = [];
+    List<Quest2> createdQuest = [];
     for (int i = 0; i < toCreate; i++) {
       //
       List<String> templArgs = newQuestArgGen(answeredQuest, i);
@@ -85,9 +85,9 @@ class DerivedQuestGenerator {
           ? perQuestGenOptions.last
           : perQuestGenOptions[i];
       //
-      Question nxtQuest;
-      if (genOptionsAtIdx.genAsRuleQuestion) {
-        nxtQuest = VisualRuleQuestion.makeFromExisting(
+      Quest2 nxtQuest;
+      if (genOptionsAtIdx.genAsRuleQuest2) {
+        nxtQuest = Quest2.makeFromExisting(
           answeredQuest,
           newQuestStr,
           genOptionsAtIdx,
@@ -107,11 +107,11 @@ class DerivedQuestGenerator {
 
 
 
-  // static List<Question> pendingQuestsFromAnswer(Question quest) {
+  // static List<Quest2> pendingQuestsFromAnswer(Quest2 quest) {
   //   List<VisualRuleType> vrts = quest.qQuantify.relatedSubVisualRules(quest);
   //   return [];
   // }
 
-  // static List<Question> impliedAnswersFromAnswer(Question quest) {
+  // static List<Quest2> impliedAnswersFromAnswer(Quest2 quest) {
   //   return [];
   // }

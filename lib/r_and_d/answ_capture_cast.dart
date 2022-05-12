@@ -17,4 +17,9 @@ class CaptureAndCast<T> {
   T cast() {
     return _castFunc(_answers);
   }
+
+  // getters
+  bool get asksWhichScreensToConfig => T is List<AppScreen>;
+  bool get asksWhichAreasOfScreenToConfig => T is List<ScreenWidgetArea>;
+  bool get asksWhichSlotsOfAreaToConfig => T is List<ScreenAreaWidgetSlot>;
 }

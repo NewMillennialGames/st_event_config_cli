@@ -1,4 +1,4 @@
-part of QuestionsLib;
+part of Quest2sLib;
 
 class VisRuleQuestWithChoices {
   //
@@ -13,7 +13,7 @@ class VisRuleQuestWithChoices {
   String get questStr => 'QwC: ' + ruleQuestType.name + '\n' + _subQuests;
   String get _subQuests => _ruleQuestChoices.toString();
 
-  String createFormattedQuestion(VisualRuleQuestion rQuest) {
+  String createFormattedQuest2(Quest2 rQuest) {
     String templ =
         ruleQuestType.questTemplByRuleType(rQuest.visRuleTypeForAreaOrSlot!);
 
@@ -58,10 +58,10 @@ class VisRuleChoiceConfig {
       questsAndChoices.map((e) => e.ruleQuestType).toList();
 
   factory VisRuleChoiceConfig.fromRuleTyp(VisualRuleType ruleTyp) {
-    // use VisualRuleType to get list of sub-questions
+    // use VisualRuleType to get list of sub-Quest2s
     // and their respective choice options
     List<VisRuleQuestWithChoices> questsAndChoices =
-        getSubQuestionsAndChoiceOptions(ruleTyp);
+        getSubQuest2sAndChoiceOptions(ruleTyp);
     return VisRuleChoiceConfig._(ruleTyp, questsAndChoices);
   }
 
@@ -72,10 +72,10 @@ class VisRuleChoiceConfig {
     return VisRuleChoiceConfig._(genOpt.ruleType!, [qwc]);
   }
 
-  static List<VisRuleQuestWithChoices> getSubQuestionsAndChoiceOptions(
+  static List<VisRuleQuestWithChoices> getSubQuest2sAndChoiceOptions(
     VisualRuleType rt,
   ) {
-    return rt.requiredQuestions
+    return rt.requiredQuest2s
         .map(
           (qrq) => VisRuleQuestWithChoices(
             qrq,

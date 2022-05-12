@@ -32,12 +32,12 @@ class CfgForAreaAndNestedSlots {
   bool isMissingRuleTyp(VisualRuleType typ) => visCfgForArea[typ] == null;
 
   //add rules to this object
-  void appendAreaOrSlotRule(VisRuleStyleQuest rQuest) {
+  void appendAreaOrSlotRule(Quest2 rQuest) {
     //
     VisualRuleType? vrt = rQuest.visRuleTypeForAreaOrSlot;
     assert(
       vrt != null,
-      'cant add question that has no attached rule',
+      'cant add Quest2 that has no attached rule',
     );
     //
     ScreenAreaWidgetSlot? optSlotInArea = rQuest.slotInArea;
@@ -51,13 +51,13 @@ class CfgForAreaAndNestedSlots {
     if (optSlotInArea == null) {
       // this is an area level rule by specific type
       cfgForSlotOrArea = visCfgForArea[vrt] ?? SlotOrAreaRuleCfg([]);
-      cfgForSlotOrArea.appendQuestion(rQuest);
+      cfgForSlotOrArea.appendQuest2(rQuest);
       visCfgForArea[vrt] = cfgForSlotOrArea;
     } else {
       // this is a slot level rule
       Map<ScreenAreaWidgetSlot, SlotOrAreaRuleCfg> slotCfgMap =
           _setAndGetMapForRuleAndSlot(vrt, optSlotInArea);
-      slotCfgMap[optSlotInArea]!.appendQuestion(rQuest);
+      slotCfgMap[optSlotInArea]!.appendQuest2(rQuest);
       visCfgForSlotsByRuleType[vrt] = slotCfgMap;
     }
   }

@@ -4,7 +4,7 @@ class DialogMgr {
   /*  not really in use much
     none of this functionality is needed
     --
-    keeps track of Dialog Sections (aka groups of related questions)
+    keeps track of Dialog Sections (aka groups of related Quest2s)
     and also coordinates (stays in sync with) the QuestListMgr
   */
   final QuestListMgr _questMgr;
@@ -15,10 +15,10 @@ class DialogMgr {
   DialogMgr(this._questMgr);
 
   //
-  Question? getNextQuestInCurrentSection() {
+  Quest2? getNextQuestInCurrentSection() {
     // only in this section
-    // return _questMgr._nextQuestionFor(currentAppScreenTyp);
-    return _questMgr.nextQuestionToAnswer();
+    // return _questMgr._nextQuest2For(currentAppScreenTyp);
+    return _questMgr.nextQuest2ToAnswer();
   }
 
   // List<UserResponse> get priorAnswers {
@@ -29,16 +29,16 @@ class DialogMgr {
   void loadBeginningDialog() {
     //
     _loadAppUiSections();
-    // only load questions for top (eventConfiguration) section
+    // only load Quest2s for top (eventConfiguration) section
     // answers in that section will kick off creation of new Quests
-    // inside of NewQuestionCollector()
-    List<Question> quests = loadInitialConfigQuestions();
-    _questMgr.appendNewQuestions(quests);
+    // inside of NewQuest2Collector()
+    List<Quest2> quests = loadInitialConfigQuest2s();
+    _questMgr.appendNewQuest2s(quests);
   }
 
-  // void _loadQuestionsForSpecifiedSection(AppScreen section) {
-  //   List<Question> quests = loadQuestionsAtTopOfSection(section);
-  //   _questMgr.appendNewQuestions(quests);
+  // void _loadQuest2sForSpecifiedSection(AppScreen section) {
+  //   List<Quest2> quests = loadQuest2sAtTopOfSection(section);
+  //   _questMgr.appendNewQuest2s(quests);
   // }
 
   void _loadAppUiSections() {

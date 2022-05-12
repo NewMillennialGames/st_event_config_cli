@@ -1,10 +1,10 @@
-part of QuestionsLib;
+part of Quest2sLib;
 
 class UserResponse<AnsTyp> {
-  /*  holds answers to normal (NON Rule-Based) questions
+  /*  holds answers to normal (NON Rule-Based) Quest2s
   AnsTyp can be a value or list of values
 
-  this class captures and retains user answers to every question
+  this class captures and retains user answers to every Quest2
   */
   late AnsTyp answers;
   UserResponse([AnsTyp? _answers]) {
@@ -35,7 +35,7 @@ class UserResponse<AnsTyp> {
 //   UserRuleResponse(this.ruleType);
 
 //   // getters
-//   List<VisRuleQuestType> get requiredQuestions => ruleType.requiredQuestions;
+//   List<VisRuleQuestType> get requiredQuest2s => ruleType.requiredQuest2s;
 
 //   List<AppVisualRuleBase> asVisualRules() {
 //     //

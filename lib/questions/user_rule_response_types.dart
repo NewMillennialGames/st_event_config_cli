@@ -1,11 +1,11 @@
-part of QuestionsLib;
+part of Quest2sLib;
 
 /*
   data-types of all user answers must implement RuleResponseWrapperIfc Ifc
 */
 
 abstract class RuleResponseWrapperIfc {
-  // handles answers for real Rule questions
+  // handles answers for real Rule Quest2s
   // receive user-answers IN
   void castResponsesToAnswerTypes(Map<VisRuleQuestType, String> responses);
   // send user answers OUT as whatever class rule is
@@ -19,7 +19,7 @@ abstract class RuleResponseWrapperIfc {
 
 @JsonSerializable()
 class RuleResponseBase implements RuleResponseWrapperIfc {
-  /* base class for user answers to rule questions
+  /* base class for user answers to rule Quest2s
     it implements the interface
     and calls subclass methods to do the hard work
   */
@@ -30,7 +30,7 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
 
   RuleResponseBase(this.ruleType);
 
-  List<VisRuleQuestType> get requiredQuestions => ruleType.requiredQuestions;
+  List<VisRuleQuestType> get requiredQuest2s => ruleType.requiredQuest2s;
   // @override
   // bool get gens2ndOr3rdSortGroupFilterQuests => false;
   //
@@ -39,8 +39,8 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
 
   void _checkArgs(Map<VisRuleQuestType, String> responses) {
     assert(
-      this.requiredQuestions.length == responses.length,
-      'not enough answers passed: got ${responses.length} exp: ${this.requiredQuestions.length}',
+      this.requiredQuest2s.length == responses.length,
+      'not enough answers passed: got ${responses.length} exp: ${this.requiredQuest2s.length}',
     );
   }
 
@@ -150,7 +150,7 @@ class TvRowStyleCfg extends RuleResponseBase {
   // receive str data into instance & make it structured data
   @override
   void _castToRealTypes() {
-    VisRuleQuestType key = requiredQuestions.first;
+    VisRuleQuestType key = requiredQuest2s.first;
     assert(key == VisRuleQuestType.selectVisualComponentOrStyle);
     String uResp = userResponses[key] ?? '0';
     int uRespIdx = int.tryParse(uResp) ?? 0;

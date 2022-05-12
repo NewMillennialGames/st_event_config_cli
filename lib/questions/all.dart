@@ -1,4 +1,4 @@
-library QuestionsLib;
+library Quest2sLib;
 
 import 'dart:ffi';
 
@@ -20,7 +20,7 @@ part 'new_quest_derived.dart';
 part 'question_quantifier.dart';
 part 'question_base.dart';
 part 'question_visual_rule.dart';
-// part 'question_behave_rule.dart';
+// part 'Quest2_behave_rule.dart';
 part 'vis_rule_choice_config.dart';
 part 'user_rule_response_types.dart';
 

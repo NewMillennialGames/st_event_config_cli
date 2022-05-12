@@ -1,21 +1,21 @@
 part of RandDee;
 
 /*
-  for questions that contain multi-answers
+  for Quest2s that contain multi-answers
   AnswType is the top (wrapped) version of those multi-answers
 */
 
 class QFactory {
   /*
-  steps to building a question
+  steps to building a Quest2
     create response accumulator (RA)
     create list of prompt and choices (P&C)
     RA + P&C can be constructed as part of QDefCollection
 
 
-  now specify intent and target of the question
+  now specify intent and target of the Quest2
 
-  now specify cascade effects from the question
+  now specify cascade effects from the Quest2
 
   */
   // late QIntentCfg intent;
@@ -43,7 +43,7 @@ class QFactory {
     return this;
   }
 
-  Quest2 getAssembledQuestion() {
+  Quest2 getAssembledQuest2() {
     return Quest2(targetArea, iterDef);
   }
 }
@@ -52,15 +52,15 @@ class QFactory {
 //   //
 //   var f = QFactory();
 //   f.startGroupWithIntent();
-//   _createTopLevelQuestions(f);
+//   _createTopLevelQuest2s(f);
 
 //   f.setTargetScreen();
 // }
 
-// void _createTopLevelQuestions(QFactory f) {
+// void _createTopLevelQuest2s(QFactory f) {
 //   //
 // }
 
-// void _createTopLevelQuestions(QFactory f) {
+// void _createTopLevelQuest2s(QFactory f) {
 //   //
 // }

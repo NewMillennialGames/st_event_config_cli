@@ -6,67 +6,67 @@ class DialogRunner {
   the top-level obj that coordinates:
     DialogMgr
     QuestListMgr
-    CliQuestionFormatter
+    CliQuest2Formatter
     
   to produce CLI output to the user
   */
   final QuestListMgr _questMgr = QuestListMgr();
-  final NewQuestionCollector _newQuestComposer = NewQuestionCollector();
+  final NewQuest2Collector _newQuestComposer = NewQuest2Collector();
   late final DialogMgr _questGroupMgr;
   // set in init
-  final QuestionPresenter questFormatter;
+  final Quest2Presenter questFormatter;
   final int linesBetweenSections;
-  final int linesBetweenQuestions;
+  final int linesBetweenQuest2s;
   //
 
   DialogRunner(
     this.questFormatter, [
     this.linesBetweenSections = 3,
-    this.linesBetweenQuestions = 1,
+    this.linesBetweenQuest2s = 1,
   ]) {
     _questGroupMgr = DialogMgr(_questMgr);
     _questGroupMgr.loadBeginningDialog();
   }
 
-  QuestListMgr get questionMgr => _questMgr;
+  QuestListMgr get Quest2Mgr => _questMgr;
   List<UserResponse> getPriorAnswersList() {
-    // used when a question needs to review prior
+    // used when a Quest2 needs to review prior
     // answers to configure itself
     return _questMgr.priorAnswers;
   }
 
   //
-  // web logic;  start asking questions for GUI
-  bool serveNextQuestionToGui() {
+  // web logic;  start asking Quest2s for GUI
+  bool serveNextQuest2ToGui() {
     //
-    Question? _quest = _questGroupMgr.getNextQuestInCurrentSection();
+    Quest2? _quest = _questGroupMgr.getNextQuestInCurrentSection();
     if (_quest == null) return false;
     questFormatter.askAndWaitForUserResponse(this, _quest);
     return true;
   }
 
-  void advanceToNextQuestion() {
+  void advanceToNextQuest2() {
     /*
-      run logic to add new questions based on user response to current question
+      run logic to add new Quest2s based on user response to current Quest2
       we currently have two different methods:
-        1) _newQuestComposer.handleAcquiringNewQuestions() was my original brute-force approach
+        1) _newQuestComposer.handleAcquiringNewQuest2s() was my original brute-force approach
           it's brittle and hard to test (will remove this eventually)
         2) appendNewQuestsOrInsertImplicitAnswers is a much more elegant and flexible
-          approach based on pattern matching and Question generation functions
+          approach based on pattern matching and Quest2 generation functions
 
       I'm leaving both in place right now because we don't currently have this
       package under test and I don't want to break existing functionality
-      but new auto-generated questions should be placed under #2 (appendNewQuestsOrInsertImplicitAnswers)
+      but new auto-generated Quest2s should be placed under #2 (appendNewQuestsOrInsertImplicitAnswers)
     */
 
-    bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(_questMgr);
+    bool didAddNew = _newQuestComposer.handleAcquiringNewQuest2s(_questMgr);
     if (!didAddNew) {
-      // run appendNewQuestsOrInsertImplicitAnswers only if handleAcquiringNewQuestions does no work
+      // run appendNewQuestsOrInsertImplicitAnswers only if handleAcquiringNewQuest2s does no work
       appendNewQuestsOrInsertImplicitAnswers(_questMgr);
     }
-    // end of logic to add new questions based on user response
+    // end of logic to add new Quest2s based on user response
 
-    bool hasNextQuest = serveNextQuestionToGui();
+    bool hasNextQuest = serveNextQuest2ToGui();
     if (!hasNextQuest) {
       questFormatter.informUiThatDialogIsComplete();
     }
@@ -76,28 +76,28 @@ class DialogRunner {
   bool cliLoopUntilComplete() {
     //
     // questFormatter manages display output
-    // final questFormatter = CliQuestionFormatter();
+    // final questFormatter = CliQuest2Formatter();
 
     _outputSpacerLines(forSection: true);
-    // check for another question
-    Question? _quest = _questGroupMgr.getNextQuestInCurrentSection();
+    // check for another Quest2
+    Quest2? _quest = _questGroupMgr.getNextQuestInCurrentSection();
     while (_quest != null) {
       // askAndWaitForUserResponse() will callback to this
-      // to create any derived questions for this section
+      // to create any derived Quest2s for this section
       questFormatter.askAndWaitForUserResponse(this, _quest);
 
-      // logic to add new questions based on user response
+      // logic to add new Quest2s based on user response
       // two different methods
-      bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(
+      bool didAddNew = _newQuestComposer.handleAcquiringNewQuest2s(
         // _questGroupMgr,
         _questMgr,
       );
-      if (!didAddNew && _quest.isRuleQuestion) {
-        // new version of handleAcquiringNewQuestions
-        // run it only if handleAcquiringNewQuestions does no work
+      if (!didAddNew && _quest.appliesToClientConfiguration) {
+        // new version of handleAcquiringNewQuest2s
+        // run it only if handleAcquiringNewQuest2s does no work
         appendNewQuestsOrInsertImplicitAnswers(_questMgr);
       }
-      // end of logic to add new questions based on user response
+      // end of logic to add new Quest2s based on user response
 
       _quest = _questGroupMgr.getNextQuestInCurrentSection();
       if (_quest != null) _outputSpacerLines();
@@ -109,7 +109,7 @@ class DialogRunner {
     if (forSection) {
       print('\n' * this.linesBetweenSections);
     } else {
-      print('\n' * this.linesBetweenQuestions);
+      print('\n' * this.linesBetweenQuest2s);
     }
   }
 }

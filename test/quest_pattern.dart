@@ -1,22 +1,22 @@
 import 'package:st_ev_cfg/st_ev_cfg.dart';
 import 'package:st_ev_cfg/interfaces/q_presenter.dart';
 
-class TestQuestRespGen implements QuestionPresenter {
-  // receives questions for test-automation
-  List<WhenQuestLike> questionMatchers;
+class TestQuestRespGen implements Quest2Presenter {
+  // receives Quest2s for test-automation
+  List<WhenQuestLike> Quest2Matchers;
 
-  TestQuestRespGen(this.questionMatchers);
+  TestQuestRespGen(this.Quest2Matchers);
 
-  List<WhenQuestLike> _lookForResponseGenerators(Question quest) {
+  List<WhenQuestLike> _lookForResponseGenerators(Quest2 quest) {
     //
-    if (!(quest is VisualRuleQuestion)) {
+    if (!(quest is Quest2)) {
       //
-      print('Warn: called _lookForResponseGenerators with top-level question');
+      print('Warn: called _lookForResponseGenerators with top-level Quest2');
       return [];
     }
 
     List<WhenQuestLike> lqm = [];
-    for (WhenQuestLike qm in questionMatchers) {
+    for (WhenQuestLike qm in Quest2Matchers) {
       //
       if (qm.matches(quest)) {
         lqm.add(qm);
@@ -26,12 +26,12 @@ class TestQuestRespGen implements QuestionPresenter {
   }
 
   String _buildUserResponse(
-    Question quest,
+    Quest2 quest,
     List<WhenQuestLike> responseGenerators,
   ) {
     //
-    assert(quest is VisualRuleQuestion, 'bad argument');
-    VisualRuleQuestion vrq = quest as VisualRuleQuestion;
+    assert(quest is Quest2, 'bad argument');
+    Quest2 vrq = quest as Quest2;
 
     List<VisRuleQuestType> questTypes = vrq.questDef.visQuestTypes;
 
@@ -52,19 +52,19 @@ class TestQuestRespGen implements QuestionPresenter {
   }
 
   @override
-  void askAndWaitForUserResponse(DialogRunner dialoger, Question quest) {
+  void askAndWaitForUserResponse(DialogRunner dialoger, Quest2 quest) {
     //
     List<WhenQuestLike> responseGenerators = _lookForResponseGenerators(quest);
     if (responseGenerators.length < 1) {
       // none so send default
       quest.convertAndStoreUserResponse('0');
-      dialoger.advanceToNextQuestion();
+      dialoger.advanceToNextQuest2();
       return;
     }
 
     String _fullResponse = _buildUserResponse(quest, responseGenerators);
     quest.convertAndStoreUserResponse(_fullResponse);
-    dialoger.advanceToNextQuestion();
+    dialoger.advanceToNextQuest2();
   }
 
   @override
@@ -85,7 +85,7 @@ class QuestAnswerPair {
 }
 
 class WhenQuestLike {
-  /* defines a question pattern
+  /* defines a Quest2 pattern
     and the answer that should be provided
     by auto-test (as user) in response
   */
@@ -102,7 +102,7 @@ class WhenQuestLike {
     this.questTypes = const [],
   ]);
 
-  bool matches(Question quest) {
+  bool matches(Quest2 quest) {
     bool isSame = quest.appScreen == screen;
     if (!isSame) return false;
     isSame = area == null || quest.screenWidgetArea == area;

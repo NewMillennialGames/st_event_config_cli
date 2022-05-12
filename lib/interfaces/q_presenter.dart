@@ -1,10 +1,11 @@
 import '../questions/all.dart';
 import '../dialog/all.dart';
+import '../r_and_d/all.dart';
 
-abstract class QuestionPresenter {
+abstract class Quest2Presenter {
   /*
   interface for the class passed to DialogRunner
-  that is responsible for rendering UI for the questions
+  that is responsible for rendering UI for the Quest2s
 
   CLI app uses:
     lib/services/cli_quest_presenter.dart
@@ -13,14 +14,14 @@ abstract class QuestionPresenter {
   in:  lib/services/web_quest_presenter.dart
   */
 
-  // bool askSectionQuestionAndWaitForUserResponse(
+  // bool askSectionQuest2AndWaitForUserResponse(
   //   DialogRunner dialoger,
   //   DialogSectionCfg sectionCfg,
   // );
 
   void askAndWaitForUserResponse(
     DialogRunner dialoger,
-    Question quest,
+    Quest2 quest,
   );
 
   void informUiThatDialogIsComplete();

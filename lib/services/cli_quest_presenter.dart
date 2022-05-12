@@ -6,12 +6,12 @@ import '../questions/all.dart';
 import '../dialog/all.dart';
 import '../enums/all.dart';
 
-class CliQuestionPresenter implements QuestionPresenter {
+class CliQuest2Presenter implements Quest2Presenter {
   // formatter for command-line IO
-  CliQuestionPresenter();
+  CliQuest2Presenter();
 
   // @override
-  // bool askSectionQuestionAndWaitForUserResponse(
+  // bool askSectionQuest2AndWaitForUserResponse(
   //   DialogRunner dialoger,
   //   DialogSectionCfg sectionCfg,
   // ) {
@@ -31,27 +31,26 @@ class CliQuestionPresenter implements QuestionPresenter {
   @override
   void askAndWaitForUserResponse(
     DialogRunner dialoger,
-    Question quest,
+    Quest2 quest,
   ) {
-    // rule questions are more complex and handled by
+    // rule Quest2s are more complex and handled by
     // looping for multiple answers
-    if (quest is VisualRuleQuestion) {
-      Map<VisRuleQuestType, String> multiAnswerRespList =
-          _handleVisualRuleQuestions(
+    if (quest is Quest2) {
+      Map<VisRuleQuestType, String> multiAnswerRespList = _handleQuest2s(
         dialoger,
         quest,
       );
-      // store response payload on the question
+      // store response payload on the Quest2
       quest.castResponseListAndStore(multiAnswerRespList);
       return;
     }
-    // else if (quest is BehaviorRuleQuestion) {
-    //   // else do behavioral question
+    // else if (quest is BehaviorRuleQuest2) {
+    //   // else do behavioral Quest2
     // return;
     // }
 
-    // normal question to figure out which rule questions to actually ask user
-    _printQuestion(quest);
+    // normal Quest2 to figure out which rule Quest2s to actually ask user
+    _printQuest2(quest);
     _printOptions(quest);
     _printInstructions(quest);
     // now capture user answer
@@ -79,7 +78,7 @@ class CliQuestionPresenter implements QuestionPresenter {
 
   void _getResponseThenCastAndStoreIt(
     DialogRunner dlogRunner,
-    Question quest,
+    Quest2 quest,
   ) {
     //
     // quest.configSelfIfNecessary(dlogRunner.getPriorAnswersList);
@@ -90,13 +89,13 @@ class CliQuestionPresenter implements QuestionPresenter {
     // print("You entered: '$userResp' and ${derivedUserResponse.toString()}");
   }
 
-  Map<VisRuleQuestType, String> _handleVisualRuleQuestions(
+  Map<VisRuleQuestType, String> _handleQuest2s(
     DialogRunner dialoger,
-    VisualRuleQuestion ruleQuest,
+    Quest2 ruleQuest,
   ) {
     //
     String ruleQuestoverview =
-        'Config ${ruleQuest.questDef.ruleTyp.name} in the ${ruleQuest.screenWidgetArea?.name} of ${ruleQuest.appScreen.name} screen  (please answer each question below)';
+        'Config ${ruleQuest.questDef.ruleTyp.name} in the ${ruleQuest.screenWidgetArea?.name} of ${ruleQuest.appScreen.name} screen  (please answer each Quest2 below)';
     print(ruleQuestoverview);
 
     Map<VisRuleQuestType, String> accumResponses = {};
@@ -112,11 +111,11 @@ class CliQuestionPresenter implements QuestionPresenter {
   }
 
   String? _showOptionsAndWaitForResponse(
-    VisualRuleQuestion rQuest,
+    Quest2 rQuest,
     VisRuleQuestWithChoices rQuestAndChoices,
   ) {
     //
-    String questForuser = rQuestAndChoices.createFormattedQuestion(rQuest);
+    String questForuser = rQuestAndChoices.createFormattedQuest2(rQuest);
     print(questForuser);
     print('\n');
     rQuestAndChoices.choices.forEachIndexed((idx, opt) {
@@ -135,12 +134,12 @@ class CliQuestionPresenter implements QuestionPresenter {
     return userResp;
   }
 
-  void _printQuestion(Question quest) {
-    // show the question
+  void _printQuest2(Quest2 quest) {
+    // show the Quest2
     print(quest.questStr);
   }
 
-  void _printOptions(Question quest) {
+  void _printOptions(Quest2 quest) {
     //
     if (!quest.hasChoices) return;
 
@@ -152,12 +151,12 @@ class CliQuestionPresenter implements QuestionPresenter {
     });
   }
 
-  void _printInstructions(Question quest) {
+  void _printInstructions(Quest2 quest) {
     //
-    if (quest.addsWhichAreaInSelectedScreenQuestions) {
+    if (quest.addsWhichAreaInSelectedScreenQuest2s) {
       // user will enter string or comma delimited list of ints
-    } else if (quest.addsWhichRulesForSelectedAreaQuestions) {
-      // causes questions to be added or removed from future queue
+    } else if (quest.addsWhichRulesForSelectedAreaQuest2s) {
+      // causes Quest2s to be added or removed from future queue
       // user may enter int or comma delimited list of ints
     } else if (quest.addsWhichRulesForSlotsInArea) {
       //

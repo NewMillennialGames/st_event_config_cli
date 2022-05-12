@@ -42,7 +42,7 @@ class RuleTemplStr {
       'Select field name for {0} rule in the {1} area of screen {2}';
 }
 
-class QuestionIds {
+class Quest2Ids {
   // eventDuration
   static String eventName = 'eventName';
   static String eventDescrip = 'eventDescrip';

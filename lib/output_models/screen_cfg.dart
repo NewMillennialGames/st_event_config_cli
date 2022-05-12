@@ -34,17 +34,16 @@ class ScreenCfgByArea {
   }
 
   void appendRule(
-    VisRuleStyleQuest rQuest,
+    Quest2 rQuest,
   ) {
     //
     var swa = rQuest.screenWidgetArea;
     assert(swa != null, 'area is required at this level');
     _confirmAreaIsApplicableToThisScreen(swa!, false);
     //
-    RuleResponseBase? answer = rQuest.response?.answers;
+    RuleResponseBase? answer = rQuest.mainAnswer;
     if (answer == null) {
-      var msg =
-          'Err: ${rQuest.questionId} ${rQuest.questDef.questStr} was missing key data';
+      var msg = 'Err: ${rQuest.questId} ${rQuest.questId} was missing key data';
       print(
         msg,
       );

@@ -1,23 +1,23 @@
 part of RandDee;
 
 class QDefCollection {
-  /* describes iteration qualities of a given question
+  /* describes iteration qualities of a given Quest2
 
   */
   List<QuestPromptInstance> questIterations;
-  bool isRuleQuestion;
+  bool isRuleQuest2;
   int _curPartIdx = -1;
 
   QDefCollection(
     this.questIterations, {
-    this.isRuleQuestion = false,
+    this.isRuleQuest2 = false,
   });
 
   // getters
   int get _partCount => questIterations.length;
   bool get isCompleted => _curPartIdx >= _partCount - 1;
   bool get isMultiPart => _partCount > 1;
-  // QuestPromptInstance get _curQuestion => questIterations[_curPartIdx];
+  // QuestPromptInstance get _curQuest2 => questIterations[_curPartIdx];
   QuestPromptInstance? getNextUserPromptIfExists() {
     _curPartIdx++;
     if (_curPartIdx > _partCount - 1) return null;
@@ -30,21 +30,21 @@ class QDefCollection {
   // Iterable<AnswTypValMap> get allTypedAnswers =>
   //     questIterations.map((sqi) => sqi.answerPayload);
 
-  // List<QuestChoiceOption> get curQAnswerOptions => _curQuestion.questsAndChoices;
+  // List<QuestChoiceOption> get curQAnswerOptions => _curQuest2.questsAndChoices;
 
   // SubmitUserResponseFunc get storeUserReponse => _storeUserReponse;
 
   // void _storeUserReponse(String resp) {
   //   //
-  //   assert(nextPart != null, 'no current question');
+  //   assert(nextPart != null, 'no current Quest2');
   //   nextPart.answerPayload.answers.
   // }
 
   // factory QuestIterDef.fromRuleTyp(VisualRuleType ruleTyp) {
-  //   // use VisualRuleType to get list of sub-questions
+  //   // use VisualRuleType to get list of sub-Quest2s
   //   // and their respective choice options
   //   List<VisRuleQuestWithChoices> questsAndChoices =
-  //       getSubQuestionsAndChoiceOptions(ruleTyp);
+  //       getSubQuest2sAndChoiceOptions(ruleTyp);
   //   return QuestIterDef._(ruleTyp, questsAndChoices);
   // }
 
@@ -59,12 +59,12 @@ class QDefCollection {
 
   // factory QDefCollection.fromMap(
   //   Map<String, List<String>> questIterations, {
-  //   bool isRuleQuestion = false,
+  //   bool isRuleQuest2 = false,
   // }) {
   //   List<SingleQPromptInstance> l =
   //       SingleQPromptInstance.fromMap(questIterations);
   //   return QDefCollection(
   //     l,
-  //     isRuleQuestion: isRuleQuestion,
+  //     isRuleQuest2: isRuleQuest2,
   //   );
   // }

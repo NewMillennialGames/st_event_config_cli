@@ -3,7 +3,7 @@ part of RandDee;
 class Quest2 extends Equatable {
   /* 
     cleaner and more testable replacement for:
-    Question<ConvertTyp, AnsTyp> and VisualRuleQuestion<>
+    Quest2<ConvertTyp, AnsTyp> and Quest2<>
     it combines those classes so there is no fundamental distinction
     between
     largely a wrapper around qIterDef && qQuantify
@@ -13,36 +13,65 @@ class Quest2 extends Equatable {
   // final bool addsToUiFactoryConfigRules;
 
 // optional unique value for expedited matching
-  String questionId = '';
+  String questId = '';
 
   Quest2(
     this.qTargetIntent,
     this.qDefCollection, {
     String? questId,
-  }) : questionId = questId == null ? qTargetIntent.sortKey : questId {
-    // now select first question to be ready for display
-    // _currQuestion = qDefCollection.curQuestion;
+  }) : questId = questId == null ? qTargetIntent.sortKey : questId {
+    // now select first Quest2 to be ready for display
+    // _currQuest2 = qDefCollection.curQuest2;
   }
 
   QuestPromptInstance? getNextUserPromptIfExists() {
     //
     QuestPromptInstance? nextQpi = qDefCollection.getNextUserPromptIfExists();
     if (nextQpi == null) {
-      // out of questions
+      // out of Quest2s
     }
     return nextQpi;
   }
 
+  bool containsPromptWhere(bool Function(QuestPromptInstance qpi) promptTest) {
+    // check if this contains an instance that matches promptTest
+    for (QuestPromptInstance qpi in qDefCollection.questIterations) {
+      if (promptTest(qpi)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  List<QuestPromptInstance> matchingPromptsWhere(
+    bool Function(QuestPromptInstance qpi) promptTest,
+  ) {
+    // return list of prompt instances
+    List<QuestPromptInstance> l = [];
+    for (QuestPromptInstance qpi in qDefCollection.questIterations) {
+      if (promptTest(qpi)) {
+        l.add(qpi);
+      }
+    }
+    return l;
+  }
+
+  QuestPromptInstance get firstQuestion => qDefCollection.questIterations.first;
+  CaptureAndCast get _firstPromptAnswers => firstQuestion._userAnswers;
+  dynamic get mainAnswer => _firstPromptAnswers.cast();
+  // Caution --- below may not work
+  Type get expectedAnswerType => _firstPromptAnswers.cast().runtimeType;
+
   // getters
-  // QuestPromptInstance? get currQuestion => _currQuestion;
+  // QuestPromptInstance? get currQuest2 => _currQuest2;
   bool get existsONLYToGenDialogStructure =>
-      qTargetIntent.isTopLevelConfigOrScreenQuestion;
+      qTargetIntent.isTopLevelConfigOrScreenQuest2;
   bool get isNotForRuleOutput => existsONLYToGenDialogStructure;
   bool get isMultiPart => qDefCollection.isMultiPart;
 
-  bool get isTopLevelConfigOrScreenQuestion =>
-      qTargetIntent.isTopLevelConfigOrScreenQuestion;
-  // bool get hasChoices => _currQuestion?.hasChoices ?? false;
+  bool get isTopLevelConfigOrScreenQuest2 =>
+      qTargetIntent.isTopLevelConfigOrScreenQuest2;
+  // bool get hasChoices => _currQuest2?.hasChoices ?? false;
   // quantified info
   AppScreen get appScreen => qTargetIntent.appScreen;
   ScreenWidgetArea? get screenWidgetArea => qTargetIntent.screenWidgetArea;
@@ -54,8 +83,8 @@ class Quest2 extends Equatable {
       qTargetIntent.behRuleTypeForAreaOrSlot;
   //
 
-  // below controls how each question causes cascade creation of new questions
-  bool get generatesNoNewQuestions => qTargetIntent.generatesNoNewQuestions;
+  // below controls how each Quest2 causes cascade creation of new Quest2s
+  bool get generatesNoNewQuest2s => qTargetIntent.generatesNoNewQuest2s;
   bool get addsRuleDetailQuestsForSlotOrArea =>
       qTargetIntent.addsRuleDetailQuestsForSlotOrArea;
 
@@ -64,50 +93,37 @@ class Quest2 extends Equatable {
 
   // appliesToClientConfiguration == should be exported to file
   bool get appliesToClientConfiguration =>
-      qDefCollection.isRuleQuestion ||
-      appScreen == AppScreen.eventConfiguration;
+      qDefCollection.isRuleQuest2 || appScreen == AppScreen.eventConfiguration;
 
   // ARE BELOW needed with new approach??
 
-  // bool get asksWhichScreensToConfig =>
-  //     qQuantify.appScreen == AppScreen.eventConfiguration &&
-  //     expectedAnswerType is List<AppScreen>;
+  bool get asksWhichScreensToConfig =>
+      qTargetIntent.appScreen == AppScreen.eventConfiguration &&
+      expectedAnswerType is List<AppScreen>;
 
-  // bool get addsWhichAreaInSelectedScreenQuestions =>
-  //     qQuantify.addsWhichAreaInSelectedScreenQuestions &&
-  //     appScreen == AppScreen.eventConfiguration &&
-  //     expectedAnswerType is List<AppScreen>;
+  bool get addsWhichAreaInSelectedScreenQuest2s =>
+      qTargetIntent.addsWhichAreaInSelectedScreenQuest2s &&
+      appScreen == AppScreen.eventConfiguration &&
+      expectedAnswerType is List<AppScreen>;
 
-  // bool get addsWhichRulesForSelectedAreaQuestions =>
-  //     qQuantify.addsWhichRulesForSelectedAreaQuestions &&
-  //     expectedAnswerType is List<ScreenWidgetArea>;
+  bool get addsWhichRulesForSelectedAreaQuest2s =>
+      qTargetIntent.addsWhichRulesForSelectedAreaQuest2s &&
+      expectedAnswerType is List<ScreenWidgetArea>;
 
-  // bool get addsWhichSlotOfSelectedAreaQuestions =>
-  //     qQuantify.addsWhichSlotOfSelectedAreaQuestions &&
-  //     expectedAnswerType is List<ScreenWidgetArea>;
+  bool get addsWhichSlotOfSelectedAreaQuest2s =>
+      qTargetIntent.addsWhichSlotOfSelectedAreaQuest2s &&
+      expectedAnswerType is List<ScreenWidgetArea>;
 
-  // bool get addsWhichRulesForSlotsInArea =>
-  //     qQuantify.addsWhichRulesForSlotsInArea &&
-  //     expectedAnswerType is List<ScreenAreaWidgetSlot>;
+  bool get addsWhichRulesForSlotsInArea =>
+      qTargetIntent.addsWhichRulesForSlotsInArea &&
+      expectedAnswerType is List<ScreenAreaWidgetSlot>;
 
   // impl for equatable
   // but really being used as a search filter
-  // to find questions in a specific granularity
+  // to find Quest2s in a specific granularity
   @override
   List<Object> get props => [qTargetIntent];
 
   @override
   bool get stringify => true;
-
-  // @override
-  // List<QuestChoiceOption> get answerOptions => qDefCollection.curQAnswerOptions;
-
-  // @override
-  // bool get hasMorePrompts => !qDefCollection.isCompleted;
-
-  // @override
-  // String? get nextUserPrompt => qDefCollection.nextPart?.userPrompt;
-
-  // @override
-  // SubmitUserResponseFunc get storeUserReponse => throw UnimplementedError('');
 }

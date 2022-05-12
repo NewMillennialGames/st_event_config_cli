@@ -23,7 +23,7 @@ extension StringFormating on String {
     });
   }
 
-  // String makeRuleQuestionStr(
+  // String makeRuleQuest2Str(
   //   VisualRuleType rt,
   //   bool isAreaScopedRule, // not a slot-level rule
   //   List<dynamic> valsDyn,

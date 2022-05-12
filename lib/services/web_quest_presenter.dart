@@ -3,17 +3,18 @@ import "dart:async";
 import '../interfaces/q_presenter.dart';
 import '../questions/all.dart';
 import '../dialog/all.dart';
+import '../r_and_d/all.dart';
 
-class WebQuestionPresenter implements QuestionPresenter {
-  // to render widget views of the question
+class WebQuest2Presenter implements Quest2Presenter {
+  // to render widget views of the Quest2
   // move this class to the parent flutter project
 
-  final StreamController<Question> questDispatcher;
+  final StreamController<Quest2> questDispatcher;
   final Stream<String> answerStream;
   DialogRunner? dRunner;
-  late Question _quest;
+  late Quest2 _quest;
 
-  WebQuestionPresenter(
+  WebQuest2Presenter(
     this.questDispatcher,
     this.answerStream,
   ) {
@@ -23,7 +24,7 @@ class WebQuestionPresenter implements QuestionPresenter {
   @override
   void askAndWaitForUserResponse(
     DialogRunner dialoger,
-    Question quest,
+    Quest2 quest,
   ) {
     if (dRunner == null) {
       this.dRunner = dialoger;
@@ -36,7 +37,7 @@ class WebQuestionPresenter implements QuestionPresenter {
 
   void _receiveAnswer(String answer) {
     _quest.convertAndStoreUserResponse(answer);
-    dRunner!.advanceToNextQuestion();
+    dRunner!.advanceToNextQuest2();
   }
 
   void informUiThatDialogIsComplete() {

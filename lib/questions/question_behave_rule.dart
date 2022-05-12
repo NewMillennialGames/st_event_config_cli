@@ -1,14 +1,14 @@
-// part of QuestionsLib;
+// part of Quest2sLib;
 
-// class BehaveRuleQuestion<ConvertTyp, AnsTyp extends RuleResponseBase>
-//     extends Question<ConvertTyp, AnsTyp> {
+// class BehaveRuleQuest2<ConvertTyp, AnsTyp extends RuleResponseBase>
+//     extends Quest2<ConvertTyp, AnsTyp> {
 //   /*
 //     not implemented or tested ...
 //     DO NOT use until fully built ...
 //   */
 //   late final VisRuleChoiceConfig _questDef;
 
-//   BehaveRuleQuestion(
+//   BehaveRuleQuest2(
 //     AppScreen appSection,
 //     ScreenWidgetArea screenArea,
 //     VisualRuleType visRuleType,
@@ -22,7 +22,7 @@
 //             slot,
 //             null,
 //           ),
-//           'niu--sub questions will be used',
+//           'niu--sub Quest2s will be used',
 //           null,
 //           null,
 //         ) {

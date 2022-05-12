@@ -7,7 +7,7 @@ const List<VisualRuleType> _unconfigurableFutureRules = [
 
 @JsonEnum()
 enum VisualRuleType {
-  topDialogStruct, // not a real rule at all.  question at higher level
+  topDialogStruct, // not a real rule at all.  Quest2 at higher level
   sortCfg, // global or within groups
   groupCfg, // how to group rows
   filterCfg, // to create filter menus
@@ -71,7 +71,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
   }
   //
 
-  List<VisRuleQuestType> get requiredQuestions {
+  List<VisRuleQuestType> get requiredQuest2s {
     switch (this) {
       case VisualRuleType.topDialogStruct:
         return [];
@@ -112,7 +112,7 @@ extension BehaviorRuleTypeExt1 on BehaviorRuleType {
 
 }
 
-// String questionStr(
+// String Quest2Str(
 //   AppScreen screen,
 //   ScreenWidgetArea screenArea,
 //   ScreenAreaWidgetSlot? slotInArea,
@@ -127,31 +127,31 @@ extension BehaviorRuleTypeExt1 on BehaviorRuleType {
 
 //   switch (this) {
 //     case VisualRuleType.sort:
-//       return RuleTemplStr.sort.makeRuleQuestionStr(
+//       return RuleTemplStr.sort.makeRuleQuest2Str(
 //         this,
 //         isAreaScopedRule,
 //         valsDyn,
 //       );
 //     case VisualRuleType.group:
-//       return RuleTemplStr.group.makeRuleQuestionStr(
+//       return RuleTemplStr.group.makeRuleQuest2Str(
 //         this,
 //         isAreaScopedRule,
 //         valsDyn,
 //       );
 //     case VisualRuleType.filter:
-//       return RuleTemplStr.filter.makeRuleQuestionStr(
+//       return RuleTemplStr.filter.makeRuleQuest2Str(
 //         this,
 //         isAreaScopedRule,
 //         valsDyn,
 //       );
 //     case VisualRuleType.format:
-//       return RuleTemplStr.format.makeRuleQuestionStr(
+//       return RuleTemplStr.format.makeRuleQuest2Str(
 //         this,
 //         isAreaScopedRule,
 //         valsDyn,
 //       );
 //     case VisualRuleType.show:
-//       return RuleTemplStr.show.makeRuleQuestionStr(
+//       return RuleTemplStr.show.makeRuleQuest2Str(
 //         this,
 //         isAreaScopedRule,
 //         valsDyn,

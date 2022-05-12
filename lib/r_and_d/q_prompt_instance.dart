@@ -1,10 +1,10 @@
 part of RandDee;
 
 class QuestPromptInstance<T> implements QPromptIfc {
-  /* describes each part of a question iteration
+  /* describes each part of a Quest2 iteration
     including list of prompts
     does NOTHING with answers
-    those are stored at Question instance level
+    those are stored at Quest2 instance level
   */
   final String userPrompt;
   final VisQuestChoiceCollection answChoiceCollection;
@@ -43,9 +43,16 @@ class QuestPromptInstance<T> implements QPromptIfc {
       answChoiceCollection.answerOptions;
   // end QPromptIfc impl
 
+  CaptureAndCast<T> get userAnswers => _userAnswers;
+  bool get asksWhichScreensToConfig => _userAnswers.asksWhichScreensToConfig;
+  bool get asksWhichAreasOfScreenToConfig =>
+      _userAnswers.asksWhichAreasOfScreenToConfig;
+  bool get asksWhichSlotsOfAreaToConfig =>
+      _userAnswers.asksWhichSlotsOfAreaToConfig;
+
   Iterable<String> get choices => answChoiceCollection.choices;
 
-  String createFormattedQuestion(Quest2 quest) {
+  String createFormattedQuest2(Quest2 quest) {
     String templ = answChoiceCollection.questTemplByRuleType(
       quest.visRuleTypeForAreaOrSlot!,
     );
@@ -73,10 +80,10 @@ class QuestPromptInstance<T> implements QPromptIfc {
 
   VisRuleQuestType get visQuestType => answChoiceCollection.visRuleQuestType;
 
-  static List<VisRuleQuestWithChoices> getSubQuestionsAndChoiceOptions(
+  static List<VisRuleQuestWithChoices> getSubQuest2sAndChoiceOptions(
     VisualRuleType rt,
   ) {
-    return rt.requiredQuestions
+    return rt.requiredQuest2s
         .map(
           (qrq) => VisRuleQuestWithChoices(
             qrq,

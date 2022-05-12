@@ -1,7 +1,7 @@
 part of StUiController;
 
-// all VisualRuleQuestion should come in with these generic types
-typedef VisRuleStyleQuest = VisualRuleQuestion<String, RuleResponseBase>;
+// all Quest2 should come in with these generic types
+// typedef VisRuleStyleQuest = Quest2;
 
 // R&D
 typedef CastStrToAnswTypCallback<T> = T Function(List<String>);

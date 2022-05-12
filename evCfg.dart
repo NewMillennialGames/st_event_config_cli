@@ -4,7 +4,7 @@ import 'package:args/args.dart';
 //
 import 'lib/scoretrader/all.dart';
 import 'lib/dialog/all.dart';
-import 'lib/questions/all.dart';
+import 'lib/Quest2s/all.dart';
 import 'lib/output_models/all.dart';
 import 'lib/services/cli_quest_presenter.dart';
 /*
@@ -23,7 +23,7 @@ Future<void> main(List<String> arguments) async {
   // add empy lines befor starting dialog
   print('\n' * 0);
 
-  final cliQuestPresenter = CliQuestionPresenter();
+  final cliQuestPresenter = CliQuest2Presenter();
   // using DI to make it easy for web app to use same dialog runner
   final dialoger = DialogRunner(cliQuestPresenter);
   final succeeded = dialoger.cliLoopUntilComplete();
@@ -33,19 +33,19 @@ Future<void> main(List<String> arguments) async {
   }
 
   // now generate results into a config file
-  createOutputFileFromResponses(dialoger.questionMgr, null);
+  createOutputFileFromResponses(dialoger.Quest2Mgr, null);
   stdout.writeln("Done:\n");
 }
 
 void createOutputFileFromResponses(
-  QuestListMgr questionMgr, [
+  QuestListMgr Quest2Mgr, [
   String? filename,
 ]) {
   //
-  final List<Question> exportableQuestions = questionMgr.exportableQuestions;
+  final List<Quest2> exportableQuest2s = Quest2Mgr.exportableQuest2s;
 
-  print('found ${exportableQuestions.length} exportable answers to convert');
-  // for (Question q in exportableQuestions) {
+  print('found ${exportableQuest2s.length} exportable answers to convert');
+  // for (Quest2 q in exportableQuest2s) {
   //   print(q.questStr);
   //   print(q.response?.answers.toString());
   //   print('\n\n');
@@ -53,12 +53,12 @@ void createOutputFileFromResponses(
 
   print('Now building Event Config rules...');
 
-  Iterable<Question> eventConfigLevelData = exportableQuestions.where(
-    (q) => q.isTopLevelConfigOrScreenQuestion,
+  Iterable<Quest2> eventConfigLevelData = exportableQuest2s.where(
+    (q) => q.isTopLevelConfigOrScreenQuest2,
   );
   final evCfg = EventCfgTree.fromEventLevelConfig(eventConfigLevelData);
   // create the per-area or per-slot rules
-  var ruleResponses = exportableQuestions.whereType<VisRuleStyleQuest>();
+  var ruleResponses = exportableQuest2s.whereType<VisRuleStyleQuest>();
   // print('ruleResponse answer count: ${ruleResponses.length}');
   evCfg.fillFromVisualRuleAnswers(ruleResponses);
   // now dump evCfg to file

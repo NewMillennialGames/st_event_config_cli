@@ -20,19 +20,19 @@ part 'q_factory.dart';
 part 'answ_capture_cast.dart';
 
 /*
-  attempt to create a new question structure
-  that conforms more fully to needs of Question and VisualRuleQuestion
+  attempt to create a new Quest2 structure
+  that conforms more fully to needs of Quest2 and Quest2
 
-  requirements of a question
-    scope:  QuestionQuantifier
+  requirements of a Quest2
+    scope:  Quest2Quantifier
 
     ask count (how many user prompts)
     answer count (how many answers allowed per prompt)
 
 
     todo:
-    rename QuestionQuantifier to QTargetQuantify
-    rename QuestionPresenter to QuestionPresenterIfc
+    rename Quest2Quantifier to QTargetQuantify
+    rename Quest2Presenter to Quest2PresenterIfc
 
 */
 

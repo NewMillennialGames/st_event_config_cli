@@ -1,7 +1,7 @@
 ### Overview
 
 this is a "Configurator" app in which a user
-can answer questions to create rules that define
+can answer Quest2s to create rules that define
 the per-event UI in Scoretrader
 
 the final output of this dialog is a
@@ -16,20 +16,20 @@ selected by the user
 
 #### Hard problems that must be solved for this to work well
 
-Division between questions that exist ONLY to structure an efficient dialog
+Division between Quest2s that exist ONLY to structure an efficient dialog
 and those that actually produce rule-output data (ui or behavioral config)
 for a specific screen, screen-area, or area-slot regions of the app
 
-Questions that receive SINGLE answer user-input
+Quest2s that receive SINGLE answer user-input
 And those that are multi-part  (sort on this field, plus descending vs ascending)
 
-Questions that are part of a group  (sort field #1, #2, #3)
+Quest2s that are part of a group  (sort field #1, #2, #3)
 
 Variable output data-types (enum, class-instance, string, etc) between all possible answers
 
 Answers that generate either:
- 1. more new questions
- 2. cascading implicit answers to new or pending questions
+ 1. more new Quest2s
+ 2. cascading implicit answers to new or pending Quest2s
 
 Casting answers to and from a JSON data structure
 
@@ -44,7 +44,7 @@ Casting answers to and from a JSON data structure
 3.  run the CLI configurator & study the JSON output
 4.  then run the demo client (to see the factory switch out the row-style dynamically based on different JSON payloads)
 
-#### Building blocks of every question
+#### Building blocks of every Quest2
 1. user-prompt(s)
 2. answer-choices
 3. specify output data-type (generic)
@@ -54,7 +54,7 @@ Casting answers to and from a JSON data structure
 
 
 #### Structure and Design
-Questions (and rules created from answers) are nested into a hierarchy as follows:
+Quest2s (and rules created from answers) are nested into a hierarchy as follows:
 
     Event Config -- (basic ?? about event setup;  Event level)
     App Screen (any UI that domniates the viewport )  App Screen level
@@ -72,11 +72,11 @@ Questions (and rules created from answers) are nested into a hierarchy as follow
         dart evCfg.dart
 
 ### General flow of app
-App Feeds question to user
-User response to each question, has one of 4 possible effects
+App Feeds Quest2 to user
+User response to each Quest2, has one of 4 possible effects
  * Capture some value(s) and store as part of config
- * Produce more future (immanent) questions
- <!-- * Eliminate some future questions -->
+ * Produce more future (immanent) Quest2s
+ <!-- * Eliminate some future Quest2s -->
  * Create a "rule" for some part of the Scoretrader app
 
 Rules live (and apply to) one of two "levels" in the UI hierarchy
@@ -93,7 +93,7 @@ Examples of a Area-Slot:
     3. Title Widget inside of Header or Footer area
 
 
-The Logic for some questions can be described
+The Logic for some Quest2s can be described
 by current/prior (response/answer) state
 
 Rules can either be:
@@ -112,9 +112,9 @@ Control what is configurable by editing the lists returned in:
     lib/app_entity_enums/ui_screen.dart
 
 also, it's important to understand that some answers
-cause new questions to be created
-there are currently TWO code-pathways to creating new questions
-1)  NewQuestionCollector()
+cause new Quest2s to be created
+there are currently TWO code-pathways to creating new Quest2s
+1)  NewQuest2Collector()
 2)  QuestMatcher()
 
 Both are working fine but I may want to clean this up in the future
@@ -129,7 +129,7 @@ to rebuild JSON models:
     flutter pub run build_runner build --delete-conflicting-outputs
 
 ###### Examples:
-Questions:
+Quest2s:
 enter event name
 
 do you want to customize MarketView -- y or n
@@ -141,9 +141,9 @@ on MarketView, do you wish to customize:
 You MUST NOT break the CLI ... we need it to keep running
 This means you should not change internal code or logic
 
-OTHER THAN class:   WebQuestionPresenter
+OTHER THAN class:   WebQuest2Presenter
 
-you can customize WebQuestionPresenter as much as you like
+you can customize WebQuest2Presenter as much as you like
 
 I've left nice hook-points for you to use my logic
 without changing my code.
@@ -151,18 +151,18 @@ without changing my code.
 These Web hook-points live at:
 
 lib/main.dart -- line 18
-lib/services/web_question_presenter.dart -- WebQuestionPresenter
+lib/services/web_Quest2_presenter.dart -- WebQuest2Presenter
 
 and I've made the UI presenter injectible into the dialog runner
 
-  final questPresenter = WebQuestionPresenter();
+  final questPresenter = WebQuest2Presenter();
   final dialoger = DialogRunner(questPresenter);
   final succeeded = dialoger.loopUntilComplete();
 
 
   my suggestion is that you implement a STREAM
-  inside of WebQuestionPresenter
-  it can send questions to your Flutter UI code
+  inside of WebQuest2Presenter
+  it can send Quest2s to your Flutter UI code
   and you can implement a REVERSE stream to send answers
   back from the Web UI
 
@@ -190,9 +190,9 @@ defer this until after 1st build:
 
   CLI
 
-  1) user answers produce new questions & add to pending Queue
-  2) answers produce IMPLICIT answers (create new question and AUTO-SET answers)
-  3) answers make some pending questions IRRELEVANT  (take them out of pending queue)
+  1) user answers produce new Quest2s & add to pending Queue
+  2) answers produce IMPLICIT answers (create new Quest2 and AUTO-SET answers)
+  3) answers make some pending Quest2s IRRELEVANT  (take them out of pending queue)
   4) all relevant answers written to JSON file
 
   ui_builder_factory
@@ -210,23 +210,23 @@ defer this until after 1st build:
 
 ####  WIP notes
 
-  Latest structural thinking for abstract question & answer handling:
+  Latest structural thinking for abstract Quest2 & answer handling:
 
 Intent --
-    QIntentCfg describes the general purpose of the question
+    QIntentCfg describes the general purpose of the Quest2
     it also handles CONVERTING user-string-response into typed-answer
 
 Quantify --
-    QuestionQuantifier defines WHICH specific parts of the app
-    the question pertains to
+    Quest2Quantifier defines WHICH specific parts of the app
+    the Quest2 pertains to
 
 Specifics --
     Quest2 wraps
 
 
-Creating a question requires specification for each category below:
+Creating a Quest2 requires specification for each category below:
 
-1. intent  (what does this question do in the overall scheme; includes cast to desired output type)
+1. intent  (what does this Quest2 do in the overall scheme; includes cast to desired output type)
 2. prompt & answer details  (what to display for configurator  (CLI or web) user)
 3. target area  (which area of the app will answer apply to)
 4. response handling  (what to do with the user-answer)
@@ -234,12 +234,12 @@ Creating a question requires specification for each category below:
 
 ##### How does response handling work?
 
-Dialog manager has a Question presenter
-Question presenter is responsible for rendering each question
-Each Question has 1->n parts
-Presenter show's each part and stores user response on the question
-Once all parts have been asked and answered, question is finalized
+Dialog manager has a Quest2 presenter
+Quest2 presenter is responsible for rendering each Quest2
+Each Quest2 has 1->n parts
+Presenter show's each part and stores user response on the Quest2
+Once all parts have been asked and answered, Quest2 is finalized
 This passes all answered parts to the Intent-obj castCallback method
 this method returns the type expected for this group of answers
 
-that response-type is stored with the question
+that response-type is stored with the Quest2

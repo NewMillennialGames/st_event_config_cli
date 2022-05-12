@@ -3,7 +3,7 @@ part of EvCfgEnums;
 @JsonEnum()
 enum VisRuleQuestType {
   /* describes
-    general structure of the possible questions to be asked
+    general structure of the possible Quest2s to be asked
     for a given Visibility-Rule
 
     in other words, HOW MANY pieces of data needs to be
@@ -22,7 +22,7 @@ extension VisRuleQuestTypeExt1 on VisRuleQuestType {
   //
 
   String questTemplByRuleType(VisualRuleType ruleTyp) {
-    /* return question template for each of these rules
+    /* return Quest2 template for each of these rules
 
 
     */
@@ -78,7 +78,7 @@ extension VisRuleQuestTypeExt1 on VisRuleQuestType {
   }
 
   int get defaultChoice {
-    // each question can have different default choice
+    // each Quest2 can have different default choice
     return 0;
   }
 }

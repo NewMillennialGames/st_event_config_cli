@@ -1,36 +1,34 @@
 part of EvCfgConfig;
 
 // public api
-List<Question> loadInitialConfigQuestions() {
-  // event config questions DO NOT have areas or uiComponents
-  return _questionLst
-      .where((qb) =>
-          qb.appScreen == AppScreen.eventConfiguration &&
-          qb.isTopLevelConfigOrScreenQuestion)
-      .toList();
+List<Quest2> loadInitialConfigQuest2s() {
+  // event config Quest2s DO NOT have areas or uiComponents
+  return _Quest2Lst.where((qb) =>
+      qb.appScreen == AppScreen.eventConfiguration &&
+      qb.isTopLevelConfigOrScreenQuest2).toList();
 }
 
-// List<Question> loadQuestionsAtTopOfSection(AppScreen appSection) {
-//   return _questionLst
+// List<Quest2> loadQuest2sAtTopOfSection(AppScreen appSection) {
+//   return _Quest2Lst
 //       .where((qb) =>
-//           qb.appScreen == appSection && qb.isTopLevelConfigOrScreenQuestion)
+//           qb.appScreen == appSection && qb.isTopLevelConfigOrScreenQuest2)
 //       .toList();
 // }
 
-// List<Question> loadQuestionsUnderSelectedSections(
+// List<Quest2> loadQuest2sUnderSelectedSections(
 //   UserResponse<List<AppScreen>> response,
 // ) {
-//   // load questions about areas in section
+//   // load Quest2s about areas in section
 //   List<AppScreen> appSectionsToConfigure = response.answers;
-//   List<Question> newQuestions = _questionLst
+//   List<Quest2> newQuest2s = _Quest2Lst
 //       .where((q) =>
 //           appSectionsToConfigure.contains(q.appScreen) &&
-//           !q.isTopLevelConfigOrScreenQuestion)
+//           !q.isTopLevelConfigOrScreenQuest2)
 //       .toList();
-//   return newQuestions;
+//   return newQuest2s;
 // }
 
-// List<Question> loadVisualRuleQuestionsForArea(
+// List<Quest2> loadQuest2sForArea(
 //   AppScreen screen,
 //   ScreenWidgetArea screenWidgetArea,
 //   ScreenAreaWidgetSlot slotInArea,
@@ -40,10 +38,10 @@ List<Question> loadInitialConfigQuestions() {
 //     this method fabricates the rule rather than
 //     loading an existing one
 //   */
-//   List<Question> lst = [];
+//   List<Quest2> lst = [];
 //   for (VisualRuleType applicableRuleForSlot in response.answers) {
 //     lst.add(
-//       VisualRuleQuestion<String, RuleResponseWrapper>(
+//       Quest2<String, RuleResponseWrapper>(
 //         screen,
 //         screenWidgetArea,
 //         slotInArea,
@@ -56,9 +54,9 @@ List<Question> loadInitialConfigQuestions() {
 // }
 
 // accumulate configuration data
-final List<Question> _questionLst = [
+final List<Quest2> _Quest2Lst = [
   /*  
-    eventConfiguration questions list below
+    eventConfiguration Quest2s list below
 
     1st generic describes data-type of ultimate
     user ANSWER (value stored in class UserResponse)
@@ -71,81 +69,87 @@ final List<Question> _questionLst = [
     but then I'd have more boilerplate in ALL
     of my Qb.castFunc code
   */
-  Qb<String, String>(
+  Qb(
     QTargetIntent.eventLevel(),
-    DlgStr.eventName,
-    null,
-    null,
-    questId: QuestionIds.eventName,
+    QDefCollection([]),
+    questId: Quest2Ids.eventName,
   ),
   // set true false to shorten manual testing
-  if (false) ...[
-    Qb<String, String>(
+  if (true) ...[
+    Qb(
       QTargetIntent.eventLevel(),
-      DlgStr.eventDescrip,
-      null,
-      null,
-      questId: QuestionIds.eventDescrip,
+      QDefCollection([]),
+      // DlgStr.eventDescrip,
+      // null,
+      // null,
+      questId: Quest2Ids.eventDescrip,
     ),
-    Qb<int, EvType>(
+    Qb(
       QTargetIntent.eventLevel(),
-      DlgStr.eventType,
-      EvType.values.map((e) => e.name),
-      (i) => EvType.values[i],
-      questId: QuestionIds.eventType,
+      QDefCollection([]),
+      // DlgStr.eventType,
+      // EvType.values.map((e) => e.name),
+      // (i) => EvType.values[i],
+      questId: Quest2Ids.eventType,
     ),
-    Qb<int, EvCompetitorType>(
+    Qb(
       QTargetIntent.eventLevel(),
-      DlgStr.eventWhosCompeting,
-      EvCompetitorType.values.map((e) => e.name),
-      (i) => EvCompetitorType.values[i],
-      questId: QuestionIds.competitorType,
+      QDefCollection([]),
+      // DlgStr.eventWhosCompeting,
+      // EvCompetitorType.values.map((e) => e.name),
+      // (i) => EvCompetitorType.values[i],
+      questId: Quest2Ids.competitorType,
     ),
-    Qb<int, EvOpponentType>(
+    Qb(
       QTargetIntent.eventLevel(),
-      DlgStr.eventCompPlayAgainst,
-      EvOpponentType.values.map((e) => e.name),
-      (i) => EvOpponentType.values[i],
-      questId: QuestionIds.competeAgainstType,
+      QDefCollection([]),
+      // DlgStr.eventCompPlayAgainst,
+      // EvOpponentType.values.map((e) => e.name),
+      // (i) => EvOpponentType.values[i],
+      questId: Quest2Ids.competeAgainstType,
     ),
-    Qb<int, EvDuration>(
+    Qb(
       QTargetIntent.eventLevel(),
-      DlgStr.eventDuration,
-      EvDuration.values.map((e) => e.name),
-      (i) => EvDuration.values[i],
-      questId: QuestionIds.eventDuration,
+      QDefCollection([]),
+      // DlgStr.eventDuration,
+      // EvDuration.values.map((e) => e.name),
+      // (i) => EvDuration.values[i],
+      questId: Quest2Ids.eventDuration,
     ),
-    Qb<int, EvEliminationStrategy>(
+    Qb(
       QTargetIntent.eventLevel(),
-      DlgStr.eventEliminationStrategy,
-      EvEliminationStrategy.values.map((e) => e.name),
-      (i) => EvEliminationStrategy.values[i],
-      questId: QuestionIds.eventEliminationStrategy,
+      QDefCollection([]),
+      // DlgStr.eventEliminationStrategy,
+      // EvEliminationStrategy.values.map((e) => e.name),
+      // (i) => EvEliminationStrategy.values[i],
+      questId: Quest2Ids.eventEliminationStrategy,
     ),
-    Qb<String, bool>(
+    Qb(
       QTargetIntent.eventLevel(),
-      DlgStr.useSameRowStyleForAllScreens,
-      ['no', 'yes'],
-      (i) => i == '1',
-      defaultAnswerIdx: 1,
-      questId: QuestionIds.globalRowStyle,
+      QDefCollection([]),
+      // DlgStr.useSameRowStyleForAllScreens,
+      // ['no', 'yes'],
+      // (i) => i == '1',
+      // defaultAnswerIdx: 1,
+      questId: Quest2Ids.globalRowStyle,
     ),
   ],
   // ask which screens to configure
-  Qb<String, List<AppScreen>>(
-    QTargetIntent.eventLevel(responseAddsWhichAreaQuestions: true),
-    DlgStr.selectAppScreens,
-    AppScreen.eventConfiguration.topConfigurableScreens.map((e) => e.name),
-    (String strLstIdxs) {
-      //
-      return castStrOfIdxsToIterOfInts(strLstIdxs)
-          .map(
-              (idx) => AppScreen.eventConfiguration.topConfigurableScreens[idx])
-          .toList();
-    },
-    acceptsMultiResponses: true,
-    isNotForOutput: true,
-    questId: QuestionIds.selectAppScreens,
+  Qb(
+    QTargetIntent.eventLevel(responseAddsWhichAreaQuest2s: true),
+    QDefCollection([]),
+    // DlgStr.selectAppScreens,  // <String, List<AppScreen>>
+    // AppScreen.eventConfiguration.topConfigurableScreens.map((e) => e.name),
+    // (String strLstIdxs) {
+    //   //
+    //   return castStrOfIdxsToIterOfInts(strLstIdxs)
+    //       .map(
+    //           (idx) => AppScreen.eventConfiguration.topConfigurableScreens[idx])
+    //       .toList();
+    // },
+    // acceptsMultiResponses: true,
+    // isNotForOutput: true,
+    questId: Quest2Ids.selectAppScreens,
   ),
   // after user selects desired screens to configure, then
   // which screen areas (and slots on those areas) are asked automatically;
@@ -154,18 +158,18 @@ final List<Question> _questionLst = [
 ];
 
  
-  // we don't need defined questions for them
+  // we don't need defined Quest2s for them
 
   // if (AppSection.eventSelection.isConfigureable)
   //   Qb<List<UiComponent>, String>(
-  //     QuestionQuantifier.appSectionLevel(AppSection.eventSelection),
+  //     Quest2Quantifier.appSectionLevel(AppSection.eventSelection),
   //     AppSection.eventSelection.includeStr,
   //     AppSection.eventSelection.applicableComponents.map((e) => e.name),
   //     AppSection.eventSelection.convertIdxsToComponentList,
   //   ),
   // if (AppSection.poolSelection.isConfigureable)
   //   Qb<List<UiComponent>, String>(
-  //     QuestionQuantifier.appSectionLevel(AppSection.poolSelection),
+  //     Quest2Quantifier.appSectionLevel(AppSection.poolSelection),
   //     AppSection.poolSelection.includeStr,
   //     AppSection.poolSelection.applicableComponents.map((e) => e.name),
   //     AppSection.poolSelection.convertIdxsToComponentList,
@@ -173,42 +177,42 @@ final List<Question> _questionLst = [
 
   // if (AppSection.socialPools.isConfigureable)
   //   Qb<List<UiComponent>, String>(
-  //     QuestionQuantifier.appSectionLevel(AppSection.socialPools),
+  //     Quest2Quantifier.appSectionLevel(AppSection.socialPools),
   //     AppSection.socialPools.includeStr,
   //     AppSection.socialPools.applicableComponents.map((e) => e.name),
   //     AppSection.socialPools.convertIdxsToComponentList,
   //   ),
   // if (AppSection.news.isConfigureable)
   //   Qb<List<UiComponent>, String>(
-  //     QuestionQuantifier.appSectionLevel(AppSection.news),
+  //     Quest2Quantifier.appSectionLevel(AppSection.news),
   //     AppSection.news.includeStr,
   //     AppSection.news.applicableComponents.map((e) => e.name),
   //     AppSection.news.convertIdxsToComponentList,
   //   ),
   // if (AppSection.leaderboard.isConfigureable)
   //   Qb<List<UiComponent>, String>(
-  //     QuestionQuantifier.appSectionLevel(AppSection.leaderboard),
+  //     Quest2Quantifier.appSectionLevel(AppSection.leaderboard),
   //     AppSection.leaderboard.includeStr,
   //     AppSection.leaderboard.applicableComponents.map((e) => e.name),
   //     AppSection.leaderboard.convertIdxsToComponentList,
   //   ),
   // if (AppSection.portfolio.isConfigureable)
   //   Qb<List<UiComponent>, String>(
-  //     QuestionQuantifier.appSectionLevel(AppSection.portfolio),
+  //     Quest2Quantifier.appSectionLevel(AppSection.portfolio),
   //     AppSection.portfolio.includeStr,
   //     AppSection.portfolio.applicableComponents.map((e) => e.name),
   //     AppSection.portfolio.convertIdxsToComponentList,
   //   ),
   // if (AppSection.trading.isConfigureable)
   //   Qb<List<UiComponent>, String>(
-  //     QuestionQuantifier.appSectionLevel(AppSection.trading),
+  //     Quest2Quantifier.appSectionLevel(AppSection.trading),
   //     AppSection.trading.includeStr,
   //     AppSection.trading.applicableComponents.map((e) => e.name),
   //     AppSection.trading.convertIdxsToComponentList,
   //   ),
   // if (AppSection.marketResearch.isConfigureable)
   //   Qb<List<UiComponent>, String>(
-  //     QuestionQuantifier.appSectionLevel(AppSection.marketResearch),
+  //     Quest2Quantifier.appSectionLevel(AppSection.marketResearch),
   //     AppSection.marketResearch.includeStr,
   //     AppSection.marketResearch.applicableComponents.map((e) => e.name),
   //     AppSection.marketResearch.convertIdxsToComponentList,

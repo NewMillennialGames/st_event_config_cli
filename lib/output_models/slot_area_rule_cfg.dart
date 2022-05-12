@@ -23,9 +23,9 @@ class SlotOrAreaRuleCfg {
   Iterable<VisualRuleType> get existingAnsweredRuleTypes =>
       visRuleList.map((e) => e.ruleType);
 
-  void appendQuestion(VisRuleStyleQuest rQuest) {
-    print('adding VisRuleStyleQuest ${rQuest.questionId} in');
-    this.visRuleList.add(rQuest.response!.answers);
+  void appendQuest2(Quest2 rQuest) {
+    print('adding VisRuleStyleQuest ${rQuest.firstQuestion} in');
+    this.visRuleList.add(rQuest.mainAnswer);
   }
 
   void fillMissingWithDefaults(
@@ -49,17 +49,17 @@ class SlotOrAreaRuleCfg {
     }
     List<VisRuleQuestType> _questsForWhichWeWantAnswers = [];
     for (VisualRuleType rt in _rulesForWhichWeWantAnswers) {
-      _questsForWhichWeWantAnswers.addAll(rt.requiredQuestions);
+      _questsForWhichWeWantAnswers.addAll(rt.requiredQuest2s);
     }
 
     var expectedResponses = Set<VisRuleQuestType>();
     existingAnsweredRuleTypes.forEach((e) {
       // get list of all needed VisRuleQuestType
-      expectedResponses.addAll(e.requiredQuestions);
+      expectedResponses.addAll(e.requiredQuest2s);
     });
 
     Iterable<List<VisRuleQuestType>> answerTypesSoFar =
-        visRuleList.map((e) => e.requiredQuestions);
+        visRuleList.map((e) => e.requiredQuest2s);
     List<VisRuleQuestType> lstVrqt = [];
     if (answerTypesSoFar.length > 0) {
       lstVrqt = answerTypesSoFar

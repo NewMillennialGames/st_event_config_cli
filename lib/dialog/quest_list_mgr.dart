@@ -1,50 +1,62 @@
 part of ConfigDialogRunner;
 
+extension ListQuestExt1 on Iterable<Quest2> {
+  //
+  Iterable<QuestPromptInstance> matchingPromptsWhere(
+          bool Function(QuestPromptInstance) test) =>
+      this
+          .where((q) => q.containsPromptWhere(test))
+          .fold<List<QuestPromptInstance>>(
+        <QuestPromptInstance>[],
+        (l, qu2) => l
+          ..addAll(
+            qu2.matchingPromptsWhere(test),
+          ),
+      );
+}
+
 class QuestListMgr {
   /*
     does nothing but track and manage the full
-    list of questions, both pending and completed/answered
+    list of Quest2s, both pending and completed/answered
   */
-  int _currQuestionIdx = -1;
-  List<Question> _pendingQuestions = [];
+  int _currQuest2Idx = -1;
+  List<Quest2> _pendingQuest2s = [];
   Map<AppScreen, int> _questCountBySection = {};
-  Map<AppScreen, List<Question>> _answeredQuestsBySection = {};
+  Map<AppScreen, List<Quest2>> _answeredQuestsBySection = {};
 
   // constructor
   QuestListMgr();
 
   //
-  List<Question> get exportableQuestions =>
-      _allAnsweredQuestions.where(_exportFilterLogic).toList();
+  List<Quest2> get exportableQuest2s =>
+      _allAnsweredQuest2s.where(_exportFilterLogic).toList();
 
-  bool _exportFilterLogic(Question q) {
+  bool _exportFilterLogic(Quest2 q) {
     // print(
-    //   'QID: ${q.questionId}  runtimeType: ${q.runtimeType}  appliesToClientConfiguration: ${q.appliesToClientConfiguration}',
+    //   'QID: ${q.Quest2Id}  runtimeType: ${q.runtimeType}  appliesToClientConfiguration: ${q.appliesToClientConfiguration}',
     // );
     return q.appliesToClientConfiguration;
   }
 
-  List<Question> get pendingQuestions => _pendingQuestions;
-  Question get _currentOrLastQuestion => _pendingQuestions[_currQuestionIdx];
-  int get totalAnsweredQuestions => _answeredQuestsBySection.values
+  List<Quest2> get pendingQuest2s => _pendingQuest2s;
+  Quest2 get _currentOrLastQuest2 => _pendingQuest2s[_currQuest2Idx];
+  int get totalAnsweredQuest2s => _answeredQuestsBySection.values
       .fold<int>(0, (r, qLst) => r + qLst.length);
 
-  int get pendingQuestionCount => _pendingQuestions.length - _currQuestionIdx;
+  int get pendingQuest2Count => _pendingQuest2s.length - _currQuest2Idx;
 
-  List<Question> get _allAnsweredQuestions =>
-      _answeredQuestsBySection.values.fold<List<Question>>(
+  List<Quest2> get _allAnsweredQuest2s =>
+      _answeredQuestsBySection.values.fold<List<Quest2>>(
         [],
-        (List<Question> l0, List<Question> l1) => l0..addAll(l1),
+        (List<Quest2> l0, List<Quest2> l1) => l0..addAll(l1),
       );
 
   List<AppScreen> get userSelectedScreens {
-    List<AppScreen> uss = (_allAnsweredQuestions
-            .whereType<Question<String, List<AppScreen>>>()
-            .where((q) => q.asksWhichScreensToConfig)
-            .first
-            .response
-            ?.answers ??
-        []);
+    Iterable<QuestPromptInstance> matchingPrompts = _allAnsweredQuest2s
+        .matchingPromptsWhere((qpi) => qpi.asksWhichScreensToConfig);
+
+    List<AppScreen> uss = (matchingPrompts.first.userAnswers.cast() ?? []);
 
     print('userSelectedScreens has ${uss.length} items');
     return uss;
@@ -52,11 +64,10 @@ class QuestListMgr {
 
   List<ScreenWidgetArea> configurableAreasForScreen(AppScreen as) {
     //
-    return _allAnsweredQuestions
-        .whereType<Question<String, List<ScreenWidgetArea>>>()
+    Iterable<QuestPromptInstance> matchingPrompts = _allAnsweredQuest2s
         .where((q) => q.appScreen == as)
-        .map((q) => q.response?.answers ?? [])
-        .fold<List<ScreenWidgetArea>>([], (l0, l1) => l0..addAll(l1)).toList();
+        .matchingPromptsWhere((qpi) => qpi.asksWhichAreasOfScreenToConfig);
+    return matchingPrompts.first.userAnswers.cast();
   }
 
   Map<AppScreen, List<ScreenWidgetArea>> get screenAreasPerScreen {
@@ -97,99 +108,103 @@ class QuestListMgr {
     ScreenWidgetArea area,
   ) {
     //
-    return _allAnsweredQuestions
-        .whereType<Question<String, List<ScreenAreaWidgetSlot>>>()
+
+    Iterable<QuestPromptInstance> matchingPrompts = _allAnsweredQuest2s
         .where((q) => q.appScreen == as && q.screenWidgetArea == area)
-        .map((q) => q.response?.answers ?? [])
-        .fold<List<ScreenAreaWidgetSlot>>(
-            [], (l0, l1) => l0..addAll(l1)).toList();
+        .matchingPromptsWhere((qpi) => qpi.asksWhichAreasOfScreenToConfig);
+    return matchingPrompts.first.userAnswers.cast();
+
+    // return _allAnsweredQuest2s
+    //     .whereType<Quest2<String, List<ScreenAreaWidgetSlot>>>()
+    //     .where((q) => q.appScreen == as && q.screenWidgetArea == area)
+    //     .map((q) => q.response?.answers ?? [])
+    //     .fold<List<ScreenAreaWidgetSlot>>(
+    //         [], (l0, l1) => l0..addAll(l1)).toList();
   }
 
-  void _sortPendingQuestions() {
-    // its important that we ONLY sort the section AFTER _currQuestionIdx
-    // or else we might re-ask prior (already answered) questions
-    if (_currQuestionIdx < 7) return;
+  void _sortPendingQuest2s() {
+    // its important that we ONLY sort the section AFTER _currQuest2Idx
+    // or else we might re-ask prior (already answered) Quest2s
+    if (_currQuest2Idx < 7) return;
 
-    print('running sortPendingQuestions');
+    print('running sortPendingQuest2s');
 
-    var unaskedQuests = _pendingQuestions.sublist(_currQuestionIdx + 1);
+    var unaskedQuests = _pendingQuest2s.sublist(_currQuest2Idx + 1);
 
     unaskedQuests.sort((a, b) => a.sortKey.compareTo(b.sortKey));
 
-    this._pendingQuestions = (_pendingQuestions.sublist(0, _currQuestionIdx + 1)
-      ..addAll(unaskedQuests));
+    this._pendingQuest2s =
+        (_pendingQuest2s.sublist(0, _currQuest2Idx + 1)..addAll(unaskedQuests));
   }
 
-  Question? nextQuestionToAnswer() {
+  Quest2? nextQuest2ToAnswer() {
     // AppScreen section
     _moveCurrentQuestToAnswered();
     //
-    if (_currQuestionIdx + 1 >= _pendingQuestions.length) {
+    if (_currQuest2Idx + 1 >= _pendingQuest2s.length) {
       return null;
     }
-    ++_currQuestionIdx;
-    // if (_currentOrLastQuestion.appScreen != section) {
-    //   --_currQuestionIdx;
+    ++_currQuest2Idx;
+    // if (_currentOrLastQuest2.appScreen != section) {
+    //   --_currQuest2Idx;
     //   return null;
     // }
-    return _currentOrLastQuestion;
+    return _currentOrLastQuest2;
   }
 
   void _moveCurrentQuestToAnswered() {
     // dont add at start or end
-    if (_currQuestionIdx < 0 ||
-        totalAnsweredQuestions >= _pendingQuestions.length) return;
+    if (_currQuest2Idx < 0 || totalAnsweredQuest2s >= _pendingQuest2s.length)
+      return;
     //
-    Question? mostRecentSaved =
-        _answeredQuestsBySection[_currentOrLastQuestion.appScreen]?.last;
-    // dont store same question twice
+    Quest2? mostRecentSaved =
+        _answeredQuestsBySection[_currentOrLastQuest2.appScreen]?.last;
+    // dont store same Quest2 twice
     if (mostRecentSaved != null &&
-        mostRecentSaved.questionId == _currentOrLastQuestion.questionId) {
+        mostRecentSaved.questId == _currentOrLastQuest2.questId) {
       //
       print(
-        'Error: QID: ${mostRecentSaved.questionId} seemd to be duplicate & wasnt moved into _answeredQuestsBySection',
+        'Error: QID: ${mostRecentSaved.questId} seemd to be duplicate & wasnt moved into _answeredQuestsBySection',
       );
       return;
     }
     ;
-    // store into list for this section;  but DO NOT remove from pendingQuestions or messes up cur_idx tracking
-    var l = _answeredQuestsBySection[_currentOrLastQuestion.appScreen] ?? [];
-    l.add(_currentOrLastQuestion);
-    _answeredQuestsBySection[_currentOrLastQuestion.appScreen] = l;
+    // store into list for this section;  but DO NOT remove from pendingQuest2s or messes up cur_idx tracking
+    var l = _answeredQuestsBySection[_currentOrLastQuest2.appScreen] ?? [];
+    l.add(_currentOrLastQuest2);
+    _answeredQuestsBySection[_currentOrLastQuest2.appScreen] = l;
   }
 
-  void loadInitialQuestions() {
+  void loadInitialQuest2s() {
     //
-    _pendingQuestions = loadInitialConfigQuestions();
-    _questCountBySection[AppScreen.eventConfiguration] =
-        _pendingQuestions.length;
+    _pendingQuest2s = loadInitialConfigQuest2s();
+    _questCountBySection[AppScreen.eventConfiguration] = _pendingQuest2s.length;
     // int c = 0;
-    // _pendingQuestions.forEach((q) {
-    //   q.questionId = ++c;
+    // _pendingQuest2s.forEach((q) {
+    //   q.Quest2Id = ++c;
     // });
   }
 
   void addImplicitAnswers(
-    List<Question> implicitlyAnsweredQuests, {
+    List<Quest2> implicitlyAnsweredQuests, {
     String dbgNam = 'init', // debug-name
   }) {
-    var alreadyAnsweredQuests =
-        _pendingQuestions.sublist(0, _currQuestionIdx + 1);
+    var alreadyAnsweredQuests = _pendingQuest2s.sublist(0, _currQuest2Idx + 1);
     alreadyAnsweredQuests.addAll(implicitlyAnsweredQuests);
 
-    var unaskedQuests = _pendingQuestions.sublist(_currQuestionIdx + 1);
+    var unaskedQuests = _pendingQuest2s.sublist(_currQuest2Idx + 1);
 
-    this._pendingQuestions = alreadyAnsweredQuests..addAll(unaskedQuests);
+    this._pendingQuest2s = alreadyAnsweredQuests..addAll(unaskedQuests);
   }
 
-  void appendNewQuestions(
-    List<Question> quests, {
+  void appendNewQuest2s(
+    List<Quest2> quests, {
     String dbgNam = 'init', // debug-name
   }) {
     //
     Set<AppScreen> newSections = quests.map((e) => e.appScreen).toSet();
 
-    print('$dbgNam is adding ${quests.length} new questions to $newSections');
+    print('$dbgNam is adding ${quests.length} new Quest2s to $newSections');
 
     for (AppScreen as in newSections) {
       int newCntBySec = quests
@@ -198,24 +213,26 @@ class QuestListMgr {
       _questCountBySection[as] = (_questCountBySection[as] ?? 0) + newCntBySec;
     }
     // quest id's start at 1, not zero
-    // int c = _pendingQuestions.length;
+    // int c = _pendingQuest2s.length;
     // quests.forEach((q) {
-    //   q.questionId = ++c;
+    //   q.Quest2Id = ++c;
     // });
-    this._pendingQuestions.addAll(quests);
+    this._pendingQuest2s.addAll(quests);
 
     // TODO:  test sorting after everything else is working
     // sorting not working and not necessary
-    // _sortPendingQuestions();
+    // _sortPendingQuest2s();
   }
 
   List<UserResponse> get priorAnswers {
     // return all existing user answers
     // filter out any null responses
 
-    return _allAnsweredQuestions
-        .map((e) => e.response)
-        .whereType<UserResponse>()
-        .toList();
+    // return _allAnsweredQuest2s
+    //     .map((e) => e.response)
+    //     .whereType<UserResponse>()
+    //     .toList();
+
+    throw UnimplementedError('NIU???');
   }
 }
