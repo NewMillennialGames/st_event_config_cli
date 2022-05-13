@@ -21,7 +21,7 @@ abstract class Quest2Presenter {
 
   void askAndWaitForUserResponse(
     DialogRunner dialoger,
-    Quest2 quest,
+    QuestBase quest,
   );
 
   void informUiThatDialogIsComplete();

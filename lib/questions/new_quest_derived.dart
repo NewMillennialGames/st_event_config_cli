@@ -12,9 +12,9 @@ part of Quest2sLib;
 */
 
 // pass Quest2, return how many new Quest2s to create
-typedef NewQuestCount = int Function(Quest2);
+typedef NewQuestCount = int Function(QuestBase);
 // pass Quest2 + newIndx, return list of args for Quest2 template
-typedef NewQuestArgGen = List<String> Function(Quest2, int);
+typedef NewQuestArgGen = List<String> Function(QuestBase, int);
 
 typedef Quest2QuantifierRevisor = QTargetIntent Function(QTargetIntent);
 
@@ -64,8 +64,8 @@ class DerivedQuestGenerator {
     required this.perQuestGenOptions,
   });
 
-  List<Quest2> generatedQuest2s(
-    Quest2 answeredQuest,
+  List<QuestBase> generatedQuest2s(
+    QuestBase answeredQuest,
     QuestMatcher? matcher,
   ) {
     /* use existing answered Quest2
@@ -75,7 +75,7 @@ class DerivedQuestGenerator {
     int toCreate = newQuestCountCalculator(answeredQuest);
     if (toCreate < 1) return [];
 
-    List<Quest2> createdQuest = [];
+    List<QuestBase> createdQuest = [];
     for (int i = 0; i < toCreate; i++) {
       //
       List<String> templArgs = newQuestArgGen(answeredQuest, i);
@@ -85,21 +85,21 @@ class DerivedQuestGenerator {
           ? perQuestGenOptions.last
           : perQuestGenOptions[i];
       //
-      Quest2 nxtQuest;
-      if (genOptionsAtIdx.genAsRuleQuest2) {
-        nxtQuest = Quest2.makeFromExisting(
-          answeredQuest,
-          newQuestStr,
-          genOptionsAtIdx,
-        );
-      } else {
-        nxtQuest = answeredQuest.fromExisting(
-          newQuestStr,
-          genOptionsAtIdx,
-        );
-      }
+      QuestBase nxtQuest;
+      // if (genOptionsAtIdx.genAsRuleQuest2) {
+      //   nxtQuest = QuestBase.makeFromExisting(
+      //     answeredQuest,
+      //     newQuestStr,
+      //     genOptionsAtIdx,
+      //   );
+      // } else {
+      //   nxtQuest = answeredQuest.fromExisting(
+      //     newQuestStr,
+      //     genOptionsAtIdx,
+      //   );
+      // }
 
-      createdQuest.add(nxtQuest);
+      // createdQuest.add(nxtQuest);
     }
     return createdQuest;
   }

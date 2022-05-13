@@ -7,7 +7,7 @@ class TestQuestRespGen implements Quest2Presenter {
 
   TestQuestRespGen(this.Quest2Matchers);
 
-  List<WhenQuestLike> _lookForResponseGenerators(Quest2 quest) {
+  List<WhenQuestLike> _lookForResponseGenerators(QuestBase quest) {
     //
     if (!(quest is Quest2)) {
       //
@@ -26,14 +26,15 @@ class TestQuestRespGen implements Quest2Presenter {
   }
 
   String _buildUserResponse(
-    Quest2 quest,
+    QuestBase quest,
     List<WhenQuestLike> responseGenerators,
   ) {
     //
-    assert(quest is Quest2, 'bad argument');
-    Quest2 vrq = quest as Quest2;
+    assert(quest is QuestBase, 'bad argument');
+    QuestBase vrq = quest as QuestBase;
 
-    List<VisRuleQuestType> questTypes = vrq.questDef.visQuestTypes;
+    List<VisRuleQuestType> questTypes = [];
+    //  vrq.questDef.visQuestTypes;
 
     String userAnswer = '';
     for (WhenQuestLike wql in responseGenerators) {
@@ -52,18 +53,18 @@ class TestQuestRespGen implements Quest2Presenter {
   }
 
   @override
-  void askAndWaitForUserResponse(DialogRunner dialoger, Quest2 quest) {
+  void askAndWaitForUserResponse(DialogRunner dialoger, QuestBase quest) {
     //
     List<WhenQuestLike> responseGenerators = _lookForResponseGenerators(quest);
     if (responseGenerators.length < 1) {
       // none so send default
-      quest.convertAndStoreUserResponse('0');
+      // quest.convertAndStoreUserResponse('0');
       dialoger.advanceToNextQuest2();
       return;
     }
 
     String _fullResponse = _buildUserResponse(quest, responseGenerators);
-    quest.convertAndStoreUserResponse(_fullResponse);
+    // quest.convertAndStoreUserResponse(_fullResponse);
     dialoger.advanceToNextQuest2();
   }
 
@@ -108,7 +109,7 @@ class WhenQuestLike {
     isSame = area == null || quest.screenWidgetArea == area;
     isSame = isSame && slot == null || quest.slotInArea == slot;
     isSame = isSame && ruleType == null ||
-        quest.qQuantify.visRuleTypeForAreaOrSlot == ruleType;
+        quest.qTargetIntent.visRuleTypeForAreaOrSlot == ruleType;
     isSame = isSame && questTypes.length > 0;
     return isSame;
   }

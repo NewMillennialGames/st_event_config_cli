@@ -15,7 +15,7 @@ class DialogMgr {
   DialogMgr(this._questMgr);
 
   //
-  Quest2? getNextQuestInCurrentSection() {
+  QuestBase? getNextQuestInCurrentSection() {
     // only in this section
     // return _questMgr._nextQuest2For(currentAppScreenTyp);
     return _questMgr.nextQuest2ToAnswer();

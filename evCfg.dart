@@ -2,9 +2,10 @@ import 'dart:io';
 import 'dart:core';
 import 'package:args/args.dart';
 //
-import 'lib/scoretrader/all.dart';
+// import 'lib/scoretrader/all.dart';
+// import 'lib/questions/all.dart';
+import 'lib/r_and_d/all.dart';
 import 'lib/dialog/all.dart';
-import 'lib/Quest2s/all.dart';
 import 'lib/output_models/all.dart';
 import 'lib/services/cli_quest_presenter.dart';
 /*
@@ -42,7 +43,7 @@ void createOutputFileFromResponses(
   String? filename,
 ]) {
   //
-  final List<Quest2> exportableQuest2s = Quest2Mgr.exportableQuest2s;
+  final List<QuestBase> exportableQuest2s = Quest2Mgr.exportableQuest2s;
 
   print('found ${exportableQuest2s.length} exportable answers to convert');
   // for (Quest2 q in exportableQuest2s) {
@@ -53,12 +54,12 @@ void createOutputFileFromResponses(
 
   print('Now building Event Config rules...');
 
-  Iterable<Quest2> eventConfigLevelData = exportableQuest2s.where(
+  Iterable<QuestBase> eventConfigLevelData = exportableQuest2s.where(
     (q) => q.isTopLevelConfigOrScreenQuest2,
   );
   final evCfg = EventCfgTree.fromEventLevelConfig(eventConfigLevelData);
   // create the per-area or per-slot rules
-  var ruleResponses = exportableQuest2s.whereType<VisRuleStyleQuest>();
+  var ruleResponses = exportableQuest2s.whereType<Quest2>();
   // print('ruleResponse answer count: ${ruleResponses.length}');
   evCfg.fillFromVisualRuleAnswers(ruleResponses);
   // now dump evCfg to file

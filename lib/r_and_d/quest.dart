@@ -1,21 +1,13 @@
 part of RandDee;
 
-class Quest2 extends Equatable {
-  /* 
-    cleaner and more testable replacement for:
-    Quest2<ConvertTyp, AnsTyp> and Quest2<>
-    it combines those classes so there is no fundamental distinction
-    between
-    largely a wrapper around qIterDef && qQuantify
-  */
+abstract class QuestBase with EquatableMixin {
+  //
   final QTargetIntent qTargetIntent;
   final QDefCollection qDefCollection;
-  // final bool addsToUiFactoryConfigRules;
-
-// optional unique value for expedited matching
+  // optional unique value for expedited matching
   String questId = '';
 
-  Quest2(
+  QuestBase(
     this.qTargetIntent,
     this.qDefCollection, {
     String? questId,
@@ -126,4 +118,50 @@ class Quest2 extends Equatable {
 
   @override
   bool get stringify => true;
+}
+
+class Quest2 extends QuestBase {
+  /*  SINGLE question instance
+  
+    cleaner and more testable replacement for:
+    Quest2<ConvertTyp, AnsTyp> and Quest2<>
+    it combines those classes so there is no fundamental distinction
+    between
+    largely a wrapper around qIterDef && qQuantify
+  */
+//   final QTargetIntent qTargetIntent;
+//   final QDefCollection qDefCollection;
+//   // final bool addsToUiFactoryConfigRules;
+
+// // optional unique value for expedited matching
+//   String questId = '';
+
+  Quest2(
+    QTargetIntent qTargetIntent,
+    QDefCollection qDefCollection, {
+    String? questId,
+  }) : super(qTargetIntent, qDefCollection, questId: questId) {}
+}
+
+class QuestMulti extends QuestBase {
+  /*  SINGLE question instance
+  
+    cleaner and more testable replacement for:
+    Quest2<ConvertTyp, AnsTyp> and Quest2<>
+    it combines those classes so there is no fundamental distinction
+    between
+    largely a wrapper around qIterDef && qQuantify
+  */
+//   final QTargetIntent qTargetIntent;
+//   final QDefCollection qDefCollection;
+//   // final bool addsToUiFactoryConfigRules;
+
+// // optional unique value for expedited matching
+//   String questId = '';
+
+  QuestMulti(
+    QTargetIntent qTargetIntent,
+    QDefCollection qDefCollection, {
+    String? questId,
+  }) : super(qTargetIntent, qDefCollection, questId: questId) {}
 }

@@ -39,7 +39,7 @@ class DialogRunner {
   // web logic;  start asking Quest2s for GUI
   bool serveNextQuest2ToGui() {
     //
-    Quest2? _quest = _questGroupMgr.getNextQuestInCurrentSection();
+    QuestBase? _quest = _questGroupMgr.getNextQuestInCurrentSection();
     if (_quest == null) return false;
     questFormatter.askAndWaitForUserResponse(this, _quest);
     return true;
@@ -80,7 +80,7 @@ class DialogRunner {
 
     _outputSpacerLines(forSection: true);
     // check for another Quest2
-    Quest2? _quest = _questGroupMgr.getNextQuestInCurrentSection();
+    QuestBase? _quest = _questGroupMgr.getNextQuestInCurrentSection();
     while (_quest != null) {
       // askAndWaitForUserResponse() will callback to this
       // to create any derived Quest2s for this section

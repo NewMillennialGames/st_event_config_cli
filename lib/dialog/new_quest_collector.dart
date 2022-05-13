@@ -27,7 +27,7 @@ class NewQuest2Collector {
   bool handleAcquiringNewQuest2s(QuestListMgr _questMgr) {
     // returns whether true if new Quest2s were added
 
-    Quest2 questJustAnswered = _questMgr._currentOrLastQuest2;
+    QuestBase questJustAnswered = _questMgr._currentOrLastQuest2;
     // ruleQuest2s don't currently generate new Quest2s
     // actually, a filter, sort or group (level 2 or 3) Quest2
     // should generate the Quest2s under it??  TODO
@@ -65,7 +65,7 @@ class NewQuest2Collector {
       print('calling: askeWhichRulesGoWithAreaAndWhichSlotsToConfig');
       askWhichRulesGoWithAreaAndWhichSlotsToConfig(
         _questMgr,
-        questJustAnswered, // <String, List<ScreenWidgetArea>>
+        questJustAnswered, // QuestBase<String, List<ScreenWidgetArea>>
       );
       addedNew = true;
       //
@@ -74,7 +74,7 @@ class NewQuest2Collector {
       print('calling: askWhichConfigRulesGoWithEachSlot');
       askWhichConfigRulesGoWithEachSlot(
         _questMgr,
-        questJustAnswered as Quest2<String, List<ScreenAreaWidgetSlot>>,
+        questJustAnswered, // <String, List<ScreenAreaWidgetSlot>>
       );
       addedNew = true;
       //
@@ -83,7 +83,7 @@ class NewQuest2Collector {
 
       genRequestedVisualRulesForAreaOrSlot(
         _questMgr,
-        questJustAnswered as Quest2<String, List<VisualRuleType>>,
+        questJustAnswered, // as QuestBase<String, List<VisualRuleType>>,
       );
       addedNew = true;
       //
@@ -120,12 +120,13 @@ class NewQuest2Collector {
     // user response to each of these Quest2s will cause a call to:
     // askeUserWhichSlotsOnSelectedAreasToConfigure() below
     // note that these Quest2s have appScreen set, but no ScreenWidgetArea
-    List<Quest2> newQuest2s = [];
+    List<QuestBase> newQuest2s = [];
     for (AppScreen scr in response.answers) {
       // skip screens that dont have configurable areas
       if (!scr.isConfigurable) continue;
 
-      var q = Quest2<String, List<ScreenWidgetArea>>(
+      var q = QuestBase(
+        // <String, List<ScreenWidgetArea>>
         QTargetIntent.screenLevel(
           scr,
           responseAddsWhichRuleAndSlotQuest2s: true,
@@ -150,7 +151,7 @@ class NewQuest2Collector {
 
   void askWhichRulesGoWithAreaAndWhichSlotsToConfig(
     QuestListMgr _questMgr,
-    Quest2 quest,
+    QuestBase quest,
   ) {
     /*  receives 1 screen but multiple areas
 
@@ -169,14 +170,14 @@ class NewQuest2Collector {
 
     // for each configurable area in current screen
     // make a Quest2 about it's possible rule-types
-    List<Quest2> newQuest2s = [];
+    List<QuestBase> newQuest2s = [];
 
     // ask rules for each area
     for (ScreenWidgetArea area in areasSelectedForScreenInLastQuest) {
       var applicableRuleTypes = area.applicableRuleTypes(screen);
       if (!area.isConfigureable || applicableRuleTypes.length < 1) continue;
 
-      var q = Quest2(
+      var q = QuestBase(
         // <String, List<VisualRuleType>>
         QTargetIntent.ruleLevel(
           screen,
@@ -214,7 +215,7 @@ class NewQuest2Collector {
       );
       if (!area.isConfigureable || applicableWigetSlots.length < 1) continue;
 
-      var q = Quest2(
+      var q = QuestBase(
         // <String, List<ScreenAreaWidgetSlot>>
         QTargetIntent.areaLevelSlots(
           screen,
@@ -244,7 +245,7 @@ class NewQuest2Collector {
 
   void askWhichConfigRulesGoWithEachSlot(
     QuestListMgr _questMgr,
-    Quest2 quest, // <String, List<ScreenAreaWidgetSlot>>
+    QuestBase quest, // <String, List<ScreenAreaWidgetSlot>>
   ) {
     // receives 1 screen & 1 area but multiple slots
 
@@ -254,14 +255,14 @@ class NewQuest2Collector {
     List<ScreenAreaWidgetSlot> selectedSlotsInArea = quest.mainAnswer ?? [];
     if (selectedSlotsInArea.length < 1) return;
 
-    List<Quest2> newQuest2s = [];
+    List<QuestBase> newQuest2s = [];
     for (ScreenAreaWidgetSlot slotInArea in selectedSlotsInArea) {
       //
       var possibleConfigRules = slotInArea.possibleConfigRules(screenArea);
       if (!slotInArea.isConfigurable || possibleConfigRules.length < 1)
         continue;
 
-      var q = Quest2(
+      var q = QuestBase(
         // <String, List<VisualRuleType>>
         QTargetIntent.ruleLevel(
           screen,
@@ -288,7 +289,7 @@ class NewQuest2Collector {
 
   void genRequestedVisualRulesForAreaOrSlot(
     QuestListMgr _questMgr,
-    Quest2 quest, // <String, List<VisualRuleType>>
+    QuestBase quest, // <String, List<VisualRuleType>>
   ) {
     /*
       user has responded WHICH rules they would like to apply
@@ -303,14 +304,14 @@ class NewQuest2Collector {
     ScreenWidgetArea area = quest.screenWidgetArea!;
     ScreenAreaWidgetSlot? areaSlot = quest.slotInArea;
     //
-    List<Quest2> newQuest2s = [];
+    List<QuestBase> newQuest2s = [];
     // Quest2s figure out their Quest2s &
     // select options from the rule-type being passed
     for (VisualRuleType ruleTyp in rulesToCreateForAreaOrSlot) {
       // string is the user-input value being parsed
       // RuleResponseWrapperIfc is one of these response types:
       // TvRowStyleCfg, TvSortOrGroupCfg, TvFilterCfg, ShowHideCfg
-      var q = Quest2(
+      var q = QuestBase(
         // <String, RuleResponseBase>
         screen,
         area,
@@ -327,7 +328,7 @@ class NewQuest2Collector {
 
   void genRequestedBehaveRulesForAreaOrSlot(
     QuestListMgr _questMgr,
-    Quest2 quest, // <String, List<BehaviorRuleType>>
+    QuestBase quest, // <String, List<BehaviorRuleType>>
   ) {
     // use example above for this pattern
   }

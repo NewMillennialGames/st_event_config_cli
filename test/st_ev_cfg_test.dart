@@ -15,7 +15,7 @@ void main() {
       VisualRuleType.groupCfg,
       responseAddsRuleDetailQuests: true,
     );
-    final askNumSlots = Quest2<String, int>(
+    final askNumSlots = QuestBase(
       qq,
       'how many Grouping positions would you like to configure?',
       ['0', '1', '$k_quests_created_in_test', '3'],
@@ -29,8 +29,8 @@ void main() {
     expect(_questMgr.priorAnswers.length, 0);
     expect(_questMgr.totalAnsweredQuest2s, 0);
 
-    Quest2 quest = _questMgr.nextQuest2ToAnswer()!;
-    quest.convertAndStoreUserResponse('$k_quests_created_in_test');
+    QuestBase quest = _questMgr.nextQuest2ToAnswer()!;
+    // quest.convertAndStoreUserResponse('$k_quests_created_in_test');
     // need to bump QuestListMgr to next Quest2
     // to force prior into the answered queue
     var nxtQu = _questMgr.nextQuest2ToAnswer();
@@ -47,8 +47,8 @@ void main() {
     // so we subtract one from pending ...
     expect(_questMgr.pendingQuest2Count - 1, k_quests_created_in_test);
 
-    for (Quest2 q in _questMgr.pendingQuest2s) {
-      print('QuestMatcher created:  ${q.questStr}  ${q.Quest2Id}');
+    for (QuestBase q in _questMgr.pendingQuest2s) {
+      // print('QuestMatcher created:  ${q.questStr}  ${q.Quest2Id}');
     }
   });
 }

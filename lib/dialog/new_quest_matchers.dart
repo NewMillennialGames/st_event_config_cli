@@ -13,7 +13,7 @@ part of ConfigDialogRunner;
 // top level function to add new Quest2s or implicit answers
 void appendNewQuestsOrInsertImplicitAnswers(QuestListMgr questListMgr) {
   //
-  Quest2 questJustAnswered = questListMgr._currentOrLastQuest2;
+  QuestBase questJustAnswered = questListMgr._currentOrLastQuest2;
   print(
     'comparing "${questJustAnswered.questId}" to ${_matcherList.length} matchers for new quests',
   );
@@ -97,10 +97,10 @@ class QuestMatcher<AnsType> {
       matcherMatchBehavior.createsImplicitAnswers;
 
   // public methods
-  List<Quest2> generatedQuest2sFor(Quest2 quest) =>
+  List<QuestBase> generatedQuest2sFor(QuestBase quest) =>
       derQuestGen.generatedQuest2s(quest, this);
 
-  bool doesMatch(Quest2 quest) {
+  bool doesMatch(QuestBase quest) {
     bool isAPatternMatch =
         quest.questId == this.questId || _doDeeperMatch(quest);
     // pattern doesnt match so exit early
@@ -113,7 +113,7 @@ class QuestMatcher<AnsType> {
     return isAPatternMatch;
   }
 
-  bool _doDeeperMatch(Quest2 quest) {
+  bool _doDeeperMatch(QuestBase quest) {
     // compare all properties instead of only Quest2Id
     bool dMatch = true;
     dMatch = dMatch &&

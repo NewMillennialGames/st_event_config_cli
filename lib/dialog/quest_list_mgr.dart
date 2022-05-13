@@ -1,6 +1,6 @@
 part of ConfigDialogRunner;
 
-extension ListQuestExt1 on Iterable<Quest2> {
+extension ListQuestExt1 on Iterable<QuestBase> {
   //
   Iterable<QuestPromptInstance> matchingPromptsWhere(
           bool Function(QuestPromptInstance) test) =>
@@ -21,35 +21,35 @@ class QuestListMgr {
     list of Quest2s, both pending and completed/answered
   */
   int _currQuest2Idx = -1;
-  List<Quest2> _pendingQuest2s = [];
+  List<QuestBase> _pendingQuest2s = [];
   Map<AppScreen, int> _questCountBySection = {};
-  Map<AppScreen, List<Quest2>> _answeredQuestsBySection = {};
+  Map<AppScreen, List<QuestBase>> _answeredQuestsBySection = {};
 
   // constructor
   QuestListMgr();
 
   //
-  List<Quest2> get exportableQuest2s =>
+  List<QuestBase> get exportableQuest2s =>
       _allAnsweredQuest2s.where(_exportFilterLogic).toList();
 
-  bool _exportFilterLogic(Quest2 q) {
+  bool _exportFilterLogic(QuestBase q) {
     // print(
     //   'QID: ${q.Quest2Id}  runtimeType: ${q.runtimeType}  appliesToClientConfiguration: ${q.appliesToClientConfiguration}',
     // );
     return q.appliesToClientConfiguration;
   }
 
-  List<Quest2> get pendingQuest2s => _pendingQuest2s;
-  Quest2 get _currentOrLastQuest2 => _pendingQuest2s[_currQuest2Idx];
+  List<QuestBase> get pendingQuest2s => _pendingQuest2s;
+  QuestBase get _currentOrLastQuest2 => _pendingQuest2s[_currQuest2Idx];
   int get totalAnsweredQuest2s => _answeredQuestsBySection.values
       .fold<int>(0, (r, qLst) => r + qLst.length);
 
   int get pendingQuest2Count => _pendingQuest2s.length - _currQuest2Idx;
 
-  List<Quest2> get _allAnsweredQuest2s =>
-      _answeredQuestsBySection.values.fold<List<Quest2>>(
+  List<QuestBase> get _allAnsweredQuest2s =>
+      _answeredQuestsBySection.values.fold<List<QuestBase>>(
         [],
-        (List<Quest2> l0, List<Quest2> l1) => l0..addAll(l1),
+        (List<QuestBase> l0, List<QuestBase> l1) => l0..addAll(l1),
       );
 
   List<AppScreen> get userSelectedScreens {
@@ -137,7 +137,7 @@ class QuestListMgr {
         (_pendingQuest2s.sublist(0, _currQuest2Idx + 1)..addAll(unaskedQuests));
   }
 
-  Quest2? nextQuest2ToAnswer() {
+  QuestBase? nextQuest2ToAnswer() {
     // AppScreen section
     _moveCurrentQuestToAnswered();
     //
@@ -157,7 +157,7 @@ class QuestListMgr {
     if (_currQuest2Idx < 0 || totalAnsweredQuest2s >= _pendingQuest2s.length)
       return;
     //
-    Quest2? mostRecentSaved =
+    QuestBase? mostRecentSaved =
         _answeredQuestsBySection[_currentOrLastQuest2.appScreen]?.last;
     // dont store same Quest2 twice
     if (mostRecentSaved != null &&
@@ -186,7 +186,7 @@ class QuestListMgr {
   }
 
   void addImplicitAnswers(
-    List<Quest2> implicitlyAnsweredQuests, {
+    List<QuestBase> implicitlyAnsweredQuests, {
     String dbgNam = 'init', // debug-name
   }) {
     var alreadyAnsweredQuests = _pendingQuest2s.sublist(0, _currQuest2Idx + 1);
@@ -198,7 +198,7 @@ class QuestListMgr {
   }
 
   void appendNewQuest2s(
-    List<Quest2> quests, {
+    List<QuestBase> quests, {
     String dbgNam = 'init', // debug-name
   }) {
     //

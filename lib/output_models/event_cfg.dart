@@ -61,7 +61,7 @@ class EventCfgTree {
     this.screenConfigMap,
   );
 
-  factory EventCfgTree.fromEventLevelConfig(Iterable<Quest2> responses) {
+  factory EventCfgTree.fromEventLevelConfig(Iterable<QuestBase> responses) {
     //
     String evTemplateName = (responses
             .where((q) => q.questId == Quest2Ids.eventName)
