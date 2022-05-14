@@ -44,7 +44,7 @@ class VisQuestChoiceCollection extends QuestChoiceCollectionBase {
 
   factory VisQuestChoiceCollection.fromList(
     VisRuleQuestType visRuleQuestType,
-    List<String> strChoices, {
+    Iterable<String> strChoices, {
     int defaultIdx = 0,
     bool multiAllowed = false,
   }) {

@@ -25,7 +25,7 @@ class QTargetIntent extends Equatable with _$QTargetQuantify {
     bool noAppRules =
         visRuleTypeForAreaOrSlot == null && behRuleTypeForAreaOrSlot == null;
     if (noAppRules)
-      return cliConfig ? QIntentEm.infoOrCliCfg : QIntentEm.structural;
+      return cliConfig ? QIntentEm.infoOrCliCfg : QIntentEm.dlogCascade;
     if (visRuleTypeForAreaOrSlot != null) return QIntentEm.visual;
     if (behRuleTypeForAreaOrSlot != null) return QIntentEm.behavioral;
     return QIntentEm.diagnostic;
@@ -226,7 +226,7 @@ class QTargetIntent extends Equatable with _$QTargetQuantify {
     );
   }
 
-  List<VisualRuleType> relatedSubVisualRules(Quest2 quest) {
+  List<VisualRuleType> relatedSubVisualRules(Quest1Response quest) {
     if (!this.generatesNoNewQuest2s) return [];
 
     List<VisualRuleType> list = [];

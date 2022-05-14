@@ -9,7 +9,7 @@ class TestQuestRespGen implements Quest2Presenter {
 
   List<WhenQuestLike> _lookForResponseGenerators(QuestBase quest) {
     //
-    if (!(quest is Quest2)) {
+    if (!(quest is Quest1Response)) {
       //
       print('Warn: called _lookForResponseGenerators with top-level Quest2');
       return [];
@@ -103,7 +103,7 @@ class WhenQuestLike {
     this.questTypes = const [],
   ]);
 
-  bool matches(Quest2 quest) {
+  bool matches(Quest1Response quest) {
     bool isSame = quest.appScreen == screen;
     if (!isSame) return false;
     isSame = area == null || quest.screenWidgetArea == area;

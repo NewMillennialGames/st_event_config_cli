@@ -1,17 +1,41 @@
 part of RandDee;
 
 class QDefCollection {
-  /* describes iteration qualities of a given Quest2
+  /* describes iteration qualities of a given QuestBase
 
   */
   List<QuestPromptInstance> questIterations;
-  bool isRuleQuest2;
+  bool isRuleQuestion;
   int _curPartIdx = -1;
 
   QDefCollection(
     this.questIterations, {
-    this.isRuleQuest2 = false,
+    this.isRuleQuestion = false,
   });
+
+  factory QDefCollection.singleDialog(
+    String userPrompt,
+    Iterable<String> choices,
+    CaptureAndCast captureAndCast, {
+    VisRuleQuestType questType = VisRuleQuestType.dialogStruct,
+  }) {
+    //
+    QuestPromptInstance qpi = QuestPromptInstance.fromRaw(
+        userPrompt, choices, questType, captureAndCast);
+    return QDefCollection([qpi]);
+  }
+
+  factory QDefCollection.singleRule(
+    String userPrompt,
+    Iterable<String> choices,
+    CaptureAndCast captureAndCast, {
+    VisRuleQuestType questType = VisRuleQuestType.dialogStruct,
+  }) {
+    //
+    QuestPromptInstance qpi = QuestPromptInstance.fromRaw(
+        userPrompt, choices, questType, captureAndCast);
+    return QDefCollection([qpi], isRuleQuestion: true);
+  }
 
   // getters
   int get _partCount => questIterations.length;

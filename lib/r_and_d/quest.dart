@@ -1,11 +1,20 @@
 part of RandDee;
 
 abstract class QuestBase with EquatableMixin {
-  //
+  /*
+
+      cleaner and more testable replacement for:
+    Quest2<ConvertTyp, AnsTyp> and Quest2<>
+    it combines those classes so there is no fundamental distinction
+    between
+    largely a wrapper around qIterDef && qQuantify
+
+  */
   final QTargetIntent qTargetIntent;
   final QDefCollection qDefCollection;
   // optional unique value for expedited matching
   String questId = '';
+  // bool isDiagnostic = false;
 
   QuestBase(
     this.qTargetIntent,
@@ -14,6 +23,71 @@ abstract class QuestBase with EquatableMixin {
   }) : questId = questId == null ? qTargetIntent.sortKey : questId {
     // now select first Quest2 to be ready for display
     // _currQuest2 = qDefCollection.curQuest2;
+  }
+
+  factory QuestBase.infoOrCliCfg(
+    QTargetIntent targIntent,
+    String userPrompt,
+    Iterable<String> choices,
+    CaptureAndCast captureAndCast, {
+    String? questId,
+  }) {
+    //
+    var qDefCollection = QDefCollection.singleDialog(
+      userPrompt,
+      choices,
+      captureAndCast,
+    );
+    return Quest1Response(targIntent, qDefCollection);
+  }
+
+  factory QuestBase.dlogCascade(
+    QTargetIntent targIntent,
+    String userPrompt,
+    Iterable<String> choices,
+    CaptureAndCast captureAndCast, {
+    String? questId,
+  }) {
+    //
+    var qDefCollection = QDefCollection.singleDialog(
+      userPrompt,
+      choices,
+      captureAndCast,
+    );
+    return QuestMultiResponse(targIntent, qDefCollection);
+  }
+
+  factory QuestBase.visualRule(
+    QTargetIntent targIntent,
+    String userPrompt,
+    Iterable<String> choices,
+    CaptureAndCast captureAndCast, {
+    String? questId,
+  }) {
+    //
+    var qDefCollection = QDefCollection.singleRule(
+      userPrompt,
+      choices,
+      captureAndCast,
+    );
+    return QuestVisualRule(targIntent, qDefCollection);
+  }
+
+  factory QuestBase.behavioralRule(
+    QTargetIntent targIntent,
+    String userPrompt,
+    Iterable<String> choices,
+    CaptureAndCast captureAndCast, {
+    String? questId,
+  }) {
+    //
+
+    var qDefCollection = QDefCollection.singleRule(
+      userPrompt,
+      choices,
+      captureAndCast,
+    );
+    return QuestBehaveRule(targIntent, qDefCollection);
   }
 
   QuestPromptInstance? getNextUserPromptIfExists() {
@@ -48,6 +122,7 @@ abstract class QuestBase with EquatableMixin {
     return l;
   }
 
+  bool get isRuleQuestion => false;
   QuestPromptInstance get firstQuestion => qDefCollection.questIterations.first;
   CaptureAndCast get _firstPromptAnswers => firstQuestion._userAnswers;
   dynamic get mainAnswer => _firstPromptAnswers.cast();
@@ -85,7 +160,8 @@ abstract class QuestBase with EquatableMixin {
 
   // appliesToClientConfiguration == should be exported to file
   bool get appliesToClientConfiguration =>
-      qDefCollection.isRuleQuest2 || appScreen == AppScreen.eventConfiguration;
+      qDefCollection.isRuleQuestion ||
+      appScreen == AppScreen.eventConfiguration;
 
   // ARE BELOW needed with new approach??
 
@@ -120,48 +196,54 @@ abstract class QuestBase with EquatableMixin {
   bool get stringify => true;
 }
 
-class Quest2 extends QuestBase {
-  /*  SINGLE question instance
-  
-    cleaner and more testable replacement for:
-    Quest2<ConvertTyp, AnsTyp> and Quest2<>
-    it combines those classes so there is no fundamental distinction
-    between
-    largely a wrapper around qIterDef && qQuantify
+class Quest1Response extends QuestBase {
+  /*  Question requiring only one user response
+
   */
-//   final QTargetIntent qTargetIntent;
-//   final QDefCollection qDefCollection;
-//   // final bool addsToUiFactoryConfigRules;
 
-// // optional unique value for expedited matching
-//   String questId = '';
-
-  Quest2(
+  Quest1Response(
     QTargetIntent qTargetIntent,
     QDefCollection qDefCollection, {
     String? questId,
   }) : super(qTargetIntent, qDefCollection, questId: questId) {}
 }
 
-class QuestMulti extends QuestBase {
-  /*  SINGLE question instance
+class QuestMultiResponse extends QuestBase {
+  /*  Question with multiple response values
   
-    cleaner and more testable replacement for:
-    Quest2<ConvertTyp, AnsTyp> and Quest2<>
-    it combines those classes so there is no fundamental distinction
-    between
-    largely a wrapper around qIterDef && qQuantify
   */
-//   final QTargetIntent qTargetIntent;
-//   final QDefCollection qDefCollection;
-//   // final bool addsToUiFactoryConfigRules;
 
-// // optional unique value for expedited matching
-//   String questId = '';
-
-  QuestMulti(
+  QuestMultiResponse(
     QTargetIntent qTargetIntent,
     QDefCollection qDefCollection, {
     String? questId,
   }) : super(qTargetIntent, qDefCollection, questId: questId) {}
+}
+
+class QuestVisualRule extends QuestBase {
+  /*  
+  */
+
+  QuestVisualRule(
+    QTargetIntent qTargetIntent,
+    QDefCollection qDefCollection, {
+    String? questId,
+  }) : super(qTargetIntent, qDefCollection, questId: questId) {}
+
+  // getters
+  bool get isRuleQuestion => true;
+}
+
+class QuestBehaveRule extends QuestBase {
+  /*  
+  */
+
+  QuestBehaveRule(
+    QTargetIntent qTargetIntent,
+    QDefCollection qDefCollection, {
+    String? questId,
+  }) : super(qTargetIntent, qDefCollection, questId: questId) {}
+
+  // getters
+  bool get isRuleQuestion => true;
 }

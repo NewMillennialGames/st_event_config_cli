@@ -28,11 +28,11 @@ class DialogMgr {
 
   void loadBeginningDialog() {
     //
-    _loadAppUiSections();
+    // _loadAppUiSections();
     // only load Quest2s for top (eventConfiguration) section
     // answers in that section will kick off creation of new Quests
     // inside of NewQuest2Collector()
-    List<Quest2> quests = loadInitialConfigQuest2s();
+    List<QuestBase> quests = loadInitialConfigQuest2s();
     _questMgr.appendNewQuest2s(quests);
   }
 
@@ -41,11 +41,11 @@ class DialogMgr {
   //   _questMgr.appendNewQuest2s(quests);
   // }
 
-  void _loadAppUiSections() {
-    // List<DialogSectionCfg> l = [];
-    // for (AppScreen s in AppScreen.values) {
-    //   l.add(DialogSectionCfg(s));
-    // }
-    // this._sections = l;
-  }
+  // void _loadAppUiSections() {
+  //   // List<DialogSectionCfg> l = [];
+  //   // for (AppScreen s in AppScreen.values) {
+  //   //   l.add(DialogSectionCfg(s));
+  //   // }
+  //   // this._sections = l;
+  // }
 }

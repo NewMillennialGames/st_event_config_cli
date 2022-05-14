@@ -73,7 +73,7 @@ class QuestMatcher<AnsType> {
   final bool isRuleQuest2;
   final String questId;
   final DerivedQuestGenerator derQuestGen;
-  late Type? typ = UserResponse<AnsType>;
+  late Type? typ = CaptureAndCast<AnsType>;
   final String matcherDescrip;
   //
   QuestMatcher(

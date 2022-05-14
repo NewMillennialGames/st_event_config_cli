@@ -1,21 +1,21 @@
 part of EvCfgConfig;
 
 // public api
-List<Quest2> loadInitialConfigQuest2s() {
+List<QuestBase> loadInitialConfigQuest2s() {
   // event config Quest2s DO NOT have areas or uiComponents
   return _Quest2Lst.where((qb) =>
       qb.appScreen == AppScreen.eventConfiguration &&
       qb.isTopLevelConfigOrScreenQuest2).toList();
 }
 
-// List<Quest2> loadQuest2sAtTopOfSection(AppScreen appSection) {
+// List<QuestBase> loadQuest2sAtTopOfSection(AppScreen appSection) {
 //   return _Quest2Lst
 //       .where((qb) =>
 //           qb.appScreen == appSection && qb.isTopLevelConfigOrScreenQuest2)
 //       .toList();
 // }
 
-// List<Quest2> loadQuest2sUnderSelectedSections(
+// List<QuestBase> loadQuest2sUnderSelectedSections(
 //   UserResponse<List<AppScreen>> response,
 // ) {
 //   // load Quest2s about areas in section
@@ -28,7 +28,7 @@ List<Quest2> loadInitialConfigQuest2s() {
 //   return newQuest2s;
 // }
 
-// List<Quest2> loadQuest2sForArea(
+// List<QuestBase> loadQuest2sForArea(
 //   AppScreen screen,
 //   ScreenWidgetArea screenWidgetArea,
 //   ScreenAreaWidgetSlot slotInArea,
@@ -54,7 +54,7 @@ List<Quest2> loadInitialConfigQuest2s() {
 // }
 
 // accumulate configuration data
-final List<Quest2> _Quest2Lst = [
+final List<QuestBase> _Quest2Lst = [
   /*  
     eventConfiguration Quest2s list below
 
@@ -69,77 +69,93 @@ final List<Quest2> _Quest2Lst = [
     but then I'd have more boilerplate in ALL
     of my Qb.castFunc code
   */
-  Qb(
+  QuestBase.infoOrCliCfg(
     QTargetIntent.eventLevel(),
-    QDefCollection([]),
-    questId: Quest2Ids.eventName,
+    '',
+    [],
+    CaptureAndCast<String>((s) => s.first),
+    questId: QuestionIdStrings.eventName,
   ),
   // set true false to shorten manual testing
   if (true) ...[
-    Qb(
+    QuestBase.infoOrCliCfg(
       QTargetIntent.eventLevel(),
-      QDefCollection([]),
-      // DlgStr.eventDescrip,
-      // null,
-      // null,
-      questId: Quest2Ids.eventDescrip,
+      DlgStr.eventDescrip,
+      [],
+      CaptureAndCast<String>((s) => s.first),
+      questId: QuestionIdStrings.eventDescrip,
     ),
-    Qb(
+    QuestBase.infoOrCliCfg(
       QTargetIntent.eventLevel(),
-      QDefCollection([]),
-      // DlgStr.eventType,
-      // EvType.values.map((e) => e.name),
-      // (i) => EvType.values[i],
-      questId: Quest2Ids.eventType,
+      // QDefCollection([]),
+      DlgStr.eventType,
+      EvType.values.map((e) => e.name),
+      CaptureAndCast<EvType>(
+        (s) => EvType.values[int.tryParse(s.first) ?? 0],
+      ),
+      questId: QuestionIdStrings.eventType,
     ),
-    Qb(
+    QuestBase.infoOrCliCfg(
       QTargetIntent.eventLevel(),
-      QDefCollection([]),
-      // DlgStr.eventWhosCompeting,
-      // EvCompetitorType.values.map((e) => e.name),
-      // (i) => EvCompetitorType.values[i],
-      questId: Quest2Ids.competitorType,
+      // QDefCollection([]),
+      DlgStr.eventWhosCompeting,
+      EvCompetitorType.values.map((e) => e.name),
+      CaptureAndCast<EvCompetitorType>(
+        (s) => EvCompetitorType.values[int.tryParse(s.first) ?? 0],
+      ),
+      questId: QuestionIdStrings.competitorType,
     ),
-    Qb(
+    QuestBase.infoOrCliCfg(
       QTargetIntent.eventLevel(),
-      QDefCollection([]),
-      // DlgStr.eventCompPlayAgainst,
-      // EvOpponentType.values.map((e) => e.name),
+      // QDefCollection([]),
+      DlgStr.eventCompPlayAgainst,
+      EvOpponentType.values.map((e) => e.name),
+      CaptureAndCast<EvOpponentType>(
+          (s) => EvOpponentType.values[int.tryParse(s.first) ?? 0]),
       // (i) => EvOpponentType.values[i],
-      questId: Quest2Ids.competeAgainstType,
+      questId: QuestionIdStrings.competeAgainstType,
     ),
-    Qb(
+    QuestBase.infoOrCliCfg(
       QTargetIntent.eventLevel(),
-      QDefCollection([]),
-      // DlgStr.eventDuration,
-      // EvDuration.values.map((e) => e.name),
+      // QDefCollection([]),
+      DlgStr.eventDuration,
+      EvDuration.values.map((e) => e.name),
+      CaptureAndCast<EvDuration>(
+          (s) => EvDuration.values[int.tryParse(s.first) ?? 0]),
       // (i) => EvDuration.values[i],
-      questId: Quest2Ids.eventDuration,
+      questId: QuestionIdStrings.eventDuration,
     ),
-    Qb(
+    QuestBase.infoOrCliCfg(
       QTargetIntent.eventLevel(),
-      QDefCollection([]),
-      // DlgStr.eventEliminationStrategy,
-      // EvEliminationStrategy.values.map((e) => e.name),
+      // QDefCollection([]),
+      DlgStr.eventEliminationStrategy,
+      EvEliminationStrategy.values.map((e) => e.name),
+      CaptureAndCast<EvEliminationStrategy>(
+          (s) => EvEliminationStrategy.values[int.tryParse(s.first) ?? 0]),
       // (i) => EvEliminationStrategy.values[i],
-      questId: Quest2Ids.eventEliminationStrategy,
+      questId: QuestionIdStrings.eventEliminationStrategy,
     ),
-    Qb(
+    QuestBase.infoOrCliCfg(
       QTargetIntent.eventLevel(),
-      QDefCollection([]),
-      // DlgStr.useSameRowStyleForAllScreens,
-      // ['no', 'yes'],
+      // QDefCollection([]),
+      DlgStr.useSameRowStyleForAllScreens,
+      ['no', 'yes'],
+      CaptureAndCast<bool>((ls) => ls.first == '1'),
       // (i) => i == '1',
       // defaultAnswerIdx: 1,
-      questId: Quest2Ids.globalRowStyle,
+      questId: QuestionIdStrings.globalRowStyle,
     ),
   ],
   // ask which screens to configure
-  Qb(
+  QuestBase.dlogCascade(
     QTargetIntent.eventLevel(responseAddsWhichAreaQuest2s: true),
-    QDefCollection([]),
-    // DlgStr.selectAppScreens,  // <String, List<AppScreen>>
-    // AppScreen.eventConfiguration.topConfigurableScreens.map((e) => e.name),
+    // QDefCollection([]),
+    DlgStr.selectAppScreens, // <String, List<AppScreen>>
+    AppScreen.eventConfiguration.topConfigurableScreens.map((e) => e.name),
+    CaptureAndCast<List<AppScreen>>((ls) => ls
+        .map((s) => int.tryParse(s) ?? 0)
+        .map((idx) => AppScreen.eventConfiguration.topConfigurableScreens[idx])
+        .toList()),
     // (String strLstIdxs) {
     //   //
     //   return castStrOfIdxsToIterOfInts(strLstIdxs)
@@ -149,7 +165,7 @@ final List<Quest2> _Quest2Lst = [
     // },
     // acceptsMultiResponses: true,
     // isNotForOutput: true,
-    questId: Quest2Ids.selectAppScreens,
+    questId: QuestionIdStrings.selectAppScreens,
   ),
   // after user selects desired screens to configure, then
   // which screen areas (and slots on those areas) are asked automatically;

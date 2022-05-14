@@ -15,4 +15,4 @@ part 'questions.dart';
 part 'strings.dart';
 part 'constants.dart';
 
-typedef Qb = Quest2;
+// typedef Qb = QuestBase.infoOrCliCfg;

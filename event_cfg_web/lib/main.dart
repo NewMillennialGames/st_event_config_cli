@@ -32,7 +32,7 @@ class _EvCfgAppState extends ConsumerState<EvCfgApp> {
 
   @override
   void initState() {
-    StreamController<Quest2> questDispatcher = ref.read(
+    StreamController<Quest1Response> questDispatcher = ref.read(
       questDispatcherProvider,
     );
     Stream<String> answerStream = ref.read(answerStreamProvier.stream);
@@ -74,7 +74,7 @@ class ConfigDialog extends ConsumerWidget {
         title: Text('ST Event Configurator'),
         centerTitle: true,
       ),
-      body: StreamBuilder<Quest2>(
+      body: StreamBuilder<Quest1Response>(
         stream: ref.watch(Quest2StreamProvier.stream),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
@@ -114,7 +114,7 @@ class Quest2Ui extends StatelessWidget {
   this is where Deigo should start working
   */
   final StreamController<String> answerDispatcher;
-  final Quest2 quest;
+  final Quest1Response quest;
   //
   const Quest2Ui(
     this.answerDispatcher,

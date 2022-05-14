@@ -43,8 +43,8 @@ class QFactory {
     return this;
   }
 
-  Quest2 getAssembledQuest2() {
-    return Quest2(targetArea, iterDef);
+  Quest1Response getAssembledQuest2() {
+    return Quest1Response(targetArea, iterDef);
   }
 }
 

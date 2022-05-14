@@ -3,7 +3,7 @@ part of EvCfgEnums;
 // @JsonEnum()
 enum QIntentEm {
   infoOrCliCfg, // behavior of CLI or name of output file
-  structural, // governs future Quest2s
+  dlogCascade, // governs future Quest2s
   visual, // creates visual rules
   behavioral, // ceates behavioral rules
   diagnostic, // for debugging or testing purposes

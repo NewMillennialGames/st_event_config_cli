@@ -224,7 +224,7 @@ class QuestListMgr {
     // _sortPendingQuest2s();
   }
 
-  List<UserResponse> get priorAnswers {
+  List<CaptureAndCast> get priorAnswers {
     // return all existing user answers
     // filter out any null responses
 

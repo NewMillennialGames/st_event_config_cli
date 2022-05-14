@@ -64,7 +64,7 @@ class EventCfgTree {
   factory EventCfgTree.fromEventLevelConfig(Iterable<QuestBase> responses) {
     //
     String evTemplateName = (responses
-            .where((q) => q.questId == Quest2Ids.eventName)
+            .where((q) => q.questId == QuestionIdStrings.eventName)
             .first
             .mainAnswer ??
         '_eventNameMissing') as String;
@@ -80,7 +80,7 @@ class EventCfgTree {
     // use try to catch errs and allow easy debugging
     try {
       evTemplateDescription = (responses
-              .where((q) => q.questId == Quest2Ids.eventDescrip)
+              .where((q) => q.questId == QuestionIdStrings.eventDescrip)
               .first
               .mainAnswer ??
           '') as String;
@@ -145,7 +145,7 @@ class EventCfgTree {
   }
 
   void fillFromVisualRuleAnswers(
-    Iterable<Quest2> answeredQuest2s,
+    Iterable<Quest1Response> answeredQuest2s,
   ) {
     /*  part of instance construction
       receive all vis-rule-Quest2s, and fill
@@ -155,7 +155,7 @@ class EventCfgTree {
     print(
       'fillFromVisualRuleAnswers got ${answeredQuest2s.length} answeredQuest2s',
     );
-    for (Quest2 rQuest in answeredQuest2s) {
+    for (Quest1Response rQuest in answeredQuest2s) {
       // look up or create it
       ScreenCfgByArea screenCfg = this.screenConfigMap[rQuest.appScreen] ??
           ScreenCfgByArea(rQuest.appScreen, {});

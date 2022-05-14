@@ -15,11 +15,11 @@ import '../r_and_d/all.dart';
 //
 part 'all.g.dart';
 part 'all.freezed.dart';
-part 'user_response.dart';
+part 'niu_user_response.dart';
 part 'new_quest_derived.dart';
 part 'question_quantifier.dart';
-part 'question_base.dart';
-part 'question_visual_rule.dart';
+part 'niu_question_base.dart';
+part 'niu_question_visual_rule.dart';
 // part 'Quest2_behave_rule.dart';
 part 'vis_rule_choice_config.dart';
 part 'user_rule_response_types.dart';

@@ -1,6 +1,6 @@
 part of ConfigDialogRunner;
 
-class NewQuest2Collector {
+class NewQuestionCollector {
   /*
     each answered Quest2 is passed to this object
     then the scope and context of the Quest2 is reviewed
@@ -98,7 +98,7 @@ class NewQuest2Collector {
     } else {
       // no new Quest2s generated;
       if (questJustAnswered.generatesNoNewQuest2s ||
-          questJustAnswered.isRuleQuest2) return false;
+          questJustAnswered.isRuleQuestion) return false;
 
       print('\nWarning ****************');
       print(

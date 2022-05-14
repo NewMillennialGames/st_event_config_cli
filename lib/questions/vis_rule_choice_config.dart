@@ -13,7 +13,7 @@ class VisRuleQuestWithChoices {
   String get questStr => 'QwC: ' + ruleQuestType.name + '\n' + _subQuests;
   String get _subQuests => _ruleQuestChoices.toString();
 
-  String createFormattedQuest2(Quest2 rQuest) {
+  String createFormattedQuest2(Quest1Response rQuest) {
     String templ =
         ruleQuestType.questTemplByRuleType(rQuest.visRuleTypeForAreaOrSlot!);
 

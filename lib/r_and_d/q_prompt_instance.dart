@@ -13,20 +13,20 @@ class QuestPromptInstance<T> implements QPromptIfc {
   QuestPromptInstance(
     this.userPrompt,
     this.answChoiceCollection,
-    CastStrToAnswTypCallback<T> castFunc,
-  ) : _userAnswers = CaptureAndCast<T>(castFunc);
+    this._userAnswers,
+  ); // : _userAnswers = CaptureAndCast<T>(castFunc);
 
   factory QuestPromptInstance.fromRaw(
     String prompt,
-    List<String> choices,
+    Iterable<String> choices,
     VisRuleQuestType questType,
-    CastStrToAnswTypCallback<T> castFunc,
+    CaptureAndCast<T> answContainer,
   ) {
     //
     return QuestPromptInstance(
       prompt,
       VisQuestChoiceCollection.fromList(questType, choices),
-      castFunc,
+      answContainer,
     );
   }
 
@@ -52,7 +52,7 @@ class QuestPromptInstance<T> implements QPromptIfc {
 
   Iterable<String> get choices => answChoiceCollection.choices;
 
-  String createFormattedQuest2(Quest2 quest) {
+  String createFormattedQuest2(Quest1Response quest) {
     String templ = answChoiceCollection.questTemplByRuleType(
       quest.visRuleTypeForAreaOrSlot!,
     );
@@ -93,23 +93,23 @@ class QuestPromptInstance<T> implements QPromptIfc {
         .toList();
   }
 
-  static List<QuestPromptInstance> fromMap(
-    Map<String, List<String>> questIterations,
-    VisRuleQuestType questType,
-    CastStrToAnswTypCallback castFunc,
-  ) {
-    //
-    List<QuestPromptInstance> l = [];
-    for (MapEntry<String, List<String>> me in questIterations.entries) {
-      l.add(
-        QuestPromptInstance.fromRaw(
-          me.key,
-          me.value,
-          questType,
-          castFunc,
-        ),
-      );
-    }
-    return l;
-  }
+  // static List<QuestPromptInstance> fromMap(
+  //   Map<String, List<String>> questIterations,
+  //   VisRuleQuestType questType,
+  //   CastStrToAnswTypCallback castFunc,
+  // ) {
+  //   //
+  //   List<QuestPromptInstance> l = [];
+  //   for (MapEntry<String, List<String>> me in questIterations.entries) {
+  //     l.add(
+  //       QuestPromptInstance.fromRaw(
+  //         me.key,
+  //         me.value,
+  //         questType,
+  //         castFunc,
+  //       ),
+  //     );
+  //   }
+  //   return l;
+  // }
 }

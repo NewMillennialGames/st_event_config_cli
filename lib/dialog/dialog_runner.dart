@@ -11,7 +11,7 @@ class DialogRunner {
   to produce CLI output to the user
   */
   final QuestListMgr _questMgr = QuestListMgr();
-  final NewQuest2Collector _newQuestComposer = NewQuest2Collector();
+  final NewQuestionCollector _newQuestComposer = NewQuestionCollector();
   late final DialogMgr _questGroupMgr;
   // set in init
   final Quest2Presenter questFormatter;
@@ -29,7 +29,7 @@ class DialogRunner {
   }
 
   QuestListMgr get Quest2Mgr => _questMgr;
-  List<UserResponse> getPriorAnswersList() {
+  List<CaptureAndCast> getPriorAnswersList() {
     // used when a Quest2 needs to review prior
     // answers to configure itself
     return _questMgr.priorAnswers;
