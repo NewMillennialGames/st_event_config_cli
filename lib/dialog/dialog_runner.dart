@@ -59,7 +59,7 @@ class DialogRunner {
       but new auto-generated Quest2s should be placed under #2 (appendNewQuestsOrInsertImplicitAnswers)
     */
 
-    bool didAddNew = _newQuestComposer.handleAcquiringNewQuest2s(_questMgr);
+    bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(_questMgr);
     if (!didAddNew) {
       // run appendNewQuestsOrInsertImplicitAnswers only if handleAcquiringNewQuest2s does no work
       appendNewQuestsOrInsertImplicitAnswers(_questMgr);
@@ -88,7 +88,7 @@ class DialogRunner {
 
       // logic to add new Quest2s based on user response
       // two different methods
-      bool didAddNew = _newQuestComposer.handleAcquiringNewQuest2s(
+      bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(
         // _questGroupMgr,
         _questMgr,
       );

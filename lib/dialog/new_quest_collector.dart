@@ -24,7 +24,7 @@ class NewQuestionCollector {
   to those areas and/or area-slots on each respective screen
   */
 
-  bool handleAcquiringNewQuest2s(QuestListMgr _questMgr) {
+  bool handleAcquiringNewQuestions(QuestListMgr _questMgr) {
     // returns whether true if new Quest2s were added
 
     QuestBase questJustAnswered = _questMgr._currentOrLastQuest2;
@@ -48,7 +48,7 @@ class NewQuestionCollector {
       print('calling: askUserWhichAreasOfSelectedScreensToConfigure');
       askUserWhichAreasOfSelectedScreensToConfigure(
         _questMgr,
-        questJustAnswered.mainAnswer as UserResponse<List<AppScreen>>,
+        questJustAnswered.mainAnswer as CaptureAndCast<List<AppScreen>>,
       );
       addedNew = true;
       //
@@ -102,9 +102,9 @@ class NewQuestionCollector {
 
       print('\nWarning ****************');
       print(
-        'Quest ID: ${questJustAnswered.Quest2Id} (cascade type: ${questJustAnswered.qQuantify.cascadeType.name}) did not generate any new Quest2s',
+        'Quest ID: ${questJustAnswered.questId} (cascade type: ${questJustAnswered.qTargetIntent.cascadeType.name}) did not generate any new Quest2s',
       );
-      print('qText: "${questJustAnswered.questStr}"');
+      print('qText: "${questJustAnswered.firstQuestion.userPrompt}"');
     }
 
     return addedNew;
@@ -113,19 +113,19 @@ class NewQuestionCollector {
   // callbacks when a Quest2 needs to add other Quest2s
   void askUserWhichAreasOfSelectedScreensToConfigure(
     QuestListMgr _questMgr,
-    UserResponse<List<AppScreen>> response,
+    CaptureAndCast<List<AppScreen>> response,
   ) {
     // receives list of multiple screens user wants to configure
     // create "include" Quest2s for all areas in selected screens
     // user response to each of these Quest2s will cause a call to:
     // askeUserWhichSlotsOnSelectedAreasToConfigure() below
     // note that these Quest2s have appScreen set, but no ScreenWidgetArea
-    List<QuestBase> newQuest2s = [];
-    for (AppScreen scr in response.answers) {
+    List<QuestBase> newQuestions = [];
+    for (AppScreen scr in response.cast()) {
       // skip screens that dont have configurable areas
       if (!scr.isConfigurable) continue;
 
-      var q = QuestBase(
+      var q = QuestBase.dlogCascade(
         // <String, List<ScreenWidgetArea>>
         QTargetIntent.screenLevel(
           scr,
@@ -133,18 +133,21 @@ class NewQuestionCollector {
         ),
         'For the ${scr.name} screen, select the areas you`d like to configure?',
         scr.configurableScreenAreas.map((e) => e.name),
-        (String idxStrs) {
-          return castStrOfIdxsToIterOfInts(idxStrs)
-              .map((idx) => scr.configurableScreenAreas[idx])
-              .toList();
-        },
-        acceptsMultiResponses: true,
+        CaptureAndCast<List<ScreenWidgetArea>>((ls) =>
+            castListOfStrIdxsToIterOfInts(ls)
+                .map((idx) => scr.configurableScreenAreas[idx])
+                .toList()),
+        // (String idxStrs) {
+        //   return castListOfStrIdxsToIterOfInts(ls)
+        //       .map((idx) => scr.configurableScreenAreas[idx])
+        //       .toList();
+        // },
       );
-      newQuest2s.add(q);
+      newQuestions.add(q);
     }
     // now put these Quest2s in the queue
     _questMgr.appendNewQuest2s(
-      newQuest2s,
+      newQuestions,
       dbgNam: 'askUserWhichAreasOfSelectedScreensToConfigure',
     );
   }
@@ -177,7 +180,7 @@ class NewQuestionCollector {
       var applicableRuleTypes = area.applicableRuleTypes(screen);
       if (!area.isConfigureable || applicableRuleTypes.length < 1) continue;
 
-      var q = QuestBase(
+      var q = QuestBase.visualRule(
         // <String, List<VisualRuleType>>
         QTargetIntent.ruleLevel(
           screen,
@@ -187,12 +190,16 @@ class NewQuestionCollector {
         ),
         'Which rules would you like to add to the ${area.name} of ${screen.name}?',
         applicableRuleTypes.map((r) => r.friendlyName),
-        (String idxStrs) {
-          return castStrOfIdxsToIterOfInts(idxStrs)
-              .map((idx) => applicableRuleTypes[idx])
-              .toList();
-        },
-        acceptsMultiResponses: applicableRuleTypes.length > 0,
+        CaptureAndCast<List<VisualRuleType>>((ls) =>
+            castListOfStrIdxsToIterOfInts(ls)
+                .map((idx) => applicableRuleTypes[idx])
+                .toList()),
+        // (String idxStrs) {
+        //   return castListOfStrIdxsToIterOfInts(ls)
+        //       .map((idx) => applicableRuleTypes[idx])
+        //       .toList();
+        // },
+        // acceptsMultiResponses: applicableRuleTypes.length > 0,
       );
       // if (area.applicableRuleTypes.length == 1) {
       //   // only one option;  we can auto-answer this one
@@ -215,7 +222,7 @@ class NewQuestionCollector {
       );
       if (!area.isConfigureable || applicableWigetSlots.length < 1) continue;
 
-      var q = QuestBase(
+      var q = QuestBase.dlogCascade(
         // <String, List<ScreenAreaWidgetSlot>>
         QTargetIntent.areaLevelSlots(
           screen,
@@ -224,12 +231,16 @@ class NewQuestionCollector {
         ),
         'Which slots/widgets/sort-fields on the ${area.name} of ${screen.name} would you like to configure?',
         applicableWigetSlots.map((ScreenAreaWidgetSlot r) => r.choiceName),
-        (String idxStrs) {
-          return castStrOfIdxsToIterOfInts(idxStrs)
-              .map((idx) => applicableWigetSlots[idx])
-              .toList();
-        },
-        acceptsMultiResponses: true,
+        CaptureAndCast<List<ScreenAreaWidgetSlot>>((ls) =>
+            castListOfStrIdxsToIterOfInts(ls)
+                .map((idx) => applicableWigetSlots[idx])
+                .toList()),
+        // (String idxStrs) {
+        //   return castListOfStrIdxsToIterOfInts(idxStrs)
+        //       .map((idx) => applicableWigetSlots[idx])
+        //       .toList();
+        // },
+        // acceptsMultiResponses: true,
       );
       newQuest2s.add(q);
     }
@@ -262,7 +273,7 @@ class NewQuestionCollector {
       if (!slotInArea.isConfigurable || possibleConfigRules.length < 1)
         continue;
 
-      var q = QuestBase(
+      var q = QuestBase.visualRule(
         // <String, List<VisualRuleType>>
         QTargetIntent.ruleLevel(
           screen,
@@ -272,11 +283,16 @@ class NewQuestionCollector {
         ),
         'Which rules would you like to add to the ${slotInArea.name} area of ${screenArea.name} on screen ${screen.name}?',
         possibleConfigRules.map((r) => r.friendlyName),
-        (String idxStrs) {
-          return castStrOfIdxsToIterOfInts(idxStrs)
-              .map((idx) => possibleConfigRules[idx])
-              .toList();
-        },
+        CaptureAndCast<List<VisualRuleType>>((ls) =>
+            castListOfStrIdxsToIterOfInts(ls)
+                .map((idx) => possibleConfigRules[idx])
+                .toList()),
+
+        // (String idxStrs) {
+        //   return castListOfStrIdxsToIterOfInts(ls)
+        //       .map((idx) => possibleConfigRules[idx])
+        //       .toList();
+        // },
       );
       newQuest2s.add(q);
     }
@@ -311,12 +327,21 @@ class NewQuestionCollector {
       // string is the user-input value being parsed
       // RuleResponseWrapperIfc is one of these response types:
       // TvRowStyleCfg, TvSortOrGroupCfg, TvFilterCfg, ShowHideCfg
-      var q = QuestBase(
+      var q = QuestBase.visualRule(
         // <String, RuleResponseBase>
-        screen,
-        area,
-        ruleTyp,
-        areaSlot,
+        QTargetIntent.ruleLevel(
+          screen,
+          area,
+          areaSlot,
+          responseAddsRuleDetailQuest2s: true,
+        ),
+        ruleTyp.friendlyName,
+        [],
+        CaptureAndCast<Iterable<RuleResponseBase>>((ls) {
+          return castListOfStrIdxsToIterOfInts(ls)
+              .map((i) => VisualRuleType.values[i])
+              .map((vrt) => RuleResponseBase(vrt));
+        }),
       );
       newQuest2s.add(q);
     }
