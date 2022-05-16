@@ -1,23 +1,23 @@
 part of RandDee;
 
-class QuestChoiceOption {
+class ResponseAnswerOption {
   //
   final String displayStr;
   final String selectVal;
 
-  QuestChoiceOption(
+  ResponseAnswerOption(
     this.displayStr,
     this.selectVal,
   );
 }
 
-class QuestChoiceCollectionBase {
+class ResponseOptCollectionBase {
   //
-  final List<QuestChoiceOption> answerOptions;
+  final List<ResponseAnswerOption> answerOptions;
   final int idxOfDefaultAnsw;
   final bool multiAllowed;
 
-  QuestChoiceCollectionBase(
+  ResponseOptCollectionBase(
     this.answerOptions, {
     this.idxOfDefaultAnsw = 0,
     this.multiAllowed = false,
@@ -27,7 +27,7 @@ class QuestChoiceCollectionBase {
   Iterable<String> get choices => answerOptions.map((e) => e.displayStr);
 }
 
-class VisQuestChoiceCollection extends QuestChoiceCollectionBase {
+class VisQuestChoiceCollection extends ResponseOptCollectionBase {
   //
   final VisRuleQuestType visRuleQuestType;
 
@@ -49,10 +49,10 @@ class VisQuestChoiceCollection extends QuestChoiceCollectionBase {
     bool multiAllowed = false,
   }) {
     //
-    List<QuestChoiceOption> answChoices = [];
+    List<ResponseAnswerOption> answChoices = [];
     int idx = 0;
     strChoices.forEach((s) {
-      answChoices.add(QuestChoiceOption(s, '$idx'));
+      answChoices.add(ResponseAnswerOption(s, '$idx'));
       idx++;
     });
     return VisQuestChoiceCollection(

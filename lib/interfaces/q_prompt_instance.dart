@@ -6,6 +6,6 @@ abstract class QPromptIfc {
   //
   String get userPrompt;
   bool get hasChoices;
-  List<QuestChoiceOption> get questsAndChoices;
+  List<ResponseAnswerOption> get questsAndChoices;
   void collectResponse(String s);
 }

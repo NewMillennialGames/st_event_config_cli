@@ -226,7 +226,7 @@ class QTargetIntent extends Equatable with _$QTargetQuantify {
     );
   }
 
-  List<VisualRuleType> relatedSubVisualRules(Quest1Response quest) {
+  List<VisualRuleType> relatedSubVisualRules(Quest1Prompt quest) {
     if (!this.generatesNoNewQuest2s) return [];
 
     List<VisualRuleType> list = [];

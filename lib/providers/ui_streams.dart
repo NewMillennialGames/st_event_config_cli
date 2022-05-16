@@ -1,11 +1,11 @@
 part of EvCfgProviders;
 
-final questDispatcherProvider = Provider<StreamController<Quest1Response>>(
+final questDispatcherProvider = Provider<StreamController<Quest1Prompt>>(
   // this is used to send Quest2s to the UI
-  (ref) => StreamController<Quest1Response>(),
+  (ref) => StreamController<Quest1Prompt>(),
 );
 
-final Quest2StreamProvier = StreamProvider<Quest1Response>((ref) async* {
+final Quest2StreamProvier = StreamProvider<Quest1Prompt>((ref) async* {
   // the UI listends to this stream and renders
   // new Quest2s when they are received
   final sc = ref.watch(questDispatcherProvider);
@@ -13,7 +13,7 @@ final Quest2StreamProvier = StreamProvider<Quest1Response>((ref) async* {
   ref.onDispose(() {
     sc.close();
   });
-  await for (final Quest1Response quest in sc.stream) {
+  await for (final Quest1Prompt quest in sc.stream) {
     yield quest;
   }
 });

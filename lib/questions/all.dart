@@ -21,7 +21,7 @@ part 'question_quantifier.dart';
 part 'niu_question_base.dart';
 part 'niu_question_visual_rule.dart';
 // part 'Quest2_behave_rule.dart';
-part 'vis_rule_choice_config.dart';
+// part 'vis_rule_choice_config.dart';
 part 'user_rule_response_types.dart';
 
 typedef CastUserInputToTyp<InputTyp, AnsTyp> = AnsTyp Function(InputTyp input);

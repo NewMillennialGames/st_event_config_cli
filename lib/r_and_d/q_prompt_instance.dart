@@ -1,20 +1,21 @@
 part of RandDee;
 
 class QuestPromptInstance<T> implements QPromptIfc {
-  /* describes each part of a Quest2 iteration
+  /* describes each prompt part of a QuestBase instance
     including list of prompts
-    does NOTHING with answers
-    those are stored at Quest2 instance level
+    answers stored in CaptureAndCast<T>
   */
   final String userPrompt;
   final VisQuestChoiceCollection answChoiceCollection;
-  final CaptureAndCast<T> _userAnswers;
+  final CaptureAndCast<T> _answerRepoAndTypeCast;
+  final bool allowsMultipleChoices;
 
   QuestPromptInstance(
     this.userPrompt,
     this.answChoiceCollection,
-    this._userAnswers,
-  ); // : _userAnswers = CaptureAndCast<T>(castFunc);
+    this._answerRepoAndTypeCast, {
+    this.allowsMultipleChoices = true,
+  }); // : _userAnswers = CaptureAndCast<T>(castFunc);
 
   factory QuestPromptInstance.fromRaw(
     String prompt,
@@ -34,25 +35,26 @@ class QuestPromptInstance<T> implements QPromptIfc {
   @override
   void collectResponse(String s) {
     // accumulate user answers in list of strings
-    _userAnswers.capture(s);
+    _answerRepoAndTypeCast.capture(s);
   }
 
   // getters
   bool get hasChoices => answChoiceCollection.hasChoices;
-  List<QuestChoiceOption> get questsAndChoices =>
+  List<ResponseAnswerOption> get questsAndChoices =>
       answChoiceCollection.answerOptions;
   // end QPromptIfc impl
 
-  CaptureAndCast<T> get userAnswers => _userAnswers;
-  bool get asksWhichScreensToConfig => _userAnswers.asksWhichScreensToConfig;
+  CaptureAndCast<T> get userAnswers => _answerRepoAndTypeCast;
+  bool get asksWhichScreensToConfig =>
+      _answerRepoAndTypeCast.asksWhichScreensToConfig;
   bool get asksWhichAreasOfScreenToConfig =>
-      _userAnswers.asksWhichAreasOfScreenToConfig;
+      _answerRepoAndTypeCast.asksWhichAreasOfScreenToConfig;
   bool get asksWhichSlotsOfAreaToConfig =>
-      _userAnswers.asksWhichSlotsOfAreaToConfig;
+      _answerRepoAndTypeCast.asksWhichSlotsOfAreaToConfig;
 
   Iterable<String> get choices => answChoiceCollection.choices;
 
-  String createFormattedQuest2(Quest1Response quest) {
+  String createFormattedQuest2(Quest1Prompt quest) {
     String templ = answChoiceCollection.questTemplByRuleType(
       quest.visRuleTypeForAreaOrSlot!,
     );
@@ -80,14 +82,15 @@ class QuestPromptInstance<T> implements QPromptIfc {
 
   VisRuleQuestType get visQuestType => answChoiceCollection.visRuleQuestType;
 
-  static List<VisRuleQuestWithChoices> getSubQuest2sAndChoiceOptions(
+  static List<ResponseAnswerOption> getSubQuest2sAndChoiceOptions(
     VisualRuleType rt,
   ) {
+    // return answChoiceCollection;
     return rt.requiredQuest2s
         .map(
-          (qrq) => VisRuleQuestWithChoices(
-            qrq,
-            qrq.choices,
+          (qrq) => ResponseAnswerOption(
+            qrq.name,
+            qrq.name,
           ),
         )
         .toList();

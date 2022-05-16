@@ -2,16 +2,15 @@ part of RandDee;
 
 abstract class QuestBase with EquatableMixin {
   /*
-
-      cleaner and more testable replacement for:
-    Quest2<ConvertTyp, AnsTyp> and Quest2<>
+    cleaner and more testable replacement for:
+    Question<ConvertTyp, AnsTyp> and RuleTypeQuestion
     it combines those classes so there is no fundamental distinction
-    between
-    largely a wrapper around qIterDef && qQuantify
+    between them;  keep consistent interface going forward
+    largely a wrapper around QTargetIntent && QDefCollection
 
   */
   final QTargetIntent qTargetIntent;
-  final QDefCollection qDefCollection;
+  final QPromptCollection qDefCollection;
   // optional unique value for expedited matching
   String questId = '';
   // bool isDiagnostic = false;
@@ -33,12 +32,12 @@ abstract class QuestBase with EquatableMixin {
     String? questId,
   }) {
     //
-    var qDefCollection = QDefCollection.singleDialog(
+    var qDefCollection = QPromptCollection.singleDialog(
       userPrompt,
       choices,
       captureAndCast,
     );
-    return Quest1Response(targIntent, qDefCollection);
+    return Quest1Prompt(targIntent, qDefCollection);
   }
 
   factory QuestBase.dlogCascade(
@@ -49,12 +48,12 @@ abstract class QuestBase with EquatableMixin {
     String? questId,
   }) {
     //
-    var qDefCollection = QDefCollection.singleDialog(
+    var qDefCollection = QPromptCollection.singleDialog(
       userPrompt,
       choices,
       captureAndCast,
     );
-    return QuestMultiResponse(targIntent, qDefCollection);
+    return QuestMultiPrompt(targIntent, qDefCollection);
   }
 
   factory QuestBase.visualRule(
@@ -65,7 +64,7 @@ abstract class QuestBase with EquatableMixin {
     String? questId,
   }) {
     //
-    var qDefCollection = QDefCollection.singleRule(
+    var qDefCollection = QPromptCollection.singleRule(
       userPrompt,
       choices,
       captureAndCast,
@@ -82,7 +81,7 @@ abstract class QuestBase with EquatableMixin {
   }) {
     //
 
-    var qDefCollection = QDefCollection.singleRule(
+    var qDefCollection = QPromptCollection.singleRule(
       userPrompt,
       choices,
       captureAndCast,
@@ -124,7 +123,8 @@ abstract class QuestBase with EquatableMixin {
 
   bool get isRuleQuestion => false;
   QuestPromptInstance get firstQuestion => qDefCollection.questIterations.first;
-  CaptureAndCast get _firstPromptAnswers => firstQuestion._userAnswers;
+  CaptureAndCast get _firstPromptAnswers =>
+      firstQuestion._answerRepoAndTypeCast;
   dynamic get mainAnswer => _firstPromptAnswers.cast();
   // Caution --- below may not work
   Type get expectedAnswerType => _firstPromptAnswers.cast().runtimeType;
@@ -196,26 +196,25 @@ abstract class QuestBase with EquatableMixin {
   bool get stringify => true;
 }
 
-class Quest1Response extends QuestBase {
-  /*  Question requiring only one user response
-
+class Quest1Prompt extends QuestBase {
+  /*  Question offering only one user prompt / question
+    this DOES NOT mean the user cannot select multiple options
   */
-
-  Quest1Response(
+  Quest1Prompt(
     QTargetIntent qTargetIntent,
-    QDefCollection qDefCollection, {
+    QPromptCollection qDefCollection, {
     String? questId,
   }) : super(qTargetIntent, qDefCollection, questId: questId) {}
 }
 
-class QuestMultiResponse extends QuestBase {
-  /*  Question with multiple response values
-  
+class QuestMultiPrompt extends QuestBase {
+  /*  Question offering MULTIPLE user prompt / questions
+
   */
 
-  QuestMultiResponse(
+  QuestMultiPrompt(
     QTargetIntent qTargetIntent,
-    QDefCollection qDefCollection, {
+    QPromptCollection qDefCollection, {
     String? questId,
   }) : super(qTargetIntent, qDefCollection, questId: questId) {}
 }
@@ -226,7 +225,7 @@ class QuestVisualRule extends QuestBase {
 
   QuestVisualRule(
     QTargetIntent qTargetIntent,
-    QDefCollection qDefCollection, {
+    QPromptCollection qDefCollection, {
     String? questId,
   }) : super(qTargetIntent, qDefCollection, questId: questId) {}
 
@@ -240,7 +239,7 @@ class QuestBehaveRule extends QuestBase {
 
   QuestBehaveRule(
     QTargetIntent qTargetIntent,
-    QDefCollection qDefCollection, {
+    QPromptCollection qDefCollection, {
     String? questId,
   }) : super(qTargetIntent, qDefCollection, questId: questId) {}
 

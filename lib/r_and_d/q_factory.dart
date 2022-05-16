@@ -19,7 +19,7 @@ class QFactory {
 
   */
   // late QIntentCfg intent;
-  late QDefCollection iterDef;
+  late QPromptCollection iterDef;
   late QTargetIntent targetArea;
   late List<QuestPromptInstance> promptIters;
 
@@ -30,7 +30,7 @@ class QFactory {
     return this;
   }
 
-  QFactory setPrompts(QDefCollection _iterDef) {
+  QFactory setPrompts(QPromptCollection _iterDef) {
     iterDef = _iterDef;
     return this;
   }
@@ -43,8 +43,8 @@ class QFactory {
     return this;
   }
 
-  Quest1Response getAssembledQuest2() {
-    return Quest1Response(targetArea, iterDef);
+  Quest1Prompt getAssembledQuest2() {
+    return Quest1Prompt(targetArea, iterDef);
   }
 }
 

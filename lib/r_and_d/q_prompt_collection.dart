@@ -1,6 +1,6 @@
 part of RandDee;
 
-class QDefCollection {
+class QPromptCollection {
   /* describes iteration qualities of a given QuestBase
 
   */
@@ -8,12 +8,12 @@ class QDefCollection {
   bool isRuleQuestion;
   int _curPartIdx = -1;
 
-  QDefCollection(
+  QPromptCollection(
     this.questIterations, {
     this.isRuleQuestion = false,
   });
 
-  factory QDefCollection.singleDialog(
+  factory QPromptCollection.singleDialog(
     String userPrompt,
     Iterable<String> choices,
     CaptureAndCast captureAndCast, {
@@ -22,10 +22,10 @@ class QDefCollection {
     //
     QuestPromptInstance qpi = QuestPromptInstance.fromRaw(
         userPrompt, choices, questType, captureAndCast);
-    return QDefCollection([qpi]);
+    return QPromptCollection([qpi]);
   }
 
-  factory QDefCollection.singleRule(
+  factory QPromptCollection.singleRule(
     String userPrompt,
     Iterable<String> choices,
     CaptureAndCast captureAndCast, {
@@ -34,7 +34,7 @@ class QDefCollection {
     //
     QuestPromptInstance qpi = QuestPromptInstance.fromRaw(
         userPrompt, choices, questType, captureAndCast);
-    return QDefCollection([qpi], isRuleQuestion: true);
+    return QPromptCollection([qpi], isRuleQuestion: true);
   }
 
   // getters

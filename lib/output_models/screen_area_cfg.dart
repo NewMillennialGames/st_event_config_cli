@@ -32,7 +32,7 @@ class CfgForAreaAndNestedSlots {
   bool isMissingRuleTyp(VisualRuleType typ) => visCfgForArea[typ] == null;
 
   //add rules to this object
-  void appendAreaOrSlotRule(Quest1Response rQuest) {
+  void appendAreaOrSlotRule(Quest1Prompt rQuest) {
     //
     VisualRuleType? vrt = rQuest.visRuleTypeForAreaOrSlot;
     assert(
