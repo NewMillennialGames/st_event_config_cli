@@ -1,7 +1,11 @@
 import 'package:st_ev_cfg/st_ev_cfg.dart';
 import 'package:st_ev_cfg/interfaces/q_presenter.dart';
 
-class TestQuestRespGen implements Quest2Presenter {
+/* helper classes only
+  no tests in here
+*/
+
+class TestQuestRespGen implements QuestionPresenter {
   // receives Quest2s for test-automation
   List<WhenQuestLike> Quest2Matchers;
 
@@ -59,13 +63,13 @@ class TestQuestRespGen implements Quest2Presenter {
     if (responseGenerators.length < 1) {
       // none so send default
       // quest.convertAndStoreUserResponse('0');
-      dialoger.advanceToNextQuest2();
+      dialoger.advanceToNextQuestion();
       return;
     }
 
     String _fullResponse = _buildUserResponse(quest, responseGenerators);
     // quest.convertAndStoreUserResponse(_fullResponse);
-    dialoger.advanceToNextQuest2();
+    dialoger.advanceToNextQuestion();
   }
 
   @override
@@ -86,7 +90,7 @@ class QuestAnswerPair {
 }
 
 class WhenQuestLike {
-  /* defines a Quest2 pattern
+  /* defines a QuestBase pattern
     and the answer that should be provided
     by auto-test (as user) in response
   */

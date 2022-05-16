@@ -1,7 +1,7 @@
 part of EvCfgConfig;
 
 // public api
-List<QuestBase> loadInitialConfigQuest2s() {
+List<QuestBase> loadInitialConfigQuestions() {
   // event config Quest2s DO NOT have areas or uiComponents
   return _Quest2Lst.where((qb) =>
       qb.appScreen == AppScreen.eventConfiguration &&

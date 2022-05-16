@@ -10,14 +10,14 @@ abstract class QuestBase with EquatableMixin {
 
   */
   final QTargetIntent qTargetIntent;
-  final QPromptCollection qDefCollection;
+  final QPromptCollection qPromptCollection;
   // optional unique value for expedited matching
   String questId = '';
   // bool isDiagnostic = false;
 
   QuestBase(
     this.qTargetIntent,
-    this.qDefCollection, {
+    this.qPromptCollection, {
     String? questId,
   }) : questId = questId == null ? qTargetIntent.sortKey : questId {
     // now select first Quest2 to be ready for display
@@ -91,7 +91,8 @@ abstract class QuestBase with EquatableMixin {
 
   QuestPromptInstance? getNextUserPromptIfExists() {
     //
-    QuestPromptInstance? nextQpi = qDefCollection.getNextUserPromptIfExists();
+    QuestPromptInstance? nextQpi =
+        qPromptCollection.getNextUserPromptIfExists();
     if (nextQpi == null) {
       // out of Quest2s
     }
@@ -100,7 +101,7 @@ abstract class QuestBase with EquatableMixin {
 
   bool containsPromptWhere(bool Function(QuestPromptInstance qpi) promptTest) {
     // check if this contains an instance that matches promptTest
-    for (QuestPromptInstance qpi in qDefCollection.questIterations) {
+    for (QuestPromptInstance qpi in qPromptCollection.questIterations) {
       if (promptTest(qpi)) {
         return true;
       }
@@ -113,7 +114,7 @@ abstract class QuestBase with EquatableMixin {
   ) {
     // return list of prompt instances
     List<QuestPromptInstance> l = [];
-    for (QuestPromptInstance qpi in qDefCollection.questIterations) {
+    for (QuestPromptInstance qpi in qPromptCollection.questIterations) {
       if (promptTest(qpi)) {
         l.add(qpi);
       }
@@ -122,7 +123,8 @@ abstract class QuestBase with EquatableMixin {
   }
 
   bool get isRuleQuestion => false;
-  QuestPromptInstance get firstQuestion => qDefCollection.questIterations.first;
+  QuestPromptInstance get firstQuestion =>
+      qPromptCollection.questIterations.first;
   CaptureAndCast get _firstPromptAnswers =>
       firstQuestion._answerRepoAndTypeCast;
   dynamic get mainAnswer => _firstPromptAnswers.cast();
@@ -134,7 +136,7 @@ abstract class QuestBase with EquatableMixin {
   bool get existsONLYToGenDialogStructure =>
       qTargetIntent.isTopLevelConfigOrScreenQuest2;
   bool get isNotForRuleOutput => existsONLYToGenDialogStructure;
-  bool get isMultiPart => qDefCollection.isMultiPart;
+  bool get isMultiPart => qPromptCollection.isMultiPart;
 
   bool get isTopLevelConfigOrScreenQuest2 =>
       qTargetIntent.isTopLevelConfigOrScreenQuest2;
@@ -149,6 +151,7 @@ abstract class QuestBase with EquatableMixin {
   BehaviorRuleType? get behRuleTypeForAreaOrSlot =>
       qTargetIntent.behRuleTypeForAreaOrSlot;
   //
+  Iterable<CaptureAndCast> get listResponses => qPromptCollection.listResponses;
 
   // below controls how each Quest2 causes cascade creation of new Quest2s
   bool get generatesNoNewQuest2s => qTargetIntent.generatesNoNewQuest2s;
@@ -160,7 +163,7 @@ abstract class QuestBase with EquatableMixin {
 
   // appliesToClientConfiguration == should be exported to file
   bool get appliesToClientConfiguration =>
-      qDefCollection.isRuleQuestion ||
+      qPromptCollection.isRuleQuestion ||
       appScreen == AppScreen.eventConfiguration;
 
   // ARE BELOW needed with new approach??

@@ -13,7 +13,7 @@ part of ConfigDialogRunner;
 // top level function to add new Quest2s or implicit answers
 void appendNewQuestsOrInsertImplicitAnswers(QuestListMgr questListMgr) {
   //
-  QuestBase questJustAnswered = questListMgr._currentOrLastQuest2;
+  QuestBase questJustAnswered = questListMgr._currentOrLastQuestion;
   print(
     'comparing "${questJustAnswered.questId}" to ${_matcherList.length} matchers for new quests',
   );
@@ -23,8 +23,8 @@ void appendNewQuestsOrInsertImplicitAnswers(QuestListMgr questListMgr) {
         '*** it does match!!  addsPendingQuest2s: ${matchTest.addsPendingQuest2s}  createsImplicitAnswers: ${matchTest.createsImplicitAnswers}',
       );
       if (matchTest.addsPendingQuest2s) {
-        questListMgr
-            .appendNewQuest2s(matchTest.generatedQuest2sFor(questJustAnswered));
+        questListMgr.appendNewQuestions(
+            matchTest.generatedQuest2sFor(questJustAnswered));
       }
       if (matchTest.createsImplicitAnswers) {
         questListMgr.addImplicitAnswers(

@@ -53,7 +53,7 @@ class _EvCfgAppState extends ConsumerState<EvCfgApp> {
     //   },
     // );
 
-    dRunner.serveNextQuest2ToGui();
+    dRunner.serveNextQuestionToGui();
   }
 
   @override

@@ -18,7 +18,7 @@ class DialogMgr {
   QuestBase? getNextQuestInCurrentSection() {
     // only in this section
     // return _questMgr._nextQuest2For(currentAppScreenTyp);
-    return _questMgr.nextQuest2ToAnswer();
+    return _questMgr.nextQuestionToAnswer();
   }
 
   // List<UserResponse> get priorAnswers {
@@ -32,8 +32,8 @@ class DialogMgr {
     // only load Quest2s for top (eventConfiguration) section
     // answers in that section will kick off creation of new Quests
     // inside of NewQuest2Collector()
-    List<QuestBase> quests = loadInitialConfigQuest2s();
-    _questMgr.appendNewQuest2s(quests);
+    List<QuestBase> quests = loadInitialConfigQuestions();
+    _questMgr.appendNewQuestions(quests);
   }
 
   // void _loadQuest2sForSpecifiedSection(AppScreen section) {

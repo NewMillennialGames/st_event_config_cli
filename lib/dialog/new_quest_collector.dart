@@ -27,7 +27,7 @@ class NewQuestionCollector {
   bool handleAcquiringNewQuestions(QuestListMgr _questMgr) {
     // returns whether true if new Quest2s were added
 
-    QuestBase questJustAnswered = _questMgr._currentOrLastQuest2;
+    QuestBase questJustAnswered = _questMgr._currentOrLastQuestion;
     // ruleQuest2s don't currently generate new Quest2s
     // actually, a filter, sort or group (level 2 or 3) Quest2
     // should generate the Quest2s under it??  TODO
@@ -146,7 +146,7 @@ class NewQuestionCollector {
       newQuestions.add(q);
     }
     // now put these Quest2s in the queue
-    _questMgr.appendNewQuest2s(
+    _questMgr.appendNewQuestions(
       newQuestions,
       dbgNam: 'askUserWhichAreasOfSelectedScreensToConfigure',
     );
@@ -245,7 +245,7 @@ class NewQuestionCollector {
       newQuest2s.add(q);
     }
 
-    _questMgr.appendNewQuest2s(
+    _questMgr.appendNewQuestions(
       newQuest2s,
       dbgNam: 'askWhichRulesGoWithAreaAndWhichSlotsToConfig',
     );
@@ -297,7 +297,7 @@ class NewQuestionCollector {
       newQuest2s.add(q);
     }
 
-    _questMgr.appendNewQuest2s(
+    _questMgr.appendNewQuestions(
       newQuest2s,
       dbgNam: 'askWhichConfigRulesGoWithEachSlot',
     );
@@ -345,7 +345,7 @@ class NewQuestionCollector {
       );
       newQuest2s.add(q);
     }
-    _questMgr.appendNewQuest2s(
+    _questMgr.appendNewQuestions(
       newQuest2s,
       dbgNam: 'genRequestedVisualRulesForAreaOrSlot',
     );

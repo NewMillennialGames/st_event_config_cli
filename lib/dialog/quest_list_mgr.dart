@@ -20,8 +20,8 @@ class QuestListMgr {
     does nothing but track and manage the full
     list of Quest2s, both pending and completed/answered
   */
-  int _currQuest2Idx = -1;
-  List<QuestBase> _pendingQuest2s = [];
+  int _currQuestionIdx = -1;
+  List<QuestBase> _pendingQuestions = [];
   Map<AppScreen, int> _questCountBySection = {};
   Map<AppScreen, List<QuestBase>> _answeredQuestsBySection = {};
 
@@ -29,8 +29,8 @@ class QuestListMgr {
   QuestListMgr();
 
   //
-  List<QuestBase> get exportableQuest2s =>
-      _allAnsweredQuest2s.where(_exportFilterLogic).toList();
+  List<QuestBase> get exportableQuestions =>
+      _allAnsweredQuestions.where(_exportFilterLogic).toList();
 
   bool _exportFilterLogic(QuestBase q) {
     // print(
@@ -39,21 +39,21 @@ class QuestListMgr {
     return q.appliesToClientConfiguration;
   }
 
-  List<QuestBase> get pendingQuest2s => _pendingQuest2s;
-  QuestBase get _currentOrLastQuest2 => _pendingQuest2s[_currQuest2Idx];
-  int get totalAnsweredQuest2s => _answeredQuestsBySection.values
+  List<QuestBase> get pendingQuestions => _pendingQuestions;
+  QuestBase get _currentOrLastQuestion => _pendingQuestions[_currQuestionIdx];
+  int get totalAnsweredQuestions => _answeredQuestsBySection.values
       .fold<int>(0, (r, qLst) => r + qLst.length);
 
-  int get pendingQuest2Count => _pendingQuest2s.length - _currQuest2Idx;
+  int get pendingQuest2Count => _pendingQuestions.length - _currQuestionIdx;
 
-  List<QuestBase> get _allAnsweredQuest2s =>
+  List<QuestBase> get _allAnsweredQuestions =>
       _answeredQuestsBySection.values.fold<List<QuestBase>>(
-        [],
+        <QuestBase>[],
         (List<QuestBase> l0, List<QuestBase> l1) => l0..addAll(l1),
       );
 
   List<AppScreen> get userSelectedScreens {
-    Iterable<QuestPromptInstance> matchingPrompts = _allAnsweredQuest2s
+    Iterable<QuestPromptInstance> matchingPrompts = _allAnsweredQuestions
         .matchingPromptsWhere((qpi) => qpi.asksWhichScreensToConfig);
 
     List<AppScreen> uss = (matchingPrompts.first.userAnswers.cast() ?? []);
@@ -64,7 +64,7 @@ class QuestListMgr {
 
   List<ScreenWidgetArea> configurableAreasForScreen(AppScreen as) {
     //
-    Iterable<QuestPromptInstance> matchingPrompts = _allAnsweredQuest2s
+    Iterable<QuestPromptInstance> matchingPrompts = _allAnsweredQuestions
         .where((q) => q.appScreen == as)
         .matchingPromptsWhere((qpi) => qpi.asksWhichAreasOfScreenToConfig);
     return matchingPrompts.first.userAnswers.cast();
@@ -94,7 +94,6 @@ class QuestListMgr {
         tree[mapEntry.key] = {area: screenSlotsInAreasFor(mapEntry.key, area)};
       }
     }
-
     return tree;
   }
 
@@ -109,7 +108,7 @@ class QuestListMgr {
   ) {
     //
 
-    Iterable<QuestPromptInstance> matchingPrompts = _allAnsweredQuest2s
+    Iterable<QuestPromptInstance> matchingPrompts = _allAnsweredQuestions
         .where((q) => q.appScreen == as && q.screenWidgetArea == area)
         .matchingPromptsWhere((qpi) => qpi.asksWhichAreasOfScreenToConfig);
     return matchingPrompts.first.userAnswers.cast();
@@ -122,46 +121,46 @@ class QuestListMgr {
     //         [], (l0, l1) => l0..addAll(l1)).toList();
   }
 
-  void _sortPendingQuest2s() {
-    // its important that we ONLY sort the section AFTER _currQuest2Idx
-    // or else we might re-ask prior (already answered) Quest2s
-    if (_currQuest2Idx < 7) return;
+  // void _sortPendingQuestions() {
+  //   // its important that we ONLY sort the section AFTER _currQuest2Idx
+  //   // or else we might re-ask prior (already answered) Quest2s
+  //   if (_currQuestionIdx < 7) return;
 
-    print('running sortPendingQuest2s');
+  //   print('running sortPendingQuest2s');
 
-    var unaskedQuests = _pendingQuest2s.sublist(_currQuest2Idx + 1);
+  //   var unaskedQuests = _pendingQuestions.sublist(_currQuestionIdx + 1);
 
-    unaskedQuests.sort((a, b) => a.sortKey.compareTo(b.sortKey));
+  //   unaskedQuests.sort((a, b) => a.sortKey.compareTo(b.sortKey));
 
-    this._pendingQuest2s =
-        (_pendingQuest2s.sublist(0, _currQuest2Idx + 1)..addAll(unaskedQuests));
-  }
+  //   this._pendingQuestions = (_pendingQuestions.sublist(0, _currQuestionIdx + 1)
+  //     ..addAll(unaskedQuests));
+  // }
 
-  QuestBase? nextQuest2ToAnswer() {
+  QuestBase? nextQuestionToAnswer() {
     // AppScreen section
     _moveCurrentQuestToAnswered();
     //
-    if (_currQuest2Idx + 1 >= _pendingQuest2s.length) {
+    if (_currQuestionIdx + 1 >= _pendingQuestions.length) {
       return null;
     }
-    ++_currQuest2Idx;
+    ++_currQuestionIdx;
     // if (_currentOrLastQuest2.appScreen != section) {
     //   --_currQuest2Idx;
     //   return null;
     // }
-    return _currentOrLastQuest2;
+    return _currentOrLastQuestion;
   }
 
   void _moveCurrentQuestToAnswered() {
     // dont add at start or end
-    if (_currQuest2Idx < 0 || totalAnsweredQuest2s >= _pendingQuest2s.length)
-      return;
+    if (_currQuestionIdx < 0 ||
+        totalAnsweredQuestions >= _pendingQuestions.length) return;
     //
     QuestBase? mostRecentSaved =
-        _answeredQuestsBySection[_currentOrLastQuest2.appScreen]?.last;
+        _answeredQuestsBySection[_currentOrLastQuestion.appScreen]?.last;
     // dont store same Quest2 twice
     if (mostRecentSaved != null &&
-        mostRecentSaved.questId == _currentOrLastQuest2.questId) {
+        mostRecentSaved.questId == _currentOrLastQuestion.questId) {
       //
       print(
         'Error: QID: ${mostRecentSaved.questId} seemd to be duplicate & wasnt moved into _answeredQuestsBySection',
@@ -170,15 +169,16 @@ class QuestListMgr {
     }
     ;
     // store into list for this section;  but DO NOT remove from pendingQuest2s or messes up cur_idx tracking
-    var l = _answeredQuestsBySection[_currentOrLastQuest2.appScreen] ?? [];
-    l.add(_currentOrLastQuest2);
-    _answeredQuestsBySection[_currentOrLastQuest2.appScreen] = l;
+    var l = _answeredQuestsBySection[_currentOrLastQuestion.appScreen] ?? [];
+    l.add(_currentOrLastQuestion);
+    _answeredQuestsBySection[_currentOrLastQuestion.appScreen] = l;
   }
 
-  void loadInitialQuest2s() {
+  void loadInitialQuestions() {
     //
-    _pendingQuest2s = loadInitialConfigQuest2s();
-    _questCountBySection[AppScreen.eventConfiguration] = _pendingQuest2s.length;
+    _pendingQuestions = loadInitialConfigQuestions();
+    _questCountBySection[AppScreen.eventConfiguration] =
+        _pendingQuestions.length;
     // int c = 0;
     // _pendingQuest2s.forEach((q) {
     //   q.Quest2Id = ++c;
@@ -189,15 +189,16 @@ class QuestListMgr {
     List<QuestBase> implicitlyAnsweredQuests, {
     String dbgNam = 'init', // debug-name
   }) {
-    var alreadyAnsweredQuests = _pendingQuest2s.sublist(0, _currQuest2Idx + 1);
+    var alreadyAnsweredQuests =
+        _pendingQuestions.sublist(0, _currQuestionIdx + 1);
     alreadyAnsweredQuests.addAll(implicitlyAnsweredQuests);
 
-    var unaskedQuests = _pendingQuest2s.sublist(_currQuest2Idx + 1);
+    var unaskedQuests = _pendingQuestions.sublist(_currQuestionIdx + 1);
 
-    this._pendingQuest2s = alreadyAnsweredQuests..addAll(unaskedQuests);
+    this._pendingQuestions = alreadyAnsweredQuests..addAll(unaskedQuests);
   }
 
-  void appendNewQuest2s(
+  void appendNewQuestions(
     List<QuestBase> quests, {
     String dbgNam = 'init', // debug-name
   }) {
@@ -217,7 +218,7 @@ class QuestListMgr {
     // quests.forEach((q) {
     //   q.Quest2Id = ++c;
     // });
-    this._pendingQuest2s.addAll(quests);
+    this._pendingQuestions.addAll(quests);
 
     // TODO:  test sorting after everything else is working
     // sorting not working and not necessary
@@ -227,12 +228,9 @@ class QuestListMgr {
   List<CaptureAndCast> get priorAnswers {
     // return all existing user answers
     // filter out any null responses
-
-    // return _allAnsweredQuest2s
-    //     .map((e) => e.response)
-    //     .whereType<UserResponse>()
-    //     .toList();
-
-    throw UnimplementedError('NIU???');
+    Iterable<Iterable<CaptureAndCast>> lstLstCc =
+        _allAnsweredQuestions.map((q) => q.listResponses);
+    return lstLstCc.fold<List<CaptureAndCast>>(
+        <CaptureAndCast>[], (l1, l2) => l1..addAll(l2)).toList();
   }
 }

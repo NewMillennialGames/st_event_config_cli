@@ -1,8 +1,8 @@
-import '../questions/all.dart';
+// import '../questions/all.dart';
 import '../dialog/all.dart';
 import '../r_and_d/all.dart';
 
-abstract class Quest2Presenter {
+abstract class QuestionPresenter {
   /*
   interface for the class passed to DialogRunner
   that is responsible for rendering UI for the Quest2s

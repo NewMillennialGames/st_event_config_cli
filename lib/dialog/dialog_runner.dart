@@ -14,7 +14,7 @@ class DialogRunner {
   final NewQuestionCollector _newQuestComposer = NewQuestionCollector();
   late final DialogMgr _questGroupMgr;
   // set in init
-  final Quest2Presenter questFormatter;
+  final QuestionPresenter questFormatter;
   final int linesBetweenSections;
   final int linesBetweenQuest2s;
   //
@@ -37,7 +37,7 @@ class DialogRunner {
 
   //
   // web logic;  start asking Quest2s for GUI
-  bool serveNextQuest2ToGui() {
+  bool serveNextQuestionToGui() {
     //
     QuestBase? _quest = _questGroupMgr.getNextQuestInCurrentSection();
     if (_quest == null) return false;
@@ -45,7 +45,7 @@ class DialogRunner {
     return true;
   }
 
-  void advanceToNextQuest2() {
+  void advanceToNextQuestion() {
     /*
       run logic to add new Quest2s based on user response to current Quest2
       we currently have two different methods:
@@ -66,7 +66,7 @@ class DialogRunner {
     }
     // end of logic to add new Quest2s based on user response
 
-    bool hasNextQuest = serveNextQuest2ToGui();
+    bool hasNextQuest = serveNextQuestionToGui();
     if (!hasNextQuest) {
       questFormatter.informUiThatDialogIsComplete();
     }

@@ -43,7 +43,7 @@ void createOutputFileFromResponses(
   String? filename,
 ]) {
   //
-  final List<QuestBase> exportableQuest2s = Quest2Mgr.exportableQuest2s;
+  final List<QuestBase> exportableQuest2s = Quest2Mgr.exportableQuestions;
 
   print('found ${exportableQuest2s.length} exportable answers to convert');
   // for (Quest2 q in exportableQuest2s) {

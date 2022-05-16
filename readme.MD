@@ -190,7 +190,7 @@ defer this until after 1st build:
 
   CLI
 
-  1) user answers produce new Quest2s & add to pending Queue
+  1) user answers produce new QuestBase & add to pending Queue
   2) answers produce IMPLICIT answers (create new Quest2 and AUTO-SET answers)
   3) answers make some pending Quest2s IRRELEVANT  (take them out of pending queue)
   4) all relevant answers written to JSON file
@@ -234,12 +234,9 @@ Creating a Quest2 requires specification for each category below:
 
 ##### How does response handling work?
 
-Dialog manager has a Quest2 presenter
-Quest2 presenter is responsible for rendering each Quest2
-Each Quest2 has 1->n parts
-Presenter show's each part and stores user response on the Quest2
-Once all parts have been asked and answered, Quest2 is finalized
-This passes all answered parts to the Intent-obj castCallback method
-this method returns the type expected for this group of answers
-
-that response-type is stored with the Quest2
+Dialog manager has a QuestionPresenter
+Presenter is responsible for rendering all prompts (QuestPromptInstance) under each QuestBase instance
+Each QuestBase has 1->n QuestPromptInstance recs
+Presenter show's each QuestPromptInstance and stores user response inside each QuestPromptInstance
+Once all parts have been asked and answered, QuestBase is commplete
+you can call the "cast()" function to get user answers converted into expected output type

@@ -38,6 +38,9 @@ class QPromptCollection {
   }
 
   // getters
+  Iterable<CaptureAndCast> get listResponses =>
+      questIterations.map((qpi) => qpi._answerRepoAndTypeCast);
+
   int get _partCount => questIterations.length;
   bool get isCompleted => _curPartIdx >= _partCount - 1;
   bool get isMultiPart => _partCount > 1;

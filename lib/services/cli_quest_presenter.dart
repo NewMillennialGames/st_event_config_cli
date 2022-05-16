@@ -7,7 +7,7 @@ import '../dialog/all.dart';
 // import '../questions/all.dart';
 // import '../enums/all.dart';
 
-class CliQuest2Presenter implements Quest2Presenter {
+class CliQuest2Presenter implements QuestionPresenter {
   // formatter for command-line IO
   CliQuest2Presenter();
 
