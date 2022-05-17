@@ -14,13 +14,13 @@ class DialogRunner {
   final NewQuestionCollector _newQuestComposer = NewQuestionCollector();
   late final DialogMgr _questGroupMgr;
   // set in init
-  final QuestionPresenter questFormatter;
+  final QuestionPresenter questPresenter;
   final int linesBetweenSections;
   final int linesBetweenQuest2s;
   //
 
   DialogRunner(
-    this.questFormatter, [
+    this.questPresenter, [
     this.linesBetweenSections = 3,
     this.linesBetweenQuest2s = 1,
   ]) {
@@ -36,12 +36,12 @@ class DialogRunner {
   }
 
   //
-  // web logic;  start asking Quest2s for GUI
+  // web logic;  start asking Questions for GUI
   bool serveNextQuestionToGui() {
     //
     QuestBase? _quest = _questGroupMgr.getNextQuestInCurrentSection();
     if (_quest == null) return false;
-    questFormatter.askAndWaitForUserResponse(this, _quest);
+    questPresenter.askAndWaitForUserResponse(this, _quest);
     return true;
   }
 
@@ -68,7 +68,7 @@ class DialogRunner {
 
     bool hasNextQuest = serveNextQuestionToGui();
     if (!hasNextQuest) {
-      questFormatter.informUiThatDialogIsComplete();
+      questPresenter.informUiThatDialogIsComplete();
     }
   }
 
@@ -84,20 +84,7 @@ class DialogRunner {
     while (_quest != null) {
       // askAndWaitForUserResponse() will callback to this
       // to create any derived Quest2s for this section
-      questFormatter.askAndWaitForUserResponse(this, _quest);
-
-      // logic to add new Quest2s based on user response
-      // two different methods
-      bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(
-        // _questGroupMgr,
-        _questMgr,
-      );
-      if (!didAddNew && _quest.appliesToClientConfiguration) {
-        // new version of handleAcquiringNewQuest2s
-        // run it only if handleAcquiringNewQuest2s does no work
-        appendNewQuestsOrInsertImplicitAnswers(_questMgr);
-      }
-      // end of logic to add new Quest2s based on user response
+      questPresenter.askAndWaitForUserResponse(this, _quest);
 
       _quest = _questGroupMgr.getNextQuestInCurrentSection();
       if (_quest != null) _outputSpacerLines();
@@ -111,5 +98,18 @@ class DialogRunner {
     } else {
       print('\n' * this.linesBetweenQuest2s);
     }
+  }
+
+  void handleQuestionCascade(QuestBase _quest) {
+    //
+    // logic to add new Questions based on user response
+    // two different methods
+    bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(_questMgr);
+    if (!didAddNew && _quest.appliesToClientConfiguration) {
+      // new version of handleAcquiringNewQuest2s
+      // run it only if handleAcquiringNewQuest2s does no work
+      appendNewQuestsOrInsertImplicitAnswers(_questMgr);
+    }
+    // end of logic to add new Questions based on user response
   }
 }

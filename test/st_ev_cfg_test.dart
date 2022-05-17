@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 import 'package:st_ev_cfg/st_ev_cfg.dart';
 
 void main() {
-  test('creates user answer & verifies new Quest2s generated from it', () {
+  test('creates user answer & verifies new Questions generated from it', () {
     const k_quests_created_in_test = 2;
 
     final _questMgr = QuestListMgr();
@@ -21,7 +21,7 @@ void main() {
       ['0', '1', '$k_quests_created_in_test', '3'],
       CaptureAndCast<int>((selCount) {
         print('running convert on $selCount');
-        return int.tryParse(selCount.first) ?? 0;
+        return int.tryParse(selCount) ?? 0;
       }),
     );
     _questMgr.appendNewQuestions([askNumSlots]);

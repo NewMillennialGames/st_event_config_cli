@@ -7,23 +7,27 @@ class CaptureAndCast<T> {
     IMPORTANT note!!!
       each question prompt (QuestPromptInstance) only receives
       one user-response, provided as a string
-      
+
   */
-  List<String> _answers = [];
   CastStrToAnswTypCallback<T> _castFunc;
+  String _answers = '';
+  // List<String> _answers = [];
 
   CaptureAndCast(this._castFunc);
 
-  void capture(String s) {
-    _answers.add(s);
+  void captureUserRespStr(String s) {
+    _answers = s;
   }
 
   T cast() {
     return _castFunc(_answers);
   }
 
-  // getters
-  bool get asksWhichScreensToConfig => T is List<AppScreen>;
-  bool get asksWhichAreasOfScreenToConfig => T is List<ScreenWidgetArea>;
-  bool get asksWhichSlotsOfAreaToConfig => T is List<ScreenAreaWidgetSlot>;
+  // getters  (use == not "is")
+  bool get asksWhichScreensToConfig =>
+      (T == Iterable<AppScreen>) || T == List<AppScreen>;
+  bool get asksWhichAreasOfScreenToConfig =>
+      (T == Iterable<ScreenWidgetArea>) || T == List<ScreenWidgetArea>;
+  bool get asksWhichSlotsOfAreaToConfig =>
+      (T == Iterable<ScreenAreaWidgetSlot>) || T == List<ScreenAreaWidgetSlot>;
 }

@@ -73,7 +73,7 @@ final List<QuestBase> _Quest2Lst = [
     QTargetIntent.eventLevel(),
     '',
     [],
-    CaptureAndCast<String>((s) => s.first),
+    CaptureAndCast<String>((s) => s),
     questId: QuestionIdStrings.eventName,
   ),
   // set true false to shorten manual testing
@@ -82,7 +82,7 @@ final List<QuestBase> _Quest2Lst = [
       QTargetIntent.eventLevel(),
       DlgStr.eventDescrip,
       [],
-      CaptureAndCast<String>((s) => s.first),
+      CaptureAndCast<String>((s) => s),
       questId: QuestionIdStrings.eventDescrip,
     ),
     QuestBase.infoOrCliCfg(
@@ -91,7 +91,7 @@ final List<QuestBase> _Quest2Lst = [
       DlgStr.eventType,
       EvType.values.map((e) => e.name),
       CaptureAndCast<EvType>(
-        (s) => EvType.values[int.tryParse(s.first) ?? 0],
+        (s) => EvType.values[int.tryParse(s) ?? 0],
       ),
       questId: QuestionIdStrings.eventType,
     ),
@@ -101,7 +101,7 @@ final List<QuestBase> _Quest2Lst = [
       DlgStr.eventWhosCompeting,
       EvCompetitorType.values.map((e) => e.name),
       CaptureAndCast<EvCompetitorType>(
-        (s) => EvCompetitorType.values[int.tryParse(s.first) ?? 0],
+        (s) => EvCompetitorType.values[int.tryParse(s) ?? 0],
       ),
       questId: QuestionIdStrings.competitorType,
     ),
@@ -111,7 +111,7 @@ final List<QuestBase> _Quest2Lst = [
       DlgStr.eventCompPlayAgainst,
       EvOpponentType.values.map((e) => e.name),
       CaptureAndCast<EvOpponentType>(
-          (s) => EvOpponentType.values[int.tryParse(s.first) ?? 0]),
+          (s) => EvOpponentType.values[int.tryParse(s) ?? 0]),
       // (i) => EvOpponentType.values[i],
       questId: QuestionIdStrings.competeAgainstType,
     ),
@@ -121,7 +121,7 @@ final List<QuestBase> _Quest2Lst = [
       DlgStr.eventDuration,
       EvDuration.values.map((e) => e.name),
       CaptureAndCast<EvDuration>(
-          (s) => EvDuration.values[int.tryParse(s.first) ?? 0]),
+          (s) => EvDuration.values[int.tryParse(s) ?? 0]),
       // (i) => EvDuration.values[i],
       questId: QuestionIdStrings.eventDuration,
     ),
@@ -131,7 +131,7 @@ final List<QuestBase> _Quest2Lst = [
       DlgStr.eventEliminationStrategy,
       EvEliminationStrategy.values.map((e) => e.name),
       CaptureAndCast<EvEliminationStrategy>(
-          (s) => EvEliminationStrategy.values[int.tryParse(s.first) ?? 0]),
+          (s) => EvEliminationStrategy.values[int.tryParse(s) ?? 0]),
       // (i) => EvEliminationStrategy.values[i],
       questId: QuestionIdStrings.eventEliminationStrategy,
     ),
@@ -140,7 +140,7 @@ final List<QuestBase> _Quest2Lst = [
       // QDefCollection([]),
       DlgStr.useSameRowStyleForAllScreens,
       ['no', 'yes'],
-      CaptureAndCast<bool>((ls) => ls.first == '1'),
+      CaptureAndCast<bool>((ls) => ls == '1'),
       // (i) => i == '1',
       // defaultAnswerIdx: 1,
       questId: QuestionIdStrings.globalRowStyle,
@@ -152,8 +152,7 @@ final List<QuestBase> _Quest2Lst = [
     // QDefCollection([]),
     DlgStr.selectAppScreens, // <String, List<AppScreen>>
     AppScreen.eventConfiguration.topConfigurableScreens.map((e) => e.name),
-    CaptureAndCast<List<AppScreen>>((ls) => ls
-        .map((s) => int.tryParse(s) ?? 0)
+    CaptureAndCast<List<AppScreen>>((s) => castStrOfIdxsToIterOfInts(s)
         .map((idx) => AppScreen.eventConfiguration.topConfigurableScreens[idx])
         .toList()),
     // (String strLstIdxs) {

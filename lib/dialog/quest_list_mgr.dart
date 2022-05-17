@@ -158,7 +158,7 @@ class QuestListMgr {
     //
     QuestBase? mostRecentSaved =
         _answeredQuestsBySection[_currentOrLastQuestion.appScreen]?.last;
-    // dont store same Quest2 twice
+    // dont store same Question twice
     if (mostRecentSaved != null &&
         mostRecentSaved.questId == _currentOrLastQuestion.questId) {
       //
@@ -205,12 +205,12 @@ class QuestListMgr {
     //
     Set<AppScreen> newSections = quests.map((e) => e.appScreen).toSet();
 
-    print('$dbgNam is adding ${quests.length} new Quest2s to $newSections');
+    print('$dbgNam is adding ${quests.length} new Questions to $newSections');
 
     for (AppScreen as in newSections) {
       int newCntBySec = quests
           .where((q) => q.appScreen == as)
-          .fold(0, (accumVal, _) => accumVal + 1);
+          .fold<int>(0, (accumVal, _) => accumVal + 1);
       _questCountBySection[as] = (_questCountBySection[as] ?? 0) + newCntBySec;
     }
     // quest id's start at 1, not zero

@@ -57,7 +57,10 @@ class TestQuestRespGen implements QuestionPresenter {
   }
 
   @override
-  void askAndWaitForUserResponse(DialogRunner dialoger, QuestBase quest) {
+  void askAndWaitForUserResponse(
+    DialogRunner dialoger,
+    QuestBase quest,
+  ) {
     //
     List<WhenQuestLike> responseGenerators = _lookForResponseGenerators(quest);
     if (responseGenerators.length < 1) {

@@ -33,6 +33,9 @@ class WebQuest2Presenter implements QuestionPresenter {
     // should pump a widget to some provider
     // to redraw the whole screen
     questDispatcher.add(quest);
+
+    // user answer might generate new questions
+    dialoger.handleQuestionCascade(quest);
   }
 
   void _receiveAnswer(String answer) {

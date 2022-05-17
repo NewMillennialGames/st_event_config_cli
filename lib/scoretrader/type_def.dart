@@ -4,7 +4,7 @@ part of StUiController;
 // typedef VisRuleStyleQuest = Quest2;
 
 // R&D
-typedef CastStrToAnswTypCallback<T> = T Function(List<String>);
+typedef CastStrToAnswTypCallback<T> = T Function(String);
 // typedef CastListToType<T> = T Function(List<String>);
 
 typedef AddQuestChkCallbk = bool Function(dynamic);

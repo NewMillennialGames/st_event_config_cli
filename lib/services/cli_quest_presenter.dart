@@ -4,12 +4,10 @@ import 'package:collection/collection.dart';
 import '../interfaces/q_presenter.dart';
 import '../r_and_d/all.dart';
 import '../dialog/all.dart';
-// import '../questions/all.dart';
-// import '../enums/all.dart';
 
-class CliQuest2Presenter implements QuestionPresenter {
+class CliQuestionPresenter implements QuestionPresenter {
   // formatter for command-line IO
-  CliQuest2Presenter();
+  CliQuestionPresenter();
 
   @override
   void askAndWaitForUserResponse(
@@ -21,6 +19,8 @@ class CliQuest2Presenter implements QuestionPresenter {
       _askAndStoreAnswer(dialoger, quest, promptInst);
       promptInst = quest.getNextUserPromptIfExists();
     }
+    // user answer might generate new questions
+    dialoger.handleQuestionCascade(quest);
   }
 
   void _askAndStoreAnswer(

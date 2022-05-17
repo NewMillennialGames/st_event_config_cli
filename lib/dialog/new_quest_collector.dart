@@ -133,8 +133,8 @@ class NewQuestionCollector {
         ),
         'For the ${scr.name} screen, select the areas you`d like to configure?',
         scr.configurableScreenAreas.map((e) => e.name),
-        CaptureAndCast<List<ScreenWidgetArea>>((ls) =>
-            castListOfStrIdxsToIterOfInts(ls)
+        CaptureAndCast<List<ScreenWidgetArea>>((s) =>
+            castStrOfIdxsToIterOfInts(s)
                 .map((idx) => scr.configurableScreenAreas[idx])
                 .toList()),
         // (String idxStrs) {
@@ -190,10 +190,9 @@ class NewQuestionCollector {
         ),
         'Which rules would you like to add to the ${area.name} of ${screen.name}?',
         applicableRuleTypes.map((r) => r.friendlyName),
-        CaptureAndCast<List<VisualRuleType>>((ls) =>
-            castListOfStrIdxsToIterOfInts(ls)
-                .map((idx) => applicableRuleTypes[idx])
-                .toList()),
+        CaptureAndCast<List<VisualRuleType>>((s) => castStrOfIdxsToIterOfInts(s)
+            .map((idx) => applicableRuleTypes[idx])
+            .toList()),
         // (String idxStrs) {
         //   return castListOfStrIdxsToIterOfInts(ls)
         //       .map((idx) => applicableRuleTypes[idx])
@@ -231,8 +230,8 @@ class NewQuestionCollector {
         ),
         'Which slots/widgets/sort-fields on the ${area.name} of ${screen.name} would you like to configure?',
         applicableWigetSlots.map((ScreenAreaWidgetSlot r) => r.choiceName),
-        CaptureAndCast<List<ScreenAreaWidgetSlot>>((ls) =>
-            castListOfStrIdxsToIterOfInts(ls)
+        CaptureAndCast<List<ScreenAreaWidgetSlot>>((s) =>
+            castStrOfIdxsToIterOfInts(s)
                 .map((idx) => applicableWigetSlots[idx])
                 .toList()),
         // (String idxStrs) {
@@ -283,10 +282,9 @@ class NewQuestionCollector {
         ),
         'Which rules would you like to add to the ${slotInArea.name} area of ${screenArea.name} on screen ${screen.name}?',
         possibleConfigRules.map((r) => r.friendlyName),
-        CaptureAndCast<List<VisualRuleType>>((ls) =>
-            castListOfStrIdxsToIterOfInts(ls)
-                .map((idx) => possibleConfigRules[idx])
-                .toList()),
+        CaptureAndCast<List<VisualRuleType>>((s) => castStrOfIdxsToIterOfInts(s)
+            .map((idx) => possibleConfigRules[idx])
+            .toList()),
 
         // (String idxStrs) {
         //   return castListOfStrIdxsToIterOfInts(ls)
@@ -337,8 +335,8 @@ class NewQuestionCollector {
         ),
         ruleTyp.friendlyName,
         [],
-        CaptureAndCast<Iterable<RuleResponseBase>>((ls) {
-          return castListOfStrIdxsToIterOfInts(ls)
+        CaptureAndCast<Iterable<RuleResponseBase>>((s) {
+          return castStrOfIdxsToIterOfInts(s)
               .map((i) => VisualRuleType.values[i])
               .map((vrt) => RuleResponseBase(vrt));
         }),

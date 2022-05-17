@@ -35,7 +35,7 @@ class QuestPromptInstance<T> implements QPromptIfc {
   @override
   void collectResponse(String s) {
     // accumulate user answers in list of strings
-    _answerRepoAndTypeCast.capture(s);
+    _answerRepoAndTypeCast.captureUserRespStr(s);
   }
 
   // getters
