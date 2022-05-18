@@ -35,17 +35,13 @@ class TestQuestRespGen implements QuestionPresenter {
     List<WhenQuestLike> responseGenerators,
   ) {
     //
-    List<VisRuleQuestType> questTypes = quest.questTypes;
-
     String userAnswer = '';
+    VisRuleQuestType vqt = qpi.visQuestType;
     for (WhenQuestLike wql in responseGenerators) {
-      for (VisRuleQuestType qt in questTypes) {
-        var gendTestAnswer = wql.answerFor(qt);
-        if (gendTestAnswer.isNotEmpty) {
-          // userAnswer += s + ',';
-          userAnswer = gendTestAnswer;
-          break;
-        }
+      String gendTestAnswer = wql.answerFor(vqt);
+      if (gendTestAnswer.isNotEmpty) {
+        userAnswer = gendTestAnswer;
+        break;
       }
     }
     // remove any adjacent comma's
@@ -79,11 +75,11 @@ class TestQuestRespGen implements QuestionPresenter {
       promptInst.collectResponse(_fullResponse);
       promptInst = quest.getNextUserPromptIfExists();
     }
-    // user answer might generate new questions
+    // all prompts answered;  ready to advance to next quest
+    // now check if user answer will generate new questions
     dialoger.handleQuestionCascade(quest);
-
-    // quest.convertAndStoreUserResponse(_fullResponse);
-    dialoger.advanceToNextQuestionFromGui();
+    // cli test;  not gui
+    // dialoger.advanceToNextQuestionFromGui();
   }
 
   @override

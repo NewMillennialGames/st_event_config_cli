@@ -1,5 +1,20 @@
 part of RandDee;
 
+class QuestPromptPayload<T> {
+  //
+  String userPrompt;
+  Iterable<String> choices;
+  VisRuleQuestType questType;
+  CaptureAndCast<T> captureAndCast;
+
+  QuestPromptPayload(
+    this.userPrompt,
+    this.choices,
+    this.questType,
+    CastStrToAnswTypCallback<T> _castFunc,
+  ) : captureAndCast = CaptureAndCast(_castFunc);
+}
+
 abstract class QuestBase with EquatableMixin {
   /*
     cleaner and more testable replacement for:
@@ -53,6 +68,16 @@ abstract class QuestBase with EquatableMixin {
       choices,
       captureAndCast,
     );
+    return QuestMultiPrompt(targIntent, qDefCollection);
+  }
+
+  factory QuestBase.multiPrompt(
+    QTargetIntent targIntent,
+    List<QuestPromptPayload> prompts, {
+    String? questId,
+  }) {
+    //
+    var qDefCollection = QPromptCollection.fromList(prompts);
     return QuestMultiPrompt(targIntent, qDefCollection);
   }
 
@@ -122,6 +147,7 @@ abstract class QuestBase with EquatableMixin {
     return l;
   }
 
+  int get promptCount => qPromptCollection.questIterations.length;
   List<VisRuleQuestType> get questTypes => qPromptCollection.questIterations
       .map((e) => e.answChoiceCollection.visRuleQuestType)
       .toList();

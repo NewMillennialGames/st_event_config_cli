@@ -37,6 +37,28 @@ class QPromptCollection {
     return QPromptCollection([qpi], isRuleQuestion: true);
   }
 
+  factory QPromptCollection.fromListQpp(List<QuestPromptPayload> qpps) {
+    //
+    List<QuestPromptInstance> lstQpi = qpps.map((qpp) {
+      return QuestPromptInstance.fromRaw(
+        qpp.userPrompt,
+        qpp.choices,
+        qpp.questType,
+        qpp.captureAndCast,
+      );
+    }).toList();
+    return QPromptCollection(lstQpi);
+  }
+
+  static QPromptCollection fromList(List<QuestPromptPayload> qpp) {
+    //
+    // List<QPromptCollection> qpcLst = [];
+    // qpp.forEach((qpp) {
+    //   qpcLst.add();
+    // });
+    return QPromptCollection.fromListQpp(qpp);
+  }
+
   // getters
   Iterable<CaptureAndCast> get listResponses =>
       questIterations.map((qpi) => qpi._answerRepoAndTypeCast);
