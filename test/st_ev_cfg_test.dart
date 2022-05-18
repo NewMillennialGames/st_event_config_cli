@@ -33,7 +33,7 @@ void main() {
     // quest.convertAndStoreUserResponse('$k_quests_created_in_test');
     // need to bump QuestListMgr to next Quest2
     // to force prior into the answered queue
-    var nxtQu = _questMgr.nextQuestionToAnswer();
+    QuestBase? nxtQu = _questMgr.nextQuestionToAnswer();
     expect(nxtQu, null, reason: '_questMgr only has 1 Quest2');
     expect(_questMgr.priorAnswers.length, 1, reason: 'quest was answered');
 

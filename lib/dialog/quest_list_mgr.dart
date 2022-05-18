@@ -144,10 +144,6 @@ class QuestListMgr {
       return null;
     }
     ++_currQuestionIdx;
-    // if (_currentOrLastQuest2.appScreen != section) {
-    //   --_currQuest2Idx;
-    //   return null;
-    // }
     return _currentOrLastQuestion;
   }
 
@@ -156,8 +152,16 @@ class QuestListMgr {
     if (_currQuestionIdx < 0 ||
         totalAnsweredQuestions >= _pendingQuestions.length) return;
     //
-    QuestBase? mostRecentSaved =
-        _answeredQuestsBySection[_currentOrLastQuestion.appScreen]?.last;
+    List<QuestBase> lstQuestInCurScreen =
+        _answeredQuestsBySection[_currentOrLastQuestion.appScreen] ?? [];
+    // attach in case list was missing
+    _answeredQuestsBySection[_currentOrLastQuestion.appScreen] =
+        lstQuestInCurScreen;
+
+    QuestBase? mostRecentSaved;
+    if (lstQuestInCurScreen.length > 0) {
+      mostRecentSaved = lstQuestInCurScreen.last;
+    }
     // dont store same Question twice
     if (mostRecentSaved != null &&
         mostRecentSaved.questId == _currentOrLastQuestion.questId) {
@@ -167,11 +171,8 @@ class QuestListMgr {
       );
       return;
     }
-    ;
     // store into list for this section;  but DO NOT remove from pendingQuest2s or messes up cur_idx tracking
-    var l = _answeredQuestsBySection[_currentOrLastQuestion.appScreen] ?? [];
-    l.add(_currentOrLastQuestion);
-    _answeredQuestsBySection[_currentOrLastQuestion.appScreen] = l;
+    lstQuestInCurScreen.add(_currentOrLastQuestion);
   }
 
   void loadInitialQuestions() {

@@ -10,7 +10,7 @@ part of ConfigDialogRunner;
 
 */
 
-// top level function to add new Quest2s or implicit answers
+// top level function to add new Questions or implicit answers
 void appendNewQuestsOrInsertImplicitAnswers(QuestListMgr questListMgr) {
   //
   QuestBase questJustAnswered = questListMgr._currentOrLastQuestion;

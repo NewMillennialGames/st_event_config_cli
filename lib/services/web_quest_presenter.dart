@@ -40,7 +40,7 @@ class WebQuest2Presenter implements QuestionPresenter {
 
   void _receiveAnswer(String answer) {
     // _quest.convertAndStoreUserResponse(answer);
-    dRunner!.advanceToNextQuestion();
+    dRunner!.advanceToNextQuestionFromGui();
   }
 
   void informUiThatDialogIsComplete() {

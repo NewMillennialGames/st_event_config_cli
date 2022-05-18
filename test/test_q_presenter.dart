@@ -6,21 +6,21 @@ import 'package:st_ev_cfg/interfaces/q_presenter.dart';
 */
 
 class TestQuestRespGen implements QuestionPresenter {
-  // receives Quest2s for test-automation
-  List<WhenQuestLike> Quest2Matchers;
+  // receives Questions for test-automation
+  List<WhenQuestLike> questionMatchers;
 
-  TestQuestRespGen(this.Quest2Matchers);
+  TestQuestRespGen(this.questionMatchers);
 
   List<WhenQuestLike> _lookForResponseGenerators(QuestBase quest) {
     //
-    if (!(quest is Quest1Prompt)) {
-      //
-      print('Warn: called _lookForResponseGenerators with top-level Quest2');
-      return [];
-    }
+    // if (!(quest is QuestVisualRule)) {
+    //   //
+    //   print('Warn: called _lookForResponseGenerators with non-rule Question');
+    //   return [];
+    // }
 
     List<WhenQuestLike> lqm = [];
-    for (WhenQuestLike qm in Quest2Matchers) {
+    for (WhenQuestLike qm in questionMatchers) {
       //
       if (qm.matches(quest)) {
         lqm.add(qm);
@@ -31,21 +31,20 @@ class TestQuestRespGen implements QuestionPresenter {
 
   String _buildUserResponse(
     QuestBase quest,
+    QuestPromptInstance qpi,
     List<WhenQuestLike> responseGenerators,
   ) {
     //
-    assert(quest is QuestBase, 'bad argument');
-    QuestBase vrq = quest as QuestBase;
-
-    List<VisRuleQuestType> questTypes = [];
-    //  vrq.questDef.visQuestTypes;
+    List<VisRuleQuestType> questTypes = quest.questTypes;
 
     String userAnswer = '';
     for (WhenQuestLike wql in responseGenerators) {
       for (VisRuleQuestType qt in questTypes) {
-        var s = wql.answerFor(qt);
-        if (s.isNotEmpty) {
-          userAnswer += s + ',';
+        var gendTestAnswer = wql.answerFor(qt);
+        if (gendTestAnswer.isNotEmpty) {
+          // userAnswer += s + ',';
+          userAnswer = gendTestAnswer;
+          break;
         }
       }
     }
@@ -66,13 +65,25 @@ class TestQuestRespGen implements QuestionPresenter {
     if (responseGenerators.length < 1) {
       // none so send default
       // quest.convertAndStoreUserResponse('0');
-      dialoger.advanceToNextQuestion();
+      dialoger.advanceToNextQuestionFromGui();
       return;
     }
 
-    String _fullResponse = _buildUserResponse(quest, responseGenerators);
+    QuestPromptInstance? promptInst = quest.getNextUserPromptIfExists();
+    while (promptInst != null) {
+      String _fullResponse = _buildUserResponse(
+        quest,
+        promptInst,
+        responseGenerators,
+      );
+      promptInst.collectResponse(_fullResponse);
+      promptInst = quest.getNextUserPromptIfExists();
+    }
+    // user answer might generate new questions
+    dialoger.handleQuestionCascade(quest);
+
     // quest.convertAndStoreUserResponse(_fullResponse);
-    dialoger.advanceToNextQuestion();
+    dialoger.advanceToNextQuestionFromGui();
   }
 
   @override
@@ -110,7 +121,7 @@ class WhenQuestLike {
     this.questTypes = const [],
   ]);
 
-  bool matches(Quest1Prompt quest) {
+  bool matches(QuestBase quest) {
     bool isSame = quest.appScreen == screen;
     if (!isSame) return false;
     isSame = area == null || quest.screenWidgetArea == area;

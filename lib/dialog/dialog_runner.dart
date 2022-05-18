@@ -4,15 +4,14 @@ class DialogRunner {
   /* actually runs the conversation
 
   the top-level obj that coordinates:
-    DialogMgr
     QuestListMgr
-    CliQuest2Formatter
+    QuestionPresenter
+    NewQuestionCollector
     
   to produce CLI output to the user
   */
-  final QuestListMgr _questMgr = QuestListMgr();
+  final QuestListMgr _qListMgr = QuestListMgr();
   final NewQuestionCollector _newQuestComposer = NewQuestionCollector();
-  late final DialogMgr _questGroupMgr;
   // set in init
   final QuestionPresenter questPresenter;
   final int linesBetweenSections;
@@ -24,30 +23,29 @@ class DialogRunner {
     this.linesBetweenSections = 3,
     this.linesBetweenQuest2s = 1,
   ]) {
-    _questGroupMgr = DialogMgr(_questMgr);
-    _questGroupMgr.loadBeginningDialog();
+    List<QuestBase> quests = loadInitialConfigQuestions();
+    _qListMgr.appendNewQuestions(quests);
   }
 
-  QuestListMgr get Quest2Mgr => _questMgr;
+  QuestListMgr get questionLstMgr => _qListMgr;
   List<CaptureAndCast> getPriorAnswersList() {
     // used when a Quest2 needs to review prior
     // answers to configure itself
-    return _questMgr.priorAnswers;
+    return _qListMgr.priorAnswers;
   }
 
-  //
   // web logic;  start asking Questions for GUI
   bool serveNextQuestionToGui() {
     //
-    QuestBase? _quest = _questGroupMgr.getNextQuestInCurrentSection();
+    QuestBase? _quest = _qListMgr.nextQuestionToAnswer();
     if (_quest == null) return false;
     questPresenter.askAndWaitForUserResponse(this, _quest);
     return true;
   }
 
-  void advanceToNextQuestion() {
-    /*
-      run logic to add new Quest2s based on user response to current Quest2
+  void advanceToNextQuestionFromGui() {
+    /* called by web presenter
+      run logic to add new Questions based on user response to current Question
       we currently have two different methods:
         1) _newQuestComposer.handleAcquiringNewQuest2s() was my original brute-force approach
           it's brittle and hard to test (will remove this eventually)
@@ -59,10 +57,10 @@ class DialogRunner {
       but new auto-generated Quest2s should be placed under #2 (appendNewQuestsOrInsertImplicitAnswers)
     */
 
-    bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(_questMgr);
+    bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(_qListMgr);
     if (!didAddNew) {
       // run appendNewQuestsOrInsertImplicitAnswers only if handleAcquiringNewQuest2s does no work
-      appendNewQuestsOrInsertImplicitAnswers(_questMgr);
+      appendNewQuestsOrInsertImplicitAnswers(_qListMgr);
     }
     // end of logic to add new Quest2s based on user response
 
@@ -80,13 +78,13 @@ class DialogRunner {
 
     _outputSpacerLines(forSection: true);
     // check for another Quest2
-    QuestBase? _quest = _questGroupMgr.getNextQuestInCurrentSection();
+    QuestBase? _quest = _qListMgr.nextQuestionToAnswer();
     while (_quest != null) {
-      // askAndWaitForUserResponse() will callback to this
-      // to create any derived Quest2s for this section
+      // askAndWaitForUserResponse() will callback to handleQuestionCascade (below)
+      // to create any derived Questions based on user answers
       questPresenter.askAndWaitForUserResponse(this, _quest);
 
-      _quest = _questGroupMgr.getNextQuestInCurrentSection();
+      _quest = _qListMgr.nextQuestionToAnswer();
       if (_quest != null) _outputSpacerLines();
     }
     return true;
@@ -104,11 +102,11 @@ class DialogRunner {
     //
     // logic to add new Questions based on user response
     // two different methods
-    bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(_questMgr);
+    bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(_qListMgr);
     if (!didAddNew && _quest.appliesToClientConfiguration) {
       // new version of handleAcquiringNewQuest2s
       // run it only if handleAcquiringNewQuest2s does no work
-      appendNewQuestsOrInsertImplicitAnswers(_questMgr);
+      appendNewQuestsOrInsertImplicitAnswers(_qListMgr);
     }
     // end of logic to add new Questions based on user response
   }

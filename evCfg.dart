@@ -34,7 +34,7 @@ Future<void> main(List<String> arguments) async {
   }
 
   // now generate results into a config file
-  createOutputFileFromResponses(dialoger.Quest2Mgr, null);
+  createOutputFileFromResponses(dialoger.questionLstMgr, null);
   stdout.writeln("Done:\n");
 }
 

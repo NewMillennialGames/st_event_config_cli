@@ -122,6 +122,9 @@ abstract class QuestBase with EquatableMixin {
     return l;
   }
 
+  List<VisRuleQuestType> get questTypes => qPromptCollection.questIterations
+      .map((e) => e.answChoiceCollection.visRuleQuestType)
+      .toList();
   bool get isRuleQuestion => false;
   QuestPromptInstance get firstQuestion =>
       qPromptCollection.questIterations.first;
