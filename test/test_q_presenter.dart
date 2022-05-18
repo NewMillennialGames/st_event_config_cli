@@ -125,6 +125,11 @@ class WhenQuestLike {
     isSame = isSame && ruleType == null ||
         quest.qTargetIntent.visRuleTypeForAreaOrSlot == ruleType;
     isSame = isSame && questTypes.length > 0;
+    if (!isSame) return false;
+
+    Set<String> aua = quest.allUserAnswers.toSet();
+    Set<String> allMatchAnswers = questTypes.map((e) => e.answer).toSet();
+    isSame = isSame && aua.intersection(allMatchAnswers).length > 0;
     return isSame;
   }
 

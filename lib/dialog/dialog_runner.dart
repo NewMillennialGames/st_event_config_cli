@@ -10,7 +10,7 @@ class DialogRunner {
     
   to produce CLI output to the user
   */
-  final QuestListMgr _qListMgr = QuestListMgr();
+  final QuestListMgr _qListMgr; // = QuestListMgr();
   final NewQuestionCollector _newQuestComposer = NewQuestionCollector();
   // set in init
   final QuestionPresenter questPresenter;
@@ -20,9 +20,10 @@ class DialogRunner {
 
   DialogRunner(
     this.questPresenter, [
+    QuestListMgr? qListMgr,
     this.linesBetweenSections = 3,
     this.linesBetweenQuest2s = 1,
-  ]) {
+  ]) : _qListMgr = qListMgr ?? QuestListMgr() {
     List<QuestBase> quests = loadInitialConfigQuestions();
     _qListMgr.appendNewQuestions(quests);
   }

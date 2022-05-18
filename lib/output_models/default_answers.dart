@@ -1,4 +1,4 @@
-part of StUiController;
+part of OutputModels;
 
 class DefaultAnswerBuilder {
   //

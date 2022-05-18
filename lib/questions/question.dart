@@ -147,6 +147,9 @@ abstract class QuestBase with EquatableMixin {
     return l;
   }
 
+  List<String> get allUserAnswers => qPromptCollection.questIterations
+      .map((qi) => qi.userAnswers._answers)
+      .toList();
   int get promptCount => qPromptCollection.questIterations.length;
   List<VisRuleQuestType> get questTypes => qPromptCollection.questIterations
       .map((e) => e.answChoiceCollection.visRuleQuestType)

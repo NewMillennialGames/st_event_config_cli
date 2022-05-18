@@ -190,6 +190,8 @@ defer this until after 1st build:
 
   CLI
 
+    add 1 question; verify it's next served
+    verify question has correct # of prompts
   1) user answers produce new QuestBase & add to pending Queue
   2) answers produce IMPLICIT answers (create new Quest2 and AUTO-SET answers)
   3) answers make some pending Quest2s IRRELEVANT  (take them out of pending queue)
