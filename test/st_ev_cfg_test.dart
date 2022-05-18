@@ -1,6 +1,8 @@
+import 'package:st_ev_cfg/interfaces/q_presenter.dart';
 import 'package:test/test.dart';
 //
 import 'package:st_ev_cfg/st_ev_cfg.dart';
+import './test_q_presenter.dart';
 
 void main() {
   test('creates user answer & verifies new Questions generated from it', () {
@@ -15,7 +17,10 @@ void main() {
       VisualRuleType.groupCfg,
       responseAddsRuleDetailQuests: true,
     );
-    final askNumSlots = QuestBase.dlogCascade(
+    QuestionPresenter qp = TestQuestRespGen([]);
+    DialogRunner dr = DialogRunner(qp);
+    //
+    QuestBase askNumSlots = QuestBase.dlogCascade(
       qq,
       'how many Grouping positions would you like to configure?',
       ['0', '1', '$k_quests_created_in_test', '3'],
@@ -30,16 +35,19 @@ void main() {
     expect(_questMgr.totalAnsweredQuestions, 0);
 
     QuestBase quest = _questMgr.nextQuestionToAnswer()!;
-    // quest.convertAndStoreUserResponse('$k_quests_created_in_test');
+
+    qp.askAndWaitForUserResponse(dr, quest);
+
+    // next line should create 2 new Questions
+    appendNewQuestsOrInsertImplicitAnswers(_questMgr);
+
     // need to bump QuestListMgr to next Quest2
     // to force prior into the answered queue
     QuestBase? nxtQu = _questMgr.nextQuestionToAnswer();
-    expect(nxtQu, null, reason: '_questMgr only has 1 Quest2');
+    expect(nxtQu, null, reason: '_questMgr only has 1 Question');
     expect(_questMgr.priorAnswers.length, 1, reason: 'quest was answered');
 
-    // next line should create 2 new Quest2s
-    appendNewQuestsOrInsertImplicitAnswers(_questMgr);
-    // they should be rule Quest2s, but not yet answered -- so zero exportable
+    // they should be rule Questions, but not yet answered -- so zero exportable
     expect(_questMgr.exportableQuestions.length, 0);
 
     // now check that k_quests_created_in_test Quest2s were created
@@ -47,8 +55,8 @@ void main() {
     // so we subtract one from pending ...
     expect(_questMgr.pendingQuest2Count - 1, k_quests_created_in_test);
 
-    for (QuestBase q in _questMgr.pendingQuestions) {
-      // print('QuestMatcher created:  ${q.questStr}  ${q.Quest2Id}');
-    }
+    // for (QuestBase q in _questMgr.pendingQuestions) {
+    //   // print('QuestMatcher created:  ${q.questStr}  ${q.Quest2Id}');
+    // }
   });
 }

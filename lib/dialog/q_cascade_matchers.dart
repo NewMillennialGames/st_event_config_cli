@@ -1,6 +1,6 @@
 part of ConfigDialogRunner;
 
-/*  Quest2s about ListView area (aka TableView)
+/*  Questions about ListView area (aka TableView)
   sorting, grouping or filtering pose a new requirement
   we need to know HOW MANY (from 0-3) fields they want to specify
   under that respective rule
@@ -20,30 +20,32 @@ void appendNewQuestsOrInsertImplicitAnswers(QuestListMgr questListMgr) {
   for (QuestMatcher matchTest in _matcherList) {
     if (matchTest.doesMatch(questJustAnswered)) {
       print(
-        '*** it does match!!  addsPendingQuest2s: ${matchTest.addsPendingQuest2s}  createsImplicitAnswers: ${matchTest.createsImplicitAnswers}',
+        '*** it does match!!  addsPendingQuest2s: ${matchTest.addsPendingQuestions}  createsImplicitAnswers: ${matchTest.createsImplicitAnswers}',
       );
-      if (matchTest.addsPendingQuest2s) {
+      if (matchTest.addsPendingQuestions) {
         questListMgr.appendNewQuestions(
-            matchTest.generatedQuest2sFor(questJustAnswered));
+          matchTest.generatedQuestionsFor(questJustAnswered),
+        );
       }
       if (matchTest.createsImplicitAnswers) {
         questListMgr.addImplicitAnswers(
-            matchTest.generatedQuest2sFor(questJustAnswered));
+          matchTest.generatedQuestionsFor(questJustAnswered),
+        );
       }
     }
   }
 }
 
 enum MatcherBehaviorEnum {
-  addPendingQuest2s,
+  addPendingQuestions,
   addImplicitAnswers,
   addQuestsAndAnswers, // aka BOTH
 }
 
 extension MatcherBehaviorEnumExt1 on MatcherBehaviorEnum {
   //
-  bool get addsPendingQuest2s => [
-        MatcherBehaviorEnum.addPendingQuest2s,
+  bool get addsPendingQuestions => [
+        MatcherBehaviorEnum.addPendingQuestions,
         MatcherBehaviorEnum.addQuestsAndAnswers
       ].contains(this);
 
@@ -92,12 +94,12 @@ class QuestMatcher<AnsType> {
   });
 
   // getters
-  bool get addsPendingQuest2s => matcherMatchBehavior.addsPendingQuest2s;
+  bool get addsPendingQuestions => matcherMatchBehavior.addsPendingQuestions;
   bool get createsImplicitAnswers =>
       matcherMatchBehavior.createsImplicitAnswers;
 
   // public methods
-  List<QuestBase> generatedQuest2sFor(QuestBase quest) =>
+  List<QuestBase> generatedQuestionsFor(QuestBase quest) =>
       derQuestGen.generatedQuest2s(quest, this);
 
   bool doesMatch(QuestBase quest) {
@@ -159,7 +161,7 @@ List<QuestMatcher> _matcherList = [
 
   QuestMatcher<int>(
     'if user wants to perform grouping on a ListView, ask how many grouping cols are required & add a Quest2 for each',
-    MatcherBehaviorEnum.addPendingQuest2s,
+    MatcherBehaviorEnum.addPendingQuestions,
     DerivedQuestGenerator(
       'Select field #{0} to use for row-grouping on {1} screen',
       newQuestCountCalculator: (q) => (q.mainAnswer) as int,

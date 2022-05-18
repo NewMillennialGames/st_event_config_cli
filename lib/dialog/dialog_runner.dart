@@ -59,7 +59,7 @@ class DialogRunner {
 
     bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(_qListMgr);
     if (!didAddNew) {
-      // run appendNewQuestsOrInsertImplicitAnswers only if handleAcquiringNewQuest2s does no work
+      // run appendNewQuestsOrInsertImplicitAnswers only if handleAcquiringNewQuestions does no work
       appendNewQuestsOrInsertImplicitAnswers(_qListMgr);
     }
     // end of logic to add new Quest2s based on user response
@@ -99,9 +99,9 @@ class DialogRunner {
   }
 
   void handleQuestionCascade(QuestBase _quest) {
-    //
     // logic to add new Questions based on user response
     // two different methods
+    // called from inside of: questPresenter.askAndWaitForUserResponse
     bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(_qListMgr);
     if (!didAddNew && _quest.appliesToClientConfiguration) {
       // new version of handleAcquiringNewQuest2s
