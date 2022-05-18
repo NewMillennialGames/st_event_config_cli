@@ -1,28 +1,22 @@
-library Quest2sLib;
-
-import 'dart:ffi';
+library QuestionsLib;
 
 import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-// import 'package:riverpod/riverpod.dart';
 //
 import '../app_entity_enums/all.dart';
 import '../enums/all.dart';
 import '../dialog/all.dart';
-import '../util/type_cast.dart';
-import '../util/string_ext.dart';
-import '../r_and_d/all.dart';
+import '../util/all.dart';
+import '../interfaces/q_prompt_instance.dart';
 //
 part 'all.g.dart';
 part 'all.freezed.dart';
-part 'niu_user_response.dart';
 part 'new_quest_derived.dart';
-part 'question_quantifier.dart';
-part 'niu_question_base.dart';
-part 'niu_question_visual_rule.dart';
-// part 'Quest2_behave_rule.dart';
-// part 'vis_rule_choice_config.dart';
+part 'q_target_intent.dart';
+part 'answ_capture_cast.dart';
+part '../r_and_d/q_factory.dart';
+part 'q_prompt_collection.dart';
+part 'q_prompt_instance.dart';
+part 'question.dart';
 part 'user_rule_response_types.dart';
-
-typedef CastUserInputToTyp<InputTyp, AnsTyp> = AnsTyp Function(InputTyp input);
-typedef CastUserInputToTyp2<AnsTyp> = AnsTyp Function(String input);
+part 'q_response_option.dart';

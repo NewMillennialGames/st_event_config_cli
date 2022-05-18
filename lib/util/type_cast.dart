@@ -1,3 +1,5 @@
+part of StUtil;
+
 Type typeOf<T>() => T;
 
 Iterable<int> castStrOfIdxsToIterOfInts(

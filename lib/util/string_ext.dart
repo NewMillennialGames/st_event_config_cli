@@ -1,4 +1,4 @@
-// import '../enums/all.dart';
+part of StUtil;
 
 extension StringFormating on String {
   // hacky templating system for rule templates

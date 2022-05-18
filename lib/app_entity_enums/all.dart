@@ -3,7 +3,7 @@ library AppEntities;
 import 'package:json_annotation/json_annotation.dart';
 
 import '../enums/all.dart';
-import '../util/type_cast.dart';
+import '../util/all.dart';
 
 part 'ui_slot_in_wid_area.dart';
 part 'ui_screen.dart';

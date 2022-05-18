@@ -1,4 +1,4 @@
-part of RandDee;
+part of QuestionsLib;
 
 class QPromptCollection {
   /* describes iteration qualities of a given QuestBase

@@ -1,4 +1,4 @@
-import '../r_and_d/all.dart';
+import '../questions/all.dart';
 
 typedef SubmitUserResponseFunc = void Function(String);
 

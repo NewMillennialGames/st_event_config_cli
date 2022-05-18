@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of Quest2sLib;
+part of QuestionsLib;
 
 // **************************************************************************
 // JsonSerializableGenerator

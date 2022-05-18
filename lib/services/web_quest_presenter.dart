@@ -3,7 +3,7 @@ import "dart:async";
 import '../interfaces/q_presenter.dart';
 // import '../questions/all.dart';
 import '../dialog/all.dart';
-import '../r_and_d/all.dart';
+import '../questions/all.dart';
 
 class WebQuest2Presenter implements QuestionPresenter {
   // to render widget views of the Quest2

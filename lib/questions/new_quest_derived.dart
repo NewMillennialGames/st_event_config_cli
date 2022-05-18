@@ -1,4 +1,4 @@
-part of Quest2sLib;
+part of QuestionsLib;
 
 /*   not sure if this is needed
   QuestMatcher() may be all we need
@@ -11,13 +11,6 @@ part of Quest2sLib;
 
 */
 
-// pass Quest2, return how many new Quest2s to create
-typedef NewQuestCount = int Function(QuestBase);
-// pass Quest2 + newIndx, return list of args for Quest2 template
-typedef NewQuestArgGen = List<String> Function(QuestBase, int);
-
-typedef Quest2QuantifierRevisor = QTargetIntent Function(QTargetIntent);
-
 class PerQuestGenOptions<AnsType> {
   /*
   describes logic and rules for a single auto-generated Quest2
@@ -25,7 +18,7 @@ class PerQuestGenOptions<AnsType> {
   */
   final Iterable<String> answerChoices;
   final AnsType Function(String) castFunc;
-  late final Quest2QuantifierRevisor qQuantUpdater;
+  late final QTargetIntentUpdateFunc qQuantUpdater;
   final int defaultAnswerIdx = 0;
   final String questId;
   final VisualRuleType? ruleType;
@@ -34,7 +27,7 @@ class PerQuestGenOptions<AnsType> {
   PerQuestGenOptions({
     required this.answerChoices,
     required this.castFunc,
-    Quest2QuantifierRevisor? qQuantRev,
+    QTargetIntentUpdateFunc? qQuantRev,
     this.questId = '',
     this.ruleType,
     this.ruleQuestType,

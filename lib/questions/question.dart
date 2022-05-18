@@ -1,4 +1,4 @@
-part of RandDee;
+part of QuestionsLib;
 
 class QuestPromptPayload<T> {
   //

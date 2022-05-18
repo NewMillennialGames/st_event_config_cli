@@ -2,9 +2,7 @@ import 'dart:io';
 import 'dart:core';
 import 'package:args/args.dart';
 //
-// import 'lib/scoretrader/all.dart';
-// import 'lib/questions/all.dart';
-import 'lib/r_and_d/all.dart';
+import 'lib/questions/all.dart';
 import 'lib/dialog/all.dart';
 import 'lib/output_models/all.dart';
 import 'lib/services/cli_quest_presenter.dart';

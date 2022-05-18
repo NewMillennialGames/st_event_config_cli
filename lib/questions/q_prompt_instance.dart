@@ -1,4 +1,4 @@
-part of RandDee;
+part of QuestionsLib;
 
 class QuestPromptInstance<T> implements QPromptIfc {
   /* describes each prompt part of a QuestBase instance

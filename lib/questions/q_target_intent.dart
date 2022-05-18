@@ -1,4 +1,4 @@
-part of Quest2sLib;
+part of QuestionsLib;
 
 @freezed
 class QTargetIntent extends Equatable with _$QTargetQuantify {

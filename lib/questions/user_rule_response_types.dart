@@ -1,4 +1,4 @@
-part of Quest2sLib;
+part of QuestionsLib;
 
 /*
   data-types of all user answers must implement RuleResponseWrapperIfc Ifc
