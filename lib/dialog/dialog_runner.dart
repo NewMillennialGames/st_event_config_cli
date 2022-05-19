@@ -19,13 +19,16 @@ class DialogRunner {
   //
 
   DialogRunner(
-    this.questPresenter, [
+    this.questPresenter, {
     QuestListMgr? qListMgr,
     this.linesBetweenSections = 3,
     this.linesBetweenQuest2s = 1,
-  ]) : _qListMgr = qListMgr ?? QuestListMgr() {
+    bool loadDefaultQuest = true,
+  }) : _qListMgr = qListMgr ?? QuestListMgr() {
     List<QuestBase> quests = loadInitialConfigQuestions();
-    _qListMgr.appendNewQuestions(quests);
+    if (loadDefaultQuest) {
+      _qListMgr.appendNewQuestions(quests);
+    }
   }
 
   QuestListMgr get questionLstMgr => _qListMgr;

@@ -22,8 +22,8 @@ class QuestListMgr {
   */
   int _currQuestionIdx = -1;
   List<QuestBase> _pendingQuestions = [];
-  Map<AppScreen, int> _questCountBySection = {};
-  Map<AppScreen, List<QuestBase>> _answeredQuestsBySection = {};
+  Map<AppScreen, int> _questCountByScreen = {};
+  Map<AppScreen, List<QuestBase>> _answeredQuestsByScreen = {};
 
   // constructor
   QuestListMgr();
@@ -41,13 +41,15 @@ class QuestListMgr {
 
   List<QuestBase> get pendingQuestions => _pendingQuestions;
   QuestBase get _currentOrLastQuestion => _pendingQuestions[_currQuestionIdx];
-  int get totalAnsweredQuestions => _answeredQuestsBySection.values
-      .fold<int>(0, (r, qLst) => r + qLst.length);
+  int get totalAnsweredQuestions =>
+      _answeredQuestsByScreen.values.fold<int>(0, (r, qLst) => r + qLst.length);
 
-  int get pendingQuestionCount => _pendingQuestions.length - _currQuestionIdx;
+  int get pendingQuestionCount => _currQuestionIdx < 0
+      ? pendingQuestions.length
+      : _pendingQuestions.length - (_currQuestionIdx + 1);
 
   List<QuestBase> get _allAnsweredQuestions =>
-      _answeredQuestsBySection.values.fold<List<QuestBase>>(
+      _answeredQuestsByScreen.values.fold<List<QuestBase>>(
         <QuestBase>[],
         (List<QuestBase> l0, List<QuestBase> l1) => l0..addAll(l1),
       );
@@ -153,9 +155,9 @@ class QuestListMgr {
         totalAnsweredQuestions >= _pendingQuestions.length) return;
     //
     List<QuestBase> lstQuestInCurScreen =
-        _answeredQuestsBySection[_currentOrLastQuestion.appScreen] ?? [];
+        _answeredQuestsByScreen[_currentOrLastQuestion.appScreen] ?? [];
     // attach in case list was missing
-    _answeredQuestsBySection[_currentOrLastQuestion.appScreen] =
+    _answeredQuestsByScreen[_currentOrLastQuestion.appScreen] =
         lstQuestInCurScreen;
 
     QuestBase? mostRecentSaved;
@@ -178,7 +180,7 @@ class QuestListMgr {
   void loadInitialQuestions() {
     //
     _pendingQuestions = loadInitialConfigQuestions();
-    _questCountBySection[AppScreen.eventConfiguration] =
+    _questCountByScreen[AppScreen.eventConfiguration] =
         _pendingQuestions.length;
     // int c = 0;
     // _pendingQuest2s.forEach((q) {
@@ -212,7 +214,7 @@ class QuestListMgr {
       int newCntBySec = quests
           .where((q) => q.appScreen == as)
           .fold<int>(0, (accumVal, _) => accumVal + 1);
-      _questCountBySection[as] = (_questCountBySection[as] ?? 0) + newCntBySec;
+      _questCountByScreen[as] = (_questCountByScreen[as] ?? 0) + newCntBySec;
     }
     // quest id's start at 1, not zero
     // int c = _pendingQuest2s.length;

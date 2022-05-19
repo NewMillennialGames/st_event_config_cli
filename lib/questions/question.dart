@@ -52,7 +52,7 @@ abstract class QuestBase with EquatableMixin {
       choices,
       captureAndCast,
     );
-    return Quest1Prompt(targIntent, qDefCollection);
+    return Quest1Prompt(targIntent, qDefCollection, questId: questId);
   }
 
   factory QuestBase.dlogCascade(
@@ -68,7 +68,7 @@ abstract class QuestBase with EquatableMixin {
       choices,
       captureAndCast,
     );
-    return QuestMultiPrompt(targIntent, qDefCollection);
+    return QuestMultiPrompt(targIntent, qDefCollection, questId: questId);
   }
 
   factory QuestBase.multiPrompt(
@@ -78,7 +78,7 @@ abstract class QuestBase with EquatableMixin {
   }) {
     //
     var qDefCollection = QPromptCollection.fromList(prompts);
-    return QuestMultiPrompt(targIntent, qDefCollection);
+    return QuestMultiPrompt(targIntent, qDefCollection, questId: questId);
   }
 
   factory QuestBase.visualRule(
@@ -94,7 +94,7 @@ abstract class QuestBase with EquatableMixin {
       choices,
       captureAndCast,
     );
-    return QuestVisualRule(targIntent, qDefCollection);
+    return QuestVisualRule(targIntent, qDefCollection, questId: questId);
   }
 
   factory QuestBase.behavioralRule(
@@ -111,7 +111,7 @@ abstract class QuestBase with EquatableMixin {
       choices,
       captureAndCast,
     );
-    return QuestBehaveRule(targIntent, qDefCollection);
+    return QuestBehaveRule(targIntent, qDefCollection, questId: questId);
   }
 
   QuestPromptInstance? getNextUserPromptIfExists() {
