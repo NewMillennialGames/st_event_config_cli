@@ -40,11 +40,14 @@ class QuestListMgr {
   }
 
   List<QuestBase> get pendingQuestions => _pendingQuestions;
-  QuestBase get _currentOrLastQuestion => _pendingQuestions[_currQuestionIdx];
+  QuestBase get _currentOrLastQuestion => _isAtBeginning
+      ? _pendingQuestions[0]
+      : _pendingQuestions[_currQuestionIdx];
   int get totalAnsweredQuestions =>
       _answeredQuestsByScreen.values.fold<int>(0, (r, qLst) => r + qLst.length);
 
-  int get pendingQuestionCount => _currQuestionIdx < 0
+  bool get _isAtBeginning => _currQuestionIdx < 0;
+  int get pendingQuestionCount => _isAtBeginning
       ? pendingQuestions.length
       : _pendingQuestions.length - (_currQuestionIdx + 1);
 
@@ -227,6 +230,8 @@ class QuestListMgr {
     // sorting not working and not necessary
     // _sortPendingQuest2s();
   }
+
+  int get priorAnswerCount => priorAnswers.length;
 
   List<CaptureAndCast> get priorAnswers {
     // return all existing user answers

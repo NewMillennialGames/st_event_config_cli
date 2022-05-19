@@ -5,9 +5,15 @@ import 'package:st_ev_cfg/st_ev_cfg.dart';
 import './test_q_presenter.dart';
 
 void main() {
-  test('creates user answer & verifies new Questions generated from it', () {
-    const k_quests_created_in_test = 2;
+  //
+  const k_quests_created_in_test = 2;
 
+  // late QuestBase askNumSlots;
+  // setUp(() {
+  //   // askNumSlots = QuestBase.multiPrompt(qq, prompts, questId: 'test1');
+  // });
+
+  test('creates user answer & verifies new Questions generated from it', () {
     final _questMgr = QuestListMgr();
     expect(_questMgr.totalAnsweredQuestions, 0);
 
@@ -17,8 +23,8 @@ void main() {
       VisualRuleType.groupCfg,
       responseAddsRuleDetailQuests: true,
     );
-    QuestionPresenter qp = TestQuestRespGen([]);
-    DialogRunner dr = DialogRunner(qp);
+    QuestionPresenter questPresent = TestQuestRespGen([]);
+    DialogRunner dlogRun = DialogRunner(questPresent);
     //
     QuestBase askNumSlots = QuestBase.dlogCascade(
       qq,
@@ -36,7 +42,7 @@ void main() {
 
     QuestBase quest = _questMgr.nextQuestionToAnswer()!;
 
-    qp.askAndWaitForUserResponse(dr, quest);
+    questPresent.askAndWaitForUserResponse(dlogRun, quest);
 
     // next line should create 2 new Questions
     appendNewQuestsOrInsertImplicitAnswers(_questMgr);
@@ -45,15 +51,14 @@ void main() {
     // to force prior into the answered queue
     QuestBase? nxtQu = _questMgr.nextQuestionToAnswer();
     expect(nxtQu, null, reason: '_questMgr only has 1 Question');
-    expect(_questMgr.priorAnswers.length, 1, reason: 'quest was answered');
+    expect(_questMgr.priorAnswerCount, 1, reason: 'quest was answered');
 
     // they should be rule Questions, but not yet answered -- so zero exportable
     expect(_questMgr.exportableQuestions.length, 0);
 
-    // now check that k_quests_created_in_test Quest2s were created
-    // since there was no 2nd INITIAL Quest2, nextQuest2ToAnswer did not move index
-    // so we subtract one from pending ...
-    expect(_questMgr.pendingQuestionCount - 1, k_quests_created_in_test);
+    // now check that k_quests_created_in_test Questions were created
+    // since there was no 2nd INITIAL Question
+    expect(_questMgr.pendingQuestionCount, 2);
 
     // for (QuestBase q in _questMgr.pendingQuestions) {
     //   // print('QuestMatcher created:  ${q.questStr}  ${q.Quest2Id}');
