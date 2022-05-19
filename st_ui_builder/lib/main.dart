@@ -54,7 +54,7 @@ void main() async {
   runApp(
     ProviderScope(
       child: ScreenUtilInit(
-        designSize: const Size(360, 630),
+        designSize: const Size(390, 844),
         builder: (context) => const Scoretrader(),
       ),
       overrides: [
