@@ -61,9 +61,12 @@ void main() {
       QuestionPresenter qp = TestQuestRespGen([]);
       DialogRunner dr = DialogRunner(qp, _questMgr);
 
+      expect(_questMgr.pendingQuestionCount, 10);
       expect(_questMgr.totalAnsweredQuestions, 0);
       _questMgr.appendNewQuestions([twoPromptQuest]);
       dr.cliLoopUntilComplete();
+      expect(_questMgr.pendingQuestionCount, 1);
+      expect(_questMgr.totalAnsweredQuestions, 2);
     },
   );
 

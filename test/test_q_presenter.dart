@@ -61,7 +61,9 @@ class TestQuestRespGen implements QuestionPresenter {
     if (responseGenerators.length < 1) {
       // none so send default
       // quest.convertAndStoreUserResponse('0');
-      dialoger.advanceToNextQuestionFromGui();
+      // dialoger.advanceToNextQuestionFromGui();
+      print('no response generators found for ${quest.questId}; exiting!');
+      dialoger.handleQuestionCascade(quest);
       return;
     }
 

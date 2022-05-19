@@ -44,7 +44,7 @@ class QuestListMgr {
   int get totalAnsweredQuestions => _answeredQuestsBySection.values
       .fold<int>(0, (r, qLst) => r + qLst.length);
 
-  int get pendingQuest2Count => _pendingQuestions.length - _currQuestionIdx;
+  int get pendingQuestionCount => _pendingQuestions.length - _currQuestionIdx;
 
   List<QuestBase> get _allAnsweredQuestions =>
       _answeredQuestsBySection.values.fold<List<QuestBase>>(

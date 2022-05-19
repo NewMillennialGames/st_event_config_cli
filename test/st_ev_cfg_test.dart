@@ -53,7 +53,7 @@ void main() {
     // now check that k_quests_created_in_test Quest2s were created
     // since there was no 2nd INITIAL Quest2, nextQuest2ToAnswer did not move index
     // so we subtract one from pending ...
-    expect(_questMgr.pendingQuest2Count - 1, k_quests_created_in_test);
+    expect(_questMgr.pendingQuestionCount - 1, k_quests_created_in_test);
 
     // for (QuestBase q in _questMgr.pendingQuestions) {
     //   // print('QuestMatcher created:  ${q.questStr}  ${q.Quest2Id}');
