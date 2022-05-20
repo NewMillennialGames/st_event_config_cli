@@ -1,9 +1,11 @@
 part of QuestionsLib;
 
 @freezed
-class QTargetIntent extends Equatable with _$QTargetQuantify {
-  /* describes what a Quest2 is about
-    it's purpose, behavior and output
+class QTargetIntent extends Equatable
+    with _$QTargetIntent
+    implements QuestFactory {
+  /* describes what a Question is about
+    it's purpose, behavior and intent
     made it equatable to enable searching Q-list
     for filtering and generating new Quest2s reactively
   */
@@ -18,15 +20,24 @@ class QTargetIntent extends Equatable with _$QTargetQuantify {
     VisualRuleType? visRuleTypeForAreaOrSlot,
     BehaviorRuleType? behRuleTypeForAreaOrSlot,
     @Default(false) bool cliConfig,
-  }) = _QTargetQuantify;
+  }) = _QTargetIntent;
 
-  // IMPORTANT:
-  QuestConstructSign get preferredQuestionConstructor {
+  // IMPORTANT:  impl of QuestFactory
+  QuestFactorytSignature get preferredQuestionConstructor {
     /* very important
       returns the factory method required to build
       new derived questions
     */
-    return QuestBase.multiPrompt;
+    if (visRuleTypeForAreaOrSlot != null) {
+      return QuestBase.questVisualRule;
+    } else if (behRuleTypeForAreaOrSlot != null) {
+      return QuestBase.questBehaveRule;
+    } else if (cliConfig) {
+      return QuestBase.quest1Prompt;
+    } else if (slotInArea != null || screenWidgetArea != null) {
+      return QuestBase.questMultiPrompt;
+    }
+    return QuestBase.quest1Prompt;
   }
 
   QIntentEm get intent {

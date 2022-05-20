@@ -1,6 +1,5 @@
 import '../questions/all.dart';
-
-typedef SubmitUserResponseFunc = void Function(String);
+import '../util/all.dart';
 
 abstract class QPromptIfc {
   //

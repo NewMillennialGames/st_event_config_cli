@@ -27,6 +27,10 @@ abstract class QuestBase with EquatableMixin {
     between them;  keep consistent interface going forward
     largely a wrapper around QTargetIntent && QDefCollection
 
+    it's vital that ALL Factory constructors respect this
+    standard signature:   QuestFactorytSignature
+
+
   */
   final QTargetIntent qTargetIntent;
   final QPromptCollection qPromptCollection;
@@ -38,11 +42,51 @@ abstract class QuestBase with EquatableMixin {
     this.qTargetIntent,
     this.qPromptCollection, {
     String? questId,
-  }) : questId = questId == null ? qTargetIntent.sortKey : questId {
-    // now select first Quest2 to be ready for display
-    // _currQuest2 = qDefCollection.curQuest2;
+  }) : questId = questId == null ? qTargetIntent.sortKey : questId;
+
+  // constructors with common QuestFactorytSignature
+  factory QuestBase.quest1Prompt(
+    QTargetIntent targIntent,
+    List<QuestPromptPayload> prompts, {
+    String? questId,
+  }) {
+    //
+    var qDefCollection = QPromptCollection.fromList(prompts);
+    return Quest1Prompt(targIntent, qDefCollection, questId: questId);
   }
 
+  factory QuestBase.questMultiPrompt(
+    QTargetIntent targIntent,
+    List<QuestPromptPayload> prompts, {
+    String? questId,
+  }) {
+    //
+    var qDefCollection = QPromptCollection.fromList(prompts);
+    return QuestMultiPrompt(targIntent, qDefCollection, questId: questId);
+  }
+
+  factory QuestBase.questVisualRule(
+    QTargetIntent targIntent,
+    List<QuestPromptPayload> prompts, {
+    String? questId,
+  }) {
+    //
+    var qDefCollection = QPromptCollection.fromList(prompts);
+    return QuestVisualRule(targIntent, qDefCollection, questId: questId);
+  }
+
+  factory QuestBase.questBehaveRule(
+    QTargetIntent targIntent,
+    List<QuestPromptPayload> prompts, {
+    String? questId,
+  }) {
+    //
+    var qDefCollection = QPromptCollection.fromList(prompts);
+    return QuestBehaveRule(targIntent, qDefCollection, questId: questId);
+  }
+  // end constructors with common QuestFactorytSignature
+
+  // manual constructors to call explicitly
   factory QuestBase.infoOrCliCfg(
     QTargetIntent targIntent,
     String userPrompt,

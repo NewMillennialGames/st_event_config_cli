@@ -8,6 +8,7 @@ import '../enums/all.dart';
 import '../dialog/all.dart';
 import '../util/all.dart';
 import '../interfaces/q_prompt_instance.dart';
+import '../interfaces/q_factory.dart';
 //
 part 'all.g.dart';
 part 'all.freezed.dart';

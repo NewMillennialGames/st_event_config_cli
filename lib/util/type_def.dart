@@ -1,17 +1,17 @@
 part of StUtil;
 
 // preferred way to construct all Question instances
-typedef QuestConstructSign = QuestBase Function(
+typedef QuestFactorytSignature = QuestBase Function(
   QTargetIntent qTargetIntent,
   List<QuestPromptPayload> promptVals, {
   String? questId,
 });
 
+// for recording user answers to questions
+typedef SubmitUserResponseFunc = void Function(String);
+// for casting string into expected rule-type value
 typedef CastStrToAnswTypCallback<T> = T Function(String);
-// typedef CastListToType<T> = T Function(List<String>);
-// typedef CastUserInputToTyp<InputTyp, AnsTyp> = AnsTyp Function(InputTyp input);
-// typedef CastUserInputToTyp2<AnsTyp> = AnsTyp Function(String input);
-
+//
 typedef AddQuestChkCallbk = bool Function(dynamic);
 typedef GroupingRules = Tuple3<TvGroupCfg, TvGroupCfg?, TvGroupCfg?>;
 typedef SortingRules = Tuple3<TvSortCfg, TvSortCfg?, TvSortCfg?>;
