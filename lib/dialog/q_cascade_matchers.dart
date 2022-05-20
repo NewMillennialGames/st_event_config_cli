@@ -20,12 +20,12 @@ void appendNewQuestsOrInsertImplicitAnswers(QuestListMgr questListMgr) {
   for (QuestMatcher matchTest in _matcherList) {
     if (matchTest.doesMatch(questJustAnswered)) {
       print(
-        '*** it does match!!  addsPendingQuest2s: ${matchTest.addsPendingQuestions}  createsImplicitAnswers: ${matchTest.createsImplicitAnswers}',
+        '*** it does match!!  addsPendingQuestions: ${matchTest.addsPendingQuestions}  createsImplicitAnswers: ${matchTest.createsImplicitAnswers}',
       );
       if (matchTest.addsPendingQuestions) {
-        questListMgr.appendNewQuestions(
-          matchTest.generatedQuestionsFor(questJustAnswered),
-        );
+        List<QuestBase> newQuests =
+            matchTest.generatedQuestionsFor(questJustAnswered);
+        questListMgr.appendNewQuestions(newQuests);
       }
       if (matchTest.createsImplicitAnswers) {
         questListMgr.addImplicitAnswers(
@@ -100,7 +100,7 @@ class QuestMatcher<AnsType> {
 
   // public methods
   List<QuestBase> generatedQuestionsFor(QuestBase quest) =>
-      derQuestGen.generatedQuest2s(quest, this);
+      derQuestGen.generatedQuestions(quest, this);
 
   bool doesMatch(QuestBase quest) {
     bool isAPatternMatch =
@@ -156,11 +156,11 @@ class QuestMatcher<AnsType> {
 }
 
 List<QuestMatcher> _matcherList = [
-  // defines rules for adding new Quest2s or implicit answers
-  // based on answers to prior Quest2s
+  // defines rules for adding new Questions or implicit answers
+  // based on answers to prior Questions
 
   QuestMatcher<int>(
-    'if user wants to perform grouping on a ListView, ask how many grouping cols are required & add a Quest2 for each',
+    'if user wants to perform grouping on a ListView, ask how many grouping cols are required & add a Questions for each',
     MatcherBehaviorEnum.addPendingQuestions,
     DerivedQuestGenerator(
       'Select field #{0} to use for row-grouping on {1} screen',

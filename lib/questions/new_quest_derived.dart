@@ -57,7 +57,7 @@ class DerivedQuestGenerator {
     required this.perQuestGenOptions,
   });
 
-  List<QuestBase> generatedQuest2s(
+  List<QuestBase> generatedQuestions(
     QuestBase answeredQuest,
     QuestMatcher? matcher,
   ) {

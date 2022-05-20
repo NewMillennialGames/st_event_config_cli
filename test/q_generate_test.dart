@@ -13,28 +13,53 @@ void main() {
   //   // askNumSlots = QuestBase.multiPrompt(qq, prompts, questId: 'test1');
   // });
 
+  /*  ah shoot ... just turned my phone on and maps says I'm 26 mins away
+      I have a zoom meeting at 11:15 
+      what other time will work 
+
+      you could also just leave the door open
+      I step inside without disturbing you 
+      whatever you think is best 
+  */
+
   test('creates user answer & verifies new Questions generated from it', () {
     final _questMgr = QuestListMgr();
     expect(_questMgr.totalAnsweredQuestions, 0);
 
+    List<RespGenWhenQuestLike> _autoResponseGenerators = [
+      RespGenWhenQuestLike(
+        AppScreen.marketView,
+        ScreenWidgetArea.tableview,
+        VisualRuleType.groupCfg,
+        responsesByQType: [
+          QTypeResponsePair(
+            VisRuleQuestType.dialogStruct,
+            '2',
+          ),
+        ],
+      )
+    ];
+    QuestionPresenter questPresent = TestQuestRespGen(_autoResponseGenerators);
+    DialogRunner dlogRun = DialogRunner(questPresent);
+    //
+    // now create user question
     final qq = QTargetIntent.areaLevelRules(
       AppScreen.marketView,
       ScreenWidgetArea.tableview,
       VisualRuleType.groupCfg,
       responseAddsRuleDetailQuests: true,
     );
-    QuestionPresenter questPresent = TestQuestRespGen([]);
-    DialogRunner dlogRun = DialogRunner(questPresent);
-    //
     QuestBase askNumSlots = QuestBase.dlogCascade(
       qq,
       'how many Grouping positions would you like to configure?',
       ['0', '1', '$k_quests_created_in_test', '3'],
       CaptureAndCast<int>((selCount) {
-        print('running convert on $selCount');
+        print('running convert on str $selCount');
         return int.tryParse(selCount) ?? 0;
       }),
     );
+
+    // add question to q-manager
     _questMgr.appendNewQuestions([askNumSlots]);
     // next 2 lines are virtually the same test
     expect(_questMgr.priorAnswers.length, 0);
@@ -42,6 +67,7 @@ void main() {
 
     QuestBase quest = _questMgr.nextQuestionToAnswer()!;
 
+    // will auto-respond using value provided in _autoResponseGenerators above
     questPresent.askAndWaitForUserResponse(dlogRun, quest);
 
     // next line should create 2 new Questions

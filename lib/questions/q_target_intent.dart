@@ -20,6 +20,15 @@ class QTargetIntent extends Equatable with _$QTargetQuantify {
     @Default(false) bool cliConfig,
   }) = _QTargetQuantify;
 
+  // IMPORTANT:
+  QuestConstructSign get preferredQuestionConstructor {
+    /* very important
+      returns the factory method required to build
+      new derived questions
+    */
+    return QuestBase.multiPrompt;
+  }
+
   QIntentEm get intent {
     //
     bool noAppRules =

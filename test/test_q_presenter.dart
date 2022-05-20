@@ -3,15 +3,19 @@ import 'package:st_ev_cfg/interfaces/q_presenter.dart';
 
 /* helper classes only
   no tests in here
+
+  allows defining rules for auto-generated answers
+  to facilitate tesing parts of the system
+  that create new questions based on existing answers
 */
 
 class TestQuestRespGen implements QuestionPresenter {
   // receives Questions for test-automation
-  List<WhenQuestLike> questionMatchers;
+  List<RespGenWhenQuestLike> questionMatchers;
 
   TestQuestRespGen(this.questionMatchers);
 
-  List<WhenQuestLike> _lookForResponseGenerators(QuestBase quest) {
+  List<RespGenWhenQuestLike> _lookForResponseGenerators(QuestBase quest) {
     //
     // if (!(quest is QuestVisualRule)) {
     //   //
@@ -19,8 +23,8 @@ class TestQuestRespGen implements QuestionPresenter {
     //   return [];
     // }
 
-    List<WhenQuestLike> lqm = [];
-    for (WhenQuestLike qm in questionMatchers) {
+    List<RespGenWhenQuestLike> lqm = [];
+    for (RespGenWhenQuestLike qm in questionMatchers) {
       //
       if (qm.matches(quest)) {
         lqm.add(qm);
@@ -29,26 +33,26 @@ class TestQuestRespGen implements QuestionPresenter {
     return lqm;
   }
 
-  String _buildUserResponse(
+  String? _buildUserResponse(
     QuestBase quest,
     QuestPromptInstance qpi,
-    List<WhenQuestLike> responseGenerators,
+    List<RespGenWhenQuestLike> responseGenerators,
   ) {
     //
-    String userAnswer = '';
+    if (responseGenerators.length < 1) return null;
+
     VisRuleQuestType vqt = qpi.visQuestType;
-    for (WhenQuestLike wql in responseGenerators) {
-      String gendTestAnswer = wql.answerFor(vqt);
-      if (gendTestAnswer.isNotEmpty) {
-        userAnswer = gendTestAnswer;
-        break;
+    for (RespGenWhenQuestLike wql in responseGenerators) {
+      String? gendTestAnswer = wql.answerFor(vqt);
+      if (gendTestAnswer != null) {
+        return gendTestAnswer;
       }
     }
     // remove any adjacent comma's
     // userAnswer = userAnswer.replaceAll(',,,', ',');
     // userAnswer = userAnswer.replaceAll(',,', ',');
     // userAnswer = userAnswer.replaceAll(',,', ',');
-    return userAnswer;
+    return null;
   }
 
   @override
@@ -57,7 +61,8 @@ class TestQuestRespGen implements QuestionPresenter {
     QuestBase quest,
   ) {
     //
-    List<WhenQuestLike> responseGenerators = _lookForResponseGenerators(quest);
+    List<RespGenWhenQuestLike> responseGenerators =
+        _lookForResponseGenerators(quest);
     if (responseGenerators.length < 1) {
       // none so send default
       // quest.convertAndStoreUserResponse('0');
@@ -69,12 +74,14 @@ class TestQuestRespGen implements QuestionPresenter {
 
     QuestPromptInstance? promptInst = quest.getNextUserPromptIfExists();
     while (promptInst != null) {
-      String _fullResponse = _buildUserResponse(
+      String? _fullResponse = _buildUserResponse(
         quest,
         promptInst,
         responseGenerators,
       );
-      promptInst.collectResponse(_fullResponse);
+      promptInst.collectResponse((_fullResponse != null) ? _fullResponse : '');
+
+      // now see if there is another prompt waiting to be answered
       promptInst = quest.getNextUserPromptIfExists();
     }
     // all prompts answered;  ready to advance to next quest
@@ -88,59 +95,69 @@ class TestQuestRespGen implements QuestionPresenter {
   void informUiThatDialogIsComplete() {}
 }
 
-class QuestAnswerPair {
-  //
-  VisRuleQuestType qType;
-  String answer;
+class QTypeResponsePair {
+  /*
+    leave qType null to make it always match
+  */
+  VisRuleQuestType? qType;
+  String response;
 
-  QuestAnswerPair(
+  QTypeResponsePair(
     this.qType,
-    this.answer,
+    this.response,
   );
 
-  bool matches(VisRuleQuestType qt) => qt == qType;
+  bool matches(VisRuleQuestType qt) => qt == qType || qType == null;
 }
 
-class WhenQuestLike {
-  /* defines a QuestBase pattern
-    and the answer that should be provided
-    by auto-test (as user) in response
+class RespGenWhenQuestLike {
+  /*  Response to Generate when Question like:
+
+  defines a QuestBase pattern
+    and the auto-response answer that should be provided
+    by test (as user) in response to each prompt
   */
   AppScreen screen;
   ScreenWidgetArea? area;
   ScreenAreaWidgetSlot? slot;
   VisualRuleType? ruleType;
-  List<QuestAnswerPair> questTypes;
+  List<QTypeResponsePair> responsesByQType;
 
-  WhenQuestLike(
+  RespGenWhenQuestLike(
     this.screen,
     this.area,
-    this.slot, [
-    this.questTypes = const [],
-  ]);
+    this.ruleType, {
+    this.slot,
+    this.responsesByQType = const [],
+  });
 
   bool matches(QuestBase quest) {
+    /* return true if this response generator
+      is a match for the question being tested
+    */
     bool isSame = quest.appScreen == screen;
     if (!isSame) return false;
     isSame = area == null || quest.screenWidgetArea == area;
     isSame = isSame && slot == null || quest.slotInArea == slot;
     isSame = isSame && ruleType == null ||
         quest.qTargetIntent.visRuleTypeForAreaOrSlot == ruleType;
-    isSame = isSame && questTypes.length > 0;
-    if (!isSame) return false;
+    isSame = isSame && responsesByQType.length > 0;
+    // if (!isSame) return false;
 
-    Set<String> aua = quest.allUserAnswers.toSet();
-    Set<String> allMatchAnswers = questTypes.map((e) => e.answer).toSet();
-    isSame = isSame && aua.intersection(allMatchAnswers).length > 0;
+    // Set<String> aua = quest.allUserAnswers.toSet();
+    // Set<String> allMatchAnswers =
+    //     responsesByQType.map((e) => e.response).toSet();
+    // isSame = isSame && aua.intersection(allMatchAnswers).length > 0;
     return isSame;
   }
 
-  String answerFor(VisRuleQuestType qType) {
-    for (QuestAnswerPair pair in questTypes) {
-      if (pair.matches(qType)) {
-        return pair.answer;
+  String? answerFor(VisRuleQuestType qType) {
+    // each prompt on a Question can have its own: VisRuleQuestType
+    for (QTypeResponsePair respPair in responsesByQType) {
+      if (respPair.matches(qType)) {
+        return respPair.response;
       }
     }
-    return '';
+    return null;
   }
 }

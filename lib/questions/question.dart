@@ -1,7 +1,11 @@
 part of QuestionsLib;
 
+/*
+
+*/
+
 class QuestPromptPayload<T> {
-  //
+  // data container for constructing new questions
   String userPrompt;
   Iterable<String> choices;
   VisRuleQuestType questType;

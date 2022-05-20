@@ -206,14 +206,14 @@ class QuestListMgr {
 
   void appendNewQuestions(
     List<QuestBase> quests, {
-    String dbgNam = 'init', // debug-name
+    String dbgNam = 'apndNewQs', // debug-name
   }) {
     //
-    Set<AppScreen> newSections = quests.map((e) => e.appScreen).toSet();
+    Set<AppScreen> appScreensSet = quests.map((e) => e.appScreen).toSet();
 
-    print('$dbgNam is adding ${quests.length} new Questions to $newSections');
+    print('$dbgNam is adding ${quests.length} new Questions to $appScreensSet');
 
-    for (AppScreen as in newSections) {
+    for (AppScreen as in appScreensSet) {
       int newCntBySec = quests
           .where((q) => q.appScreen == as)
           .fold<int>(0, (accumVal, _) => accumVal + 1);

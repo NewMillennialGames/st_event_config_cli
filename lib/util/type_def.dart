@@ -1,5 +1,12 @@
 part of StUtil;
 
+// preferred way to construct all Question instances
+typedef QuestConstructSign = QuestBase Function(
+  QTargetIntent qTargetIntent,
+  List<QuestPromptPayload> promptVals, {
+  String? questId,
+});
+
 typedef CastStrToAnswTypCallback<T> = T Function(String);
 // typedef CastListToType<T> = T Function(List<String>);
 // typedef CastUserInputToTyp<InputTyp, AnsTyp> = AnsTyp Function(InputTyp input);

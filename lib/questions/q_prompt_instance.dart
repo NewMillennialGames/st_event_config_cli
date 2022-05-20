@@ -34,7 +34,8 @@ class QuestPromptInstance<T> implements QPromptIfc {
   // begin QPromptIfc impl
   @override
   void collectResponse(String s) {
-    // accumulate user answers in list of strings
+    // store user answer response into  CaptureAndCast<T> _answerRepoAndTypeCast
+    print('Qpi.colResp:  Prompt: "$userPrompt" answered with $s!');
     _answerRepoAndTypeCast.captureUserRespStr(s);
   }
 
