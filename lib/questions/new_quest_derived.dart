@@ -35,7 +35,7 @@ class PerQuestGenOptions<AnsType> {
             qTargetIntentUpdaterArg == null ? _noOp : qTargetIntentUpdaterArg;
 
   Type get genType => AnsType;
-  bool get genAsRuleQuest2 => ruleType != null;
+  bool get genAsRuleQuestion => ruleType != null;
 
   static QTargetIntent _noOp(QTargetIntent qq, int idx) => qq;
 }
@@ -62,9 +62,9 @@ class DerivedQuestGenerator {
     QuestBase answeredQuest,
     QuestMatcher? matcher,
   ) {
-    /* use existing answered Quest2
+    /* use existing answered Question
     plus logic defined in both this and PerQuestGenOptions
-    to build and return a list of new Quest2s
+    to build and return a list of new Questions
     */
     int toCreate = newQuestCountCalculator(answeredQuest);
     if (toCreate < 1) return [];
@@ -80,20 +80,29 @@ class DerivedQuestGenerator {
           : perQuestGenOptions[i];
       //
       QuestBase nxtQuest;
-      // if (genOptionsAtIdx.genAsRuleQuest2) {
-      //   nxtQuest = QuestBase.makeFromExisting(
-      //     answeredQuest,
-      //     newQuestStr,
-      //     genOptionsAtIdx,
-      //   );
-      // } else {
-      //   nxtQuest = answeredQuest.fromExisting(
-      //     newQuestStr,
-      //     genOptionsAtIdx,
-      //   );
-      // }
 
-      // createdQuest.add(nxtQuest);
+      QTargetIntent targIntent = answeredQuest.qTargetIntent;
+      QuestFactorytSignature newQuestConstructor =
+          targIntent.preferredQuestionConstructor;
+
+      // targIntent = targIntent.
+
+      if (genOptionsAtIdx.genAsRuleQuestion) {
+        nxtQuest = newQuestConstructor(targIntent, []);
+        // nxtQuest = QuestBase.makeFromExisting(
+        //   answeredQuest,
+        //   newQuestStr,
+        //   genOptionsAtIdx,
+        // );
+      } else {
+        // nxtQuest = answeredQuest.fromExisting(
+        //   newQuestStr,
+        //   genOptionsAtIdx,
+        // );
+      }
+
+      nxtQuest = newQuestConstructor(targIntent, []);
+      createdQuest.add(nxtQuest);
     }
     return createdQuest;
   }
