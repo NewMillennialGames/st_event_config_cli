@@ -17,8 +17,8 @@ class PerQuestGenOptions<AnsType> {
   instance lives inside DerivedQuestGenerator.perQuestGenOptions
   */
   final Iterable<String> answerChoices;
-  final AnsType Function(String) castFunc;
-  late final QTargetIntentUpdateFunc qQuantUpdater;
+  final CastStrToAnswTypCallback<AnsType> castFunc;
+  late final QTargetIntentUpdateFunc qTargetIntentUpdater;
   final int defaultAnswerIdx = 0;
   final String questId;
   final VisualRuleType? ruleType;
@@ -27,16 +27,17 @@ class PerQuestGenOptions<AnsType> {
   PerQuestGenOptions({
     required this.answerChoices,
     required this.castFunc,
-    QTargetIntentUpdateFunc? qQuantRev,
+    QTargetIntentUpdateFunc? qTargetIntentUpdaterArg,
     this.questId = '',
     this.ruleType,
     this.ruleQuestType,
-  }) : this.qQuantUpdater = qQuantRev == null ? _noOp : qQuantRev;
+  }) : this.qTargetIntentUpdater =
+            qTargetIntentUpdaterArg == null ? _noOp : qTargetIntentUpdaterArg;
 
   Type get genType => AnsType;
   bool get genAsRuleQuest2 => ruleType != null;
 
-  static QTargetIntent _noOp(QTargetIntent qq) => qq;
+  static QTargetIntent _noOp(QTargetIntent qq, int idx) => qq;
 }
 
 class DerivedQuestGenerator {
@@ -97,14 +98,3 @@ class DerivedQuestGenerator {
     return createdQuest;
   }
 }
-
-
-
-  // static List<Quest2> pendingQuestsFromAnswer(Quest2 quest) {
-  //   List<VisualRuleType> vrts = quest.qQuantify.relatedSubVisualRules(quest);
-  //   return [];
-  // }
-
-  // static List<Quest2> impliedAnswersFromAnswer(Quest2 quest) {
-  //   return [];
-  // }

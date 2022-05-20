@@ -15,16 +15,16 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-class _$QTargetQuantifyTearOff {
-  const _$QTargetQuantifyTearOff();
+class _$QTargetIntentTearOff {
+  const _$QTargetIntentTearOff();
 
-  _QTargetQuantify call(QRespCascadePatternEm cascadeType, AppScreen appScreen,
+  _QTargetIntent call(QRespCascadePatternEm cascadeType, AppScreen appScreen,
       ScreenWidgetArea? screenWidgetArea,
       {ScreenAreaWidgetSlot? slotInArea,
       VisualRuleType? visRuleTypeForAreaOrSlot,
       BehaviorRuleType? behRuleTypeForAreaOrSlot,
       bool cliConfig = false}) {
-    return _QTargetQuantify(
+    return _QTargetIntent(
       cascadeType,
       appScreen,
       screenWidgetArea,
@@ -37,10 +37,10 @@ class _$QTargetQuantifyTearOff {
 }
 
 /// @nodoc
-const $QTargetQuantify = _$QTargetQuantifyTearOff();
+const $QTargetIntent = _$QTargetIntentTearOff();
 
 /// @nodoc
-mixin _$QTargetQuantify {
+mixin _$QTargetIntent {
   QRespCascadePatternEm get cascadeType => throw _privateConstructorUsedError;
   AppScreen get appScreen => throw _privateConstructorUsedError;
   ScreenWidgetArea? get screenWidgetArea => throw _privateConstructorUsedError;
@@ -52,15 +52,15 @@ mixin _$QTargetQuantify {
   bool get cliConfig => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $QTargetQuantifyCopyWith<QTargetIntent> get copyWith =>
+  $QTargetIntentCopyWith<QTargetIntent> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $QTargetQuantifyCopyWith<$Res> {
-  factory $QTargetQuantifyCopyWith(
+abstract class $QTargetIntentCopyWith<$Res> {
+  factory $QTargetIntentCopyWith(
           QTargetIntent value, $Res Function(QTargetIntent) then) =
-      _$QTargetQuantifyCopyWithImpl<$Res>;
+      _$QTargetIntentCopyWithImpl<$Res>;
   $Res call(
       {QRespCascadePatternEm cascadeType,
       AppScreen appScreen,
@@ -72,9 +72,9 @@ abstract class $QTargetQuantifyCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$QTargetQuantifyCopyWithImpl<$Res>
-    implements $QTargetQuantifyCopyWith<$Res> {
-  _$QTargetQuantifyCopyWithImpl(this._value, this._then);
+class _$QTargetIntentCopyWithImpl<$Res>
+    implements $QTargetIntentCopyWith<$Res> {
+  _$QTargetIntentCopyWithImpl(this._value, this._then);
 
   final QTargetIntent _value;
   // ignore: unused_field
@@ -124,11 +124,11 @@ class _$QTargetQuantifyCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$QTargetQuantifyCopyWith<$Res>
-    implements $QTargetQuantifyCopyWith<$Res> {
-  factory _$QTargetQuantifyCopyWith(
-          _QTargetQuantify value, $Res Function(_QTargetQuantify) then) =
-      __$QTargetQuantifyCopyWithImpl<$Res>;
+abstract class _$QTargetIntentCopyWith<$Res>
+    implements $QTargetIntentCopyWith<$Res> {
+  factory _$QTargetIntentCopyWith(
+          _QTargetIntent value, $Res Function(_QTargetIntent) then) =
+      __$QTargetIntentCopyWithImpl<$Res>;
   @override
   $Res call(
       {QRespCascadePatternEm cascadeType,
@@ -141,15 +141,15 @@ abstract class _$QTargetQuantifyCopyWith<$Res>
 }
 
 /// @nodoc
-class __$QTargetQuantifyCopyWithImpl<$Res>
-    extends _$QTargetQuantifyCopyWithImpl<$Res>
-    implements _$QTargetQuantifyCopyWith<$Res> {
-  __$QTargetQuantifyCopyWithImpl(
-      _QTargetQuantify _value, $Res Function(_QTargetQuantify) _then)
-      : super(_value, (v) => _then(v as _QTargetQuantify));
+class __$QTargetIntentCopyWithImpl<$Res>
+    extends _$QTargetIntentCopyWithImpl<$Res>
+    implements _$QTargetIntentCopyWith<$Res> {
+  __$QTargetIntentCopyWithImpl(
+      _QTargetIntent _value, $Res Function(_QTargetIntent) _then)
+      : super(_value, (v) => _then(v as _QTargetIntent));
 
   @override
-  _QTargetQuantify get _value => super._value as _QTargetQuantify;
+  _QTargetIntent get _value => super._value as _QTargetIntent;
 
   @override
   $Res call({
@@ -161,7 +161,7 @@ class __$QTargetQuantifyCopyWithImpl<$Res>
     Object? behRuleTypeForAreaOrSlot = freezed,
     Object? cliConfig = freezed,
   }) {
-    return _then(_QTargetQuantify(
+    return _then(_QTargetIntent(
       cascadeType == freezed
           ? _value.cascadeType
           : cascadeType // ignore: cast_nullable_to_non_nullable
@@ -196,8 +196,8 @@ class __$QTargetQuantifyCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_QTargetQuantify extends _QTargetQuantify {
-  _$_QTargetQuantify(this.cascadeType, this.appScreen, this.screenWidgetArea,
+class _$_QTargetIntent extends _QTargetIntent {
+  _$_QTargetIntent(this.cascadeType, this.appScreen, this.screenWidgetArea,
       {this.slotInArea,
       this.visRuleTypeForAreaOrSlot,
       this.behRuleTypeForAreaOrSlot,
@@ -222,18 +222,18 @@ class _$_QTargetQuantify extends _QTargetQuantify {
 
   @JsonKey(ignore: true)
   @override
-  _$QTargetQuantifyCopyWith<_QTargetQuantify> get copyWith =>
-      __$QTargetQuantifyCopyWithImpl<_QTargetQuantify>(this, _$identity);
+  _$QTargetIntentCopyWith<_QTargetIntent> get copyWith =>
+      __$QTargetIntentCopyWithImpl<_QTargetIntent>(this, _$identity);
 }
 
-abstract class _QTargetQuantify extends QTargetIntent {
-  factory _QTargetQuantify(QRespCascadePatternEm cascadeType,
-      AppScreen appScreen, ScreenWidgetArea? screenWidgetArea,
+abstract class _QTargetIntent extends QTargetIntent {
+  factory _QTargetIntent(QRespCascadePatternEm cascadeType, AppScreen appScreen,
+      ScreenWidgetArea? screenWidgetArea,
       {ScreenAreaWidgetSlot? slotInArea,
       VisualRuleType? visRuleTypeForAreaOrSlot,
       BehaviorRuleType? behRuleTypeForAreaOrSlot,
-      bool cliConfig}) = _$_QTargetQuantify;
-  _QTargetQuantify._() : super._();
+      bool cliConfig}) = _$_QTargetIntent;
+  _QTargetIntent._() : super._();
 
   @override
   QRespCascadePatternEm get cascadeType;
@@ -251,6 +251,6 @@ abstract class _QTargetQuantify extends QTargetIntent {
   bool get cliConfig;
   @override
   @JsonKey(ignore: true)
-  _$QTargetQuantifyCopyWith<_QTargetQuantify> get copyWith =>
+  _$QTargetIntentCopyWith<_QTargetIntent> get copyWith =>
       throw _privateConstructorUsedError;
 }

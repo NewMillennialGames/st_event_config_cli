@@ -26,7 +26,7 @@ class QTargetIntent extends Equatable
   QuestFactorytSignature get preferredQuestionConstructor {
     /* very important
       returns the factory method required to build
-      new derived questions
+      new auto-derived questions (from user answers)
     */
     if (visRuleTypeForAreaOrSlot != null) {
       return QuestBase.questVisualRule;
@@ -41,7 +41,7 @@ class QTargetIntent extends Equatable
   }
 
   QIntentEm get intent {
-    //
+    // not yet tested
     bool noAppRules =
         visRuleTypeForAreaOrSlot == null && behRuleTypeForAreaOrSlot == null;
     if (noAppRules)
@@ -52,7 +52,7 @@ class QTargetIntent extends Equatable
   }
 
   QTargetLevelEm get tLevel {
-    //
+    // not yet tested
     if (appScreen == AppScreen.eventConfiguration)
       return QTargetLevelEm.notAnAppRule;
     if (screenWidgetArea == null) return QTargetLevelEm.screenRule;

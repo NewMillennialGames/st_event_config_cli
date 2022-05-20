@@ -172,7 +172,7 @@ List<QuestMatcher> _matcherList = [
           answerChoices: DbTableFieldName.values.map((e) => e.name),
           castFunc: (ansr) => DbTableFieldName
               .values[int.tryParse(ansr) ?? CfgConst.cancelSortIndex],
-          qQuantRev: (qq) =>
+          qTargetIntentUpdaterArg: (qq, _) =>
               qq.copyWith(visRuleTypeForAreaOrSlot: VisualRuleType.groupCfg),
           ruleType: VisualRuleType.groupCfg,
           ruleQuestType: VisRuleQuestType.selectDataFieldName,
