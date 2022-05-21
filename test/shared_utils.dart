@@ -1,5 +1,6 @@
 import 'package:st_ev_cfg/st_ev_cfg.dart';
 import 'package:st_ev_cfg/interfaces/q_presenter.dart';
+import 'package:st_ev_cfg/util/all.dart';
 
 /* helper classes only
   no tests in here
@@ -8,6 +9,24 @@ import 'package:st_ev_cfg/interfaces/q_presenter.dart';
   to facilitate tesing parts of the system
   that create new questions based on existing answers
 */
+
+class TestDataCreation {
+  //
+  QuestBase makeQuestion<T>(
+    QTargetIntent qq,
+    String prompt,
+    List<String> choices,
+    CastStrToAnswTypCallback<T> clbk,
+  ) {
+    //
+    return QuestBase.dlogCascade(
+      qq,
+      prompt,
+      choices,
+      CaptureAndCast<T>(clbk),
+    );
+  }
+}
 
 class TestQuestRespGen implements QuestionPresenter {
   // receives Questions for test-automation

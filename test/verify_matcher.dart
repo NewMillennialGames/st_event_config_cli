@@ -2,7 +2,7 @@ import 'package:st_ev_cfg/interfaces/q_presenter.dart';
 import 'package:test/test.dart';
 //
 import 'package:st_ev_cfg/st_ev_cfg.dart';
-import './test_q_presenter.dart';
+import 'shared_utils.dart';
 
 void main() {
   //
@@ -13,6 +13,7 @@ void main() {
 
   test('validate that matchers hit', () {
     final _questMgr = QuestListMgr();
+    final _qMatchColl = QMatchCollection([]);
     expect(_questMgr.totalAnsweredQuestions, 0);
   });
 

@@ -2,7 +2,7 @@ import 'package:st_ev_cfg/interfaces/q_presenter.dart';
 import 'package:test/test.dart';
 //
 import 'package:st_ev_cfg/st_ev_cfg.dart';
-import './test_q_presenter.dart';
+import 'shared_utils.dart';
 
 void main() {
   //
@@ -17,6 +17,7 @@ void main() {
   */
 
   test('creates user answer & verifies new Questions generated from it', () {
+    final testDataCreate = TestDataCreation();
     final _questMgr = QuestListMgr();
     final _qMatchColl = QMatchCollection.scoretrader();
     expect(_questMgr.totalAnsweredQuestions, 0);
@@ -44,15 +45,21 @@ void main() {
       VisualRuleType.groupCfg,
       responseAddsRuleDetailQuests: true,
     );
-    QuestBase askNumSlots = QuestBase.dlogCascade(
-      qq,
-      'how many Grouping positions would you like to configure?',
-      ['0', '1', '$k_quests_created_in_test', '3'],
-      CaptureAndCast<int>((selCount) {
-        print('running convert on str $selCount');
-        return int.tryParse(selCount) ?? 0;
-      }),
-    );
+    // QuestBase askNumSlots = QuestBase.dlogCascade(
+    //   qq,
+    //   'how many Grouping positions would you like to configure?',
+    //   ['0', '1', '$k_quests_created_in_test', '3'],
+    //   CaptureAndCast<int>((selCount) {
+    //     print('running convert on str $selCount');
+    //     return int.tryParse(selCount) ?? 0;
+    //   }),
+    // );
+
+    QuestBase askNumSlots = testDataCreate.makeQuestion<int>(
+        qq, '', ['0', '1', '$k_quests_created_in_test', '3'], (selCount) {
+      print('running convert on str $selCount');
+      return int.tryParse(selCount) ?? 0;
+    });
 
     // add question to q-manager
     _questMgr.appendNewQuestions([askNumSlots]);
