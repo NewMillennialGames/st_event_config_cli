@@ -13,17 +13,12 @@ void main() {
   //   // askNumSlots = QuestBase.multiPrompt(qq, prompts, questId: 'test1');
   // });
 
-  /*  ah shoot ... just turned my phone on and maps says I'm 26 mins away
-      I have a zoom meeting at 11:15 
-      what other time will work 
-
-      you could also just leave the door open
-      I step inside without disturbing you 
-      whatever you think is best 
+  /*  
   */
 
   test('creates user answer & verifies new Questions generated from it', () {
     final _questMgr = QuestListMgr();
+    final _qMatchColl = QMatchCollection.scoretrader();
     expect(_questMgr.totalAnsweredQuestions, 0);
 
     List<RespGenWhenQuestLike> _autoResponseGenerators = [
@@ -71,7 +66,7 @@ void main() {
     questPresent.askAndWaitForUserResponse(dlogRun, quest);
 
     // next line should create 2 new Questions
-    appendNewQuestsOrInsertImplicitAnswers(_questMgr);
+    _qMatchColl.appendNewQuestsOrInsertImplicitAnswers(_questMgr);
 
     // need to bump QuestListMgr to next Quest2
     // to force prior into the answered queue

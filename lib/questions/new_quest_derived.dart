@@ -13,7 +13,7 @@ part of QuestionsLib;
 
 class PerQuestGenOptions<AnsType> {
   /*
-  describes logic and rules for a single auto-generated Quest2
+  describes logic and rules for a single auto-generated Question
   instance lives inside DerivedQuestGenerator.perQuestGenOptions
   */
   final Iterable<String> answerChoices;

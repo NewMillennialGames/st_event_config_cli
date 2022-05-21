@@ -10,27 +10,38 @@ part of ConfigDialogRunner;
 
 */
 
-// top level function to add new Questions or implicit answers
-void appendNewQuestsOrInsertImplicitAnswers(QuestListMgr questListMgr) {
+class QMatchCollection {
   //
-  QuestBase questJustAnswered = questListMgr._currentOrLastQuestion;
-  print(
-    'comparing "${questJustAnswered.questId}" to ${_matcherList.length} matchers for new quests',
-  );
-  for (QuestMatcher matchTest in _matcherList) {
-    if (matchTest.doesMatch(questJustAnswered)) {
-      print(
-        '*** it does match!!  addsPendingQuestions: ${matchTest.addsPendingQuestions}  createsImplicitAnswers: ${matchTest.createsImplicitAnswers}',
-      );
-      if (matchTest.addsPendingQuestions) {
-        List<QuestBase> newQuests =
-            matchTest.generatedQuestionsFor(questJustAnswered);
-        questListMgr.appendNewQuestions(newQuests);
-      }
-      if (matchTest.createsImplicitAnswers) {
-        questListMgr.addImplicitAnswers(
-          matchTest.generatedQuestionsFor(questJustAnswered),
+  List<QuestMatcher> _matcherList;
+
+  QMatchCollection(this._matcherList);
+
+  factory QMatchCollection.scoretrader() {
+    return QMatchCollection(_stDfltMatcherList);
+  }
+
+  // top level function to add new Questions or implicit answers
+  void appendNewQuestsOrInsertImplicitAnswers(QuestListMgr questListMgr) {
+    //
+    QuestBase questJustAnswered = questListMgr._currentOrLastQuestion;
+    print(
+      'comparing "${questJustAnswered.questId}" to ${_matcherList.length} matchers for new quests',
+    );
+    for (QuestMatcher matchTest in _matcherList) {
+      if (matchTest.doesMatch(questJustAnswered)) {
+        print(
+          '*** it does match!!  addsPendingQuestions: ${matchTest.addsPendingQuestions}  createsImplicitAnswers: ${matchTest.createsImplicitAnswers}',
         );
+        if (matchTest.addsPendingQuestions) {
+          List<QuestBase> newQuests =
+              matchTest.generatedQuestionsFor(questJustAnswered);
+          questListMgr.appendNewQuestions(newQuests);
+        }
+        if (matchTest.createsImplicitAnswers) {
+          questListMgr.addImplicitAnswers(
+            matchTest.generatedQuestionsFor(questJustAnswered),
+          );
+        }
       }
     }
   }
@@ -72,7 +83,7 @@ class QuestMatcher<AnsType> {
   final ScreenAreaWidgetSlot? slotInArea;
   final VisualRuleType? visRuleTypeForAreaOrSlot;
   final BehaviorRuleType? behRuleTypeForAreaOrSlot;
-  final bool isRuleQuest2;
+  final bool isRuleQuestion;
   final String questId;
   final DerivedQuestGenerator derQuestGen;
   late Type? typ = CaptureAndCast<AnsType>;
@@ -90,7 +101,7 @@ class QuestMatcher<AnsType> {
     this.slotInArea,
     this.visRuleTypeForAreaOrSlot,
     this.behRuleTypeForAreaOrSlot,
-    this.isRuleQuest2 = false,
+    this.isRuleQuestion = false,
   });
 
   // getters
@@ -146,7 +157,7 @@ class QuestMatcher<AnsType> {
     // print('behRuleTypeForAreaOrSlot matches: $dMatch');
 
     dMatch = dMatch &&
-        (this.isRuleQuest2 == false || quest.appliesToClientConfiguration);
+        (this.isRuleQuestion == false || quest.appliesToClientConfiguration);
     print('isRuleQuest2 matches: $dMatch');
 
     // dMatch =
@@ -155,7 +166,7 @@ class QuestMatcher<AnsType> {
   }
 }
 
-List<QuestMatcher> _matcherList = [
+List<QuestMatcher> _stDfltMatcherList = [
   // defines rules for adding new Questions or implicit answers
   // based on answers to prior Questions
 
@@ -186,6 +197,6 @@ List<QuestMatcher> _matcherList = [
     // if existing Quest2 is for grouping on ListView
     // make sure user said YES (they want grouping)
     validateUserAnswerAfterPatternMatchIsTrueCallback: (ans) => (ans ?? 0) > 0,
-    isRuleQuest2: false,
+    isRuleQuestion: false,
   ),
 ];

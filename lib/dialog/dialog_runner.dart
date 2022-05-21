@@ -16,6 +16,7 @@ class DialogRunner {
   final QuestionPresenter questPresenter;
   final int linesBetweenSections;
   final int linesBetweenQuest2s;
+  final QMatchCollection _qMatchColl;
   //
 
   DialogRunner(
@@ -24,7 +25,10 @@ class DialogRunner {
     this.linesBetweenSections = 3,
     this.linesBetweenQuest2s = 1,
     bool loadDefaultQuest = true,
-  }) : _qListMgr = qListMgr ?? QuestListMgr() {
+    QMatchCollection? qMatchColl,
+  })  : _qListMgr = qListMgr ?? QuestListMgr(),
+        _qMatchColl =
+            qMatchColl != null ? qMatchColl : QMatchCollection.scoretrader() {
     List<QuestBase> quests = loadInitialConfigQuestions();
     if (loadDefaultQuest) {
       _qListMgr.appendNewQuestions(quests);
@@ -64,7 +68,7 @@ class DialogRunner {
     bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(_qListMgr);
     if (!didAddNew) {
       // run appendNewQuestsOrInsertImplicitAnswers only if handleAcquiringNewQuestions does no work
-      appendNewQuestsOrInsertImplicitAnswers(_qListMgr);
+      _qMatchColl.appendNewQuestsOrInsertImplicitAnswers(_qListMgr);
     }
     // end of logic to add new Quest2s based on user response
 
@@ -110,7 +114,7 @@ class DialogRunner {
     if (!didAddNew && _quest.appliesToClientConfiguration) {
       // new version of handleAcquiringNewQuest2s
       // run it only if handleAcquiringNewQuest2s does no work
-      appendNewQuestsOrInsertImplicitAnswers(_qListMgr);
+      _qMatchColl.appendNewQuestsOrInsertImplicitAnswers(_qListMgr);
     }
     // end of logic to add new Questions based on user response
   }
