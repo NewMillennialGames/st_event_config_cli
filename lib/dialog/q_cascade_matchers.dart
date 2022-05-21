@@ -20,6 +20,10 @@ class QMatchCollection {
     return QMatchCollection(_stDfltMatcherList);
   }
 
+  void append(List<QuestMatcher> ml) {
+    _matcherList.addAll(ml);
+  }
+
   // top level function to add new Questions or implicit answers
   void appendNewQuestsOrInsertImplicitAnswers(QuestListMgr questListMgr) {
     //
@@ -44,6 +48,17 @@ class QMatchCollection {
         }
       }
     }
+  }
+
+  int matchCountFor(QuestBase quest) {
+    // mostly for testing
+    int cnt = 0;
+    for (QuestMatcher matchTest in _matcherList) {
+      if (matchTest.doesMatch(quest)) {
+        cnt++;
+      }
+    }
+    return cnt;
   }
 }
 

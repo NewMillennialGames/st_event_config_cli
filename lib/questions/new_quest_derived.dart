@@ -58,6 +58,16 @@ class DerivedQuestGenerator {
     required this.perQuestGenOptions,
   });
 
+  factory DerivedQuestGenerator.noop() {
+    // dummy rec for when we dont need to produce new questions
+    return DerivedQuestGenerator(
+      'no op',
+      newQuestCountCalculator: (qb) => 0,
+      newQuestArgGen: (a, ix) => [],
+      perQuestGenOptions: [],
+    );
+  }
+
   List<QuestBase> generatedQuestions(
     QuestBase answeredQuest,
     QuestMatcher? matcher,
