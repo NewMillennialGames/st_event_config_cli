@@ -16,22 +16,27 @@ selected by the user
 
 #### Hard problems that must be solved for this to work well
 
-Division between Quest2s that exist ONLY to structure an efficient dialog
+Division between Questions that exist ONLY to structure an efficient dialog
 and those that actually produce rule-output data (ui or behavioral config)
 for a specific screen, screen-area, or area-slot regions of the app
 
-Quest2s that receive SINGLE answer user-input
+Questions that receive SINGLE answer user-input
 And those that are multi-part  (sort on this field, plus descending vs ascending)
 
-Quest2s that are part of a group  (sort field #1, #2, #3)
+Questions that are part of a group (multi-prompt) (sort field #1, #2, #3)
 
-Variable output data-types (enum, class-instance, string, etc) between all possible answers
+Variable output data-types (enum, class-instance, string, etc) across all possible prompt answers
 
 Answers that generate either:
- 1. more new Quest2s
+ 1. more new Questions
  2. cascading implicit answers to new or pending Quest2s
 
 Casting answers to and from a JSON data structure
+
+To solve the above, we need:
+1. capture all user-responses as string
+2. cast strings to a generic type
+3. 
 
 
 #### Understanding organization of logic

@@ -30,11 +30,11 @@ class TestDataCreation {
 
 class TestQuestRespGen implements QuestionPresenter {
   // receives Questions for test-automation
-  List<RespGenWhenQuestLike> questionMatchers;
+  List<TestRespGenWhenQuestLike> questionMatchers;
 
   TestQuestRespGen(this.questionMatchers);
 
-  List<RespGenWhenQuestLike> _lookForResponseGenerators(QuestBase quest) {
+  List<TestRespGenWhenQuestLike> _lookForResponseGenerators(QuestBase quest) {
     //
     // if (!(quest is QuestVisualRule)) {
     //   //
@@ -42,8 +42,8 @@ class TestQuestRespGen implements QuestionPresenter {
     //   return [];
     // }
 
-    List<RespGenWhenQuestLike> lqm = [];
-    for (RespGenWhenQuestLike qm in questionMatchers) {
+    List<TestRespGenWhenQuestLike> lqm = [];
+    for (TestRespGenWhenQuestLike qm in questionMatchers) {
       //
       if (qm.matches(quest)) {
         lqm.add(qm);
@@ -55,13 +55,13 @@ class TestQuestRespGen implements QuestionPresenter {
   String? _buildUserResponse(
     QuestBase quest,
     QuestPromptInstance qpi,
-    List<RespGenWhenQuestLike> responseGenerators,
+    List<TestRespGenWhenQuestLike> responseGenerators,
   ) {
     //
     if (responseGenerators.length < 1) return null;
 
     VisRuleQuestType vqt = qpi.visQuestType;
-    for (RespGenWhenQuestLike wql in responseGenerators) {
+    for (TestRespGenWhenQuestLike wql in responseGenerators) {
       String? gendTestAnswer = wql.answerFor(vqt);
       if (gendTestAnswer != null) {
         return gendTestAnswer;
@@ -80,7 +80,7 @@ class TestQuestRespGen implements QuestionPresenter {
     QuestBase quest,
   ) {
     //
-    List<RespGenWhenQuestLike> responseGenerators =
+    List<TestRespGenWhenQuestLike> responseGenerators =
         _lookForResponseGenerators(quest);
     if (responseGenerators.length < 1) {
       // none so send default
@@ -129,7 +129,7 @@ class QTypeResponsePair {
   bool matches(VisRuleQuestType qt) => qt == qType || qType == null;
 }
 
-class RespGenWhenQuestLike {
+class TestRespGenWhenQuestLike {
   /*  Response to Generate when Question like:
 
   defines a QuestBase pattern
@@ -142,7 +142,7 @@ class RespGenWhenQuestLike {
   VisualRuleType? ruleType;
   List<QTypeResponsePair> responsesByQType;
 
-  RespGenWhenQuestLike(
+  TestRespGenWhenQuestLike(
     this.screen,
     this.area,
     this.ruleType, {

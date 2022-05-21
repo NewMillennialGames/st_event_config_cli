@@ -277,6 +277,16 @@ abstract class QuestBase with EquatableMixin {
 
   @override
   bool get stringify => true;
+
+  void setAllAnswersWhileTesting(List<String> userResponses) {
+    // test code only
+    int idx = 0;
+    for (QuestPromptInstance qpi in qPromptCollection.questIterations) {
+      //
+      qpi.collectResponse(userResponses[idx]);
+      idx++;
+    }
+  }
 }
 
 class Quest1Prompt extends QuestBase {

@@ -58,8 +58,15 @@ void main() {
         'should NOT match',
         MatcherBehaviorEnum.addPendingQuestions,
         DerivedQuestGenerator.noop(),
-        validateUserAnswerAfterPatternMatchIsTrueCallback: (p0) => false,
+        validateUserAnswerAfterPatternMatchIsTrueCallback: (p0) => true,
         appScreen: AppScreen.eventConfiguration,
+      ),
+      QuestMatcher(
+        'should NOT match',
+        MatcherBehaviorEnum.addPendingQuestions,
+        DerivedQuestGenerator.noop(),
+        validateUserAnswerAfterPatternMatchIsTrueCallback: (p0) => false,
+        appScreen: AppScreen.leaderboard,
       ),
     ]);
     expect(_qMatchColl.matchCountFor(askNumSlots), 2);
