@@ -71,7 +71,7 @@ final List<QuestBase> _Quest2Lst = [
   */
   QuestBase.infoOrCliCfg(
     QTargetIntent.eventLevel(),
-    '',
+    DlgStr.eventName,
     [],
     CaptureAndCast<String>((s) => s),
     questId: QuestionIdStrings.eventName,

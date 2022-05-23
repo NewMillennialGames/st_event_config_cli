@@ -57,7 +57,7 @@ void createOutputFileFromResponses(
   );
   final evCfg = EventCfgTree.fromEventLevelConfig(eventConfigLevelData);
   // create the per-area or per-slot rules
-  var ruleResponses = exportableQuest2s.whereType<Quest1Prompt>();
+  var ruleResponses = exportableQuest2s.whereType<QuestVisualRule>();
   // print('ruleResponse answer count: ${ruleResponses.length}');
   evCfg.fillFromVisualRuleAnswers(ruleResponses);
   // now dump evCfg to file

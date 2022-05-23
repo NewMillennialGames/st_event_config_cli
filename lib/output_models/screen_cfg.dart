@@ -34,7 +34,7 @@ class ScreenCfgByArea {
   }
 
   void appendRule(
-    Quest1Prompt rQuest,
+    QuestVisualRule rQuest,
   ) {
     //
     var swa = rQuest.screenWidgetArea;

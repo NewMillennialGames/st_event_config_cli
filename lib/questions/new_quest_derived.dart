@@ -11,33 +11,28 @@ part of QuestionsLib;
 
 */
 
-class PerQuestGenOptions<AnsType> {
+class PerQuestGenOption<AnsType> {
   /*
   describes logic and rules for a single auto-generated Question
   instance lives inside DerivedQuestGenerator.perQuestGenOptions
   */
-  final Iterable<String> answerChoices;
+
   final CastStrToAnswTypCallback<AnsType> castFunc;
-  late final QTargetIntentUpdateFunc qTargetIntentUpdater;
   final int defaultAnswerIdx = 0;
   final String questId;
   final VisualRuleType? ruleType;
   final VisRuleQuestType? ruleQuestType;
 
-  PerQuestGenOptions({
-    required this.answerChoices,
+  PerQuestGenOption({
+    // required this.answerChoiceGenerator,
     required this.castFunc,
-    QTargetIntentUpdateFunc? qTargetIntentUpdaterArg,
     this.questId = '',
     this.ruleType,
     this.ruleQuestType,
-  }) : this.qTargetIntentUpdater =
-            qTargetIntentUpdaterArg == null ? _noOp : qTargetIntentUpdaterArg;
+  });
 
   Type get genType => AnsType;
   bool get genAsRuleQuestion => ruleType != null;
-
-  static QTargetIntent _noOp(QTargetIntent qq, int idx) => qq;
 }
 
 class DerivedQuestGenerator {
@@ -46,29 +41,40 @@ class DerivedQuestGenerator {
     should indicate what new Quest2s to ask
   */
 
-  String questTemplate;
-  NewQuestCount newQuestCountCalculator;
-  NewQuestArgGen newQuestArgGen;
-  List<PerQuestGenOptions> perQuestGenOptions;
+  final String questPromptTemplate;
+  final NewQuestCount newQuestCountCalculator;
+  final NewQuestArgGen newQuestPromptArgGen;
+  final ChoiceListFromPriorAnswer answerChoiceGenerator;
+  final QTargetIntentUpdateFunc qTargetIntentUpdater;
+  final List<PerQuestGenOption> perQuestGenOptions;
 
   DerivedQuestGenerator(
-    this.questTemplate, {
+    this.questPromptTemplate, {
     required this.newQuestCountCalculator,
-    required this.newQuestArgGen,
+    required this.newQuestPromptArgGen,
+    required this.answerChoiceGenerator,
+    QTargetIntentUpdateFunc? qTargetIntentUpdaterArg,
     required this.perQuestGenOptions,
-  });
+  }) : this.qTargetIntentUpdater = qTargetIntentUpdaterArg == null
+            ? _ccTargIntent
+            : qTargetIntentUpdaterArg;
+
+  static QTargetIntent _ccTargIntent(QuestBase qb, int idx) =>
+      qb.qTargetIntent.copyWith();
 
   factory DerivedQuestGenerator.noop() {
     // dummy rec for when we dont need to produce new questions
+    // eg testing
     return DerivedQuestGenerator(
       'no op',
       newQuestCountCalculator: (qb) => 0,
-      newQuestArgGen: (a, ix) => [],
+      newQuestPromptArgGen: (a, ix) => [],
+      answerChoiceGenerator: (_, __) => [],
       perQuestGenOptions: [],
     );
   }
 
-  List<QuestBase> generatedQuestions(
+  List<QuestBase> getDerivedAutoGenQuestions(
     QuestBase answeredQuest,
     QuestMatcher? matcher,
   ) {
@@ -79,41 +85,63 @@ class DerivedQuestGenerator {
     int toCreate = newQuestCountCalculator(answeredQuest);
     if (toCreate < 1) return [];
 
-    List<QuestBase> createdQuest = [];
+    List<QuestBase> createdQuests = [];
     for (int i = 0; i < toCreate; i++) {
       //
-      List<String> templArgs = newQuestArgGen(answeredQuest, i);
-      String newQuestStr = questTemplate.format(templArgs);
+      List<String> templArgs = newQuestPromptArgGen(answeredQuest, i);
+      String newQuestStr = questPromptTemplate.format(templArgs);
 
-      PerQuestGenOptions genOptionsAtIdx = perQuestGenOptions.length <= i
-          ? perQuestGenOptions.last
-          : perQuestGenOptions[i];
+      PerQuestGenOption instcGenOpt = perQuestGenOptions.length > i
+          ? perQuestGenOptions[i]
+          : perQuestGenOptions.last;
       //
-      QuestBase nxtQuest;
 
       QTargetIntent targIntent = answeredQuest.qTargetIntent;
       QuestFactorytSignature newQuestConstructor =
           targIntent.preferredQuestionConstructor;
 
-      // targIntent = targIntent.
+      // values required to build new question:
 
-      if (genOptionsAtIdx.genAsRuleQuestion) {
-        nxtQuest = newQuestConstructor(targIntent, []);
-        // nxtQuest = QuestBase.makeFromExisting(
-        //   answeredQuest,
-        //   newQuestStr,
-        //   genOptionsAtIdx,
-        // );
-      } else {
-        // nxtQuest = answeredQuest.fromExisting(
-        //   newQuestStr,
-        //   genOptionsAtIdx,
-        // );
-      }
+      // convert old (answered) targIntent into one for new question
+      targIntent = qTargetIntentUpdater(answeredQuest, i);
 
-      nxtQuest = newQuestConstructor(targIntent, []);
-      createdQuest.add(nxtQuest);
+      String _userPrompt = questPromptTemplate.format(
+        newQuestPromptArgGen(
+          answeredQuest,
+          i,
+        ),
+      );
+      List<QuestPromptPayload> newQuestPrompts = [
+        QuestPromptPayload(
+          _userPrompt,
+          answerChoiceGenerator(answeredQuest.mainAnswer, i).toList(),
+          instcGenOpt.ruleQuestType ?? VisRuleQuestType.dialogStruct,
+          instcGenOpt.castFunc,
+        ),
+      ];
+
+      QuestBase nxtQuest = newQuestConstructor(
+        targIntent,
+        newQuestPrompts,
+        questId: instcGenOpt.questId,
+      );
+      createdQuests.add(nxtQuest);
     }
-    return createdQuest;
+    return createdQuests;
   }
 }
+
+
+      // if (genOptionsAtIdx.genAsRuleQuestion) {
+      //   nxtQuest = newQuestConstructor(targIntent, []);
+      //   // nxtQuest = QuestBase.makeFromExisting(
+      //   //   answeredQuest,
+      //   //   newQuestStr,
+      //   //   genOptionsAtIdx,
+      //   // );
+      // } else {
+      //   // nxtQuest = answeredQuest.fromExisting(
+      //   //   newQuestStr,
+      //   //   genOptionsAtIdx,
+      //   // );
+      // }

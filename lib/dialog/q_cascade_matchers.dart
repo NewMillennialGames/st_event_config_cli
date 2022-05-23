@@ -11,7 +11,10 @@ part of ConfigDialogRunner;
 */
 
 class QMatchCollection {
-  //
+  /*  use basic constructor for testing
+      use factory QMatchCollection.scoretrader
+      for real CLI usage
+  */
   List<QuestMatcher> _matcherList;
 
   QMatchCollection(this._matcherList);
@@ -38,12 +41,12 @@ class QMatchCollection {
         );
         if (matchTest.addsPendingQuestions) {
           List<QuestBase> newQuests =
-              matchTest.generatedQuestionsFor(questJustAnswered);
+              matchTest.getDerivedAutoGenQuestions(questJustAnswered);
           questListMgr.appendNewQuestions(newQuests);
         }
         if (matchTest.createsImplicitAnswers) {
           questListMgr.addImplicitAnswers(
-            matchTest.generatedQuestionsFor(questJustAnswered),
+            matchTest.getDerivedAutoGenQuestions(questJustAnswered),
           );
         }
       }
@@ -125,8 +128,8 @@ class QuestMatcher<AnsType> {
       matcherMatchBehavior.createsImplicitAnswers;
 
   // public methods
-  List<QuestBase> generatedQuestionsFor(QuestBase quest) =>
-      derQuestGen.generatedQuestions(quest, this);
+  List<QuestBase> getDerivedAutoGenQuestions(QuestBase quest) =>
+      derQuestGen.getDerivedAutoGenQuestions(quest, this);
 
   bool doesMatch(QuestBase quest) {
     bool isAPatternMatch =
@@ -185,21 +188,60 @@ List<QuestMatcher> _stDfltMatcherList = [
   // defines rules for adding new Questions or implicit answers
   // based on answers to prior Questions
 
+  QuestMatcher<List<ScreenWidgetArea>>(
+    'choose configurable areas on selected screens',
+    MatcherBehaviorEnum.addPendingQuestions,
+    DerivedQuestGenerator(
+      'Select areas to configure on screen {0}',
+      newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
+        return (priorAnsweredQuest.mainAnswer as List<AppScreen>).length;
+      },
+      newQuestPromptArgGen: (QuestBase priorAnsweredQuest, int idx) {
+        return [(priorAnsweredQuest.mainAnswer as List<AppScreen>)[idx].name];
+      },
+      answerChoiceGenerator: ((dynamic priorAnswer, int idx) {
+        var selectedAppScreens = priorAnswer as List<AppScreen>;
+        return selectedAppScreens[idx]
+            .configurableScreenAreas
+            .map((e) => e.name);
+      }),
+      qTargetIntentUpdaterArg: (QuestBase qb, int idx) =>
+          qb.qTargetIntent.copyWith(appScreen: qb.qTargetIntent.appScreen),
+      perQuestGenOptions: [
+        PerQuestGenOption(
+          castFunc: (String lstAreaIdxs) {
+            return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
+                .map((i) => ScreenWidgetArea.values[i]);
+          },
+        ),
+      ],
+    ),
+    cascadeType: QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea,
+    questId: QuestionIdStrings.selectAppScreens,
+    validateUserAnswerAfterPatternMatchIsTrueCallback: (ans) => true,
+    isRuleQuestion: false,
+  ),
+
   QuestMatcher<int>(
     'if user wants to perform grouping on a ListView, ask how many grouping cols are required & add a Questions for each',
     MatcherBehaviorEnum.addPendingQuestions,
     DerivedQuestGenerator(
       'Select field #{0} to use for row-grouping on {1} screen',
       newQuestCountCalculator: (q) => (q.mainAnswer) as int,
-      newQuestArgGen: (quest, idx) =>
+      newQuestPromptArgGen: (quest, idx) =>
           <String>['${idx + 1}', quest.appScreen.name],
+      answerChoiceGenerator: ((priorAnswer, idx) {
+        var selectedAppScreens = priorAnswer as List<AppScreen>;
+        return selectedAppScreens[idx]
+            .configurableScreenAreas
+            .map((e) => e.name);
+      }),
+      qTargetIntentUpdaterArg: (QuestBase qb, int idx) =>
+          qb.qTargetIntent.copyWith(appScreen: qb.qTargetIntent.appScreen),
       perQuestGenOptions: [
-        PerQuestGenOptions(
-          answerChoices: DbTableFieldName.values.map((e) => e.name),
+        PerQuestGenOption(
           castFunc: (ansr) => DbTableFieldName
               .values[int.tryParse(ansr) ?? CfgConst.cancelSortIndex],
-          qTargetIntentUpdaterArg: (qq, idx) =>
-              qq.copyWith(visRuleTypeForAreaOrSlot: VisualRuleType.groupCfg),
           ruleType: VisualRuleType.groupCfg,
           ruleQuestType: VisRuleQuestType.selectDataFieldName,
         ),
@@ -209,7 +251,7 @@ List<QuestMatcher> _stDfltMatcherList = [
     cascadeType: QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea,
     screenWidgetArea: ScreenWidgetArea.tableview,
     visRuleTypeForAreaOrSlot: VisualRuleType.groupCfg,
-    // if existing Quest2 is for grouping on ListView
+    // if existing Question is for grouping on ListView
     // make sure user said YES (they want grouping)
     validateUserAnswerAfterPatternMatchIsTrueCallback: (ans) => (ans ?? 0) > 0,
     isRuleQuestion: false,

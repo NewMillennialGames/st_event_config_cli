@@ -195,6 +195,8 @@ abstract class QuestBase with EquatableMixin {
     return l;
   }
 
+  // getters
+  Iterable<CaptureAndCast> get listResponses => qPromptCollection.listResponses;
   List<String> get allUserAnswers => qPromptCollection.questIterations
       .map((qi) => qi.userAnswers._answers)
       .toList();
@@ -211,15 +213,13 @@ abstract class QuestBase with EquatableMixin {
   // Caution --- below may not work
   Type get expectedAnswerType => _firstPromptAnswers.cast().runtimeType;
 
-  // getters
-  // QuestPromptInstance? get currQuest2 => _currQuest2;
   bool get existsONLYToGenDialogStructure =>
-      qTargetIntent.isTopLevelConfigOrScreenQuest2;
+      qTargetIntent.isTopLevelConfigOrScreenQuestion;
   bool get isNotForRuleOutput => existsONLYToGenDialogStructure;
   bool get isMultiPart => qPromptCollection.isMultiPart;
 
   bool get isTopLevelConfigOrScreenQuest2 =>
-      qTargetIntent.isTopLevelConfigOrScreenQuest2;
+      qTargetIntent.isTopLevelConfigOrScreenQuestion;
   // bool get hasChoices => _currQuest2?.hasChoices ?? false;
   // quantified info
   AppScreen get appScreen => qTargetIntent.appScreen;
@@ -231,8 +231,6 @@ abstract class QuestBase with EquatableMixin {
   BehaviorRuleType? get behRuleTypeForAreaOrSlot =>
       qTargetIntent.behRuleTypeForAreaOrSlot;
   //
-  Iterable<CaptureAndCast> get listResponses => qPromptCollection.listResponses;
-
   // below controls how each Quest2 causes cascade creation of new Quest2s
   bool get generatesNoNewQuest2s => qTargetIntent.generatesNoNewQuest2s;
   bool get addsRuleDetailQuestsForSlotOrArea =>

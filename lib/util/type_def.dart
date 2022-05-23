@@ -11,6 +11,8 @@ typedef QuestFactorytSignature = QuestBase Function(
 typedef SubmitUserResponseFunc = void Function(String);
 // for casting string into expected rule-type value
 typedef CastStrToAnswTypCallback<T> = T Function(String);
+typedef ChoiceListFromPriorAnswer<T> = Iterable<String> Function(
+    T priorAnswer, int idx);
 //
 typedef AddQuestChkCallbk = bool Function(dynamic);
 typedef GroupingRules = Tuple3<TvGroupCfg, TvGroupCfg?, TvGroupCfg?>;
@@ -24,8 +26,7 @@ typedef NewQuestArgGen = List<String> Function(QuestBase, int);
 
 // when auto-generating questions (from prior answers)
 // this function lets you pass in the source QTI and get a new one back
-typedef QTargetIntentUpdateFunc = QTargetIntent Function(
-    QTargetIntent qti, int idx);
+typedef QTargetIntentUpdateFunc = QTargetIntent Function(QuestBase ab, int idx);
 
 
 // typedef RuleQuestTypTup = Tuple2<VisualRuleType, VisRuleQuestType>;

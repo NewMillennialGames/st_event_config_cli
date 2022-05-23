@@ -145,7 +145,7 @@ class EventCfgTree {
   }
 
   void fillFromVisualRuleAnswers(
-    Iterable<Quest1Prompt> answeredQuest2s,
+    Iterable<QuestVisualRule> answeredQuestions,
   ) {
     /*  part of instance construction
       receive all vis-rule-Quest2s, and fill
@@ -153,9 +153,9 @@ class EventCfgTree {
         that will customize the client UI
     */
     print(
-      'fillFromVisualRuleAnswers got ${answeredQuest2s.length} answeredQuest2s',
+      'fillFromVisualRuleAnswers got ${answeredQuestions.length} answeredQuestions',
     );
-    for (Quest1Prompt rQuest in answeredQuest2s) {
+    for (QuestVisualRule rQuest in answeredQuestions) {
       // look up or create it
       ScreenCfgByArea screenCfg = this.screenConfigMap[rQuest.appScreen] ??
           ScreenCfgByArea(rQuest.appScreen, {});

@@ -73,7 +73,7 @@ class QTargetIntent extends Equatable
   // equatableKey must be distinct & unique
   String get equatableKey => sortKey;
 
-  bool get isTopLevelConfigOrScreenQuest2 =>
+  bool get isTopLevelConfigOrScreenQuestion =>
       appScreen == AppScreen.eventConfiguration &&
       screenWidgetArea == null &&
       slotInArea == null &&
