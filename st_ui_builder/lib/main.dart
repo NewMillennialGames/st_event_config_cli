@@ -55,7 +55,9 @@ void main() async {
     ProviderScope(
       child: ScreenUtilInit(
         designSize: const Size(390, 844),
-        builder: (context) => const Scoretrader(),
+        builder: (BuildContext context, Widget? child) {
+          return const Scoretrader();
+        },
       ),
       overrides: [
         currEventProvider.overrideWithValue(Event()),
@@ -183,7 +185,7 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
           ),
           Container(
             height: hasColumnFilters ? 500.h : 740.h,
-            padding:  EdgeInsets.fromLTRB(20.w, 0, 20.w, 10.h),
+            padding: EdgeInsets.fromLTRB(20.w, 0, 20.w, 10.h),
             child: GroupedListView<TableviewDataRowTuple, GroupHeaderData>(
               elements: tvMgr.listData,
               groupBy: tvMgr.groupBy,

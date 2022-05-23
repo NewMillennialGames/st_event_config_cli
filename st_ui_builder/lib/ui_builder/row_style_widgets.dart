@@ -318,7 +318,7 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
     ActiveGameDetails agd,
   ) {
     //
-    bool hasIncreased = comp1.recentPriceDelta > 0;
+    bool hasIncreased = comp1.recentPriceDelta >= 0;
     String sharePrice = comp1.currPriceStr;
     String sharePriceChange = comp1.recentDeltaStr;
     TextStyle gainLossTxtStyle = hasIncreased
