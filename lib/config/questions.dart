@@ -148,22 +148,13 @@ final List<QuestBase> _Quest2Lst = [
   ],
   // ask which screens to configure
   QuestBase.dlogCascade(
-    QTargetIntent.eventLevel(responseAddsWhichAreaQuest2s: true),
+    QTargetIntent.eventLevel(responseAddsWhichAreaQuestions: true),
     // QDefCollection([]),
     DlgStr.selectAppScreens, // <String, List<AppScreen>>
     AppScreen.eventConfiguration.topConfigurableScreens.map((e) => e.name),
     CaptureAndCast<List<AppScreen>>((s) => castStrOfIdxsToIterOfInts(s)
         .map((idx) => AppScreen.eventConfiguration.topConfigurableScreens[idx])
         .toList()),
-    // (String strLstIdxs) {
-    //   //
-    //   return castStrOfIdxsToIterOfInts(strLstIdxs)
-    //       .map(
-    //           (idx) => AppScreen.eventConfiguration.topConfigurableScreens[idx])
-    //       .toList();
-    // },
-    // acceptsMultiResponses: true,
-    // isNotForOutput: true,
     questId: QuestionIdStrings.selectAppScreens,
   ),
   // after user selects desired screens to configure, then

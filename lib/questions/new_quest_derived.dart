@@ -82,20 +82,12 @@ class DerivedQuestGenerator {
     plus logic defined in both this and PerQuestGenOptions
     to build and return a list of new Questions
     */
-    int toCreate = newQuestCountCalculator(answeredQuest);
-    if (toCreate < 1) return [];
+    int newQuestCount = newQuestCountCalculator(answeredQuest);
+    if (newQuestCount < 1) return [];
 
     List<QuestBase> createdQuests = [];
-    for (int i = 0; i < toCreate; i++) {
+    for (int newQIdx = 0; newQIdx < newQuestCount; newQIdx++) {
       //
-      List<String> templArgs = newQuestPromptArgGen(answeredQuest, i);
-      String newQuestStr = questPromptTemplate.format(templArgs);
-
-      PerQuestGenOption instcGenOpt = perQuestGenOptions.length > i
-          ? perQuestGenOptions[i]
-          : perQuestGenOptions.last;
-      //
-
       QTargetIntent targIntent = answeredQuest.qTargetIntent;
       QuestFactorytSignature newQuestConstructor =
           targIntent.preferredQuestionConstructor;
@@ -103,18 +95,19 @@ class DerivedQuestGenerator {
       // values required to build new question:
 
       // convert old (answered) targIntent into one for new question
-      targIntent = qTargetIntentUpdater(answeredQuest, i);
+      targIntent = qTargetIntentUpdater(answeredQuest, newQIdx);
 
-      String _userPrompt = questPromptTemplate.format(
-        newQuestPromptArgGen(
-          answeredQuest,
-          i,
-        ),
-      );
+      List<String> templArgs = newQuestPromptArgGen(answeredQuest, newQIdx);
+      String _userPrompt = questPromptTemplate.format(templArgs);
+
+      PerQuestGenOption instcGenOpt = perQuestGenOptions.length > newQIdx
+          ? perQuestGenOptions[newQIdx]
+          : perQuestGenOptions.last;
+
       List<QuestPromptPayload> newQuestPrompts = [
         QuestPromptPayload(
           _userPrompt,
-          answerChoiceGenerator(answeredQuest.mainAnswer, i).toList(),
+          answerChoiceGenerator(answeredQuest.mainAnswer, newQIdx).toList(),
           instcGenOpt.ruleQuestType ?? VisRuleQuestType.dialogStruct,
           instcGenOpt.castFunc,
         ),

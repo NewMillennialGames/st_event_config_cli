@@ -15,25 +15,24 @@ void main() {
 
   /*  
   */
-  // test(
-  //   'simply see if new questions get created based on gen-rules',
-  //   () {
-  //     //
-  //     final testDataCreate = TestDataCreation();
-  //         final qq = QTargetIntent.areaLevelRules(
-  //     AppScreen.marketView,
-  //     ScreenWidgetArea.tableview,
-  //     VisualRuleType.groupCfg,
-  //     responseAddsRuleDetailQuests: true,
-  //   );
-  //   QuestBase askNumSlots = testDataCreate.makeQuestion<int>(
-  //       qq, '', ['0', '1', '$k_quests_created_in_test', '3'], (selCount) {
-  //     print('askNumSlots convert on str $selCount');
-  //     return int.tryParse(selCount) ?? 0;
-  //   });
-
-  //   },
-  // );
+  test(
+    'simply see if new questions get created based on gen-rules',
+    () {
+      //
+      final testDataCreate = TestDataCreation();
+      final qq = QTargetIntent.areaLevelRules(
+        AppScreen.marketView,
+        ScreenWidgetArea.tableview,
+        VisualRuleType.groupCfg,
+        responseAddsRuleDetailQuests: true,
+      );
+      QuestBase askNumSlots = testDataCreate.makeQuestion<int>(
+          qq, '', ['0', '1', '$k_quests_created_in_test', '3'], (selCount) {
+        print('askNumSlots convert on str $selCount');
+        return int.tryParse(selCount) ?? 0;
+      });
+    },
+  );
 
   test('creates user answer & verifies new Questions generated from it', () {
     final testDataCreator = TestDataCreation();

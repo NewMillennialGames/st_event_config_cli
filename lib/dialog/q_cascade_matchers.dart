@@ -92,7 +92,7 @@ class QuestMatcher<AnsType> {
   */
   final MatcherBehaviorEnum matcherMatchBehavior;
   // AddQuestChkCallbk is for doing more advanced analysis to verify a match
-  final AddQuestChkCallbk validateUserAnswerAfterPatternMatchIsTrueCallback;
+  final AddQuestChkCallbk? validateUserAnswerAfterPatternMatchIsTrueCallback;
   // cascadeType indicates whether we add new Quest2s, auto-answers or both
   final QRespCascadePatternEm? cascadeType;
   // pattern matching values;  leave null to not match on them
@@ -111,7 +111,7 @@ class QuestMatcher<AnsType> {
     this.matcherDescrip,
     this.matcherMatchBehavior,
     this.derQuestGen, {
-    required this.validateUserAnswerAfterPatternMatchIsTrueCallback,
+    this.validateUserAnswerAfterPatternMatchIsTrueCallback,
     this.cascadeType,
     this.questId = '-na',
     this.appScreen,
@@ -138,8 +138,11 @@ class QuestMatcher<AnsType> {
     if (!isAPatternMatch) return false;
 
     // pattern match succeeded, so now validate user answer
-    bool userRespValueIsAMatch =
-        validateUserAnswerAfterPatternMatchIsTrueCallback(quest.mainAnswer);
+    bool userRespValueIsAMatch = true;
+    if (validateUserAnswerAfterPatternMatchIsTrueCallback != null) {
+      userRespValueIsAMatch =
+          validateUserAnswerAfterPatternMatchIsTrueCallback!(quest.mainAnswer);
+    }
     isAPatternMatch = isAPatternMatch && userRespValueIsAMatch;
     return isAPatternMatch;
   }
@@ -189,7 +192,7 @@ List<QuestMatcher> _stDfltMatcherList = [
   // based on answers to prior Questions
 
   QuestMatcher<List<ScreenWidgetArea>>(
-    'choose configurable areas on selected screens',
+    'build ?`s to specify configured areas on selected screens',
     MatcherBehaviorEnum.addPendingQuestions,
     DerivedQuestGenerator(
       'Select areas to configure on screen {0}',

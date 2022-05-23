@@ -110,7 +110,7 @@ class QTargetIntent extends Equatable
   */
 
   factory QTargetIntent.eventLevel({
-    bool responseAddsWhichAreaQuest2s = false,
+    bool responseAddsWhichAreaQuestions = false,
   }) {
     /*
       sample Quest2:    for this event:
@@ -120,7 +120,7 @@ class QTargetIntent extends Equatable
     */
     return QTargetIntent(
       // QIntentCfg.eventLevel(),
-      responseAddsWhichAreaQuest2s
+      responseAddsWhichAreaQuestions
           ? QRespCascadePatternEm.addsWhichAreaInSelectedScreenQuest2s
           : QRespCascadePatternEm.noCascade,
       AppScreen.eventConfiguration,
