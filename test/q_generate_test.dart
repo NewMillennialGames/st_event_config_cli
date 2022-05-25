@@ -10,34 +10,15 @@ void main() {
   //
   const k_quests_created_in_test = 2;
 
-  // late QuestBase askNumSlots;
-  // setUp(() {
-  //   // askNumSlots = QuestBase.multiPrompt(qq, prompts, questId: 'test1');
-  // });
-
   /*  
   */
   test(
     'simply see if new questions get created based on gen-rules',
     () {
       //
-      // final testDataCreate = TestDataCreation();
-      // final qq = QTargetIntent.areaLevelRules(
-      //   AppScreen.marketView,
-      //   ScreenWidgetArea.tableview,
-      //   VisualRuleType.groupCfg,
-      //   responseAddsRuleDetailQuests: true,
-      // );
-      // QuestBase askNumSlots = testDataCreate.makeQuestion<int>(
-      //     qq, '', ['0', '1', '$k_quests_created_in_test', '3'], (selCount) {
-      //   print('askNumSlots convert on str $selCount');
-      //   return int.tryParse(selCount) ?? 0;
-      // });
-
       // ask which screens to configure
       QuestBase askScreens = QuestBase.dlogCascade(
         QTargetIntent.eventLevel(responseAddsWhichAreaQuestions: true),
-        // QDefCollection([]),
         DlgStr.selectAppScreens, // <String, List<AppScreen>>
         AppScreen.eventConfiguration.topConfigurableScreens.map((e) => e.name),
         CaptureAndCast<List<AppScreen>>((s) => castStrOfIdxsToIterOfInts(s)
@@ -46,6 +27,24 @@ void main() {
             .toList()),
         questId: QuestionIdStrings.selectAppScreens,
       );
+
+      final _questMgr = QuestListMgr();
+      final _qMatchColl = QMatchCollection.scoretrader();
+
+      _questMgr.appendNewQuestions([askScreens]);
+
+      QuestBase quest = _questMgr.nextQuestionToAnswer()!;
+      // provide answers
+      quest.setAllAnswersWhileTesting(['1,2']);
+
+      // need to bump QuestListMgr to next (null) Question
+      // to force prior into the answered queue
+      QuestBase? nullQuest = _questMgr.nextQuestionToAnswer();
+
+      // next line should create 2 new Questions
+      _qMatchColl.appendNewQuestsOrInsertImplicitAnswers(_questMgr);
+      expect(_questMgr.priorAnswerCount, 1);
+      expect(_questMgr.pendingQuestionCount, 2);
     },
   );
 
@@ -55,23 +54,6 @@ void main() {
     final _qMatchColl = QMatchCollection.scoretrader();
     expect(_questMgr.totalAnsweredQuestions, 0);
 
-    // List<TestRespGenWhenQuestLike> _autoResponseGenerators = [
-    //   TestRespGenWhenQuestLike(
-    //     AppScreen.marketView,
-    //     ScreenWidgetArea.tableview,
-    //     VisualRuleType.groupCfg,
-    //     responsesByQType: [
-    //       QTypeResponsePair(
-    //         VisRuleQuestType.dialogStruct,
-    //         '2',
-    //       ),
-    //     ],
-    //   )
-    // ];
-    // QuestionPresenter testQuestPresenter =
-    //     TestQuestRespGen(_autoResponseGenerators);
-    // DialogRunner dlogRun = DialogRunner(testQuestPresenter);
-    //
     // now create user question
     final qq = QTargetIntent.areaLevelRules(
       AppScreen.marketView,
