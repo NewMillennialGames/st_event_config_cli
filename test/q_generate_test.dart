@@ -35,7 +35,7 @@ void main() {
 
       QuestBase quest = _questMgr.nextQuestionToAnswer()!;
       // provide answers
-      quest.setAllAnswersWhileTesting(['1,2']);
+      quest.setAllAnswersWhileTesting(['0,1']);
 
       // need to bump QuestListMgr to next (null) Question
       // to force prior into the answered queue
@@ -45,6 +45,12 @@ void main() {
       _qMatchColl.appendNewQuestsOrInsertImplicitAnswers(_questMgr);
       expect(_questMgr.priorAnswerCount, 1);
       expect(_questMgr.pendingQuestionCount, 2);
+
+      for (QuestBase q in _questMgr.pendingQuestions) {
+        print(
+          'QuestMatcher created:  ${q.firstQuestion.userPrompt}  ${q.questId}',
+        );
+      }
     },
   );
 
