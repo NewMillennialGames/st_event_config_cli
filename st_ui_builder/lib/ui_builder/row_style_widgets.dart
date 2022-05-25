@@ -13,7 +13,7 @@ we have one style for each value of:
 final _redrawAssetRowProvider = StateProvider<bool>((ref) => false);
 
 class AssetVsAssetRowMktView extends StBaseTvRow
-    with ShowsTwoAssets, RequiresGameStatus, RequiresUserPositionProps {
+    with ShowsTwoAssets, RequiresGameStatus {
   //
   bool get showRank => false;
 
@@ -33,9 +33,9 @@ class AssetVsAssetRowMktView extends StBaseTvRow
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        AssetVsAssetHalfRow(comp1, agd, showRank, assetHoldingsSummary),
+        AssetVsAssetHalfRow(comp1, agd, showRank, comp1.assetHoldingsSummary),
         SizedBox(height: UiSizes.spaceBtwnRows),
-        AssetVsAssetHalfRow(comp2, agd, showRank, assetHoldingsSummary),
+        AssetVsAssetHalfRow(comp2, agd, showRank, comp2.assetHoldingsSummary)
       ],
     );
   }
@@ -302,7 +302,7 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
   bool get isTeamPlayerVsField => false;
 
   // proceeds apply to a SALE
-  bool get showProceeds => true;
+  bool get showProceeds => false;
 
   // holdings apply to what you currently own
   bool get showHoldingsValue => !showProceeds;
