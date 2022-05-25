@@ -1,7 +1,9 @@
-import 'package:st_ev_cfg/interfaces/q_presenter.dart';
 import 'package:test/test.dart';
 //
 import 'package:st_ev_cfg/st_ev_cfg.dart';
+import 'package:st_ev_cfg/config/all.dart';
+import 'package:st_ev_cfg/util/all.dart';
+//
 import 'shared_utils.dart';
 
 void main() {
@@ -19,18 +21,31 @@ void main() {
     'simply see if new questions get created based on gen-rules',
     () {
       //
-      final testDataCreate = TestDataCreation();
-      final qq = QTargetIntent.areaLevelRules(
-        AppScreen.marketView,
-        ScreenWidgetArea.tableview,
-        VisualRuleType.groupCfg,
-        responseAddsRuleDetailQuests: true,
+      // final testDataCreate = TestDataCreation();
+      // final qq = QTargetIntent.areaLevelRules(
+      //   AppScreen.marketView,
+      //   ScreenWidgetArea.tableview,
+      //   VisualRuleType.groupCfg,
+      //   responseAddsRuleDetailQuests: true,
+      // );
+      // QuestBase askNumSlots = testDataCreate.makeQuestion<int>(
+      //     qq, '', ['0', '1', '$k_quests_created_in_test', '3'], (selCount) {
+      //   print('askNumSlots convert on str $selCount');
+      //   return int.tryParse(selCount) ?? 0;
+      // });
+
+      // ask which screens to configure
+      QuestBase askScreens = QuestBase.dlogCascade(
+        QTargetIntent.eventLevel(responseAddsWhichAreaQuestions: true),
+        // QDefCollection([]),
+        DlgStr.selectAppScreens, // <String, List<AppScreen>>
+        AppScreen.eventConfiguration.topConfigurableScreens.map((e) => e.name),
+        CaptureAndCast<List<AppScreen>>((s) => castStrOfIdxsToIterOfInts(s)
+            .map((idx) =>
+                AppScreen.eventConfiguration.topConfigurableScreens[idx])
+            .toList()),
+        questId: QuestionIdStrings.selectAppScreens,
       );
-      QuestBase askNumSlots = testDataCreate.makeQuestion<int>(
-          qq, '', ['0', '1', '$k_quests_created_in_test', '3'], (selCount) {
-        print('askNumSlots convert on str $selCount');
-        return int.tryParse(selCount) ?? 0;
-      });
     },
   );
 
@@ -66,8 +81,9 @@ void main() {
     );
 
     QuestBase askNumSlots = testDataCreator.makeQuestion<int>(
-        qq, 'no op prompt', ['0', '1', '$k_quests_created_in_test', '3'],
-        (selCount) {
+        qq,
+        'askNumSlots convert on str (no op prompt)',
+        ['0', '1', '$k_quests_created_in_test', '3'], (selCount) {
       print('askNumSlots convert on str $selCount');
       return int.tryParse(selCount) ?? 0;
     });
@@ -85,7 +101,7 @@ void main() {
     // will auto-respond using value provided in _autoResponseGenerators above
     // testQuestPresenter.askAndWaitForUserResponse(dlogRun, quest);
 
-    // need to bump QuestListMgr to next Question
+    // need to bump QuestListMgr to next (null) Question
     // to force prior into the answered queue
     QuestBase? nxtQu = _questMgr.nextQuestionToAnswer();
 
@@ -94,15 +110,16 @@ void main() {
     expect(nxtQu, null, reason: '_questMgr only has 1 Question');
     expect(_questMgr.priorAnswerCount, 1, reason: 'quest was answered');
 
-    // they should be rule Questions, but not yet answered -- so zero exportable
+    // they both should be rule Questions, but not yet answered -- so zero exportable
     expect(_questMgr.exportableQuestions.length, 0);
 
     // now check that k_quests_created_in_test Questions were created
     // since there was no 2nd INITIAL Question
     expect(_questMgr.pendingQuestionCount, 2);
 
-    // for (QuestBase q in _questMgr.pendingQuestions) {
-    //   // print('QuestMatcher created:  ${q.questStr}  ${q.Quest2Id}');
-    // }
+    for (QuestBase q in _questMgr.pendingQuestions) {
+      print(
+          'QuestMatcher created:  ${q.firstQuestion.userPrompt}  ${q.questId}');
+    }
   });
 }

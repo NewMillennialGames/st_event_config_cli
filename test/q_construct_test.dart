@@ -9,6 +9,8 @@ import 'shared_utils.dart';
   verify question has correct # of prompts
 */
 
+const String _questId = 'test1';
+
 void main() {
   late QuestBase twoPromptQuest;
 
@@ -35,7 +37,7 @@ void main() {
       ),
     ];
 
-    twoPromptQuest = QuestBase.multiPrompt(qq, prompts, questId: 'test1');
+    twoPromptQuest = QuestBase.multiPrompt(qq, prompts, questId: _questId);
   });
 
   test(
@@ -63,12 +65,12 @@ void main() {
       _questMgr.appendNewQuestions([twoPromptQuest]);
       expect(_questMgr.pendingQuestionCount, 1);
       QuestBase? q1 = _questMgr.nextQuestionToAnswer();
-      expect(q1?.questId, 'test1');
+      expect(q1?.questId, _questId);
     },
   );
 
   test(
-    'confirms presenter moves answered question',
+    'confirms presenter moves answered question into totalAnsweredQuestions',
     () {
       final _questMgr = QuestListMgr();
       QuestionPresenter qp = TestQuestRespGen([]);

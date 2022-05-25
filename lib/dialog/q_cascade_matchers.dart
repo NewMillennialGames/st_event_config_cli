@@ -10,6 +10,8 @@ part of ConfigDialogRunner;
 
 */
 
+const String _missingQuestId = '-na';
+
 class QMatchCollection {
   /*  use basic constructor for testing
       use factory QMatchCollection.scoretrader
@@ -20,7 +22,7 @@ class QMatchCollection {
   QMatchCollection(this._matcherList);
 
   factory QMatchCollection.scoretrader() {
-    return QMatchCollection(_stDfltMatcherList);
+    return QMatchCollection(stDfltMatcherList);
   }
 
   void append(List<QuestMatcher> ml) {
@@ -34,19 +36,19 @@ class QMatchCollection {
     print(
       'comparing "${questJustAnswered.questId}" to ${_matcherList.length} matchers for new quests',
     );
-    for (QuestMatcher matchTest in _matcherList) {
-      if (matchTest.doesMatch(questJustAnswered)) {
+    for (QuestMatcher qMatchTest in _matcherList) {
+      if (qMatchTest.doesMatch(questJustAnswered)) {
         print(
-          '*** it does match!!  addsPendingQuestions: ${matchTest.addsPendingQuestions}  createsImplicitAnswers: ${matchTest.createsImplicitAnswers}',
+          '*** it does match!!  addsPendingQuestions: ${qMatchTest.addsPendingQuestions}  createsImplicitAnswers: ${qMatchTest.createsImplicitAnswers}',
         );
-        if (matchTest.addsPendingQuestions) {
+        if (qMatchTest.addsPendingQuestions) {
           List<QuestBase> newQuests =
-              matchTest.getDerivedAutoGenQuestions(questJustAnswered);
+              qMatchTest.getDerivedAutoGenQuestions(questJustAnswered);
           questListMgr.appendNewQuestions(newQuests);
         }
-        if (matchTest.createsImplicitAnswers) {
+        if (qMatchTest.createsImplicitAnswers) {
           questListMgr.addImplicitAnswers(
-            matchTest.getDerivedAutoGenQuestions(questJustAnswered),
+            qMatchTest.getDerivedAutoGenQuestions(questJustAnswered),
           );
         }
       }
@@ -103,17 +105,17 @@ class QuestMatcher<AnsType> {
   final BehaviorRuleType? behRuleTypeForAreaOrSlot;
   final bool isRuleQuestion;
   final String questId;
-  final DerivedQuestGenerator derQuestGen;
+  final DerivedQuestGenerator derivedQuestGen;
   late Type? typ = CaptureAndCast<AnsType>;
   final String matcherDescrip;
   //
   QuestMatcher(
     this.matcherDescrip,
     this.matcherMatchBehavior,
-    this.derQuestGen, {
+    this.derivedQuestGen, {
     this.validateUserAnswerAfterPatternMatchIsTrueCallback,
     this.cascadeType,
-    this.questId = '-na',
+    this.questId = _missingQuestId,
     this.appScreen,
     this.screenWidgetArea,
     this.slotInArea,
@@ -126,26 +128,40 @@ class QuestMatcher<AnsType> {
   bool get addsPendingQuestions => matcherMatchBehavior.addsPendingQuestions;
   bool get createsImplicitAnswers =>
       matcherMatchBehavior.createsImplicitAnswers;
+  bool get usesExplicitMatchByQuestId =>
+      this.questId != _missingQuestId &&
+      this.questId.isNotEmpty &&
+      this.questId.length > 3;
 
   // public methods
-  List<QuestBase> getDerivedAutoGenQuestions(QuestBase quest) =>
-      derQuestGen.getDerivedAutoGenQuestions(quest, this);
-
   bool doesMatch(QuestBase quest) {
-    bool isAPatternMatch =
-        quest.questId == this.questId || _doDeeperMatch(quest);
+    //
+    if (usesExplicitMatchByQuestId && quest.questId != this.questId) {
+      // print('this matcher targeted at a SPECIFIC question & does not apply to passed quest');
+      return false;
+    } else if (quest.questId == this.questId) {
+      // exact match on questId
+      if (validateUserAnswerAfterPatternMatchIsTrueCallback != null) {
+        return validateUserAnswerAfterPatternMatchIsTrueCallback!(
+            quest.mainAnswer);
+      }
+      return true;
+    }
+
+    bool isAPatternMatch = _doDeeperMatch(quest);
     // pattern doesnt match so exit early
     if (!isAPatternMatch) return false;
 
-    // pattern match succeeded, so now validate user answer
-    bool userRespValueIsAMatch = true;
+    // pattern match succeeded (isAPatternMatch == true), so now validate user answer
     if (validateUserAnswerAfterPatternMatchIsTrueCallback != null) {
-      userRespValueIsAMatch =
-          validateUserAnswerAfterPatternMatchIsTrueCallback!(quest.mainAnswer);
+      return validateUserAnswerAfterPatternMatchIsTrueCallback!(
+          quest.mainAnswer);
     }
-    isAPatternMatch = isAPatternMatch && userRespValueIsAMatch;
     return isAPatternMatch;
   }
+
+  List<QuestBase> getDerivedAutoGenQuestions(QuestBase quest) =>
+      derivedQuestGen.getDerivedAutoGenQuestions(quest, this);
 
   bool _doDeeperMatch(QuestBase quest) {
     // compare all properties instead of only Quest2Id
@@ -186,77 +202,3 @@ class QuestMatcher<AnsType> {
     return dMatch;
   }
 }
-
-List<QuestMatcher> _stDfltMatcherList = [
-  // defines rules for adding new Questions or implicit answers
-  // based on answers to prior Questions
-
-  QuestMatcher<List<ScreenWidgetArea>>(
-    'build ?`s to specify configured areas on selected screens',
-    MatcherBehaviorEnum.addPendingQuestions,
-    DerivedQuestGenerator(
-      'Select areas to configure on screen {0}',
-      newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
-        return (priorAnsweredQuest.mainAnswer as List<AppScreen>).length;
-      },
-      newQuestPromptArgGen: (QuestBase priorAnsweredQuest, int idx) {
-        return [(priorAnsweredQuest.mainAnswer as List<AppScreen>)[idx].name];
-      },
-      answerChoiceGenerator: ((dynamic priorAnswer, int idx) {
-        var selectedAppScreens = priorAnswer as List<AppScreen>;
-        return selectedAppScreens[idx]
-            .configurableScreenAreas
-            .map((e) => e.name);
-      }),
-      qTargetIntentUpdaterArg: (QuestBase qb, int idx) =>
-          qb.qTargetIntent.copyWith(appScreen: qb.qTargetIntent.appScreen),
-      perQuestGenOptions: [
-        PerQuestGenOption(
-          castFunc: (String lstAreaIdxs) {
-            return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
-                .map((i) => ScreenWidgetArea.values[i]);
-          },
-        ),
-      ],
-    ),
-    cascadeType: QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea,
-    questId: QuestionIdStrings.selectAppScreens,
-    validateUserAnswerAfterPatternMatchIsTrueCallback: (ans) => true,
-    isRuleQuestion: false,
-  ),
-
-  QuestMatcher<int>(
-    'if user wants to perform grouping on a ListView, ask how many grouping cols are required & add a Questions for each',
-    MatcherBehaviorEnum.addPendingQuestions,
-    DerivedQuestGenerator(
-      'Select field #{0} to use for row-grouping on {1} screen',
-      newQuestCountCalculator: (q) => (q.mainAnswer) as int,
-      newQuestPromptArgGen: (quest, idx) =>
-          <String>['${idx + 1}', quest.appScreen.name],
-      answerChoiceGenerator: ((priorAnswer, idx) {
-        var selectedAppScreens = priorAnswer as List<AppScreen>;
-        return selectedAppScreens[idx]
-            .configurableScreenAreas
-            .map((e) => e.name);
-      }),
-      qTargetIntentUpdaterArg: (QuestBase qb, int idx) =>
-          qb.qTargetIntent.copyWith(appScreen: qb.qTargetIntent.appScreen),
-      perQuestGenOptions: [
-        PerQuestGenOption(
-          castFunc: (ansr) => DbTableFieldName
-              .values[int.tryParse(ansr) ?? CfgConst.cancelSortIndex],
-          ruleType: VisualRuleType.groupCfg,
-          ruleQuestType: VisRuleQuestType.selectDataFieldName,
-        ),
-      ],
-    ),
-
-    cascadeType: QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea,
-    screenWidgetArea: ScreenWidgetArea.tableview,
-    visRuleTypeForAreaOrSlot: VisualRuleType.groupCfg,
-    // if existing Question is for grouping on ListView
-    // make sure user said YES (they want grouping)
-    validateUserAnswerAfterPatternMatchIsTrueCallback: (ans) => (ans ?? 0) > 0,
-    isRuleQuestion: false,
-  ),
-];
