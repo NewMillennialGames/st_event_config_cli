@@ -104,7 +104,7 @@ class QuestMatcher<AnsType> {
   final VisualRuleType? visRuleTypeForAreaOrSlot;
   final BehaviorRuleType? behRuleTypeForAreaOrSlot;
   final bool isRuleQuestion;
-  final String questId;
+  final PriorQuestIdMatchPatternTest? questIdPatternTest;
   final DerivedQuestGenerator derivedQuestGen;
   late Type? typ = CaptureAndCast<AnsType>;
   final String matcherDescrip;
@@ -115,7 +115,7 @@ class QuestMatcher<AnsType> {
     this.derivedQuestGen, {
     this.validateUserAnswerAfterPatternMatchIsTrueCallback,
     this.cascadeType,
-    this.questId = _missingQuestId,
+    this.questIdPatternTest,
     this.appScreen,
     this.screenWidgetArea,
     this.slotInArea,
@@ -128,18 +128,16 @@ class QuestMatcher<AnsType> {
   bool get addsPendingQuestions => matcherMatchBehavior.addsPendingQuestions;
   bool get createsImplicitAnswers =>
       matcherMatchBehavior.createsImplicitAnswers;
-  bool get usesExplicitMatchByQuestId =>
-      this.questId != _missingQuestId &&
-      this.questId.isNotEmpty &&
-      this.questId.length > 3;
+
+  bool get usesMatchByQuestIdPattern => this.questIdPatternTest != null;
 
   // public methods
   bool doesMatch(QuestBase quest) {
     //
-    if (usesExplicitMatchByQuestId && quest.questId != this.questId) {
+    if (usesMatchByQuestIdPattern && quest.questId != this.questIdPatternTest) {
       // print('this matcher targeted at a SPECIFIC question & does not apply to passed quest');
       return false;
-    } else if (quest.questId == this.questId) {
+    } else if (quest.questId == this.questIdPatternTest) {
       // exact match on questId
       if (validateUserAnswerAfterPatternMatchIsTrueCallback != null) {
         return validateUserAnswerAfterPatternMatchIsTrueCallback!(quest);

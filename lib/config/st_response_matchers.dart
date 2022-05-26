@@ -9,12 +9,14 @@ this config should drive the whole dynamic
 dialog
 */
 
+const String _whichAreasForScreenConst = 'whichAreasForScreen';
+
 List<QuestMatcher> stDfltMatcherList = [
   // defines rules for adding new Questions or implicit answers
   // based on answers to prior Questions
 
   QuestMatcher<List<ScreenWidgetArea>>(
-    'build ?`s to specify configured areas on selected screens',
+    'build ?`s to specify which areas to config on selected screens',
     MatcherBehaviorEnum.addPendingQuestions,
     DerivedQuestGenerator(
       'Select areas to configure on screen {0}',
@@ -23,6 +25,12 @@ List<QuestMatcher> stDfltMatcherList = [
       },
       newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
         return (priorAnsweredQuest.mainAnswer as List<AppScreen>).length;
+      },
+      newQuestIdGenFromPriorQuest: (QuestBase priorQ, int idx) {
+        // each new question about area on screen should
+        // have an ID that lets the next QM identify it to produce new Q's
+        String scrName = priorQ.appScreen.name; // + '-' + priorQ.mainAnswer
+        return _whichAreasForScreenConst + '-' + scrName;
       },
       answerChoiceGenerator: ((QuestBase priorAnsweredQuest, int idx) {
         var selectedAppScreens =
@@ -43,7 +51,7 @@ List<QuestMatcher> stDfltMatcherList = [
       ],
     ),
     cascadeType: QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea,
-    questId: QuestionIdStrings.selectAppScreens,
+    questIdPatternTest: (qid) => qid == QuestionIdStrings.selectAppScreens,
     validateUserAnswerAfterPatternMatchIsTrueCallback: (ans) => true,
     isRuleQuestion: false,
   ),
@@ -81,12 +89,14 @@ List<QuestMatcher> stDfltMatcherList = [
       ],
     ),
     cascadeType: QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea,
-    validateUserAnswerAfterPatternMatchIsTrueCallback: (QuestBase qb) {
-      bool addsWhichRulesForSelectedAreaQuestions =
-          qb.qTargetIntent.addsWhichRulesForSelectedAreaQuestions;
-      return addsWhichRulesForSelectedAreaQuestions &&
-          qb.expectedAnswerType == List<VisualRuleType>;
-    },
+    questIdPatternTest: (qid) => qid.startsWith(_whichAreasForScreenConst),
+
+    // validateUserAnswerAfterPatternMatchIsTrueCallback: (QuestBase qb) {
+    //   bool addsWhichRulesForSelectedAreaQuestions =
+    //       qb.qTargetIntent.addsWhichRulesForSelectedAreaQuestions;
+    //   return addsWhichRulesForSelectedAreaQuestions &&
+    //       qb.expectedAnswerType == List<VisualRuleType>;
+    // },
     isRuleQuestion: false,
   ),
 

@@ -45,7 +45,7 @@ class DerivedQuestGenerator {
   final ChoiceListFromPriorAnswer answerChoiceGenerator;
   final QTargetIntentUpdateFunc qTargetIntentUpdater;
   final List<PerQuestGenOption> perQuestGenOptions;
-  final NewQuestIdGenFromPriorAnswer? newQuestIdGenFromPriorAnswer;
+  final NewQuestIdGenFromPriorAnswer? newQuestIdGenFromPriorQuest;
 
   DerivedQuestGenerator(
     this.questPromptTemplate, {
@@ -54,7 +54,7 @@ class DerivedQuestGenerator {
     required this.answerChoiceGenerator,
     required this.perQuestGenOptions,
     QTargetIntentUpdateFunc? qTargetIntentUpdaterArg,
-    this.newQuestIdGenFromPriorAnswer,
+    this.newQuestIdGenFromPriorQuest,
   }) : this.qTargetIntentUpdater = qTargetIntentUpdaterArg == null
             ? _ccTargIntent
             : qTargetIntentUpdaterArg;
@@ -113,9 +113,9 @@ class DerivedQuestGenerator {
         ),
       ];
 
-      String newQuestId = newQuestIdGenFromPriorAnswer == null
+      String newQuestId = newQuestIdGenFromPriorQuest == null
           ? answeredQuest.questId + '-$newQIdx'
-          : newQuestIdGenFromPriorAnswer!(answeredQuest, newQIdx);
+          : newQuestIdGenFromPriorQuest!(answeredQuest, newQIdx);
       QuestBase nxtQuest = newQuestConstructor(
         targIntent,
         newQuestPrompts,
