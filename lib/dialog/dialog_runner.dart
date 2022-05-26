@@ -111,7 +111,7 @@ class DialogRunner {
     // two different methods
     // called from inside of: questPresenter.askAndWaitForUserResponse
     bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(_qListMgr);
-    if (!didAddNew && _quest.appliesToClientConfiguration) {
+    if (!didAddNew) {
       // new version of handleAcquiringNewQuest2s
       // run it only if handleAcquiringNewQuest2s does no work
       _qMatchColl.appendNewQuestsOrInsertImplicitAnswers(_qListMgr);

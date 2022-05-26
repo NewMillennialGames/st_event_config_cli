@@ -1,13 +1,14 @@
 part of QuestionsLib;
 
-/*   not sure if this is needed
-  QuestMatcher() may be all we need
+/*   the DerivedQuestGenerator & PerQuestGenOption classes desscribes the 
+logic & data-types required to auto-gen new questions
+based on answers to a prior question
 
-
-  AutoAnswer is responsible
+  DerivedQuestGenerator is responsible
   for looking at questJustAnswered
-  and creating any implicit answers
-  that we dont need to ask
+  and creating any derived questions
+  (sometimes with implicit answers
+  that we dont need to ask)
 
 */
 
@@ -19,14 +20,11 @@ class PerQuestGenOption<AnsType> {
 
   final CastStrToAnswTypCallback<AnsType> castFunc;
   final int defaultAnswerIdx = 0;
-  // final String questId;
   final VisualRuleType? ruleType;
   final VisRuleQuestType? ruleQuestType;
 
   PerQuestGenOption({
-    // required this.answerChoiceGenerator,
     required this.castFunc,
-    // this.questId = '',
     this.ruleType,
     this.ruleQuestType,
   });

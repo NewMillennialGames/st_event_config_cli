@@ -29,17 +29,15 @@ class QuestListMgr {
   QuestListMgr();
 
   //
-  List<QuestVisualRule> get exportableQuestions => _allAnsweredQuestions
-      .whereType<QuestVisualRule>()
-      .where(_exportFilterLogic)
-      .toList();
+  Iterable<UiFactoryRuleBase> get exportableQuestions =>
+      _allAnsweredQuestions.whereType<UiFactoryRuleBase>();
 
-  bool _exportFilterLogic(QuestBase q) {
-    // print(
-    //   'QID: ${q.Quest2Id}  runtimeType: ${q.runtimeType}  appliesToClientConfiguration: ${q.appliesToClientConfiguration}',
-    // );
-    return q is QuestVisualRule && q.appliesToClientConfiguration;
-  }
+  // bool _exportFilterLogic(QuestBase q) {
+  //   // print(
+  //   //   'QID: ${q.Quest2Id}  runtimeType: ${q.runtimeType}  appliesToClientConfiguration: ${q.appliesToClientConfiguration}',
+  //   // );
+  //   return q.appliesToClientConfiguration;
+  // }
 
   List<QuestBase> get pendingQuestions => _pendingQuestions;
   QuestBase get _currentOrLastQuestion => _isAtBeginning
@@ -216,7 +214,8 @@ class QuestListMgr {
     //
     Set<AppScreen> appScreensSet = quests.map((e) => e.appScreen).toSet();
 
-    print('$dbgNam is adding ${quests.length} new Questions to $appScreensSet');
+    print(
+        '$dbgNam is adding ${quests.length} new Questions for these screens $appScreensSet');
 
     for (AppScreen as in appScreensSet) {
       int newCntBySec = quests

@@ -3,9 +3,11 @@ part of EvCfgConfig;
 // public api
 List<QuestBase> loadInitialConfigQuestions() {
   // event config Quest2s DO NOT have areas or uiComponents
-  return _Quest2Lst.where((qb) =>
-      qb.appScreen == AppScreen.eventConfiguration &&
-      qb.isTopLevelConfigOrScreenQuest2).toList();
+  return _initQuestionLst
+      .where((qb) =>
+          qb.appScreen == AppScreen.eventConfiguration &&
+          qb.isTopLevelEventConfigQuestion)
+      .toList();
 }
 
 // List<QuestBase> loadQuest2sAtTopOfSection(AppScreen appSection) {
@@ -54,7 +56,7 @@ List<QuestBase> loadInitialConfigQuestions() {
 // }
 
 // accumulate configuration data
-final List<QuestBase> _Quest2Lst = [
+final List<QuestBase> _initQuestionLst = [
   /*  
     eventConfiguration Quest2s list below
 
@@ -69,7 +71,7 @@ final List<QuestBase> _Quest2Lst = [
     but then I'd have more boilerplate in ALL
     of my Qb.castFunc code
   */
-  QuestBase.infoOrCliCfg(
+  QuestBase.initialEventConfigRule(
     QTargetIntent.eventLevel(),
     DlgStr.eventName,
     [],
@@ -78,14 +80,14 @@ final List<QuestBase> _Quest2Lst = [
   ),
   // set true false to shorten manual testing
   if (true) ...[
-    QuestBase.infoOrCliCfg(
+    QuestBase.initialEventConfigRule(
       QTargetIntent.eventLevel(),
       DlgStr.eventDescrip,
       [],
       CaptureAndCast<String>((s) => s),
       questId: QuestionIdStrings.eventDescrip,
     ),
-    QuestBase.infoOrCliCfg(
+    QuestBase.initialEventConfigRule(
       QTargetIntent.eventLevel(),
       // QDefCollection([]),
       DlgStr.eventType,
@@ -95,7 +97,7 @@ final List<QuestBase> _Quest2Lst = [
       ),
       questId: QuestionIdStrings.eventType,
     ),
-    QuestBase.infoOrCliCfg(
+    QuestBase.initialEventConfigRule(
       QTargetIntent.eventLevel(),
       // QDefCollection([]),
       DlgStr.eventWhosCompeting,
@@ -105,7 +107,7 @@ final List<QuestBase> _Quest2Lst = [
       ),
       questId: QuestionIdStrings.competitorType,
     ),
-    QuestBase.infoOrCliCfg(
+    QuestBase.initialEventConfigRule(
       QTargetIntent.eventLevel(),
       // QDefCollection([]),
       DlgStr.eventCompPlayAgainst,
@@ -115,7 +117,7 @@ final List<QuestBase> _Quest2Lst = [
       // (i) => EvOpponentType.values[i],
       questId: QuestionIdStrings.competeAgainstType,
     ),
-    QuestBase.infoOrCliCfg(
+    QuestBase.initialEventConfigRule(
       QTargetIntent.eventLevel(),
       // QDefCollection([]),
       DlgStr.eventDuration,
@@ -125,7 +127,7 @@ final List<QuestBase> _Quest2Lst = [
       // (i) => EvDuration.values[i],
       questId: QuestionIdStrings.eventDuration,
     ),
-    QuestBase.infoOrCliCfg(
+    QuestBase.initialEventConfigRule(
       QTargetIntent.eventLevel(),
       // QDefCollection([]),
       DlgStr.eventEliminationStrategy,
@@ -135,7 +137,7 @@ final List<QuestBase> _Quest2Lst = [
       // (i) => EvEliminationStrategy.values[i],
       questId: QuestionIdStrings.eventEliminationStrategy,
     ),
-    QuestBase.infoOrCliCfg(
+    QuestBase.initialEventConfigRule(
       QTargetIntent.eventLevel(),
       // QDefCollection([]),
       DlgStr.useSameRowStyleForAllScreens,

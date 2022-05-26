@@ -33,11 +33,11 @@ class QTargetIntent extends Equatable
     } else if (behRuleTypeForAreaOrSlot != null) {
       return QuestBase.questBehaveRule;
     } else if (cliConfig) {
-      return QuestBase.quest1Prompt;
+      return QuestBase.eventConfigRulePrompt;
     } else if (slotInArea != null || screenWidgetArea != null) {
       return QuestBase.questMultiPrompt;
     }
-    return QuestBase.quest1Prompt;
+    return QuestBase.eventConfigRulePrompt;
   }
 
   QIntentEm get intent {
@@ -73,7 +73,7 @@ class QTargetIntent extends Equatable
   // equatableKey must be distinct & unique
   String get equatableKey => sortKey;
 
-  bool get isTopLevelConfigOrScreenQuestion =>
+  bool get isTopLevelEventConfigQuestion =>
       appScreen == AppScreen.eventConfiguration &&
       screenWidgetArea == null &&
       slotInArea == null &&

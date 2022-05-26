@@ -185,15 +185,7 @@ class QuestMatcher<AnsType> {
         (this.visRuleTypeForAreaOrSlot == null ||
             this.visRuleTypeForAreaOrSlot == quest.visRuleTypeForAreaOrSlot);
     print('visRuleTypeForAreaOrSlot matches: $dMatch');
-
-    // dMatch = dMatch &&
-    //     (this.behRuleTypeForAreaOrSlot == null ||
-    //         this.behRuleTypeForAreaOrSlot == quest.behRuleTypeForAreaOrSlot);
-    // print('behRuleTypeForAreaOrSlot matches: $dMatch');
-
-    dMatch = dMatch &&
-        (this.isRuleQuestion == false || quest.appliesToClientConfiguration);
-    print('isRuleQuestion matches: $dMatch');
+    print('isRuleQuestion: ${quest.isRuleQuestion}');
 
     // dMatch =
     //     dMatch && (this.typ == null || quest.response.runtimeType == this.typ);

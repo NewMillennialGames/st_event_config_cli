@@ -41,8 +41,8 @@ void createOutputFileFromResponses(
   String? filename,
 ]) {
   //
-  final List<QuestVisualRule> exportableQuestions =
-      questListMgr.exportableQuestions;
+  final List<UiFactoryRuleBase> exportableQuestions =
+      questListMgr.exportableQuestions.toList();
 
   print('found ${exportableQuestions.length} exportable answers to convert');
   // for (Quest2 q in exportableQuest2s) {
@@ -53,8 +53,8 @@ void createOutputFileFromResponses(
 
   print('Now building Event Config rules...');
 
-  Iterable<QuestBase> eventConfigLevelData = exportableQuestions.where(
-    (q) => q.isTopLevelConfigOrScreenQuest2,
+  Iterable<UiFactoryRuleBase> eventConfigLevelData = exportableQuestions.where(
+    (q) => q.isTopLevelEventConfigQuestion,
   );
   final evCfg = EventCfgTree.fromEventLevelConfig(eventConfigLevelData);
   // create the per-area or per-slot rules
