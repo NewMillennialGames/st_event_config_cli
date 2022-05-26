@@ -37,13 +37,14 @@ Future<void> main(List<String> arguments) async {
 }
 
 void createOutputFileFromResponses(
-  QuestListMgr Quest2Mgr, [
+  QuestListMgr questListMgr, [
   String? filename,
 ]) {
   //
-  final List<QuestBase> exportableQuest2s = Quest2Mgr.exportableQuestions;
+  final List<QuestVisualRule> exportableQuestions =
+      questListMgr.exportableQuestions;
 
-  print('found ${exportableQuest2s.length} exportable answers to convert');
+  print('found ${exportableQuestions.length} exportable answers to convert');
   // for (Quest2 q in exportableQuest2s) {
   //   print(q.questStr);
   //   print(q.response?.answers.toString());
@@ -52,12 +53,12 @@ void createOutputFileFromResponses(
 
   print('Now building Event Config rules...');
 
-  Iterable<QuestBase> eventConfigLevelData = exportableQuest2s.where(
+  Iterable<QuestBase> eventConfigLevelData = exportableQuestions.where(
     (q) => q.isTopLevelConfigOrScreenQuest2,
   );
   final evCfg = EventCfgTree.fromEventLevelConfig(eventConfigLevelData);
   // create the per-area or per-slot rules
-  var ruleResponses = exportableQuest2s.whereType<QuestVisualRule>();
+  var ruleResponses = exportableQuestions.whereType<QuestVisualRule>();
   // print('ruleResponse answer count: ${ruleResponses.length}');
   evCfg.fillFromVisualRuleAnswers(ruleResponses);
   // now dump evCfg to file

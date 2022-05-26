@@ -29,14 +29,16 @@ class QuestListMgr {
   QuestListMgr();
 
   //
-  List<QuestBase> get exportableQuestions =>
-      _allAnsweredQuestions.where(_exportFilterLogic).toList();
+  List<QuestVisualRule> get exportableQuestions => _allAnsweredQuestions
+      .whereType<QuestVisualRule>()
+      .where(_exportFilterLogic)
+      .toList();
 
   bool _exportFilterLogic(QuestBase q) {
     // print(
     //   'QID: ${q.Quest2Id}  runtimeType: ${q.runtimeType}  appliesToClientConfiguration: ${q.appliesToClientConfiguration}',
     // );
-    return q.appliesToClientConfiguration;
+    return q is QuestVisualRule && q.appliesToClientConfiguration;
   }
 
   List<QuestBase> get pendingQuestions => _pendingQuestions;
@@ -47,6 +49,8 @@ class QuestListMgr {
       _answeredQuestsByScreen.values.fold<int>(0, (r, qLst) => r + qLst.length);
 
   bool get _isAtBeginning => _currQuestionIdx < 0;
+  bool get _notYetAtEnd => _currQuestionIdx < pendingQuestionCount - 2;
+  // bool get _hasReachedEnd => !_notYetAtEnd;
   int get pendingQuestionCount => _isAtBeginning
       ? pendingQuestions.length
       : _pendingQuestions.length - (_currQuestionIdx + 1);
@@ -167,9 +171,10 @@ class QuestListMgr {
     if (lstQuestInCurScreen.length > 0) {
       mostRecentSaved = lstQuestInCurScreen.last;
     }
-    // dont store same Question twice
+    // dont store same Question twice; code lingers on last question
     if (mostRecentSaved != null &&
-        mostRecentSaved.questId == _currentOrLastQuestion.questId) {
+        mostRecentSaved.questId == _currentOrLastQuestion.questId &&
+        _notYetAtEnd) {
       //
       print(
         'Error: QID: ${mostRecentSaved.questId} seemd to be duplicate & wasnt moved into _answeredQuestsBySection',

@@ -18,14 +18,15 @@ List<QuestMatcher> stDfltMatcherList = [
     MatcherBehaviorEnum.addPendingQuestions,
     DerivedQuestGenerator(
       'Select areas to configure on screen {0}',
-      newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
-        return (priorAnsweredQuest.mainAnswer as List<AppScreen>).length;
-      },
       newQuestPromptArgGen: (QuestBase priorAnsweredQuest, int idx) {
         return [(priorAnsweredQuest.mainAnswer as List<AppScreen>)[idx].name];
       },
-      answerChoiceGenerator: ((dynamic priorAnswer, int idx) {
-        var selectedAppScreens = priorAnswer as List<AppScreen>;
+      newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
+        return (priorAnsweredQuest.mainAnswer as List<AppScreen>).length;
+      },
+      answerChoiceGenerator: ((QuestBase priorAnsweredQuest, int idx) {
+        var selectedAppScreens =
+            priorAnsweredQuest.mainAnswer as List<AppScreen>;
         return selectedAppScreens[idx]
             .configurableScreenAreas
             .map((e) => e.name);
@@ -47,15 +48,57 @@ List<QuestMatcher> stDfltMatcherList = [
     isRuleQuestion: false,
   ),
 
+  QuestMatcher<List<VisualRuleType>>(
+    'build ?`s to specify which rules for areas of selected screens',
+    MatcherBehaviorEnum.addPendingQuestions,
+    DerivedQuestGenerator(
+      'Select which rules to configure on area {0} of screen {1}',
+      newQuestPromptArgGen: (QuestBase priorAnsweredQuest, int idx) {
+        var areaName =
+            (priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>)[idx].name;
+        var screenName = priorAnsweredQuest.qTargetIntent.appScreen.name;
+        return [areaName, screenName];
+      },
+      newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
+        return (priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>).length;
+      },
+      answerChoiceGenerator: ((QuestBase priorAnsweredQuest, int idx) {
+        var selectedScreenAreas =
+            priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>;
+        return selectedScreenAreas[idx]
+            .applicableRuleTypes(priorAnsweredQuest.qTargetIntent.appScreen)
+            .map((e) => e.name);
+      }),
+      qTargetIntentUpdaterArg: (QuestBase qb, int idx) =>
+          qb.qTargetIntent.copyWith(appScreen: qb.qTargetIntent.appScreen),
+      perQuestGenOptions: [
+        PerQuestGenOption(
+          castFunc: (String lstAreaIdxs) {
+            return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
+                .map((i) => ScreenWidgetArea.values[i]);
+          },
+        ),
+      ],
+    ),
+    cascadeType: QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea,
+    validateUserAnswerAfterPatternMatchIsTrueCallback: (QuestBase qb) {
+      bool addsWhichRulesForSelectedAreaQuestions =
+          qb.qTargetIntent.addsWhichRulesForSelectedAreaQuestions;
+      return addsWhichRulesForSelectedAreaQuestions &&
+          qb.expectedAnswerType == List<VisualRuleType>;
+    },
+    isRuleQuestion: false,
+  ),
+
   QuestMatcher<int>(
     'if user wants to perform grouping on a ListView, ask how many grouping cols are required & add a Questions for each',
     MatcherBehaviorEnum.addPendingQuestions,
     DerivedQuestGenerator(
       'Select field #{0} to use for row-grouping on {1} screen',
-      newQuestCountCalculator: (q) => (q.mainAnswer) as int,
       newQuestPromptArgGen: (quest, idx) =>
           <String>['${idx + 1}', quest.appScreen.name],
-      answerChoiceGenerator: ((priorAnswer, idx) {
+      newQuestCountCalculator: (q) => (q.mainAnswer) as int,
+      answerChoiceGenerator: ((QuestBase priorAnsweredQuest, idx) {
         // var selectedAppScreens = priorAnswer as int;
         return DbTableFieldName.values.map((e) => e.name);
       }),
@@ -76,7 +119,8 @@ List<QuestMatcher> stDfltMatcherList = [
     visRuleTypeForAreaOrSlot: VisualRuleType.groupCfg,
     // if existing Question is for grouping on ListView
     // make sure user said YES (they want grouping)
-    validateUserAnswerAfterPatternMatchIsTrueCallback: (ans) => (ans ?? 0) > 0,
+    validateUserAnswerAfterPatternMatchIsTrueCallback: (QuestBase qb) =>
+        (qb.mainAnswer ?? 0) > 0,
     isRuleQuestion: false,
   ),
 ];

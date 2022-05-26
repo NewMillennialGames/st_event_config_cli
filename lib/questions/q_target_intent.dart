@@ -85,16 +85,16 @@ class QTargetIntent extends Equatable
   //     visRuleTypeForAreaOrSlot == null &&
   //     behRuleTypeForAreaOrSlot == null; // && slotInArea == null
   //
-  bool get generatesNoNewQuest2s => cascadeType.generatesNoNewQuest2s;
+  bool get generatesNoNewQuest2s => cascadeType.generatesNoNewQuestions;
 
   bool get addsWhichAreaInSelectedScreenQuest2s =>
-      cascadeType.addsWhichAreaInSelectedScreenQuest2s;
+      cascadeType.addsWhichAreaInSelectedScreenQuestions;
 
-  bool get addsWhichRulesForSelectedAreaQuest2s =>
-      cascadeType.addsWhichRulesForSelectedAreaQuest2s;
+  bool get addsWhichRulesForSelectedAreaQuestions =>
+      cascadeType.addsWhichRulesForSelectedAreaQuestions;
 
   bool get addsWhichSlotOfSelectedAreaQuest2s =>
-      cascadeType.addsWhichSlotOfSelectedAreaQuest2s;
+      cascadeType.addsWhichSlotOfSelectedAreaQuestions;
 
   bool get addsWhichRulesForSlotsInArea =>
       cascadeType.addsWhichRulesForSlotsInArea;
@@ -121,7 +121,7 @@ class QTargetIntent extends Equatable
     return QTargetIntent(
       // QIntentCfg.eventLevel(),
       responseAddsWhichAreaQuestions
-          ? QRespCascadePatternEm.addsWhichAreaInSelectedScreenQuest2s
+          ? QRespCascadePatternEm.addsWhichAreaInSelectedScreenQuestions
           : QRespCascadePatternEm.noCascade,
       AppScreen.eventConfiguration,
       null,
@@ -141,7 +141,7 @@ class QTargetIntent extends Equatable
     return QTargetIntent(
       // QIntentCfg.eventLevel(),
       responseAddsWhichRuleAndSlotQuest2s
-          ? QRespCascadePatternEm.addsWhichRulesForSelectedAreaQuest2s
+          ? QRespCascadePatternEm.addsWhichRulesForSelectedAreaQuestions
           : QRespCascadePatternEm.noCascade,
       appScreen,
       null,

@@ -63,11 +63,14 @@ class EventCfgTree {
 
   factory EventCfgTree.fromEventLevelConfig(Iterable<QuestBase> responses) {
     //
-    String evTemplateName = (responses
-            .where((q) => q.questId == QuestionIdStrings.eventName)
-            .first
-            .mainAnswer ??
-        '_eventNameMissing') as String;
+    Iterable<QuestBase> listOneMainQuest =
+        responses.where((q) => q.questId == QuestionIdStrings.eventName);
+
+    if (listOneMainQuest.length < 1)
+      throw UnimplementedError('top level question missing');
+
+    String evTemplateName =
+        (listOneMainQuest.first.mainAnswer ?? '_eventNameMissing') as String;
 
     // declare Event level vals to be captured
     String evTemplateDescription = '';

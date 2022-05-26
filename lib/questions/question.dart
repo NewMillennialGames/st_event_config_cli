@@ -241,6 +241,7 @@ abstract class QuestBase with EquatableMixin {
 
   // appliesToClientConfiguration == should be exported to file
   bool get appliesToClientConfiguration =>
+      this is QuestVisualRule ||
       qPromptCollection.isRuleQuestion ||
       appScreen == AppScreen.eventConfiguration;
 
@@ -256,7 +257,7 @@ abstract class QuestBase with EquatableMixin {
       expectedAnswerType is List<AppScreen>;
 
   bool get addsWhichRulesForSelectedAreaQuest2s =>
-      qTargetIntent.addsWhichRulesForSelectedAreaQuest2s &&
+      qTargetIntent.addsWhichRulesForSelectedAreaQuestions &&
       expectedAnswerType is List<ScreenWidgetArea>;
 
   bool get addsWhichSlotOfSelectedAreaQuest2s =>

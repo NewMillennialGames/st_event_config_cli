@@ -107,7 +107,8 @@ void main() {
 
     for (QuestBase q in _questMgr.pendingQuestions) {
       print(
-          'QuestMatcher created:  ${q.firstQuestion.userPrompt}  ${q.questId}');
+        'QuestMatcher created:  ${q.firstQuestion.userPrompt}  ${q.questId}',
+      );
     }
   });
 }

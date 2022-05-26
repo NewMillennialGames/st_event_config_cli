@@ -142,8 +142,7 @@ class QuestMatcher<AnsType> {
     } else if (quest.questId == this.questId) {
       // exact match on questId
       if (validateUserAnswerAfterPatternMatchIsTrueCallback != null) {
-        return validateUserAnswerAfterPatternMatchIsTrueCallback!(
-            quest.mainAnswer);
+        return validateUserAnswerAfterPatternMatchIsTrueCallback!(quest);
       }
       return true;
     }
@@ -154,8 +153,7 @@ class QuestMatcher<AnsType> {
 
     // pattern match succeeded (isAPatternMatch == true), so now validate user answer
     if (validateUserAnswerAfterPatternMatchIsTrueCallback != null) {
-      return validateUserAnswerAfterPatternMatchIsTrueCallback!(
-          quest.mainAnswer);
+      return validateUserAnswerAfterPatternMatchIsTrueCallback!(quest);
     }
     return isAPatternMatch;
   }
@@ -195,7 +193,7 @@ class QuestMatcher<AnsType> {
 
     dMatch = dMatch &&
         (this.isRuleQuestion == false || quest.appliesToClientConfiguration);
-    print('isRuleQuest2 matches: $dMatch');
+    print('isRuleQuestion matches: $dMatch');
 
     // dMatch =
     //     dMatch && (this.typ == null || quest.response.runtimeType == this.typ);

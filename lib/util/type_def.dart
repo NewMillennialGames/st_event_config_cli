@@ -11,10 +11,14 @@ typedef QuestFactorytSignature = QuestBase Function(
 typedef SubmitUserResponseFunc = void Function(String);
 // for casting string into expected rule-type value
 typedef CastStrToAnswTypCallback<T> = T Function(String);
+typedef NewQuestIdGenFromPriorAnswer = String Function(
+    QuestBase priorAnsweredQuest, int idx);
+
 typedef ChoiceListFromPriorAnswer<T> = Iterable<String> Function(
-    T priorAnswer, int idx);
+    QuestBase priorAnsweredQuest, int idx);
 //
-typedef AddQuestChkCallbk = bool Function(dynamic);
+typedef AddQuestChkCallbk = bool Function(QuestBase priorAnsweredQuest);
+//
 typedef GroupingRules = Tuple3<TvGroupCfg, TvGroupCfg?, TvGroupCfg?>;
 typedef SortingRules = Tuple3<TvSortCfg, TvSortCfg?, TvSortCfg?>;
 typedef FilterRules = Tuple3<TvFilterCfg, TvFilterCfg?, TvFilterCfg?>;

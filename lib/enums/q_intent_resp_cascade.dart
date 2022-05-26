@@ -31,9 +31,9 @@ enum QRespCascadePatternEm {
     I want NO CASCADE Quest2s to sort to LAST position
     so I moved it's index to the bottom of list
    */
-  addsWhichAreaInSelectedScreenQuest2s,
-  addsWhichRulesForSelectedAreaQuest2s, // for each area of each screen
-  addsWhichSlotOfSelectedAreaQuest2s, // for each screen & area
+  addsWhichAreaInSelectedScreenQuestions,
+  addsWhichRulesForSelectedAreaQuestions, // for each area of each screen
+  addsWhichSlotOfSelectedAreaQuestions, // for each screen & area
   addsWhichRulesForSlotsInArea, // for each slot in area
   addsRuleDetailQuestsForSlotOrArea,
   // addsVisualRuleDetailQuest2s,
@@ -47,16 +47,16 @@ extension UserResponseCascadePatternExt on QRespCascadePatternEm {
   these properties describe CURRENT Quest2 
   (not the ones they will be creating)
   */
-  bool get generatesNoNewQuest2s => this == QRespCascadePatternEm.noCascade;
+  bool get generatesNoNewQuestions => this == QRespCascadePatternEm.noCascade;
 
-  bool get addsWhichAreaInSelectedScreenQuest2s =>
-      this == QRespCascadePatternEm.addsWhichAreaInSelectedScreenQuest2s;
+  bool get addsWhichAreaInSelectedScreenQuestions =>
+      this == QRespCascadePatternEm.addsWhichAreaInSelectedScreenQuestions;
 
-  bool get addsWhichRulesForSelectedAreaQuest2s =>
-      this == QRespCascadePatternEm.addsWhichRulesForSelectedAreaQuest2s;
+  bool get addsWhichRulesForSelectedAreaQuestions =>
+      this == QRespCascadePatternEm.addsWhichRulesForSelectedAreaQuestions;
 
-  bool get addsWhichSlotOfSelectedAreaQuest2s =>
-      this == QRespCascadePatternEm.addsWhichSlotOfSelectedAreaQuest2s;
+  bool get addsWhichSlotOfSelectedAreaQuestions =>
+      this == QRespCascadePatternEm.addsWhichSlotOfSelectedAreaQuestions;
 
   bool get addsWhichRulesForSlotsInArea =>
       this == QRespCascadePatternEm.addsWhichRulesForSlotsInArea;

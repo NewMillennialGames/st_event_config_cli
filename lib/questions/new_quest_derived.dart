@@ -19,14 +19,14 @@ class PerQuestGenOption<AnsType> {
 
   final CastStrToAnswTypCallback<AnsType> castFunc;
   final int defaultAnswerIdx = 0;
-  final String questId;
+  // final String questId;
   final VisualRuleType? ruleType;
   final VisRuleQuestType? ruleQuestType;
 
   PerQuestGenOption({
     // required this.answerChoiceGenerator,
     required this.castFunc,
-    this.questId = '',
+    // this.questId = '',
     this.ruleType,
     this.ruleQuestType,
   });
@@ -47,14 +47,16 @@ class DerivedQuestGenerator {
   final ChoiceListFromPriorAnswer answerChoiceGenerator;
   final QTargetIntentUpdateFunc qTargetIntentUpdater;
   final List<PerQuestGenOption> perQuestGenOptions;
+  final NewQuestIdGenFromPriorAnswer? newQuestIdGenFromPriorAnswer;
 
   DerivedQuestGenerator(
     this.questPromptTemplate, {
     required this.newQuestCountCalculator,
     required this.newQuestPromptArgGen,
     required this.answerChoiceGenerator,
-    QTargetIntentUpdateFunc? qTargetIntentUpdaterArg,
     required this.perQuestGenOptions,
+    QTargetIntentUpdateFunc? qTargetIntentUpdaterArg,
+    this.newQuestIdGenFromPriorAnswer,
   }) : this.qTargetIntentUpdater = qTargetIntentUpdaterArg == null
             ? _ccTargIntent
             : qTargetIntentUpdaterArg;
@@ -107,16 +109,19 @@ class DerivedQuestGenerator {
       List<QuestPromptPayload> newQuestPrompts = [
         QuestPromptPayload(
           _userPrompt,
-          answerChoiceGenerator(answeredQuest.mainAnswer, newQIdx).toList(),
+          answerChoiceGenerator(answeredQuest, newQIdx).toList(),
           instcGenOpt.ruleQuestType ?? VisRuleQuestType.dialogStruct,
           instcGenOpt.castFunc,
         ),
       ];
 
+      String newQuestId = newQuestIdGenFromPriorAnswer == null
+          ? answeredQuest.questId + '-$newQIdx'
+          : newQuestIdGenFromPriorAnswer!(answeredQuest, newQIdx);
       QuestBase nxtQuest = newQuestConstructor(
         targIntent,
         newQuestPrompts,
-        questId: instcGenOpt.questId,
+        questId: newQuestId,
       );
       createdQuests.add(nxtQuest);
     }
