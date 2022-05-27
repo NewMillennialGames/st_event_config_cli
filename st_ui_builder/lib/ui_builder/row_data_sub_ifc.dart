@@ -14,7 +14,7 @@ abstract class AssetHoldingsSummaryIfc {
 
 extension AssetHoldingsSummaryIfcExt1 on AssetHoldingsSummaryIfc {
   //
-  double get positionGainLoss => (positionEstValue - positionCost) / 100;
+  double get positionGainLoss => (positionEstValue - positionCost / 100) / 100;
 
   // UI values for this
   int get tokensAvail => 0;
