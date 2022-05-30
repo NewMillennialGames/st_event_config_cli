@@ -80,7 +80,7 @@ class ActiveGameDetails with _$ActiveGameDetails {
   isOwned
 
   what happens when an asset listed in the Portfolio HAS NO current Game??
-  In that case, the visibility of the Trade button should be 
+  In that case, the visibility of the Trade button should be
   based on the Asset-State, and NOT the game-State.
 
   But, with NO CURRENT GAME, how will the row lookup this info?
@@ -223,6 +223,8 @@ class ActiveGameDetails with _$ActiveGameDetails {
 
   bool isOwned(AssetKey assetId) => _ownedAssetIds.contains(assetId);
   bool isWatched(AssetKey assetId) => _watchedAssetIds.contains(assetId);
+
+  bool get hasEnded => gameStatus.hasEnded;
 
   ActiveGameDetails updateAsset(AssetStateUpdates asu) {
     //
