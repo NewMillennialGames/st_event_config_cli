@@ -94,7 +94,6 @@ class TradeButton extends ConsumerWidget {
     // );
     // bool eventHasStarted = optCurEvent?.state == EventState.inProgress;
     // (optCurEvent?.state ?? EventState.unpublished) == EventState.inProgress;
-
     return Container(
       height: UiSizes.tradeBtnHeight,
       width: 80,
