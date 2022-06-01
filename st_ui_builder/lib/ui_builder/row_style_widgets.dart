@@ -331,11 +331,9 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
     String sharesOwned = assetHoldingsSummary.sharesOwnedStr;
     String positionValue = assetHoldingsSummary.positionEstValueStr;
     String positionGainLoss = assetHoldingsSummary.positionGainLossStr;
-    Color gainLossColor =
-        assetHoldingsSummary.positionGainLoss.roundToDouble() >= 0
-            ? StColors.green
-            : StColors.errorText;
-
+    Color gainLossColor = assetHoldingsSummary.positionGainLoss >= 0
+        ? StColors.green
+        : StColors.errorText;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       width: MediaQuery.of(ctx).size.width,
