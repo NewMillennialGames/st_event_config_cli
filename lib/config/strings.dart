@@ -54,4 +54,6 @@ class QuestionIdStrings {
   //
   static String globalRowStyle = 'globalRowStyle';
   static String selectAppScreens = 'selectAppScreens';
+
+  static String specAreasToConfigOnScreen = 'specAreasToConfigOnScreen';
 }

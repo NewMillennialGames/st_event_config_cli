@@ -38,8 +38,9 @@ void main() {
     _qMatchColl.append([
       QuestMatcher(
         'should match 1',
-        MatcherBehaviorEnum.addPendingQuestions,
-        DerivedQuestGenerator.noop(),
+        cascadeTypeOfMatchedQuest:
+            QRespCascadePatternEm.addsWhichAreaInSelectedScreenQuestions,
+        derivedQuestGen: DerivedQuestGenerator.noop(),
         validateUserAnswerAfterPatternMatchIsTrueCallback: (p0) => true,
         appScreen: qq.appScreen,
         screenWidgetArea: qq.screenWidgetArea,
@@ -47,8 +48,9 @@ void main() {
       ),
       QuestMatcher(
         'should match 2',
-        MatcherBehaviorEnum.addPendingQuestions,
-        DerivedQuestGenerator.noop(),
+        cascadeTypeOfMatchedQuest:
+            QRespCascadePatternEm.addsWhichAreaInSelectedScreenQuestions,
+        derivedQuestGen: DerivedQuestGenerator.noop(),
         validateUserAnswerAfterPatternMatchIsTrueCallback: (p0) => true,
         appScreen: qq.appScreen,
         screenWidgetArea: qq.screenWidgetArea,
@@ -56,15 +58,17 @@ void main() {
       ),
       QuestMatcher(
         'should NOT match',
-        MatcherBehaviorEnum.addPendingQuestions,
-        DerivedQuestGenerator.noop(),
+        cascadeTypeOfMatchedQuest:
+            QRespCascadePatternEm.addsWhichAreaInSelectedScreenQuestions,
+        derivedQuestGen: DerivedQuestGenerator.noop(),
         validateUserAnswerAfterPatternMatchIsTrueCallback: (p0) => true,
         appScreen: AppScreen.eventConfiguration,
       ),
       QuestMatcher(
         'should NOT match',
-        MatcherBehaviorEnum.addPendingQuestions,
-        DerivedQuestGenerator.noop(),
+        cascadeTypeOfMatchedQuest:
+            QRespCascadePatternEm.addsWhichAreaInSelectedScreenQuestions,
+        derivedQuestGen: DerivedQuestGenerator.noop(),
         validateUserAnswerAfterPatternMatchIsTrueCallback: (p0) => false,
         appScreen: AppScreen.leaderboard,
       ),

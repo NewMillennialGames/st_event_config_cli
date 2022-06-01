@@ -6,10 +6,11 @@ part of EvCfgConfig;
     from the intial configurator questions
 
 this config should drive the whole dynamic
-dialog
-*/
+dialog with CLI user
 
-const String _whichAreasForScreenConst = 'whichAreasForScreen';
+instructions for use:
+
+*/
 
 List<QuestMatcher> stDfltMatcherList = [
   // defines rules for adding new Questions or implicit answers
@@ -17,30 +18,49 @@ List<QuestMatcher> stDfltMatcherList = [
 
   QuestMatcher<List<ScreenWidgetArea>>(
     'build ?`s to specify which areas to config on selected screens',
-    MatcherBehaviorEnum.addPendingQuestions,
-    DerivedQuestGenerator(
+    cascadeTypeOfMatchedQuest:
+        QRespCascadePatternEm.addsWhichAreaInSelectedScreenQuestions,
+    derivedQuestGen: DerivedQuestGenerator(
       'Select areas to configure on screen {0}',
-      newQuestPromptArgGen: (QuestBase priorAnsweredQuest, int idx) {
-        return [(priorAnsweredQuest.mainAnswer as List<AppScreen>)[idx].name];
+      newQuestPromptArgGen: (QuestBase priorAnsweredQuest, int newQuIdx) {
+        String nameOfScreenToConfig =
+            (priorAnsweredQuest.mainAnswer as List<AppScreen>)[newQuIdx].name;
+        return [nameOfScreenToConfig];
       },
       newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
-        return (priorAnsweredQuest.mainAnswer as List<AppScreen>).length;
+        return (priorAnsweredQuest.mainAnswer as List<dynamic>).length;
       },
-      newQuestIdGenFromPriorQuest: (QuestBase priorQ, int idx) {
+      newQuestIdGenFromPriorQuest: (
+        QuestBase priorAnsweredQuest,
+        int newQuIdx,
+      ) {
         // each new question about area on screen should
         // have an ID that lets the next QM identify it to produce new Q's
-        String scrName = priorQ.appScreen.name; // + '-' + priorQ.mainAnswer
-        return _whichAreasForScreenConst + '-' + scrName;
+        String scrName = priorAnsweredQuest.appScreen.name;
+        return QuestionIdStrings.specAreasToConfigOnScreen + '-' + scrName;
       },
-      answerChoiceGenerator: ((QuestBase priorAnsweredQuest, int idx) {
+      answerChoiceGenerator: (
+        QuestBase priorAnsweredQuest,
+        int newQuIdx,
+      ) {
         var selectedAppScreens =
             priorAnsweredQuest.mainAnswer as List<AppScreen>;
-        return selectedAppScreens[idx]
+        return selectedAppScreens[newQuIdx]
             .configurableScreenAreas
             .map((e) => e.name);
-      }),
-      qTargetIntentUpdaterArg: (QuestBase qb, int idx) =>
-          qb.qTargetIntent.copyWith(appScreen: qb.qTargetIntent.appScreen),
+      },
+      qTargetIntentUpdaterCallbk: (
+        QuestBase priorAnsweredQuest,
+        int newQuIdx,
+      ) {
+        // create target + intent of each generated question
+        var selectedAppScreens =
+            priorAnsweredQuest.mainAnswer as List<AppScreen>;
+        return priorAnsweredQuest.qTargetIntent.copyWith(
+            appScreen: selectedAppScreens[newQuIdx],
+            cascadeType:
+                QRespCascadePatternEm.addsWhichRulesForSelectedAreaQuestions);
+      },
       perQuestGenOptions: [
         PerQuestGenOption(
           castFunc: (String lstAreaIdxs) {
@@ -50,7 +70,6 @@ List<QuestMatcher> stDfltMatcherList = [
         ),
       ],
     ),
-    cascadeType: QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea,
     questIdPatternTest: (qid) => qid == QuestionIdStrings.selectAppScreens,
     validateUserAnswerAfterPatternMatchIsTrueCallback: (ans) => true,
     isRuleQuestion: false,
@@ -58,9 +77,12 @@ List<QuestMatcher> stDfltMatcherList = [
 
   QuestMatcher<List<VisualRuleType>>(
     'build ?`s to specify which rules for areas of selected screens',
-    MatcherBehaviorEnum.addPendingQuestions,
-    DerivedQuestGenerator(
-      'Select which rules to configure on area {0} of screen {1}',
+    cascadeTypeOfMatchedQuest:
+        QRespCascadePatternEm.addsWhichRulesForSelectedAreaQuestions,
+    derivedQuestGen: DerivedQuestGenerator(
+      'Select which rules to add on area {0} of screen {1}',
+      // genBehaviorOfDerivedQuests:
+      //     DerivedGenBehaviorOnMatchEnum.addPendingQuestions,
       newQuestPromptArgGen: (QuestBase priorAnsweredQuest, int idx) {
         var areaName =
             (priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>)[idx].name;
@@ -77,8 +99,13 @@ List<QuestMatcher> stDfltMatcherList = [
             .applicableRuleTypes(priorAnsweredQuest.qTargetIntent.appScreen)
             .map((e) => e.name);
       }),
-      qTargetIntentUpdaterArg: (QuestBase qb, int idx) =>
-          qb.qTargetIntent.copyWith(appScreen: qb.qTargetIntent.appScreen),
+      qTargetIntentUpdaterCallbk: (QuestBase priorAnsweredQuest, int idx) {
+        var selectedScreenAreas =
+            priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>;
+        ScreenWidgetArea currArea = selectedScreenAreas[idx];
+        return priorAnsweredQuest.qTargetIntent
+            .copyWith(screenWidgetArea: currArea);
+      },
       perQuestGenOptions: [
         PerQuestGenOption(
           castFunc: (String lstAreaIdxs) {
@@ -88,43 +115,82 @@ List<QuestMatcher> stDfltMatcherList = [
         ),
       ],
     ),
-    cascadeType: QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea,
-    questIdPatternTest: (qid) => qid.startsWith(_whichAreasForScreenConst),
+    questIdPatternTest: (qid) =>
+        qid.startsWith(QuestionIdStrings.specAreasToConfigOnScreen),
+    isRuleQuestion: false,
+  ),
 
-    // validateUserAnswerAfterPatternMatchIsTrueCallback: (QuestBase qb) {
-    //   bool addsWhichRulesForSelectedAreaQuestions =
-    //       qb.qTargetIntent.addsWhichRulesForSelectedAreaQuestions;
-    //   return addsWhichRulesForSelectedAreaQuestions &&
-    //       qb.expectedAnswerType == List<VisualRuleType>;
-    // },
+  QuestMatcher<List<ScreenAreaWidgetSlot>>(
+    'build ?`s to specify which slots in areas on selected screens user wants to config',
+    cascadeTypeOfMatchedQuest:
+        QRespCascadePatternEm.addsWhichSlotOfSelectedAreaQuestions,
+    derivedQuestGen: DerivedQuestGenerator(
+      'Select which slots to config within area {0} of screen {1}',
+      // genBehaviorOfDerivedQuests:
+      //     DerivedGenBehaviorOnMatchEnum.addPendingQuestions,
+      newQuestPromptArgGen: (QuestBase priorAnsweredQuest, int idx) {
+        var areaName =
+            (priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>)[idx].name;
+        var screenName = priorAnsweredQuest.appScreen.name;
+        return [areaName, screenName];
+      },
+      newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
+        return (priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>).length;
+      },
+      answerChoiceGenerator: (QuestBase priorAnsweredQuest, int idx) {
+        var selectedScreenAreas =
+            priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>;
+        return selectedScreenAreas[idx]
+            .applicableWigetSlots(priorAnsweredQuest.appScreen)
+            .map((e) => e.name);
+      },
+      qTargetIntentUpdaterCallbk: (QuestBase priorAnsweredQuest, int idx) {
+        var selectedScreenAreas =
+            priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>;
+        ScreenWidgetArea currArea = selectedScreenAreas[idx];
+        return priorAnsweredQuest.qTargetIntent
+            .copyWith(screenWidgetArea: currArea);
+      },
+      perQuestGenOptions: [
+        PerQuestGenOption(
+          castFunc: (String lstAreaIdxs) {
+            return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
+                .map((i) => ScreenWidgetArea.values[i]);
+          },
+        ),
+      ],
+    ),
+    questIdPatternTest: (qid) =>
+        qid.startsWith(QuestionIdStrings.specAreasToConfigOnScreen),
     isRuleQuestion: false,
   ),
 
   QuestMatcher<int>(
     'if user wants to perform grouping on a ListView, ask how many grouping cols are required & add a Questions for each',
-    MatcherBehaviorEnum.addPendingQuestions,
-    DerivedQuestGenerator(
+    cascadeTypeOfMatchedQuest:
+        QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea,
+    derivedQuestGen: DerivedQuestGenerator(
       'Select field #{0} to use for row-grouping on {1} screen',
+      // genBehaviorOfDerivedQuests:
+      //     DerivedGenBehaviorOnMatchEnum.addPendingQuestions,
       newQuestPromptArgGen: (quest, idx) =>
           <String>['${idx + 1}', quest.appScreen.name],
       newQuestCountCalculator: (q) => (q.mainAnswer) as int,
-      answerChoiceGenerator: ((QuestBase priorAnsweredQuest, idx) {
+      answerChoiceGenerator: (QuestBase priorAnsweredQuest, idx) {
         // var selectedAppScreens = priorAnswer as int;
         return DbTableFieldName.values.map((e) => e.name);
-      }),
-      qTargetIntentUpdaterArg: (QuestBase qb, int idx) =>
+      },
+      qTargetIntentUpdaterCallbk: (QuestBase qb, int idx) =>
           qb.qTargetIntent.copyWith(appScreen: qb.qTargetIntent.appScreen),
       perQuestGenOptions: [
         PerQuestGenOption(
           castFunc: (ansr) => DbTableFieldName
               .values[int.tryParse(ansr) ?? CfgConst.cancelSortIndex],
-          ruleType: VisualRuleType.groupCfg,
-          ruleQuestType: VisRuleQuestType.selectDataFieldName,
+          visRuleType: VisualRuleType.groupCfg,
+          visRuleQuestType: VisRuleQuestType.selectDataFieldName,
         ),
       ],
     ),
-
-    cascadeType: QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea,
     screenWidgetArea: ScreenWidgetArea.tableview,
     visRuleTypeForAreaOrSlot: VisualRuleType.groupCfg,
     // if existing Question is for grouping on ListView

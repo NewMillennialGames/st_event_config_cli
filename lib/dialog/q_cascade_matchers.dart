@@ -67,22 +67,23 @@ class QMatchCollection {
   }
 }
 
-enum MatcherBehaviorEnum {
+enum DerivedGenBehaviorOnMatchEnum {
   addPendingQuestions,
   addImplicitAnswers,
   addQuestsAndAnswers, // aka BOTH
+  noop,
 }
 
-extension MatcherBehaviorEnumExt1 on MatcherBehaviorEnum {
+extension MatcherBehaviorEnumExt1 on DerivedGenBehaviorOnMatchEnum {
   //
   bool get addsPendingQuestions => [
-        MatcherBehaviorEnum.addPendingQuestions,
-        MatcherBehaviorEnum.addQuestsAndAnswers
+        DerivedGenBehaviorOnMatchEnum.addPendingQuestions,
+        DerivedGenBehaviorOnMatchEnum.addQuestsAndAnswers
       ].contains(this);
 
   bool get createsImplicitAnswers => [
-        MatcherBehaviorEnum.addImplicitAnswers,
-        MatcherBehaviorEnum.addQuestsAndAnswers
+        DerivedGenBehaviorOnMatchEnum.addImplicitAnswers,
+        DerivedGenBehaviorOnMatchEnum.addQuestsAndAnswers
       ].contains(this);
 }
 
@@ -92,11 +93,14 @@ class QuestMatcher<AnsType> {
   in order to verify it's a match
 
   */
-  final MatcherBehaviorEnum matcherMatchBehavior;
+  final String matcherDescrip;
+  // cascadeType indicates whether we add new Quest2s, auto-answers or both
+  final QRespCascadePatternEm? cascadeTypeOfMatchedQuest;
+  final DerivedQuestGenerator derivedQuestGen;
+
   // AddQuestChkCallbk is for doing more advanced analysis to verify a match
   final AddQuestChkCallbk? validateUserAnswerAfterPatternMatchIsTrueCallback;
-  // cascadeType indicates whether we add new Quest2s, auto-answers or both
-  final QRespCascadePatternEm? cascadeType;
+
   // pattern matching values;  leave null to not match on them
   final AppScreen? appScreen;
   final ScreenWidgetArea? screenWidgetArea;
@@ -105,16 +109,15 @@ class QuestMatcher<AnsType> {
   final BehaviorRuleType? behRuleTypeForAreaOrSlot;
   final bool isRuleQuestion;
   final PriorQuestIdMatchPatternTest? questIdPatternTest;
-  final DerivedQuestGenerator derivedQuestGen;
+
   late Type? typ = CaptureAndCast<AnsType>;
-  final String matcherDescrip;
+
   //
   QuestMatcher(
-    this.matcherDescrip,
-    this.matcherMatchBehavior,
-    this.derivedQuestGen, {
+    this.matcherDescrip, {
+    required this.cascadeTypeOfMatchedQuest,
+    required this.derivedQuestGen,
     this.validateUserAnswerAfterPatternMatchIsTrueCallback,
-    this.cascadeType,
     this.questIdPatternTest,
     this.appScreen,
     this.screenWidgetArea,
@@ -125,9 +128,10 @@ class QuestMatcher<AnsType> {
   });
 
   // getters
-  bool get addsPendingQuestions => matcherMatchBehavior.addsPendingQuestions;
+  bool get addsPendingQuestions =>
+      derivedQuestGen.genBehaviorOfDerivedQuests.addsPendingQuestions;
   bool get createsImplicitAnswers =>
-      matcherMatchBehavior.createsImplicitAnswers;
+      derivedQuestGen.genBehaviorOfDerivedQuests.createsImplicitAnswers;
 
   bool get usesMatchByQuestIdPattern => this.questIdPatternTest != null;
 
@@ -163,8 +167,8 @@ class QuestMatcher<AnsType> {
     // compare all properties instead of only Quest2Id
     bool dMatch = true;
     dMatch = dMatch &&
-        (this.cascadeType == null ||
-            this.cascadeType == quest.qTargetIntent.cascadeType);
+        (this.cascadeTypeOfMatchedQuest == null ||
+            this.cascadeTypeOfMatchedQuest == quest.qTargetIntent.cascadeType);
     print('Cascade matches: $dMatch');
     dMatch =
         dMatch && (this.appScreen == null || this.appScreen == quest.appScreen);

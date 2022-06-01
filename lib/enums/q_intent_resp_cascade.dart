@@ -21,14 +21,14 @@ enum QTargetLevelEm {
 }
 
 enum QRespCascadePatternEm {
-  /* UserResponseCascadePattern defines:
-    how does response from user
-    to a current Quest2
-    impact future Quest2s in the pending list
+  /* QRespCascadePatternEm defines:
+    how does response from user to a current Question
+    
+    impact future Questions in the pending list
 
     see extension below for clear wording
 
-    I want NO CASCADE Quest2s to sort to LAST position
+    I want NO CASCADE Questions to sort to LAST position
     so I moved it's index to the bottom of list
    */
   addsWhichAreaInSelectedScreenQuestions,
@@ -36,8 +36,7 @@ enum QRespCascadePatternEm {
   addsWhichSlotOfSelectedAreaQuestions, // for each screen & area
   addsWhichRulesForSlotsInArea, // for each slot in area
   addsRuleDetailQuestsForSlotOrArea,
-  // addsVisualRuleDetailQuest2s,
-  // addsBehavioralRuleQuest2s,
+  //
   noCascade,
 }
 

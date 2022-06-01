@@ -20,17 +20,17 @@ class PerQuestGenOption<AnsType> {
 
   final CastStrToAnswTypCallback<AnsType> castFunc;
   final int defaultAnswerIdx = 0;
-  final VisualRuleType? ruleType;
-  final VisRuleQuestType? ruleQuestType;
+  final VisualRuleType? visRuleType;
+  final VisRuleQuestType? visRuleQuestType;
 
   PerQuestGenOption({
     required this.castFunc,
-    this.ruleType,
-    this.ruleQuestType,
+    this.visRuleType,
+    this.visRuleQuestType,
   });
 
   Type get genType => AnsType;
-  bool get genAsRuleQuestion => ruleType != null;
+  bool get genAsRuleQuestion => visRuleType != null;
 }
 
 class DerivedQuestGenerator {
@@ -40,24 +40,27 @@ class DerivedQuestGenerator {
   */
 
   final String questPromptTemplate;
+  final DerivedGenBehaviorOnMatchEnum genBehaviorOfDerivedQuests;
   final NewQuestCount newQuestCountCalculator;
   final NewQuestArgGen newQuestPromptArgGen;
   final ChoiceListFromPriorAnswer answerChoiceGenerator;
   final QTargetIntentUpdateFunc qTargetIntentUpdater;
-  final List<PerQuestGenOption> perQuestGenOptions;
   final NewQuestIdGenFromPriorAnswer? newQuestIdGenFromPriorQuest;
+  final List<PerQuestGenOption> perQuestGenOptions;
 
   DerivedQuestGenerator(
     this.questPromptTemplate, {
+    this.genBehaviorOfDerivedQuests =
+        DerivedGenBehaviorOnMatchEnum.addPendingQuestions,
     required this.newQuestCountCalculator,
     required this.newQuestPromptArgGen,
     required this.answerChoiceGenerator,
     required this.perQuestGenOptions,
-    QTargetIntentUpdateFunc? qTargetIntentUpdaterArg,
     this.newQuestIdGenFromPriorQuest,
-  }) : this.qTargetIntentUpdater = qTargetIntentUpdaterArg == null
+    QTargetIntentUpdateFunc? qTargetIntentUpdaterCallbk,
+  }) : this.qTargetIntentUpdater = qTargetIntentUpdaterCallbk == null
             ? _ccTargIntent
-            : qTargetIntentUpdaterArg;
+            : qTargetIntentUpdaterCallbk;
 
   static QTargetIntent _ccTargIntent(QuestBase qb, int idx) =>
       qb.qTargetIntent.copyWith();
@@ -67,6 +70,7 @@ class DerivedQuestGenerator {
     // eg testing
     return DerivedQuestGenerator(
       'no op',
+      genBehaviorOfDerivedQuests: DerivedGenBehaviorOnMatchEnum.noop,
       newQuestCountCalculator: (qb) => 0,
       newQuestPromptArgGen: (a, ix) => [],
       answerChoiceGenerator: (_, __) => [],
@@ -108,7 +112,7 @@ class DerivedQuestGenerator {
         QuestPromptPayload(
           _userPrompt,
           answerChoiceGenerator(answeredQuest, newQIdx).toList(),
-          instcGenOpt.ruleQuestType ?? VisRuleQuestType.dialogStruct,
+          instcGenOpt.visRuleQuestType ?? VisRuleQuestType.dialogStruct,
           instcGenOpt.castFunc,
         ),
       ];
