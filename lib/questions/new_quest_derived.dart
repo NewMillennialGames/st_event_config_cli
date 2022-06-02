@@ -22,11 +22,13 @@ class PerQuestGenOption<AnsType> {
   final int defaultAnswerIdx = 0;
   final VisualRuleType? visRuleType;
   final VisRuleQuestType? visRuleQuestType;
+  final bool acceptsMultiResponses;
 
   PerQuestGenOption({
     required this.castFunc,
     this.visRuleType,
     this.visRuleQuestType,
+    this.acceptsMultiResponses = false,
   });
 
   Type get genType => AnsType;

@@ -107,7 +107,7 @@ class QuestMatcher<AnsType> {
   final ScreenAreaWidgetSlot? slotInArea;
   final VisualRuleType? visRuleTypeForAreaOrSlot;
   final BehaviorRuleType? behRuleTypeForAreaOrSlot;
-  final bool isRuleQuestion;
+  final bool matchOnlyOnRuleQuestion;
   final PriorQuestIdMatchPatternTest? questIdPatternTest;
 
   late Type? typ = CaptureAndCast<AnsType>;
@@ -124,7 +124,7 @@ class QuestMatcher<AnsType> {
     this.slotInArea,
     this.visRuleTypeForAreaOrSlot,
     this.behRuleTypeForAreaOrSlot,
-    this.isRuleQuestion = false,
+    this.matchOnlyOnRuleQuestion = false,
   });
 
   // getters
@@ -133,29 +133,37 @@ class QuestMatcher<AnsType> {
   bool get createsImplicitAnswers =>
       derivedQuestGen.genBehaviorOfDerivedQuests.createsImplicitAnswers;
 
-  bool get usesMatchByQuestIdPattern => this.questIdPatternTest != null;
+  bool get usesMatchByQIdPatternCallback => questIdPatternTest != null;
+  bool get shouldValidateUserAnswer =>
+      validateUserAnswerAfterPatternMatchIsTrueCallback != null;
 
   // public methods
-  bool doesMatch(QuestBase quest) {
+  bool doesMatch(QuestBase prevAnsweredQuest) {
     //
-    if (usesMatchByQuestIdPattern && quest.questId != this.questIdPatternTest) {
-      // print('this matcher targeted at a SPECIFIC question & does not apply to passed quest');
-      return false;
-    } else if (quest.questId == this.questIdPatternTest) {
-      // exact match on questId
-      if (validateUserAnswerAfterPatternMatchIsTrueCallback != null) {
-        return validateUserAnswerAfterPatternMatchIsTrueCallback!(quest);
+    if (usesMatchByQIdPatternCallback) {
+      // print('this matcher targeted at a SPECIFIC question & does not consider other atts');
+      bool patternDoesMatch =
+          this.questIdPatternTest!(prevAnsweredQuest.questId);
+      if (!patternDoesMatch) {
+        return false;
       }
-      return true;
+      // is exact match on questId; should we also check answer?
+      if (shouldValidateUserAnswer) {
+        return validateUserAnswerAfterPatternMatchIsTrueCallback!(
+          prevAnsweredQuest,
+        );
+      }
+      return patternDoesMatch;
     }
 
-    bool isAPatternMatch = _doDeeperMatch(quest);
+    bool isAPatternMatch = _doDeeperMatch(prevAnsweredQuest);
     // pattern doesnt match so exit early
     if (!isAPatternMatch) return false;
 
     // pattern match succeeded (isAPatternMatch == true), so now validate user answer
     if (validateUserAnswerAfterPatternMatchIsTrueCallback != null) {
-      return validateUserAnswerAfterPatternMatchIsTrueCallback!(quest);
+      return validateUserAnswerAfterPatternMatchIsTrueCallback!(
+          prevAnsweredQuest);
     }
     return isAPatternMatch;
   }

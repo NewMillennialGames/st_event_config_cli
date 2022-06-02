@@ -24,22 +24,22 @@ void main() {
       responseAddsRuleDetailQuests: true,
     );
 
-    QuestBase askNumSlots = testDataCreate.makeQuestion<int>(
+    QuestBase askNumSortSlots = testDataCreate.makeQuestion<int>(
       qq,
-      '',
+      'how many sort slots you want?',
       ['0', '1', '2', '3'],
       (selCount) {
         return int.tryParse(selCount) ?? 0;
       },
     );
     var _qMatchColl = QMatchCollection([]);
-    expect(_qMatchColl.matchCountFor(askNumSlots), 0);
+    expect(_qMatchColl.matchCountFor(askNumSortSlots), 0);
     //
     _qMatchColl.append([
       QuestMatcher(
         'should match 1',
         cascadeTypeOfMatchedQuest:
-            QRespCascadePatternEm.addsWhichAreaInSelectedScreenQuestions,
+            QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea,
         derivedQuestGen: DerivedQuestGenerator.noop(),
         validateUserAnswerAfterPatternMatchIsTrueCallback: (p0) => true,
         appScreen: qq.appScreen,
@@ -49,7 +49,7 @@ void main() {
       QuestMatcher(
         'should match 2',
         cascadeTypeOfMatchedQuest:
-            QRespCascadePatternEm.addsWhichAreaInSelectedScreenQuestions,
+            QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea,
         derivedQuestGen: DerivedQuestGenerator.noop(),
         validateUserAnswerAfterPatternMatchIsTrueCallback: (p0) => true,
         appScreen: qq.appScreen,
@@ -73,7 +73,7 @@ void main() {
         appScreen: AppScreen.leaderboard,
       ),
     ]);
-    expect(_qMatchColl.matchCountFor(askNumSlots), 2);
+    expect(_qMatchColl.matchCountFor(askNumSortSlots), 2);
   });
 
   // test('check if matchers hit', () {
