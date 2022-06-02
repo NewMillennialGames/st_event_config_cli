@@ -13,7 +13,7 @@ void main() {
   /*  
   */
   test(
-    'simply see if new questions get created based on gen-rules',
+    'verify new questions get created based on gen-rules',
     () {
       //
       // ask which screens to configure
