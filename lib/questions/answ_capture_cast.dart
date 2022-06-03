@@ -19,8 +19,8 @@ class CaptureAndCast<T> {
     _answers = s;
   }
 
-  T cast() {
-    return _castFunc(_answers);
+  T cast(QuestBase qb) {
+    return _castFunc(qb, _answers);
   }
 
   // getters  (use == not "is")

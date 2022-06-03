@@ -11,7 +11,7 @@ class DialogRunner {
   to produce CLI output to the user
   */
   final QuestListMgr _qListMgr; // = QuestListMgr();
-  final NewQuestionCollector _newQuestComposer = NewQuestionCollector();
+  // final NewQuestionCollector _newQuestComposer = NewQuestionCollector();
   // set in init
   final QuestionPresenter questPresenter;
   final int linesBetweenSections;
@@ -65,7 +65,8 @@ class DialogRunner {
       but new auto-generated Quest2s should be placed under #2 (appendNewQuestsOrInsertImplicitAnswers)
     */
 
-    bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(_qListMgr);
+    // bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(_qListMgr);
+    bool didAddNew = false;
     if (!didAddNew) {
       // run appendNewQuestsOrInsertImplicitAnswers only if handleAcquiringNewQuestions does no work
       _qMatchColl.appendNewQuestsOrInsertImplicitAnswers(_qListMgr);
@@ -110,7 +111,8 @@ class DialogRunner {
     // logic to add new Questions based on user response
     // two different methods
     // called from inside of: questPresenter.askAndWaitForUserResponse
-    bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(_qListMgr);
+    // bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(_qListMgr);
+    bool didAddNew = false;
     if (!didAddNew) {
       // new version of handleAcquiringNewQuest2s
       // run it only if handleAcquiringNewQuest2s does no work

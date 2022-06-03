@@ -21,10 +21,11 @@ void main() {
         QTargetIntent.eventLevel(responseAddsWhichAreaQuestions: true),
         DlgStr.selectAppScreens, // <String, List<AppScreen>>
         AppScreen.eventConfiguration.topConfigurableScreens.map((e) => e.name),
-        CaptureAndCast<List<AppScreen>>((s) => castStrOfIdxsToIterOfInts(s)
-            .map((idx) =>
-                AppScreen.eventConfiguration.topConfigurableScreens[idx])
-            .toList()),
+        CaptureAndCast<List<AppScreen>>((QuestBase qb, s) =>
+            castStrOfIdxsToIterOfInts(s)
+                .map((idx) =>
+                    AppScreen.eventConfiguration.topConfigurableScreens[idx])
+                .toList()),
         questId: QuestionIdStrings.selectAppScreens,
       );
 
@@ -71,7 +72,7 @@ void main() {
     QuestBase askNumSlots = testDataCreator.makeQuestion<int>(
         qq,
         'askNumSlots convert on str (no op prompt)',
-        ['0', '1', '$k_quests_created_in_test', '3'], (selCount) {
+        ['0', '1', '$k_quests_created_in_test', '3'], (QuestBase qb, selCount) {
       print('askNumSlots convert on str $selCount');
       return int.tryParse(selCount) ?? 0;
     });

@@ -35,7 +35,7 @@ class QuestPromptInstance<T> implements QPromptIfc {
   @override
   void collectResponse(String s) {
     // store user answer response into  CaptureAndCast<T> _answerRepoAndTypeCast
-    print('Qpi.colResp:  Prompt: "$userPrompt" answered with $s!');
+    // print('Qpi.colResp:  Prompt: "$userPrompt" answered with $s!');
     _answerRepoAndTypeCast.captureUserRespStr(s);
   }
 

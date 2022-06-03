@@ -75,86 +75,77 @@ final List<QuestBase> _initQuestionLst = [
     QTargetIntent.eventLevel(),
     DlgStr.eventName,
     [],
-    CaptureAndCast<String>((s) => s),
+    CaptureAndCast<String>((qb, s) => s),
     questId: QuestionIdStrings.eventName,
   ),
   // set true false to shorten manual testing
-  if (true) ...[
+  if (false) ...[
     QuestBase.initialEventConfigRule(
       QTargetIntent.eventLevel(),
       DlgStr.eventDescrip,
       [],
-      CaptureAndCast<String>((s) => s),
+      CaptureAndCast<String>((qb, s) => s),
       questId: QuestionIdStrings.eventDescrip,
     ),
     QuestBase.initialEventConfigRule(
       QTargetIntent.eventLevel(),
-      // QDefCollection([]),
       DlgStr.eventType,
       EvType.values.map((e) => e.name),
       CaptureAndCast<EvType>(
-        (s) => EvType.values[int.tryParse(s) ?? 0],
+        (qb, s) => EvType.values[int.tryParse(s) ?? 0],
       ),
       questId: QuestionIdStrings.eventType,
     ),
     QuestBase.initialEventConfigRule(
       QTargetIntent.eventLevel(),
-      // QDefCollection([]),
       DlgStr.eventWhosCompeting,
       EvCompetitorType.values.map((e) => e.name),
       CaptureAndCast<EvCompetitorType>(
-        (s) => EvCompetitorType.values[int.tryParse(s) ?? 0],
+        (qb, s) => EvCompetitorType.values[int.tryParse(s) ?? 0],
       ),
       questId: QuestionIdStrings.competitorType,
     ),
     QuestBase.initialEventConfigRule(
       QTargetIntent.eventLevel(),
-      // QDefCollection([]),
       DlgStr.eventCompPlayAgainst,
       EvOpponentType.values.map((e) => e.name),
       CaptureAndCast<EvOpponentType>(
-          (s) => EvOpponentType.values[int.tryParse(s) ?? 0]),
-      // (i) => EvOpponentType.values[i],
+        (qb, s) => EvOpponentType.values[int.tryParse(s) ?? 0],
+      ),
       questId: QuestionIdStrings.competeAgainstType,
     ),
     QuestBase.initialEventConfigRule(
       QTargetIntent.eventLevel(),
-      // QDefCollection([]),
       DlgStr.eventDuration,
       EvDuration.values.map((e) => e.name),
       CaptureAndCast<EvDuration>(
-          (s) => EvDuration.values[int.tryParse(s) ?? 0]),
-      // (i) => EvDuration.values[i],
+        (qb, s) => EvDuration.values[int.tryParse(s) ?? 0],
+      ),
       questId: QuestionIdStrings.eventDuration,
     ),
     QuestBase.initialEventConfigRule(
       QTargetIntent.eventLevel(),
-      // QDefCollection([]),
       DlgStr.eventEliminationStrategy,
       EvEliminationStrategy.values.map((e) => e.name),
       CaptureAndCast<EvEliminationStrategy>(
-          (s) => EvEliminationStrategy.values[int.tryParse(s) ?? 0]),
-      // (i) => EvEliminationStrategy.values[i],
+        (qb, s) => EvEliminationStrategy.values[int.tryParse(s) ?? 0],
+      ),
       questId: QuestionIdStrings.eventEliminationStrategy,
     ),
     QuestBase.initialEventConfigRule(
       QTargetIntent.eventLevel(),
-      // QDefCollection([]),
       DlgStr.useSameRowStyleForAllScreens,
       ['no', 'yes'],
-      CaptureAndCast<bool>((ls) => ls == '1'),
-      // (i) => i == '1',
-      // defaultAnswerIdx: 1,
+      CaptureAndCast<bool>((qb, ls) => ls == '1'),
       questId: QuestionIdStrings.globalRowStyle,
     ),
   ],
   // ask which screens to configure
   QuestBase.dlogCascade(
     QTargetIntent.eventLevel(responseAddsWhichAreaQuestions: true),
-    // QDefCollection([]),
     DlgStr.selectAppScreens, // <String, List<AppScreen>>
     AppScreen.eventConfiguration.topConfigurableScreens.map((e) => e.name),
-    CaptureAndCast<List<AppScreen>>((s) => castStrOfIdxsToIterOfInts(s)
+    CaptureAndCast<List<AppScreen>>((qb, s) => castStrOfIdxsToIterOfInts(s)
         .map((idx) => AppScreen.eventConfiguration.topConfigurableScreens[idx])
         .toList()),
     questId: QuestionIdStrings.selectAppScreens,

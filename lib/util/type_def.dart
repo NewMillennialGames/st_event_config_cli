@@ -10,13 +10,13 @@ typedef QuestFactorytSignature = QuestBase Function(
 // for recording user answers to questions
 typedef SubmitUserResponseFunc = void Function(String);
 // for casting string into expected rule-type value
-typedef CastStrToAnswTypCallback<T> = T Function(String);
+typedef CastStrToAnswTypCallback<T> = T Function(QuestBase, String);
 typedef NewQuestIdGenFromPriorAnswer = String Function(
     QuestBase priorAnsweredQuest, int idx);
 
 typedef PriorQuestIdMatchPatternTest = bool Function(String priorQuestId);
 
-typedef ChoiceListFromPriorAnswer<T> = Iterable<String> Function(
+typedef ChoiceListFromPriorAnswer<T> = List<String> Function(
     QuestBase priorAnsweredQuest, int idx);
 //
 typedef AddQuestChkCallbk = bool Function(QuestBase priorAnsweredQuest);

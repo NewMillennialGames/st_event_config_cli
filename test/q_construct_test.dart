@@ -27,13 +27,13 @@ void main() {
         'how many Grouping positions would you like to configure?',
         ['0', '1', '2', '3'],
         VisRuleQuestType.dialogStruct,
-        (String selCount) => int.tryParse(selCount) ?? 0,
+        (QuestBase qb, String selCount) => int.tryParse(selCount) ?? 0,
       ),
       QuestPromptPayload(
         'how many Grouping positions would you like to configure?',
         ['0', '1', '2', '3'],
         VisRuleQuestType.dialogStruct,
-        (String selCount) => int.tryParse(selCount) ?? 0,
+        (QuestBase qb, String selCount) => int.tryParse(selCount) ?? 0,
       ),
     ];
 

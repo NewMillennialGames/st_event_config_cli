@@ -51,9 +51,11 @@ List<QuestMatcher> stDfltMatcherList = [
       ) {
         var selectedAppScreens =
             priorAnsweredQuest.mainAnswer as List<AppScreen>;
+        // adding 1 to skip eventConfig screen enum
         return selectedAppScreens[newQuIdx]
             .configurableScreenAreas
-            .map((swa) => swa.name);
+            .map((swa) => swa.name)
+            .toList();
       },
       qTargetIntentUpdaterCallbk: (
         QuestBase priorAnsweredQuest,
@@ -70,7 +72,7 @@ List<QuestMatcher> stDfltMatcherList = [
       },
       perQuestGenOptions: [
         PerQuestGenOption(
-          castFunc: (String lstAreaIdxs) {
+          castFunc: (QuestBase qb, String lstAreaIdxs) {
             return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0).map(
               (i) => ScreenWidgetArea.values[i],
             );
@@ -91,32 +93,41 @@ List<QuestMatcher> stDfltMatcherList = [
       'Select which rules to add on area {0} of screen {1}',
       newQuestPromptArgGen: (
         QuestBase priorAnsweredQuest,
-        int idx,
+        int newQuestIdx,
       ) {
-        var areaName =
-            (priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>)[idx].name;
-        var screenName = priorAnsweredQuest.qTargetIntent.appScreen.name;
+        List<ScreenWidgetArea> screenAreasToConfig =
+            (priorAnsweredQuest.mainAnswer as Iterable<ScreenWidgetArea>)
+                .toList();
+        print('*****');
+        print(screenAreasToConfig);
+
+        String areaName = screenAreasToConfig[newQuestIdx].name;
+        String screenName = priorAnsweredQuest.appScreen.name;
         return [areaName, screenName];
       },
       newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
-        return (priorAnsweredQuest.mainAnswer as List<dynamic>).length;
+        return (priorAnsweredQuest.mainAnswer as Iterable<ScreenWidgetArea>)
+            .length;
       },
       answerChoiceGenerator: ((
         QuestBase priorAnsweredQuest,
         int idx,
       ) {
-        var selectedScreenAreas =
-            priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>;
+        List<ScreenWidgetArea> selectedScreenAreas =
+            (priorAnsweredQuest.mainAnswer as Iterable<ScreenWidgetArea>)
+                .toList();
         return selectedScreenAreas[idx]
             .applicableRuleTypes(priorAnsweredQuest.appScreen)
-            .map((e) => e.name);
+            .map((e) => e.name)
+            .toList();
       }),
       qTargetIntentUpdaterCallbk: (
         QuestBase priorAnsweredQuest,
         int idx,
       ) {
-        var selectedScreenAreas =
-            priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>;
+        List<ScreenWidgetArea> selectedScreenAreas =
+            (priorAnsweredQuest.mainAnswer as Iterable<ScreenWidgetArea>)
+                .toList();
         ScreenWidgetArea currArea = selectedScreenAreas[idx];
         return priorAnsweredQuest.qTargetIntent.copyWith(
           screenWidgetArea: currArea,
@@ -126,10 +137,12 @@ List<QuestMatcher> stDfltMatcherList = [
       },
       perQuestGenOptions: [
         PerQuestGenOption(
-          castFunc: (String lstAreaIdxs) {
-            return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0).map(
-              (i) => ScreenWidgetArea.values[i],
-            );
+          castFunc: (QuestBase qb, String lstAreaIdxs) {
+            return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
+                .map(
+                  (i) => ScreenWidgetArea.values[i],
+                )
+                .toList();
           },
         ),
       ],
@@ -149,30 +162,35 @@ List<QuestMatcher> stDfltMatcherList = [
         QuestBase priorAnsweredQuest,
         int idx,
       ) {
-        var areaName =
-            (priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>)[idx].name;
+        List<ScreenWidgetArea> respList =
+            (priorAnsweredQuest.mainAnswer as Iterable<ScreenWidgetArea>)
+                .toList();
+        var areaName = respList[idx].name;
         var screenName = priorAnsweredQuest.appScreen.name;
         return [areaName, screenName];
       },
       newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
-        return (priorAnsweredQuest.mainAnswer as List<dynamic>).length;
+        return (priorAnsweredQuest.mainAnswer as Iterable<dynamic>).length;
       },
       answerChoiceGenerator: (
         QuestBase priorAnsweredQuest,
         int idx,
       ) {
-        var selectedScreenAreas =
-            priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>;
+        List<ScreenWidgetArea> selectedScreenAreas =
+            (priorAnsweredQuest.mainAnswer as Iterable<ScreenWidgetArea>)
+                .toList();
         return selectedScreenAreas[idx]
             .applicableWigetSlots(priorAnsweredQuest.appScreen)
-            .map((e) => e.name);
+            .map((e) => e.name)
+            .toList();
       },
       qTargetIntentUpdaterCallbk: (
         QuestBase priorAnsweredQuest,
         int idx,
       ) {
-        var selectedScreenAreas =
-            priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>;
+        List<ScreenWidgetArea> selectedScreenAreas =
+            (priorAnsweredQuest.mainAnswer as Iterable<ScreenWidgetArea>)
+                .toList();
         ScreenWidgetArea currArea = selectedScreenAreas[idx];
         return priorAnsweredQuest.qTargetIntent.copyWith(
           screenWidgetArea: currArea,
@@ -182,9 +200,10 @@ List<QuestMatcher> stDfltMatcherList = [
       },
       perQuestGenOptions: [
         PerQuestGenOption(
-          castFunc: (String lstAreaIdxs) {
-            return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
-                .map((i) => ScreenAreaWidgetSlot.values[i]);
+          castFunc: (QuestBase qb, String lstAreaIdxs) {
+            return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0).map(
+              (i) => ScreenAreaWidgetSlot.values[i],
+            );
           },
         ),
       ],
@@ -227,7 +246,7 @@ List<QuestMatcher> stDfltMatcherList = [
         QuestBase priorAnsweredQuest,
         int idx,
       ) {
-        return DbTableFieldName.values.map((e) => e.name);
+        return DbTableFieldName.values.map((e) => e.name).toList();
       },
       qTargetIntentUpdaterCallbk: (
         QuestBase priorAnsweredQuest,
@@ -239,7 +258,7 @@ List<QuestMatcher> stDfltMatcherList = [
       },
       perQuestGenOptions: [
         PerQuestGenOption(
-          castFunc: (String ansr) => DbTableFieldName
+          castFunc: (QuestBase qb, String ansr) => DbTableFieldName
               .values[int.tryParse(ansr) ?? CfgConst.cancelSortIndex],
           visRuleType: VisualRuleType.groupCfg,
           visRuleQuestType: VisRuleQuestType.selectDataFieldName,

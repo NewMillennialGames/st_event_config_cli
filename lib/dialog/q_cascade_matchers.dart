@@ -147,53 +147,61 @@ class QuestMatcher<AnsType> {
       if (!patternDoesMatch) {
         return false;
       }
-      // is exact match on questId; should we also check answer?
+      // is proper match on questId; should we also check answer?
       if (shouldValidateUserAnswer) {
         return validateUserAnswerAfterPatternMatchIsTrueCallback!(
           prevAnsweredQuest,
         );
       }
-      return patternDoesMatch;
+      return patternDoesMatch; // always true here
     }
 
     bool isAPatternMatch = _doDeeperMatch(prevAnsweredQuest);
     // pattern doesnt match so exit early
     if (!isAPatternMatch) return false;
 
-    // pattern match succeeded (isAPatternMatch == true), so now validate user answer
-    if (validateUserAnswerAfterPatternMatchIsTrueCallback != null) {
+    // pattern match succeeded (isAPatternMatch == true)
+    // so now validate user answer if requested
+    if (shouldValidateUserAnswer) {
       return validateUserAnswerAfterPatternMatchIsTrueCallback!(
-          prevAnsweredQuest);
+        prevAnsweredQuest,
+      );
     }
-    return isAPatternMatch;
+    return isAPatternMatch; // always true here
   }
 
   List<QuestBase> getDerivedAutoGenQuestions(QuestBase quest) =>
       derivedQuestGen.getDerivedAutoGenQuestions(quest, this);
 
   bool _doDeeperMatch(QuestBase quest) {
-    // compare all properties instead of only Quest2Id
+    // compare all properties instead of only QuestionId
     bool dMatch = true;
     dMatch = dMatch &&
         (this.cascadeTypeOfMatchedQuest == null ||
             this.cascadeTypeOfMatchedQuest == quest.qTargetIntent.cascadeType);
+    if (!dMatch) return false; // only continue tests when succeeding
     print('Cascade matches: $dMatch');
+
     dMatch =
         dMatch && (this.appScreen == null || this.appScreen == quest.appScreen);
+    if (!dMatch) return false;
     print('appScreen matches: $dMatch');
 
     dMatch = dMatch &&
         (this.screenWidgetArea == null ||
             this.screenWidgetArea == quest.screenWidgetArea);
+    if (!dMatch) return false;
     print('screenWidgetArea matches: $dMatch');
 
     dMatch = dMatch &&
         (this.slotInArea == null || this.slotInArea == quest.slotInArea);
+    if (!dMatch) return false;
     print('slotInArea matches: $dMatch');
 
     dMatch = dMatch &&
         (this.visRuleTypeForAreaOrSlot == null ||
             this.visRuleTypeForAreaOrSlot == quest.visRuleTypeForAreaOrSlot);
+    if (!dMatch) return false;
     print('visRuleTypeForAreaOrSlot matches: $dMatch');
     print('isRuleQuestion: ${quest.isRuleQuestion}');
 

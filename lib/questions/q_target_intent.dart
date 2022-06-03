@@ -85,15 +85,15 @@ class QTargetIntent extends Equatable
   //     visRuleTypeForAreaOrSlot == null &&
   //     behRuleTypeForAreaOrSlot == null; // && slotInArea == null
   //
-  bool get generatesNoNewQuest2s => cascadeType.generatesNoNewQuestions;
+  bool get generatesNoNewQuestions => cascadeType.generatesNoNewQuestions;
 
-  bool get addsWhichAreaInSelectedScreenQuest2s =>
+  bool get addsWhichAreaInSelectedScreenQuestions =>
       cascadeType.addsWhichAreaInSelectedScreenQuestions;
 
   bool get addsWhichRulesForSelectedAreaQuestions =>
       cascadeType.addsWhichRulesForSelectedAreaQuestions;
 
-  bool get addsWhichSlotOfSelectedAreaQuest2s =>
+  bool get addsWhichSlotOfSelectedAreaQuestions =>
       cascadeType.addsWhichSlotOfSelectedAreaQuestions;
 
   bool get addsWhichRulesForSlotsInArea =>
@@ -113,9 +113,9 @@ class QTargetIntent extends Equatable
     bool responseAddsWhichAreaQuestions = false,
   }) {
     /*
-      sample Quest2:    for this event:
+      sample Question:    for this event:
       'Select the app screens you`d like to configure?',
-      when responseAddsWhichAreaQuest2s is true
+      when responseAddsWhichAreaQuestions is true
       this answer will build "which area" Quest2s
     */
     return QTargetIntent(
@@ -133,7 +133,7 @@ class QTargetIntent extends Equatable
     bool responseAddsWhichRuleAndSlotQuest2s = false,
   }) {
     /*
-      sample Quest2:
+      sample Question:
       'For the ${scr.name} screen, select the areas you`d like to configure?',
       when responseAddsWhichRuleAndSlotQuest2s is true
       this answer will build "which rule for area" Quest2s
@@ -160,7 +160,7 @@ class QTargetIntent extends Equatable
     I think this method was deprecated when I switched to sloppy pattern of treating
     Listview rules as slot rules rather than answers under an area level rule
 
-      sample Quest2:
+      sample Question:
        'Which rules would you like to add to the ${area.name} of ${screen.name}?',
       when responseAddsWhichRuleTypeQuestsForArea is true
       this answer will build "rule detail ?? for area" Quest2s
@@ -182,7 +182,7 @@ class QTargetIntent extends Equatable
     bool responseAddsWhichRuleQuest2s = false,
   }) {
     /*
-      sample Quest2:
+      sample Question:
       'Which slots/widgets on the ${area.name} of ${screen.name} would you like to configure?',
       when responseAddsWhichRuleQuest2s is true
       this answer will build "rule detail ?? for slot" Quest2s
@@ -204,7 +204,7 @@ class QTargetIntent extends Equatable
     bool responseAddsRuleDetailQuest2s = false,
   }) {
     /*
-      sample Quest2:
+      sample Question:
      'Which rules would you like to add to the ${slotInArea.name} area of ${screenArea.name} on screen ${screen.name}?',
       when responseAddsRuleDetailQuest2s is true
       this answer will build "rule detail ?? for slot" Quest2s
@@ -247,7 +247,7 @@ class QTargetIntent extends Equatable
   }
 
   List<VisualRuleType> relatedSubVisualRules(Quest1Prompt quest) {
-    if (!this.generatesNoNewQuest2s) return [];
+    if (!this.generatesNoNewQuestions) return [];
 
     List<VisualRuleType> list = [];
     switch (this.visRuleTypeForAreaOrSlot!) {

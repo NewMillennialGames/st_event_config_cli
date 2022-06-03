@@ -63,7 +63,8 @@ class QuestListMgr {
     Iterable<QuestPromptInstance> matchingPrompts = _allAnsweredQuestions
         .matchingPromptsWhere((qpi) => qpi.asksWhichScreensToConfig);
 
-    List<AppScreen> uss = (matchingPrompts.first.userAnswers.cast() ?? []);
+    List<AppScreen> uss =
+        (matchingPrompts.first.userAnswers.cast(_currentOrLastQuestion) ?? []);
 
     print('userSelectedScreens has ${uss.length} items');
     return uss;
@@ -74,7 +75,7 @@ class QuestListMgr {
     Iterable<QuestPromptInstance> matchingPrompts = _allAnsweredQuestions
         .where((q) => q.appScreen == as)
         .matchingPromptsWhere((qpi) => qpi.asksWhichAreasOfScreenToConfig);
-    return matchingPrompts.first.userAnswers.cast();
+    return matchingPrompts.first.userAnswers.cast(_currentOrLastQuestion);
   }
 
   Map<AppScreen, List<ScreenWidgetArea>> get screenAreasPerScreen {
@@ -118,7 +119,7 @@ class QuestListMgr {
     Iterable<QuestPromptInstance> matchingPrompts = _allAnsweredQuestions
         .where((q) => q.appScreen == as && q.screenWidgetArea == area)
         .matchingPromptsWhere((qpi) => qpi.asksWhichAreasOfScreenToConfig);
-    return matchingPrompts.first.userAnswers.cast();
+    return matchingPrompts.first.userAnswers.cast(_currentOrLastQuestion);
 
     // return _allAnsweredQuest2s
     //     .whereType<Quest2<String, List<ScreenAreaWidgetSlot>>>()
@@ -240,9 +241,12 @@ class QuestListMgr {
   List<CaptureAndCast> get priorAnswers {
     // return all existing user answers
     // filter out any null responses
-    Iterable<Iterable<CaptureAndCast>> lstLstCc =
-        _allAnsweredQuestions.map((q) => q.listResponses);
-    return lstLstCc.fold<List<CaptureAndCast>>(
-        <CaptureAndCast>[], (l1, l2) => l1..addAll(l2)).toList();
+    List<Iterable<CaptureAndCast>> lstLstCc =
+        _allAnsweredQuestions.map((q) => q.listResponses).toList();
+
+    List<CaptureAndCast<dynamic>> resLst = lstLstCc.fold<List<CaptureAndCast>>(
+        <CaptureAndCast>[], (l1, l2) => l1..addAll(l2));
+
+    return resLst.toList();
   }
 }

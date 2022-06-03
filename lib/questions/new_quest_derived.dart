@@ -101,7 +101,8 @@ class DerivedQuestGenerator {
       // values required to build new question:
 
       // convert old (answered) targIntent into one for new question
-      targIntent = qTargetIntentUpdater(answeredQuest, newQIdx);
+      // added extra copyWith() in case passed function forgets it
+      targIntent = qTargetIntentUpdater(answeredQuest, newQIdx).copyWith();
 
       List<String> templArgs = newQuestPromptArgGen(answeredQuest, newQIdx);
       String _userPrompt = questPromptTemplate.format(templArgs);
