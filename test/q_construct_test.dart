@@ -73,7 +73,7 @@ void main() {
     'confirms presenter moves answered question into totalAnsweredQuestions',
     () {
       final _questMgr = QuestListMgr();
-      QuestionPresenter qp = TestQuestRespGen([]);
+      QuestionPresenterIfc qp = TestQuestRespGen([]);
       DialogRunner dlogRun = DialogRunner(
         qp,
         qListMgr: _questMgr,

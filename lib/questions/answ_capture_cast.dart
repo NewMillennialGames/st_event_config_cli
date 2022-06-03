@@ -2,7 +2,7 @@ part of QuestionsLib;
 
 class CaptureAndCast<T> {
   /* _castFunc signature is:
-      typedef CastStrToAnswTypCallback<T> = T Function(List<String>);
+      typedef CastStrToAnswTypCallback<T> = T Function(QuestBase, String);
 
     IMPORTANT note!!!
       each question prompt (QuestPromptInstance) only receives
@@ -11,7 +11,6 @@ class CaptureAndCast<T> {
   */
   CastStrToAnswTypCallback<T> _castFunc;
   String _answers = '';
-  // List<String> _answers = [];
 
   CaptureAndCast(this._castFunc);
 
@@ -19,8 +18,11 @@ class CaptureAndCast<T> {
     _answers = s;
   }
 
-  T cast(QuestBase qb) {
-    return _castFunc(qb, _answers);
+  T cast(QuestBase questFromWhichAnswersOriginated) {
+    var ans = _castFunc(questFromWhichAnswersOriginated, _answers);
+    // if (castTypeIsList) return ans as List<dynamic>;
+    print('castAnswer castTypeIsList:  $castTypeIsList');
+    return ans;
   }
 
   // getters  (use == not "is")
@@ -30,4 +32,8 @@ class CaptureAndCast<T> {
       (T == Iterable<ScreenWidgetArea>) || T == List<ScreenWidgetArea>;
   bool get asksWhichSlotsOfAreaToConfig =>
       (T == Iterable<ScreenAreaWidgetSlot>) || T == List<ScreenAreaWidgetSlot>;
+  bool get castTypeIsList =>
+      asksWhichScreensToConfig ||
+      asksWhichAreasOfScreenToConfig ||
+      asksWhichSlotsOfAreaToConfig;
 }

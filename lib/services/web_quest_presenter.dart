@@ -5,7 +5,7 @@ import '../interfaces/q_presenter.dart';
 import '../dialog/all.dart';
 import '../questions/all.dart';
 
-class WebQuest2Presenter implements QuestionPresenter {
+class WebQuest2Presenter implements QuestionPresenterIfc {
   // to render widget views of the Quest2
   // move this class to the parent flutter project
 
@@ -41,6 +41,11 @@ class WebQuest2Presenter implements QuestionPresenter {
   void _receiveAnswer(String answer) {
     // _quest.convertAndStoreUserResponse(answer);
     dRunner!.advanceToNextQuestionFromGui();
+  }
+
+  @override
+  void showErrorAndRePresentQuestion(String errTxt, String questHelpMsg) {
+    //
   }
 
   void informUiThatDialogIsComplete() {

@@ -28,7 +28,7 @@ class TestDataCreation {
   }
 }
 
-class TestQuestRespGen implements QuestionPresenter {
+class TestQuestRespGen implements QuestionPresenterIfc {
   // receives Questions for test-automation
   List<TestRespGenWhenQuestLike> questionMatchers;
 
@@ -108,6 +108,10 @@ class TestQuestRespGen implements QuestionPresenter {
     dialoger.handleQuestionCascade(quest);
     // cli test;  not gui
     // dialoger.advanceToNextQuestionFromGui();
+  }
+
+  void showErrorAndRePresentQuestion(String errTxt, String questHelpMsg) {
+    //
   }
 
   @override

@@ -13,7 +13,7 @@ class DialogRunner {
   final QuestListMgr _qListMgr; // = QuestListMgr();
   // final NewQuestionCollector _newQuestComposer = NewQuestionCollector();
   // set in init
-  final QuestionPresenter questPresenter;
+  final QuestionPresenterIfc questPresenter;
   final int linesBetweenSections;
   final int linesBetweenQuest2s;
   final QMatchCollection _qMatchColl;
@@ -91,7 +91,20 @@ class DialogRunner {
     while (_quest != null) {
       // askAndWaitForUserResponse() will callback to handleQuestionCascade (below)
       // to create any derived Questions based on user answers
+
+      // next line for testing
       questPresenter.askAndWaitForUserResponse(this, _quest);
+      // enable block below for production
+      // try {
+      //   questPresenter.askAndWaitForUserResponse(this, _quest);
+      // } catch (e, _) {
+      //   print(
+      //       'Err:  cliLoopUntilComplete running questPresenter.askAndWaitForUserResponse');
+      //   print('Err thrown was ${e.toString()}');
+      //   questPresenter.showErrorAndRePresentQuestion(
+      //       e as String, _quest.helpMsgOnError ?? '');
+      //   continue;
+      // }
 
       _quest = _qListMgr.nextQuestionToAnswer();
       if (_quest != null) _outputSpacerLines();

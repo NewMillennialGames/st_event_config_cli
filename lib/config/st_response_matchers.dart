@@ -73,8 +73,10 @@ List<QuestMatcher> stDfltMatcherList = [
       perQuestGenOptions: [
         PerQuestGenOption(
           castFunc: (QuestBase qb, String lstAreaIdxs) {
+            List<ScreenWidgetArea> possibleAreasForScreen =
+                qb.appScreen.configurableScreenAreas;
             return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0).map(
-              (i) => ScreenWidgetArea.values[i],
+              (i) => possibleAreasForScreen[i],
             );
           },
         ),

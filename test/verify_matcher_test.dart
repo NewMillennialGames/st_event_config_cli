@@ -13,7 +13,7 @@ void main() {
       'validate that QuestMatcher hits question based on QTargetIntent properties',
       () {
     final testDataCreate = TestDataCreation();
-    QuestionPresenter questPresent = TestQuestRespGen([]);
+    QuestionPresenterIfc questPresent = TestQuestRespGen([]);
     DialogRunner dlogRun = DialogRunner(questPresent);
     //
     // now create user question

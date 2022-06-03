@@ -37,12 +37,14 @@ abstract class QuestBase with EquatableMixin {
   final QPromptCollection qPromptCollection;
   // optional unique value for expedited matching
   String questId = '';
+  String? helpMsgOnError;
   // bool isDiagnostic = false;
 
   QuestBase(
     this.qTargetIntent,
     this.qPromptCollection, {
     String? questId,
+    this.helpMsgOnError,
   }) : questId = questId == null ? qTargetIntent.sortKey : questId;
 
   // constructors with common QuestFactorytSignature

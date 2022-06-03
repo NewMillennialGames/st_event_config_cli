@@ -2,7 +2,7 @@
 import '../dialog/all.dart';
 import '../questions/all.dart';
 
-abstract class QuestionPresenter {
+abstract class QuestionPresenterIfc {
   /*
   interface for the class passed to DialogRunner
   that is responsible for rendering UI for the Quest2s
@@ -25,4 +25,6 @@ abstract class QuestionPresenter {
   );
 
   void informUiThatDialogIsComplete();
+
+  void showErrorAndRePresentQuestion(String errTxt, String questHelpMsg);
 }

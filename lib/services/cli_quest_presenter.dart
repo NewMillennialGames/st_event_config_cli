@@ -5,7 +5,7 @@ import '../interfaces/q_presenter.dart';
 import '../questions/all.dart';
 import '../dialog/all.dart';
 
-class CliQuestionPresenter implements QuestionPresenter {
+class CliQuestionPresenter implements QuestionPresenterIfc {
   // formatter for command-line IO
   CliQuestionPresenter();
 
@@ -112,6 +112,11 @@ class CliQuestionPresenter implements QuestionPresenter {
     } else {
       print('Type your answer, then press enter/return!');
     }
+  }
+
+  @override
+  void showErrorAndRePresentQuestion(String errTxt, String questHelpMsg) {
+    //
   }
 
   @override
