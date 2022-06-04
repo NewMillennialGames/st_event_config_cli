@@ -259,7 +259,11 @@ List<QuestMatcher> stDfltMatcherList = [
         var slotName = respList[idx].name;
         var areaName = priorAnsweredQuest.screenWidgetArea?.name ?? 'area';
         var screenName = priorAnsweredQuest.appScreen.name;
-        return [slotName, areaName, screenName];
+        return [
+          slotName.toUpperCase(),
+          areaName.toUpperCase(),
+          screenName.toUpperCase()
+        ];
       },
       newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
         return (priorAnsweredQuest.mainAnswer as Iterable<dynamic>).length;

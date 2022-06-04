@@ -72,6 +72,9 @@ class QMatchCollection {
     }
     return cnt;
   }
+
+  // mostly for testing
+  Iterable<QuestMatcher> get allMatchers => _matcherList;
 }
 
 enum DerivedGenBehaviorOnMatchEnum {
