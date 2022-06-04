@@ -29,8 +29,11 @@ class QuestListMgr {
   QuestListMgr();
 
   //
-  Iterable<UiFactoryRuleBase> get exportableQuestions =>
+  Iterable<UiFactoryRuleBase> get exportableRuleQuestions =>
       _allAnsweredQuestions.whereType<UiFactoryRuleBase>();
+
+  Iterable<EventTopLevelConfig> get exportableTopLevelQuestions =>
+      _allAnsweredQuestions.whereType<EventTopLevelConfig>();
 
   // bool _exportFilterLogic(QuestBase q) {
   //   // print(

@@ -100,7 +100,7 @@ void main() {
     expect(_questMgr.priorAnswerCount, 1, reason: 'quest was answered');
 
     // they both should be rule Questions, but not yet answered -- so zero exportable
-    expect(_questMgr.exportableQuestions.length, 0);
+    expect(_questMgr.exportableRuleQuestions.length, 0);
 
     // now check that k_quests_created_in_test Questions were created
     // since there was no 2nd INITIAL Question
