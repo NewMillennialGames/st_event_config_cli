@@ -56,4 +56,7 @@ class QuestionIdStrings {
   static String selectAppScreens = 'selectAppScreens';
 
   static String specAreasToConfigOnScreen = 'specAreasToConfigOnScreen';
+  static String specRulesForAreaOnScreen = 'specRulesForAreaOnScreen';
+  static String specSlotsToConfigInArea = 'specSlotsToConfigInArea';
+  static String specRulesForSlotInArea = 'specRulesForSlotInArea';
 }

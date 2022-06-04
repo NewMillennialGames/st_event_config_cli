@@ -111,6 +111,20 @@ List<QuestMatcher> stDfltMatcherList = [
         return (priorAnsweredQuest.mainAnswer as Iterable<ScreenWidgetArea>)
             .length;
       },
+      newQuestIdGenFromPriorQuest: (
+        QuestBase priorAnsweredQuest,
+        int newQuIdx,
+      ) {
+        // each new question about area on screen should
+        // have an ID that lets the next QM identify it to produce new Q's
+        String scrName = priorAnsweredQuest.appScreen.name;
+        String area = priorAnsweredQuest.screenWidgetArea?.name ?? '-na';
+        return QuestionIdStrings.specRulesForAreaOnScreen +
+            '-' +
+            scrName +
+            '-' +
+            area;
+      },
       answerChoiceGenerator: ((
         QuestBase priorAnsweredQuest,
         int idx,
@@ -174,6 +188,20 @@ List<QuestMatcher> stDfltMatcherList = [
       newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
         return (priorAnsweredQuest.mainAnswer as Iterable<dynamic>).length;
       },
+      newQuestIdGenFromPriorQuest: (
+        QuestBase priorAnsweredQuest,
+        int newQuIdx,
+      ) {
+        // each new question about area on screen should
+        // have an ID that lets the next QM identify it to produce new Q's
+        String scrName = priorAnsweredQuest.appScreen.name;
+        String area = priorAnsweredQuest.screenWidgetArea?.name ?? '-na';
+        return QuestionIdStrings.specSlotsToConfigInArea +
+            '-' +
+            scrName +
+            '-' +
+            area;
+      },
       answerChoiceGenerator: (
         QuestBase priorAnsweredQuest,
         int idx,
@@ -198,6 +226,70 @@ List<QuestMatcher> stDfltMatcherList = [
           screenWidgetArea: currArea,
           cascadeType: // of created questions
               QRespCascadePatternEm.addsWhichSlotOfSelectedAreaQuestions,
+        );
+      },
+      perQuestGenOptions: [
+        PerQuestGenOption(
+          castFunc: (QuestBase qb, String lstAreaIdxs) {
+            return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0).map(
+              (i) => ScreenAreaWidgetSlot.values[i],
+            );
+          },
+        ),
+      ],
+    ),
+  ),
+
+  QuestMatcher<List<VisualRuleType>>(
+    'build ?`s to specify which rules for slots in areas on selected screens user wants to config',
+    cascadeTypeOfMatchedQuest:
+        QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea,
+    questIdPatternTest: (qid) =>
+        qid.startsWith(QuestionIdStrings.specSlotsToConfigInArea),
+    //
+    derivedQuestGen: DerivedQuestGenerator(
+      'Select which rules to config within slot {0} in area {1} of screen {2}',
+      newQuestPromptArgGen: (
+        QuestBase priorAnsweredQuest,
+        int idx,
+      ) {
+        List<ScreenAreaWidgetSlot> respList =
+            (priorAnsweredQuest.mainAnswer as Iterable<ScreenAreaWidgetSlot>)
+                .toList();
+        var slotName = respList[idx].name;
+        var areaName = priorAnsweredQuest.screenWidgetArea?.name ?? 'area';
+        var screenName = priorAnsweredQuest.appScreen.name;
+        return [slotName, areaName, screenName];
+      },
+      newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
+        return (priorAnsweredQuest.mainAnswer as Iterable<dynamic>).length;
+      },
+      answerChoiceGenerator: (
+        QuestBase priorAnsweredQuest,
+        int idx,
+      ) {
+        List<ScreenAreaWidgetSlot> selectedAreaSlots =
+            (priorAnsweredQuest.mainAnswer as Iterable<ScreenAreaWidgetSlot>)
+                .toList();
+        ScreenAreaWidgetSlot curSlot = selectedAreaSlots[idx];
+        ScreenWidgetArea curArea = priorAnsweredQuest.screenWidgetArea!;
+        return curSlot.possibleConfigRules(curArea).map((e) => e.name).toList();
+      },
+      qTargetIntentUpdaterCallbk: (
+        QuestBase priorAnsweredQuest,
+        int idx,
+      ) {
+        // ScreenWidgetArea currArea = priorAnsweredQuest.screenWidgetArea!; //  ?? ScreenWidgetArea.header;
+        // String currAreaName = currArea.name;
+        List<ScreenAreaWidgetSlot> selectedAreaSlots =
+            (priorAnsweredQuest.mainAnswer as Iterable<ScreenAreaWidgetSlot>)
+                .toList();
+        ScreenAreaWidgetSlot slot = selectedAreaSlots[idx];
+        return priorAnsweredQuest.qTargetIntent.copyWith(
+          // screenWidgetArea: currArea,
+          slotInArea: slot,
+          cascadeType: // of created questions
+              QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea,
         );
       },
       perQuestGenOptions: [

@@ -33,14 +33,15 @@ class QMatchCollection {
   void appendNewQuestsOrInsertImplicitAnswers(QuestListMgr questListMgr) {
     //
     QuestBase questJustAnswered = questListMgr._currentOrLastQuestion;
-    print(
-      'comparing "${questJustAnswered.questId}" to ${_matcherList.length} matchers for new quests',
-    );
+    // print(
+    //   'comparing "${questJustAnswered.questId}" to ${_matcherList.length} matchers for new quests',
+    // );
+    int matchCount = 0;
+    List<QuestMatcher> _foundQms = [];
     for (QuestMatcher qMatchTest in _matcherList) {
       if (qMatchTest.doesMatch(questJustAnswered)) {
-        print(
-          '*** it does match!!  addsPendingQuestions: ${qMatchTest.addsPendingQuestions}  createsImplicitAnswers: ${qMatchTest.createsImplicitAnswers}',
-        );
+        matchCount += 1;
+        _foundQms.add(qMatchTest);
         if (qMatchTest.addsPendingQuestions) {
           List<QuestBase> newQuests =
               qMatchTest.getDerivedAutoGenQuestions(questJustAnswered);
@@ -53,6 +54,12 @@ class QMatchCollection {
         }
       }
     }
+    print(
+      '*** appendNewQuestsOrInsertImplicitAnswers found $matchCount QuestMatchers for ${questJustAnswered.questId}',
+    );
+    _foundQms.forEach((qm) {
+      print('\t\t' + qm.matcherDescrip);
+    });
   }
 
   int matchCountFor(QuestBase quest) {
@@ -128,10 +135,8 @@ class QuestMatcher<AnsType> {
   });
 
   // getters
-  bool get addsPendingQuestions =>
-      derivedQuestGen.genBehaviorOfDerivedQuests.addsPendingQuestions;
-  bool get createsImplicitAnswers =>
-      derivedQuestGen.genBehaviorOfDerivedQuests.createsImplicitAnswers;
+  bool get addsPendingQuestions => derivedQuestGen.addsPendingQuestions;
+  bool get createsImplicitAnswers => derivedQuestGen.createsImplicitAnswers;
 
   bool get usesMatchByQIdPatternCallback => questIdPatternTest != null;
   bool get shouldValidateUserAnswer =>

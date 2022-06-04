@@ -132,6 +132,15 @@ class DerivedQuestGenerator {
     }
     return createdQuests;
   }
+
+  bool get addsPendingQuestions =>
+      genBehaviorOfDerivedQuests.addsPendingQuestions;
+
+  bool get createsImplicitAnswers =>
+      genBehaviorOfDerivedQuests.createsImplicitAnswers; // || hasOnlyOneChoice;
+
+  bool hasOnlyOneChoice(QuestBase qb) =>
+      answerChoiceGenerator(qb, 0).length == 1;
 }
 
 
