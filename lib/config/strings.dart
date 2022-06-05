@@ -59,4 +59,8 @@ class QuestionIdStrings {
   static String specRulesForAreaOnScreen = 'specRulesForAreaOnScreen';
   static String specSlotsToConfigInArea = 'specSlotsToConfigInArea';
   static String specRulesForSlotInArea = 'specRulesForSlotInArea';
+
+  static String specRuleDetailsForAreaOnScreen =
+      'specRuleDetailsForAreaOnScreen';
+  static String specRuleDetailsForSlotInArea = 'specRuleDetailsForSlotInArea';
 }

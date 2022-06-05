@@ -35,7 +35,7 @@ void main() {
     );
     var _qMatchColl = QMatchCollection.scoretrader();
 
-    for (QuestMatcher qm in _qMatchColl.allMatchers) {
+    for (QuestMatcher qm in _qMatchColl.allMatchersTestOnly) {
       List<QuestBase> producedQuestions =
           qm.getDerivedAutoGenQuestions(askNumSortSlots);
     }

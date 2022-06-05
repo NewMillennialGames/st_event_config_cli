@@ -124,7 +124,7 @@ void main() {
       'should match 1 based on same quest ID',
       cascadeTypeOfMatchedQuest:
           QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea,
-      questIdPatternTest: (qid) => qid == testQuestId,
+      questIdPatternMatchTest: (qid) => qid == testQuestId,
       derivedQuestGen: DerivedQuestGenerator(
         'blah {0}',
         newQuestCountCalculator: (q) => 0,

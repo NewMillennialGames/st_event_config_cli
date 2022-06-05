@@ -4,16 +4,24 @@ part of QuestionsLib;
 class QTargetIntent extends Equatable
     with _$QTargetIntent
     implements QuestFactory {
-  /* describes what a Question is about
-    it's purpose, behavior and intent
-    made it equatable to enable searching Q-list
-    for filtering and generating new Quest2s reactively
+  /* describes what a Question pertains to
+    it's target, intent and cascade behavior
+
+    a QuestMatcher and a DerivedQuestGenerator
+    might receive this question along with user answer
+    interpret that answer (after type conversion),
+    and GENERATE derived questions
+    the INTENT of those derived questions is captured in:
+      this.cascadeWorkDoneByRespGendQuests
+
+        made it equatable to enable searching Q-list
+    for filtering and generating new Questions reactively
   */
 
   QTargetIntent._();
 
   factory QTargetIntent(
-    QRespCascadePatternEm cascadeType,
+    QRespCascadePatternEm cascadeWorkDoneByRespGendQuests,
     AppScreen appScreen,
     ScreenWidgetArea? screenWidgetArea, {
     ScreenAreaWidgetSlot? slotInArea,
@@ -70,6 +78,15 @@ class QTargetIntent extends Equatable
     return '${appScreen.index}-$screenAreaIdx-$slotInAreaIdx-$visRuleTypeIdx';
   }
 
+  String get targetPath {
+    String screenName = appScreen.name;
+    String? area = screenWidgetArea?.name;
+    String? slot = slotInArea?.name;
+    if (area == null) return screenName;
+    if (slot == null) return screenName + '-' + area;
+    return screenName + '-' + area + '-' + slot;
+  }
+
   // equatableKey must be distinct & unique
   String get equatableKey => sortKey;
 
@@ -102,10 +119,25 @@ class QTargetIntent extends Equatable
   bool get addsRuleDetailQuestsForSlotOrArea =>
       cascadeType.addsRuleDetailQuestsForSlotOrArea;
 
-  // bool get addsBehavioralRuleQuest2s =>
-  //     cascadeType.addsBehavioralRuleQuest2s;
+  List<ScreenWidgetArea> get possibleAreasForScreen =>
+      appScreen.configurableScreenAreas;
 
-  /*  certain Quest2s at top 3 levels (when property answered)
+  List<VisualRuleType> get possibleRulesForAreaInScreen {
+    if (screenWidgetArea == null) return [];
+    return screenWidgetArea!.applicableRuleTypes(appScreen);
+  }
+
+  List<ScreenAreaWidgetSlot> get possibleSlotsForAreaInScreen {
+    if (screenWidgetArea == null) return [];
+    return screenWidgetArea!.applicableWigetSlots(appScreen);
+  }
+
+  List<VisualRuleType> get possibleRulesForSlotInAreaOfScreen {
+    if (screenWidgetArea == null || slotInArea == null) return [];
+    return slotInArea!.possibleConfigRules(screenWidgetArea!);
+  }
+
+  /*  certain Questions at top 3 levels (when property answered)
       can generate Quest2s for levels below them
   */
 

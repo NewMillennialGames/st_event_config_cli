@@ -213,6 +213,7 @@ abstract class QuestBase with EquatableMixin {
   }
 
   // getters
+  String get targetPath => qTargetIntent.targetPath;
   bool get isRuleQuestion => this is UiFactoryRuleBase; // controls export
   bool get isTopLevelEventConfigQuestion =>
       this is EventTopLevelConfig &&

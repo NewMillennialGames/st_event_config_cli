@@ -12,20 +12,20 @@ based on answers to a prior question
 
 */
 
-class PerQuestGenOption<AnsType> {
+class PerQuestGenResponsHandlingOpts<AnsType> {
   /*
   describes logic and rules for a single auto-generated Question
   instance lives inside DerivedQuestGenerator.perQuestGenOptions
   */
 
-  final CastStrToAnswTypCallback<AnsType> castFunc;
+  final CastStrToAnswTypCallback<AnsType> newRespCastFunc;
   final int defaultAnswerIdx = 0;
   final VisualRuleType? visRuleType;
   final VisRuleQuestType? visRuleQuestType;
   final bool acceptsMultiResponses;
 
-  PerQuestGenOption({
-    required this.castFunc,
+  PerQuestGenResponsHandlingOpts({
+    required this.newRespCastFunc,
     this.visRuleType,
     this.visRuleQuestType,
     this.acceptsMultiResponses = false,
@@ -35,7 +35,7 @@ class PerQuestGenOption<AnsType> {
   bool get genAsRuleQuestion => visRuleType != null;
 }
 
-class DerivedQuestGenerator {
+class DerivedQuestGenerator<PriorAnsType> {
   /*
     intersection of an answered Quest2, plus a QuestMatcher
     should indicate what new Quest2s to ask
@@ -43,12 +43,13 @@ class DerivedQuestGenerator {
 
   final String questPromptTemplate;
   final DerivedGenBehaviorOnMatchEnum genBehaviorOfDerivedQuests;
+  // final CastPriorAnswToType<PriorAnsType>? castPriorAnswToType;
   final NewQuestCount newQuestCountCalculator;
   final NewQuestArgGen newQuestPromptArgGen;
   final ChoiceListFromPriorAnswer answerChoiceGenerator;
   final QTargetIntentUpdateFunc qTargetIntentUpdater;
   final NewQuestIdGenFromPriorAnswer? newQuestIdGenFromPriorQuest;
-  final List<PerQuestGenOption> perQuestGenOptions;
+  final List<PerQuestGenResponsHandlingOpts> perQuestGenOptions;
 
   DerivedQuestGenerator(
     this.questPromptTemplate, {
@@ -107,16 +108,17 @@ class DerivedQuestGenerator {
       List<String> templArgs = newQuestPromptArgGen(answeredQuest, newQIdx);
       String _userPrompt = questPromptTemplate.format(templArgs);
 
-      PerQuestGenOption instcGenOpt = perQuestGenOptions.length > newQIdx
-          ? perQuestGenOptions[newQIdx]
-          : perQuestGenOptions.last;
+      PerQuestGenResponsHandlingOpts instcGenOpt =
+          perQuestGenOptions.length > newQIdx
+              ? perQuestGenOptions[newQIdx]
+              : perQuestGenOptions.last;
 
       List<QuestPromptPayload> newQuestPrompts = [
         QuestPromptPayload(
           _userPrompt,
           answerChoiceGenerator(answeredQuest, newQIdx).toList(),
           instcGenOpt.visRuleQuestType ?? VisRuleQuestType.dialogStruct,
-          instcGenOpt.castFunc,
+          instcGenOpt.newRespCastFunc,
         ),
       ];
 

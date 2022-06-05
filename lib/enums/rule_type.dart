@@ -71,7 +71,9 @@ extension VisualRuleTypeExt1 on VisualRuleType {
   }
   //
 
-  List<VisRuleQuestType> get requiredQuest2s {
+  List<VisRuleQuestType> get requConfigQuests {
+    // its helpful that only one config type is returned
+    // DerivedQuestGenerator could have problems if this changes
     switch (this) {
       case VisualRuleType.topDialogStruct:
         return [];

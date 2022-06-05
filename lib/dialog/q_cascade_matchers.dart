@@ -74,7 +74,7 @@ class QMatchCollection {
   }
 
   // mostly for testing
-  Iterable<QuestMatcher> get allMatchers => _matcherList;
+  Iterable<QuestMatcher> get allMatchersTestOnly => _matcherList;
 }
 
 enum DerivedGenBehaviorOnMatchEnum {
@@ -97,19 +97,35 @@ extension MatcherBehaviorEnumExt1 on DerivedGenBehaviorOnMatchEnum {
       ].contains(this);
 }
 
-class QuestMatcher<AnsType> {
+class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
   /*
+  defines rules for generating NEW QUESTIONS (or answers)
+  off of the answers (main answer type) from each prior question
+
+  AnsTypOfMatched is the main answer type of matched question
+  AnsTypOfGend is the main answer type of generated questions
+
   define all properties a matcher may need to eval
   in order to verify it's a match
-
+  but most logic just works on this callback:
+    questIdPatternMatchTest(priorQuestId);
+  which receives the prior question ID as a test for match succcess
   */
   final String matcherDescrip;
-  // cascadeType indicates whether we add new Quest2s, auto-answers or both
+  /* cascadeTypeOfMatchedQuest indicates what type of
+    new Questions (or potentially auto-answers)
+    will be added by the DerivedQuestGenerator
+
+    cascadeTypeOfMatchedQuest == cascadeWorkDoneByRespGendQuests 
+    on QTargetIntent
+  */
   final QRespCascadePatternEm? cascadeTypeOfMatchedQuest;
   final DerivedQuestGenerator derivedQuestGen;
 
   // AddQuestChkCallbk is for doing more advanced analysis to verify a match
-  final AddQuestChkCallbk? validateUserAnswerAfterPatternMatchIsTrueCallback;
+  final AddQuestRespChkCallbk?
+      validateUserAnswerAfterPatternMatchIsTrueCallback;
+  final PriorQuestIdMatchPatternTest? questIdPatternMatchTest;
 
   // pattern matching values;  leave null to not match on them
   final AppScreen? appScreen;
@@ -118,9 +134,6 @@ class QuestMatcher<AnsType> {
   final VisualRuleType? visRuleTypeForAreaOrSlot;
   final BehaviorRuleType? behRuleTypeForAreaOrSlot;
   final bool matchOnlyOnRuleQuestion;
-  final PriorQuestIdMatchPatternTest? questIdPatternTest;
-
-  late Type? typ = CaptureAndCast<AnsType>;
 
   //
   QuestMatcher(
@@ -128,7 +141,7 @@ class QuestMatcher<AnsType> {
     required this.cascadeTypeOfMatchedQuest,
     required this.derivedQuestGen,
     this.validateUserAnswerAfterPatternMatchIsTrueCallback,
-    this.questIdPatternTest,
+    this.questIdPatternMatchTest,
     this.appScreen,
     this.screenWidgetArea,
     this.slotInArea,
@@ -141,9 +154,12 @@ class QuestMatcher<AnsType> {
   bool get addsPendingQuestions => derivedQuestGen.addsPendingQuestions;
   bool get createsImplicitAnswers => derivedQuestGen.createsImplicitAnswers;
 
-  bool get usesMatchByQIdPatternCallback => questIdPatternTest != null;
+  bool get usesMatchByQIdPatternCallback => questIdPatternMatchTest != null;
   bool get shouldValidateUserAnswer =>
       validateUserAnswerAfterPatternMatchIsTrueCallback != null;
+  // expose generic types
+  Type get matchedAnsTyp => AnsTypOfMatched;
+  Type get generatedQuestAnsTyp => AnsTypOfGend;
 
   // public methods
   bool doesMatch(QuestBase prevAnsweredQuest) {
@@ -151,7 +167,7 @@ class QuestMatcher<AnsType> {
     if (usesMatchByQIdPatternCallback) {
       // print('this matcher targeted at a SPECIFIC question & does not consider other atts');
       bool patternDoesMatch =
-          this.questIdPatternTest!(prevAnsweredQuest.questId);
+          this.questIdPatternMatchTest!(prevAnsweredQuest.questId);
       if (!patternDoesMatch) {
         return false;
       }
@@ -167,7 +183,6 @@ class QuestMatcher<AnsType> {
     bool isAPatternMatch = _doDeeperMatch(prevAnsweredQuest);
     // pattern doesnt match so exit early
     if (!isAPatternMatch) return false;
-
     // pattern match succeeded (isAPatternMatch == true)
     // so now validate user answer if requested
     if (shouldValidateUserAnswer) {
@@ -180,6 +195,15 @@ class QuestMatcher<AnsType> {
 
   List<QuestBase> getDerivedAutoGenQuestions(QuestBase quest) =>
       derivedQuestGen.getDerivedAutoGenQuestions(quest, this);
+
+  AnsTypOfMatched getTypedAnswer(QuestBase priorAnsweredQuest) {
+    // should only call this when Question doesMatch
+    assert(
+      doesMatch(priorAnsweredQuest),
+      'invalid usage of getTypedAnswer; should only call this when Question doesMatch',
+    );
+    return priorAnsweredQuest.mainAnswer as AnsTypOfMatched;
+  }
 
   bool _doDeeperMatch(QuestBase quest) {
     // compare all properties instead of only QuestionId
@@ -217,4 +241,6 @@ class QuestMatcher<AnsType> {
     //     dMatch && (this.typ == null || quest.response.runtimeType == this.typ);
     return dMatch;
   }
+
+  // AnsTypOfMatched get recentMatchAnswer => _recentMatchAnswer;
 }
