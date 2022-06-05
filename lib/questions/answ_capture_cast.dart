@@ -21,7 +21,7 @@ class CaptureAndCast<T> {
   T cast(QuestBase questFromWhichAnswersOriginated) {
     var ans = _castFunc(questFromWhichAnswersOriginated, _answers);
     // if (castTypeIsList) return ans as List<dynamic>;
-    print('castAnswer castTypeIsList:  $castTypeIsList');
+    // print('castAnswer castTypeIsList:  $castTypeIsList');
     return ans;
   }
 

@@ -37,27 +37,37 @@ class QMatchCollection {
     //   'comparing "${questJustAnswered.questId}" to ${_matcherList.length} matchers for new quests',
     // );
     int matchCount = 0;
-    List<QuestMatcher> _foundQms = [];
-    for (QuestMatcher qMatchTest in _matcherList) {
-      if (qMatchTest.doesMatch(questJustAnswered)) {
+    List<QuestMatcher> _foundQmatchers = [];
+    List<QuestBase> newGendPendingQuests = []; // generated questions
+    for (QuestMatcher curQuestMatcher in _matcherList) {
+      if (curQuestMatcher.doesMatch(questJustAnswered)) {
+        _foundQmatchers.add(curQuestMatcher);
+        if (curQuestMatcher.addsPendingQuestions ||
+            curQuestMatcher.createsImplicitAnswers) {
+          newGendPendingQuests.addAll(
+              curQuestMatcher.getDerivedAutoGenQuestions(questJustAnswered));
+        }
         matchCount += 1;
-        _foundQms.add(qMatchTest);
-        if (qMatchTest.addsPendingQuestions) {
-          List<QuestBase> newQuests =
-              qMatchTest.getDerivedAutoGenQuestions(questJustAnswered);
-          questListMgr.appendNewQuestions(newQuests);
-        }
-        if (qMatchTest.createsImplicitAnswers) {
-          questListMgr.addImplicitAnswers(
-            qMatchTest.getDerivedAutoGenQuestions(questJustAnswered),
-          );
-        }
       }
     }
+
+    List<QuestBase> stillToAnswer = newGendPendingQuests.where(
+      (QuestBase qb) {
+        return true;
+      },
+    ).toList();
+    questListMgr.appendNewQuestions(stillToAnswer);
+
+    // List<QuestBase> autoAnswered = newGendPendingQuests;
+    // _autoAnswer(autoAnswered);
+    // questListMgr.addImplicitAnswers(autoAnswered);
+
     print(
       '*** appendNewQuestsOrInsertImplicitAnswers found $matchCount QuestMatchers for ${questJustAnswered.questId}',
     );
-    _foundQms.forEach((qm) {
+    _foundQmatchers.forEach((qm) {
+      print('\nScreen: ');
+      print(questJustAnswered.appScreen.name);
       print('\t\t' + qm.matcherDescrip);
     });
   }
