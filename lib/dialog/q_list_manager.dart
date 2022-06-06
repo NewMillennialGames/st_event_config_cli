@@ -132,20 +132,25 @@ class QuestListMgr {
     //         [], (l0, l1) => l0..addAll(l1)).toList();
   }
 
-  // void _sortPendingQuestions() {
-  //   // its important that we ONLY sort the section AFTER _currQuest2Idx
-  //   // or else we might re-ask prior (already answered) Quest2s
-  //   if (_currQuestionIdx < 7) return;
+  void _sortPendingQuestions() {
+    /*
+          its important that we ONLY sort the section AFTER _currQuestionIdx
+    or else we might re-ask prior (already answered) Questions
 
-  //   print('running sortPendingQuest2s');
+    this is an ASCENDING sort; larger # questions get asked last
+    */
+    if (_currQuestionIdx < 7) return;
 
-  //   var unaskedQuests = _pendingQuestions.sublist(_currQuestionIdx + 1);
+    print('running sortPendingQuest2s');
 
-  //   unaskedQuests.sort((a, b) => a.sortKey.compareTo(b.sortKey));
+    List<QuestBase> unaskedQuests =
+        _pendingQuestions.sublist(_currQuestionIdx + 1);
 
-  //   this._pendingQuestions = (_pendingQuestions.sublist(0, _currQuestionIdx + 1)
-  //     ..addAll(unaskedQuests));
-  // }
+    unaskedQuests.sort((a, b) => a.sortKey.compareTo(b.sortKey));
+
+    this._pendingQuestions = (_pendingQuestions.sublist(0, _currQuestionIdx + 1)
+      ..addAll(unaskedQuests));
+  }
 
   QuestBase? nextQuestionToAnswer() {
     // AppScreen section
@@ -198,28 +203,20 @@ class QuestListMgr {
     // });
   }
 
-  void addImplicitAnswers(
-    List<QuestBase> implicitlyAnsweredQuests, {
-    String dbgNam = 'init', // debug-name
-  }) {
-    var alreadyAnsweredQuests =
-        _pendingQuestions.sublist(0, _currQuestionIdx + 1);
-    alreadyAnsweredQuests.addAll(implicitlyAnsweredQuests);
-
-    var unaskedQuests = _pendingQuestions.sublist(_currQuestionIdx + 1);
-
-    this._pendingQuestions = alreadyAnsweredQuests..addAll(unaskedQuests);
-  }
-
-  void appendNewQuestions(
+  void appendGeneratedQuestsAndAnswers(
     List<QuestBase> quests, {
     String dbgNam = 'apndNewQs', // debug-name
   }) {
-    //
+    /*
+      you can send both new (un-answered)
+      and auto-answered questions to this method
+
+    */
     Set<AppScreen> appScreensSet = quests.map((e) => e.appScreen).toSet();
 
     print(
-        '$dbgNam is adding ${quests.length} new Questions for these screens $appScreensSet');
+      '$dbgNam is adding ${quests.length} new Questions for these screens $appScreensSet',
+    );
 
     for (AppScreen as in appScreensSet) {
       int newCntBySec = quests
@@ -227,16 +224,45 @@ class QuestListMgr {
           .fold<int>(0, (accumVal, _) => accumVal + 1);
       _questCountByScreen[as] = (_questCountByScreen[as] ?? 0) + newCntBySec;
     }
-    // quest id's start at 1, not zero
-    // int c = _pendingQuest2s.length;
-    // quests.forEach((q) {
-    //   q.Quest2Id = ++c;
-    // });
-    this._pendingQuestions.addAll(quests);
 
-    // TODO:  test sorting after everything else is working
-    // sorting not working and not necessary
-    // _sortPendingQuest2s();
+    var fullyAnsweredQuests = quests.where((q) => q.isFullyAnswered);
+    _insertPreviouslyAnsweredQuestions(fullyAnsweredQuests);
+
+    var unAnsweredQuests = quests.where((q) => !q.isFullyAnswered);
+    _pendingQuestions.addAll(unAnsweredQuests);
+
+    _sortPendingQuestions();
+  }
+
+  void _insertPreviouslyAnsweredQuestions(
+    Iterable<QuestBase> autoAnsweredQuests,
+  ) {
+    /*
+      puts questions into the corrrect
+      by-screen section, and then appends questions
+      to the pending list and bumps the current index
+      so we don't bother asking user to answer them
+
+      we already updated per-screen counts in calling method
+    */
+    int countToAddToCurIdx = autoAnsweredQuests.length;
+    if (countToAddToCurIdx < 1) return;
+
+    Set<AppScreen> appScreensSet =
+        autoAnsweredQuests.map((e) => e.appScreen).toSet();
+
+    for (AppScreen as in appScreensSet) {
+      Iterable<QuestBase> quest4Screen =
+          autoAnsweredQuests.where((q) => q.appScreen == as);
+
+      if (_answeredQuestsByScreen[as] == null) _answeredQuestsByScreen[as] = [];
+
+      _answeredQuestsByScreen[as]!.addAll(quest4Screen);
+    }
+
+    this._pendingQuestions.addAll(autoAnsweredQuests);
+    // now update index to skip asking these questions
+    _currQuestionIdx = _currQuestionIdx + countToAddToCurIdx;
   }
 
   int get priorAnswerCount => priorAnswers.length;

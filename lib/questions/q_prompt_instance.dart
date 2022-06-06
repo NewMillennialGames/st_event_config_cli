@@ -40,6 +40,7 @@ class QuestPromptInstance<T> implements QPromptIfc {
   }
 
   // getters
+  bool get hasAnswer => _answerRepoAndTypeCast.hasAnswer;
   bool get hasChoices => answChoiceCollection.hasChoices;
   List<ResponseAnswerOption> get questsAndChoices =>
       answChoiceCollection.answerOptions;

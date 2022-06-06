@@ -31,7 +31,7 @@ class DialogRunner {
             qMatchColl != null ? qMatchColl : QMatchCollection.scoretrader() {
     List<QuestBase> quests = loadInitialConfigQuestions();
     if (loadDefaultQuest) {
-      _qListMgr.appendNewQuestions(quests);
+      _qListMgr.appendGeneratedQuestsAndAnswers(quests);
     }
   }
 

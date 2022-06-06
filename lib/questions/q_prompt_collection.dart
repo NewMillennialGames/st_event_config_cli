@@ -21,7 +21,11 @@ class QPromptCollection {
   }) {
     //
     QuestPromptInstance qpi = QuestPromptInstance.fromRaw(
-        userPrompt, choices, questType, captureAndCast);
+      userPrompt,
+      choices,
+      questType,
+      captureAndCast,
+    );
     return QPromptCollection([qpi]);
   }
 
@@ -33,7 +37,11 @@ class QPromptCollection {
   }) {
     //
     QuestPromptInstance qpi = QuestPromptInstance.fromRaw(
-        userPrompt, choices, questType, captureAndCast);
+      userPrompt,
+      choices,
+      questType,
+      captureAndCast,
+    );
     return QPromptCollection([qpi], isRuleQuestion: true);
   }
 
@@ -64,9 +72,12 @@ class QPromptCollection {
       questIterations.map((qpi) => qpi._answerRepoAndTypeCast);
 
   int get _partCount => questIterations.length;
-  bool get isCompleted => _curPartIdx >= _partCount - 1;
+  bool get isCompleted => _curPartIdx >= _partCount - 1 || allPartsHaveAnswers;
   bool get isMultiPart => _partCount > 1;
-  // QuestPromptInstance get _curQuest2 => questIterations[_curPartIdx];
+  bool get allPartsHaveAnswers =>
+      questIterations.where((QuestPromptInstance pi) => pi.hasAnswer).length >=
+      _partCount;
+
   QuestPromptInstance? getNextUserPromptIfExists() {
     _curPartIdx++;
     if (_curPartIdx > _partCount - 1) return null;

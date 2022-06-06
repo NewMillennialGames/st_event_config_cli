@@ -32,7 +32,7 @@ void main() {
       final _questMgr = QuestListMgr();
       final _qMatchColl = QMatchCollection.scoretrader();
 
-      _questMgr.appendNewQuestions([askScreens]);
+      _questMgr.appendGeneratedQuestsAndAnswers([askScreens]);
 
       QuestBase quest = _questMgr.nextQuestionToAnswer()!;
       // provide answers
@@ -78,7 +78,7 @@ void main() {
     });
 
     // add question to q-manager
-    _questMgr.appendNewQuestions([askNumSlots]);
+    _questMgr.appendGeneratedQuestsAndAnswers([askNumSlots]);
     // next 2 lines are virtually the same test
     expect(_questMgr.priorAnswers.length, 0);
     expect(_questMgr.totalAnsweredQuestions, 0);

@@ -45,7 +45,7 @@ abstract class QuestBase with EquatableMixin {
     this.qPromptCollection, {
     String? questId,
     this.helpMsgOnError,
-  }) : questId = questId == null ? qTargetIntent.sortKey : questId;
+  }) : questId = questId == null ? qTargetIntent.equatableKey : questId;
 
   // constructors with common QuestFactorytSignature
   factory QuestBase.eventConfigRulePrompt(
@@ -214,6 +214,7 @@ abstract class QuestBase with EquatableMixin {
 
   // getters
   String get targetPath => qTargetIntent.targetPath;
+  bool get isFullyAnswered => qPromptCollection.allPartsHaveAnswers;
   bool get isRuleQuestion => this is UiFactoryRuleBase; // controls export
   bool get isTopLevelEventConfigQuestion =>
       this is EventTopLevelConfig &&
@@ -253,7 +254,7 @@ abstract class QuestBase with EquatableMixin {
   bool get addsRuleDetailQuestsForSlotOrArea =>
       qTargetIntent.addsRuleDetailQuestsForSlotOrArea;
 
-  String get sortKey => qTargetIntent.sortKey;
+  int get sortKey => qTargetIntent.targetSortIndex;
   // ask 2nd & 3rd position for (sort, group, filter)
 
   // appliesToClientConfiguration == should be exported to file

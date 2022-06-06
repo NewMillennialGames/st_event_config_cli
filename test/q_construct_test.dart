@@ -62,7 +62,7 @@ void main() {
       final _questMgr = QuestListMgr();
       expect(_questMgr.pendingQuestionCount, 0);
       expect(_questMgr.totalAnsweredQuestions, 0);
-      _questMgr.appendNewQuestions([twoPromptQuest]);
+      _questMgr.appendGeneratedQuestsAndAnswers([twoPromptQuest]);
       expect(_questMgr.pendingQuestionCount, 1);
       QuestBase? q1 = _questMgr.nextQuestionToAnswer();
       expect(q1?.questId, _questId);
@@ -82,7 +82,7 @@ void main() {
 
       expect(_questMgr.pendingQuestionCount, 0);
       expect(_questMgr.totalAnsweredQuestions, 0);
-      _questMgr.appendNewQuestions([twoPromptQuest]);
+      _questMgr.appendGeneratedQuestsAndAnswers([twoPromptQuest]);
       expect(_questMgr.pendingQuestionCount, 1);
       dlogRun.cliLoopUntilComplete();
       expect(_questMgr.pendingQuestionCount, 0);

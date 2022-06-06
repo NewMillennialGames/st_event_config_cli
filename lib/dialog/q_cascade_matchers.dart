@@ -50,17 +50,7 @@ class QMatchCollection {
         matchCount += 1;
       }
     }
-
-    List<QuestBase> stillToAnswer = newGendPendingQuests.where(
-      (QuestBase qb) {
-        return true;
-      },
-    ).toList();
-    questListMgr.appendNewQuestions(stillToAnswer);
-
-    // List<QuestBase> autoAnswered = newGendPendingQuests;
-    // _autoAnswer(autoAnswered);
-    // questListMgr.addImplicitAnswers(autoAnswered);
+    questListMgr.appendGeneratedQuestsAndAnswers(newGendPendingQuests);
 
     print(
       '*** appendNewQuestsOrInsertImplicitAnswers found $matchCount QuestMatchers for ${questJustAnswered.questId}',
