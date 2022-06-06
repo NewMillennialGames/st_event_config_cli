@@ -42,8 +42,9 @@ class QMatchCollection {
     for (QuestMatcher curQuestMatcher in _matcherList) {
       if (curQuestMatcher.doesMatch(questJustAnswered)) {
         _foundQmatchers.add(curQuestMatcher);
-        if (curQuestMatcher.addsPendingQuestions ||
-            curQuestMatcher.createsImplicitAnswers) {
+        if (true) {
+          // curQuestMatcher.addsPendingQuestions ||
+          // curQuestMatcher.createsImplicitAnswers
           newGendPendingQuests.addAll(
               curQuestMatcher.getDerivedAutoGenQuestions(questJustAnswered));
         }
@@ -120,7 +121,10 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
     on QTargetIntent
   */
   final QRespCascadePatternEm? cascadeTypeOfMatchedQuest;
-  final DerivedQuestGenerator derivedQuestGen;
+  // next 2 cannot be final
+  DerivedQuestGenerator<AnsTypOfMatched> derivedQuestGen;
+  // derQuestGeneratorFactory will build a DerivedQuestGenerator when derivedQuestGen is a noop
+  DerQuestGeneratorFactoryClbk? derQuestGeneratorFactory;
 
   // AddQuestChkCallbk is for doing more advanced analysis to verify a match
   final AddQuestRespChkCallbk?
@@ -135,6 +139,8 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
   final BehaviorRuleType? behRuleTypeForAreaOrSlot;
   final bool matchOnlyOnRuleQuestion;
 
+  bool _hasCreatedDynamicDqg = false;
+
   //
   QuestMatcher(
     this.matcherDescrip, {
@@ -148,11 +154,12 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
     this.visRuleTypeForAreaOrSlot,
     this.behRuleTypeForAreaOrSlot,
     this.matchOnlyOnRuleQuestion = false,
+    this.derQuestGeneratorFactory,
   });
 
   // getters
-  bool get addsPendingQuestions => derivedQuestGen.addsPendingQuestions;
-  bool get createsImplicitAnswers => derivedQuestGen.createsImplicitAnswers;
+  // bool get addsPendingQuestions => derivedQuestGen.addsPendingQuestions;
+  // bool get createsImplicitAnswers => derivedQuestGen.createsImplicitAnswers;
 
   bool get usesMatchByQIdPatternCallback => questIdPatternMatchTest != null;
   bool get shouldValidateUserAnswer =>
@@ -193,8 +200,10 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
     return isAPatternMatch; // always true here
   }
 
-  List<QuestBase> getDerivedAutoGenQuestions(QuestBase quest) =>
-      derivedQuestGen.getDerivedAutoGenQuestions(quest, this);
+  List<QuestBase> getDerivedAutoGenQuestions(QuestBase answeredQuest) {
+    DerivedQuestGenerator<AnsTypOfMatched> dqg = activeDqg(answeredQuest);
+    return dqg.getDerivedAutoGenQuestions(answeredQuest, this);
+  }
 
   AnsTypOfMatched getTypedAnswer(QuestBase priorAnsweredQuest) {
     // should only call this when Question doesMatch
@@ -242,5 +251,13 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
     return dMatch;
   }
 
-  // AnsTypOfMatched get recentMatchAnswer => _recentMatchAnswer;
+  DerivedQuestGenerator<AnsTypOfMatched> activeDqg(QuestBase? qb) {
+    if (derQuestGeneratorFactory == null || _hasCreatedDynamicDqg)
+      return derivedQuestGen;
+
+    derivedQuestGen = derQuestGeneratorFactory!(qb!, 0)
+        as DerivedQuestGenerator<AnsTypOfMatched>;
+    _hasCreatedDynamicDqg = true;
+    return derivedQuestGen;
+  }
 }

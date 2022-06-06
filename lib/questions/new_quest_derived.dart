@@ -90,7 +90,7 @@ class DerivedQuestGenerator<PriorAnsType> {
     to build and return a list of new Questions
     */
     int newQuestCount = newQuestCountCalculator(answeredQuest);
-    if (newQuestCount < 1 || !matcher.addsPendingQuestions) return [];
+    if (newQuestCount < 1) return [];
 
     List<QuestBase> createdQuests = [];
     for (int newQIdx = 0; newQIdx < newQuestCount; newQIdx++) {

@@ -16,6 +16,9 @@ typedef CastStrToAnswTypCallback<T> = T Function(QuestBase, String);
 typedef NewQuestIdGenFromPriorAnswer = String Function(
     QuestBase priorAnsweredQuest, int idx);
 
+typedef DerQuestGeneratorFactoryClbk<T> = DerivedQuestGenerator<T> Function(
+    QuestBase priorAnsweredQuest, int idx);
+
 typedef PriorQuestIdMatchPatternTest = bool Function(String priorQuestId);
 
 typedef ChoiceListFromPriorAnswer<T> = List<String> Function(
