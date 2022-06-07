@@ -43,7 +43,7 @@ class QuestListMgr {
   // }
 
   List<QuestBase> get pendingQuestions => _pendingQuestions;
-  QuestBase get _currentOrLastQuestion => _isAtBeginning
+  QuestBase get currentOrLastQuestion => _isAtBeginning
       ? _pendingQuestions[0]
       : _pendingQuestions[_currQuestionIdx];
   int get totalAnsweredQuestions =>
@@ -67,7 +67,7 @@ class QuestListMgr {
         .matchingPromptsWhere((qpi) => qpi.asksWhichScreensToConfig);
 
     List<AppScreen> uss =
-        (matchingPrompts.first.userAnswers.cast(_currentOrLastQuestion) ?? []);
+        (matchingPrompts.first.userAnswers.cast(currentOrLastQuestion) ?? []);
 
     print('userSelectedScreens has ${uss.length} items');
     return uss;
@@ -78,7 +78,7 @@ class QuestListMgr {
     Iterable<QuestPromptInstance> matchingPrompts = _allAnsweredQuestions
         .where((q) => q.appScreen == as)
         .matchingPromptsWhere((qpi) => qpi.asksWhichAreasOfScreenToConfig);
-    return matchingPrompts.first.userAnswers.cast(_currentOrLastQuestion);
+    return matchingPrompts.first.userAnswers.cast(currentOrLastQuestion);
   }
 
   Map<AppScreen, List<ScreenWidgetArea>> get screenAreasPerScreen {
@@ -122,7 +122,7 @@ class QuestListMgr {
     Iterable<QuestPromptInstance> matchingPrompts = _allAnsweredQuestions
         .where((q) => q.appScreen == as && q.screenWidgetArea == area)
         .matchingPromptsWhere((qpi) => qpi.asksWhichAreasOfScreenToConfig);
-    return matchingPrompts.first.userAnswers.cast(_currentOrLastQuestion);
+    return matchingPrompts.first.userAnswers.cast(currentOrLastQuestion);
 
     // return _allAnsweredQuest2s
     //     .whereType<Quest2<String, List<ScreenAreaWidgetSlot>>>()
@@ -160,7 +160,7 @@ class QuestListMgr {
       return null;
     }
     ++_currQuestionIdx;
-    return _currentOrLastQuestion;
+    return currentOrLastQuestion;
   }
 
   void _moveCurrentQuestToAnswered() {
@@ -169,9 +169,9 @@ class QuestListMgr {
         totalAnsweredQuestions >= _pendingQuestions.length) return;
     //
     List<QuestBase> lstQuestInCurScreen =
-        _answeredQuestsByScreen[_currentOrLastQuestion.appScreen] ?? [];
+        _answeredQuestsByScreen[currentOrLastQuestion.appScreen] ?? [];
     // attach in case list was missing
-    _answeredQuestsByScreen[_currentOrLastQuestion.appScreen] =
+    _answeredQuestsByScreen[currentOrLastQuestion.appScreen] =
         lstQuestInCurScreen;
 
     QuestBase? mostRecentSaved;
@@ -180,7 +180,7 @@ class QuestListMgr {
     }
     // dont store same Question twice; code lingers on last question
     if (mostRecentSaved != null &&
-        mostRecentSaved.questId == _currentOrLastQuestion.questId &&
+        mostRecentSaved.questId == currentOrLastQuestion.questId &&
         _notYetAtEnd) {
       //
       print(
@@ -189,7 +189,7 @@ class QuestListMgr {
       return;
     }
     // store into list for this section;  but DO NOT remove from pendingQuest2s or messes up cur_idx tracking
-    lstQuestInCurScreen.add(_currentOrLastQuestion);
+    lstQuestInCurScreen.add(currentOrLastQuestion);
   }
 
   void loadInitialQuestions() {

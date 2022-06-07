@@ -215,7 +215,12 @@ abstract class QuestBase with EquatableMixin {
   // getters
   String get targetPath => qTargetIntent.targetPath;
   bool get isFullyAnswered => qPromptCollection.allPartsHaveAnswers;
-  bool get isRuleQuestion => this is UiFactoryRuleBase; // controls export
+
+  bool get isRulePrepQuestion => qTargetIntent.isRulePrepQuestion;
+  bool get createsRuleCfgQuests => qTargetIntent.createsRuleCfgQuests;
+
+  bool get containsRuleConfig => this is UiFactoryRuleBase; // controls export
+
   bool get isTopLevelEventConfigQuestion =>
       this is EventTopLevelConfig &&
       qTargetIntent.isTopLevelEventConfigQuestion;
@@ -269,12 +274,12 @@ abstract class QuestBase with EquatableMixin {
       qTargetIntent.appScreen == AppScreen.eventConfiguration &&
       expectedAnswerType is List<AppScreen>;
 
-  bool get addsWhichAreaInSelectedScreenQuest2s =>
+  bool get addsWhichAreaInSelectedScreenQuestions =>
       qTargetIntent.addsWhichAreaInSelectedScreenQuestions &&
       appScreen == AppScreen.eventConfiguration &&
       expectedAnswerType is List<AppScreen>;
 
-  bool get addsWhichRulesForSelectedAreaQuest2s =>
+  bool get addsWhichRulesForSelectedAreaQuestions =>
       qTargetIntent.addsWhichRulesForSelectedAreaQuestions &&
       expectedAnswerType is List<ScreenWidgetArea>;
 

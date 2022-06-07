@@ -69,7 +69,7 @@ class CliQuestionPresenter implements QuestionPresenterIfc {
   }
 
   void _printQuestion(QuestPromptInstance promptInst) {
-    // show the Quest2
+    // show the Question
     print(promptInst.userPrompt);
   }
 
@@ -87,9 +87,9 @@ class CliQuestionPresenter implements QuestionPresenterIfc {
 
   void _printInstructions(QuestBase quest, QuestPromptInstance promptInst) {
     //
-    if (quest.addsWhichAreaInSelectedScreenQuest2s) {
+    if (quest.addsWhichAreaInSelectedScreenQuestions) {
       // user will enter string or comma delimited list of ints
-    } else if (quest.addsWhichRulesForSelectedAreaQuest2s) {
+    } else if (quest.addsWhichRulesForSelectedAreaQuestions) {
       // causes Quest2s to be added or removed from future queue
       // user may enter int or comma delimited list of ints
     } else if (quest.addsWhichRulesForSlotsInArea) {

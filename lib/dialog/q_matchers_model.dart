@@ -30,9 +30,18 @@ class QMatchCollection {
   }
 
   // top level function to add new Questions or implicit answers
-  void appendNewQuestsOrInsertImplicitAnswers(QuestListMgr questListMgr) {
+  void appendNewQuestsOrInsertImplicitAnswers(
+    QuestListMgr questListMgr,
+    QuestBase questJustAnswered,
+  ) {
     //
-    QuestBase questJustAnswered = questListMgr._currentOrLastQuestion;
+    if (questJustAnswered.questId !=
+        questListMgr.currentOrLastQuestion.questId) {
+      // not sure if this is a real problem or not?
+      print(
+        'Warning:  current quest idx was moved during this process',
+      );
+    }
     // print(
     //   'comparing "${questJustAnswered.questId}" to ${_matcherList.length} matchers for new quests',
     // );
@@ -76,6 +85,16 @@ class QMatchCollection {
 
   // mostly for testing
   Iterable<QuestMatcher> get allMatchersTestOnly => _matcherList;
+
+  void createPrepQuestions(
+    QuestListMgr questListMgr,
+    QuestBase _quest,
+  ) {}
+
+  void createRuleQuestions(
+    QuestListMgr questListMgr,
+    QuestBase _quest,
+  ) {}
 }
 
 enum DerivedGenBehaviorOnMatchEnum {
@@ -247,7 +266,7 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
             this.visRuleTypeForAreaOrSlot == quest.visRuleTypeForAreaOrSlot);
     if (!dMatch) return false;
     print('visRuleTypeForAreaOrSlot matches: $dMatch');
-    print('isRuleQuestion: ${quest.isRuleQuestion}');
+    print('isRuleQuestion: ${quest.containsRuleConfig}');
 
     // dMatch =
     //     dMatch && (this.typ == null || quest.response.runtimeType == this.typ);

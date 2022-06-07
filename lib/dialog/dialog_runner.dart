@@ -69,7 +69,8 @@ class DialogRunner {
     bool didAddNew = false;
     if (!didAddNew) {
       // run appendNewQuestsOrInsertImplicitAnswers only if handleAcquiringNewQuestions does no work
-      _qMatchColl.appendNewQuestsOrInsertImplicitAnswers(_qListMgr);
+      _qMatchColl.appendNewQuestsOrInsertImplicitAnswers(
+          _qListMgr, _qListMgr.currentOrLastQuestion);
     }
     // end of logic to add new Quest2s based on user response
 
@@ -120,17 +121,24 @@ class DialogRunner {
     }
   }
 
-  void handleQuestionCascade(QuestBase _quest) {
+  void handleQuestionCascade(QuestBase questJustAnswered) {
     // logic to add new Questions based on user response
-    // two different methods
-    // called from inside of: questPresenter.askAndWaitForUserResponse
-    // bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(_qListMgr);
-    bool didAddNew = false;
-    if (!didAddNew) {
-      // new version of handleAcquiringNewQuest2s
-      // run it only if handleAcquiringNewQuest2s does no work
-      _qMatchColl.appendNewQuestsOrInsertImplicitAnswers(_qListMgr);
+    if (questJustAnswered.isRulePrepQuestion) {
+      // usually means we need to ask count of sort, filter, config
+      _qMatchColl.createPrepQuestions(_qListMgr, questJustAnswered);
+    } else if (questJustAnswered.createsRuleCfgQuests) {
+      _qMatchColl.createRuleQuestions(_qListMgr, questJustAnswered);
+    } else if (true) {
+      _qMatchColl.appendNewQuestsOrInsertImplicitAnswers(
+          _qListMgr, questJustAnswered);
     }
     // end of logic to add new Questions based on user response
   }
 }
+
+
+    // two different methods
+    // called from inside of: questPresenter.askAndWaitForUserResponse
+    // bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(_qListMgr);
+    // bool didAddNew = false;
+    // if (!didAddNew) {

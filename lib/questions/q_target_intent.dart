@@ -103,6 +103,18 @@ class QTargetIntent extends Equatable
     return screenName + '-' + area + '-' + slot;
   }
 
+  // when visRuleTypeForAreaOrSlot is set, it means we're about to start configuring a rule
+  bool get createsRuleCfgQuests => visRuleTypeForAreaOrSlot != null;
+  // some rule types need to ask COUNT before we can configure those rules
+  // test isRulePrepQuestion BEFORE you test createsRuleQuestions
+  bool get isRulePrepQuestion =>
+      createsRuleCfgQuests &&
+      [
+        VisualRuleType.filterCfg,
+        VisualRuleType.groupCfg,
+        VisualRuleType.sortCfg
+      ].contains(visRuleTypeForAreaOrSlot);
+
   bool get isTopLevelEventConfigQuestion =>
       appScreen == AppScreen.eventConfiguration &&
       screenWidgetArea == null &&

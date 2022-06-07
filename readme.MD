@@ -35,8 +35,12 @@ Casting answers to and from a JSON data structure
 
 To solve the above, we need:
 1. capture all user-responses as string
-2. cast strings to a generic type
+2. cast strings to some generic type
 3. 
+
+Once I know what rule I'm applying to a given (area or slot), then I have all the info
+I need to generate those follow-up questions
+
 
 
 #### Understanding organization of logic

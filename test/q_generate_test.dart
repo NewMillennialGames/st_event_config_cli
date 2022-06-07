@@ -43,7 +43,8 @@ void main() {
       QuestBase? nullQuest = _questMgr.nextQuestionToAnswer();
 
       // next line should create 2 new Questions
-      _qMatchColl.appendNewQuestsOrInsertImplicitAnswers(_questMgr);
+      _qMatchColl.appendNewQuestsOrInsertImplicitAnswers(
+          _questMgr, _questMgr.currentOrLastQuestion);
       expect(_questMgr.priorAnswerCount, 1);
       expect(_questMgr.pendingQuestionCount, 2);
 
@@ -95,7 +96,8 @@ void main() {
     QuestBase? nxtQu = _questMgr.nextQuestionToAnswer();
 
     // next line should create 2 new Questions
-    _qMatchColl.appendNewQuestsOrInsertImplicitAnswers(_questMgr);
+    _qMatchColl.appendNewQuestsOrInsertImplicitAnswers(
+        _questMgr, _questMgr.currentOrLastQuestion);
     expect(nxtQu, null, reason: '_questMgr only has 1 Question');
     expect(_questMgr.priorAnswerCount, 1, reason: 'quest was answered');
 
