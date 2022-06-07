@@ -121,10 +121,14 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
     on QTargetIntent
   */
   final QRespCascadePatternEm? cascadeTypeOfMatchedQuest;
-  // next 2 cannot be final
+  /*
+  next 2 cannot be final;  only one is used
+  function takes precedence; if deriveQuestGenCallbk passed
+  it will be used
+  */
   DerivedQuestGenerator<AnsTypOfMatched> derivedQuestGen;
   // derQuestGeneratorFactory will build a DerivedQuestGenerator when derivedQuestGen is a noop
-  DerQuestGeneratorFactoryClbk? derQuestGeneratorFactory;
+  DerQuestGeneratorFactoryClbk<AnsTypOfMatched>? deriveQuestGenCallbk;
 
   // AddQuestChkCallbk is for doing more advanced analysis to verify a match
   final AddQuestRespChkCallbk?
@@ -137,7 +141,6 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
   final ScreenAreaWidgetSlot? slotInArea;
   final VisualRuleType? visRuleTypeForAreaOrSlot;
   final BehaviorRuleType? behRuleTypeForAreaOrSlot;
-  final bool matchOnlyOnRuleQuestion;
 
   bool _hasCreatedDynamicDqg = false;
 
@@ -153,14 +156,14 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
     this.slotInArea,
     this.visRuleTypeForAreaOrSlot,
     this.behRuleTypeForAreaOrSlot,
-    this.matchOnlyOnRuleQuestion = false,
-    this.derQuestGeneratorFactory,
+    this.deriveQuestGenCallbk,
   });
 
   // getters
   // bool get addsPendingQuestions => derivedQuestGen.addsPendingQuestions;
   // bool get createsImplicitAnswers => derivedQuestGen.createsImplicitAnswers;
 
+  bool get producesBuilderRules => false;
   bool get usesMatchByQIdPatternCallback => questIdPatternMatchTest != null;
   bool get shouldValidateUserAnswer =>
       validateUserAnswerAfterPatternMatchIsTrueCallback != null;
@@ -252,12 +255,35 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
   }
 
   DerivedQuestGenerator<AnsTypOfMatched> activeDqg(QuestBase? qb) {
-    if (derQuestGeneratorFactory == null || _hasCreatedDynamicDqg)
+    if (deriveQuestGenCallbk == null || _hasCreatedDynamicDqg)
       return derivedQuestGen;
 
-    derivedQuestGen = derQuestGeneratorFactory!(qb!, 0)
-        as DerivedQuestGenerator<AnsTypOfMatched>;
+    derivedQuestGen =
+        deriveQuestGenCallbk!(qb!, 0) as DerivedQuestGenerator<AnsTypOfMatched>;
     _hasCreatedDynamicDqg = true;
     return derivedQuestGen;
   }
+}
+
+class QuestMatcherForRuleOutput<AnsTypOfMatched, AnsTypOfGend>
+    extends QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
+  /*
+
+  */
+
+  QuestMatcherForRuleOutput(
+    String matcherDescrip, {
+    required DerQuestGeneratorFactoryClbk<AnsTypOfMatched> deriveQuestGenCallbk,
+    PriorQuestIdMatchPatternTest? questIdPatternMatchTest,
+    VisualRuleType? visRuleTypeForAreaOrSlot,
+    BehaviorRuleType? behRuleTypeForAreaOrSlot,
+  }) : super(
+          matcherDescrip,
+          cascadeTypeOfMatchedQuest: QRespCascadePatternEm.noCascade,
+          derivedQuestGen: DerivedQuestGenerator.noop(),
+          deriveQuestGenCallbk: deriveQuestGenCallbk,
+          questIdPatternMatchTest: questIdPatternMatchTest,
+          visRuleTypeForAreaOrSlot: visRuleTypeForAreaOrSlot,
+          behRuleTypeForAreaOrSlot: behRuleTypeForAreaOrSlot,
+        );
 }

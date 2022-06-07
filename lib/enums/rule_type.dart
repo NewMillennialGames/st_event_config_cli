@@ -103,6 +103,42 @@ extension VisualRuleTypeExt1 on VisualRuleType {
         return [];
     }
   }
+
+  DerivedQuestGenerator derQuestGenFromSubtype(
+    QuestBase prevAnswQuest,
+    VisRuleQuestType questTypeNewQuestion,
+  ) {
+    /*
+
+    */
+    assert(this.requConfigQuests.contains(questTypeNewQuestion), '');
+    switch (questTypeNewQuestion) {
+      case VisRuleQuestType.askCountOfSlotsToConfigure:
+        return DerivedQuestGenerator<int>(
+          'How many sort/filter/group fields do you need for ${prevAnswQuest.targetPath}?',
+          newQuestCountCalculator: (qb) => qb.mainAnswer as int,
+          newQuestPromptArgGen: (prevQuest, newQuestIdx) => [],
+          answerChoiceGenerator: (prevQuest, newQuestIdx) => ['1', '2', '3'],
+          newQuestIdGenFromPriorQuest: (prevQuest, newQuestIdx) => '',
+          perQuestGenOptions: [
+            PerQuestGenResponsHandlingOpts(newRespCastFunc: (qb, ans) {
+              //
+            })
+          ],
+        );
+      case VisRuleQuestType.controlsVisibilityOfAreaOrSlot:
+        break;
+      case VisRuleQuestType.dialogStruct:
+        break;
+      case VisRuleQuestType.selectDataFieldName:
+        break;
+      case VisRuleQuestType.selectVisualComponentOrStyle:
+        break;
+      case VisRuleQuestType.specifySortAscending:
+        break;
+    }
+    return DerivedQuestGenerator.noop();
+  }
 }
 
 enum BehaviorRuleType {

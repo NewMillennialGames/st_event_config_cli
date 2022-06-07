@@ -37,7 +37,7 @@ class PerQuestGenResponsHandlingOpts<AnsType> {
 
 class DerivedQuestGenerator<PriorAnsType> {
   /*
-    intersection of an answered Quest2, plus a QuestMatcher
+    intersection of an answered Question, plus a QuestMatcher
     should indicate what new Quest2s to ask
   */
 
