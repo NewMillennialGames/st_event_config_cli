@@ -55,6 +55,7 @@ extension VisRuleQuestTypeExt1 on VisRuleQuestType {
   List<String> get choices {
     switch (this) {
       case VisRuleQuestType.dialogStruct:
+        // placeholder;  related to a top-level question
         return [];
       case VisRuleQuestType.selectDataFieldName:
         return DbTableFieldName.values.map((e) => e.name).toList();

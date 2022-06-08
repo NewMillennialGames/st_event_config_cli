@@ -124,7 +124,8 @@ class DialogRunner {
   void handleQuestionCascade(QuestBase questJustAnswered) {
     // logic to add new Questions based on user response
     if (questJustAnswered.isRulePrepQuestion) {
-      // usually means we need to ask count of sort, filter, config
+      // usually means we need to ask pending question count
+      // for: sort, filter, config  (how many positions)
       _qMatchColl.createPrepQuestions(_qListMgr, questJustAnswered);
     } else if (questJustAnswered.createsRuleCfgQuests) {
       _qMatchColl.createRuleQuestions(_qListMgr, questJustAnswered);

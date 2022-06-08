@@ -32,12 +32,21 @@ void main() {
       (QuestBase qb, String selCount) {
         return int.tryParse(selCount) ?? 0;
       },
+      questId: 'blahhh',
     );
     var _qMatchColl = QMatchCollection.scoretrader();
 
+    int matchCount = 0;
     for (QuestMatcher qm in _qMatchColl.allMatchersTestOnly) {
-      List<QuestBase> producedQuestions =
-          qm.getDerivedAutoGenQuestions(askNumSortSlots);
+      if (qm.doesMatch(askNumSortSlots)) {
+        matchCount += 1;
+        List<QuestBase> producedQuestions =
+            qm.getDerivedAutoGenQuestions(askNumSortSlots);
+      }
+    }
+    if (matchCount < 1) {
+      //
+      print('no matches so test is basically useless');
     }
   });
 }

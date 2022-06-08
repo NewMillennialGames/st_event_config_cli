@@ -16,14 +16,16 @@ class TestDataCreation {
     QTargetIntent qq,
     String prompt,
     List<String> choices,
-    CastStrToAnswTypCallback<T> clbk,
-  ) {
+    CastStrToAnswTypCallback<T> clbk, {
+    String questId = '',
+  }) {
     //
     return QuestBase.dlogCascade(
       qq,
       prompt,
       choices,
       CaptureAndCast<T>(clbk),
+      questId: questId,
     );
   }
 }
