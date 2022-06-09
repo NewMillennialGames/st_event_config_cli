@@ -56,7 +56,7 @@ class QuestPromptInstance<T> implements QPromptIfc {
 
   Iterable<String> get choices => answChoiceCollection.choices;
 
-  String createFormattedQuest2(Quest1Prompt quest) {
+  String createFormattedQuest2(RegionTargetQuest quest) {
     String templ = answChoiceCollection.questTemplByRuleType(
       quest.visRuleTypeForAreaOrSlot!,
     );

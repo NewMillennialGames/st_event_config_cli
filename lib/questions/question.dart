@@ -48,7 +48,7 @@ abstract class QuestBase with EquatableMixin {
   }) : questId = questId == null ? qTargetIntent.equatableKey : questId;
 
   // constructors with common QuestFactorytSignature
-  factory QuestBase.eventConfigRulePrompt(
+  factory QuestBase.eventLevelCfgQuest(
     QTargetIntent targIntent,
     List<QuestPromptPayload> prompts, {
     String? questId,
@@ -56,10 +56,10 @@ abstract class QuestBase with EquatableMixin {
     // implements QuestFactorytSignature
     // applies to ui-factory config rules
     var qDefCollection = QPromptCollection.fromList(prompts);
-    return EventTopLevelConfig(targIntent, qDefCollection, questId: questId);
+    return EventLevelCfgQuest(targIntent, qDefCollection, questId: questId);
   }
 
-  factory QuestBase.quest1Prompt(
+  factory QuestBase.regionTargetQuest(
     QTargetIntent targIntent,
     List<QuestPromptPayload> prompts, {
     String? questId,
@@ -67,10 +67,10 @@ abstract class QuestBase with EquatableMixin {
     // implements QuestFactorytSignature
     // DOES NOT apply to ui-factory config
     var qDefCollection = QPromptCollection.fromList(prompts);
-    return Quest1Prompt(targIntent, qDefCollection, questId: questId);
+    return RegionTargetQuest(targIntent, qDefCollection, questId: questId);
   }
 
-  factory QuestBase.questMultiPrompt(
+  factory QuestBase.ruleSelectQuest(
     QTargetIntent targIntent,
     List<QuestPromptPayload> prompts, {
     String? questId,
@@ -78,10 +78,10 @@ abstract class QuestBase with EquatableMixin {
     // implements QuestFactorytSignature
     // DOES NOT apply to ui-factory config
     var qDefCollection = QPromptCollection.fromList(prompts);
-    return QuestMultiPrompt(targIntent, qDefCollection, questId: questId);
+    return RuleSelectQuest(targIntent, qDefCollection, questId: questId);
   }
 
-  factory QuestBase.questVisualRule(
+  factory QuestBase.visualRuleDetailQuest(
     QTargetIntent targIntent,
     List<QuestPromptPayload> prompts, {
     String? questId,
@@ -89,10 +89,10 @@ abstract class QuestBase with EquatableMixin {
     // implements QuestFactorytSignature
     // applies to ui-factory config
     var qDefCollection = QPromptCollection.fromList(prompts);
-    return QuestVisualRule(targIntent, qDefCollection, questId: questId);
+    return VisualRuleDetailQuest(targIntent, qDefCollection, questId: questId);
   }
 
-  factory QuestBase.questBehaveRule(
+  factory QuestBase.behaveRuleDetailQuest(
     QTargetIntent targIntent,
     List<QuestPromptPayload> prompts, {
     String? questId,
@@ -100,7 +100,7 @@ abstract class QuestBase with EquatableMixin {
     // implements QuestFactorytSignature
     // applies to ui-factory config
     var qDefCollection = QPromptCollection.fromList(prompts);
-    return QuestBehaveRule(targIntent, qDefCollection, questId: questId);
+    return BehaveRuleDetailQuest(targIntent, qDefCollection, questId: questId);
   }
   // end constructors with common QuestFactorytSignature
 
@@ -118,10 +118,10 @@ abstract class QuestBase with EquatableMixin {
       choices,
       captureAndCast,
     );
-    return EventTopLevelConfig(targIntent, qDefCollection, questId: questId);
+    return EventLevelCfgQuest(targIntent, qDefCollection, questId: questId);
   }
 
-  factory QuestBase.dlogCascade(
+  factory QuestBase.regionTargetQuestManual(
     QTargetIntent targIntent,
     String userPrompt,
     Iterable<String> choices,
@@ -134,49 +134,7 @@ abstract class QuestBase with EquatableMixin {
       choices,
       captureAndCast,
     );
-    return EventTopLevelConfig(targIntent, qDefCollection, questId: questId);
-  }
-
-  factory QuestBase.multiPrompt(
-    QTargetIntent targIntent,
-    List<QuestPromptPayload> prompts, {
-    String? questId,
-  }) {
-    //
-    var qDefCollection = QPromptCollection.fromList(prompts);
-    return QuestMultiPrompt(targIntent, qDefCollection, questId: questId);
-  }
-
-  factory QuestBase.visualRule(
-    QTargetIntent targIntent,
-    String userPrompt,
-    Iterable<String> choices,
-    CaptureAndCast captureAndCast, {
-    String? questId,
-  }) {
-    // applies to ui-factory config rules
-    var qDefCollection = QPromptCollection.singleRule(
-      userPrompt,
-      choices,
-      captureAndCast,
-    );
-    return QuestVisualRule(targIntent, qDefCollection, questId: questId);
-  }
-
-  factory QuestBase.behavioralRule(
-    QTargetIntent targIntent,
-    String userPrompt,
-    Iterable<String> choices,
-    CaptureAndCast captureAndCast, {
-    String? questId,
-  }) {
-    // applies to ui-factory config rules
-    var qDefCollection = QPromptCollection.singleRule(
-      userPrompt,
-      choices,
-      captureAndCast,
-    );
-    return QuestBehaveRule(targIntent, qDefCollection, questId: questId);
+    return RegionTargetQuest(targIntent, qDefCollection, questId: questId);
   }
 
   QuestPromptInstance? getNextUserPromptIfExists() {
@@ -215,15 +173,18 @@ abstract class QuestBase with EquatableMixin {
   // getters
   String get targetPath => qTargetIntent.targetPath;
   bool get isFullyAnswered => qPromptCollection.allPartsHaveAnswers;
-
-  bool get isRulePrepQuestion => qTargetIntent.isRulePrepQuestion;
   bool get createsRuleCfgQuests => qTargetIntent.createsRuleCfgQuests;
 
-  bool get containsRuleConfig => this is UiFactoryRuleBase; // controls export
-
+  // define types of question
   bool get isTopLevelEventConfigQuestion =>
-      this is EventTopLevelConfig &&
-      qTargetIntent.isTopLevelEventConfigQuestion;
+      this is EventLevelCfgQuest && qTargetIntent.isTopLevelEventConfigQuestion;
+  bool get isRegionTargetQuestion => this is RegionTargetQuest;
+  bool get isRuleSelectionQuestion => this is RuleSelectQuest;
+  bool get isRulePrepQuestion =>
+      this is RulePrepQuest && qTargetIntent.isRulePrepQuestion;
+  bool get isRuleDetailQuestion => this is UiFactoryRuleBase; // controls export
+  bool get isVisRuleDetailQuestion => this is VisualRuleDetailQuest;
+  bool get isBehRuleDetailQuestion => this is BehaveRuleDetailQuest;
 
   Iterable<CaptureAndCast> get listResponses => qPromptCollection.listResponses;
   int get promptCount => qPromptCollection.questIterations.length;
@@ -311,32 +272,43 @@ abstract class QuestBase with EquatableMixin {
   }
 }
 
-class EventTopLevelConfig extends QuestBase {
+class EventLevelCfgQuest extends QuestBase {
   /*  applies to ui-factory config rules
   */
-  EventTopLevelConfig(
+  EventLevelCfgQuest(
     QTargetIntent qTargetIntent,
     QPromptCollection qDefCollection, {
     String? questId,
   }) : super(qTargetIntent, qDefCollection, questId: questId) {}
 }
 
-class Quest1Prompt extends QuestBase {
+class RegionTargetQuest extends QuestBase {
   /*  Question offering only one user prompt / question
     this DOES NOT mean the user cannot select multiple options
   */
-  Quest1Prompt(
+  RegionTargetQuest(
     QTargetIntent qTargetIntent,
     QPromptCollection qDefCollection, {
     String? questId,
   }) : super(qTargetIntent, qDefCollection, questId: questId) {}
 }
 
-class QuestMultiPrompt extends QuestBase {
-  /*  Question offering MULTIPLE user prompt / questions
+class RuleSelectQuest extends QuestBase {
+  /*  
 
   */
-  QuestMultiPrompt(
+  RuleSelectQuest(
+    QTargetIntent qTargetIntent,
+    QPromptCollection qDefCollection, {
+    String? questId,
+  }) : super(qTargetIntent, qDefCollection, questId: questId) {}
+}
+
+class RulePrepQuest extends QuestBase {
+  /*  intermediate step to guide creation of Rule detail questions
+      not every rule-type requires one of these
+  */
+  RulePrepQuest(
     QTargetIntent qTargetIntent,
     QPromptCollection qDefCollection, {
     String? questId,
@@ -354,20 +326,20 @@ abstract class UiFactoryRuleBase extends QuestBase {
   // getters
 }
 
-class QuestVisualRule extends UiFactoryRuleBase {
+class VisualRuleDetailQuest extends UiFactoryRuleBase {
   /*  applies to ui-factory config rules
   */
-  QuestVisualRule(
+  VisualRuleDetailQuest(
     QTargetIntent qTargetIntent,
     QPromptCollection qDefCollection, {
     String? questId,
   }) : super(qTargetIntent, qDefCollection, questId: questId) {}
 }
 
-class QuestBehaveRule extends UiFactoryRuleBase {
+class BehaveRuleDetailQuest extends UiFactoryRuleBase {
   /*  applies to ui-factory config rules
   */
-  QuestBehaveRule(
+  BehaveRuleDetailQuest(
     QTargetIntent qTargetIntent,
     QPromptCollection qDefCollection, {
     String? questId,

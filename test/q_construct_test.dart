@@ -37,7 +37,8 @@ void main() {
       ),
     ];
 
-    twoPromptQuest = QuestBase.multiPrompt(qq, prompts, questId: _questId);
+    twoPromptQuest =
+        QuestBase.visualRuleDetailQuest(qq, prompts, questId: _questId);
   });
 
   test(

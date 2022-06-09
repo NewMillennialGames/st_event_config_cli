@@ -37,15 +37,15 @@ class QTargetIntent extends Equatable
       new auto-derived questions (from user answers)
     */
     if (visRuleTypeForAreaOrSlot != null) {
-      return QuestBase.questVisualRule;
+      return QuestBase.visualRuleDetailQuest;
     } else if (behRuleTypeForAreaOrSlot != null) {
-      return QuestBase.questBehaveRule;
+      return QuestBase.behaveRuleDetailQuest;
     } else if (cliConfig) {
-      return QuestBase.eventConfigRulePrompt;
+      return QuestBase.eventLevelCfgQuest;
     } else if (slotInArea != null || screenWidgetArea != null) {
-      return QuestBase.questMultiPrompt;
+      return QuestBase.ruleSelectQuest;
     }
-    return QuestBase.eventConfigRulePrompt;
+    return QuestBase.eventLevelCfgQuest;
   }
 
   QIntentEm get intent {
@@ -314,7 +314,7 @@ class QTargetIntent extends Equatable
     );
   }
 
-  List<VisualRuleType> relatedSubVisualRules(Quest1Prompt quest) {
+  List<VisualRuleType> relatedSubVisualRules(RegionTargetQuest quest) {
     if (!this.generatesNoNewQuestions) return [];
 
     List<VisualRuleType> list = [];

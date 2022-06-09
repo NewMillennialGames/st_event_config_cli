@@ -141,7 +141,7 @@ final List<QuestBase> _initQuestionLst = [
     ),
   ],
   // ask which screens to configure
-  QuestBase.dlogCascade(
+  QuestBase.regionTargetQuestManual(
     QTargetIntent.eventLevel(responseAddsWhichAreaQuestions: true),
     DlgStr.selectAppScreens, // <String, List<AppScreen>>
     AppScreen.eventConfiguration.topConfigurableScreens.map((e) => e.name),

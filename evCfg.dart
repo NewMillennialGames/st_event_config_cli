@@ -41,7 +41,7 @@ void createOutputFileFromResponses(
   String? filename,
 ]) {
   //
-  List<EventTopLevelConfig> eventConfigLevelData =
+  List<EventLevelCfgQuest> eventConfigLevelData =
       questListMgr.exportableTopLevelQuestions.toList();
   List<UiFactoryRuleBase> exportableRuleQuestions =
       questListMgr.exportableRuleQuestions.toList();
@@ -64,7 +64,8 @@ void createOutputFileFromResponses(
 
   final evCfg = EventCfgTree.fromEventLevelConfig(eventConfigLevelData);
   // create the per-area or per-slot rules
-  var ruleResponses = exportableRuleQuestions.whereType<QuestVisualRule>();
+  var ruleResponses =
+      exportableRuleQuestions.whereType<VisualRuleDetailQuest>();
   // print('ruleResponse answer count: ${ruleResponses.length}');
   evCfg.fillFromVisualRuleAnswers(ruleResponses);
   // now dump evCfg to file

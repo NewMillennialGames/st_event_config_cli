@@ -20,7 +20,7 @@ class TestDataCreation {
     String questId = '',
   }) {
     //
-    return QuestBase.dlogCascade(
+    return QuestBase.regionTargetQuestManual(
       qq,
       prompt,
       choices,

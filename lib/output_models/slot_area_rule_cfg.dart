@@ -23,7 +23,7 @@ class SlotOrAreaRuleCfg {
   Iterable<VisualRuleType> get existingAnsweredRuleTypes =>
       visRuleList.map((e) => e.ruleType);
 
-  void appendQuestion(QuestVisualRule rQuest) {
+  void appendQuestion(VisualRuleDetailQuest rQuest) {
     print('adding QuestVisualRule ${rQuest.firstQuestion} in');
     this.visRuleList.add(rQuest.mainAnswer);
   }

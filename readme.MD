@@ -171,6 +171,25 @@ Presenter show's each QuestPromptInstance and stores user response inside each Q
 Once all parts have been asked and answered, QuestBase is commplete
 you can call the "cast()" function to get user answers converted into expected output type
 
+#### Testing requirements
+
+  Things we need to test in the:
+
+  CLI
+
+    add 1 question; verify it's next served
+    verify question has correct # of prompts
+  1) user answers produce new QuestBase & add to pending Queue
+  2) answers produce IMPLICIT answers (create new Question and AUTO-SET answers)
+  3) answers make some pending Questions IRRELEVANT  (take them out of pending queue)
+  4) all relevant answers written to JSON file
+
+  ui_builder_factory
+
+  1) multiple different JSON config files can be loaded
+  2) row-builder-function matches the app-screen for which it applies  (eg grouped or ungrouped)
+  3) filtering logic also fits app-screen & config requirements
+  4) sorting & grouping output matches json config
 
 ###### Specs for Web UI:
 
@@ -218,28 +237,6 @@ defer this until after 1st build:
   those rows ...
 
   or update them on the outside
-
-
-  #### Testing requirements
-
-  Things we need to test in the:
-
-  CLI
-
-    add 1 question; verify it's next served
-    verify question has correct # of prompts
-  1) user answers produce new QuestBase & add to pending Queue
-  2) answers produce IMPLICIT answers (create new Question and AUTO-SET answers)
-  3) answers make some pending Questions IRRELEVANT  (take them out of pending queue)
-  4) all relevant answers written to JSON file
-
-  ui_builder_factory
-
-  1) multiple different JSON config files can be loaded
-  2) row-builder-function matches the app-screen for which it applies  (eg grouped or ungrouped)
-  3) filtering logic also fits app-screen & config requirements
-  4) sorting & grouping output matches json config
-
 
 
 #### For future

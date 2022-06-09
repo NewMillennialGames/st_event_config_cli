@@ -17,7 +17,7 @@ void main() {
     () {
       //
       // ask which screens to configure
-      QuestBase askScreens = QuestBase.dlogCascade(
+      QuestBase askScreens = QuestBase.regionTargetQuestManual(
         QTargetIntent.eventLevel(responseAddsWhichAreaQuestions: true),
         DlgStr.selectAppScreens, // <String, List<AppScreen>>
         AppScreen.eventConfiguration.topConfigurableScreens.map((e) => e.name),

@@ -87,7 +87,7 @@ void main() {
     );
     String testQuestId = '111222';
     QuestBase anyBaseQuest =
-        QuestBase.eventConfigRulePrompt(qti, [qpp], questId: testQuestId);
+        QuestBase.eventLevelCfgQuest(qti, [qpp], questId: testQuestId);
 
     var _qMatchColl = QMatchCollection([]);
     expect(_qMatchColl.matchCountFor(anyBaseQuest), 0);

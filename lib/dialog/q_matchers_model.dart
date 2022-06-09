@@ -322,7 +322,7 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
             this.visRuleTypeForAreaOrSlot == quest.visRuleTypeForAreaOrSlot);
     if (!dMatch) return false;
     print('visRuleTypeForAreaOrSlot matches: $dMatch');
-    print('isRuleQuestion: ${quest.containsRuleConfig}');
+    print('isRuleQuestion: ${quest.isRuleDetailQuestion}');
 
     // dMatch =
     //     dMatch && (this.typ == null || quest.response.runtimeType == this.typ);
