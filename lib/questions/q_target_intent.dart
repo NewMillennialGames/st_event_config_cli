@@ -21,7 +21,7 @@ class QTargetIntent extends Equatable
   QTargetIntent._();
 
   factory QTargetIntent(
-    QRespCascadePatternEm cascadeWorkDoneByRespGendQuests,
+    // QRespCascadePatternEm cascadeWorkDoneByRespGendQuests,
     AppScreen appScreen,
     ScreenWidgetArea? screenWidgetArea, {
     ScreenAreaWidgetSlot? slotInArea,
@@ -98,22 +98,27 @@ class QTargetIntent extends Equatable
     String screenName = appScreen.name;
     String? area = screenWidgetArea?.name;
     String? slot = slotInArea?.name;
+    String? visRuleName = visRuleTypeForAreaOrSlot?.name;
+    bool hasRule = visRuleName != null;
+
     if (area == null) return screenName;
-    if (slot == null) return screenName + '-' + area;
-    return screenName + '-' + area + '-' + slot;
+    if (slot == null)
+      return screenName + '-' + area + (hasRule ? '-$visRuleName' : '');
+    if (!hasRule) return screenName + '-' + area + '-' + slot;
+    return screenName + '-' + area + '-' + slot + '-' + visRuleName;
   }
 
   // when visRuleTypeForAreaOrSlot is set, it means we're about to start configuring a rule
-  bool get createsRuleCfgQuests => visRuleTypeForAreaOrSlot != null;
+  // bool get createsRuleCfgQuests => visRuleTypeForAreaOrSlot != null;
   // some rule types need to ask COUNT before we can configure those rules
   // test isRulePrepQuestion BEFORE you test createsRuleQuestions
-  bool get isRulePrepQuestion =>
-      createsRuleCfgQuests &&
-      [
-        VisualRuleType.filterCfg,
-        VisualRuleType.groupCfg,
-        VisualRuleType.sortCfg
-      ].contains(visRuleTypeForAreaOrSlot);
+  // bool get isRulePrepQuestion =>
+  //     createsRuleCfgQuests &&
+  //     [
+  //       VisualRuleType.filterCfg,
+  //       VisualRuleType.groupCfg,
+  //       VisualRuleType.sortCfg
+  //     ].contains(visRuleTypeForAreaOrSlot);
 
   bool get isTopLevelEventConfigQuestion =>
       appScreen == AppScreen.eventConfiguration &&
@@ -127,22 +132,27 @@ class QTargetIntent extends Equatable
   //     visRuleTypeForAreaOrSlot == null &&
   //     behRuleTypeForAreaOrSlot == null; // && slotInArea == null
   //
-  bool get generatesNoNewQuestions => cascadeType.generatesNoNewQuestions;
+  // bool get generatesNoNewQuestions => cascadeType.generatesNoNewQuestions;
 
-  bool get addsWhichAreaInSelectedScreenQuestions =>
-      cascadeType.addsWhichAreaInSelectedScreenQuestions;
+  // bool get addsWhichAreaInSelectedScreenQuestions =>
+  //     cascadeType.addsWhichAreaInSelectedScreenQuestions;
 
-  bool get addsWhichRulesForSelectedAreaQuestions =>
-      cascadeType.addsWhichRulesForSelectedAreaQuestions;
+  // bool get addsWhichRulesForSelectedAreaQuestions =>
+  //     cascadeType.addsWhichRulesForSelectedAreaQuestions;
 
-  bool get addsWhichSlotOfSelectedAreaQuestions =>
-      cascadeType.addsWhichSlotOfSelectedAreaQuestions;
+  // bool get addsWhichSlotOfSelectedAreaQuestions =>
+  //     cascadeType.addsWhichSlotOfSelectedAreaQuestions;
 
-  bool get addsWhichRulesForSlotsInArea =>
-      cascadeType.addsWhichRulesForSlotsInArea;
+  // bool get addsWhichRulesForSlotsInArea =>
+  //     cascadeType.addsWhichRulesForSlotsInArea;
 
-  bool get addsRuleDetailQuestsForSlotOrArea =>
-      cascadeType.addsRuleDetailQuestsForSlotOrArea;
+  // bool get addsRuleDetailQuestsForSlotOrArea =>
+  //     cascadeType.addsRuleDetailQuestsForSlotOrArea;
+
+  bool get requiresVisRulePrepQuestion =>
+      visRuleTypeForAreaOrSlot?.requiresRulePrepQuestion ?? false;
+  bool get requiresBehRulePrepQuestion =>
+      behRuleTypeForAreaOrSlot?.requiresRulePrepQuestion ?? false;
 
   List<ScreenWidgetArea> get possibleAreasForScreen =>
       appScreen.configurableScreenAreas;
@@ -188,9 +198,9 @@ class QTargetIntent extends Equatable
     */
     return QTargetIntent(
       // QIntentCfg.eventLevel(),
-      responseAddsWhichAreaQuestions
-          ? QRespCascadePatternEm.addsWhichAreaInSelectedScreenQuestions
-          : QRespCascadePatternEm.noCascade,
+      // responseAddsWhichAreaQuestions
+      //     ? QRespCascadePatternEm.respCreatesWhichAreaInScreenQuestions
+      //     : QRespCascadePatternEm.noCascade,
       AppScreen.eventConfiguration,
       null,
     );
@@ -208,9 +218,9 @@ class QTargetIntent extends Equatable
     */
     return QTargetIntent(
       // QIntentCfg.eventLevel(),
-      responseAddsWhichRuleAndSlotQuest2s
-          ? QRespCascadePatternEm.addsWhichRulesForSelectedAreaQuestions
-          : QRespCascadePatternEm.noCascade,
+      // responseAddsWhichRuleAndSlotQuest2s
+      //     ? QRespCascadePatternEm.respCreatesWhichRulesForAreaOrSlotQuestions
+      //     : QRespCascadePatternEm.noCascade,
       appScreen,
       null,
     );
@@ -235,9 +245,9 @@ class QTargetIntent extends Equatable
     */
     return QTargetIntent(
       // QIntentCfg.areaLevelRules(ruleType),
-      responseAddsRuleDetailQuests
-          ? QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea
-          : QRespCascadePatternEm.noCascade,
+      // responseAddsRuleDetailQuests
+      //     ? QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions
+      //     : QRespCascadePatternEm.noCascade,
       appScreen,
       screenArea,
       visRuleTypeForAreaOrSlot: ruleType,
@@ -257,9 +267,9 @@ class QTargetIntent extends Equatable
     */
     return QTargetIntent(
       // QIntentCfg.areaLevelSlots(VisualRuleType.topDialogStruct),
-      responseAddsWhichRuleQuest2s
-          ? QRespCascadePatternEm.addsWhichRulesForSlotsInArea
-          : QRespCascadePatternEm.noCascade,
+      // responseAddsWhichRuleQuest2s
+      //     ? QRespCascadePatternEm.respCreatesRulePrepQuestions
+      //     : QRespCascadePatternEm.noCascade,
       appScreen,
       screenArea,
     );
@@ -279,9 +289,9 @@ class QTargetIntent extends Equatable
     */
     return QTargetIntent(
       // QIntentCfg.ruleLevel(VisualRuleType.topDialogStruct),
-      responseAddsRuleDetailQuest2s
-          ? QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea
-          : QRespCascadePatternEm.noCascade,
+      // responseAddsRuleDetailQuest2s
+      //     ? QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions
+      //     : QRespCascadePatternEm.noCascade,
       appScreen,
       screenArea,
       slotInArea: slot,
@@ -301,11 +311,13 @@ class QTargetIntent extends Equatable
     return QTargetIntent(
       // QIntentCfg.ruleDetailMultiResponse(
       //     visRuleTypeForSlotInArea ?? VisualRuleType.topDialogStruct),
-      addsMoreRuleQuest2s
-          ? (isVisual
-              ? QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea
-              : QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea)
-          : QRespCascadePatternEm.noCascade,
+      // addsMoreRuleQuest2s
+      //     ? (isVisual
+      //         ? QRespCascadePatternEm
+      //             .respCreatesRuleDetailForSlotOrAreaQuestions
+      //         : QRespCascadePatternEm
+      //             .respCreatesRuleDetailForSlotOrAreaQuestions)
+      //     : QRespCascadePatternEm.noCascade,
       appScreen,
       screenWidgetArea,
       slotInArea: slot,
@@ -314,27 +326,27 @@ class QTargetIntent extends Equatable
     );
   }
 
-  List<VisualRuleType> relatedSubVisualRules(RegionTargetQuest quest) {
-    if (!this.generatesNoNewQuestions) return [];
+  // List<VisualRuleType> relatedSubVisualRules(RegionTargetQuest quest) {
+  //   if (!this.generatesNoNewQuestions) return [];
 
-    List<VisualRuleType> list = [];
-    switch (this.visRuleTypeForAreaOrSlot!) {
-      case VisualRuleType.filterCfg:
-        list.addAll([]);
-        break;
-      case VisualRuleType.sortCfg:
-        list.addAll([]);
-        break;
-      case VisualRuleType.showOrHide:
-        list.addAll([]);
-        break;
-      case VisualRuleType.styleOrFormat:
-        list.addAll([]);
-        break;
-    }
+  //   List<VisualRuleType> list = [];
+  //   switch (this.visRuleTypeForAreaOrSlot!) {
+  //     case VisualRuleType.filterCfg:
+  //       list.addAll([]);
+  //       break;
+  //     case VisualRuleType.sortCfg:
+  //       list.addAll([]);
+  //       break;
+  //     case VisualRuleType.showOrHide:
+  //       list.addAll([]);
+  //       break;
+  //     case VisualRuleType.styleOrFormat:
+  //       list.addAll([]);
+  //       break;
+  //   }
 
-    return list;
-  }
+  //   return list;
+  // }
 
   static int _weightForTargetEnumIdx(dynamic targetEnum) {
     /* allows weighting each QTargetIntent

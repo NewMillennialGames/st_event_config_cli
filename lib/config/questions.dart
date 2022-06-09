@@ -141,7 +141,7 @@ final List<QuestBase> _initQuestionLst = [
     ),
   ],
   // ask which screens to configure
-  QuestBase.regionTargetQuestManual(
+  QuestBase.initialEventConfigRule(
     QTargetIntent.eventLevel(responseAddsWhichAreaQuestions: true),
     DlgStr.selectAppScreens, // <String, List<AppScreen>>
     AppScreen.eventConfiguration.topConfigurableScreens.map((e) => e.name),
@@ -149,6 +149,7 @@ final List<QuestBase> _initQuestionLst = [
         .map((idx) => AppScreen.eventConfiguration.topConfigurableScreens[idx])
         .toList()),
     questId: QuestionIdStrings.selectAppScreens,
+    isSelectScreensQuestion: true,
   ),
   // after user selects desired screens to configure, then
   // which screen areas (and slots on those areas) are asked automatically;

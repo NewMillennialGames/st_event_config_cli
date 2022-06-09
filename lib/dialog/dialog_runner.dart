@@ -16,7 +16,8 @@ class DialogRunner {
   final QuestionPresenterIfc questPresenter;
   final int linesBetweenSections;
   final int linesBetweenQuest2s;
-  final QMatchCollection _qMatchColl;
+  final QuestionCascadeDispatcher questCascadeDispatcher;
+  // final QMatchCollection _qMatchColl;
   //
 
   DialogRunner(
@@ -25,10 +26,11 @@ class DialogRunner {
     this.linesBetweenSections = 3,
     this.linesBetweenQuest2s = 1,
     bool loadDefaultQuest = true,
-    QMatchCollection? qMatchColl,
+    QuestionCascadeDispatcher? questCascadeDisp,
   })  : _qListMgr = qListMgr ?? QuestListMgr(),
-        _qMatchColl =
-            qMatchColl != null ? qMatchColl : QMatchCollection.scoretrader() {
+        questCascadeDispatcher = questCascadeDisp == null
+            ? QuestionCascadeDispatcher(null)
+            : questCascadeDisp {
     List<QuestBase> quests = loadInitialConfigQuestions();
     if (loadDefaultQuest) {
       _qListMgr.appendGeneratedQuestsAndAnswers(quests);
@@ -65,13 +67,10 @@ class DialogRunner {
       but new auto-generated Quest2s should be placed under #2 (appendNewQuestsOrInsertImplicitAnswers)
     */
 
-    // bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(_qListMgr);
-    bool didAddNew = false;
-    if (!didAddNew) {
-      // run appendNewQuestsOrInsertImplicitAnswers only if handleAcquiringNewQuestions does no work
-      _qMatchColl.appendNewQuestsOrInsertImplicitAnswers(
-          _qListMgr, _qListMgr.currentOrLastQuestion);
-    }
+    questCascadeDispatcher.appendNewQuestsOrInsertImplicitAnswers(
+      _qListMgr,
+      _qListMgr.currentOrLastQuestion,
+    );
     // end of logic to add new Quest2s based on user response
 
     bool hasNextQuest = serveNextQuestionToGui();
@@ -123,24 +122,27 @@ class DialogRunner {
 
   void handleQuestionCascade(QuestBase questJustAnswered) {
     // logic to add new Questions based on user response
-    if (questJustAnswered.isRulePrepQuestion) {
-      // usually means we need to ask pending question count
-      // for: sort, filter, config  (how many positions)
-      _qMatchColl.createPrepQuestions(
-        _qListMgr,
-        questJustAnswered,
-      );
-    } else if (questJustAnswered.createsRuleCfgQuests) {
-      _qMatchColl.createRuleQuestions(
-        _qListMgr,
-        questJustAnswered,
-      );
-    } else if (true) {
-      _qMatchColl.appendNewQuestsOrInsertImplicitAnswers(
-        _qListMgr,
-        questJustAnswered,
-      );
-    }
+
+    questCascadeDispatcher.handleNewCascade(_qListMgr, questJustAnswered);
+
+    // if (questJustAnswered.isRulePrepQuestion) {
+    //   // usually means we need to ask pending question count
+    //   // for: sort, filter, config  (how many positions)
+    //   _qMatchColl.createPrepQuestions(
+    //     _qListMgr,
+    //     questJustAnswered,
+    //   );
+    // } else if (questJustAnswered.createsRuleCfgQuests) {
+    //   _qMatchColl.createRuleQuestions(
+    //     _qListMgr,
+    //     questJustAnswered,
+    //   );
+    // } else if (true) {
+    //   _qMatchColl.appendNewQuestsOrInsertImplicitAnswers(
+    //     _qListMgr,
+    //     questJustAnswered,
+    //   );
+    // }
     // end of logic to add new Questions based on user response
   }
 }

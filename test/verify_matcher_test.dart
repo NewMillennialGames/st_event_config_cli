@@ -39,7 +39,7 @@ void main() {
       QuestMatcher(
         'should match 1 based on screen, area ruletype',
         cascadeTypeOfMatchedQuest:
-            QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea,
+            QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions,
         derivedQuestGen: DerivedQuestGenerator.noop(),
         // validateUserAnswerAfterPatternMatchIsTrueCallback: (p0) => true,
         appScreen: qq.appScreen,
@@ -49,7 +49,7 @@ void main() {
       QuestMatcher(
         'should match 2 based on screen, area ruletype & valid answer',
         cascadeTypeOfMatchedQuest:
-            QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea,
+            QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions,
         derivedQuestGen: DerivedQuestGenerator.noop(),
         validateUserAnswerAfterPatternMatchIsTrueCallback: (p0) => true,
         appScreen: qq.appScreen,
@@ -59,14 +59,14 @@ void main() {
       QuestMatcher(
         'should NOT match based on wrong screen',
         cascadeTypeOfMatchedQuest:
-            QRespCascadePatternEm.addsWhichAreaInSelectedScreenQuestions,
+            QRespCascadePatternEm.respCreatesWhichAreaInScreenQuestions,
         derivedQuestGen: DerivedQuestGenerator.noop(),
         appScreen: AppScreen.eventConfiguration,
       ),
       QuestMatcher(
         'should NOT match based on invalid user answer',
         cascadeTypeOfMatchedQuest:
-            QRespCascadePatternEm.addsWhichAreaInSelectedScreenQuestions,
+            QRespCascadePatternEm.respCreatesWhichAreaInScreenQuestions,
         derivedQuestGen: DerivedQuestGenerator.noop(),
         validateUserAnswerAfterPatternMatchIsTrueCallback: (p0) => false,
         appScreen: AppScreen.marketView,
@@ -96,7 +96,7 @@ void main() {
     final wontMatchByCascade = QuestMatcher(
       'should NOT match based on cascadeTypeOfMatchedQuest',
       cascadeTypeOfMatchedQuest:
-          QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea,
+          QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions,
       validateUserAnswerAfterPatternMatchIsTrueCallback: (p0) => true,
       appScreen: qti.appScreen,
       screenWidgetArea: qti.screenWidgetArea,
@@ -114,7 +114,7 @@ void main() {
     final wontMatchByUserAnser = QuestMatcher(
       'should NOT match based on invalid user answer',
       cascadeTypeOfMatchedQuest:
-          QRespCascadePatternEm.addsWhichAreaInSelectedScreenQuestions,
+          QRespCascadePatternEm.respCreatesWhichAreaInScreenQuestions,
       validateUserAnswerAfterPatternMatchIsTrueCallback: (p0) => false,
       appScreen: AppScreen.marketView,
       derivedQuestGen: DerivedQuestGenerator.noop(),
@@ -123,7 +123,7 @@ void main() {
     final willMatchByQuestId = QuestMatcher(
       'should match 1 based on same quest ID',
       cascadeTypeOfMatchedQuest:
-          QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea,
+          QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions,
       questIdPatternMatchTest: (qid) => qid == testQuestId,
       derivedQuestGen: DerivedQuestGenerator(
         'blah {0}',

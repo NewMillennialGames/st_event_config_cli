@@ -87,17 +87,17 @@ class CliQuestionPresenter implements QuestionPresenterIfc {
 
   void _printInstructions(QuestBase quest, QuestPromptInstance promptInst) {
     //
-    if (quest.addsWhichAreaInSelectedScreenQuestions) {
+    if (quest.isTopLevelEventConfigQuestion) {
       // user will enter string or comma delimited list of ints
-    } else if (quest.addsWhichRulesForSelectedAreaQuestions) {
+    } else if (quest.isRegionTargetQuestion) {
       // causes Quest2s to be added or removed from future queue
       // user may enter int or comma delimited list of ints
-    } else if (quest.addsWhichRulesForSlotsInArea) {
+    } else if (quest.isRuleSelectionQuestion) {
       //
-    } else if (quest.addsRuleDetailQuestsForSlotOrArea) {
+    } else if (quest.isRulePrepQuestion) {
       // needs to produce visual formatting rules
       // user will select a widget display option
-    } else if (false) {
+    } else if (quest.isRuleDetailQuestion) {
       // needs to produce behavioral rules
       // future;  not yet implemented
     }

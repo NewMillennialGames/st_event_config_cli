@@ -19,7 +19,8 @@ enum VisualRuleType {
 extension VisualRuleTypeExt1 on VisualRuleType {
   //
 
-  bool get hasVariableSubRuleCount => [
+  bool get requiresRulePrepQuestion => [
+        // hasVariableSubRuleCount
         // these rules can configure 0-3 slots
         VisualRuleType.sortCfg,
         VisualRuleType.groupCfg,
@@ -163,8 +164,8 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           qTargetIntentUpdaterCallbk: (QuestBase qb, int __) {
             //
             return qb.qTargetIntent.copyWith(
-                cascadeType:
-                    QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea);
+                cascadeType: QRespCascadePatternEm
+                    .respCreatesRuleDetailForSlotOrAreaQuestions);
           },
           perQuestGenOptions: [
             PerQuestGenResponsHandlingOpts<int>(
@@ -191,7 +192,7 @@ enum BehaviorRuleType {
 
 extension BehaviorRuleTypeExt1 on BehaviorRuleType {
   //
-
+  bool get requiresRulePrepQuestion => false;
 }
 
 // String Quest2Str(

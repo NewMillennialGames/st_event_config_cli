@@ -31,11 +31,11 @@ enum QRespCascadePatternEm {
     I want NO CASCADE Questions to sort to LAST position
     so I moved it's index to the bottom of list
    */
-  addsWhichAreaInSelectedScreenQuestions,
-  addsWhichRulesForSelectedAreaQuestions, // for each area of each screen
-  addsWhichSlotOfSelectedAreaQuestions, // for each screen & area
-  addsWhichRulesForSlotsInArea, // for each slot in area
-  addsRuleDetailQuestsForSlotOrArea,
+  respCreatesWhichAreaInScreenQuestions,
+  respCreatesWhichSlotOfAreaQuestions, // for each screen & area
+  respCreatesWhichRulesForAreaOrSlotQuestions, // for each area of each screen
+  respCreatesRulePrepQuestions, // for each slot in area
+  respCreatesRuleDetailForSlotOrAreaQuestions,
   //
   noCascade,
 }
@@ -49,19 +49,19 @@ extension UserResponseCascadePatternExt on QRespCascadePatternEm {
   bool get generatesNoNewQuestions => this == QRespCascadePatternEm.noCascade;
 
   bool get addsWhichAreaInSelectedScreenQuestions =>
-      this == QRespCascadePatternEm.addsWhichAreaInSelectedScreenQuestions;
+      this == QRespCascadePatternEm.respCreatesWhichAreaInScreenQuestions;
 
   bool get addsWhichRulesForSelectedAreaQuestions =>
-      this == QRespCascadePatternEm.addsWhichRulesForSelectedAreaQuestions;
+      this == QRespCascadePatternEm.respCreatesWhichRulesForAreaOrSlotQuestions;
 
   bool get addsWhichSlotOfSelectedAreaQuestions =>
-      this == QRespCascadePatternEm.addsWhichSlotOfSelectedAreaQuestions;
+      this == QRespCascadePatternEm.respCreatesWhichSlotOfAreaQuestions;
 
   bool get addsWhichRulesForSlotsInArea =>
-      this == QRespCascadePatternEm.addsWhichRulesForSlotsInArea;
+      this == QRespCascadePatternEm.respCreatesRulePrepQuestions;
 
   bool get addsRuleDetailQuestsForSlotOrArea =>
-      this == QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea;
+      this == QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions;
 
   // bool get addsVisualRuleDetailQuest2s =>
   //     this == QuestCascadeTyp.addsVisualRuleDetailQuest2s;

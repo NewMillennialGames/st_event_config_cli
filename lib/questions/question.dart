@@ -80,6 +80,17 @@ abstract class QuestBase with EquatableMixin {
     var qDefCollection = QPromptCollection.fromList(prompts);
     return RuleSelectQuest(targIntent, qDefCollection, questId: questId);
   }
+  //
+  factory QuestBase.rulePrepQuest(
+    QTargetIntent targIntent,
+    List<QuestPromptPayload> prompts, {
+    String? questId,
+  }) {
+    // implements QuestFactorytSignature
+    // DOES NOT apply to ui-factory config
+    var qDefCollection = QPromptCollection.fromList(prompts);
+    return RulePrepQuest(targIntent, qDefCollection, questId: questId);
+  }
 
   factory QuestBase.visualRuleDetailQuest(
     QTargetIntent targIntent,
@@ -111,6 +122,7 @@ abstract class QuestBase with EquatableMixin {
     Iterable<String> choices,
     CaptureAndCast captureAndCast, {
     String? questId,
+    bool isSelectScreensQuestion = false,
   }) {
     //
     var qDefCollection = QPromptCollection.singleDialog(
@@ -118,7 +130,12 @@ abstract class QuestBase with EquatableMixin {
       choices,
       captureAndCast,
     );
-    return EventLevelCfgQuest(targIntent, qDefCollection, questId: questId);
+    return EventLevelCfgQuest(
+      targIntent,
+      qDefCollection,
+      questId: questId,
+      isSelectScreensQuestion: isSelectScreensQuestion,
+    );
   }
 
   factory QuestBase.regionTargetQuestManual(
@@ -171,17 +188,23 @@ abstract class QuestBase with EquatableMixin {
   }
 
   // getters
+  bool get doesCreateDerivedQuests =>
+      respCascadePatternEm != QRespCascadePatternEm.noCascade;
+  QuestFactorytSignature get derivedQuestConstructor =>
+      QuestBase.eventLevelCfgQuest;
+  QRespCascadePatternEm get respCascadePatternEm =>
+      QRespCascadePatternEm.noCascade;
+
   String get targetPath => qTargetIntent.targetPath;
   bool get isFullyAnswered => qPromptCollection.allPartsHaveAnswers;
-  bool get createsRuleCfgQuests => qTargetIntent.createsRuleCfgQuests;
+  // bool get createsRuleCfgQuests => qTargetIntent.createsRuleCfgQuests;
 
   // define types of question
   bool get isTopLevelEventConfigQuestion =>
       this is EventLevelCfgQuest && qTargetIntent.isTopLevelEventConfigQuestion;
   bool get isRegionTargetQuestion => this is RegionTargetQuest;
   bool get isRuleSelectionQuestion => this is RuleSelectQuest;
-  bool get isRulePrepQuestion =>
-      this is RulePrepQuest && qTargetIntent.isRulePrepQuestion;
+  bool get isRulePrepQuestion => this is RulePrepQuest;
   bool get isRuleDetailQuestion => this is UiFactoryRuleBase; // controls export
   bool get isVisRuleDetailQuestion => this is VisualRuleDetailQuest;
   bool get isBehRuleDetailQuestion => this is BehaveRuleDetailQuest;
@@ -216,9 +239,9 @@ abstract class QuestBase with EquatableMixin {
       qTargetIntent.behRuleTypeForAreaOrSlot;
   //
   // below controls how each Quest2 causes cascade creation of new Quest2s
-  bool get generatesNoNewQuestions => qTargetIntent.generatesNoNewQuestions;
+  bool get generatesNoNewQuestions => !doesCreateDerivedQuests;
   bool get addsRuleDetailQuestsForSlotOrArea =>
-      qTargetIntent.addsRuleDetailQuestsForSlotOrArea;
+      isRuleSelectionQuestion || isRulePrepQuestion;
 
   int get sortKey => qTargetIntent.targetSortIndex;
   // ask 2nd & 3rd position for (sort, group, filter)
@@ -231,26 +254,26 @@ abstract class QuestBase with EquatableMixin {
 
   // ARE BELOW needed with new approach??
 
-  bool get asksWhichScreensToConfig =>
-      qTargetIntent.appScreen == AppScreen.eventConfiguration &&
-      expectedAnswerType is List<AppScreen>;
+  // bool get asksWhichScreensToConfig =>
+  //     qTargetIntent.appScreen == AppScreen.eventConfiguration &&
+  //     expectedAnswerType is List<AppScreen>;
 
-  bool get addsWhichAreaInSelectedScreenQuestions =>
-      qTargetIntent.addsWhichAreaInSelectedScreenQuestions &&
-      appScreen == AppScreen.eventConfiguration &&
-      expectedAnswerType is List<AppScreen>;
+  // bool get addsWhichAreaInSelectedScreenQuestions =>
+  //     qTargetIntent.addsWhichAreaInSelectedScreenQuestions &&
+  //     appScreen == AppScreen.eventConfiguration &&
+  //     expectedAnswerType is List<AppScreen>;
 
-  bool get addsWhichRulesForSelectedAreaQuestions =>
-      qTargetIntent.addsWhichRulesForSelectedAreaQuestions &&
-      expectedAnswerType is List<ScreenWidgetArea>;
+  // bool get addsWhichRulesForSelectedAreaQuestions =>
+  //     qTargetIntent.addsWhichRulesForSelectedAreaQuestions &&
+  //     expectedAnswerType is List<ScreenWidgetArea>;
 
-  bool get addsWhichSlotOfSelectedAreaQuest2s =>
-      qTargetIntent.addsWhichSlotOfSelectedAreaQuestions &&
-      expectedAnswerType is List<ScreenWidgetArea>;
+  // bool get addsWhichSlotOfSelectedAreaQuest2s =>
+  //     qTargetIntent.addsWhichSlotOfSelectedAreaQuestions &&
+  //     expectedAnswerType is List<ScreenWidgetArea>;
 
-  bool get addsWhichRulesForSlotsInArea =>
-      qTargetIntent.addsWhichRulesForSlotsInArea &&
-      expectedAnswerType is List<ScreenAreaWidgetSlot>;
+  // bool get addsWhichRulesForSlotsInArea =>
+  //     qTargetIntent.addsWhichRulesForSlotsInArea &&
+  //     expectedAnswerType is List<ScreenAreaWidgetSlot>;
 
   // impl for equatable
   // but really being used as a search filter
@@ -275,11 +298,22 @@ abstract class QuestBase with EquatableMixin {
 class EventLevelCfgQuest extends QuestBase {
   /*  applies to ui-factory config rules
   */
+  final bool isSelectScreensQuestion; // this is special
   EventLevelCfgQuest(
     QTargetIntent qTargetIntent,
     QPromptCollection qDefCollection, {
     String? questId,
+    this.isSelectScreensQuestion = false,
   }) : super(qTargetIntent, qDefCollection, questId: questId) {}
+
+  @override
+  QRespCascadePatternEm get respCascadePatternEm => isSelectScreensQuestion
+      ? QRespCascadePatternEm.respCreatesWhichAreaInScreenQuestions
+      : QRespCascadePatternEm.noCascade;
+
+  @override
+  QuestFactorytSignature get derivedQuestConstructor =>
+      QuestBase.regionTargetQuest;
 }
 
 class RegionTargetQuest extends QuestBase {
@@ -291,6 +325,17 @@ class RegionTargetQuest extends QuestBase {
     QPromptCollection qDefCollection, {
     String? questId,
   }) : super(qTargetIntent, qDefCollection, questId: questId) {}
+
+  bool get _areaAlreadySet => qTargetIntent.screenWidgetArea != null;
+
+  @override
+  QRespCascadePatternEm get respCascadePatternEm => _areaAlreadySet
+      ? QRespCascadePatternEm.respCreatesWhichSlotOfAreaQuestions
+      : QRespCascadePatternEm.respCreatesWhichAreaInScreenQuestions;
+
+  @override
+  QuestFactorytSignature get derivedQuestConstructor =>
+      QuestBase.ruleSelectQuest;
 }
 
 class RuleSelectQuest extends QuestBase {
@@ -302,17 +347,35 @@ class RuleSelectQuest extends QuestBase {
     QPromptCollection qDefCollection, {
     String? questId,
   }) : super(qTargetIntent, qDefCollection, questId: questId) {}
+
+  @override
+  QRespCascadePatternEm get respCascadePatternEm =>
+      QRespCascadePatternEm.respCreatesWhichRulesForAreaOrSlotQuestions;
+
+  @override
+  QuestFactorytSignature get derivedQuestConstructor => QuestBase.rulePrepQuest;
 }
 
 class RulePrepQuest extends QuestBase {
   /*  intermediate step to guide creation of Rule detail questions
       not every rule-type requires one of these
   */
+  final bool createsBehavioralQuests;
   RulePrepQuest(
     QTargetIntent qTargetIntent,
     QPromptCollection qDefCollection, {
     String? questId,
+    this.createsBehavioralQuests = false,
   }) : super(qTargetIntent, qDefCollection, questId: questId) {}
+
+  @override
+  QRespCascadePatternEm get respCascadePatternEm =>
+      QRespCascadePatternEm.respCreatesWhichSlotOfAreaQuestions;
+
+  @override
+  QuestFactorytSignature get derivedQuestConstructor => createsBehavioralQuests
+      ? QuestBase.behaveRuleDetailQuest
+      : QuestBase.visualRuleDetailQuest;
 }
 
 abstract class UiFactoryRuleBase extends QuestBase {
@@ -321,9 +384,15 @@ abstract class UiFactoryRuleBase extends QuestBase {
     QTargetIntent qTargetIntent,
     QPromptCollection qDefCollection, {
     String? questId,
-  }) : super(qTargetIntent, qDefCollection, questId: questId) {}
+  }) : super(qTargetIntent, qDefCollection, questId: questId) {
+    assert(
+        qTargetIntent.visRuleTypeForAreaOrSlot != null, 'must have rule type');
+  }
 
   // getters
+  @override
+  QRespCascadePatternEm get respCascadePatternEm =>
+      QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions;
 }
 
 class VisualRuleDetailQuest extends UiFactoryRuleBase {
@@ -334,6 +403,10 @@ class VisualRuleDetailQuest extends UiFactoryRuleBase {
     QPromptCollection qDefCollection, {
     String? questId,
   }) : super(qTargetIntent, qDefCollection, questId: questId) {}
+
+  @override
+  QRespCascadePatternEm get respCascadePatternEm =>
+      QRespCascadePatternEm.noCascade;
 }
 
 class BehaveRuleDetailQuest extends UiFactoryRuleBase {
@@ -344,4 +417,8 @@ class BehaveRuleDetailQuest extends UiFactoryRuleBase {
     QPromptCollection qDefCollection, {
     String? questId,
   }) : super(qTargetIntent, qDefCollection, questId: questId) {}
+
+  @override
+  QRespCascadePatternEm get respCascadePatternEm =>
+      QRespCascadePatternEm.noCascade;
 }

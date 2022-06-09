@@ -130,7 +130,7 @@ class QMatchCollection {
     */
     assert(
       _answeredQuest.visRuleTypeForAreaOrSlot != null &&
-          _answeredQuest.createsRuleCfgQuests,
+          _answeredQuest.isRulePrepQuestion,
       'oops; can only create rule questions below the vis-rule level',
     );
     VisualRuleType visRuleTyp = _answeredQuest.visRuleTypeForAreaOrSlot!;
