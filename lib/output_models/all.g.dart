@@ -94,8 +94,8 @@ const _$AppScreenEnumMap = {
   AppScreen.marketView: 'marketView',
   AppScreen.socialPools: 'socialPools',
   AppScreen.news: 'news',
-  AppScreen.leaderboard: 'leaderboard',
-  AppScreen.portfolio: 'portfolio',
+  AppScreen.leaderboardTraders: 'leaderboard',
+  AppScreen.portfolioPositions: 'portfolio',
   AppScreen.trading: 'trading',
   AppScreen.marketResearch: 'marketResearch',
 };

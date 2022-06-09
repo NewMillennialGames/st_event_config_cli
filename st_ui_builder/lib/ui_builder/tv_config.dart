@@ -106,7 +106,7 @@ class TableviewConfigPayload {
           default:
             return AssetVsAssetRowMktResearchView.new;
         }
-      case AppScreen.portfolio:
+      case AppScreen.portfolioPositions:
         switch (rowStyle) {
           case TvAreaRowStyle.assetVsAsset:
             return AssetVsAssetRowPortfolioView.new;

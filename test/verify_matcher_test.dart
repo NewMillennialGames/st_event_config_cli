@@ -107,7 +107,7 @@ void main() {
     final wontMatchByWrongScreenAndCascade = QuestMatcher(
       'should NOT match based on wrong screen',
       cascadeTypeOfMatchedQuest: QRespCascadePatternEm.noCascade,
-      appScreen: AppScreen.leaderboard,
+      appScreen: AppScreen.leaderboardTraders,
       derivedQuestGen: DerivedQuestGenerator.noop(),
     );
 

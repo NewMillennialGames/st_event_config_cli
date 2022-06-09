@@ -48,25 +48,25 @@ class QTargetIntent extends Equatable
     return QuestBase.eventLevelCfgQuest;
   }
 
-  QIntentEm get intent {
-    // not yet tested
-    bool noAppRules =
-        visRuleTypeForAreaOrSlot == null && behRuleTypeForAreaOrSlot == null;
-    if (noAppRules)
-      return cliConfig ? QIntentEm.infoOrCliCfg : QIntentEm.dlogCascade;
-    if (visRuleTypeForAreaOrSlot != null) return QIntentEm.visual;
-    if (behRuleTypeForAreaOrSlot != null) return QIntentEm.behavioral;
-    return QIntentEm.diagnostic;
-  }
+  // QIntentEm get intent {
+  //   // not yet tested
+  //   bool noAppRules =
+  //       visRuleTypeForAreaOrSlot == null && behRuleTypeForAreaOrSlot == null;
+  //   if (noAppRules)
+  //     return cliConfig ? QIntentEm.infoOrCliCfg : QIntentEm.dlogCascade;
+  //   if (visRuleTypeForAreaOrSlot != null) return QIntentEm.visual;
+  //   if (behRuleTypeForAreaOrSlot != null) return QIntentEm.behavioral;
+  //   return QIntentEm.diagnostic;
+  // }
 
-  QTargetLevelEm get tLevel {
-    // not yet tested
-    if (appScreen == AppScreen.eventConfiguration)
-      return QTargetLevelEm.notAnAppRule;
-    if (screenWidgetArea == null) return QTargetLevelEm.screenRule;
-    if (slotInArea == null) return QTargetLevelEm.areaRule;
-    return QTargetLevelEm.slotRule;
-  }
+  // QTargetLevelEm get tLevel {
+  //   // not yet tested
+  //   if (appScreen == AppScreen.eventConfiguration)
+  //     return QTargetLevelEm.notAnAppRule;
+  //   if (screenWidgetArea == null) return QTargetLevelEm.screenRule;
+  //   if (slotInArea == null) return QTargetLevelEm.areaRule;
+  //   return QTargetLevelEm.slotRule;
+  // }
 
   int get targetSortIndex {
     /* used to sort all questions

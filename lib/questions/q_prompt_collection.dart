@@ -1,7 +1,8 @@
 part of QuestionsLib;
 
 class QPromptCollection {
-  /* describes iteration qualities of a given QuestBase
+  /* describes iteration (prompt) properties
+   of a given QuestBase subclass
 
   */
   List<QuestPromptInstance> questIterations;
