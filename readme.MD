@@ -145,6 +145,33 @@ do you want to customize MarketView -- y or n
 on MarketView, do you wish to customize:
 
 
+####  Cascade logic
+
+CLI serves up 5 types of question:
+
+ 1. event level config & behavior -- manually pre-defined in config/questions.dart
+ 2. targeting questions -- to define area/slot of the app  (defined in st_response_matchers)
+ 3. rule-selection questions -- to indicate what you want to DO with the target area/slot  (defined in st_response_matchers)
+ 4. rule-prep questions -- eg  how many sort-fields or filter-menu's do you want to specify / define
+ 5. rule-detail questions -- actual answers required to fully specify the rule (not all details ?'s require prep-questions)
+
+Creating a Question requires specification for each category below:
+
+1. intent  (what does this Question do in the overall scheme; includes cast to desired output type)
+2. prompt & answer details  (what to display for configurator  (CLI or web) user)
+3. target area  (which area of the app will answer apply to)
+4. response handling  (how to cast or convert the user-answer)
+
+##### How does response handling work?
+
+Dialog manager has a QuestionPresenter
+Presenter is responsible for rendering all prompts (QuestPromptInstance) under each QuestBase instance
+Each QuestBase has 1->n QuestPromptInstance recs
+Presenter show's each QuestPromptInstance and stores user response inside each QuestPromptInstance
+Once all parts have been asked and answered, QuestBase is commplete
+you can call the "cast()" function to get user answers converted into expected output type
+
+
 ###### Specs for Web UI:
 
 You MUST NOT break the CLI ... we need it to keep running
@@ -214,40 +241,7 @@ defer this until after 1st build:
   4) sorting & grouping output matches json config
 
 
+
 #### For future
 1. id love to convert this into a DSL  (target this area of app with this type of rule governed by these cfg-args)
 2. 
-
-
-####  WIP notes
-
-  Latest structural thinking for abstract Question & answer handling:
-
-Intent --
-    QIntentCfg describes the general purpose of the Question
-    it also handles CONVERTING user-string-response into typed-answer
-
-Quantify --
-    QuestionQuantifier defines WHICH specific parts of the app
-    the Question pertains to
-
-Specifics --
-    Question wraps
-
-
-Creating a Question requires specification for each category below:
-
-1. intent  (what does this Question do in the overall scheme; includes cast to desired output type)
-2. prompt & answer details  (what to display for configurator  (CLI or web) user)
-3. target area  (which area of the app will answer apply to)
-4. response handling  (what to do with the user-answer)
-
-
-##### How does response handling work?
-
-Dialog manager has a QuestionPresenter
-Presenter is responsible for rendering all prompts (QuestPromptInstance) under each QuestBase instance
-Each QuestBase has 1->n QuestPromptInstance recs
-Presenter show's each QuestPromptInstance and stores user response inside each QuestPromptInstance
-Once all parts have been asked and answered, QuestBase is commplete
-you can call the "cast()" function to get user answers converted into expected output type

@@ -586,7 +586,7 @@ FIXME:
         QRespCascadePatternEm.addsRuleDetailQuestsForSlotOrArea,
     //
     derivedQuestGen: DerivedQuestGenerator(
-      'Set details for rule {0} for slot {1} in area {2} of screen {3}',
+      'Set rule details for rule {0} for slot {1} in area {2} of screen {3}',
       newQuestPromptArgGen: (
         QuestBase priorAnsweredQuest,
         int newQuestIdx,
@@ -614,15 +614,16 @@ FIXME:
       ) {
         // each new question about area on screen should
         // have an ID that lets the next QM identify it to produce new Q's
-        ScreenAreaWidgetSlot? curSlotIfAvail = priorAnsweredQuest.slotInArea;
-        String namePrefix = curSlotIfAvail == null
-            ? QuestionIdStrings.specRuleDetailsForAreaOnScreen
-            : QuestionIdStrings.specRuleDetailsForSlotInArea;
+        // ScreenAreaWidgetSlot? curSlotIfAvail = priorAnsweredQuest.slotInArea;
+        // String namePrefix = curSlotIfAvail == null
+        //     ? QuestionIdStrings.specRuleDetailsForAreaOnScreen
+        //     : QuestionIdStrings.specRuleDetailsForSlotInArea;
 
-        String scrName = priorAnsweredQuest.appScreen.name;
-        String area = priorAnsweredQuest.screenWidgetArea?.name ?? '-na';
-        String slotName = curSlotIfAvail?.name ?? 'n/a';
-        return namePrefix + '-' + scrName + '-' + area + '-' + slotName;
+        // String scrName = priorAnsweredQuest.appScreen.name;
+        // String area = priorAnsweredQuest.screenWidgetArea?.name ?? '-na';
+        // String slotName = curSlotIfAvail?.name ?? 'n/a';
+        // return namePrefix + '-' + scrName + '-' + area + '-' + slotName;
+        return priorAnsweredQuest.targetPath;
       },
       answerChoiceGenerator: (
         QuestBase priorAnsweredQuest,

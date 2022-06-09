@@ -94,24 +94,21 @@ class QMatchCollection {
       and then use those to produce required new questions
     */
     assert(
-      _answeredQuest.visRuleTypeForAreaOrSlot != null,
+      _answeredQuest.visRuleTypeForAreaOrSlot != null &&
+          _answeredQuest.isRulePrepQuestion,
       'oops; can only create prep questions at vis-rule level',
     );
-    VisualRuleType vrt = _answeredQuest.visRuleTypeForAreaOrSlot!;
-    List<VisRuleQuestType> rqtLst = vrt.requConfigQuests;
-    List<DerivedQuestGenerator> derQuestGens = [];
-    for (VisRuleQuestType rqt in rqtLst) {
+    VisualRuleType visRuleTyp = _answeredQuest.visRuleTypeForAreaOrSlot!;
+    List<VisRuleQuestType> ruleSubtypeLst = visRuleTyp.requConfigQuests;
+
+    List<QuestBase> newQuests = [];
+    for (VisRuleQuestType ruleSubtype in ruleSubtypeLst) {
       //
       DerivedQuestGenerator dqg =
-          vrt.derQuestGenFromSubtype(_answeredQuest, rqt);
-      derQuestGens.add(dqg);
-    }
-    List<QuestBase> newQuests = [];
-    for (DerivedQuestGenerator dqg in derQuestGens) {
-      // QuestBase qb = _makeNewQuest(_answeredQuest, dqg);
-      Iterable<QuestBase> qbs =
+          visRuleTyp.derQuestGenFromSubtype(_answeredQuest, ruleSubtype);
+      Iterable<QuestBase> generatedQuestions =
           dqg.getDerivedAutoGenQuestions(_answeredQuest, null);
-      newQuests.addAll(qbs);
+      newQuests.addAll(generatedQuestions);
     }
 
     questListMgr.appendGeneratedQuestsAndAnswers(newQuests);
@@ -132,24 +129,21 @@ class QMatchCollection {
       and then use those to produce required new questions
     */
     assert(
-      _answeredQuest.visRuleTypeForAreaOrSlot != null,
+      _answeredQuest.visRuleTypeForAreaOrSlot != null &&
+          _answeredQuest.createsRuleCfgQuests,
       'oops; can only create rule questions below the vis-rule level',
     );
-    VisualRuleType vrt = _answeredQuest.visRuleTypeForAreaOrSlot!;
-    List<VisRuleQuestType> rqtLst = vrt.requConfigQuests;
-    List<DerivedQuestGenerator> derQuestGens = [];
-    for (VisRuleQuestType rqt in rqtLst) {
+    VisualRuleType visRuleTyp = _answeredQuest.visRuleTypeForAreaOrSlot!;
+    List<VisRuleQuestType> ruleSubtypeLst = visRuleTyp.requConfigQuests;
+
+    List<QuestBase> newQuests = [];
+    for (VisRuleQuestType ruleSubtype in ruleSubtypeLst) {
       //
       DerivedQuestGenerator dqg =
-          vrt.derQuestGenFromSubtype(_answeredQuest, rqt);
-      derQuestGens.add(dqg);
-    }
-    List<QuestBase> newQuests = [];
-    for (DerivedQuestGenerator dqg in derQuestGens) {
-      // QuestBase qb = _makeNewQuest(_answeredQuest, dqg);
-      Iterable<QuestBase> qbs =
+          visRuleTyp.derQuestGenFromSubtype(_answeredQuest, ruleSubtype);
+      Iterable<QuestBase> generatedQuestions =
           dqg.getDerivedAutoGenQuestions(_answeredQuest, null);
-      newQuests.addAll(qbs);
+      newQuests.addAll(generatedQuestions);
     }
 
     questListMgr.appendGeneratedQuestsAndAnswers(newQuests);

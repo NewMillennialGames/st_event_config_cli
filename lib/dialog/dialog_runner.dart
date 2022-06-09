@@ -126,12 +126,20 @@ class DialogRunner {
     if (questJustAnswered.isRulePrepQuestion) {
       // usually means we need to ask pending question count
       // for: sort, filter, config  (how many positions)
-      _qMatchColl.createPrepQuestions(_qListMgr, questJustAnswered);
+      _qMatchColl.createPrepQuestions(
+        _qListMgr,
+        questJustAnswered,
+      );
     } else if (questJustAnswered.createsRuleCfgQuests) {
-      _qMatchColl.createRuleQuestions(_qListMgr, questJustAnswered);
+      _qMatchColl.createRuleQuestions(
+        _qListMgr,
+        questJustAnswered,
+      );
     } else if (true) {
       _qMatchColl.appendNewQuestsOrInsertImplicitAnswers(
-          _qListMgr, questJustAnswered);
+        _qListMgr,
+        questJustAnswered,
+      );
     }
     // end of logic to add new Questions based on user response
   }
