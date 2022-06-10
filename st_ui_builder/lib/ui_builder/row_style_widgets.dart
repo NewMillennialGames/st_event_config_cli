@@ -318,7 +318,7 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
     ActiveGameDetails agd,
   ) {
     //
-    bool hasIncreased = comp1.recentPriceDelta >= 0;
+    bool hasIncreased = comp1.recentPriceDelta >= Decimal.zero;
     String sharePrice = comp1.currPriceStr;
     String sharePriceChange = comp1.recentDeltaStr;
     TextStyle gainLossTxtStyle = hasIncreased
@@ -331,10 +331,9 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
     String sharesOwned = assetHoldingsSummary.sharesOwnedStr;
     String positionValue = assetHoldingsSummary.positionEstValueStr;
     String positionGainLoss = assetHoldingsSummary.positionGainLossStr;
-    Color gainLossColor =
-        assetHoldingsSummary.positionGainLoss.roundToDouble() >= 0
-            ? StColors.green
-            : StColors.errorText;
+    Color gainLossColor = assetHoldingsSummary.positionGainLoss >= Decimal.zero
+        ? StColors.green
+        : StColors.errorText;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8),

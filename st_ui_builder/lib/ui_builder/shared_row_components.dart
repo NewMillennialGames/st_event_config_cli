@@ -785,13 +785,13 @@ class HoldingsAndValueRow extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  double get _sharePrice => asset.assetStateUpdates.curPrice; // ?? 0;
+  Decimal get _sharePrice => asset.assetStateUpdates.curPrice; // ?? 0;
   int get _sharesHeld => asset.assetHoldingsSummary.sharesOwned; // ?? 0;
-  double get _gainLoss => asset.assetHoldingsSummary.positionGainLoss; // ?? 0;
+  Decimal get _gainLoss => asset.assetHoldingsSummary.positionGainLoss; // ?? 0;
 
-  String get _formattedGainLoss => _sharePrice.isNegative
+  String get _formattedGainLoss => _sharePrice < Decimal.zero
       ? _sharePrice.toStringAsFixed(2)
-      : '+' + _sharePrice.toStringAsFixed(2);
+      : '+${_sharePrice.toStringAsFixed(2)}';
 
   @override
   Widget build(BuildContext context) {
@@ -864,10 +864,10 @@ class HoldingsAndValueRow extends StatelessWidget {
                   style: StTextStyles.h6.copyWith(),
                 ),
                 Text(
-                  _gainLoss.isNegative
+                  _gainLoss < Decimal.zero
                       ? _gainLoss.toStringAsFixed(2)
-                      : '+' + _gainLoss.toStringAsFixed(2),
-                  style: _gainLoss.isNegative
+                      : '+${_gainLoss.toStringAsFixed(2)}',
+                  style: _gainLoss < Decimal.zero
                       ? StTextStyles.moneyDeltaPositive.copyWith(
                           color: StColors.errorText,
                         )

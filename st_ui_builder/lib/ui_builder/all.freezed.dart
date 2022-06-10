@@ -12,39 +12,7 @@ part of StUiController;
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
-/// @nodoc
-class _$AssetStateUpdatesTearOff {
-  const _$AssetStateUpdatesTearOff();
-
-  _AssetStateUpdates call(String assetKey, String name, String ticker,
-      {AssetState assetState = AssetState.assetNew,
-      TradeMode tradeMode = TradeMode.tradeMarket,
-      bool isWatched = false,
-      bool isOwned = false,
-      double curPrice = 0,
-      double hiPrice = 0,
-      double lowPrice = 0,
-      double openPrice = 0}) {
-    return _AssetStateUpdates(
-      assetKey,
-      name,
-      ticker,
-      assetState: assetState,
-      tradeMode: tradeMode,
-      isWatched: isWatched,
-      isOwned: isOwned,
-      curPrice: curPrice,
-      hiPrice: hiPrice,
-      lowPrice: lowPrice,
-      openPrice: openPrice,
-    );
-  }
-}
-
-/// @nodoc
-const $AssetStateUpdates = _$AssetStateUpdatesTearOff();
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$AssetStateUpdates {
@@ -55,10 +23,10 @@ mixin _$AssetStateUpdates {
   TradeMode get tradeMode => throw _privateConstructorUsedError;
   bool get isWatched => throw _privateConstructorUsedError;
   bool get isOwned => throw _privateConstructorUsedError;
-  double get curPrice => throw _privateConstructorUsedError;
-  double get hiPrice => throw _privateConstructorUsedError;
-  double get lowPrice => throw _privateConstructorUsedError;
-  double get openPrice => throw _privateConstructorUsedError;
+  Decimal get curPrice => throw _privateConstructorUsedError;
+  Decimal get hiPrice => throw _privateConstructorUsedError;
+  Decimal get lowPrice => throw _privateConstructorUsedError;
+  Decimal get openPrice => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AssetStateUpdatesCopyWith<AssetStateUpdates> get copyWith =>
@@ -78,10 +46,10 @@ abstract class $AssetStateUpdatesCopyWith<$Res> {
       TradeMode tradeMode,
       bool isWatched,
       bool isOwned,
-      double curPrice,
-      double hiPrice,
-      double lowPrice,
-      double openPrice});
+      Decimal curPrice,
+      Decimal hiPrice,
+      Decimal lowPrice,
+      Decimal openPrice});
 }
 
 /// @nodoc
@@ -139,29 +107,29 @@ class _$AssetStateUpdatesCopyWithImpl<$Res>
       curPrice: curPrice == freezed
           ? _value.curPrice
           : curPrice // ignore: cast_nullable_to_non_nullable
-              as double,
+              as Decimal,
       hiPrice: hiPrice == freezed
           ? _value.hiPrice
           : hiPrice // ignore: cast_nullable_to_non_nullable
-              as double,
+              as Decimal,
       lowPrice: lowPrice == freezed
           ? _value.lowPrice
           : lowPrice // ignore: cast_nullable_to_non_nullable
-              as double,
+              as Decimal,
       openPrice: openPrice == freezed
           ? _value.openPrice
           : openPrice // ignore: cast_nullable_to_non_nullable
-              as double,
+              as Decimal,
     ));
   }
 }
 
 /// @nodoc
-abstract class _$AssetStateUpdatesCopyWith<$Res>
+abstract class _$$_AssetStateUpdatesCopyWith<$Res>
     implements $AssetStateUpdatesCopyWith<$Res> {
-  factory _$AssetStateUpdatesCopyWith(
-          _AssetStateUpdates value, $Res Function(_AssetStateUpdates) then) =
-      __$AssetStateUpdatesCopyWithImpl<$Res>;
+  factory _$$_AssetStateUpdatesCopyWith(_$_AssetStateUpdates value,
+          $Res Function(_$_AssetStateUpdates) then) =
+      __$$_AssetStateUpdatesCopyWithImpl<$Res>;
   @override
   $Res call(
       {String assetKey,
@@ -171,22 +139,22 @@ abstract class _$AssetStateUpdatesCopyWith<$Res>
       TradeMode tradeMode,
       bool isWatched,
       bool isOwned,
-      double curPrice,
-      double hiPrice,
-      double lowPrice,
-      double openPrice});
+      Decimal curPrice,
+      Decimal hiPrice,
+      Decimal lowPrice,
+      Decimal openPrice});
 }
 
 /// @nodoc
-class __$AssetStateUpdatesCopyWithImpl<$Res>
+class __$$_AssetStateUpdatesCopyWithImpl<$Res>
     extends _$AssetStateUpdatesCopyWithImpl<$Res>
-    implements _$AssetStateUpdatesCopyWith<$Res> {
-  __$AssetStateUpdatesCopyWithImpl(
-      _AssetStateUpdates _value, $Res Function(_AssetStateUpdates) _then)
-      : super(_value, (v) => _then(v as _AssetStateUpdates));
+    implements _$$_AssetStateUpdatesCopyWith<$Res> {
+  __$$_AssetStateUpdatesCopyWithImpl(
+      _$_AssetStateUpdates _value, $Res Function(_$_AssetStateUpdates) _then)
+      : super(_value, (v) => _then(v as _$_AssetStateUpdates));
 
   @override
-  _AssetStateUpdates get _value => super._value as _AssetStateUpdates;
+  _$_AssetStateUpdates get _value => super._value as _$_AssetStateUpdates;
 
   @override
   $Res call({
@@ -202,7 +170,7 @@ class __$AssetStateUpdatesCopyWithImpl<$Res>
     Object? lowPrice = freezed,
     Object? openPrice = freezed,
   }) {
-    return _then(_AssetStateUpdates(
+    return _then(_$_AssetStateUpdates(
       assetKey == freezed
           ? _value.assetKey
           : assetKey // ignore: cast_nullable_to_non_nullable
@@ -234,19 +202,19 @@ class __$AssetStateUpdatesCopyWithImpl<$Res>
       curPrice: curPrice == freezed
           ? _value.curPrice
           : curPrice // ignore: cast_nullable_to_non_nullable
-              as double,
+              as Decimal,
       hiPrice: hiPrice == freezed
           ? _value.hiPrice
           : hiPrice // ignore: cast_nullable_to_non_nullable
-              as double,
+              as Decimal,
       lowPrice: lowPrice == freezed
           ? _value.lowPrice
           : lowPrice // ignore: cast_nullable_to_non_nullable
-              as double,
+              as Decimal,
       openPrice: openPrice == freezed
           ? _value.openPrice
           : openPrice // ignore: cast_nullable_to_non_nullable
-              as double,
+              as Decimal,
     ));
   }
 }
@@ -260,10 +228,10 @@ class _$_AssetStateUpdates extends _AssetStateUpdates
       this.tradeMode = TradeMode.tradeMarket,
       this.isWatched = false,
       this.isOwned = false,
-      this.curPrice = 0,
-      this.hiPrice = 0,
-      this.lowPrice = 0,
-      this.openPrice = 0})
+      required this.curPrice,
+      required this.hiPrice,
+      required this.lowPrice,
+      required this.openPrice})
       : super._();
 
   @override
@@ -272,30 +240,26 @@ class _$_AssetStateUpdates extends _AssetStateUpdates
   final String name;
   @override
   final String ticker;
-  @JsonKey()
   @override
+  @JsonKey()
   final AssetState assetState;
-  @JsonKey()
   @override
+  @JsonKey()
   final TradeMode tradeMode;
-  @JsonKey()
   @override
+  @JsonKey()
   final bool isWatched;
-  @JsonKey()
   @override
+  @JsonKey()
   final bool isOwned;
-  @JsonKey()
   @override
-  final double curPrice;
-  @JsonKey()
+  final Decimal curPrice;
   @override
-  final double hiPrice;
-  @JsonKey()
+  final Decimal hiPrice;
   @override
-  final double lowPrice;
-  @JsonKey()
+  final Decimal lowPrice;
   @override
-  final double openPrice;
+  final Decimal openPrice;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -324,7 +288,7 @@ class _$_AssetStateUpdates extends _AssetStateUpdates
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _AssetStateUpdates &&
+            other is _$_AssetStateUpdates &&
             const DeepCollectionEquality().equals(other.assetKey, assetKey) &&
             const DeepCollectionEquality().equals(other.name, name) &&
             const DeepCollectionEquality().equals(other.ticker, ticker) &&
@@ -356,74 +320,51 @@ class _$_AssetStateUpdates extends _AssetStateUpdates
 
   @JsonKey(ignore: true)
   @override
-  _$AssetStateUpdatesCopyWith<_AssetStateUpdates> get copyWith =>
-      __$AssetStateUpdatesCopyWithImpl<_AssetStateUpdates>(this, _$identity);
+  _$$_AssetStateUpdatesCopyWith<_$_AssetStateUpdates> get copyWith =>
+      __$$_AssetStateUpdatesCopyWithImpl<_$_AssetStateUpdates>(
+          this, _$identity);
 }
 
 abstract class _AssetStateUpdates extends AssetStateUpdates {
-  const factory _AssetStateUpdates(String assetKey, String name, String ticker,
-      {AssetState assetState,
-      TradeMode tradeMode,
-      bool isWatched,
-      bool isOwned,
-      double curPrice,
-      double hiPrice,
-      double lowPrice,
-      double openPrice}) = _$_AssetStateUpdates;
+  const factory _AssetStateUpdates(
+      final String assetKey, final String name, final String ticker,
+      {final AssetState assetState,
+      final TradeMode tradeMode,
+      final bool isWatched,
+      final bool isOwned,
+      required final Decimal curPrice,
+      required final Decimal hiPrice,
+      required final Decimal lowPrice,
+      required final Decimal openPrice}) = _$_AssetStateUpdates;
   const _AssetStateUpdates._() : super._();
 
   @override
-  String get assetKey;
+  String get assetKey => throw _privateConstructorUsedError;
   @override
-  String get name;
+  String get name => throw _privateConstructorUsedError;
   @override
-  String get ticker;
+  String get ticker => throw _privateConstructorUsedError;
   @override
-  AssetState get assetState;
+  AssetState get assetState => throw _privateConstructorUsedError;
   @override
-  TradeMode get tradeMode;
+  TradeMode get tradeMode => throw _privateConstructorUsedError;
   @override
-  bool get isWatched;
+  bool get isWatched => throw _privateConstructorUsedError;
   @override
-  bool get isOwned;
+  bool get isOwned => throw _privateConstructorUsedError;
   @override
-  double get curPrice;
+  Decimal get curPrice => throw _privateConstructorUsedError;
   @override
-  double get hiPrice;
+  Decimal get hiPrice => throw _privateConstructorUsedError;
   @override
-  double get lowPrice;
+  Decimal get lowPrice => throw _privateConstructorUsedError;
   @override
-  double get openPrice;
+  Decimal get openPrice => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
-  _$AssetStateUpdatesCopyWith<_AssetStateUpdates> get copyWith =>
+  _$$_AssetStateUpdatesCopyWith<_$_AssetStateUpdates> get copyWith =>
       throw _privateConstructorUsedError;
 }
-
-/// @nodoc
-class _$ActiveGameDetailsTearOff {
-  const _$ActiveGameDetailsTearOff();
-
-  _ActiveGameDetails call(String competitionKey, DateTime scheduledStartDtTm,
-      {CompetitionStatus gameStatus = CompetitionStatus.compUninitialized,
-      String roundName = '',
-      String regionOrConference = '',
-      String location = '',
-      List<AssetStateUpdates> participantAssetInfo = const []}) {
-    return _ActiveGameDetails(
-      competitionKey,
-      scheduledStartDtTm,
-      gameStatus: gameStatus,
-      roundName: roundName,
-      regionOrConference: regionOrConference,
-      location: location,
-      participantAssetInfo: participantAssetInfo,
-    );
-  }
-}
-
-/// @nodoc
-const $ActiveGameDetails = _$ActiveGameDetailsTearOff();
 
 /// @nodoc
 mixin _$ActiveGameDetails {
@@ -510,11 +451,11 @@ class _$ActiveGameDetailsCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$ActiveGameDetailsCopyWith<$Res>
+abstract class _$$_ActiveGameDetailsCopyWith<$Res>
     implements $ActiveGameDetailsCopyWith<$Res> {
-  factory _$ActiveGameDetailsCopyWith(
-          _ActiveGameDetails value, $Res Function(_ActiveGameDetails) then) =
-      __$ActiveGameDetailsCopyWithImpl<$Res>;
+  factory _$$_ActiveGameDetailsCopyWith(_$_ActiveGameDetails value,
+          $Res Function(_$_ActiveGameDetails) then) =
+      __$$_ActiveGameDetailsCopyWithImpl<$Res>;
   @override
   $Res call(
       {String competitionKey,
@@ -527,15 +468,15 @@ abstract class _$ActiveGameDetailsCopyWith<$Res>
 }
 
 /// @nodoc
-class __$ActiveGameDetailsCopyWithImpl<$Res>
+class __$$_ActiveGameDetailsCopyWithImpl<$Res>
     extends _$ActiveGameDetailsCopyWithImpl<$Res>
-    implements _$ActiveGameDetailsCopyWith<$Res> {
-  __$ActiveGameDetailsCopyWithImpl(
-      _ActiveGameDetails _value, $Res Function(_ActiveGameDetails) _then)
-      : super(_value, (v) => _then(v as _ActiveGameDetails));
+    implements _$$_ActiveGameDetailsCopyWith<$Res> {
+  __$$_ActiveGameDetailsCopyWithImpl(
+      _$_ActiveGameDetails _value, $Res Function(_$_ActiveGameDetails) _then)
+      : super(_value, (v) => _then(v as _$_ActiveGameDetails));
 
   @override
-  _ActiveGameDetails get _value => super._value as _ActiveGameDetails;
+  _$_ActiveGameDetails get _value => super._value as _$_ActiveGameDetails;
 
   @override
   $Res call({
@@ -547,7 +488,7 @@ class __$ActiveGameDetailsCopyWithImpl<$Res>
     Object? location = freezed,
     Object? participantAssetInfo = freezed,
   }) {
-    return _then(_ActiveGameDetails(
+    return _then(_$_ActiveGameDetails(
       competitionKey == freezed
           ? _value.competitionKey
           : competitionKey // ignore: cast_nullable_to_non_nullable
@@ -573,7 +514,7 @@ class __$ActiveGameDetailsCopyWithImpl<$Res>
           : location // ignore: cast_nullable_to_non_nullable
               as String,
       participantAssetInfo: participantAssetInfo == freezed
-          ? _value.participantAssetInfo
+          ? _value._participantAssetInfo
           : participantAssetInfo // ignore: cast_nullable_to_non_nullable
               as List<AssetStateUpdates>,
     ));
@@ -589,28 +530,34 @@ class _$_ActiveGameDetails extends _ActiveGameDetails
       this.roundName = '',
       this.regionOrConference = '',
       this.location = '',
-      this.participantAssetInfo = const []})
-      : super._();
+      final List<AssetStateUpdates> participantAssetInfo = const []})
+      : _participantAssetInfo = participantAssetInfo,
+        super._();
 
   @override
   final String competitionKey;
   @override
   final DateTime scheduledStartDtTm;
-  @JsonKey()
   @override
+  @JsonKey()
   final CompetitionStatus gameStatus;
+// @Default(CompetitionType.game) CompetitionType gameType,
+  @override
   @JsonKey()
-  @override // @Default(CompetitionType.game) CompetitionType gameType,
   final String roundName;
-  @JsonKey()
   @override
+  @JsonKey()
   final String regionOrConference;
-  @JsonKey()
   @override
+  @JsonKey()
   final String location;
-  @JsonKey()
+  final List<AssetStateUpdates> _participantAssetInfo;
   @override
-  final List<AssetStateUpdates> participantAssetInfo;
+  @JsonKey()
+  List<AssetStateUpdates> get participantAssetInfo {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_participantAssetInfo);
+  }
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -635,7 +582,7 @@ class _$_ActiveGameDetails extends _ActiveGameDetails
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _ActiveGameDetails &&
+            other is _$_ActiveGameDetails &&
             const DeepCollectionEquality()
                 .equals(other.competitionKey, competitionKey) &&
             const DeepCollectionEquality()
@@ -647,7 +594,7 @@ class _$_ActiveGameDetails extends _ActiveGameDetails
                 .equals(other.regionOrConference, regionOrConference) &&
             const DeepCollectionEquality().equals(other.location, location) &&
             const DeepCollectionEquality()
-                .equals(other.participantAssetInfo, participantAssetInfo));
+                .equals(other._participantAssetInfo, _participantAssetInfo));
   }
 
   @override
@@ -659,40 +606,43 @@ class _$_ActiveGameDetails extends _ActiveGameDetails
       const DeepCollectionEquality().hash(roundName),
       const DeepCollectionEquality().hash(regionOrConference),
       const DeepCollectionEquality().hash(location),
-      const DeepCollectionEquality().hash(participantAssetInfo));
+      const DeepCollectionEquality().hash(_participantAssetInfo));
 
   @JsonKey(ignore: true)
   @override
-  _$ActiveGameDetailsCopyWith<_ActiveGameDetails> get copyWith =>
-      __$ActiveGameDetailsCopyWithImpl<_ActiveGameDetails>(this, _$identity);
+  _$$_ActiveGameDetailsCopyWith<_$_ActiveGameDetails> get copyWith =>
+      __$$_ActiveGameDetailsCopyWithImpl<_$_ActiveGameDetails>(
+          this, _$identity);
 }
 
 abstract class _ActiveGameDetails extends ActiveGameDetails {
   const factory _ActiveGameDetails(
-      String competitionKey, DateTime scheduledStartDtTm,
-      {CompetitionStatus gameStatus,
-      String roundName,
-      String regionOrConference,
-      String location,
-      List<AssetStateUpdates> participantAssetInfo}) = _$_ActiveGameDetails;
+          final String competitionKey, final DateTime scheduledStartDtTm,
+          {final CompetitionStatus gameStatus,
+          final String roundName,
+          final String regionOrConference,
+          final String location,
+          final List<AssetStateUpdates> participantAssetInfo}) =
+      _$_ActiveGameDetails;
   const _ActiveGameDetails._() : super._();
 
   @override
-  String get competitionKey;
+  String get competitionKey => throw _privateConstructorUsedError;
   @override
-  DateTime get scheduledStartDtTm;
+  DateTime get scheduledStartDtTm => throw _privateConstructorUsedError;
   @override
-  CompetitionStatus get gameStatus;
+  CompetitionStatus get gameStatus => throw _privateConstructorUsedError;
   @override // @Default(CompetitionType.game) CompetitionType gameType,
-  String get roundName;
+  String get roundName => throw _privateConstructorUsedError;
   @override
-  String get regionOrConference;
+  String get regionOrConference => throw _privateConstructorUsedError;
   @override
-  String get location;
+  String get location => throw _privateConstructorUsedError;
   @override
-  List<AssetStateUpdates> get participantAssetInfo;
+  List<AssetStateUpdates> get participantAssetInfo =>
+      throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
-  _$ActiveGameDetailsCopyWith<_ActiveGameDetails> get copyWith =>
+  _$$_ActiveGameDetailsCopyWith<_$_ActiveGameDetails> get copyWith =>
       throw _privateConstructorUsedError;
 }
