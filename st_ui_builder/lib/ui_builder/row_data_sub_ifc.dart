@@ -6,15 +6,15 @@ abstract class AssetHoldingsSummaryIfc {
   */
   int get sharesOwned;
 
-  double get positionCost;
+  Decimal get positionCost;
 
-  double get positionEstValue; // current estimate
+  Decimal get positionEstValue; // current estimate
   int get tokensAvail;
 }
 
 extension AssetHoldingsSummaryIfcExt1 on AssetHoldingsSummaryIfc {
   //
-  double get positionGainLoss => (positionEstValue - positionCost / 100) / 100;
+  Decimal get positionGainLoss => positionEstValue - positionCost;
 
   // UI values for this
   int get tokensAvail => 0;
@@ -27,7 +27,7 @@ extension AssetHoldingsSummaryIfcExt1 on AssetHoldingsSummaryIfc {
 
   String get positionGainLossStr => positionGainLoss.toStringAsFixed(2);
 
-  bool get returnIsPositive => positionGainLoss >= 0;
+  bool get returnIsPositive => positionGainLoss >= Decimal.zero;
 
   Color get posGainSymbolColor => returnIsPositive ? Colors.green : Colors.red;
 }

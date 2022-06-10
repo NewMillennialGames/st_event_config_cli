@@ -27,10 +27,10 @@ class AssetStateUpdates with _$AssetStateUpdates {
     @Default(TradeMode.tradeMarket) TradeMode tradeMode,
     @Default(false) bool isWatched,
     @Default(false) bool isOwned,
-    @Default(0) double curPrice,
-    @Default(0) double hiPrice,
-    @Default(0) double lowPrice,
-    @Default(0) double openPrice,
+    required Decimal curPrice,
+    required Decimal hiPrice,
+    required Decimal lowPrice,
+    required Decimal openPrice,
   }) = _AssetStateUpdates;
 
   factory AssetStateUpdates.fromAsset(Asset a) {
@@ -41,6 +41,8 @@ class AssetStateUpdates with _$AssetStateUpdates {
       assetState: a.state,
       tradeMode: a.tradeMode,
       openPrice: a.openingPrice.asPrice2d,
+      hiPrice: a.highPrice.asPrice2d,
+      lowPrice: a.lowPrice.asPrice2d,
       curPrice: a.currentPrice > 0
           ? a.currentPrice.asPrice2d
           : a.openingPrice.asPrice2d,
@@ -51,21 +53,28 @@ class AssetStateUpdates with _$AssetStateUpdates {
     //
     return copyWith(
       curPrice: ai.price.asPrice2d,
+      hiPrice: ai.highPrice.asPrice2d,
+      lowPrice: ai.lowPrice.asPrice2d,
       assetState: ai.state,
       tradeMode: ai.mode,
     );
   }
 
   bool get isTradable => assetState.isTradable;
+
   bool get stockIsUp => curPrice >= openPrice;
+
   bool get isDecreasing => !stockIsUp;
 
   String get formattedChangeStr =>
       (isDecreasing ? '' : '+') + priceDeltaSinceOpenStr;
 
-  double get priceDeltaSinceOpen => curPrice - openPrice;
+  Decimal get priceDeltaSinceOpen => curPrice - openPrice;
+
   String get priceDeltaSinceOpenStr => priceDeltaSinceOpen.toStringAsFixed(2);
+
   String get curPriceStr => curPrice.toStringAsFixed(2);
+
   Color get priceFluxColor => stockIsUp ? Colors.green : Colors.red;
 }
 
@@ -153,6 +162,8 @@ class ActiveGameDetails with _$ActiveGameDetails {
     //
     AssetStateUpdates newAsu = participantAssetInfo[rowIdx].copyWith(
       curPrice: info.price.asPrice2d,
+      hiPrice: info.highPrice.asPrice2d,
+      lowPrice: info.lowPrice.asPrice2d,
       tradeMode: info.mode,
       assetState: info.state,
     );
@@ -189,8 +200,10 @@ class ActiveGameDetails with _$ActiveGameDetails {
   String get assetId1 => participantAssetInfo.isNotEmpty
       ? participantAssetInfo.first.assetKey
       : '_';
+
   String get assetId2 =>
       participantAssetInfo.length > 1 ? participantAssetInfo[1].assetKey : '_';
+
   bool get isTradableAsset1 => participantAssetInfo.isNotEmpty
       ? participantAssetInfo.first.isTradable && _isTradableGame
       : false;
@@ -198,17 +211,24 @@ class ActiveGameDetails with _$ActiveGameDetails {
   bool get isTradableAsset2 => participantAssetInfo.length > 1
       ? participantAssetInfo[1].isTradable && _isTradableGame
       : false;
+
   bool get _isTradableGame => gameStatus.isTradable;
+
   //
   int get competitorCount => participantAssetInfo.length;
+
   //
   String get gameDateStr => scheduledStartDtTm.asDtwMmDyStr;
+
   String get gameTimeStr => scheduledStartDtTm.asTimeOnlyStr;
+
   DateTime get scheduledStartDateOnly => scheduledStartDtTm.truncateTime;
+
   //
 
   Set<String> get _participantAssetIds =>
       participantAssetInfo.map((ai) => ai.assetKey).toSet();
+
   bool includesParticipant(String assetId) =>
       _participantAssetIds.contains(assetId);
 
@@ -216,12 +236,14 @@ class ActiveGameDetails with _$ActiveGameDetails {
       .where((ai) => ai.isOwned)
       .map((ai) => AssetKey(ai.assetKey))
       .toSet();
+
   Set<AssetKey> get _watchedAssetIds => participantAssetInfo
       .where((ai) => ai.isWatched)
       .map((ai) => AssetKey(ai.assetKey))
       .toSet();
 
   bool isOwned(AssetKey assetId) => _ownedAssetIds.contains(assetId);
+
   bool isWatched(AssetKey assetId) => _watchedAssetIds.contains(assetId);
 
   bool get hasEnded => gameStatus.hasEnded;
@@ -253,25 +275,23 @@ class ActiveGameDetails with _$ActiveGameDetails {
   }
 }
 
-  // List<String> _makeLst(
-  //   bool first,
-  //   bool second,
-  // ) {
-  //       // List<String> watchedAssetIds = _makeLst(
-  //   //   comp1IsWatched ?? isWatched(assetId1),
-  //   //   comp2IsWatched ?? isWatched(assetId2),
-  //   // );
-  //   // List<String> ownedAssetIds = _makeLst(
-  //   //   comp1IsOwned ?? isOwned(assetId1),
-  //   //   comp2IsOwned ?? isOwned(assetId2),
-  //   // );
-  //   List<String> l = [];
-  //   if (first) l.add(assetId1);
-  //   if (second) l.add(assetId2);
-  //   return l;
-  // }
-
-
+// List<String> _makeLst(
+//   bool first,
+//   bool second,
+// ) {
+//       // List<String> watchedAssetIds = _makeLst(
+//   //   comp1IsWatched ?? isWatched(assetId1),
+//   //   comp2IsWatched ?? isWatched(assetId2),
+//   // );
+//   // List<String> ownedAssetIds = _makeLst(
+//   //   comp1IsOwned ?? isOwned(assetId1),
+//   //   comp2IsOwned ?? isOwned(assetId2),
+//   // );
+//   List<String> l = [];
+//   if (first) l.add(assetId1);
+//   if (second) l.add(assetId2);
+//   return l;
+// }
 
 // @immutable
 // class old_ActiveGameDetails {

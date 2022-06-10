@@ -1,6 +1,5 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:decimal/decimal.dart';
 import 'package:intl/intl.dart';
-
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
 //
 import 'package:stclient/stclient.dart';
@@ -129,7 +128,7 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
   String get ticker => 'ticker';
 
   @override
-  double get openPrice => 2.33;
+  Decimal get openPrice => Decimal.parse('2.33');
 
   @override
   int get displayNumber => 5;
