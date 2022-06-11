@@ -33,7 +33,7 @@ List<QuestMatcher> stDfltMatcherList = [
     ''',
     // simple match by questId
     questIdPatternMatchTest: (qid) => qid == QuestionIdStrings.selectAppScreens,
-    cascadeTypeOfMatchedQuest:
+    respCascadePatternEm:
         QRespCascadePatternEm.respCreatesWhichAreaInScreenQuestions,
     //
     derivedQuestGen: DerivedQuestGenerator<List<AppScreen>>(
@@ -81,10 +81,10 @@ List<QuestMatcher> stDfltMatcherList = [
         // creates new target + intent (QTargetIntent) for each generated question
         var selectedAppScreens =
             priorAnsweredQuest.mainAnswer as List<AppScreen>;
+        // FIXME:  cascadeType: // of created questions
+        // QRespCascadePatternEm.respCreatesWhichRulesForAreaOrSlotQuestions,
         return priorAnsweredQuest.qTargetIntent.copyWith(
           appScreen: selectedAppScreens[newQuIdx],
-          cascadeType: // of created questions
-              QRespCascadePatternEm.respCreatesWhichRulesForAreaOrSlotQuestions,
         );
       },
       /* params to handle converting user responses (String 0,1,2)
@@ -129,7 +129,7 @@ FIXME:
     // match on start of qid
     questIdPatternMatchTest: (qid) =>
         qid.startsWith(QuestionIdStrings.specAreasToConfigOnScreen),
-    cascadeTypeOfMatchedQuest:
+    respCascadePatternEm:
         QRespCascadePatternEm.respCreatesWhichRulesForAreaOrSlotQuestions,
     //
     derivedQuestGen: DerivedQuestGenerator(
@@ -190,10 +190,10 @@ FIXME:
             (priorAnsweredQuest.mainAnswer as Iterable<ScreenWidgetArea>)
                 .toList();
         ScreenWidgetArea currArea = selectedScreenAreas[newQuestIdx];
+        // FIXME:  cascadeType: // of created questions
+        // QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions,
         return priorAnsweredQuest.qTargetIntent.copyWith(
           screenWidgetArea: currArea,
-          cascadeType: // of created questions
-              QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions,
         );
       },
       perQuestGenOptions: [
@@ -225,7 +225,7 @@ FIXME:
     ''',
     questIdPatternMatchTest: (qid) =>
         qid.startsWith(QuestionIdStrings.specRulesForAreaOnScreen),
-    cascadeTypeOfMatchedQuest:
+    respCascadePatternEm:
         QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions,
     //
     derivedQuestGen: DerivedQuestGenerator(
@@ -291,10 +291,10 @@ FIXME:
         List<VisualRuleType> selectedRulesInArea =
             (priorAnsweredQuest.mainAnswer as List<VisualRuleType>);
         VisualRuleType curRule = selectedRulesInArea[newQuestIdx];
+        // FIXME: cascadeType: // of created questions
+        // QRespCascadePatternEm.noCascade,
         return priorAnsweredQuest.qTargetIntent.copyWith(
           visRuleTypeForAreaOrSlot: curRule,
-          cascadeType: // of created questions
-              QRespCascadePatternEm.noCascade,
         );
       },
       perQuestGenOptions: [
@@ -319,7 +319,7 @@ FIXME:
       ask WHICH rules for each selected slot
     ''',
 
-    cascadeTypeOfMatchedQuest:
+    respCascadePatternEm:
         QRespCascadePatternEm.respCreatesWhichSlotOfAreaQuestions,
     questIdPatternMatchTest: (qid) =>
         qid.startsWith(QuestionIdStrings.specAreasToConfigOnScreen),
@@ -377,10 +377,10 @@ FIXME:
             (priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>);
         // .toList();
         ScreenWidgetArea currArea = selectedScreenAreas[newQuestIdx];
+        // FIXME:  cascadeType: // of created questions
+        // QRespCascadePatternEm.respCreatesRulePrepQuestions,
         return priorAnsweredQuest.qTargetIntent.copyWith(
           screenWidgetArea: currArea,
-          cascadeType: // of created questions
-              QRespCascadePatternEm.respCreatesRulePrepQuestions,
         );
       },
       perQuestGenOptions: [
@@ -411,8 +411,7 @@ FIXME:
 
       build ?`s to specify which rules for slots in areas on selected screens user wants to config
     ''',
-    cascadeTypeOfMatchedQuest:
-        QRespCascadePatternEm.respCreatesRulePrepQuestions,
+    respCascadePatternEm: QRespCascadePatternEm.respCreatesRulePrepQuestions,
     questIdPatternMatchTest: (qid) =>
         qid.startsWith(QuestionIdStrings.specSlotsToConfigInArea),
     //
@@ -462,10 +461,10 @@ FIXME:
             (priorAnsweredQuest.mainAnswer as List<ScreenAreaWidgetSlot>);
         // .toList();
         ScreenAreaWidgetSlot curSlot = selectedAreaSlots[newQuestIdx];
+        // FIXME: cascadeType: // of created questions
+        // QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions,
         return priorAnsweredQuest.qTargetIntent.copyWith(
           slotInArea: curSlot,
-          cascadeType: // of created questions
-              QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions,
         );
       },
       perQuestGenOptions: [
@@ -492,7 +491,7 @@ FIXME:
     ''',
     questIdPatternMatchTest: (qid) =>
         qid.startsWith(QuestionIdStrings.specRulesForSlotInArea),
-    cascadeTypeOfMatchedQuest:
+    respCascadePatternEm:
         QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions,
     //
     derivedQuestGen: DerivedQuestGenerator(
@@ -553,10 +552,10 @@ FIXME:
         List<VisualRuleType> selectedRulesInArea =
             (priorAnsweredQuest.mainAnswer as List<VisualRuleType>);
         VisualRuleType curRule = selectedRulesInArea[newQuestIdx];
+        // FIXME:  cascadeType: // of created questions
+        // QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions
         return priorAnsweredQuest.qTargetIntent.copyWith(
           visRuleTypeForAreaOrSlot: curRule,
-          cascadeType: // of created questions
-              QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions,
         );
       },
       perQuestGenOptions: [
@@ -582,7 +581,7 @@ FIXME:
     ''',
     questIdPatternMatchTest: (qid) =>
         qid.startsWith(QuestionIdStrings.specRulesForAreaOnScreen),
-    cascadeTypeOfMatchedQuest:
+    respCascadePatternEm:
         QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions,
     //
     derivedQuestGen: DerivedQuestGenerator(
@@ -647,11 +646,11 @@ FIXME:
         VisualRuleType curRule = selectedRules[newQuestIdx];
         // .toList();
         // ScreenAreaWidgetSlot slot = selectedAreaSlots[idx];
+        // FIXME:  cascadeType: // of created questions
+        // QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions,
         return priorAnsweredQuest.qTargetIntent.copyWith(
           // screenWidgetArea: currArea,
           visRuleTypeForAreaOrSlot: curRule,
-          cascadeType: // of created questions
-              QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions,
         );
       },
       perQuestGenOptions: [
@@ -685,7 +684,7 @@ FIXME:
 // #9
   QuestMatcher<VisualRuleType, int>(
     'if user wants to perform grouping on a ListView, ask how many grouping cols are required & add a Questions for each',
-    cascadeTypeOfMatchedQuest:
+    respCascadePatternEm:
         QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions,
     screenWidgetArea: ScreenWidgetArea.tableview,
     visRuleTypeForAreaOrSlot: VisualRuleType.groupCfg,

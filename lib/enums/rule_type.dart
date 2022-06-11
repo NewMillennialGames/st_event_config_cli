@@ -132,8 +132,8 @@ extension VisualRuleTypeExt1 on VisualRuleType {
               newQuestNamePrefix + '$newQuestIdx',
           qTargetIntentUpdaterCallbk: (QuestBase qb, int __) {
             //
-            return qb.qTargetIntent
-                .copyWith(cascadeType: QRespCascadePatternEm.noCascade);
+            // FIXME:  cascadeType: QRespCascadePatternEm.noCascade
+            return qb.qTargetIntent.copyWith();
           },
           perQuestGenOptions: [
             PerQuestGenResponsHandlingOpts<int>(
@@ -163,9 +163,8 @@ extension VisualRuleTypeExt1 on VisualRuleType {
               newQuestNamePrefix + '$newQuestIdx',
           qTargetIntentUpdaterCallbk: (QuestBase qb, int __) {
             //
-            return qb.qTargetIntent.copyWith(
-                cascadeType: QRespCascadePatternEm
-                    .respCreatesRuleDetailForSlotOrAreaQuestions);
+            // FIXME:  cascadeType: QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions
+            return qb.qTargetIntent.copyWith();
           },
           perQuestGenOptions: [
             PerQuestGenResponsHandlingOpts<int>(

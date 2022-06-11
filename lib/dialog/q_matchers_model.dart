@@ -195,7 +195,7 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
     cascadeTypeOfMatchedQuest == cascadeWorkDoneByRespGendQuests 
     on QTargetIntent
   */
-  final QRespCascadePatternEm? cascadeTypeOfMatchedQuest;
+  final QRespCascadePatternEm? respCascadePatternEm;
   /*
   next 2 cannot be final;  only one is used
   function takes precedence; if deriveQuestGenCallbk passed
@@ -222,7 +222,7 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
   //
   QuestMatcher(
     this.matcherDescrip, {
-    required this.cascadeTypeOfMatchedQuest,
+    required this.respCascadePatternEm,
     required this.derivedQuestGen,
     this.validateUserAnswerAfterPatternMatchIsTrueCallback,
     this.questIdPatternMatchTest,
@@ -296,8 +296,8 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
     // compare all properties instead of only QuestionId
     bool dMatch = true;
     dMatch = dMatch &&
-        (this.cascadeTypeOfMatchedQuest == null ||
-            this.cascadeTypeOfMatchedQuest == quest.qTargetIntent.cascadeType);
+        (this.respCascadePatternEm == null ||
+            this.respCascadePatternEm == quest.respCascadePatternEm);
     if (!dMatch) return false; // only continue tests when succeeding
     print('Cascade matches: $dMatch');
 
@@ -354,7 +354,7 @@ class QuestMatcherForRuleOutput<AnsTypOfMatched, AnsTypOfGend>
     BehaviorRuleType? behRuleTypeForAreaOrSlot,
   }) : super(
           matcherDescrip,
-          cascadeTypeOfMatchedQuest: QRespCascadePatternEm.noCascade,
+          respCascadePatternEm: QRespCascadePatternEm.noCascade,
           derivedQuestGen: DerivedQuestGenerator.noop(),
           deriveQuestGenCallbk: deriveQuestGenCallbk,
           questIdPatternMatchTest: questIdPatternMatchTest,

@@ -38,7 +38,7 @@ void main() {
     _qMatchColl.append([
       QuestMatcher(
         'should match 1 based on screen, area ruletype',
-        cascadeTypeOfMatchedQuest:
+        respCascadePatternEm:
             QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions,
         derivedQuestGen: DerivedQuestGenerator.noop(),
         // validateUserAnswerAfterPatternMatchIsTrueCallback: (p0) => true,
@@ -48,7 +48,7 @@ void main() {
       ),
       QuestMatcher(
         'should match 2 based on screen, area ruletype & valid answer',
-        cascadeTypeOfMatchedQuest:
+        respCascadePatternEm:
             QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions,
         derivedQuestGen: DerivedQuestGenerator.noop(),
         validateUserAnswerAfterPatternMatchIsTrueCallback: (p0) => true,
@@ -58,14 +58,14 @@ void main() {
       ),
       QuestMatcher(
         'should NOT match based on wrong screen',
-        cascadeTypeOfMatchedQuest:
+        respCascadePatternEm:
             QRespCascadePatternEm.respCreatesWhichAreaInScreenQuestions,
         derivedQuestGen: DerivedQuestGenerator.noop(),
         appScreen: AppScreen.eventConfiguration,
       ),
       QuestMatcher(
         'should NOT match based on invalid user answer',
-        cascadeTypeOfMatchedQuest:
+        respCascadePatternEm:
             QRespCascadePatternEm.respCreatesWhichAreaInScreenQuestions,
         derivedQuestGen: DerivedQuestGenerator.noop(),
         validateUserAnswerAfterPatternMatchIsTrueCallback: (p0) => false,
@@ -95,7 +95,7 @@ void main() {
 
     final wontMatchByCascade = QuestMatcher(
       'should NOT match based on cascadeTypeOfMatchedQuest',
-      cascadeTypeOfMatchedQuest:
+      respCascadePatternEm:
           QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions,
       validateUserAnswerAfterPatternMatchIsTrueCallback: (p0) => true,
       appScreen: qti.appScreen,
@@ -106,14 +106,14 @@ void main() {
 
     final wontMatchByWrongScreenAndCascade = QuestMatcher(
       'should NOT match based on wrong screen',
-      cascadeTypeOfMatchedQuest: QRespCascadePatternEm.noCascade,
+      respCascadePatternEm: QRespCascadePatternEm.noCascade,
       appScreen: AppScreen.leaderboardTraders,
       derivedQuestGen: DerivedQuestGenerator.noop(),
     );
 
     final wontMatchByUserAnser = QuestMatcher(
       'should NOT match based on invalid user answer',
-      cascadeTypeOfMatchedQuest:
+      respCascadePatternEm:
           QRespCascadePatternEm.respCreatesWhichAreaInScreenQuestions,
       validateUserAnswerAfterPatternMatchIsTrueCallback: (p0) => false,
       appScreen: AppScreen.marketView,
@@ -122,7 +122,7 @@ void main() {
 
     final willMatchByQuestId = QuestMatcher(
       'should match 1 based on same quest ID',
-      cascadeTypeOfMatchedQuest:
+      respCascadePatternEm:
           QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions,
       questIdPatternMatchTest: (qid) => qid == testQuestId,
       derivedQuestGen: DerivedQuestGenerator(

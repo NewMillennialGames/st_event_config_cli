@@ -18,14 +18,12 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$QTargetIntentTearOff {
   const _$QTargetIntentTearOff();
 
-  _QTargetIntent call(QRespCascadePatternEm cascadeType, AppScreen appScreen,
-      ScreenWidgetArea? screenWidgetArea,
+  _QTargetIntent call(AppScreen appScreen, ScreenWidgetArea? screenWidgetArea,
       {ScreenAreaWidgetSlot? slotInArea,
       VisualRuleType? visRuleTypeForAreaOrSlot,
       BehaviorRuleType? behRuleTypeForAreaOrSlot,
       bool cliConfig = false}) {
     return _QTargetIntent(
-      cascadeType,
       appScreen,
       screenWidgetArea,
       slotInArea: slotInArea,
@@ -41,7 +39,7 @@ const $QTargetIntent = _$QTargetIntentTearOff();
 
 /// @nodoc
 mixin _$QTargetIntent {
-  QRespCascadePatternEm get cascadeType => throw _privateConstructorUsedError;
+// QRespCascadePatternEm cascadeWorkDoneByRespGendQuests,
   AppScreen get appScreen => throw _privateConstructorUsedError;
   ScreenWidgetArea? get screenWidgetArea => throw _privateConstructorUsedError;
   ScreenAreaWidgetSlot? get slotInArea => throw _privateConstructorUsedError;
@@ -62,8 +60,7 @@ abstract class $QTargetIntentCopyWith<$Res> {
           QTargetIntent value, $Res Function(QTargetIntent) then) =
       _$QTargetIntentCopyWithImpl<$Res>;
   $Res call(
-      {QRespCascadePatternEm cascadeType,
-      AppScreen appScreen,
+      {AppScreen appScreen,
       ScreenWidgetArea? screenWidgetArea,
       ScreenAreaWidgetSlot? slotInArea,
       VisualRuleType? visRuleTypeForAreaOrSlot,
@@ -82,7 +79,6 @@ class _$QTargetIntentCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? cascadeType = freezed,
     Object? appScreen = freezed,
     Object? screenWidgetArea = freezed,
     Object? slotInArea = freezed,
@@ -91,10 +87,6 @@ class _$QTargetIntentCopyWithImpl<$Res>
     Object? cliConfig = freezed,
   }) {
     return _then(_value.copyWith(
-      cascadeType: cascadeType == freezed
-          ? _value.cascadeType
-          : cascadeType // ignore: cast_nullable_to_non_nullable
-              as QRespCascadePatternEm,
       appScreen: appScreen == freezed
           ? _value.appScreen
           : appScreen // ignore: cast_nullable_to_non_nullable
@@ -131,8 +123,7 @@ abstract class _$QTargetIntentCopyWith<$Res>
       __$QTargetIntentCopyWithImpl<$Res>;
   @override
   $Res call(
-      {QRespCascadePatternEm cascadeType,
-      AppScreen appScreen,
+      {AppScreen appScreen,
       ScreenWidgetArea? screenWidgetArea,
       ScreenAreaWidgetSlot? slotInArea,
       VisualRuleType? visRuleTypeForAreaOrSlot,
@@ -153,7 +144,6 @@ class __$QTargetIntentCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? cascadeType = freezed,
     Object? appScreen = freezed,
     Object? screenWidgetArea = freezed,
     Object? slotInArea = freezed,
@@ -162,10 +152,6 @@ class __$QTargetIntentCopyWithImpl<$Res>
     Object? cliConfig = freezed,
   }) {
     return _then(_QTargetIntent(
-      cascadeType == freezed
-          ? _value.cascadeType
-          : cascadeType // ignore: cast_nullable_to_non_nullable
-              as QRespCascadePatternEm,
       appScreen == freezed
           ? _value.appScreen
           : appScreen // ignore: cast_nullable_to_non_nullable
@@ -197,16 +183,14 @@ class __$QTargetIntentCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_QTargetIntent extends _QTargetIntent {
-  _$_QTargetIntent(this.cascadeType, this.appScreen, this.screenWidgetArea,
+  _$_QTargetIntent(this.appScreen, this.screenWidgetArea,
       {this.slotInArea,
       this.visRuleTypeForAreaOrSlot,
       this.behRuleTypeForAreaOrSlot,
       this.cliConfig = false})
       : super._();
 
-  @override
-  final QRespCascadePatternEm cascadeType;
-  @override
+  @override // QRespCascadePatternEm cascadeWorkDoneByRespGendQuests,
   final AppScreen appScreen;
   @override
   final ScreenWidgetArea? screenWidgetArea;
@@ -227,17 +211,15 @@ class _$_QTargetIntent extends _QTargetIntent {
 }
 
 abstract class _QTargetIntent extends QTargetIntent {
-  factory _QTargetIntent(QRespCascadePatternEm cascadeType, AppScreen appScreen,
-      ScreenWidgetArea? screenWidgetArea,
+  factory _QTargetIntent(
+      AppScreen appScreen, ScreenWidgetArea? screenWidgetArea,
       {ScreenAreaWidgetSlot? slotInArea,
       VisualRuleType? visRuleTypeForAreaOrSlot,
       BehaviorRuleType? behRuleTypeForAreaOrSlot,
       bool cliConfig}) = _$_QTargetIntent;
   _QTargetIntent._() : super._();
 
-  @override
-  QRespCascadePatternEm get cascadeType;
-  @override
+  @override // QRespCascadePatternEm cascadeWorkDoneByRespGendQuests,
   AppScreen get appScreen;
   @override
   ScreenWidgetArea? get screenWidgetArea;
