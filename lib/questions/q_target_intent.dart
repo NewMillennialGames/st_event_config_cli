@@ -1,9 +1,7 @@
 part of QuestionsLib;
 
 @freezed
-class QTargetIntent extends Equatable
-    with _$QTargetIntent
-    implements QuestFactory {
+class QTargetIntent extends Equatable with _$QTargetIntent {
   /* describes what a Question pertains to
     it's target, intent and cascade behavior
 
@@ -31,22 +29,22 @@ class QTargetIntent extends Equatable
   }) = _QTargetIntent;
 
   // IMPORTANT:  impl of QuestFactory
-  QuestFactorytSignature get preferredQuestionConstructor {
-    /* very important
-      returns the factory method required to build
-      new auto-derived questions (from user answers)
-    */
-    if (visRuleTypeForAreaOrSlot != null) {
-      return QuestBase.visualRuleDetailQuest;
-    } else if (behRuleTypeForAreaOrSlot != null) {
-      return QuestBase.behaveRuleDetailQuest;
-    } else if (cliConfig) {
-      return QuestBase.eventLevelCfgQuest;
-    } else if (slotInArea != null || screenWidgetArea != null) {
-      return QuestBase.ruleSelectQuest;
-    }
-    return QuestBase.eventLevelCfgQuest;
-  }
+  // QuestFactorytSignature get preferredQuestionConstructor {
+  //   /* very important
+  //     returns the factory method required to build
+  //     new auto-derived questions (from user answers)
+  //   */
+  //   if (visRuleTypeForAreaOrSlot != null) {
+  //     return QuestBase.visualRuleDetailQuest;
+  //   } else if (behRuleTypeForAreaOrSlot != null) {
+  //     return QuestBase.behaveRuleDetailQuest;
+  //   } else if (cliConfig) {
+  //     return QuestBase.eventLevelCfgQuest;
+  //   } else if (slotInArea != null || screenWidgetArea != null) {
+  //     return QuestBase.ruleSelectQuest;
+  //   }
+  //   return QuestBase.eventLevelCfgQuest;
+  // }
 
   // QIntentEm get intent {
   //   // not yet tested

@@ -145,16 +145,20 @@ final List<QuestBase> _initQuestionLst = [
     QTargetIntent.eventLevel(responseAddsWhichAreaQuestions: true),
     DlgStr.selectAppScreens, // <String, List<AppScreen>>
     AppScreen.eventConfiguration.topConfigurableScreens.map((e) => e.name),
-    CaptureAndCast<List<AppScreen>>((qb, s) => castStrOfIdxsToIterOfInts(s)
-        .map((idx) => AppScreen.eventConfiguration.topConfigurableScreens[idx])
-        .toList()),
+    CaptureAndCast<List<AppScreen>>(
+      (QuestBase qb, String s) => castStrOfIdxsToIterOfInts(s)
+          .map(
+            (idx) => AppScreen.eventConfiguration.topConfigurableScreens[idx],
+          )
+          .toList(),
+    ),
     questId: QuestionIdStrings.selectAppScreens,
     isSelectScreensQuestion: true,
   ),
   // after user selects desired screens to configure, then
   // which screen areas (and slots on those areas) are asked automatically;
   // then we ask them which visual rules they'd like to apply
-  // to those areas and/or area-slots
+  // to those areas and/or which area-slots are desired
 ];
 
  

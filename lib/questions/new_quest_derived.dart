@@ -112,16 +112,15 @@ class DerivedQuestGenerator<PriorAnsType> {
     List<QuestBase> createdQuests = [];
     for (int newQIdx = 0; newQIdx < newQuestCount; newQIdx++) {
       //
-      QTargetIntent targIntent = answeredQuest.qTargetIntent;
       QuestFactorytSignature newQuestConstructor =
-          targIntent.preferredQuestionConstructor;
+          answeredQuest.derivedQuestConstructor;
 
       // values required to build new question:
 
       // convert old (answered) targIntent into one for new question
       // added extra copyWith() in case passed function forgets it
-      targIntent = qTargetIntentUpdater(answeredQuest, newQIdx).copyWith();
-
+      QTargetIntent targIntent =
+          qTargetIntentUpdater(answeredQuest, newQIdx).copyWith();
       List<String> templArgs = newQuestPromptArgGen(answeredQuest, newQIdx);
       String _userPrompt = questPromptTemplate.format(templArgs);
 
@@ -163,17 +162,16 @@ class DerivedQuestGenerator<PriorAnsType> {
       answerChoiceGenerator(qb, 0).length == 1;
 }
 
-
-      // if (genOptionsAtIdx.genAsRuleQuestion) {
-      //   nxtQuest = newQuestConstructor(targIntent, []);
-      //   // nxtQuest = QuestBase.makeFromExisting(
-      //   //   answeredQuest,
-      //   //   newQuestStr,
-      //   //   genOptionsAtIdx,
-      //   // );
-      // } else {
-      //   // nxtQuest = answeredQuest.fromExisting(
-      //   //   newQuestStr,
-      //   //   genOptionsAtIdx,
-      //   // );
-      // }
+// if (genOptionsAtIdx.genAsRuleQuestion) {
+//   nxtQuest = newQuestConstructor(targIntent, []);
+//   // nxtQuest = QuestBase.makeFromExisting(
+//   //   answeredQuest,
+//   //   newQuestStr,
+//   //   genOptionsAtIdx,
+//   // );
+// } else {
+//   // nxtQuest = answeredQuest.fromExisting(
+//   //   newQuestStr,
+//   //   genOptionsAtIdx,
+//   // );
+// }

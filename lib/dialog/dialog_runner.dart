@@ -11,13 +11,11 @@ class DialogRunner {
   to produce CLI output to the user
   */
   final QuestListMgr _qListMgr; // = QuestListMgr();
-  // final NewQuestionCollector _newQuestComposer = NewQuestionCollector();
   // set in init
   final QuestionPresenterIfc questPresenter;
   final int linesBetweenSections;
   final int linesBetweenQuest2s;
   final QuestionCascadeDispatcher questCascadeDispatcher;
-  // final QMatchCollection _qMatchColl;
   //
 
   DialogRunner(
@@ -89,7 +87,7 @@ class DialogRunner {
     // check for another Quest2
     QuestBase? _quest = _qListMgr.nextQuestionToAnswer();
     while (_quest != null) {
-      // askAndWaitForUserResponse() will callback to handleQuestionCascade (below)
+      // askAndWaitForUserResponse() will callback to gentNewQuestionsFromUserResponse (below)
       // to create any derived Questions based on user answers
 
       // next line for testing
@@ -112,6 +110,14 @@ class DialogRunner {
     return true;
   }
 
+  void gentNewQuestionsFromUserResponse(QuestBase questJustAnswered) {
+    // logic to add new Questions based on user response
+    questCascadeDispatcher.appendNewQuestsOrInsertImplicitAnswers(
+      _qListMgr,
+      questJustAnswered,
+    );
+  }
+
   void _outputSpacerLines({bool forSection = false}) {
     if (forSection) {
       print('\n' * this.linesBetweenSections);
@@ -119,37 +125,4 @@ class DialogRunner {
       print('\n' * this.linesBetweenQuest2s);
     }
   }
-
-  void handleQuestionCascade(QuestBase questJustAnswered) {
-    // logic to add new Questions based on user response
-
-    questCascadeDispatcher.handleNewCascade(_qListMgr, questJustAnswered);
-
-    // if (questJustAnswered.isRulePrepQuestion) {
-    //   // usually means we need to ask pending question count
-    //   // for: sort, filter, config  (how many positions)
-    //   _qMatchColl.createPrepQuestions(
-    //     _qListMgr,
-    //     questJustAnswered,
-    //   );
-    // } else if (questJustAnswered.createsRuleCfgQuests) {
-    //   _qMatchColl.createRuleQuestions(
-    //     _qListMgr,
-    //     questJustAnswered,
-    //   );
-    // } else if (true) {
-    //   _qMatchColl.appendNewQuestsOrInsertImplicitAnswers(
-    //     _qListMgr,
-    //     questJustAnswered,
-    //   );
-    // }
-    // end of logic to add new Questions based on user response
-  }
 }
-
-
-    // two different methods
-    // called from inside of: questPresenter.askAndWaitForUserResponse
-    // bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(_qListMgr);
-    // bool didAddNew = false;
-    // if (!didAddNew) {

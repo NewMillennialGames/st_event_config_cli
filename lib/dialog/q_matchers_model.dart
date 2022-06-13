@@ -153,26 +153,6 @@ class QMatchCollection {
   Iterable<QuestMatcher> get allMatchersTestOnly => _matcherList;
 }
 
-enum DerivedGenBehaviorOnMatchEnum {
-  addPendingQuestions,
-  addImplicitAnswers,
-  addQuestsAndAnswers, // aka BOTH
-  noop,
-}
-
-extension MatcherBehaviorEnumExt1 on DerivedGenBehaviorOnMatchEnum {
-  //
-  bool get addsPendingQuestions => [
-        DerivedGenBehaviorOnMatchEnum.addPendingQuestions,
-        DerivedGenBehaviorOnMatchEnum.addQuestsAndAnswers
-      ].contains(this);
-
-  bool get createsImplicitAnswers => [
-        DerivedGenBehaviorOnMatchEnum.addImplicitAnswers,
-        DerivedGenBehaviorOnMatchEnum.addQuestsAndAnswers
-      ].contains(this);
-}
-
 class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
   /*
   defines rules for generating NEW QUESTIONS (or answers)

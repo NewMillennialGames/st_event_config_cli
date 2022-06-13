@@ -190,21 +190,23 @@ abstract class QuestBase with EquatableMixin {
   // getters
   bool get doesCreateDerivedQuests =>
       respCascadePatternEm != QRespCascadePatternEm.noCascade;
+  // derivedQuestConstructor overridden in subclasses
   QuestFactorytSignature get derivedQuestConstructor =>
       QuestBase.eventLevelCfgQuest;
+  // respCascadePatternEm overridden in subclasses
   QRespCascadePatternEm get respCascadePatternEm =>
       QRespCascadePatternEm.noCascade;
 
   String get targetPath => qTargetIntent.targetPath;
   bool get isFullyAnswered => qPromptCollection.allPartsHaveAnswers;
-  // bool get createsRuleCfgQuests => qTargetIntent.createsRuleCfgQuests;
 
-  // define types of question
+  // define type of question for auto-gen
   bool get isTopLevelEventConfigQuestion =>
       this is EventLevelCfgQuest && qTargetIntent.isTopLevelEventConfigQuestion;
   bool get isRegionTargetQuestion => this is RegionTargetQuest;
   bool get isRuleSelectionQuestion => this is RuleSelectQuest;
   bool get isRulePrepQuestion => this is RulePrepQuest;
+  // rule level
   bool get isRuleDetailQuestion => this is UiFactoryRuleBase; // controls export
   bool get isVisRuleDetailQuestion => this is VisualRuleDetailQuest;
   bool get isBehRuleDetailQuestion => this is BehaveRuleDetailQuest;
