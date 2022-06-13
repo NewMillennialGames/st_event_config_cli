@@ -14,6 +14,7 @@ class TableRowDataMgr {
   List<TableviewDataRowTuple> _allAssetRows;
   RedrawTvCallback? redrawCallback;
   GroupedListOrder sortOrder = GroupedListOrder.ASC;
+
   // rows actually rendered from _filteredAssetRows
   // List<TableviewDataRowTuple> _filteredAssetRows = [];
 
@@ -24,11 +25,13 @@ class TableRowDataMgr {
     this.redrawCallback,
     bool ascending = true,
   }) : sortOrder = ascending ? GroupedListOrder.ASC : GroupedListOrder.DESC;
+
   // _filteredAssetRows = _allAssetRows.toList();
 
   // List<TableviewDataRowTuple> get listData => _filteredAssetRows;
   // ``GroupingRules`` get groupRules => _tableViewCfg.groupByRules;
   SortingRules get sortingRules => _tableViewCfg.sortRules;
+
   // FilterRules get filterRules => _tableViewCfg.filterRules;
 
   // rowBuilder is function to return a Tv-Row for this screen
@@ -36,6 +39,8 @@ class TableRowDataMgr {
         var asset = _allAssetRows[i];
         return _tableViewCfg.rowConstructor(asset);
       };
+
+  TvAreaRowStyle get rowStyle => _tableViewCfg.rowStyle;
 
   void setLiveData(
     Iterable<TableviewDataRowTuple> _assetRows, {

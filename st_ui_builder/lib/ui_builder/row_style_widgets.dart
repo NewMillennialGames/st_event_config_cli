@@ -13,7 +13,7 @@ we have one style for each value of:
 final _redrawAssetRowProvider = StateProvider<bool>((ref) => false);
 
 class AssetVsAssetRowMktView extends StBaseTvRow
-    with ShowsTwoAssets, RequiresGameStatus, RequiresUserPositionProps {
+    with ShowsTwoAssets, RequiresGameStatus {
   //
   bool get showRank => false;
 
@@ -33,9 +33,9 @@ class AssetVsAssetRowMktView extends StBaseTvRow
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        AssetVsAssetHalfRow(comp1, agd, showRank, assetHoldingsSummary),
-        const SizedBox(height: UiSizes.spaceBtwnRows),
-        AssetVsAssetHalfRow(comp2, agd, showRank, assetHoldingsSummary),
+        AssetVsAssetHalfRow(comp1, agd, showRank, comp1.assetHoldingsSummary),
+        SizedBox(height: UiSizes.spaceBtwnRows),
+        AssetVsAssetHalfRow(comp2, agd, showRank, comp2.assetHoldingsSummary)
       ],
     );
   }
@@ -61,7 +61,7 @@ class AssetVsAssetRowLeaderBoardView extends StBaseTvRow with ShowsTwoAssets {
           competitor: comp1,
           showLeaderBoardIcon: true,
         ),
-        const SizedBox(height: UiSizes.spaceBtwnRows),
+        SizedBox(height: UiSizes.spaceBtwnRows),
         LeaderboardHalfRow(competitor: comp2)
       ],
     );
@@ -89,7 +89,7 @@ class DriverVsFieldRowLeaderBoardView extends StBaseTvRow with ShowsTwoAssets {
           showLeaderBoardIcon: true,
           isDriverVsField: true,
         ),
-        const SizedBox(height: UiSizes.spaceBtwnRows),
+        SizedBox(height: UiSizes.spaceBtwnRows),
         LeaderboardHalfRow(competitor: comp2, isDriverVsField: true)
       ],
     );
@@ -117,7 +117,7 @@ class TeamPlayerVsFieldLeaderBoardView extends StBaseTvRow with ShowsTwoAssets {
           showLeaderBoardIcon: true,
           isTeamPlayerVsField: true,
         ),
-        const SizedBox(height: UiSizes.spaceBtwnRows),
+        SizedBox(height: UiSizes.spaceBtwnRows),
         LeaderboardHalfRow(competitor: comp2, isTeamPlayerVsField: true)
       ],
     );
@@ -272,7 +272,7 @@ class AssetVsAssetRowMktResearchView extends StBaseTvRow with ShowsTwoAssets {
                           border: Border.all(color: StColors.black, width: 3),
                           shape: BoxShape.circle,
                           color: StColors.darkGreen),
-                      child: const Center(
+                      child: Center(
                           child: Text(
                         StStrings.versus,
                         style: StTextStyles.p2,
@@ -302,7 +302,8 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
   bool get isTeamPlayerVsField => false;
 
   // proceeds apply to a SALE
-  bool get showProceeds => true;
+  bool get showProceeds => false;
+
   // holdings apply to what you currently own
   bool get showHoldingsValue => !showProceeds;
 
@@ -317,7 +318,7 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
     ActiveGameDetails agd,
   ) {
     //
-    bool hasIncreased = comp1.recentPriceDelta > 0;
+    bool hasIncreased = comp1.recentPriceDelta >= Decimal.zero;
     String sharePrice = comp1.currPriceStr;
     String sharePriceChange = comp1.recentDeltaStr;
     TextStyle gainLossTxtStyle = hasIncreased
@@ -330,7 +331,7 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
     String sharesOwned = assetHoldingsSummary.sharesOwnedStr;
     String positionValue = assetHoldingsSummary.positionEstValueStr;
     String positionGainLoss = assetHoldingsSummary.positionGainLossStr;
-    Color gainLossColor = assetHoldingsSummary.positionGainLoss >= 0
+    Color gainLossColor = assetHoldingsSummary.positionGainLoss >= Decimal.zero
         ? StColors.green
         : StColors.errorText;
 
@@ -386,11 +387,15 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
                                       .copyWith(color: StColors.coolGray),
                                   children: [
                                     TextSpan(
-                                      text: sharePrice,
+                                      text: sharePrice.replaceAllMapped(
+                                          RegexFunctions()
+                                              .formatNumberStringsWithCommas,
+                                          RegexFunctions().mathFunc),
                                       style: StTextStyles.p1,
                                     ),
                                     TextSpan(
-                                      text: " $sharePriceChange",
+                                      text:
+                                          " ${sharePriceChange.replaceAllMapped(RegexFunctions().formatNumberStringsWithCommas, RegexFunctions().mathFunc)}",
                                       style: gainLossTxtStyle,
                                     )
                                   ]),
@@ -410,7 +415,10 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
                             ),
                             kVerticalSpacerSm,
                             Text(
-                              positionValue,
+                              positionValue.replaceAllMapped(
+                                  RegexFunctions()
+                                      .formatNumberStringsWithCommas,
+                                  RegexFunctions().mathFunc),
                               style: StTextStyles.p1,
                             ),
                           ],
@@ -423,7 +431,10 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
                                     .copyWith(color: StColors.coolGray)),
                             kVerticalSpacerSm,
                             Text(
-                              positionGainLoss,
+                              positionGainLoss.replaceAllMapped(
+                                  RegexFunctions()
+                                      .formatNumberStringsWithCommas,
+                                  RegexFunctions().mathFunc),
                               style: StTextStyles.p1
                                   .copyWith(color: gainLossColor),
                             ),
@@ -451,6 +462,7 @@ class DriverVsFieldRowPortfolio extends AssetVsAssetRowPortfolioView {
 
   @override
   bool get isDriverVsField => true;
+
   @override
   bool get showProceeds => false;
 }
@@ -534,8 +546,6 @@ class TeamVsFieldRowMktView extends StBaseTvRow
   ) {
     //
     final size = MediaQuery.of(ctx).size;
-    print(
-        "Shares owned int: ${assetHoldingsSummary.sharesOwnedStr.toString()}");
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -556,7 +566,7 @@ class TeamVsFieldRowMktView extends StBaseTvRow
           width: 12,
         ),
         SizedBox(
-          width: size.width * .50,
+          width: size.width * .52,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -835,7 +845,7 @@ class TeamVsFieldRankedRowTest extends StBaseTvRow with ShowsOneAsset {
     ActiveGameDetails agd,
   ) {
     return Container(
-      height: 80,
+      height: 80.h,
       decoration: kRowBoxDecor,
       child: Row(
         // crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -845,13 +855,13 @@ class TeamVsFieldRankedRowTest extends StBaseTvRow with ShowsOneAsset {
             children: [
               const Text('Rank:'),
               Container(
-                height: 26,
-                width: 26,
+                height: 26.h,
+                width: 26.h,
                 color: Colors.amber,
                 child: Text(
                   comp1.rankStr,
-                  style: const TextStyle(
-                    fontSize: 28,
+                  style: TextStyle(
+                    fontSize: 28.sp,
                   ),
                 ),
               ),
@@ -1054,7 +1064,7 @@ class TeamVsFieldRankedRowTest extends StBaseTvRow with ShowsOneAsset {
 //                             'first.tokens',
 //                             style:
 //                                 StTextStyles.textNameMarketTicker.copyWith(
-//                               fontSize: 14,
+//                               fontSize: 14.sp,
 //                             ),
 //                           ),
 //                         ],

@@ -261,9 +261,9 @@ class GroupedTableDataMgr {
           },
           dropdownColor: StColors.black,
           iconEnabledColor: StColors.gray,
-          style: const TextStyle(
+          style:  TextStyle(
             color: StColors.lightGray,
-            fontSize: 16,
+            fontSize: 16.sp,
           ),
           underline: null,
         ),

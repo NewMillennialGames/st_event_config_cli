@@ -21,14 +21,14 @@ class WatchButton extends ConsumerWidget {
   }
 }
 
-const kSpacerSm = SizedBox(
-  width: 4,
+var kSpacerSm = SizedBox(
+  width: 10.w,
 );
-const kVerticalSpacerSm = SizedBox(
-  height: 3,
+var kVerticalSpacerSm = SizedBox(
+  height: 3.h,
 );
-const kSpacerLarge = SizedBox(
-  width: 20,
+var kSpacerLarge = SizedBox(
+  width: 20.w,
 );
 
 class CompetitorImage extends StatelessWidget {
@@ -45,8 +45,8 @@ class CompetitorImage extends StatelessWidget {
   }) : super(key: key);
 
   double get _shrinkSize => shrinkForRank
-      ? (isTwoAssetRow ? 0.56 : 0.78)
-      : (isTwoAssetRow ? 0.78 : 1);
+      ? (isTwoAssetRow ? 0.44 : 0.66)
+      : (isTwoAssetRow ? 0.66 : 0.88);
 
   double get imgSize => UiSizes.teamImgSide * _shrinkSize;
 
@@ -94,7 +94,6 @@ class TradeButton extends ConsumerWidget {
     // );
     // bool eventHasStarted = optCurEvent?.state == EventState.inProgress;
     // (optCurEvent?.state ?? EventState.unpublished) == EventState.inProgress;
-
     return Container(
       height: UiSizes.tradeBtnHeight,
       width: 80,
@@ -102,7 +101,7 @@ class TradeButton extends ConsumerWidget {
       alignment: Alignment.center,
       child: (assetState.isTradable)
           ? TextButton(
-              child: const Text(
+              child: Text(
                 StStrings.tradeUc,
                 // tf.labelForState(status),
                 style: StTextStyles.h6,
@@ -114,7 +113,7 @@ class TradeButton extends ConsumerWidget {
           : Text(
               tf.labelForGameState(competitionStatus),
               style: StTextStyles.h5.copyWith(
-                fontSize: 15,
+                fontSize: 15.sp,
                 color: tf.colorForGameState(competitionStatus),
               ),
               textAlign: TextAlign.center,
@@ -146,24 +145,23 @@ class CheckAssetType extends StatelessWidget {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(
-            height: 40,
+          Container(
+            height: 40.h,
+            width: MediaQuery.of(context).size.width * .1,
+            margin: const EdgeInsets.only(right: 8),
             child: FittedBox(
               fit: BoxFit.fitHeight,
               child: Text(
                 competitor.displayNumberStr,
-                style: StTextStyles.h2.copyWith(
-                  fontWeight: FontWeight.w700,
-                ),
+                style: StTextStyles.h3.copyWith(fontWeight: FontWeight.w700),
               ),
             ),
           ),
-          kSpacerSm,
           ConstrainedBox(
             constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width * .3,
-              minHeight: 50,
-              maxHeight: 50,
+              maxWidth: MediaQuery.of(context).size.width * .26,
+              minHeight: 50.h,
+              maxHeight: 50.h,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,12 +169,12 @@ class CheckAssetType extends StatelessWidget {
               children: [
                 Text(firstName.toUpperCase(),
                     overflow: TextOverflow.ellipsis,
-                    style: StTextStyles.p2
-                        .copyWith(fontWeight: FontWeight.w500, fontSize: 12)),
+                    style: StTextStyles.p2.copyWith(
+                        fontWeight: FontWeight.w500, fontSize: 12.sp)),
                 Text(lastName.toUpperCase(),
                     overflow: TextOverflow.ellipsis,
                     style: StTextStyles.h3
-                        .copyWith(fontWeight: FontWeight.w800, fontSize: 18))
+                        .copyWith(fontWeight: FontWeight.w800, fontSize: 18.sp))
               ],
             ),
           )
@@ -301,7 +299,7 @@ class AssetVsAssetHalfRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-       assetHoldingsInterface.sharesOwned > 0
+        assetHoldingsInterface.sharesOwned > 0
             ? const Icon(Icons.work, color: StColors.green)
             : WatchButton(
                 assetKey: competitor.assetKey,
@@ -386,7 +384,7 @@ class MktRschAsset extends ConsumerWidget {
               Text(
                 competitor.topName,
                 style: StTextStyles.h4.copyWith(
-                  fontSize: 18,
+                  fontSize: 18.sp,
                   color: isTradable ? StColors.coolGray : StTextStyles.h4.color,
                 ),
               ),
@@ -528,7 +526,7 @@ class RowControl extends StatelessWidget {
 //                   Text(
 //                     competitor.topName,
 //                     style: StTextStyles.h4.copyWith(
-//                       fontSize: 18,
+//                       fontSize: 18.sp,
 //                       color: gameStatus._isTradableGame
 //                           ? StColors.coolGray
 //                           : StTextStyles.h4.color,
@@ -759,7 +757,7 @@ class AssetTopRow extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(right: _rowRightMargin),
               child: TextButton(
-                child: const Text(
+                child: Text(
                   StStrings.tradeUc,
                   style: StTextStyles.h5,
                 ),
@@ -787,13 +785,13 @@ class HoldingsAndValueRow extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  double get _sharePrice => asset.assetStateUpdates.curPrice; // ?? 0;
+  Decimal get _sharePrice => asset.assetStateUpdates.curPrice; // ?? 0;
   int get _sharesHeld => asset.assetHoldingsSummary.sharesOwned; // ?? 0;
-  double get _gainLoss => asset.assetHoldingsSummary.positionGainLoss; // ?? 0;
+  Decimal get _gainLoss => asset.assetHoldingsSummary.positionGainLoss; // ?? 0;
 
-  String get _formattedGainLoss => _sharePrice.isNegative
+  String get _formattedGainLoss => _sharePrice < Decimal.zero
       ? _sharePrice.toStringAsFixed(2)
-      : '+' + _sharePrice.toStringAsFixed(2);
+      : '+${_sharePrice.toStringAsFixed(2)}';
 
   @override
   Widget build(BuildContext context) {
@@ -866,10 +864,10 @@ class HoldingsAndValueRow extends StatelessWidget {
                   style: StTextStyles.h6.copyWith(),
                 ),
                 Text(
-                  _gainLoss.isNegative
+                  _gainLoss < Decimal.zero
                       ? _gainLoss.toStringAsFixed(2)
-                      : '+' + _gainLoss.toStringAsFixed(2),
-                  style: _gainLoss.isNegative
+                      : '+${_gainLoss.toStringAsFixed(2)}',
+                  style: _gainLoss < Decimal.zero
                       ? StTextStyles.moneyDeltaPositive.copyWith(
                           color: StColors.errorText,
                         )

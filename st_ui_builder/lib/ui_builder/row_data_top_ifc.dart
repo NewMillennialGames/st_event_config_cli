@@ -15,33 +15,53 @@ abstract class AssetRowPropertyIfc {
   // enum DbTableFieldName()
   AssetKey get assetKey; // for unique comparison
   String get topName;
+
   String get subName;
+
   String get ticker;
+
   String get marketResearchUrl;
+
   String get liveStatsUrl;
+
   String get imgUrl;
+
   String get position;
+
   int get rank;
+
   bool get isTeam;
+
   String get searchText;
-  double get openPrice;
+
+  Decimal get openPrice;
+
   //
   String get teamNameWhenTradingPlayers;
+
   String get teamImgUrlWhenTradingPlayers;
 
   // holds asset price history
   AssetStateUpdates get assetStateUpdates;
+
   // holds user ownership state
   AssetHoldingsSummaryIfc get assetHoldingsSummary;
+
+  UserEventSummaryIfc get userEventSummary;
 
   // next 3 properties are game props but needed for sorting and grouping
   // shows values off the game record
   DateTime get gameDate; // rounded to midnight for row grouping
   String get regionOrConference;
+
   String get roundName;
+
   String get location;
+
   int get displayNumber;
+
   CompetitionStatus get gameStatus;
+
   CompetitionType get gameType;
 
   void updateDynamicState(ActiveGameDetails agd);
@@ -54,15 +74,21 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
           .toUpperCase();
 
   String get rankStr => '$rank';
+
   String get displayNumberStr => '$displayNumber';
+
   String get gameDateDtwStr => gameDate.asDtwMmDyStr;
+
   String get gameDateAppStr => gameDate.asShortDtStr;
+
   String get gameTimeStr => gameDate.asTimeOnlyStr;
 
   // from assetHoldingsSummary
-  double get positionGainLoss => assetHoldingsSummary.positionGainLoss; // ?? 0;
+  Decimal get positionGainLoss =>
+      assetHoldingsSummary.positionGainLoss; // ?? 0;
   String get sharesOwnedStr => assetHoldingsSummary.sharesOwnedStr; // ?? '0';
   int get sharesOwnedInt => assetHoldingsSummary.sharesOwned;
+
   String get positionCostStr =>
       assetHoldingsSummary.positionCostStr; // ?? kMissingPrice;
   String get positionEstValueStr =>
@@ -75,17 +101,22 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
       assetHoldingsSummary.posGainSymbolColor; // ?? Colors.grey;
 
   // assetPriceFluxSummary
-  double get currPrice => assetStateUpdates.curPrice; // ?? 0;
-  double get recentPriceDelta => assetStateUpdates.priceDeltaSinceOpen; // ?? 0;
+  Decimal get currPrice => assetStateUpdates.curPrice; // ?? 0;
+  Decimal get recentPriceDelta =>
+      assetStateUpdates.priceDeltaSinceOpen; // ?? 0;
   String get currPriceStr => assetStateUpdates.curPriceStr; // ?? kMissingPrice;
   String get recentDeltaStr =>
       assetStateUpdates.formattedChangeStr; // ?? kMissingPrice;
   String get openPriceStr => assetStateUpdates.openPrice.toStringAsFixed(2);
+
   String get lowPriceStr => assetStateUpdates.lowPrice.toStringAsFixed(2);
+
   String get hiPriceStr => assetStateUpdates.hiPrice.toStringAsFixed(2);
 
   bool get stockIsUp => assetStateUpdates.stockIsUp;
+
   Color get priceFluxColor => assetStateUpdates.priceFluxColor;
+
   CompetitionType get gameType => CompetitionType.game;
 
   String labelExtractor(DbTableFieldName fldName) {
