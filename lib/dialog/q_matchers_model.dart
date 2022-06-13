@@ -245,6 +245,11 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
           prevAnsweredQuest,
         );
       }
+      if (patternDoesMatch) {
+        print(
+          'QID: ${prevAnsweredQuest.questId} does match ${derivedQuestGen.questPromptTemplate}',
+        );
+      }
       return patternDoesMatch; // always true here
     }
 
@@ -256,6 +261,12 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
     if (shouldValidateUserAnswer) {
       return validateUserAnswerAfterPatternMatchIsTrueCallback!(
         prevAnsweredQuest,
+      );
+    }
+
+    if (isAPatternMatch) {
+      print(
+        'QID: ${prevAnsweredQuest.questId} does match ${derivedQuestGen.questPromptTemplate}',
       );
     }
     return isAPatternMatch; // always true here
@@ -281,31 +292,31 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
     // dMatch = dMatch &&
     //     (this.respCascadePatternEm == null ||
     //         this.respCascadePatternEm == quest.respCascadePatternEm);
-    if (!dMatch) return false; // only continue tests when succeeding
-    print('Cascade matches: $dMatch');
+    // if (!dMatch) return false; // only continue tests when succeeding
+    // print('Cascade matches: $dMatch');
 
     dMatch =
         dMatch && (this.appScreen == null || this.appScreen == quest.appScreen);
     if (!dMatch) return false;
-    print('appScreen matches: $dMatch');
+    // print('appScreen matches: $dMatch');
 
     dMatch = dMatch &&
         (this.screenWidgetArea == null ||
             this.screenWidgetArea == quest.screenWidgetArea);
     if (!dMatch) return false;
-    print('screenWidgetArea matches: $dMatch');
+    // print('screenWidgetArea matches: $dMatch');
 
     dMatch = dMatch &&
         (this.slotInArea == null || this.slotInArea == quest.slotInArea);
     if (!dMatch) return false;
-    print('slotInArea matches: $dMatch');
+    // print('slotInArea matches: $dMatch');
 
     dMatch = dMatch &&
         (this.visRuleTypeForAreaOrSlot == null ||
             this.visRuleTypeForAreaOrSlot == quest.visRuleTypeForAreaOrSlot);
     if (!dMatch) return false;
-    print('visRuleTypeForAreaOrSlot matches: $dMatch');
-    print('isRuleQuestion: ${quest.isRuleDetailQuestion}');
+    // print('visRuleTypeForAreaOrSlot matches: $dMatch');
+    // print('isRuleQuestion: ${quest.isRuleDetailQuestion}');
 
     // dMatch =
     //     dMatch && (this.typ == null || quest.response.runtimeType == this.typ);
@@ -323,25 +334,25 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
   }
 }
 
-class QuestMatcherForRuleOutput<AnsTypOfMatched, AnsTypOfGend>
-    extends QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
-  /*
+// class QuestMatcherForRuleOutput<AnsTypOfMatched, AnsTypOfGend>
+//     extends QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
+//   /*
 
-  */
+//   */
 
-  QuestMatcherForRuleOutput(
-    String matcherDescrip, {
-    required DerQuestGeneratorFactoryClbk<AnsTypOfMatched> deriveQuestGenCallbk,
-    PriorQuestIdMatchPatternTest? questIdPatternMatchTest,
-    VisualRuleType? visRuleTypeForAreaOrSlot,
-    BehaviorRuleType? behRuleTypeForAreaOrSlot,
-  }) : super(
-          matcherDescrip,
-          // respCascadePatternEm: QRespCascadePatternEm.noCascade,
-          derivedQuestGen: DerivedQuestGenerator.noop(),
-          deriveQuestGenCallbk: deriveQuestGenCallbk,
-          questIdPatternMatchTest: questIdPatternMatchTest,
-          visRuleTypeForAreaOrSlot: visRuleTypeForAreaOrSlot,
-          behRuleTypeForAreaOrSlot: behRuleTypeForAreaOrSlot,
-        );
-}
+//   QuestMatcherForRuleOutput(
+//     String matcherDescrip, {
+//     required DerQuestGeneratorFactoryClbk<AnsTypOfMatched> deriveQuestGenCallbk,
+//     PriorQuestIdMatchPatternTest? questIdPatternMatchTest,
+//     VisualRuleType? visRuleTypeForAreaOrSlot,
+//     BehaviorRuleType? behRuleTypeForAreaOrSlot,
+//   }) : super(
+//           matcherDescrip,
+//           // respCascadePatternEm: QRespCascadePatternEm.noCascade,
+//           derivedQuestGen: DerivedQuestGenerator.noop(),
+//           deriveQuestGenCallbk: deriveQuestGenCallbk,
+//           questIdPatternMatchTest: questIdPatternMatchTest,
+//           visRuleTypeForAreaOrSlot: visRuleTypeForAreaOrSlot,
+//           behRuleTypeForAreaOrSlot: behRuleTypeForAreaOrSlot,
+//         );
+// }

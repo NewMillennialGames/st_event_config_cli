@@ -23,6 +23,7 @@ class QuestionCascadeDispatcher {
 
     if (questJustAnswered.isTopLevelEventConfigQuestion) {
       // matching question is about: which screens to config?
+      print('\twhich screens');
       DerivedQuestGenerator<List<AppScreen>> genAreaInScreenSelectQuests =
           _getAreaDerGen();
       List<QuestBase> newQuests = genAreaInScreenSelectQuests
@@ -31,18 +32,23 @@ class QuestionCascadeDispatcher {
       //
     } else if (questJustAnswered.isRegionTargetQuestion) {
       // creat questions to specify slot to target, or rule for selected area
+      print('\tregion target');
       _qMatchColl.appendNewQuestsOrInsertImplicitAnswers(
         questListMgr,
         questJustAnswered,
       );
     } else if (questJustAnswered.isRuleSelectionQuestion) {
       // pick which rule for area or slot
+      print('\trule selection');
     } else if (questJustAnswered.isRulePrepQuestion) {
       // optional; ask how many detail prompts to produce
+      print('\trule prep');
     } else if (questJustAnswered.isVisRuleDetailQuestion) {
       // collect details for visual rule
+      print('\tvisual rule details');
     } else if (questJustAnswered.isBehRuleDetailQuestion) {
       // collect details for a behavioral rule
+      print('\behave rule details');
     }
   }
 
