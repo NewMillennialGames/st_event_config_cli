@@ -13,7 +13,7 @@ void main() {
   /*  
   */
   test(
-    'verify new questions get created based on gen-rules',
+    'verify new questions get created based on gen-rules; matcher removed so now zero',
     () {
       //
       // ask which screens to configure
@@ -46,7 +46,7 @@ void main() {
       _qMatchColl.appendNewQuestsOrInsertImplicitAnswers(
           _questMgr, _questMgr.currentOrLastQuestion);
       expect(_questMgr.priorAnswerCount, 1);
-      expect(_questMgr.pendingQuestionCount, 2);
+      expect(_questMgr.pendingQuestionCount, 0);
 
       for (QuestBase q in _questMgr.pendingQuestions) {
         print(
@@ -97,7 +97,9 @@ void main() {
 
     // next line should create 2 new Questions
     _qMatchColl.appendNewQuestsOrInsertImplicitAnswers(
-        _questMgr, _questMgr.currentOrLastQuestion);
+      _questMgr,
+      _questMgr.currentOrLastQuestion,
+    );
     expect(nxtQu, null, reason: '_questMgr only has 1 Question');
     expect(_questMgr.priorAnswerCount, 1, reason: 'quest was answered');
 
@@ -106,7 +108,7 @@ void main() {
 
     // now check that k_quests_created_in_test Questions were created
     // since there was no 2nd INITIAL Question
-    expect(_questMgr.pendingQuestionCount, 2);
+    expect(_questMgr.pendingQuestionCount, 0);
 
     for (QuestBase q in _questMgr.pendingQuestions) {
       print(

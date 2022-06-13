@@ -55,7 +55,10 @@ class QMatchCollection {
           // curQuestMatcher.addsPendingQuestions ||
           // curQuestMatcher.createsImplicitAnswers
           newGendPendingQuests.addAll(
-              curQuestMatcher.getDerivedAutoGenQuestions(questJustAnswered));
+            curQuestMatcher.getDerivedAutoGenQuestions(
+              questJustAnswered,
+            ),
+          );
         }
         matchCount += 1;
       }
@@ -175,7 +178,7 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
     cascadeTypeOfMatchedQuest == cascadeWorkDoneByRespGendQuests 
     on QTargetIntent
   */
-  final QRespCascadePatternEm? respCascadePatternEm;
+  // final QRespCascadePatternEm? respCascadePatternEm;
   /*
   next 2 cannot be final;  only one is used
   function takes precedence; if deriveQuestGenCallbk passed
@@ -202,7 +205,7 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
   //
   QuestMatcher(
     this.matcherDescrip, {
-    required this.respCascadePatternEm,
+    // required this.respCascadePatternEm,
     required this.derivedQuestGen,
     this.validateUserAnswerAfterPatternMatchIsTrueCallback,
     this.questIdPatternMatchTest,
@@ -275,9 +278,9 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
   bool _doDeeperMatch(QuestBase quest) {
     // compare all properties instead of only QuestionId
     bool dMatch = true;
-    dMatch = dMatch &&
-        (this.respCascadePatternEm == null ||
-            this.respCascadePatternEm == quest.respCascadePatternEm);
+    // dMatch = dMatch &&
+    //     (this.respCascadePatternEm == null ||
+    //         this.respCascadePatternEm == quest.respCascadePatternEm);
     if (!dMatch) return false; // only continue tests when succeeding
     print('Cascade matches: $dMatch');
 
@@ -334,7 +337,7 @@ class QuestMatcherForRuleOutput<AnsTypOfMatched, AnsTypOfGend>
     BehaviorRuleType? behRuleTypeForAreaOrSlot,
   }) : super(
           matcherDescrip,
-          respCascadePatternEm: QRespCascadePatternEm.noCascade,
+          // respCascadePatternEm: QRespCascadePatternEm.noCascade,
           derivedQuestGen: DerivedQuestGenerator.noop(),
           deriveQuestGenCallbk: deriveQuestGenCallbk,
           questIdPatternMatchTest: questIdPatternMatchTest,

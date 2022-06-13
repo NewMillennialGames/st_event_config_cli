@@ -229,9 +229,9 @@ abstract class QuestBase with EquatableMixin {
   bool get isNotForRuleOutput => existsONLYToGenDialogStructure;
   bool get isMultiPart => qPromptCollection.isMultiPart;
 
-  // bool get hasChoices => _currQuest2?.hasChoices ?? false;
   // quantified info
   AppScreen get appScreen => qTargetIntent.appScreen;
+  bool get _areaAlreadySet => qTargetIntent.screenWidgetArea != null;
   ScreenWidgetArea? get screenWidgetArea => qTargetIntent.screenWidgetArea;
   ScreenAreaWidgetSlot? get slotInArea => qTargetIntent.slotInArea;
   //
@@ -246,6 +246,7 @@ abstract class QuestBase with EquatableMixin {
       isRuleSelectionQuestion || isRulePrepQuestion;
 
   int get sortKey => qTargetIntent.targetSortIndex;
+
   // ask 2nd & 3rd position for (sort, group, filter)
 
   // appliesToClientConfiguration == should be exported to file
@@ -327,8 +328,6 @@ class RegionTargetQuest extends QuestBase {
     QPromptCollection qDefCollection, {
     String? questId,
   }) : super(qTargetIntent, qDefCollection, questId: questId) {}
-
-  bool get _areaAlreadySet => qTargetIntent.screenWidgetArea != null;
 
   @override
   QRespCascadePatternEm get respCascadePatternEm => _areaAlreadySet

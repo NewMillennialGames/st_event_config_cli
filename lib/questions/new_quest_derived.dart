@@ -67,6 +67,7 @@ class DerivedQuestGenerator<PriorAnsType> {
   final QTargetIntentUpdateFunc qTargetIntentUpdater;
   final NewQuestIdGenFromPriorAnswer? newQuestIdGenFromPriorQuest;
   final List<PerQuestGenResponsHandlingOpts> perQuestGenOptions;
+  QuestFactorytSignature? newQuestConstructor;
 
   DerivedQuestGenerator(
     this.questPromptTemplate, {
@@ -78,6 +79,7 @@ class DerivedQuestGenerator<PriorAnsType> {
     required this.perQuestGenOptions,
     this.newQuestIdGenFromPriorQuest,
     QTargetIntentUpdateFunc? qTargetIntentUpdaterCallbk,
+    this.newQuestConstructor,
   }) : this.qTargetIntentUpdater = qTargetIntentUpdaterCallbk == null
             ? _ccTargIntent
             : qTargetIntentUpdaterCallbk;
@@ -109,11 +111,13 @@ class DerivedQuestGenerator<PriorAnsType> {
     int newQuestCount = newQuestCountCalculator(answeredQuest);
     if (newQuestCount < 1) return [];
 
+    if (newQuestConstructor == null) {
+      newQuestConstructor = answeredQuest.derivedQuestConstructor;
+    }
+
     List<QuestBase> createdQuests = [];
     for (int newQIdx = 0; newQIdx < newQuestCount; newQIdx++) {
       //
-      QuestFactorytSignature newQuestConstructor =
-          answeredQuest.derivedQuestConstructor;
 
       // values required to build new question:
 
@@ -142,7 +146,7 @@ class DerivedQuestGenerator<PriorAnsType> {
       String newQuestId = newQuestIdGenFromPriorQuest == null
           ? answeredQuest.questId + '-$newQIdx'
           : newQuestIdGenFromPriorQuest!(answeredQuest, newQIdx);
-      QuestBase nxtQuest = newQuestConstructor(
+      QuestBase nxtQuest = newQuestConstructor!(
         targIntent,
         newQuestPrompts,
         questId: newQuestId,
