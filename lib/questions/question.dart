@@ -246,38 +246,6 @@ abstract class QuestBase with EquatableMixin {
       isRuleSelectionQuestion || isRulePrepQuestion;
 
   int get sortKey => qTargetIntent.targetSortIndex;
-
-  // ask 2nd & 3rd position for (sort, group, filter)
-
-  // appliesToClientConfiguration == should be exported to file
-  // bool get appliesToClientConfiguration =>
-  //     this is UiFactoryRuleBase ||
-  //     qPromptCollection.isRuleQuestion ||
-  //     appScreen == AppScreen.eventConfiguration;
-
-  // ARE BELOW needed with new approach??
-
-  // bool get asksWhichScreensToConfig =>
-  //     qTargetIntent.appScreen == AppScreen.eventConfiguration &&
-  //     expectedAnswerType is List<AppScreen>;
-
-  // bool get addsWhichAreaInSelectedScreenQuestions =>
-  //     qTargetIntent.addsWhichAreaInSelectedScreenQuestions &&
-  //     appScreen == AppScreen.eventConfiguration &&
-  //     expectedAnswerType is List<AppScreen>;
-
-  // bool get addsWhichRulesForSelectedAreaQuestions =>
-  //     qTargetIntent.addsWhichRulesForSelectedAreaQuestions &&
-  //     expectedAnswerType is List<ScreenWidgetArea>;
-
-  // bool get addsWhichSlotOfSelectedAreaQuest2s =>
-  //     qTargetIntent.addsWhichSlotOfSelectedAreaQuestions &&
-  //     expectedAnswerType is List<ScreenWidgetArea>;
-
-  // bool get addsWhichRulesForSlotsInArea =>
-  //     qTargetIntent.addsWhichRulesForSlotsInArea &&
-  //     expectedAnswerType is List<ScreenAreaWidgetSlot>;
-
   // impl for equatable
   // but really being used as a search filter
   // to find Quest2s in a specific granularity
@@ -307,7 +275,12 @@ class EventLevelCfgQuest extends QuestBase {
     QPromptCollection qDefCollection, {
     String? questId,
     this.isSelectScreensQuestion = false,
-  }) : super(qTargetIntent, qDefCollection, questId: questId) {}
+  }) : super(qTargetIntent, qDefCollection, questId: questId) {
+    assert(qTargetIntent.appScreen == AppScreen.eventConfiguration,
+        'specific screen should not be set at this level');
+    assert(qTargetIntent.screenWidgetArea == null,
+        'target should not be specified at this level');
+  }
 
   @override
   QRespCascadePatternEm get respCascadePatternEm => isSelectScreensQuestion
@@ -320,14 +293,20 @@ class EventLevelCfgQuest extends QuestBase {
 }
 
 class RegionTargetQuest extends QuestBase {
-  /*  Question offering only one user prompt / question
-    this DOES NOT mean the user cannot select multiple options
+  /* 
   */
   RegionTargetQuest(
     QTargetIntent qTargetIntent,
     QPromptCollection qDefCollection, {
     String? questId,
-  }) : super(qTargetIntent, qDefCollection, questId: questId) {}
+  }) : super(qTargetIntent, qDefCollection, questId: questId) {
+    assert(qTargetIntent.appScreen != AppScreen.eventConfiguration, 'wtf');
+    assert(
+      qTargetIntent.screenWidgetArea == null ||
+          qTargetIntent.slotInArea == null,
+      'target seems already specified; what is this question?',
+    );
+  }
 
   @override
   QRespCascadePatternEm get respCascadePatternEm => _areaAlreadySet
@@ -347,7 +326,10 @@ class RuleSelectQuest extends QuestBase {
     QTargetIntent qTargetIntent,
     QPromptCollection qDefCollection, {
     String? questId,
-  }) : super(qTargetIntent, qDefCollection, questId: questId) {}
+  }) : super(qTargetIntent, qDefCollection, questId: questId) {
+    assert(qTargetIntent.appScreen != AppScreen.eventConfiguration, 'wtf');
+    assert(qTargetIntent.screenWidgetArea != null, 'wtf');
+  }
 
   @override
   QRespCascadePatternEm get respCascadePatternEm =>
@@ -367,11 +349,19 @@ class RulePrepQuest extends QuestBase {
     QPromptCollection qDefCollection, {
     String? questId,
     this.createsBehavioralQuests = false,
-  }) : super(qTargetIntent, qDefCollection, questId: questId) {}
+  }) : super(qTargetIntent, qDefCollection, questId: questId) {
+    assert(qTargetIntent.appScreen != AppScreen.eventConfiguration, 'wtf');
+    assert(qTargetIntent.screenWidgetArea != null, 'wtf');
+    assert(
+      qTargetIntent.visRuleTypeForAreaOrSlot != null ||
+          qTargetIntent.behRuleTypeForAreaOrSlot != null,
+      'wtf',
+    );
+  }
 
   @override
   QRespCascadePatternEm get respCascadePatternEm =>
-      QRespCascadePatternEm.respCreatesWhichSlotOfAreaQuestions;
+      QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions;
 
   @override
   QuestFactorytSignature get derivedQuestConstructor => createsBehavioralQuests
@@ -380,46 +370,65 @@ class RulePrepQuest extends QuestBase {
 }
 
 abstract class UiFactoryRuleBase extends QuestBase {
-  // applies to ui-factory config rules
+  /* these questions form the end of the dialog chain
+    they capture all the details required to fully
+    configure one complete rule for the ui-factory-builder
+    their answers DO NOT generate new questions
+    they simply get converted to JSON for each intended event
+  */
   UiFactoryRuleBase(
     QTargetIntent qTargetIntent,
     QPromptCollection qDefCollection, {
     String? questId,
   }) : super(qTargetIntent, qDefCollection, questId: questId) {
+    assert(qTargetIntent.appScreen != AppScreen.eventConfiguration, 'wtf');
+    assert(qTargetIntent.screenWidgetArea != null, 'wtf');
     assert(
-        qTargetIntent.visRuleTypeForAreaOrSlot != null, 'must have rule type');
+      qTargetIntent.visRuleTypeForAreaOrSlot != null ||
+          qTargetIntent.behRuleTypeForAreaOrSlot != null,
+      'must contain an explicit rule type',
+    );
   }
 
   // getters
   @override
   QRespCascadePatternEm get respCascadePatternEm =>
-      QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions;
+      QRespCascadePatternEm.noCascade;
+
+  @override
+  QuestFactorytSignature get derivedQuestConstructor {
+    throw UnimplementedError(
+      'Rule details questions do not generate new questions; they contain the final rule-config details & cascade stops at this level',
+    );
+  }
 }
 
 class VisualRuleDetailQuest extends UiFactoryRuleBase {
-  /*  applies to ui-factory config rules
+  /*  ui-factory visual rules
   */
   VisualRuleDetailQuest(
     QTargetIntent qTargetIntent,
     QPromptCollection qDefCollection, {
     String? questId,
-  }) : super(qTargetIntent, qDefCollection, questId: questId) {}
-
-  @override
-  QRespCascadePatternEm get respCascadePatternEm =>
-      QRespCascadePatternEm.noCascade;
+  }) : super(qTargetIntent, qDefCollection, questId: questId) {
+    assert(
+      qTargetIntent.visRuleTypeForAreaOrSlot != null,
+      'must have VIS rule type',
+    );
+  }
 }
 
 class BehaveRuleDetailQuest extends UiFactoryRuleBase {
-  /*  applies to ui-factory config rules
+  /*  ui-factory behavioral rules
   */
   BehaveRuleDetailQuest(
     QTargetIntent qTargetIntent,
     QPromptCollection qDefCollection, {
     String? questId,
-  }) : super(qTargetIntent, qDefCollection, questId: questId) {}
-
-  @override
-  QRespCascadePatternEm get respCascadePatternEm =>
-      QRespCascadePatternEm.noCascade;
+  }) : super(qTargetIntent, qDefCollection, questId: questId) {
+    assert(
+      qTargetIntent.behRuleTypeForAreaOrSlot != null,
+      'must have BEH rule type',
+    );
+  }
 }

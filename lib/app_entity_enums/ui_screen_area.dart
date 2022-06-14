@@ -36,9 +36,9 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
         ];
       case ScreenWidgetArea.filterBar:
         return [
-          ScreenAreaWidgetSlot.slot1,
-          ScreenAreaWidgetSlot.slot2,
-          ScreenAreaWidgetSlot.slot3,
+          // ScreenAreaWidgetSlot.slot1,
+          // ScreenAreaWidgetSlot.slot2,
+          // ScreenAreaWidgetSlot.slot3,
         ];
       case ScreenWidgetArea.header:
         return [
@@ -51,9 +51,9 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
         ];
       case ScreenWidgetArea.tableview:
         return [
-          ScreenAreaWidgetSlot.slot1,
-          ScreenAreaWidgetSlot.slot2,
-          ScreenAreaWidgetSlot.slot3,
+          // ScreenAreaWidgetSlot.slot1,
+          // ScreenAreaWidgetSlot.slot2,
+          // ScreenAreaWidgetSlot.slot3,
         ];
       case ScreenWidgetArea.footer:
         return [
