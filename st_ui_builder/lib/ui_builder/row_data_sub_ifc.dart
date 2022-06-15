@@ -9,14 +9,15 @@ abstract class AssetHoldingsSummaryIfc {
   Decimal get positionCost;
 
   Decimal get positionEstValue; // current estimate
+
+  Order? get order;
+
   int get tokensAvail;
 }
 
 extension AssetHoldingsSummaryIfcExt1 on AssetHoldingsSummaryIfc {
   //
-  Decimal get positionGainLoss =>
-      ((positionEstValue - positionCost) / Decimal.fromInt(sharesOwned))
-          .toDecimal();
+  Decimal get positionGainLoss => positionEstValue - positionCost;
 
   // UI values for this
   int get tokensAvail => 0;
