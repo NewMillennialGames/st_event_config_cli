@@ -9,6 +9,9 @@ abstract class AssetHoldingsSummaryIfc {
   Decimal get positionCost;
 
   Decimal get positionEstValue; // current estimate
+
+  Order? get order;
+
   int get tokensAvail;
 }
 
