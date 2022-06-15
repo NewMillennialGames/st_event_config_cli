@@ -90,7 +90,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
         ];
       case VisualRuleType.filterCfg:
         return [
-          Vrq.selectDataFieldName,
+          Vrq.askCountOfSlotsToConfigure,
         ];
       case VisualRuleType.styleOrFormat:
         return [
@@ -105,7 +105,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
     }
   }
 
-  DerivedQuestGenerator derQuestGenFromSubtype(
+  DerivedQuestGenerator derQuestGenFromSubtypeForRuleGen(
     QuestBase prevAnswQuest,
     VisRuleQuestType ruleSubtypeNewQuest,
   ) {
@@ -115,7 +115,16 @@ extension VisualRuleTypeExt1 on VisualRuleType {
       if user answers all those, it will be sufficient data for rule-config
     */
     assert(
-      this.requConfigQuests.contains(ruleSubtypeNewQuest),
+      prevAnswQuest is RuleSelectQuest || prevAnswQuest is RulePrepQuest,
+      'cant produce detail quests from this prevAnswQuest',
+    );
+    assert(
+      prevAnswQuest.visRuleTypeForAreaOrSlot != null,
+      'must have a rule specified',
+    );
+    assert(
+      this.requConfigQuests.isEmpty ||
+          this.requConfigQuests.contains(ruleSubtypeNewQuest),
       'sub type not valid for ruletype',
     );
     String ruleTypeName = this.name;

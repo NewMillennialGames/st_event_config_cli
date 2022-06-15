@@ -29,8 +29,8 @@ class DialogRunner {
         questCascadeDispatcher = questCascadeDisp == null
             ? QuestionCascadeDispatcher(null)
             : questCascadeDisp {
-    List<QuestBase> quests = loadInitialConfigQuestions();
     if (loadDefaultQuest) {
+      List<QuestBase> quests = loadInitialConfigQuestions();
       _qListMgr.appendGeneratedQuestsAndAnswers(quests);
     }
   }

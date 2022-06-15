@@ -48,6 +48,7 @@ abstract class QuestBase with EquatableMixin {
   }) : questId = questId == null ? qTargetIntent.equatableKey : questId;
 
   // constructors with common QuestFactorytSignature
+  // called by a DerivedQuestGenerator<PriorAnsType>
   factory QuestBase.eventLevelCfgQuest(
     QTargetIntent targIntent,
     List<QuestPromptPayload> prompts, {
@@ -65,7 +66,7 @@ abstract class QuestBase with EquatableMixin {
     String? questId,
   }) {
     // implements QuestFactorytSignature
-    // DOES NOT apply to ui-factory config
+    // this style quest DOES NOT apply to ui-factory config
     var qDefCollection = QPromptCollection.fromList(prompts);
     return RegionTargetQuest(targIntent, qDefCollection, questId: questId);
   }
@@ -76,7 +77,7 @@ abstract class QuestBase with EquatableMixin {
     String? questId,
   }) {
     // implements QuestFactorytSignature
-    // DOES NOT apply to ui-factory config
+    // this style quest DOES NOT apply to ui-factory config
     var qDefCollection = QPromptCollection.fromList(prompts);
     return RuleSelectQuest(targIntent, qDefCollection, questId: questId);
   }
@@ -87,8 +88,33 @@ abstract class QuestBase with EquatableMixin {
     String? questId,
   }) {
     // implements QuestFactorytSignature
-    // DOES NOT apply to ui-factory config
+    // this style quest DOES NOT apply to ui-factory config
+    // only creates rule-prep when necessary
     var qDefCollection = QPromptCollection.fromList(prompts);
+    // check whether we need rule-prep or just a vis-rule question
+    if (targIntent.visRuleTypeForAreaOrSlot?.requiresRulePrepQuestion ??
+        false) {
+      return RulePrepQuest(
+        targIntent,
+        qDefCollection,
+        questId: questId,
+      );
+    }
+    if (targIntent.visRuleTypeForAreaOrSlot != null) {
+      return VisualRuleDetailQuest(
+        targIntent,
+        qDefCollection,
+        questId: questId,
+      );
+    }
+    if (targIntent.behRuleTypeForAreaOrSlot != null) {
+      return BehaveRuleDetailQuest(
+        targIntent,
+        qDefCollection,
+        questId: questId,
+      );
+    }
+    print('Error:  QuestBase.rulePrepQuest hit impossible condition');
     return RulePrepQuest(targIntent, qDefCollection, questId: questId);
   }
 
@@ -162,6 +188,18 @@ abstract class QuestBase with EquatableMixin {
       // out of Quest2s
     }
     return nextQpi;
+  }
+
+  DerivedQuestGenerator getDerivedQuestGenFromSubtype(
+    VisRuleQuestType ruleSubtypeNewQuest,
+  ) {
+    //
+    assert(
+      this is RuleSelectQuest || this is RulePrepQuest,
+      'cant produce detail quests from this prevAnswQuest',
+    );
+    return qTargetIntent.visRuleTypeForAreaOrSlot!
+        .derQuestGenFromSubtypeForRuleGen(this, ruleSubtypeNewQuest);
   }
 
   bool containsPromptWhere(bool Function(QuestPromptInstance qpi) promptTest) {
@@ -304,7 +342,7 @@ class RegionTargetQuest extends QuestBase {
     assert(
       qTargetIntent.screenWidgetArea == null ||
           qTargetIntent.slotInArea == null,
-      'target seems already specified; what is this question?',
+      'target seems already specified; what is this question? $questId',
     );
   }
 
@@ -333,7 +371,7 @@ class RuleSelectQuest extends QuestBase {
 
   @override
   QRespCascadePatternEm get respCascadePatternEm =>
-      QRespCascadePatternEm.respCreatesWhichRulesForAreaOrSlotQuestions;
+      QRespCascadePatternEm.respCreatesRulePrepQuestions;
 
   @override
   QuestFactorytSignature get derivedQuestConstructor => QuestBase.rulePrepQuest;
