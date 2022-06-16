@@ -23,7 +23,6 @@ List<QuestMatcher> stDfltMatcherList = [
   */
 
 // #1
-// #2
   QuestMatcher<List<ScreenWidgetArea>, List<VisualRuleType>>(
     '''matches questions in which user specifies screen-areas to config
       build ?s to specify which Visual rules for those selected screen-areas
@@ -34,8 +33,14 @@ List<QuestMatcher> stDfltMatcherList = [
     questIdPatternMatchTest: (qid) =>
         qid.startsWith(QuestionIdStrings.specAreasToConfigOnScreen),
     //
+    validateUserAnswerAfterPatternMatchIsTrueCallback:
+        (QuestBase priorAnsweredQuest) {
+      return (priorAnsweredQuest.mainAnswer as Iterable<ScreenWidgetArea>)
+              .length >
+          0;
+    },
     derivedQuestGen: DerivedQuestGenerator(
-      'Select which rules to add on area {0} of screen {1} (answ will generate rule detail quests)',
+      'Select which rules to add on area {0} of screen {1} (answ will generate rule detail (or prep) quests)',
       newQuestConstructor: QuestBase.ruleSelectQuest,
       newQuestPromptArgGen: (
         QuestBase priorAnsweredQuest,
@@ -93,8 +98,6 @@ List<QuestMatcher> stDfltMatcherList = [
             (priorAnsweredQuest.mainAnswer as Iterable<ScreenWidgetArea>)
                 .toList();
         ScreenWidgetArea currArea = selectedScreenAreas[newQuestIdx];
-        // FIXME:  cascadeType: // of created questions
-        // QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions,
         return priorAnsweredQuest.qTargetIntent.copyWith(
           screenWidgetArea: currArea,
         );
@@ -118,7 +121,7 @@ List<QuestMatcher> stDfltMatcherList = [
     ),
   ),
 
-// #3
+// #2
   QuestMatcher<List<ScreenWidgetArea>, List<ScreenAreaWidgetSlot>>(
     '''matches questions in which user specifies screen-areas to config
       build ?s to specify which SLOTS for those selected screen-areas
@@ -129,6 +132,12 @@ List<QuestMatcher> stDfltMatcherList = [
 
     questIdPatternMatchTest: (qid) =>
         qid.startsWith(QuestionIdStrings.specAreasToConfigOnScreen),
+    validateUserAnswerAfterPatternMatchIsTrueCallback:
+        (QuestBase priorAnsweredQuest) {
+      return (priorAnsweredQuest.mainAnswer as Iterable<ScreenWidgetArea>)
+              .length >
+          0;
+    },
     //
     derivedQuestGen: DerivedQuestGenerator<List<ScreenWidgetArea>>(
       'Select which slots to config within area {0} of screen {1}',
@@ -139,7 +148,6 @@ List<QuestMatcher> stDfltMatcherList = [
       ) {
         List<ScreenWidgetArea> respList =
             (priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>);
-        // .toList();
         var areaName = respList[newQuestIdx].name;
         var screenName = priorAnsweredQuest.appScreen.name;
         return [
@@ -170,7 +178,6 @@ List<QuestMatcher> stDfltMatcherList = [
       ) {
         List<ScreenWidgetArea> selectedScreenAreas =
             (priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>);
-        // .toList();
         return selectedScreenAreas[newQuestIdx]
             .applicableWigetSlots(priorAnsweredQuest.appScreen)
             .map((e) => e.name)
@@ -182,7 +189,6 @@ List<QuestMatcher> stDfltMatcherList = [
       ) {
         List<ScreenWidgetArea> selectedScreenAreas =
             (priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>);
-        // .toList();
         ScreenWidgetArea currArea = selectedScreenAreas[newQuestIdx];
         // FIXME:  cascadeType: // of created questions
         // QRespCascadePatternEm.respCreatesRulePrepQuestions,
@@ -208,7 +214,7 @@ List<QuestMatcher> stDfltMatcherList = [
     ),
   ),
 
-  // #4
+  // #3
   QuestMatcher<List<VisualRuleType>, String>(
     '''matches questions in which user specifies vis-rules to config on screen-areas
       build ?s to specify specific rule config for each rule on those selected screen-areas
@@ -216,8 +222,8 @@ List<QuestMatcher> stDfltMatcherList = [
       the answers to those questions (VisRuleQuestType) will be the
       ui config for THAT RULE, on selected screen area
     ''',
-    questIdPatternMatchTest: (qid) =>
-        qid.startsWith('xxx-niu' + QuestionIdStrings.specRulesForAreaOnScreen),
+    questIdPatternMatchTest: (String qid) => // 'xxx-niu' +
+        qid.startsWith(QuestionIdStrings.specRulesForAreaOnScreen),
     //
     derivedQuestGen: DerivedQuestGenerator(
       'Config rule {0} within area {1} of screen {2}',

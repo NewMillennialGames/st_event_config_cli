@@ -187,10 +187,13 @@ DerivedQuestGenerator<List<AppScreen>>
       int newQuIdx,
     ) {
       /* each new question about area on screen should
-          have an ID that lets the next QM identify it to produce new Q's
+          have an ID that lets the next QuestMatcher identify it to produce new Q's
+          specAreasToConfigOnScreen is important so appropriate matchers fire
+          on each of these answers
         */
       var selectedAppScreens = priorAnsweredQuest.mainAnswer as List<AppScreen>;
       String scrName = selectedAppScreens[newQuIdx].name;
+
       return QuestionIdStrings.specAreasToConfigOnScreen + '-' + scrName;
     },
     answerChoiceGenerator: (

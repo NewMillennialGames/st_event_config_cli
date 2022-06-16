@@ -144,7 +144,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           },
           perQuestGenOptions: [
             PerQuestGenResponsHandlingOpts<int>(
-              newRespCastFunc: (QuestBase qb, ans) {
+              newRespCastFunc: (QuestBase qb, String ans) {
                 return ans as int;
               },
               visRuleType: this,
@@ -175,7 +175,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           },
           perQuestGenOptions: [
             PerQuestGenResponsHandlingOpts<int>(
-              newRespCastFunc: (QuestBase qb, ans) {
+              newRespCastFunc: (QuestBase qb, String ans) {
                 return ans as int;
               },
               visRuleType: this,
