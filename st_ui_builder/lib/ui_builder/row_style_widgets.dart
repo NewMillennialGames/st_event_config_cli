@@ -566,9 +566,7 @@ class TeamVsFieldRowMktView extends StBaseTvRow
           shouldShrinkParticipantImage,
           isTwoAssetRow: this is ShowsTwoAssets,
         ),
-        const SizedBox(
-          width: 12,
-        ),
+        kSpacerSm,
         SizedBox(
           width: size.width * .52,
           child: Column(
