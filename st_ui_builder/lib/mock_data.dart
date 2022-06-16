@@ -98,11 +98,10 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
       AssetStateUpdates.fromAsset(Asset()); // throw UnimplementedError();
 
   @override
-  AssetHoldingsSummaryIfc get assetHoldingsSummary =>
-      throw UnimplementedError();
+  AssetHoldingsSummaryIfc get assetHoldingsSummary => MockAssetHoldings();
 
   @override
-  UserEventSummaryIfc get userEventSummary => throw UnimplementedError();
+  UserEventSummaryIfc get userEventSummary => MockEventSummary();
 
   // should be on the game
   String get roundName => throw UnimplementedError();
@@ -151,3 +150,37 @@ List<MockAsset> _fakeData = [
   // MockAsset('Ive', 'Reg3', 'Jeeps', '14'),
   // MockAsset('Jake', 'Reg3', 'Ford', '15'),
 ];
+
+class MockAssetHoldings implements AssetHoldingsSummaryIfc {
+  @override
+  Decimal get positionCost => Decimal.fromInt(20);
+
+  @override
+  Decimal get positionEstValue => Decimal.fromInt(30);
+
+  @override
+  int get sharesOwned => 10;
+
+  @override
+  int get tokensAvail => 200;
+}
+
+class MockEventSummary implements UserEventSummaryIfc {
+  @override
+  int get currentPortfolioValue => 2000;
+
+  @override
+  String get eventKey => '';
+
+  @override
+  String get key => '';
+
+  @override
+  int get positionCount => 2;
+
+  @override
+  int get unrealizedGainLoss => 4;
+
+  @override
+  String get userID => '';
+}
