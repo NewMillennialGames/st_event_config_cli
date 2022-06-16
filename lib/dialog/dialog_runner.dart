@@ -110,7 +110,7 @@ class DialogRunner {
     return true;
   }
 
-  void gentNewQuestionsFromUserResponse(QuestBase questJustAnswered) {
+  void generateNewQuestionsFromUserResponse(QuestBase questJustAnswered) {
     // logic to add new Questions based on user response
     questCascadeDispatcher.appendNewQuestsOrInsertImplicitAnswers(
       _qListMgr,

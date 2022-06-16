@@ -159,7 +159,7 @@ Map<String, dynamic> _$CfgForAreaAndNestedSlotsToJson(
     };
 
 const _$VisualRuleTypeEnumMap = {
-  VisualRuleType.topDialogStruct: 'topDialogStruct',
+  VisualRuleType.generalDialogFlow: 'topDialogStruct',
   VisualRuleType.sortCfg: 'sortCfg',
   VisualRuleType.groupCfg: 'groupCfg',
   VisualRuleType.filterCfg: 'filterCfg',

@@ -78,7 +78,7 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
     VisualRuleType rt =
         VisualRuleType.values.where((e) => e.name == json['ruleType']).first;
     switch (rt) {
-      case VisualRuleType.topDialogStruct:
+      case VisualRuleType.generalDialogFlow:
         // never should run
         assert(false, 'whoops?');
         return TvFilterCfg.fromJson(json);

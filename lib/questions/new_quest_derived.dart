@@ -102,7 +102,7 @@ class DerivedQuestGenerator<PriorAnsType> {
 
   List<QuestBase> getDerivedAutoGenQuestions(
     QuestBase answeredQuest,
-    QuestMatcher? matcher,
+    // QuestMatcher? matcher,
   ) {
     /* use existing answered Question
     plus logic defined in both this and PerQuestGenOptions

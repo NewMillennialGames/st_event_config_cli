@@ -35,7 +35,7 @@ class WebQuest2Presenter implements QuestionPresenterIfc {
     questDispatcher.add(quest);
 
     // user answer might generate new questions
-    dialoger.gentNewQuestionsFromUserResponse(quest);
+    dialoger.generateNewQuestionsFromUserResponse(quest);
   }
 
   void _receiveAnswer(String answer) {

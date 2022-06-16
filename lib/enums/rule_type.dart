@@ -7,7 +7,7 @@ const List<VisualRuleType> _unconfigurableFutureRules = [
 
 @JsonEnum()
 enum VisualRuleType {
-  topDialogStruct, // not a real rule at all.  Quest2 at higher level
+  generalDialogFlow, // not a real rule at all.  Quest2 at higher level
   sortCfg, // global or within groups
   groupCfg, // how to group rows
   filterCfg, // to create filter menus
@@ -31,7 +31,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
     // return special types to contain answers
     // instance of the class that parses user response
     switch (this) {
-      case VisualRuleType.topDialogStruct:
+      case VisualRuleType.generalDialogFlow:
         return TvSortCfg();
       case VisualRuleType.sortCfg:
         return TvSortCfg();
@@ -54,7 +54,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
     //
     String nm = this.name;
     switch (this) {
-      case VisualRuleType.topDialogStruct:
+      case VisualRuleType.generalDialogFlow:
         return nm + ' (configs cfg dialog)';
       case VisualRuleType.sortCfg:
         return nm + ' (config row order)';
@@ -76,7 +76,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
     // its helpful that only one config type is returned
     // DerivedQuestGenerator could have problems if this changes
     switch (this) {
-      case VisualRuleType.topDialogStruct:
+      case VisualRuleType.generalDialogFlow:
         return [];
       case VisualRuleType.sortCfg:
         return [
@@ -85,8 +85,6 @@ extension VisualRuleTypeExt1 on VisualRuleType {
       case VisualRuleType.groupCfg:
         return [
           Vrq.askCountOfSlotsToConfigure,
-          // Vrq.selectDataFieldName,
-          // Vrq.specifySortAscending
         ];
       case VisualRuleType.filterCfg:
         return [

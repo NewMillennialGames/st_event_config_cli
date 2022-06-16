@@ -138,10 +138,13 @@ class QuestListMgr {
     or else we might re-ask prior (already answered) Questions
 
     this is an ASCENDING sort; larger # questions get asked last
-    */
-    if (_currQuestionIdx < 7) return;
 
-    print('running sortPendingQuest2s');
+    // disabled sorting while in test mode
+    */
+    if (!CfgConst.inTestMode && _currQuestionIdx < CfgConst.questCountB4Sorting)
+      return;
+
+    // print('running sortPendingQuestions');
 
     List<QuestBase> unaskedQuests =
         _pendingQuestions.sublist(_currQuestionIdx + 1);

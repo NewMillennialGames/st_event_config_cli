@@ -20,7 +20,7 @@ class CliQuestionPresenter implements QuestionPresenterIfc {
       promptInst = quest.getNextUserPromptIfExists();
     }
     // user answer might generate new questions
-    dialoger.gentNewQuestionsFromUserResponse(quest);
+    dialoger.generateNewQuestionsFromUserResponse(quest);
   }
 
   void _askAndStoreAnswer(

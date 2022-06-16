@@ -50,16 +50,13 @@ class QMatchCollection {
     List<QuestBase> newGendPendingQuests = []; // generated questions
     for (QuestMatcher curQuestMatcher in _matcherList) {
       if (curQuestMatcher.doesMatch(questJustAnswered)) {
+        // remember matcher and get generated questions from it
         _foundQmatchers.add(curQuestMatcher);
-        if (true) {
-          // curQuestMatcher.addsPendingQuestions ||
-          // curQuestMatcher.createsImplicitAnswers
-          newGendPendingQuests.addAll(
-            curQuestMatcher.getDerivedAutoGenQuestions(
-              questJustAnswered,
-            ),
-          );
-        }
+        newGendPendingQuests.addAll(
+          curQuestMatcher.getDerivedAutoGenQuestions(
+            questJustAnswered,
+          ),
+        );
         matchCount += 1;
       }
     }
@@ -208,7 +205,7 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
 
   List<QuestBase> getDerivedAutoGenQuestions(QuestBase answeredQuest) {
     DerivedQuestGenerator<AnsTypOfMatched> dqg = activeDqg(answeredQuest);
-    return dqg.getDerivedAutoGenQuestions(answeredQuest, this);
+    return dqg.getDerivedAutoGenQuestions(answeredQuest);
   }
 
   AnsTypOfMatched getTypedAnswer(QuestBase priorAnsweredQuest) {
