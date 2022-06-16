@@ -331,9 +331,10 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
     String sharesOwned = assetHoldingsSummary.sharesOwnedStr;
     String positionValue = assetHoldingsSummary.positionEstValueStr;
     String positionGainLoss = assetHoldingsSummary.positionGainLossStr;
-    Color gainLossColor = assetHoldingsSummary.positionGainLoss >= Decimal.zero
-        ? StColors.green
-        : StColors.errorText;
+    bool isGainLossPositive =
+        assetHoldingsSummary.positionGainLoss >= Decimal.zero;
+    Color gainLossColor =
+        isGainLossPositive ? StColors.green : StColors.errorText;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -376,9 +377,11 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(sharesOwned + ' shares',
-                                style: StTextStyles.p1
-                                    .copyWith(color: StColors.coolGray)),
+                            Text(
+                              '$sharesOwned shares',
+                              style: StTextStyles.p1
+                                  .copyWith(color: StColors.coolGray),
+                            ),
                             kVerticalSpacerSm,
                             RichText(
                               text: TextSpan(
@@ -431,10 +434,11 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
                                     .copyWith(color: StColors.coolGray)),
                             kVerticalSpacerSm,
                             Text(
-                              positionGainLoss.replaceAllMapped(
-                                  RegexFunctions()
-                                      .formatNumberStringsWithCommas,
-                                  RegexFunctions().mathFunc),
+                              (isGainLossPositive ? "+" : "") +
+                                  positionGainLoss.replaceAllMapped(
+                                      RegexFunctions()
+                                          .formatNumberStringsWithCommas,
+                                      RegexFunctions().mathFunc),
                               style: StTextStyles.p1
                                   .copyWith(color: gainLossColor),
                             ),
