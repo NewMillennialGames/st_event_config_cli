@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:st_ui_builder/st_ui_builder.dart';
 
 //
 import 'package:stclient/stclient.dart';
@@ -53,16 +54,16 @@ void main() async {
   await readExampleEventConfig();
   runApp(
     ProviderScope(
+      overrides: [
+        currEventProvider.overrideWithValue(Event()),
+        tradeFlowProvider.overrideWithValue(TradeFlowForDemo()),
+      ],
       child: ScreenUtilInit(
         designSize: const Size(390, 844),
         builder: (BuildContext context, Widget? child) {
           return const Scoretrader();
         },
       ),
-      overrides: [
-        currEventProvider.overrideWithValue(Event()),
-        tradeFlowProvider.overrideWithValue(TradeFlowForDemo()),
-      ],
     ),
   );
 }
@@ -106,7 +107,6 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
 
   //
   late GroupedTableDataMgr tvMgr;
-
   void _redrawCallback() {
     //
     // setState(() {});
@@ -142,7 +142,6 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
     // and wrapped in Natalia's wrapper class
     // now use this data to construct the TableviewDataRowTuple
     // argument needed for the RowStyle constructors
-
     // get TableView configurator from the UI Factory
     tvMgr = stBldr.groupedTvConfigForScreen(
       AppScreen.marketView,
@@ -173,8 +172,7 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
           'Market View w grouped-list & opt filter-bar',
         ),
       ),
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
+      body: ListView(
         children: [
           if (hasColumnFilters)
             tvMgr.columnFilterBarWidget(
@@ -183,20 +181,93 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
           Container(
             height: 30,
           ),
-          Container(
-            height: hasColumnFilters ? 500.h : 740.h,
-            padding: EdgeInsets.fromLTRB(20.w, 0, 20.w, 10.h),
-            child: GroupedListView<TableviewDataRowTuple, GroupHeaderData>(
-              elements: tvMgr.listData,
-              groupBy: tvMgr.groupBy,
-              groupHeaderBuilder: tvMgr.groupHeaderBuilder,
-              indexedItemBuilder: tvMgr.indexedItemBuilder,
-              sort: true,
-              useStickyGroupSeparators: true,
-              // next line should not be needed??
-              // groupComparator: tvMgr.groupComparator,
-            ),
+          DemoRow(
+            label: "AssetVsAsset Row Market View",
+            row: AssetVsAssetRowMktView(assetRows.first),
           ),
+          DemoRow(
+            label: "AssetVsAsset Row Ranked Market View",
+            row: AssetVsAssetRowRankedMktView(assetRows.first),
+          ),
+          DemoRow(
+            label: "DriverVsField Row Market View",
+            row: DriverVsFieldRowMktView(assetRows.first),
+          ),
+          DemoRow(
+            label: "TeamVsField Row Market View",
+            row: TeamVsFieldRowMktView(assetRows.first),
+          ),
+          DemoRow(
+            label: "TeamVsField Ranked Row Market View",
+            row: TeamVsFieldRowRankedMktView(assetRows.first),
+          ),
+          DemoRow(
+            label: "TeamplayerVsField Row Market View",
+            row: TeamPlayerVsFieldRowMktView(assetRows.first),
+          ),
+          DemoRow(
+            label: "PlayerVsField Ranked Row Market View",
+            row: PlayerVsFieldRankedRowMktView(assetRows.first),
+          ),
+          DemoRow(
+            label: "AssetVsAsset Row Market Research View",
+            row: AssetVsAssetRowMktResearchView(assetRows.first),
+          ),
+          DemoRow(
+            label: "TeamVsField Row Market Reasearch View",
+            row: TeamVsFieldRowMktResearchView(assetRows.first),
+          ),
+
+          DemoRow(
+            label: "AssetVsAsset Row Portfolio View",
+            row: AssetVsAssetRowPortfolioView(assetRows.first),
+          ),
+          DemoRow(
+            label: "DriverVsField Row Portfolio View",
+            row: DriverVsFieldRowPortfolio(assetRows.first),
+          ),
+          DemoRow(
+            label: "TeamPlayerVsField Row Portfolio View",
+            row: TeamPlayerVsFieldRowPortfolio(assetRows.first),
+          ),
+          DemoRow(
+            label: "AssetVsAsset Row Portfolio History View",
+            row: AssetVsAssetRowPortfolioHistory(assetRows.first),
+          ),
+          DemoRow(
+            label: "DriverVsField Row Portfolio History View",
+            row: DriverVsFieldRowPortfolioHistory(assetRows.first),
+          ),
+          DemoRow(
+            label: "TeamPlayerVsField Row Portfolio History View",
+            row: TeamPlayerVsFieldRowPortfolioHistory(assetRows.first),
+          ),
+          DemoRow(
+            label: "AssetVsAsset Row Leaderboard View",
+            row: AssetVsAssetRowLeaderBoardView(assetRows.first),
+          ),
+          DemoRow(
+            label: "DriverVsField Row Leaderboard View",
+            row: DriverVsFieldRowLeaderBoardView(assetRows.first),
+          ),
+          DemoRow(
+            label: "TeamplayerVsField Row Leaderboard View",
+            row: TeamPlayerVsFieldLeaderBoardView(assetRows.first),
+          ),
+          // Container(
+          //   height: hasColumnFilters ? 500.h : 740.h,
+          //   padding: EdgeInsets.fromLTRB(20.w, 0, 20.w, 10.h),
+          //   child: GroupedListView<TableviewDataRowTuple, GroupHeaderData>(
+          //     elements: tvMgr.listData,
+          //     groupBy: tvMgr.groupBy,
+          //     groupHeaderBuilder: tvMgr.groupHeaderBuilder,
+          //     indexedItemBuilder: tvMgr.indexedItemBuilder,
+          //     sort: true,
+          //     useStickyGroupSeparators: true,
+          // next line should not be needed??
+          // groupComparator: tvMgr.groupComparator,
+          //   ),
+          // ),
         ],
       ),
       // floatingActionButton: FloatingActionButton(onPressed: _updateGameStatus),
@@ -257,6 +328,36 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
   String _getRandRegion() {
     int idx = Random().nextInt(6);
     return rounds[idx];
+  }
+}
+
+class DemoRow extends StatelessWidget {
+  final String label;
+  final Widget row;
+  const DemoRow({
+    required this.label,
+    required this.row,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          label,
+          textAlign: TextAlign.center,
+          style: StTextStyles.h4.copyWith(color: Colors.black),
+        ),
+        SizedBox(
+          height: 15.h,
+        ),
+        row,
+        SizedBox(
+          height: 15.h,
+        ),
+      ],
+    );
   }
 }
 
