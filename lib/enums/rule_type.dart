@@ -137,7 +137,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
               ['0', '1', '2', '3'],
           newQuestIdGenFromPriorQuest: (prevQuest, newQuestIdx) =>
               newQuestNamePrefix + '$newQuestIdx',
-          qTargetIntentUpdaterCallbk: (QuestBase qb, int __) {
+          deriveTargetFromPriorRespCallbk: (QuestBase qb, int __) {
             //
             // FIXME:  cascadeType: QRespCascadePatternEm.noCascade
             return qb.qTargetIntent.copyWith();
@@ -168,7 +168,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
               DbTableFieldName.values.map((e) => e.name).toList(),
           newQuestIdGenFromPriorQuest: (prevQuest, newQuestIdx) =>
               newQuestNamePrefix + '$newQuestIdx',
-          qTargetIntentUpdaterCallbk: (QuestBase qb, int __) {
+          deriveTargetFromPriorRespCallbk: (QuestBase qb, int __) {
             //
             // FIXME:  cascadeType: QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions
             return qb.qTargetIntent.copyWith();

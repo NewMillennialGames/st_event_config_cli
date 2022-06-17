@@ -90,7 +90,7 @@ List<QuestMatcher> stDfltMatcherList = [
             .map((e) => e.name)
             .toList();
       }),
-      qTargetIntentUpdaterCallbk: (
+      deriveTargetFromPriorRespCallbk: (
         QuestBase priorAnsweredQuest,
         int newQuestIdx,
       ) {
@@ -183,7 +183,7 @@ List<QuestMatcher> stDfltMatcherList = [
             .map((e) => e.name)
             .toList();
       },
-      qTargetIntentUpdaterCallbk: (
+      deriveTargetFromPriorRespCallbk: (
         QuestBase priorAnsweredQuest,
         int newQuestIdx,
       ) {
@@ -282,7 +282,7 @@ List<QuestMatcher> stDfltMatcherList = [
               chLst..addAll(qt.answPromptChoices),
         );
       },
-      qTargetIntentUpdaterCallbk: (
+      deriveTargetFromPriorRespCallbk: (
         QuestBase priorAnsweredQuest,
         int newQuestIdx,
       ) {
@@ -358,7 +358,7 @@ List<QuestMatcher> stDfltMatcherList = [
         // ScreenWidgetArea curArea = priorAnsweredQuest.screenWidgetArea!;
         // return curSlot.possibleConfigRules(curArea).map((e) => e.name).toList();
       },
-      qTargetIntentUpdaterCallbk: (
+      deriveTargetFromPriorRespCallbk: (
         QuestBase priorAnsweredQuest,
         int newQuestIdx,
       ) {
@@ -540,7 +540,7 @@ List<QuestMatcher> stDfltMatcherList = [
         // ScreenWidgetArea curArea = priorAnsweredQuest.screenWidgetArea!;
         return curRule.requConfigQuests.map((e) => e.name).toList();
       },
-      qTargetIntentUpdaterCallbk: (
+      deriveTargetFromPriorRespCallbk: (
         QuestBase priorAnsweredQuest,
         int newQuestIdx,
       ) {
@@ -626,7 +626,7 @@ List<QuestMatcher> stDfltMatcherList = [
       ) {
         return DbTableFieldName.values.map((e) => e.name).toList();
       },
-      qTargetIntentUpdaterCallbk: (
+      deriveTargetFromPriorRespCallbk: (
         QuestBase priorAnsweredQuest,
         int idx,
       ) {

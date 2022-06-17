@@ -16,8 +16,11 @@ enum ScreenWidgetArea {
 
 extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
   //
-  String includeStr(AppScreen section) =>
-      'On Section ${section.name}, do you want to configure the ${this.name}?';
+  // String includeStr(AppScreen section) =>
+  //     'On Section ${section.name}, do you want to configure the ${this.name}?';
+
+  bool get hasNoSlots => [ScreenWidgetArea.tableview].contains(this);
+  bool get requiresPrepQuestion => [ScreenWidgetArea.filterBar].contains(this);
 
   // intentionally checking rules here (in addition to slots)
   // an area can be configurable EVEN IF it has ZERO
@@ -116,8 +119,8 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
     this
         .applicableRuleTypes(screen)
         .forEach((rt) => idxToModifiableRuleTyps[++tempIdx] = rt);
-    idxToModifiableRuleTyps
-        .removeWhere((idx, uic) => !providedIdxs.contains(idx));
+    idxToModifiableRuleTyps.removeWhere(
+        (int idx, VisualRuleType uic) => !providedIdxs.contains(idx));
     return idxToModifiableRuleTyps.values.toList();
   }
 }

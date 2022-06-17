@@ -208,7 +208,7 @@ DerivedQuestGenerator<List<AppScreen>>
           .map((swa) => swa.name)
           .toList();
     },
-    qTargetIntentUpdaterCallbk: (
+    deriveTargetFromPriorRespCallbk: (
       QuestBase priorAnsweredQuest,
       int newQuIdx,
     ) {
@@ -310,7 +310,7 @@ DerivedQuestGenerator<List<ScreenWidgetArea>>
           .map((e) => e.name)
           .toList();
     }),
-    qTargetIntentUpdaterCallbk: (
+    deriveTargetFromPriorRespCallbk: (
       QuestBase priorAnsweredQuest,
       int newQuestIdx,
     ) {
@@ -395,7 +395,7 @@ DerivedQuestGenerator<List<ScreenAreaWidgetSlot>>
           .map((e) => e.name)
           .toList();
     }),
-    qTargetIntentUpdaterCallbk: (
+    deriveTargetFromPriorRespCallbk: (
       QuestBase priorAnsweredQuest,
       int newQuestIdx,
     ) {

@@ -16,6 +16,8 @@ class PerQuestGenResponsHandlingOpts<AnsType> {
   /*
   describes logic and rules for a single auto-generated Question
   each instance lives inside DerivedQuestGenerator.perQuestGenOptions
+
+  perhaps I should name it:  PerPrompt ....??
   */
 
   final CastStrToAnswTypCallback<AnsType> newRespCastFunc;
@@ -60,7 +62,6 @@ class DerivedQuestGenerator<PriorAnsType> {
 
   final String questPromptTemplate;
   final DerivedGenBehaviorOnMatchEnum genBehaviorOfDerivedQuests;
-  // final CastPriorAnswToType<PriorAnsType>? castPriorAnswToType;
   final NewQuestCount newQuestCountCalculator;
   final NewQuestArgGen newQuestPromptArgGen;
   final ChoiceListFromPriorAnswer answerChoiceGenerator;
@@ -78,11 +79,11 @@ class DerivedQuestGenerator<PriorAnsType> {
     required this.answerChoiceGenerator,
     required this.perQuestGenOptions,
     this.newQuestIdGenFromPriorQuest,
-    QTargetIntentUpdateFunc? qTargetIntentUpdaterCallbk,
+    QTargetIntentUpdateFunc? deriveTargetFromPriorRespCallbk,
     this.newQuestConstructor,
-  }) : this.qTargetIntentUpdater = qTargetIntentUpdaterCallbk == null
+  }) : this.qTargetIntentUpdater = deriveTargetFromPriorRespCallbk == null
             ? _ccTargIntent
-            : qTargetIntentUpdaterCallbk;
+            : deriveTargetFromPriorRespCallbk;
 
   static QTargetIntent _ccTargIntent(QuestBase qb, int idx) =>
       qb.qTargetIntent.copyWith();
@@ -111,9 +112,14 @@ class DerivedQuestGenerator<PriorAnsType> {
     int newQuestCount = newQuestCountCalculator(answeredQuest);
     if (newQuestCount < 1) return [];
 
-    if (newQuestConstructor == null) {
+    bool newQuConstrWasNull = newQuestConstructor == null;
+    if (newQuConstrWasNull) {
       newQuestConstructor = answeredQuest.derivedQuestConstructor;
     }
+
+    // TODO:  future
+    bool newQuestContainsMultiPrompts = this.perQuestGenOptions.length > 1;
+    int newQuestChoiceCount = _answerChoiceCount(answeredQuest);
 
     List<QuestBase> createdQuests = [];
     for (int newQIdx = 0; newQIdx < newQuestCount; newQIdx++) {
@@ -153,6 +159,11 @@ class DerivedQuestGenerator<PriorAnsType> {
       );
       createdQuests.add(nxtQuest);
     }
+
+    if (newQuConstrWasNull) {
+      // set back to null for the next time this instance is used
+      newQuestConstructor = null;
+    }
     return createdQuests;
   }
 
@@ -162,20 +173,11 @@ class DerivedQuestGenerator<PriorAnsType> {
   bool get createsImplicitAnswers =>
       genBehaviorOfDerivedQuests.createsImplicitAnswers; // || hasOnlyOneChoice;
 
-  bool hasOnlyOneChoice(QuestBase qb) =>
-      answerChoiceGenerator(qb, 0).length == 1;
-}
+  int _answerChoiceCount(QuestBase priorAnsweredQuest) {
+    return answerChoiceGenerator(priorAnsweredQuest, 0).length;
+  }
 
-// if (genOptionsAtIdx.genAsRuleQuestion) {
-//   nxtQuest = newQuestConstructor(targIntent, []);
-//   // nxtQuest = QuestBase.makeFromExisting(
-//   //   answeredQuest,
-//   //   newQuestStr,
-//   //   genOptionsAtIdx,
-//   // );
-// } else {
-//   // nxtQuest = answeredQuest.fromExisting(
-//   //   newQuestStr,
-//   //   genOptionsAtIdx,
-//   // );
-// }
+  bool hasOnlyOneChoice(QuestBase qb) => _answerChoiceCount(qb) == 1;
+
+  bool hasZeroValidChoices(QuestBase qb) => _answerChoiceCount(qb) < 1;
+}
