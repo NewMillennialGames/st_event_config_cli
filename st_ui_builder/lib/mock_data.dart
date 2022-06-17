@@ -163,6 +163,9 @@ class MockAssetHoldings implements AssetHoldingsSummaryIfc {
 
   @override
   int get tokensAvail => 200;
+
+  @override
+  Order? get order => null;
 }
 
 class MockEventSummary implements UserEventSummaryIfc {

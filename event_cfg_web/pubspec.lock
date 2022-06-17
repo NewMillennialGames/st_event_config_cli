@@ -95,13 +95,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  grouped_list:
-    dependency: transitive
-    description:
-      name: grouped_list
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.2.0"
   intl:
     dependency: "direct main"
     description:
@@ -183,7 +176,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "1.0.2"
+    version: "1.0.12"
   stack_trace:
     dependency: transitive
     description:
