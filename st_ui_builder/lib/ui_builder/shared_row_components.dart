@@ -332,7 +332,7 @@ class AssetVsAssetHalfRow extends StatelessWidget {
         const SizedBox(
           width: 4,
         ),
-        TradeButton(competitor.assetStateUpdates, gameDetails.gameStatus),
+        TradeButton(competitor.assetStateUpdates, competitor.gameStatus),
       ],
     );
   }
@@ -468,7 +468,7 @@ class RowControl extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(right: 16),
             child: TradeButton(
-                competitor.assetStateUpdates, gameDetails.gameStatus),
+                competitor.assetStateUpdates, competitor.gameStatus),
           ),
         ],
       ),

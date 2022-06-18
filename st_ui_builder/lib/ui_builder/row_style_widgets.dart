@@ -363,7 +363,7 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
                     ),
                     if (showHoldingsValue)
                       // this is a portfolio positions row; show trade
-                      TradeButton(comp1.assetStateUpdates, agd.gameStatus),
+                      TradeButton(comp1.assetStateUpdates, comp1.gameStatus),
                   ],
                 ),
                 kVerticalSpacerSm,
@@ -640,7 +640,7 @@ class TeamVsFieldRowMktView extends StBaseTvRow
             ],
           ),
         ),
-        TradeButton(comp1.assetStateUpdates, agd.gameStatus),
+        TradeButton(comp1.assetStateUpdates, comp1.gameStatus),
       ],
     );
   }
