@@ -101,14 +101,14 @@ class TradeButton extends ConsumerWidget {
       alignment: Alignment.center,
       child: (assetState.isTradable)
           ? TextButton(
+              onPressed: () => tf.beginTradeFlow(AssetKey(assetState.assetKey)),
+              style: StButtonStyles.tradeButtonCanTrade,
               child: Text(
                 StStrings.tradeUc,
                 // tf.labelForState(status),
                 style: StTextStyles.h6,
                 textAlign: TextAlign.center,
               ),
-              onPressed: () => tf.beginTradeFlow(AssetKey(assetState.assetKey)),
-              style: StButtonStyles.tradeButtonCanTrade,
             )
           : Text(
               tf.labelForGameState(competitionStatus),
@@ -332,7 +332,7 @@ class AssetVsAssetHalfRow extends StatelessWidget {
         const SizedBox(
           width: 4,
         ),
-        TradeButton(competitor.assetStateUpdates, gameDetails.gameStatus),
+        TradeButton(competitor.assetStateUpdates, competitor.gameStatus),
       ],
     );
   }
@@ -468,7 +468,7 @@ class RowControl extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(right: 16),
             child: TradeButton(
-                competitor.assetStateUpdates, gameDetails.gameStatus),
+                competitor.assetStateUpdates, competitor.gameStatus),
           ),
         ],
       ),
