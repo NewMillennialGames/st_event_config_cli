@@ -7,9 +7,14 @@ const List<VisualRuleType> _unconfigurableFutureRules = [
 
 @JsonEnum()
 enum VisualRuleType {
-  generalDialogFlow, // not a real rule at all.  Quest2 at higher level
-  sortCfg, // global or within groups
-  groupCfg, // how to group rows
+  /*  generalDialogFlow is a placeholder value
+      its not a real rule at all
+      Dont show it
+      used for Questions at Event level
+  */
+  generalDialogFlow,
+  sortCfg, // applies to area or filter-menu
+  groupCfg, // how to group rows in listview; applies to listview area only
   filterCfg, // to create filter menus
   styleOrFormat, // select rowStyle for ListView
   showOrHide, // control visibility
@@ -19,6 +24,7 @@ enum VisualRuleType {
 extension VisualRuleTypeExt1 on VisualRuleType {
   //
 
+  bool get requiresPrepQuestion => requiresRulePrepQuestion;
   bool get requiresRulePrepQuestion => [
         // hasVariableSubRuleCount
         // these rules can configure 0-3 slots
@@ -32,7 +38,8 @@ extension VisualRuleTypeExt1 on VisualRuleType {
     // instance of the class that parses user response
     switch (this) {
       case VisualRuleType.generalDialogFlow:
-        return TvSortCfg();
+        throw UnimplementedError('not a real rule; no cfg container exists');
+      // return TvSortCfg();
       case VisualRuleType.sortCfg:
         return TvSortCfg();
       case VisualRuleType.groupCfg:

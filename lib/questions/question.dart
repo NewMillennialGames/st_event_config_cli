@@ -226,14 +226,21 @@ abstract class QuestBase with EquatableMixin {
   }
 
   // getters
+  bool get requiresVisRulePrepQuestion =>
+      qTargetIntent.requiresVisRulePrepQuestion;
+  bool get requiresBehRulePrepQuestion =>
+      qTargetIntent.requiresBehRulePrepQuestion;
+
   bool get doesCreateDerivedQuests =>
       respCascadePatternEm != QRespCascadePatternEm.noCascade;
-  // derivedQuestConstructor overridden in subclasses
-  QuestFactorytSignature get derivedQuestConstructor =>
-      QuestBase.eventLevelCfgQuest;
+
   // respCascadePatternEm overridden in subclasses
   QRespCascadePatternEm get respCascadePatternEm =>
       QRespCascadePatternEm.noCascade;
+
+  // derivedQuestConstructor overridden in subclasses
+  QuestFactorytSignature get derivedQuestConstructor =>
+      QuestBase.eventLevelCfgQuest;
 
   String get targetPath => qTargetIntent.targetPath;
   bool get isFullyAnswered => qPromptCollection.allPartsHaveAnswers;

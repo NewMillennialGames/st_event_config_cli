@@ -10,7 +10,7 @@ enum ScreenAreaWidgetSlot {
   // ui-sub-area of the UI component
   header,
   footer,
-  slot1,
+  slot1, // aka menu position 1 on filter-bar
   slot2,
   slot3,
 
@@ -27,9 +27,15 @@ enum ScreenAreaWidgetSlot {
 extension ScreenAreaWidgetSlotExt1 on ScreenAreaWidgetSlot {
   //
 
-  bool get isConfigurable => true; //this.possibleConfigRules.length > 0;
-
+  // getters
+  // none currently require prep
+  bool get requiresPrepQuestion => [].contains(this);
   String get choiceName => this.name;
+
+  // methods
+  // all currently configurable
+  bool isConfigurableOn(ScreenWidgetArea forArea) =>
+      this.possibleConfigRules(forArea).length > 0;
 
   List<VisualRuleType> possibleConfigRules(ScreenWidgetArea forArea) {
     switch (this) {
@@ -69,5 +75,31 @@ extension ScreenAreaWidgetSlotExt1 on ScreenAreaWidgetSlot {
           VisualRuleType.showOrHide,
         ];
     }
+  }
+
+  List<VisualRuleType> convertIdxsToRuleList(
+    AppScreen screen,
+    ScreenWidgetArea area,
+    String commaLstOfInts,
+  ) {
+    /* this == a ScreenAreaWidgetSlot
+    
+      since we dont show EVERY RuleType, 
+      eg we skip VisualRuleType.generalDialogFlow  (zero)
+      the choice indexes are offset by -1
+      in other words Vrt.xxx.index of 1 is SHOWN in the zero position
+      or its ACTUAL index is +1 from what the user user entered
+      this code adjusts for that by using:    ++tempIdx
+    */
+    Set<int> providedIdxs = castStrOfIdxsToIterOfInts(commaLstOfInts).toSet();
+    //
+    int tempIdx = 0;
+    Map<int, VisualRuleType> idxToModifiableRuleTyps = {};
+    possibleConfigRules(area)
+        .forEach((rt) => idxToModifiableRuleTyps[++tempIdx] = rt);
+    //
+    idxToModifiableRuleTyps.removeWhere(
+        (int idx, VisualRuleType uic) => !providedIdxs.contains(idx));
+    return idxToModifiableRuleTyps.values.toList();
   }
 }

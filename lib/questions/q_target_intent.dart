@@ -28,44 +28,6 @@ class QTargetIntent extends Equatable with _$QTargetIntent {
     @Default(false) bool cliConfig,
   }) = _QTargetIntent;
 
-  // IMPORTANT:  impl of QuestFactory
-  // QuestFactorytSignature get preferredQuestionConstructor {
-  //   /* very important
-  //     returns the factory method required to build
-  //     new auto-derived questions (from user answers)
-  //   */
-  //   if (visRuleTypeForAreaOrSlot != null) {
-  //     return QuestBase.visualRuleDetailQuest;
-  //   } else if (behRuleTypeForAreaOrSlot != null) {
-  //     return QuestBase.behaveRuleDetailQuest;
-  //   } else if (cliConfig) {
-  //     return QuestBase.eventLevelCfgQuest;
-  //   } else if (slotInArea != null || screenWidgetArea != null) {
-  //     return QuestBase.ruleSelectQuest;
-  //   }
-  //   return QuestBase.eventLevelCfgQuest;
-  // }
-
-  // QIntentEm get intent {
-  //   // not yet tested
-  //   bool noAppRules =
-  //       visRuleTypeForAreaOrSlot == null && behRuleTypeForAreaOrSlot == null;
-  //   if (noAppRules)
-  //     return cliConfig ? QIntentEm.infoOrCliCfg : QIntentEm.dlogCascade;
-  //   if (visRuleTypeForAreaOrSlot != null) return QIntentEm.visual;
-  //   if (behRuleTypeForAreaOrSlot != null) return QIntentEm.behavioral;
-  //   return QIntentEm.diagnostic;
-  // }
-
-  // QTargetLevelEm get tLevel {
-  //   // not yet tested
-  //   if (appScreen == AppScreen.eventConfiguration)
-  //     return QTargetLevelEm.notAnAppRule;
-  //   if (screenWidgetArea == null) return QTargetLevelEm.screenRule;
-  //   if (slotInArea == null) return QTargetLevelEm.areaRule;
-  //   return QTargetLevelEm.slotRule;
-  // }
-
   int get targetSortIndex {
     /* used to sort all questions
       in to proper order for group
@@ -147,10 +109,17 @@ class QTargetIntent extends Equatable with _$QTargetIntent {
   // bool get addsRuleDetailQuestsForSlotOrArea =>
   //     cascadeType.addsRuleDetailQuestsForSlotOrArea;
 
+  bool get _requiresRulePrepQuestion =>
+      (screenWidgetArea?.requiresPrepQuestion ?? false) ||
+      (slotInArea?.requiresPrepQuestion ?? false);
+
   bool get requiresVisRulePrepQuestion =>
-      visRuleTypeForAreaOrSlot?.requiresRulePrepQuestion ?? false;
+      _requiresRulePrepQuestion ||
+      (visRuleTypeForAreaOrSlot?.requiresRulePrepQuestion ?? false);
+
   bool get requiresBehRulePrepQuestion =>
-      behRuleTypeForAreaOrSlot?.requiresRulePrepQuestion ?? false;
+      _requiresRulePrepQuestion ||
+      (behRuleTypeForAreaOrSlot?.requiresRulePrepQuestion ?? false);
 
   List<ScreenWidgetArea> get possibleAreasForScreen =>
       appScreen.configurableScreenAreas;

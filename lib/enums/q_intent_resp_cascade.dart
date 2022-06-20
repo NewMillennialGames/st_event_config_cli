@@ -1,25 +1,5 @@
 part of EvCfgEnums;
 
-// @JsonEnum()
-// enum QIntentEm {
-//   infoOrCliCfg, // behavior of CLI or name of output file
-//   dlogCascade, // governs future Quest2s
-//   visual, // creates visual rules
-//   behavioral, // ceates behavioral rules
-//   diagnostic, // for debugging or testing purposes
-// }
-
-// @JsonEnum()
-// enum QTargetLevelEm {
-//   /* what level or scope is this Quest2
-//     operating on
-//   */
-//   notAnAppRule,
-//   screenRule,
-//   areaRule,
-//   slotRule,
-// }
-
 enum QRespCascadePatternEm {
   /* QRespCascadePatternEm defines:
     how does response from user to a current Question
