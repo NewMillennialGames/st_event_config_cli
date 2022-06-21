@@ -77,6 +77,30 @@ extension ScreenAreaWidgetSlotExt1 on ScreenAreaWidgetSlot {
     }
   }
 
+  List<dynamic> possibleVisualStyles(
+    AppScreen appScreen,
+    ScreenWidgetArea screenWidgetArea,
+  ) {
+    switch (this) {
+      case ScreenAreaWidgetSlot.header:
+        return [];
+      case ScreenAreaWidgetSlot.footer:
+        return [];
+      case ScreenAreaWidgetSlot.slot1:
+        return [];
+      case ScreenAreaWidgetSlot.slot2:
+        return [];
+      case ScreenAreaWidgetSlot.slot3:
+        return [];
+      case ScreenAreaWidgetSlot.title:
+        return [];
+      case ScreenAreaWidgetSlot.subtitle:
+        return [];
+      case ScreenAreaWidgetSlot.bannerUrl:
+        return [];
+    }
+  }
+
   List<VisualRuleType> convertIdxsToRuleList(
     AppScreen screen,
     ScreenWidgetArea area,

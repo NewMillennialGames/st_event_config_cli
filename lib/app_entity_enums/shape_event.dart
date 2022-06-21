@@ -51,4 +51,12 @@ enum EvOpponentType {
   personalBest,
 }
 
+@JsonEnum()
+enum EvAgeOffGameRule {
+  whenRoundChanges,
+  everyWeek,
+  oneDayAfterEnds,
+  byEvEliminationStrategy,
+}
+
 // enum EvStyling { sortKey, groupKey, bannerUrl, assetIconUrlTemplate }

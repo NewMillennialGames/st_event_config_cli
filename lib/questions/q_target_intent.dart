@@ -139,6 +139,14 @@ class QTargetIntent extends Equatable with _$QTargetIntent {
     return slotInArea!.possibleConfigRules(screenWidgetArea!);
   }
 
+  List<dynamic> get possibleVisCompStylesForTarget {
+    // component styles for a target area/slot
+
+    if (slotInArea != null)
+      return slotInArea!.possibleVisualStyles(appScreen, screenWidgetArea!);
+    return screenWidgetArea!.possibleVisualStyles(appScreen);
+  }
+
   // equatableKey must be distinct & unique
   String get equatableKey {
     // makes equatable work for searching & sorting Quest2 list

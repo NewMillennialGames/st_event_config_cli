@@ -14,6 +14,12 @@ and these created rules can radically customize the UI of
 the Scoretrader app, based on the current event
 selected by the user
 
+#### Glossary of terms
+
+-- target -> an area or slot (of a screen) to which rules will be attached
+-- 
+
+
 #### Hard problems that must be solved for this to work well
 
 Division between Questions that exist ONLY to structure an efficient dialog

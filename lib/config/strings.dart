@@ -15,6 +15,7 @@ class DlgStr {
       'Apply 1st selected TblView row style to all other screens?';
   static String selectAppScreens =
       'Select the app screens you`d like to configure?';
+  static String eventGameAgeOffPolicy = 'Select rule for hiding finished games';
   // static String eventName = 'Enter Event Template Name';
   // static String eventName = 'Enter Event Template Name';
   // static String eventName = 'Enter Event Template Name';
@@ -51,6 +52,7 @@ class QuestionIdStrings {
   static String competeAgainstType = 'competeAgainstType';
   static String eventDuration = 'eventDuration';
   static String eventEliminationStrategy = 'eventEliminationStrategy';
+  static String eventAgeOffGameRule = 'eventAgeOffGameRule';
   //
   static String globalRowStyle = 'globalRowStyle';
   static String selectAppScreens = 'selectAppScreens';

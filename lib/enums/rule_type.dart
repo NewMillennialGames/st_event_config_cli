@@ -9,8 +9,8 @@ const List<VisualRuleType> _unconfigurableFutureRules = [
 enum VisualRuleType {
   /*  generalDialogFlow is a placeholder value
       its not a real rule at all
-      Dont show it
-      used for Questions at Event level
+      Dont show it in configurator
+      it used for Questions at Event level
   */
   generalDialogFlow,
   sortCfg, // applies to area or filter-menu
@@ -120,7 +120,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
       if user answers all those, it will be sufficient data for rule-config
     */
     assert(
-      prevAnswQuest is RuleSelectQuest || prevAnswQuest is RulePrepQuest,
+      prevAnswQuest.isRuleSelectionQuestion || prevAnswQuest.isRulePrepQuestion,
       'cant produce detail quests from this prevAnswQuest',
     );
     assert(
@@ -132,21 +132,24 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           this.requConfigQuests.contains(ruleSubtypeNewQuest),
       'sub type not valid for ruletype',
     );
+    if (this.requConfigQuests.isEmpty) {
+      print(
+        'Warn:  building DerQuesGen for ${this.name} on ${ruleSubtypeNewQuest.name} when requConfigQuests.isEmpty',
+      );
+    }
     String ruleTypeName = this.name;
     String newQuestNamePrefix = prevAnswQuest.questId;
     switch (ruleSubtypeNewQuest) {
       case VisRuleQuestType.askCountOfSlotsToConfigure:
-        return DerivedQuestGenerator<int>(
+        return DerivedQuestGenerator<VisualRuleType>(
           'How many $ruleTypeName fields do you need for ${prevAnswQuest.targetPath}?',
           newQuestCountCalculator: (qb) => 1,
           newQuestPromptArgGen: (prevQuest, newQuestIdx) => [],
           answerChoiceGenerator: (prevQuest, newQuestIdx) =>
               ['0', '1', '2', '3'],
           newQuestIdGenFromPriorQuest: (prevQuest, newQuestIdx) =>
-              newQuestNamePrefix + '$newQuestIdx',
+              newQuestNamePrefix + '_askCount_$newQuestIdx',
           deriveTargetFromPriorRespCallbk: (QuestBase qb, int __) {
-            //
-            // FIXME:  cascadeType: QRespCascadePatternEm.noCascade
             return qb.qTargetIntent.copyWith();
           },
           perQuestGenOptions: [
@@ -160,30 +163,47 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           ],
         );
       case VisRuleQuestType.controlsVisibilityOfAreaOrSlot:
-        break;
-      case VisRuleQuestType.dialogStruct:
-        return DerivedQuestGenerator.noop();
-      case VisRuleQuestType.selectDataFieldName:
-        return DerivedQuestGenerator<int>(
-          'Select field #{0} for {1} on ${prevAnswQuest.targetPath}?',
+        return DerivedQuestGenerator<VisualRuleType>(
+          'Do you want to hide the element at ${prevAnswQuest.targetPath}?',
           newQuestCountCalculator: (qb) => 1,
-          newQuestPromptArgGen: (prevQuest, newQuestIdx) => [
-            '$newQuestIdx',
-            prevQuest.visRuleTypeForAreaOrSlot?.name ?? '_err',
-          ],
-          answerChoiceGenerator: (prevQuest, newQuestIdx) =>
-              DbTableFieldName.values.map((e) => e.name).toList(),
+          newQuestPromptArgGen: (prevQuest, newQuestIdx) => [],
+          answerChoiceGenerator: (prevQuest, newQuestIdx) => ['no', 'yes'],
           newQuestIdGenFromPriorQuest: (prevQuest, newQuestIdx) =>
-              newQuestNamePrefix + '$newQuestIdx',
+              newQuestNamePrefix + '_hide_$newQuestIdx',
           deriveTargetFromPriorRespCallbk: (QuestBase qb, int __) {
-            //
-            // FIXME:  cascadeType: QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions
             return qb.qTargetIntent.copyWith();
           },
           perQuestGenOptions: [
-            PerQuestGenResponsHandlingOpts<int>(
+            PerQuestGenResponsHandlingOpts<bool>(
               newRespCastFunc: (QuestBase qb, String ans) {
-                return ans as int;
+                return ans as bool;
+              },
+              visRuleType: this,
+              visRuleQuestType: ruleSubtypeNewQuest,
+            ),
+          ],
+        );
+      //
+      case VisRuleQuestType.dialogStruct:
+        throw UnimplementedError('err: not a real rule');
+      // return DerivedQuestGenerator.noop();
+
+      case VisRuleQuestType.selectDataFieldName:
+        return DerivedQuestGenerator<int>(
+          'Select field #{0} for ${prevAnswQuest.targetPath}?',
+          newQuestCountCalculator: (qb) => qb.mainAnswer as int,
+          newQuestPromptArgGen: (prevQuest, newQuestIdx) => ['$newQuestIdx'],
+          answerChoiceGenerator: (prevQuest, newQuestIdx) =>
+              DbTableFieldName.values.map((e) => e.name).toList(),
+          newQuestIdGenFromPriorQuest: (prevQuest, newQuestIdx) =>
+              newQuestNamePrefix + '_selFld_$newQuestIdx',
+          deriveTargetFromPriorRespCallbk: (QuestBase qb, int __) {
+            return qb.qTargetIntent.copyWith();
+          },
+          perQuestGenOptions: [
+            PerQuestGenResponsHandlingOpts<DbTableFieldName>(
+              newRespCastFunc: (QuestBase qb, String ans) {
+                return DbTableFieldName.values[ans as int];
               },
               visRuleType: this,
               visRuleQuestType: ruleSubtypeNewQuest,
@@ -191,7 +211,32 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           ],
         );
       case VisRuleQuestType.selectVisualComponentOrStyle:
-        break;
+        // specify desired style on area or slot
+        List<dynamic> possibleVisStyles =
+            prevAnswQuest.qTargetIntent.possibleVisCompStylesForTarget;
+
+        return DerivedQuestGenerator<int>(
+          'Select preferred style for ${prevAnswQuest.targetPath}?',
+          newQuestCountCalculator: (qb) => 1,
+          newQuestPromptArgGen: (prevQuest, newQuestIdx) => [],
+          answerChoiceGenerator: (prevQuest, newQuestIdx) =>
+              possibleVisStyles.map((e) => e.toString()).toList(),
+          newQuestIdGenFromPriorQuest: (prevQuest, newQuestIdx) =>
+              newQuestNamePrefix + '_selStyle_$newQuestIdx',
+          deriveTargetFromPriorRespCallbk: (QuestBase qb, int __) {
+            return qb.qTargetIntent.copyWith();
+          },
+          perQuestGenOptions: [
+            PerQuestGenResponsHandlingOpts<dynamic>(
+              newRespCastFunc: (QuestBase qb, String ans) {
+                return possibleVisStyles[ans as int];
+              },
+              visRuleType: this,
+              visRuleQuestType: ruleSubtypeNewQuest,
+            ),
+          ],
+        );
+      //
       case VisRuleQuestType.specifySortAscending:
         break;
     }

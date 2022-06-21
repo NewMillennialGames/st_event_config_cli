@@ -313,8 +313,15 @@ abstract class QuestBase with EquatableMixin {
 
 class EventLevelCfgQuest extends QuestBase {
   /*  applies to ui-factory config rules
+
+  isSelectScreensQuestion is the top level question
+  that begins the process of generating
+  area/slot "target" questions
+
+  a "target" is some part of the app to which we'd like
+  to attach 1-n visual or behavioral rules
   */
-  final bool isSelectScreensQuestion; // this is special
+  final bool isSelectScreensQuestion; // starts targetting dialog when true
   EventLevelCfgQuest(
     QTargetIntent qTargetIntent,
     QPromptCollection qDefCollection, {

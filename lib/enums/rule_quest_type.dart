@@ -10,7 +10,7 @@ enum VisRuleQuestType {
     collected to properly build a complete rule
 
   */
-  dialogStruct,
+  dialogStruct, // noop
   selectDataFieldName,
   askCountOfSlotsToConfigure,
   specifySortAscending,

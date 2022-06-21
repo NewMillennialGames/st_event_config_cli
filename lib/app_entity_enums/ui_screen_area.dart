@@ -101,6 +101,28 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
     }
   }
 
+  List<dynamic> possibleVisualStyles(
+    AppScreen appScreen,
+  ) {
+    /* what are the visual style options
+    for this area in this screen
+    */
+    switch (this) {
+      case ScreenWidgetArea.navBar:
+        return [];
+      case ScreenWidgetArea.filterBar:
+        return [];
+      case ScreenWidgetArea.header:
+        return [];
+      case ScreenWidgetArea.banner:
+        return [];
+      case ScreenWidgetArea.tableview:
+        return TvAreaRowStyle.values;
+      case ScreenWidgetArea.footer:
+        return [];
+    }
+  }
+
   //
   List<VisualRuleType> convertIdxsToRuleList(
     AppScreen screen,
