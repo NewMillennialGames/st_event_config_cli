@@ -22,16 +22,17 @@ class QuestPromptPayload<T> {
 
 abstract class QuestBase with EquatableMixin {
   /*
-    cleaner and more testable replacement for:
-    Question<ConvertTyp, AnsTyp> and RuleTypeQuestion
-    it combines those classes so there is no fundamental distinction
-    between them;  keep consistent interface going forward
     largely a wrapper around QTargetIntent && QDefCollection
+    base class for all our 5 specific question types:
 
-    it's vital that ALL Factory constructors respect this
-    standard signature:   QuestFactorytSignature
+      1. event level config & behavior
+      2. targeting questions (pick area or area-slot)
+      3. rule-selection questions (which rule for target)
+      4. rule-prep questions  (opt details to gen rule-detail)
+      5. rule-detail questions (rule config details)
 
-
+    it's vital that 5 Factory quest constructors respect
+    this standard signature:   QuestFactorytSignature
   */
   final QTargetIntent qTargetIntent;
   final QPromptCollection qPromptCollection;
@@ -171,7 +172,7 @@ abstract class QuestBase with EquatableMixin {
     CaptureAndCast captureAndCast, {
     String? questId,
   }) {
-    //
+    // used in test
     var qDefCollection = QPromptCollection.singleDialog(
       userPrompt,
       choices,
@@ -190,7 +191,7 @@ abstract class QuestBase with EquatableMixin {
     return nextQpi;
   }
 
-  DerivedQuestGenerator getDerivedQuestGenFromSubtype(
+  DerivedQuestGenerator getDerivedRuleQuestGenViaVisType(
     VisRuleQuestType ruleSubtypeNewQuest,
   ) {
     //
@@ -365,9 +366,10 @@ class RegionTargetQuest extends QuestBase {
       ? QRespCascadePatternEm.respCreatesWhichSlotOfAreaQuestions
       : QRespCascadePatternEm.respCreatesWhichAreaInScreenQuestions;
 
+  // FIXME
   @override
   QuestFactorytSignature get derivedQuestConstructor =>
-      QuestBase.ruleSelectQuest;
+      true ? QuestBase.ruleSelectQuest : QuestBase.regionTargetQuest;
 }
 
 class RuleSelectQuest extends QuestBase {

@@ -72,6 +72,7 @@ class QMatchCollection {
     });
   }
 
+  // testing below
   int matchCountFor(QuestBase quest) {
     // mostly for testing
     int cnt = 0;
@@ -102,6 +103,7 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
   which receives the prior question ID as a test for match succcess
   */
   final String matcherDescrip;
+  bool _hasCreatedDynamicDqg = false;
   /* cascadeTypeOfMatchedQuest indicates what type of
     new Questions (or potentially auto-answers)
     will be added by the DerivedQuestGenerator
@@ -131,12 +133,9 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
   final VisualRuleType? visRuleTypeForAreaOrSlot;
   final BehaviorRuleType? behRuleTypeForAreaOrSlot;
 
-  bool _hasCreatedDynamicDqg = false;
-
   //
   QuestMatcher(
     this.matcherDescrip, {
-    // required this.respCascadePatternEm,
     required this.derivedQuestGen,
     this.validateUserAnswerAfterPatternMatchIsTrueCallback,
     this.questIdPatternMatchTest,
@@ -149,16 +148,13 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
   });
 
   // getters
-  // bool get addsPendingQuestions => derivedQuestGen.addsPendingQuestions;
-  // bool get createsImplicitAnswers => derivedQuestGen.createsImplicitAnswers;
-
   bool get producesBuilderRules => false;
   bool get usesMatchByQIdPatternCallback => questIdPatternMatchTest != null;
   bool get shouldValidateUserAnswer =>
       validateUserAnswerAfterPatternMatchIsTrueCallback != null;
   // expose generic types
-  Type get matchedAnsTyp => AnsTypOfMatched;
-  Type get generatedQuestAnsTyp => AnsTypOfGend;
+  // Type get matchedAnsTyp => AnsTypOfMatched;
+  // Type get generatedQuestAnsTyp => AnsTypOfGend;
 
   // public methods
   bool doesMatch(QuestBase prevAnsweredQuest) {
@@ -258,32 +254,10 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
     if (deriveQuestGenCallbk == null || _hasCreatedDynamicDqg)
       return derivedQuestGen;
 
+    // should generate DQG rather than return stored DQG
     derivedQuestGen =
         deriveQuestGenCallbk!(qb!, 0) as DerivedQuestGenerator<AnsTypOfMatched>;
     _hasCreatedDynamicDqg = true;
     return derivedQuestGen;
   }
 }
-
-// class QuestMatcherForRuleOutput<AnsTypOfMatched, AnsTypOfGend>
-//     extends QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
-//   /*
-
-//   */
-
-//   QuestMatcherForRuleOutput(
-//     String matcherDescrip, {
-//     required DerQuestGeneratorFactoryClbk<AnsTypOfMatched> deriveQuestGenCallbk,
-//     PriorQuestIdMatchPatternTest? questIdPatternMatchTest,
-//     VisualRuleType? visRuleTypeForAreaOrSlot,
-//     BehaviorRuleType? behRuleTypeForAreaOrSlot,
-//   }) : super(
-//           matcherDescrip,
-//           // respCascadePatternEm: QRespCascadePatternEm.noCascade,
-//           derivedQuestGen: DerivedQuestGenerator.noop(),
-//           deriveQuestGenCallbk: deriveQuestGenCallbk,
-//           questIdPatternMatchTest: questIdPatternMatchTest,
-//           visRuleTypeForAreaOrSlot: visRuleTypeForAreaOrSlot,
-//           behRuleTypeForAreaOrSlot: behRuleTypeForAreaOrSlot,
-//         );
-// }

@@ -67,7 +67,7 @@ class DerivedQuestGenerator<PriorAnsType> {
   final ChoiceListFromPriorAnswer answerChoiceGenerator;
   final QTargetIntentUpdateFunc qTargetIntentUpdater;
   final NewQuestIdGenFromPriorAnswer? newQuestIdGenFromPriorQuest;
-  final List<PerQuestGenResponsHandlingOpts> perQuestGenOptions;
+  final List<PerQuestGenResponsHandlingOpts> perNewQuestGenOpts;
   QuestFactorytSignature? newQuestConstructor;
 
   DerivedQuestGenerator(
@@ -77,7 +77,7 @@ class DerivedQuestGenerator<PriorAnsType> {
     required this.newQuestCountCalculator,
     required this.newQuestPromptArgGen,
     required this.answerChoiceGenerator,
-    required this.perQuestGenOptions,
+    required this.perNewQuestGenOpts,
     this.newQuestIdGenFromPriorQuest,
     QTargetIntentUpdateFunc? deriveTargetFromPriorRespCallbk,
     this.newQuestConstructor,
@@ -97,7 +97,7 @@ class DerivedQuestGenerator<PriorAnsType> {
       newQuestCountCalculator: (qb) => 0,
       newQuestPromptArgGen: (a, ix) => [],
       answerChoiceGenerator: (_, __) => [],
-      perQuestGenOptions: [],
+      perNewQuestGenOpts: [],
     );
   }
 
@@ -118,7 +118,7 @@ class DerivedQuestGenerator<PriorAnsType> {
     }
 
     // TODO:  future
-    bool newQuestContainsMultiPrompts = this.perQuestGenOptions.length > 1;
+    bool newQuestContainsMultiPrompts = this.perNewQuestGenOpts.length > 1;
     int newQuestChoiceCount = _answerChoiceCount(answeredQuest);
 
     List<QuestBase> createdQuests = [];
@@ -136,9 +136,9 @@ class DerivedQuestGenerator<PriorAnsType> {
 
       // select correct Gen-Options or use last if list is too short
       PerQuestGenResponsHandlingOpts instcGenOpt =
-          perQuestGenOptions.length > newQIdx
-              ? perQuestGenOptions[newQIdx]
-              : perQuestGenOptions.last;
+          perNewQuestGenOpts.length > newQIdx
+              ? perNewQuestGenOpts[newQIdx]
+              : perNewQuestGenOpts.last;
 
       List<QuestPromptPayload> newQuestPrompts = [
         QuestPromptPayload(

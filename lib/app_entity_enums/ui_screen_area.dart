@@ -73,7 +73,7 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
       case ScreenWidgetArea.navBar:
         return [VisualRuleType.styleOrFormat];
       case ScreenWidgetArea.filterBar:
-        return [VisualRuleType.filterCfg];
+        return [];
       case ScreenWidgetArea.header:
         return [
           VisualRuleType.styleOrFormat,
@@ -88,7 +88,6 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
         // for that specific rule
         return [
           VisualRuleType.styleOrFormat,
-          // VisualRuleType.filterCfg,
           VisualRuleType.sortCfg,
           VisualRuleType.groupCfg,
         ];

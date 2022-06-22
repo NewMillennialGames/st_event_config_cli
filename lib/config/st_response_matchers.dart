@@ -16,6 +16,12 @@ List<QuestMatcher> stDfltMatcherList = [
   /* defines rules for adding new Questions or implicit answers
     based on answers to prior Questions
 
+    this list is primarily matchers to catch TARGET focused questions
+    TARGET focused questions are ones intended to specify area or slot
+    
+    once area or slot have been set, then we can ask which rule
+    to apply to that target
+
   Explaining the generics here:
     QuestMatcher<AnsTypOfMatched, AnsTypOfGend>
       AnsTypOfMatched is the main answer type of matched question
@@ -98,11 +104,13 @@ List<QuestMatcher> stDfltMatcherList = [
             (priorAnsweredQuest.mainAnswer as Iterable<ScreenWidgetArea>)
                 .toList();
         ScreenWidgetArea currArea = selectedScreenAreas[newQuestIdx];
+        print(
+            'info: get ? with target ${priorAnsweredQuest.targetPath} for $currArea');
         return priorAnsweredQuest.qTargetIntent.copyWith(
           screenWidgetArea: currArea,
         );
       },
-      perQuestGenOptions: [
+      perNewQuestGenOpts: [
         PerQuestGenResponsHandlingOpts<List<VisualRuleType>>(
           newRespCastFunc: (
             QuestBase newAnsQuest,
@@ -192,11 +200,13 @@ List<QuestMatcher> stDfltMatcherList = [
         ScreenWidgetArea currArea = selectedScreenAreas[newQuestIdx];
         // FIXME:  cascadeType: // of created questions
         // QRespCascadePatternEm.respCreatesRulePrepQuestions,
+        print(
+            'info: get ? with target ${priorAnsweredQuest.targetPath} for $currArea');
         return priorAnsweredQuest.qTargetIntent.copyWith(
           screenWidgetArea: currArea,
         );
       },
-      perQuestGenOptions: [
+      perNewQuestGenOpts: [
         PerQuestGenResponsHandlingOpts<List<ScreenAreaWidgetSlot>>(
           newRespCastFunc: (
             QuestBase newQuest,
@@ -295,7 +305,7 @@ List<QuestMatcher> stDfltMatcherList = [
           visRuleTypeForAreaOrSlot: curRule,
         );
       },
-      perQuestGenOptions: [
+      perNewQuestGenOpts: [
         PerQuestGenResponsHandlingOpts<String>(
           newRespCastFunc: (
             QuestBase newQuest,
@@ -374,7 +384,7 @@ List<QuestMatcher> stDfltMatcherList = [
           slotInArea: curSlot,
         );
       },
-      perQuestGenOptions: [
+      perNewQuestGenOpts: [
         PerQuestGenResponsHandlingOpts<List<VisualRuleType>>(
           newRespCastFunc: (QuestBase newQuest, String lstAreaIdxs) {
             List<VisualRuleType> possibleRules =
@@ -558,7 +568,7 @@ List<QuestMatcher> stDfltMatcherList = [
           visRuleTypeForAreaOrSlot: curRule,
         );
       },
-      perQuestGenOptions: [
+      perNewQuestGenOpts: [
         PerQuestGenResponsHandlingOpts(
           newRespCastFunc: (QuestBase newQuest, String lstAreaIdxs) {
             var curRule = newQuest.qTargetIntent.visRuleTypeForAreaOrSlot!;
@@ -634,7 +644,7 @@ List<QuestMatcher> stDfltMatcherList = [
           visRuleTypeForAreaOrSlot: VisualRuleType.groupCfg,
         );
       },
-      perQuestGenOptions: [
+      perNewQuestGenOpts: [
         PerQuestGenResponsHandlingOpts(
           newRespCastFunc: (QuestBase qb, String ansr) => DbTableFieldName
               .values[int.tryParse(ansr) ?? CfgConst.cancelSortIndex],

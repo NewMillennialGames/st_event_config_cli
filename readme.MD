@@ -165,7 +165,7 @@ Creating a Question requires specification for each category below:
 
 1. intent  (what does this Question do in the overall scheme; includes cast to desired output type)
 2. prompt & answer details  (what to display for configurator  (CLI or web) user)
-3. target area  (which area of the app will answer apply to)
+3. target area (which screen-area (or scr-area-slot) of the app will answer apply to)
 4. response handling  (how to cast or convert the user-answer)
 
 ##### How does response handling work?

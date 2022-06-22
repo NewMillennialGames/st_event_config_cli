@@ -35,7 +35,7 @@ class QuestionCascadeDispatcher {
       // will create one question to select area-list for each screen
       print('\tWhich screens  (building questions to specify which areas)');
       DerivedQuestGenerator<List<AppScreen>> genAreaInScreenSelectQuests =
-          _getGeneratorForWhichAreasInEachSelectedScreen();
+          _getQuestGenForWhichAreasInEachSelectedScreen();
       // next line will produce questions that are class RegionTargetQuest
       // and their answers will be handled by next branch below (isRegionTargetQuestion)
       List<QuestBase> newQuests = genAreaInScreenSelectQuests
@@ -60,13 +60,13 @@ class QuestionCascadeDispatcher {
       List<QuestBase> newQuests;
       if (questJustAnswered.slotInArea != null) {
         DerivedQuestGenerator<List<ScreenAreaWidgetSlot>> dqg =
-            _getGeneratorForWhichRulesOnSlotOfArea();
+            _getQuestGenForWhichRulesInSlotOfArea();
         newQuests = dqg.getDerivedAutoGenQuestions(
           questJustAnswered,
         );
       } else {
         DerivedQuestGenerator<List<ScreenWidgetArea>> dqg =
-            _getGeneratorForWhichRuleInSelectedArea();
+            _getQuestGenForWhichRuleInSelectedArea();
         newQuests = dqg.getDerivedAutoGenQuestions(
           questJustAnswered,
         );
@@ -115,7 +115,7 @@ class QuestionCascadeDispatcher {
     for (VisRuleQuestType ruleSubtype in ruleSubtypeLst) {
       //
       DerivedQuestGenerator dqg =
-          _answeredQuest.getDerivedQuestGenFromSubtype(ruleSubtype);
+          _answeredQuest.getDerivedRuleQuestGenViaVisType(ruleSubtype);
       Iterable<QuestBase> generatedQuestions =
           dqg.getDerivedAutoGenQuestions(_answeredQuest);
       newQuests.addAll(generatedQuestions);
@@ -147,7 +147,7 @@ class QuestionCascadeDispatcher {
     for (VisRuleQuestType ruleSubtype in ruleSubtypeLst) {
       //
       DerivedQuestGenerator dqg =
-          _answeredQuest.getDerivedQuestGenFromSubtype(ruleSubtype);
+          _answeredQuest.getDerivedRuleQuestGenViaVisType(ruleSubtype);
       Iterable<QuestBase> generatedQuestions =
           dqg.getDerivedAutoGenQuestions(_answeredQuest);
       newQuests.addAll(generatedQuestions);
@@ -164,7 +164,7 @@ class QuestionCascadeDispatcher {
 // top level functions
 
 DerivedQuestGenerator<List<AppScreen>>
-    _getGeneratorForWhichAreasInEachSelectedScreen() {
+    _getQuestGenForWhichAreasInEachSelectedScreen() {
   //
   return DerivedQuestGenerator<List<AppScreen>>(
     'Select areas you want to configure on screen {0} (resp will gen which rule/slot for each area quest)',
@@ -232,7 +232,7 @@ FIXME:
             QuestMatcher<List<AppScreen>, List<ScreenWidgetArea>>
         that seems like a design mistake???
       */
-    perQuestGenOptions: [
+    perNewQuestGenOpts: [
       PerQuestGenResponsHandlingOpts<List<ScreenWidgetArea>>(
         newRespCastFunc: (
           QuestBase newAnsQuest,
@@ -252,7 +252,7 @@ FIXME:
 }
 
 DerivedQuestGenerator<List<ScreenWidgetArea>>
-    _getGeneratorForWhichRuleInSelectedArea() {
+    _getQuestGenForWhichRuleInSelectedArea() {
   //
   return DerivedQuestGenerator(
     'Select which rules to add on area {0} of screen {1} (answ will generate rule detail quests)',
@@ -293,15 +293,6 @@ DerivedQuestGenerator<List<ScreenWidgetArea>>
       QuestBase priorAnsweredQuest,
       int idx,
     ) {
-      // List<ScreenWidgetArea> selectedScreenAreas =
-      //     (priorAnsweredQuest.mainAnswer as Iterable<ScreenWidgetArea>)
-      //         .toList();
-      // ScreenWidgetArea selectedArea = selectedScreenAreas[idx];
-      // return selectedArea
-      //     .applicableRuleTypes(priorAnsweredQuest.appScreen)
-      //     .map((e) => e.name)
-      //     .toList();
-
       List<VisualRuleType> selectedRulesForArea =
           (priorAnsweredQuest.mainAnswer as Iterable<VisualRuleType>).toList();
       VisualRuleType selectedRule = selectedRulesForArea[idx];
@@ -323,7 +314,7 @@ DerivedQuestGenerator<List<ScreenWidgetArea>>
         visRuleTypeForAreaOrSlot: currRule,
       );
     },
-    perQuestGenOptions: [
+    perNewQuestGenOpts: [
       PerQuestGenResponsHandlingOpts<List<VisualRuleType>>(
         newRespCastFunc: (
           QuestBase newAnsQuest,
@@ -343,7 +334,7 @@ DerivedQuestGenerator<List<ScreenWidgetArea>>
 }
 
 DerivedQuestGenerator<List<ScreenAreaWidgetSlot>>
-    _getGeneratorForWhichRulesOnSlotOfArea() {
+    _getQuestGenForWhichRulesInSlotOfArea() {
   //
   return DerivedQuestGenerator(
     'Select which rules to add for slot {0} in area {1} of screen {2} (answ will generate rule detail quests)',
@@ -408,7 +399,7 @@ DerivedQuestGenerator<List<ScreenAreaWidgetSlot>>
         slotInArea: currSlot,
       );
     },
-    perQuestGenOptions: [
+    perNewQuestGenOpts: [
       PerQuestGenResponsHandlingOpts<List<VisualRuleType>>(
         newRespCastFunc: (
           QuestBase newAnsQuest,

@@ -3,23 +3,23 @@ part of QuestionsLib;
 @freezed
 class QTargetIntent extends Equatable with _$QTargetIntent {
   /* describes what a Question pertains to
-    it's target, intent and cascade behavior
+    it's target (area or area-slot of a screen)
+    and general intent
 
     a QuestMatcher and a DerivedQuestGenerator
     might receive this question along with user answer
     interpret that answer (after type conversion),
     and GENERATE derived questions
-    the INTENT of those derived questions is captured in:
-      this.cascadeWorkDoneByRespGendQuests
 
         made it equatable to enable searching Q-list
     for filtering and generating new Questions reactively
+
+    https://www.facebook.com/reel/5400821536636739/?s=ifu
   */
 
   QTargetIntent._();
 
   factory QTargetIntent(
-    // QRespCascadePatternEm cascadeWorkDoneByRespGendQuests,
     AppScreen appScreen,
     ScreenWidgetArea? screenWidgetArea, {
     ScreenAreaWidgetSlot? slotInArea,
@@ -68,46 +68,12 @@ class QTargetIntent extends Equatable with _$QTargetIntent {
     return screenName + '-' + area + '-' + slot + '-' + visRuleName;
   }
 
-  // when visRuleTypeForAreaOrSlot is set, it means we're about to start configuring a rule
-  // bool get createsRuleCfgQuests => visRuleTypeForAreaOrSlot != null;
-  // some rule types need to ask COUNT before we can configure those rules
-  // test isRulePrepQuestion BEFORE you test createsRuleQuestions
-  // bool get isRulePrepQuestion =>
-  //     createsRuleCfgQuests &&
-  //     [
-  //       VisualRuleType.filterCfg,
-  //       VisualRuleType.groupCfg,
-  //       VisualRuleType.sortCfg
-  //     ].contains(visRuleTypeForAreaOrSlot);
-
   bool get isTopLevelEventConfigQuestion =>
       appScreen == AppScreen.eventConfiguration &&
       screenWidgetArea == null &&
       slotInArea == null &&
       visRuleTypeForAreaOrSlot == null &&
       behRuleTypeForAreaOrSlot == null;
-
-  // bool get isQuestAboutAreaInScreenOrSlotInArea =>
-  //     screenWidgetArea != null &&
-  //     visRuleTypeForAreaOrSlot == null &&
-  //     behRuleTypeForAreaOrSlot == null; // && slotInArea == null
-  //
-  // bool get generatesNoNewQuestions => cascadeType.generatesNoNewQuestions;
-
-  // bool get addsWhichAreaInSelectedScreenQuestions =>
-  //     cascadeType.addsWhichAreaInSelectedScreenQuestions;
-
-  // bool get addsWhichRulesForSelectedAreaQuestions =>
-  //     cascadeType.addsWhichRulesForSelectedAreaQuestions;
-
-  // bool get addsWhichSlotOfSelectedAreaQuestions =>
-  //     cascadeType.addsWhichSlotOfSelectedAreaQuestions;
-
-  // bool get addsWhichRulesForSlotsInArea =>
-  //     cascadeType.addsWhichRulesForSlotsInArea;
-
-  // bool get addsRuleDetailQuestsForSlotOrArea =>
-  //     cascadeType.addsRuleDetailQuestsForSlotOrArea;
 
   bool get _requiresRulePrepQuestion =>
       (screenWidgetArea?.requiresPrepQuestion ?? false) ||
@@ -172,10 +138,6 @@ class QTargetIntent extends Equatable with _$QTargetIntent {
       this answer will build "which area" Quest2s
     */
     return QTargetIntent(
-      // QIntentCfg.eventLevel(),
-      // responseAddsWhichAreaQuestions
-      //     ? QRespCascadePatternEm.respCreatesWhichAreaInScreenQuestions
-      //     : QRespCascadePatternEm.noCascade,
       AppScreen.eventConfiguration,
       null,
     );
@@ -192,10 +154,6 @@ class QTargetIntent extends Equatable with _$QTargetIntent {
       this answer will build "which rule for area" Quest2s
     */
     return QTargetIntent(
-      // QIntentCfg.eventLevel(),
-      // responseAddsWhichRuleAndSlotQuest2s
-      //     ? QRespCascadePatternEm.respCreatesWhichRulesForAreaOrSlotQuestions
-      //     : QRespCascadePatternEm.noCascade,
       appScreen,
       null,
     );
@@ -219,10 +177,6 @@ class QTargetIntent extends Equatable with _$QTargetIntent {
       this answer will build "rule detail ?? for area" Quest2s
     */
     return QTargetIntent(
-      // QIntentCfg.areaLevelRules(ruleType),
-      // responseAddsRuleDetailQuests
-      //     ? QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions
-      //     : QRespCascadePatternEm.noCascade,
       appScreen,
       screenArea,
       visRuleTypeForAreaOrSlot: ruleType,
@@ -241,10 +195,6 @@ class QTargetIntent extends Equatable with _$QTargetIntent {
       this answer will build "rule detail ?? for slot" Quest2s
     */
     return QTargetIntent(
-      // QIntentCfg.areaLevelSlots(VisualRuleType.topDialogStruct),
-      // responseAddsWhichRuleQuest2s
-      //     ? QRespCascadePatternEm.respCreatesRulePrepQuestions
-      //     : QRespCascadePatternEm.noCascade,
       appScreen,
       screenArea,
     );

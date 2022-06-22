@@ -130,7 +130,7 @@ void main() {
         newQuestCountCalculator: (q) => 0,
         newQuestPromptArgGen: (_, __) => [],
         answerChoiceGenerator: (_, __) => [],
-        perQuestGenOptions: [],
+        perNewQuestGenOpts: [],
       ),
     );
 
