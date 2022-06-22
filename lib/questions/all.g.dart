@@ -22,7 +22,7 @@ Map<String, dynamic> _$RuleResponseBaseToJson(RuleResponseBase instance) =>
     };
 
 const _$VisualRuleTypeEnumMap = {
-  VisualRuleType.generalDialogFlow: 'topDialogStruct',
+  VisualRuleType.generalDialogFlow: 'generalDialogFlow',
   VisualRuleType.sortCfg: 'sortCfg',
   VisualRuleType.groupCfg: 'groupCfg',
   VisualRuleType.filterCfg: 'filterCfg',

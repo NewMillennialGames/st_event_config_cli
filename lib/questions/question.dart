@@ -244,6 +244,7 @@ abstract class QuestBase with EquatableMixin {
       QuestBase.eventLevelCfgQuest;
 
   String get targetPath => qTargetIntent.targetPath;
+  bool get _targetPathIsComplete => qTargetIntent.targetComplete;
   bool get isFullyAnswered => qPromptCollection.allPartsHaveAnswers;
 
   // define type of question for auto-gen
@@ -366,10 +367,10 @@ class RegionTargetQuest extends QuestBase {
       ? QRespCascadePatternEm.respCreatesWhichSlotOfAreaQuestions
       : QRespCascadePatternEm.respCreatesWhichAreaInScreenQuestions;
 
-  // FIXME
   @override
-  QuestFactorytSignature get derivedQuestConstructor =>
-      true ? QuestBase.ruleSelectQuest : QuestBase.regionTargetQuest;
+  QuestFactorytSignature get derivedQuestConstructor => _targetPathIsComplete
+      ? QuestBase.ruleSelectQuest
+      : QuestBase.regionTargetQuest;
 }
 
 class RuleSelectQuest extends QuestBase {

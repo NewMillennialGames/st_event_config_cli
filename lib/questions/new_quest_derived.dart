@@ -103,14 +103,19 @@ class DerivedQuestGenerator<PriorAnsType> {
 
   List<QuestBase> getDerivedAutoGenQuestions(
     QuestBase answeredQuest,
-    // QuestMatcher? matcher,
   ) {
     /* use existing answered Question
     plus logic defined in both this and PerQuestGenOptions
     to build and return a list of new Questions
     */
     int newQuestCount = newQuestCountCalculator(answeredQuest);
-    if (newQuestCount < 1) return [];
+
+    if (newQuestCount < 1) {
+      print(
+        'DeQuestGen.getDerivedAutoGenQuestions bailed empty due to:\nnewQuestCount: $newQuestCount',
+      );
+      return [];
+    }
 
     bool newQuConstrWasNull = newQuestConstructor == null;
     if (newQuConstrWasNull) {
@@ -119,11 +124,13 @@ class DerivedQuestGenerator<PriorAnsType> {
 
     // TODO:  future
     bool newQuestContainsMultiPrompts = this.perNewQuestGenOpts.length > 1;
-    int newQuestChoiceCount = _answerChoiceCount(answeredQuest);
 
     List<QuestBase> createdQuests = [];
     for (int newQIdx = 0; newQIdx < newQuestCount; newQIdx++) {
       //
+
+      int newQuestChoiceCount = _newQuestChoiceCount(answeredQuest, newQIdx);
+      if (newQuestChoiceCount < 1) continue;
 
       // values required to build new question:
 
@@ -173,11 +180,14 @@ class DerivedQuestGenerator<PriorAnsType> {
   bool get createsImplicitAnswers =>
       genBehaviorOfDerivedQuests.createsImplicitAnswers; // || hasOnlyOneChoice;
 
-  int _answerChoiceCount(QuestBase priorAnsweredQuest) {
-    return answerChoiceGenerator(priorAnsweredQuest, 0).length;
+  int _newQuestChoiceCount(
+    QuestBase priorAnsweredQuest,
+    int newQIdx,
+  ) {
+    return answerChoiceGenerator(priorAnsweredQuest, newQIdx).length;
   }
 
-  bool hasOnlyOneChoice(QuestBase qb) => _answerChoiceCount(qb) == 1;
+  // bool hasOnlyOneChoice(QuestBase qb) => _firstQuestChoiceCount(qb) == 1;
 
-  bool hasZeroValidChoices(QuestBase qb) => _answerChoiceCount(qb) < 1;
+  // bool hasZeroValidChoices(QuestBase qb) => _firstQuestChoiceCount(qb) < 1;
 }

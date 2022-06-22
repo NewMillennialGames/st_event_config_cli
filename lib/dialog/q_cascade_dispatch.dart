@@ -312,6 +312,7 @@ DerivedQuestGenerator<List<ScreenWidgetArea>>
         screenWidgetArea: priorAnsweredQuest.screenWidgetArea,
         slotInArea: priorAnsweredQuest.slotInArea,
         visRuleTypeForAreaOrSlot: currRule,
+        targetComplete: true,
       );
     },
     perNewQuestGenOpts: [
@@ -397,6 +398,7 @@ DerivedQuestGenerator<List<ScreenAreaWidgetSlot>>
       return priorAnsweredQuest.qTargetIntent.copyWith(
         screenWidgetArea: priorAnsweredQuest.screenWidgetArea,
         slotInArea: currSlot,
+        targetComplete: true,
       );
     },
     perNewQuestGenOpts: [

@@ -14,7 +14,12 @@ class QTargetIntent extends Equatable with _$QTargetIntent {
         made it equatable to enable searching Q-list
     for filtering and generating new Questions reactively
 
-    https://www.facebook.com/reel/5400821536636739/?s=ifu
+    targetComplete means
+    that this question is ready for rule-selection
+    does not need more target details
+    this helps the question generation system
+    decide which factory constructor method to
+    use for derived (generated) questions
   */
 
   QTargetIntent._();
@@ -25,7 +30,7 @@ class QTargetIntent extends Equatable with _$QTargetIntent {
     ScreenAreaWidgetSlot? slotInArea,
     VisualRuleType? visRuleTypeForAreaOrSlot,
     BehaviorRuleType? behRuleTypeForAreaOrSlot,
-    @Default(false) bool cliConfig,
+    @Default(false) bool targetComplete,
   }) = _QTargetIntent;
 
   int get targetSortIndex {

@@ -45,6 +45,7 @@ List<QuestMatcher> stDfltMatcherList = [
               .length >
           0;
     },
+    // is doing the right thing but not with the TARGET quest-type??
     derivedQuestGen: DerivedQuestGenerator(
       'Select which rules to add on area {0} of screen {1} (answ will generate rule detail (or prep) quests)',
       newQuestConstructor: QuestBase.ruleSelectQuest,
@@ -104,10 +105,12 @@ List<QuestMatcher> stDfltMatcherList = [
             (priorAnsweredQuest.mainAnswer as Iterable<ScreenWidgetArea>)
                 .toList();
         ScreenWidgetArea currArea = selectedScreenAreas[newQuestIdx];
-        print(
-            'info: get ? with target ${priorAnsweredQuest.targetPath} for $currArea');
+        // print(
+        //   'info: make ? with target ${priorAnsweredQuest.targetPath} for $currArea',
+        // );
         return priorAnsweredQuest.qTargetIntent.copyWith(
           screenWidgetArea: currArea,
+          targetComplete: true,
         );
       },
       perNewQuestGenOpts: [
@@ -198,10 +201,9 @@ List<QuestMatcher> stDfltMatcherList = [
         List<ScreenWidgetArea> selectedScreenAreas =
             (priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>);
         ScreenWidgetArea currArea = selectedScreenAreas[newQuestIdx];
-        // FIXME:  cascadeType: // of created questions
-        // QRespCascadePatternEm.respCreatesRulePrepQuestions,
-        print(
-            'info: get ? with target ${priorAnsweredQuest.targetPath} for $currArea');
+        // print(
+        //   'info: make ? with target ${priorAnsweredQuest.targetPath} for $currArea',
+        // );
         return priorAnsweredQuest.qTargetIntent.copyWith(
           screenWidgetArea: currArea,
         );
@@ -303,6 +305,7 @@ List<QuestMatcher> stDfltMatcherList = [
         // QRespCascadePatternEm.noCascade,
         return priorAnsweredQuest.qTargetIntent.copyWith(
           visRuleTypeForAreaOrSlot: curRule,
+          targetComplete: true,
         );
       },
       perNewQuestGenOpts: [
@@ -319,84 +322,85 @@ List<QuestMatcher> stDfltMatcherList = [
   ),
 
 // #5
-  QuestMatcher<List<ScreenAreaWidgetSlot>, List<VisualRuleType>>(
-    '''matches questions in which user specifies slots in screen-areas to config
-      build ?s to specify which rules for those SLOTS in screen-areas
-      
-      the answers to those questions (Visual Rule types) will match below to
-      config details about those rules
+  // QuestMatcher<List<ScreenAreaWidgetSlot>, List<VisualRuleType>>(
+  //   '''matches questions in which user specifies slots in screen-areas to config
+  //     build ?s to specify which rules for those SLOTS in screen-areas
 
-      build ?`s to specify which rules for slots in areas on selected screens user wants to config
-    ''',
-    questIdPatternMatchTest: (qid) =>
-        qid.startsWith(QuestionIdStrings.specSlotsToConfigInArea),
-    //
-    derivedQuestGen: DerivedQuestGenerator(
-      'Select which rules to config within slot {0} in area {1} of screen {2}',
-      newQuestConstructor: QuestBase.ruleSelectQuest,
-      newQuestPromptArgGen: (
-        QuestBase priorAnsweredQuest,
-        int newQuestIdx,
-      ) {
-        List<ScreenAreaWidgetSlot> respList =
-            (priorAnsweredQuest.mainAnswer as List<ScreenAreaWidgetSlot>);
-        // .toList();
-        var slotName = respList[newQuestIdx].name;
-        var areaName = priorAnsweredQuest.screenWidgetArea?.name ?? 'area';
-        var screenName = priorAnsweredQuest.appScreen.name;
-        return [
-          slotName.toUpperCase(),
-          areaName.toUpperCase(),
-          screenName.toUpperCase()
-        ];
-      },
-      newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
-        return (priorAnsweredQuest.mainAnswer as Iterable<dynamic>).length;
-      },
-      answerChoiceGenerator: (
-        QuestBase priorAnsweredQuest,
-        int newQuestIdx,
-      ) {
-        List<VisualRuleType> possibleRules =
-            priorAnsweredQuest.qTargetIntent.possibleRulesForSlotInAreaOfScreen;
-        return possibleRules.map((e) => e.name).toList();
+  //     the answers to those questions (Visual Rule types) will match below to
+  //     config details about those rules
 
-        // List<ScreenAreaWidgetSlot> selectedAreaSlots =
-        //     (priorAnsweredQuest.mainAnswer as Iterable<ScreenAreaWidgetSlot>)
-        //         .toList();
-        // ScreenAreaWidgetSlot curSlot = selectedAreaSlots[newQuestIdx];
-        // ScreenWidgetArea curArea = priorAnsweredQuest.screenWidgetArea!;
-        // return curSlot.possibleConfigRules(curArea).map((e) => e.name).toList();
-      },
-      deriveTargetFromPriorRespCallbk: (
-        QuestBase priorAnsweredQuest,
-        int newQuestIdx,
-      ) {
-        // ScreenWidgetArea currArea = priorAnsweredQuest.screenWidgetArea!; //  ?? ScreenWidgetArea.header;
-        // String currAreaName = currArea.name;
-        List<ScreenAreaWidgetSlot> selectedAreaSlots =
-            (priorAnsweredQuest.mainAnswer as List<ScreenAreaWidgetSlot>);
-        // .toList();
-        ScreenAreaWidgetSlot curSlot = selectedAreaSlots[newQuestIdx];
-        // FIXME: cascadeType: // of created questions
-        // QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions,
-        return priorAnsweredQuest.qTargetIntent.copyWith(
-          slotInArea: curSlot,
-        );
-      },
-      perNewQuestGenOpts: [
-        PerQuestGenResponsHandlingOpts<List<VisualRuleType>>(
-          newRespCastFunc: (QuestBase newQuest, String lstAreaIdxs) {
-            List<VisualRuleType> possibleRules =
-                newQuest.qTargetIntent.possibleRulesForSlotInAreaOfScreen;
-            return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
-                .map((i) => possibleRules[i])
-                .toList();
-          },
-        ),
-      ],
-    ),
-  ),
+  //     build ?`s to specify which rules for slots in areas on selected screens user wants to config
+  //   ''',
+  //   questIdPatternMatchTest: (qid) =>
+  //       qid.startsWith(QuestionIdStrings.specSlotsToConfigInArea),
+  //   //
+  //   derivedQuestGen: DerivedQuestGenerator(
+  //     'Select which rules to config within slot {0} in area {1} of screen {2}',
+  //     newQuestConstructor: QuestBase.ruleSelectQuest,
+  //     newQuestPromptArgGen: (
+  //       QuestBase priorAnsweredQuest,
+  //       int newQuestIdx,
+  //     ) {
+  //       List<ScreenAreaWidgetSlot> respList =
+  //           (priorAnsweredQuest.mainAnswer as List<ScreenAreaWidgetSlot>);
+  //       // .toList();
+  //       var slotName = respList[newQuestIdx].name;
+  //       var areaName = priorAnsweredQuest.screenWidgetArea?.name ?? 'area';
+  //       var screenName = priorAnsweredQuest.appScreen.name;
+  //       return [
+  //         slotName.toUpperCase(),
+  //         areaName.toUpperCase(),
+  //         screenName.toUpperCase()
+  //       ];
+  //     },
+  //     newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
+  //       return (priorAnsweredQuest.mainAnswer as Iterable<dynamic>).length;
+  //     },
+  //     answerChoiceGenerator: (
+  //       QuestBase priorAnsweredQuest,
+  //       int newQuestIdx,
+  //     ) {
+  //       List<VisualRuleType> possibleRules =
+  //           priorAnsweredQuest.qTargetIntent.possibleRulesForSlotInAreaOfScreen;
+  //       return possibleRules.map((e) => e.name).toList();
+
+  //       // List<ScreenAreaWidgetSlot> selectedAreaSlots =
+  //       //     (priorAnsweredQuest.mainAnswer as Iterable<ScreenAreaWidgetSlot>)
+  //       //         .toList();
+  //       // ScreenAreaWidgetSlot curSlot = selectedAreaSlots[newQuestIdx];
+  //       // ScreenWidgetArea curArea = priorAnsweredQuest.screenWidgetArea!;
+  //       // return curSlot.possibleConfigRules(curArea).map((e) => e.name).toList();
+  //     },
+  //     deriveTargetFromPriorRespCallbk: (
+  //       QuestBase priorAnsweredQuest,
+  //       int newQuestIdx,
+  //     ) {
+  //       // ScreenWidgetArea currArea = priorAnsweredQuest.screenWidgetArea!; //  ?? ScreenWidgetArea.header;
+  //       // String currAreaName = currArea.name;
+  //       List<ScreenAreaWidgetSlot> selectedAreaSlots =
+  //           (priorAnsweredQuest.mainAnswer as List<ScreenAreaWidgetSlot>);
+  //       // .toList();
+  //       ScreenAreaWidgetSlot curSlot = selectedAreaSlots[newQuestIdx];
+  //       // FIXME: cascadeType: // of created questions
+  //       // QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions,
+  //       return priorAnsweredQuest.qTargetIntent.copyWith(
+  //         slotInArea: curSlot,
+  //         targetComplete: true,
+  //       );
+  //     },
+  //     perNewQuestGenOpts: [
+  //       PerQuestGenResponsHandlingOpts<List<VisualRuleType>>(
+  //         newRespCastFunc: (QuestBase newQuest, String lstAreaIdxs) {
+  //           List<VisualRuleType> possibleRules =
+  //               newQuest.qTargetIntent.possibleRulesForSlotInAreaOfScreen;
+  //           return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
+  //               .map((i) => possibleRules[i])
+  //               .toList();
+  //         },
+  //       ),
+  //     ],
+  //   ),
+  // ),
 
   // #6
   // QuestMatcher<List<VisualRuleType>, String>(

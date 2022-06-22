@@ -22,14 +22,14 @@ class _$QTargetIntentTearOff {
       {ScreenAreaWidgetSlot? slotInArea,
       VisualRuleType? visRuleTypeForAreaOrSlot,
       BehaviorRuleType? behRuleTypeForAreaOrSlot,
-      bool cliConfig = false}) {
+      bool targetComplete = false}) {
     return _QTargetIntent(
       appScreen,
       screenWidgetArea,
       slotInArea: slotInArea,
       visRuleTypeForAreaOrSlot: visRuleTypeForAreaOrSlot,
       behRuleTypeForAreaOrSlot: behRuleTypeForAreaOrSlot,
-      cliConfig: cliConfig,
+      targetComplete: targetComplete,
     );
   }
 }
@@ -39,7 +39,6 @@ const $QTargetIntent = _$QTargetIntentTearOff();
 
 /// @nodoc
 mixin _$QTargetIntent {
-// QRespCascadePatternEm cascadeWorkDoneByRespGendQuests,
   AppScreen get appScreen => throw _privateConstructorUsedError;
   ScreenWidgetArea? get screenWidgetArea => throw _privateConstructorUsedError;
   ScreenAreaWidgetSlot? get slotInArea => throw _privateConstructorUsedError;
@@ -47,7 +46,7 @@ mixin _$QTargetIntent {
       throw _privateConstructorUsedError;
   BehaviorRuleType? get behRuleTypeForAreaOrSlot =>
       throw _privateConstructorUsedError;
-  bool get cliConfig => throw _privateConstructorUsedError;
+  bool get targetComplete => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $QTargetIntentCopyWith<QTargetIntent> get copyWith =>
@@ -65,7 +64,7 @@ abstract class $QTargetIntentCopyWith<$Res> {
       ScreenAreaWidgetSlot? slotInArea,
       VisualRuleType? visRuleTypeForAreaOrSlot,
       BehaviorRuleType? behRuleTypeForAreaOrSlot,
-      bool cliConfig});
+      bool targetComplete});
 }
 
 /// @nodoc
@@ -84,7 +83,7 @@ class _$QTargetIntentCopyWithImpl<$Res>
     Object? slotInArea = freezed,
     Object? visRuleTypeForAreaOrSlot = freezed,
     Object? behRuleTypeForAreaOrSlot = freezed,
-    Object? cliConfig = freezed,
+    Object? targetComplete = freezed,
   }) {
     return _then(_value.copyWith(
       appScreen: appScreen == freezed
@@ -107,9 +106,9 @@ class _$QTargetIntentCopyWithImpl<$Res>
           ? _value.behRuleTypeForAreaOrSlot
           : behRuleTypeForAreaOrSlot // ignore: cast_nullable_to_non_nullable
               as BehaviorRuleType?,
-      cliConfig: cliConfig == freezed
-          ? _value.cliConfig
-          : cliConfig // ignore: cast_nullable_to_non_nullable
+      targetComplete: targetComplete == freezed
+          ? _value.targetComplete
+          : targetComplete // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }
@@ -128,7 +127,7 @@ abstract class _$QTargetIntentCopyWith<$Res>
       ScreenAreaWidgetSlot? slotInArea,
       VisualRuleType? visRuleTypeForAreaOrSlot,
       BehaviorRuleType? behRuleTypeForAreaOrSlot,
-      bool cliConfig});
+      bool targetComplete});
 }
 
 /// @nodoc
@@ -149,7 +148,7 @@ class __$QTargetIntentCopyWithImpl<$Res>
     Object? slotInArea = freezed,
     Object? visRuleTypeForAreaOrSlot = freezed,
     Object? behRuleTypeForAreaOrSlot = freezed,
-    Object? cliConfig = freezed,
+    Object? targetComplete = freezed,
   }) {
     return _then(_QTargetIntent(
       appScreen == freezed
@@ -172,9 +171,9 @@ class __$QTargetIntentCopyWithImpl<$Res>
           ? _value.behRuleTypeForAreaOrSlot
           : behRuleTypeForAreaOrSlot // ignore: cast_nullable_to_non_nullable
               as BehaviorRuleType?,
-      cliConfig: cliConfig == freezed
-          ? _value.cliConfig
-          : cliConfig // ignore: cast_nullable_to_non_nullable
+      targetComplete: targetComplete == freezed
+          ? _value.targetComplete
+          : targetComplete // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }
@@ -187,10 +186,10 @@ class _$_QTargetIntent extends _QTargetIntent {
       {this.slotInArea,
       this.visRuleTypeForAreaOrSlot,
       this.behRuleTypeForAreaOrSlot,
-      this.cliConfig = false})
+      this.targetComplete = false})
       : super._();
 
-  @override // QRespCascadePatternEm cascadeWorkDoneByRespGendQuests,
+  @override
   final AppScreen appScreen;
   @override
   final ScreenWidgetArea? screenWidgetArea;
@@ -202,7 +201,7 @@ class _$_QTargetIntent extends _QTargetIntent {
   final BehaviorRuleType? behRuleTypeForAreaOrSlot;
   @JsonKey()
   @override
-  final bool cliConfig;
+  final bool targetComplete;
 
   @JsonKey(ignore: true)
   @override
@@ -216,10 +215,10 @@ abstract class _QTargetIntent extends QTargetIntent {
       {ScreenAreaWidgetSlot? slotInArea,
       VisualRuleType? visRuleTypeForAreaOrSlot,
       BehaviorRuleType? behRuleTypeForAreaOrSlot,
-      bool cliConfig}) = _$_QTargetIntent;
+      bool targetComplete}) = _$_QTargetIntent;
   _QTargetIntent._() : super._();
 
-  @override // QRespCascadePatternEm cascadeWorkDoneByRespGendQuests,
+  @override
   AppScreen get appScreen;
   @override
   ScreenWidgetArea? get screenWidgetArea;
@@ -230,7 +229,7 @@ abstract class _QTargetIntent extends QTargetIntent {
   @override
   BehaviorRuleType? get behRuleTypeForAreaOrSlot;
   @override
-  bool get cliConfig;
+  bool get targetComplete;
   @override
   @JsonKey(ignore: true)
   _$QTargetIntentCopyWith<_QTargetIntent> get copyWith =>
