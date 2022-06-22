@@ -1,4 +1,5 @@
 const String kSignUpScreenLogoImage = 'assets/images/logo.png';
+const String kLogoGoldIcon = 'assets/images/logo-scoretrader-gold.png';
 const String kUserImageProfileScreenProfileImage =
     'assets/images/user-image.png';
 const String kAppbarWidgetLeadingIcon = 'assets/images/logo_appbar.jpg';
@@ -10,12 +11,13 @@ const String kIconWinner = 'assets/images/icon-winner-1st.png';
 const String kIconWiner1st = 'assets/images/icon-winner-1st.png';
 const String kIconWiner2nd = 'assets/images/icon-winner-2nd.png';
 const String kIconWiner3st = 'assets/images/icon-winner-3st.png';
-const String KIconUser = 'assets/images/icon-user.png';
-const String KIconToken = 'assets/images/logo-scoretrader-token.png';
-const String KiconMarket = 'assets/images/tabbar-market.png';
-const String KiconNews = 'assets/images/tabbar-news.png';
-const String KiconLeader = 'assets/images/tabbar-leaders.png';
-const String KiconPortafolio = 'assets/images/tabbar-portfolio.png';
+const String kIconUser = 'assets/images/icon-user.png';
+const String kIconToken = 'assets/images/logo-scoretrader-token.png';
+const String kIconMarket = 'assets/images/tabbar-market.png';
+const String kIconPools = 'assets/images/tabbar-chat.png';
+const String kIconNews = 'assets/images/tabbar-news.png';
+const String kIconLeader = 'assets/images/tabbar-leaders.png';
+const String kIconPortfolio = 'assets/images/tabbar-portfolio.png';
 const String kImageVsBgLeftOff = 'assets/images/vs-bg-left-off@3x.png';
 const String kImageVsBgLeftOn = 'assets/images/vs-bg-left-on@3x.png';
 const String kImageVsBgRightOff = 'assets/images/vs-bg-right-off@3x.png';
