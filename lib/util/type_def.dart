@@ -2,7 +2,7 @@ part of StUtil;
 
 // preferred way to auto-construct all new Question instances
 typedef QuestFactorytSignature = QuestBase Function(
-  QTargetIntent qTargetIntent,
+  QTargetResolution qTargetIntent,
   List<QuestPromptPayload> promptVals, {
   String? questId,
 });
@@ -37,7 +37,8 @@ typedef NewQuestArgGen = List<String> Function(QuestBase, int);
 
 // when auto-generating questions (from prior answers)
 // this function lets you pass in the source QTI and get a new one back
-typedef QTargetIntentUpdateFunc = QTargetIntent Function(QuestBase ab, int idx);
+typedef QTargetIntentUpdateFunc = QTargetResolution Function(
+    QuestBase ab, int idx);
 
 
 // typedef RuleQuestTypTup = Tuple2<VisualRuleType, VisRuleQuestType>;

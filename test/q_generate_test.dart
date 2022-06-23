@@ -18,7 +18,7 @@ void main() {
       //
       // ask which screens to configure
       QuestBase askScreens = QuestBase.initialEventConfigRule(
-        QTargetIntent.eventLevel(),
+        QTargetResolution.eventLevel(),
         DlgStr.selectAppScreens, // <String, List<AppScreen>>
         AppScreen.eventConfiguration.topConfigurableScreens.map((e) => e.name),
         CaptureAndCast<List<AppScreen>>((QuestBase qb, s) =>
@@ -67,7 +67,7 @@ void main() {
     expect(_questMgr.totalAnsweredQuestions, 0);
 
     // now create user question
-    final qTarg = QTargetIntent.areaLevelRules(
+    final qTarg = QTargetResolution.areaLevelRules(
       AppScreen.marketView,
       ScreenWidgetArea.tableview,
       VisualRuleType.groupCfg,

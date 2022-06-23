@@ -13,7 +13,7 @@ import 'package:st_ev_cfg/util/all.dart';
 class TestDataCreation {
   //
   QuestBase makeQuestion<T>(
-    QTargetIntent qq,
+    QTargetResolution qq,
     String prompt,
     List<String> choices,
     CastStrToAnswTypCallback<T> clbk, {

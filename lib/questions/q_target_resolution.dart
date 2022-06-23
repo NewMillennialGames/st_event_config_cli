@@ -1,7 +1,7 @@
 part of QuestionsLib;
 
 @freezed
-class QTargetIntent extends Equatable with _$QTargetIntent {
+class QTargetResolution extends Equatable with _$QTargetResolution {
   /* describes what a Question pertains to
     it's target (area or area-slot of a screen)
     and general intent
@@ -22,16 +22,16 @@ class QTargetIntent extends Equatable with _$QTargetIntent {
     use for derived (generated) questions
   */
 
-  QTargetIntent._();
+  QTargetResolution._();
 
-  factory QTargetIntent(
+  factory QTargetResolution(
     AppScreen appScreen,
     ScreenWidgetArea? screenWidgetArea, {
     ScreenAreaWidgetSlot? slotInArea,
     VisualRuleType? visRuleTypeForAreaOrSlot,
     BehaviorRuleType? behRuleTypeForAreaOrSlot,
     @Default(false) bool targetComplete,
-  }) = _QTargetIntent;
+  }) = _QTargetResolution;
 
   int get targetSortIndex {
     /* used to sort all questions
@@ -133,20 +133,20 @@ class QTargetIntent extends Equatable with _$QTargetIntent {
       can generate Quest2s for levels below them
   */
 
-  factory QTargetIntent.eventLevel() {
+  factory QTargetResolution.eventLevel() {
     /*
       sample Question:    for this event:
       'Select the app screens you`d like to configure?',
       when responseAddsWhichAreaQuestions is true
       this answer will build "which area" Quest2s
     */
-    return QTargetIntent(
+    return QTargetResolution(
       AppScreen.eventConfiguration,
       null,
     );
   }
 
-  factory QTargetIntent.screenLevel(
+  factory QTargetResolution.screenLevel(
     AppScreen appScreen,
   ) {
     /*
@@ -155,13 +155,13 @@ class QTargetIntent extends Equatable with _$QTargetIntent {
       when responseAddsWhichRuleAndSlotQuest2s is true
       this answer will build "which rule for area" Quest2s
     */
-    return QTargetIntent(
+    return QTargetResolution(
       appScreen,
       null,
     );
   }
 
-  factory QTargetIntent.areaLevelRules(
+  factory QTargetResolution.areaLevelRules(
     AppScreen appScreen,
     ScreenWidgetArea screenArea,
     VisualRuleType ruleType,
@@ -177,14 +177,14 @@ class QTargetIntent extends Equatable with _$QTargetIntent {
       when responseAddsWhichRuleTypeQuestsForArea is true
       this answer will build "rule detail ?? for area" Quest2s
     */
-    return QTargetIntent(
+    return QTargetResolution(
       appScreen,
       screenArea,
       visRuleTypeForAreaOrSlot: ruleType,
     );
   }
 
-  factory QTargetIntent.areaLevelSlots(
+  factory QTargetResolution.areaLevelSlots(
     AppScreen appScreen,
     ScreenWidgetArea screenArea,
   ) {
@@ -194,13 +194,13 @@ class QTargetIntent extends Equatable with _$QTargetIntent {
       when responseAddsWhichRuleQuest2s is true
       this answer will build "rule detail ?? for slot" Quest2s
     */
-    return QTargetIntent(
+    return QTargetResolution(
       appScreen,
       screenArea,
     );
   }
 
-  factory QTargetIntent.ruleLevel(
+  factory QTargetResolution.ruleLevel(
     AppScreen appScreen,
     ScreenWidgetArea screenArea,
     ScreenAreaWidgetSlot? slot,
@@ -211,7 +211,7 @@ class QTargetIntent extends Equatable with _$QTargetIntent {
       when responseAddsRuleDetailQuest2s is true
       this answer will build "rule detail ?? for slot" Quest2s
     */
-    return QTargetIntent(
+    return QTargetResolution(
       // QIntentCfg.ruleLevel(VisualRuleType.topDialogStruct),
       // responseAddsRuleDetailQuest2s
       //     ? QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions
@@ -222,7 +222,7 @@ class QTargetIntent extends Equatable with _$QTargetIntent {
     );
   }
 
-  factory QTargetIntent.ruleDetailMultiResponse(
+  factory QTargetResolution.ruleDetailMultiResponse(
     AppScreen appScreen,
     ScreenWidgetArea screenWidgetArea,
     VisualRuleType? visRuleTypeForSlotInArea,
@@ -231,7 +231,7 @@ class QTargetIntent extends Equatable with _$QTargetIntent {
     BehaviorRuleType? behRuleTypeForSlotInArea,
   ) {
     // bool isVisual = visRuleTypeForSlotInArea != null;
-    return QTargetIntent(
+    return QTargetResolution(
       appScreen,
       screenWidgetArea,
       slotInArea: slot,

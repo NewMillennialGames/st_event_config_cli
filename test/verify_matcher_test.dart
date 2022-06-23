@@ -17,7 +17,7 @@ void main() {
     DialogRunner dlogRun = DialogRunner(questPresent);
     //
     // now create user question
-    final qq = QTargetIntent.areaLevelRules(
+    final qq = QTargetResolution.areaLevelRules(
       AppScreen.marketView,
       ScreenWidgetArea.tableview,
       VisualRuleType.groupCfg,
@@ -77,7 +77,7 @@ void main() {
   test('validate that QuestMatcher hits question based on QID pattern', () {
     //
     // now create user question
-    final qti = QTargetIntent.eventLevel();
+    final qti = QTargetResolution.eventLevel();
     final qpp = QuestPromptPayload(
       'some question',
       ['0', '1', '1'],

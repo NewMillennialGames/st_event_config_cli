@@ -85,7 +85,7 @@ class DerivedQuestGenerator<PriorAnsType> {
             ? _ccTargIntent
             : deriveTargetFromPriorRespCallbk;
 
-  static QTargetIntent _ccTargIntent(QuestBase qb, int idx) =>
+  static QTargetResolution _ccTargIntent(QuestBase qb, int idx) =>
       qb.qTargetIntent.copyWith();
 
   factory DerivedQuestGenerator.noop() {
@@ -136,7 +136,7 @@ class DerivedQuestGenerator<PriorAnsType> {
 
       // convert old (answered) targIntent into one for new question
       // added extra copyWith() in case passed function forgets it
-      QTargetIntent targIntent =
+      QTargetResolution targIntent =
           qTargetIntentUpdater(answeredQuest, newQIdx).copyWith();
       List<String> templArgs = newQuestPromptArgGen(answeredQuest, newQIdx);
       String _userPrompt = questPromptTemplate.format(templArgs);

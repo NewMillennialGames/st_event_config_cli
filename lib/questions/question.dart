@@ -34,7 +34,7 @@ abstract class QuestBase with EquatableMixin {
     it's vital that 5 Factory quest constructors respect
     this standard signature:   QuestFactorytSignature
   */
-  final QTargetIntent qTargetIntent;
+  final QTargetResolution qTargetIntent;
   final QPromptCollection qPromptCollection;
   // optional unique value for expedited matching
   String questId = '';
@@ -51,7 +51,7 @@ abstract class QuestBase with EquatableMixin {
   // constructors with common QuestFactorytSignature
   // called by a DerivedQuestGenerator<PriorAnsType>
   factory QuestBase.eventLevelCfgQuest(
-    QTargetIntent targIntent,
+    QTargetResolution targIntent,
     List<QuestPromptPayload> prompts, {
     String? questId,
   }) {
@@ -62,7 +62,7 @@ abstract class QuestBase with EquatableMixin {
   }
 
   factory QuestBase.regionTargetQuest(
-    QTargetIntent targIntent,
+    QTargetResolution targIntent,
     List<QuestPromptPayload> prompts, {
     String? questId,
   }) {
@@ -73,7 +73,7 @@ abstract class QuestBase with EquatableMixin {
   }
 
   factory QuestBase.ruleSelectQuest(
-    QTargetIntent targIntent,
+    QTargetResolution targIntent,
     List<QuestPromptPayload> prompts, {
     String? questId,
   }) {
@@ -84,7 +84,7 @@ abstract class QuestBase with EquatableMixin {
   }
   //
   factory QuestBase.rulePrepQuest(
-    QTargetIntent targIntent,
+    QTargetResolution targIntent,
     List<QuestPromptPayload> prompts, {
     String? questId,
   }) {
@@ -120,7 +120,7 @@ abstract class QuestBase with EquatableMixin {
   }
 
   factory QuestBase.visualRuleDetailQuest(
-    QTargetIntent targIntent,
+    QTargetResolution targIntent,
     List<QuestPromptPayload> prompts, {
     String? questId,
   }) {
@@ -131,7 +131,7 @@ abstract class QuestBase with EquatableMixin {
   }
 
   factory QuestBase.behaveRuleDetailQuest(
-    QTargetIntent targIntent,
+    QTargetResolution targIntent,
     List<QuestPromptPayload> prompts, {
     String? questId,
   }) {
@@ -144,7 +144,7 @@ abstract class QuestBase with EquatableMixin {
 
   // manual constructors to call explicitly
   factory QuestBase.initialEventConfigRule(
-    QTargetIntent targIntent,
+    QTargetResolution targIntent,
     String userPrompt,
     Iterable<String> choices,
     CaptureAndCast captureAndCast, {
@@ -166,7 +166,7 @@ abstract class QuestBase with EquatableMixin {
   }
 
   factory QuestBase.regionTargetQuestManual(
-    QTargetIntent targIntent,
+    QTargetResolution targIntent,
     String userPrompt,
     Iterable<String> choices,
     CaptureAndCast captureAndCast, {
@@ -325,7 +325,7 @@ class EventLevelCfgQuest extends QuestBase {
   */
   final bool isSelectScreensQuestion; // starts targetting dialog when true
   EventLevelCfgQuest(
-    QTargetIntent qTargetIntent,
+    QTargetResolution qTargetIntent,
     QPromptCollection qDefCollection, {
     String? questId,
     this.isSelectScreensQuestion = false,
@@ -350,7 +350,7 @@ class RegionTargetQuest extends QuestBase {
   /* 
   */
   RegionTargetQuest(
-    QTargetIntent qTargetIntent,
+    QTargetResolution qTargetIntent,
     QPromptCollection qDefCollection, {
     String? questId,
   }) : super(qTargetIntent, qDefCollection, questId: questId) {
@@ -381,7 +381,7 @@ class RuleSelectQuest extends QuestBase {
 
   */
   RuleSelectQuest(
-    QTargetIntent qTargetIntent,
+    QTargetResolution qTargetIntent,
     QPromptCollection qDefCollection, {
     String? questId,
   }) : super(qTargetIntent, qDefCollection, questId: questId) {
@@ -403,7 +403,7 @@ class RulePrepQuest extends QuestBase {
   */
   final bool createsBehavioralQuests;
   RulePrepQuest(
-    QTargetIntent qTargetIntent,
+    QTargetResolution qTargetIntent,
     QPromptCollection qDefCollection, {
     String? questId,
     this.createsBehavioralQuests = false,
@@ -435,7 +435,7 @@ abstract class UiFactoryRuleBase extends QuestBase {
     they simply get converted to JSON for each intended event
   */
   UiFactoryRuleBase(
-    QTargetIntent qTargetIntent,
+    QTargetResolution qTargetIntent,
     QPromptCollection qDefCollection, {
     String? questId,
   }) : super(qTargetIntent, qDefCollection, questId: questId) {
@@ -465,7 +465,7 @@ class VisualRuleDetailQuest extends UiFactoryRuleBase {
   /*  ui-factory visual rules
   */
   VisualRuleDetailQuest(
-    QTargetIntent qTargetIntent,
+    QTargetResolution qTargetIntent,
     QPromptCollection qDefCollection, {
     String? questId,
   }) : super(qTargetIntent, qDefCollection, questId: questId) {
@@ -480,7 +480,7 @@ class BehaveRuleDetailQuest extends UiFactoryRuleBase {
   /*  ui-factory behavioral rules
   */
   BehaveRuleDetailQuest(
-    QTargetIntent qTargetIntent,
+    QTargetResolution qTargetIntent,
     QPromptCollection qDefCollection, {
     String? questId,
   }) : super(qTargetIntent, qDefCollection, questId: questId) {

@@ -15,15 +15,16 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-class _$QTargetIntentTearOff {
-  const _$QTargetIntentTearOff();
+class _$QTargetResolutionTearOff {
+  const _$QTargetResolutionTearOff();
 
-  _QTargetIntent call(AppScreen appScreen, ScreenWidgetArea? screenWidgetArea,
+  _QTargetResolution call(
+      AppScreen appScreen, ScreenWidgetArea? screenWidgetArea,
       {ScreenAreaWidgetSlot? slotInArea,
       VisualRuleType? visRuleTypeForAreaOrSlot,
       BehaviorRuleType? behRuleTypeForAreaOrSlot,
       bool targetComplete = false}) {
-    return _QTargetIntent(
+    return _QTargetResolution(
       appScreen,
       screenWidgetArea,
       slotInArea: slotInArea,
@@ -35,10 +36,10 @@ class _$QTargetIntentTearOff {
 }
 
 /// @nodoc
-const $QTargetIntent = _$QTargetIntentTearOff();
+const $QTargetResolution = _$QTargetResolutionTearOff();
 
 /// @nodoc
-mixin _$QTargetIntent {
+mixin _$QTargetResolution {
   AppScreen get appScreen => throw _privateConstructorUsedError;
   ScreenWidgetArea? get screenWidgetArea => throw _privateConstructorUsedError;
   ScreenAreaWidgetSlot? get slotInArea => throw _privateConstructorUsedError;
@@ -49,15 +50,15 @@ mixin _$QTargetIntent {
   bool get targetComplete => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $QTargetIntentCopyWith<QTargetIntent> get copyWith =>
+  $QTargetResolutionCopyWith<QTargetResolution> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $QTargetIntentCopyWith<$Res> {
-  factory $QTargetIntentCopyWith(
-          QTargetIntent value, $Res Function(QTargetIntent) then) =
-      _$QTargetIntentCopyWithImpl<$Res>;
+abstract class $QTargetResolutionCopyWith<$Res> {
+  factory $QTargetResolutionCopyWith(
+          QTargetResolution value, $Res Function(QTargetResolution) then) =
+      _$QTargetResolutionCopyWithImpl<$Res>;
   $Res call(
       {AppScreen appScreen,
       ScreenWidgetArea? screenWidgetArea,
@@ -68,13 +69,13 @@ abstract class $QTargetIntentCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$QTargetIntentCopyWithImpl<$Res>
-    implements $QTargetIntentCopyWith<$Res> {
-  _$QTargetIntentCopyWithImpl(this._value, this._then);
+class _$QTargetResolutionCopyWithImpl<$Res>
+    implements $QTargetResolutionCopyWith<$Res> {
+  _$QTargetResolutionCopyWithImpl(this._value, this._then);
 
-  final QTargetIntent _value;
+  final QTargetResolution _value;
   // ignore: unused_field
-  final $Res Function(QTargetIntent) _then;
+  final $Res Function(QTargetResolution) _then;
 
   @override
   $Res call({
@@ -115,11 +116,11 @@ class _$QTargetIntentCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$QTargetIntentCopyWith<$Res>
-    implements $QTargetIntentCopyWith<$Res> {
-  factory _$QTargetIntentCopyWith(
-          _QTargetIntent value, $Res Function(_QTargetIntent) then) =
-      __$QTargetIntentCopyWithImpl<$Res>;
+abstract class _$QTargetResolutionCopyWith<$Res>
+    implements $QTargetResolutionCopyWith<$Res> {
+  factory _$QTargetResolutionCopyWith(
+          _QTargetResolution value, $Res Function(_QTargetResolution) then) =
+      __$QTargetResolutionCopyWithImpl<$Res>;
   @override
   $Res call(
       {AppScreen appScreen,
@@ -131,15 +132,15 @@ abstract class _$QTargetIntentCopyWith<$Res>
 }
 
 /// @nodoc
-class __$QTargetIntentCopyWithImpl<$Res>
-    extends _$QTargetIntentCopyWithImpl<$Res>
-    implements _$QTargetIntentCopyWith<$Res> {
-  __$QTargetIntentCopyWithImpl(
-      _QTargetIntent _value, $Res Function(_QTargetIntent) _then)
-      : super(_value, (v) => _then(v as _QTargetIntent));
+class __$QTargetResolutionCopyWithImpl<$Res>
+    extends _$QTargetResolutionCopyWithImpl<$Res>
+    implements _$QTargetResolutionCopyWith<$Res> {
+  __$QTargetResolutionCopyWithImpl(
+      _QTargetResolution _value, $Res Function(_QTargetResolution) _then)
+      : super(_value, (v) => _then(v as _QTargetResolution));
 
   @override
-  _QTargetIntent get _value => super._value as _QTargetIntent;
+  _QTargetResolution get _value => super._value as _QTargetResolution;
 
   @override
   $Res call({
@@ -150,7 +151,7 @@ class __$QTargetIntentCopyWithImpl<$Res>
     Object? behRuleTypeForAreaOrSlot = freezed,
     Object? targetComplete = freezed,
   }) {
-    return _then(_QTargetIntent(
+    return _then(_QTargetResolution(
       appScreen == freezed
           ? _value.appScreen
           : appScreen // ignore: cast_nullable_to_non_nullable
@@ -181,8 +182,8 @@ class __$QTargetIntentCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_QTargetIntent extends _QTargetIntent {
-  _$_QTargetIntent(this.appScreen, this.screenWidgetArea,
+class _$_QTargetResolution extends _QTargetResolution {
+  _$_QTargetResolution(this.appScreen, this.screenWidgetArea,
       {this.slotInArea,
       this.visRuleTypeForAreaOrSlot,
       this.behRuleTypeForAreaOrSlot,
@@ -205,18 +206,18 @@ class _$_QTargetIntent extends _QTargetIntent {
 
   @JsonKey(ignore: true)
   @override
-  _$QTargetIntentCopyWith<_QTargetIntent> get copyWith =>
-      __$QTargetIntentCopyWithImpl<_QTargetIntent>(this, _$identity);
+  _$QTargetResolutionCopyWith<_QTargetResolution> get copyWith =>
+      __$QTargetResolutionCopyWithImpl<_QTargetResolution>(this, _$identity);
 }
 
-abstract class _QTargetIntent extends QTargetIntent {
-  factory _QTargetIntent(
+abstract class _QTargetResolution extends QTargetResolution {
+  factory _QTargetResolution(
       AppScreen appScreen, ScreenWidgetArea? screenWidgetArea,
       {ScreenAreaWidgetSlot? slotInArea,
       VisualRuleType? visRuleTypeForAreaOrSlot,
       BehaviorRuleType? behRuleTypeForAreaOrSlot,
-      bool targetComplete}) = _$_QTargetIntent;
-  _QTargetIntent._() : super._();
+      bool targetComplete}) = _$_QTargetResolution;
+  _QTargetResolution._() : super._();
 
   @override
   AppScreen get appScreen;
@@ -232,6 +233,6 @@ abstract class _QTargetIntent extends QTargetIntent {
   bool get targetComplete;
   @override
   @JsonKey(ignore: true)
-  _$QTargetIntentCopyWith<_QTargetIntent> get copyWith =>
+  _$QTargetResolutionCopyWith<_QTargetResolution> get copyWith =>
       throw _privateConstructorUsedError;
 }

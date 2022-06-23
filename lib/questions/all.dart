@@ -12,7 +12,7 @@ import '../interfaces/q_prompt_instance.dart';
 part 'all.g.dart';
 part 'all.freezed.dart';
 part 'new_quest_derived.dart';
-part 'q_target_intent.dart';
+part 'q_target_resolution.dart';
 part 'answ_capture_cast.dart';
 part 'q_prompt_collection.dart';
 part 'q_prompt_instance.dart';
