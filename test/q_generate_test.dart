@@ -61,6 +61,8 @@ void main() {
       () {
     final testDataCreator = TestDataCreation();
     final _qMatchColl = QMatchCollection.scoretrader();
+    final _qcd = QuestionCascadeDispatcher(
+        matchersToGenRulePrepQuests: _qMatchColl.allMatchersTestOnly.toList());
     final _questMgr = QuestListMgr();
     expect(_questMgr.totalAnsweredQuestions, 0);
 
@@ -71,16 +73,17 @@ void main() {
       VisualRuleType.groupCfg,
     );
 
-    QuestBase askNumSlots = testDataCreator.makeQuestion<int>(
+    QuestBase askGroupDepth = testDataCreator.makeQuestion<int>(
         qTarg,
         'set ListView group-by depth on marketView',
-        ['0', '1', '$k_quests_created_in_test', '3'], (QuestBase qb, selCount) {
-      print('askNumSlots convert on str $selCount');
+        ['0', '1', '$k_quests_created_in_test', '3'],
+        (QuestBase qb, String selCount) {
+      // print('askNumSlots convert on str $selCount');
       return int.tryParse(selCount) ?? 0;
     });
 
     // add question to q-manager
-    _questMgr.appendGeneratedQuestsAndAnswers([askNumSlots]);
+    _questMgr.appendGeneratedQuestsAndAnswers([askGroupDepth]);
     // next 2 lines are virtually the same test
     expect(_questMgr.priorAnswers.length, 0);
     expect(_questMgr.totalAnsweredQuestions, 0);
