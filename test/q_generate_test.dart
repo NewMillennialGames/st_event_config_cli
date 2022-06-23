@@ -17,8 +17,8 @@ void main() {
     () {
       //
       // ask which screens to configure
-      QuestBase askScreens = QuestBase.regionTargetQuestManual(
-        QTargetIntent.eventLevel(responseAddsWhichAreaQuestions: true),
+      QuestBase askScreens = QuestBase.initialEventConfigRule(
+        QTargetIntent.eventLevel(),
         DlgStr.selectAppScreens, // <String, List<AppScreen>>
         AppScreen.eventConfiguration.topConfigurableScreens.map((e) => e.name),
         CaptureAndCast<List<AppScreen>>((QuestBase qb, s) =>
@@ -56,23 +56,24 @@ void main() {
     },
   );
 
-  test('creates user answer & verifies new Questions generated from it', () {
+  test(
+      'creates user answer abt LV group-by depth, & verifies new Questions generated from it',
+      () {
     final testDataCreator = TestDataCreation();
-    final _questMgr = QuestListMgr();
     final _qMatchColl = QMatchCollection.scoretrader();
+    final _questMgr = QuestListMgr();
     expect(_questMgr.totalAnsweredQuestions, 0);
 
     // now create user question
-    final qq = QTargetIntent.areaLevelRules(
+    final qTarg = QTargetIntent.areaLevelRules(
       AppScreen.marketView,
       ScreenWidgetArea.tableview,
       VisualRuleType.groupCfg,
-      responseAddsRuleDetailQuests: true,
     );
 
     QuestBase askNumSlots = testDataCreator.makeQuestion<int>(
-        qq,
-        'askNumSlots convert on str (no op prompt)',
+        qTarg,
+        'set ListView group-by depth on marketView',
         ['0', '1', '$k_quests_created_in_test', '3'], (QuestBase qb, selCount) {
       print('askNumSlots convert on str $selCount');
       return int.tryParse(selCount) ?? 0;
@@ -108,7 +109,7 @@ void main() {
 
     // now check that k_quests_created_in_test Questions were created
     // since there was no 2nd INITIAL Question
-    expect(_questMgr.pendingQuestionCount, 0);
+    expect(_questMgr.pendingQuestionCount, 2);
 
     for (QuestBase q in _questMgr.pendingQuestions) {
       print(

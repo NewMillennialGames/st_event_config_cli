@@ -106,7 +106,7 @@ final List<QuestBase> _initQuestionLst = [
   ],
   // ask which screens to configure
   QuestBase.initialEventConfigRule(
-    QTargetIntent.eventLevel(responseAddsWhichAreaQuestions: true),
+    QTargetIntent.eventLevel(),
     DlgStr.selectAppScreens, // <String, List<AppScreen>>
     AppScreen.eventConfiguration.topConfigurableScreens.map((e) => e.name),
     CaptureAndCast<List<AppScreen>>(

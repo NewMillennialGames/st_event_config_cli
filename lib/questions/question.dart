@@ -354,7 +354,10 @@ class RegionTargetQuest extends QuestBase {
     QPromptCollection qDefCollection, {
     String? questId,
   }) : super(qTargetIntent, qDefCollection, questId: questId) {
-    assert(qTargetIntent.appScreen != AppScreen.eventConfiguration, 'wtf');
+    assert(
+      qTargetIntent.appScreen != AppScreen.eventConfiguration,
+      'target quest must have defined screen',
+    );
     assert(
       qTargetIntent.screenWidgetArea == null ||
           qTargetIntent.slotInArea == null,

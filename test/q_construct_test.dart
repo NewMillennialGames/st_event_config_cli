@@ -19,7 +19,6 @@ void main() {
       AppScreen.marketView,
       ScreenWidgetArea.tableview,
       VisualRuleType.groupCfg,
-      responseAddsRuleDetailQuests: true,
     );
 
     List<QuestPromptPayload> prompts = [

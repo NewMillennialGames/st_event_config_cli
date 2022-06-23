@@ -22,7 +22,6 @@ void main() {
       AppScreen.marketView,
       ScreenWidgetArea.tableview,
       VisualRuleType.groupCfg,
-      responseAddsRuleDetailQuests: true,
     );
 
     QuestBase askNumSortSlots = testDataCreate.makeQuestion<int>(

@@ -133,9 +133,7 @@ class QTargetIntent extends Equatable with _$QTargetIntent {
       can generate Quest2s for levels below them
   */
 
-  factory QTargetIntent.eventLevel({
-    bool responseAddsWhichAreaQuestions = false,
-  }) {
+  factory QTargetIntent.eventLevel() {
     /*
       sample Question:    for this event:
       'Select the app screens you`d like to configure?',
@@ -149,9 +147,8 @@ class QTargetIntent extends Equatable with _$QTargetIntent {
   }
 
   factory QTargetIntent.screenLevel(
-    AppScreen appScreen, {
-    bool responseAddsWhichRuleAndSlotQuest2s = false,
-  }) {
+    AppScreen appScreen,
+  ) {
     /*
       sample Question:
       'For the ${scr.name} screen, select the areas you`d like to configure?',
@@ -167,9 +164,8 @@ class QTargetIntent extends Equatable with _$QTargetIntent {
   factory QTargetIntent.areaLevelRules(
     AppScreen appScreen,
     ScreenWidgetArea screenArea,
-    VisualRuleType ruleType, {
-    bool responseAddsRuleDetailQuests = false,
-  }) {
+    VisualRuleType ruleType,
+  ) {
     /*  DG note 4/14/22 -> this constructor was commented and removed previously
           don't remember why or how it's not in use, but I am using it now in tests
 
@@ -190,9 +186,8 @@ class QTargetIntent extends Equatable with _$QTargetIntent {
 
   factory QTargetIntent.areaLevelSlots(
     AppScreen appScreen,
-    ScreenWidgetArea screenArea, {
-    bool responseAddsWhichRuleQuest2s = false,
-  }) {
+    ScreenWidgetArea screenArea,
+  ) {
     /*
       sample Question:
       'Which slots/widgets on the ${area.name} of ${screen.name} would you like to configure?',
@@ -208,9 +203,8 @@ class QTargetIntent extends Equatable with _$QTargetIntent {
   factory QTargetIntent.ruleLevel(
     AppScreen appScreen,
     ScreenWidgetArea screenArea,
-    ScreenAreaWidgetSlot? slot, {
-    bool responseAddsRuleDetailQuest2s = false,
-  }) {
+    ScreenAreaWidgetSlot? slot,
+  ) {
     /*
       sample Question:
      'Which rules would you like to add to the ${slotInArea.name} area of ${screenArea.name} on screen ${screen.name}?',
@@ -234,20 +228,10 @@ class QTargetIntent extends Equatable with _$QTargetIntent {
     VisualRuleType? visRuleTypeForSlotInArea,
     // rule level always has screen & area; may have slot
     ScreenAreaWidgetSlot? slot,
-    BehaviorRuleType? behRuleTypeForSlotInArea, {
-    bool addsMoreRuleQuest2s = false,
-  }) {
-    bool isVisual = visRuleTypeForSlotInArea != null;
+    BehaviorRuleType? behRuleTypeForSlotInArea,
+  ) {
+    // bool isVisual = visRuleTypeForSlotInArea != null;
     return QTargetIntent(
-      // QIntentCfg.ruleDetailMultiResponse(
-      //     visRuleTypeForSlotInArea ?? VisualRuleType.topDialogStruct),
-      // addsMoreRuleQuest2s
-      //     ? (isVisual
-      //         ? QRespCascadePatternEm
-      //             .respCreatesRuleDetailForSlotOrAreaQuestions
-      //         : QRespCascadePatternEm
-      //             .respCreatesRuleDetailForSlotOrAreaQuestions)
-      //     : QRespCascadePatternEm.noCascade,
       appScreen,
       screenWidgetArea,
       slotInArea: slot,
