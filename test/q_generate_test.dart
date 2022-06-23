@@ -18,7 +18,7 @@ void main() {
       //
       // ask which screens to configure
       QuestBase askScreens = QuestBase.initialEventConfigRule(
-        QTargetResolution.eventLevel(),
+        QTargetResolution.forEvent(),
         DlgStr.selectAppScreens, // <String, List<AppScreen>>
         AppScreen.eventConfiguration.topConfigurableScreens.map((e) => e.name),
         CaptureAndCast<List<AppScreen>>((QuestBase qb, s) =>
@@ -30,7 +30,7 @@ void main() {
       );
 
       final _questMgr = QuestListMgr();
-      final _qMatchColl = QMatchCollection.scoretrader();
+      final _qcd = QuestionCascadeDispatcher();
 
       _questMgr.appendGeneratedQuestsAndAnswers([askScreens]);
 
@@ -43,7 +43,7 @@ void main() {
       QuestBase? nullQuest = _questMgr.nextQuestionToAnswer();
 
       // next line should create 2 new Questions
-      _qMatchColl.appendNewQuestsOrInsertImplicitAnswers(
+      _qcd.appendNewQuestsOrInsertImplicitAnswers(
           _questMgr, _questMgr.currentOrLastQuestion);
       expect(_questMgr.priorAnswerCount, 1);
       expect(_questMgr.pendingQuestionCount, 0);
@@ -60,16 +60,15 @@ void main() {
       'creates user answer abt LV group-by depth, & verifies new Questions generated from it',
       () {
     final testDataCreator = TestDataCreation();
-    final _qMatchColl = QMatchCollection.scoretrader();
-    final _qcd = QuestionCascadeDispatcher(
-        matchersToGenRulePrepQuests: _qMatchColl.allMatchersTestOnly.toList());
+    final _qcd = QuestionCascadeDispatcher();
     final _questMgr = QuestListMgr();
     expect(_questMgr.totalAnsweredQuestions, 0);
 
     // now create user question
-    final qTarg = QTargetResolution.areaLevelRules(
+    final qTarg = QTargetResolution.forVisRulePrep(
       AppScreen.marketView,
       ScreenWidgetArea.tableview,
+      null,
       VisualRuleType.groupCfg,
     );
 
@@ -100,7 +99,7 @@ void main() {
     QuestBase? nxtQu = _questMgr.nextQuestionToAnswer();
 
     // next line should create 2 new Questions
-    _qMatchColl.appendNewQuestsOrInsertImplicitAnswers(
+    _qcd.appendNewQuestsOrInsertImplicitAnswers(
       _questMgr,
       _questMgr.currentOrLastQuestion,
     );

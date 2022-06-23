@@ -27,7 +27,7 @@ final List<QuestBase> _initQuestionLst = [
     of my Qb.castFunc code
   */
   QuestBase.initialEventConfigRule(
-    QTargetResolution.eventLevel(),
+    QTargetResolution.forEvent(),
     DlgStr.eventName,
     [],
     CaptureAndCast<String>((qb, s) => s),
@@ -36,14 +36,14 @@ final List<QuestBase> _initQuestionLst = [
   // set true false to shorten manual testing
   if (false) ...[
     QuestBase.initialEventConfigRule(
-      QTargetResolution.eventLevel(),
+      QTargetResolution.forEvent(),
       DlgStr.eventDescrip,
       [],
       CaptureAndCast<String>((qb, s) => s),
       questId: QuestionIdStrings.eventDescrip,
     ),
     QuestBase.initialEventConfigRule(
-      QTargetResolution.eventLevel(),
+      QTargetResolution.forEvent(),
       DlgStr.eventType,
       EvType.values.map((e) => e.name),
       CaptureAndCast<EvType>(
@@ -52,7 +52,7 @@ final List<QuestBase> _initQuestionLst = [
       questId: QuestionIdStrings.eventType,
     ),
     QuestBase.initialEventConfigRule(
-      QTargetResolution.eventLevel(),
+      QTargetResolution.forEvent(),
       DlgStr.eventWhosCompeting,
       EvCompetitorType.values.map((e) => e.name),
       CaptureAndCast<EvCompetitorType>(
@@ -61,7 +61,7 @@ final List<QuestBase> _initQuestionLst = [
       questId: QuestionIdStrings.competitorType,
     ),
     QuestBase.initialEventConfigRule(
-      QTargetResolution.eventLevel(),
+      QTargetResolution.forEvent(),
       DlgStr.eventCompPlayAgainst,
       EvOpponentType.values.map((e) => e.name),
       CaptureAndCast<EvOpponentType>(
@@ -70,7 +70,7 @@ final List<QuestBase> _initQuestionLst = [
       questId: QuestionIdStrings.competeAgainstType,
     ),
     QuestBase.initialEventConfigRule(
-      QTargetResolution.eventLevel(),
+      QTargetResolution.forEvent(),
       DlgStr.eventDuration,
       EvDuration.values.map((e) => e.name),
       CaptureAndCast<EvDuration>(
@@ -79,7 +79,7 @@ final List<QuestBase> _initQuestionLst = [
       questId: QuestionIdStrings.eventDuration,
     ),
     QuestBase.initialEventConfigRule(
-      QTargetResolution.eventLevel(),
+      QTargetResolution.forEvent(),
       DlgStr.eventEliminationStrategy,
       EvEliminationStrategy.values.map((e) => e.name),
       CaptureAndCast<EvEliminationStrategy>(
@@ -88,14 +88,14 @@ final List<QuestBase> _initQuestionLst = [
       questId: QuestionIdStrings.eventEliminationStrategy,
     ),
     QuestBase.initialEventConfigRule(
-      QTargetResolution.eventLevel(),
+      QTargetResolution.forEvent(),
       DlgStr.useSameRowStyleForAllScreens,
       ['no', 'yes'],
       CaptureAndCast<bool>((qb, ls) => ls == '1'),
       questId: QuestionIdStrings.globalRowStyle,
     ),
     QuestBase.initialEventConfigRule(
-      QTargetResolution.eventLevel(),
+      QTargetResolution.forEvent(),
       DlgStr.eventGameAgeOffPolicy,
       EvAgeOffGameRule.values.map((e) => e.name),
       CaptureAndCast<EvAgeOffGameRule>(
@@ -106,7 +106,7 @@ final List<QuestBase> _initQuestionLst = [
   ],
   // ask which screens to configure
   QuestBase.initialEventConfigRule(
-    QTargetResolution.eventLevel(),
+    QTargetResolution.forEvent(),
     DlgStr.selectAppScreens, // <String, List<AppScreen>>
     AppScreen.eventConfiguration.topConfigurableScreens.map((e) => e.name),
     CaptureAndCast<List<AppScreen>>(

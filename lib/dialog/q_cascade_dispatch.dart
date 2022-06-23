@@ -1,25 +1,20 @@
 part of ConfigDialogRunner;
 
-class QuestionCascadeDispatcher {
-  // handles logic for creating new questions or implicit answers
-  // final QMatchCollection _qMatchCollForAreaRulesAndSlots;
-  // QuestionCascadeDispatcher(QMatchCollection? qAreaTargetMatchColl)
-  //   : _qMatchCollForAreaRulesAndSlots = qAreaTargetMatchColl != null
-  //         ? qAreaTargetMatchColl
-  //         : QMatchCollection.scoretrader() {}
+const List<QuestMatcher> _EMPTY_LST = const [];
 
-  List<QuestMatcher> matchersToGenTargetingQuests = [];
-  List<QuestMatcher> matchersToGenRuleSelectQuests = [];
-  List<QuestMatcher> matchersToGenRulePrepQuests = [];
-  List<QuestMatcher> matchersToGenRuleDetailQuests = [];
+class QuestionCascadeDispatcher {
+  List<QuestMatcher> matchersToGenTargetingQuests;
+  List<QuestMatcher> matchersToGenRuleSelectQuests;
+  List<QuestMatcher> matchersToGenRulePrepQuests;
+  List<QuestMatcher> matchersToGenRuleDetailQuests;
 
   QuestionCascadeDispatcher({
-    this.matchersToGenTargetingQuests = const [],
-    this.matchersToGenRuleSelectQuests = const [],
-    this.matchersToGenRulePrepQuests = const [],
-    this.matchersToGenRuleDetailQuests = const [],
+    this.matchersToGenTargetingQuests = _EMPTY_LST,
+    this.matchersToGenRuleSelectQuests = _EMPTY_LST,
+    this.matchersToGenRulePrepQuests = _EMPTY_LST,
+    this.matchersToGenRuleDetailQuests = _EMPTY_LST,
   }) {
-    //
+    // will use scoretrader defaults unless args passed to constructor
     if (matchersToGenTargetingQuests.length < 1) {
       matchersToGenTargetingQuests = _getMatchersToGenTargetingQuests();
     }
@@ -136,9 +131,111 @@ class QuestionCascadeDispatcher {
     }
   }
 
-  static List<QuestMatcher> _getMatchersToGenTargetingQuests() {
+  // begin static matchers lists
+  List<QuestMatcher> _getMatchersToGenTargetingQuests() {
     //
     return [
+      QuestMatcher<List<AppScreen>, List<ScreenWidgetArea>>(
+        '''
+      receive list of user selected app-screens
+      and generate one question for each
+      in which we ask which areas on that screen
+      need to be configured
+''',
+        questIdPatternMatchTest: (String answQid) =>
+            answQid.startsWith(QuestionIdStrings.selectAppScreens),
+        validateUserAnswerAfterPatternMatchIsTrueCallback:
+            (QuestBase priorAnsweredQuest) {
+          var lst = priorAnsweredQuest.mainAnswer as Iterable<AppScreen>;
+          return lst.length > 0;
+        },
+        derivedQuestGen: DerivedQuestGenerator<List<AppScreen>>(
+          'Select areas you want to configure on screen {0} (resp will gen which rule/slot for each area quest)',
+          newQuestPromptArgGen: (
+            QuestBase priorAnsweredQuest,
+            int newQuIdx,
+          ) {
+            // produce args for {0} in prompt template above
+            String nameOfScreenToConfig =
+                (priorAnsweredQuest.mainAnswer as List<AppScreen>)[newQuIdx]
+                    .name;
+            return [nameOfScreenToConfig.toUpperCase()];
+          },
+          newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
+            // how many screens selected,
+            // so how many new questions to generate?
+            return (priorAnsweredQuest.mainAnswer as List<AppScreen>).length;
+          },
+          newQuestIdGenFromPriorQuest: (
+            QuestBase priorAnsweredQuest,
+            int newQuIdx,
+          ) {
+            /* each new question about area on screen should
+          have an ID that lets the next QuestMatcher identify it to produce new Q's
+          specAreasToConfigOnScreen is important so appropriate matchers fire
+          on each of these answers
+        */
+            var selectedAppScreens =
+                priorAnsweredQuest.mainAnswer as List<AppScreen>;
+            String scrName = selectedAppScreens[newQuIdx].name;
+
+            return QuestionIdStrings.specAreasToConfigOnScreen + '-' + scrName;
+          },
+          answerChoiceGenerator: (
+            QuestBase priorAnsweredQuest,
+            int newQuIdx,
+          ) {
+            // show allowed possible answers for generated questions
+            // return List<String>
+            var selectedAppScreens =
+                priorAnsweredQuest.mainAnswer as List<AppScreen>;
+            return selectedAppScreens[newQuIdx]
+                .configurableScreenAreas
+                .map((swa) => swa.name)
+                .toList();
+          },
+          deriveTargetFromPriorRespCallbk: (
+            QuestBase priorAnsweredQuest,
+            int newQuIdx,
+          ) {
+            // creates new target + intent (QTargetIntent) for each generated question
+            var selectedAppScreens =
+                priorAnsweredQuest.mainAnswer as List<AppScreen>;
+            return priorAnsweredQuest.qTargetResolution.copyWith(
+              appScreen: selectedAppScreens[newQuIdx],
+            );
+          },
+          /* params to handle converting user responses (String 0,1,2)
+          on NEW QUESTIONS, into the expected response data-type
+          each item in list below is 1-1 sync with question being created
+          if perQuestGenOptions.length < result of newQuestCountCalculator()
+          then LAST item in perQuestGenOptions will be used to configure
+          subsequent new questions
+
+FIXME:
+          TO CONSIDER:  what if generic type in PerQuestGenResponsHandlingOpts
+          is different than 2nd generic type above in
+            QuestMatcher<List<AppScreen>, List<ScreenWidgetArea>>
+        that seems like a design mistake???
+      */
+          perNewQuestGenOpts: [
+            PerQuestGenResponsHandlingOpts<List<ScreenWidgetArea>>(
+              newRespCastFunc: (
+                QuestBase newAnsQuest,
+                String lstAreaIdxs,
+              ) {
+                List<ScreenWidgetArea> possibleAreasForScreen =
+                    newAnsQuest.qTargetResolution.possibleAreasForScreen;
+                return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
+                    .map(
+                      (i) => possibleAreasForScreen[i],
+                    )
+                    .toList();
+              },
+            ),
+          ],
+        ),
+      ),
       QuestMatcher<List<ScreenWidgetArea>, List<ScreenAreaWidgetSlot>>(
         '''matches questions in which user specifies screen-areas to config
       build ?s to specify which SLOTS for those selected screen-areas
@@ -147,13 +244,12 @@ class QuestionCascadeDispatcher {
       ask WHICH rules for each selected slot
     ''',
 
-        questIdPatternMatchTest: (qid) =>
-            qid.startsWith(QuestionIdStrings.specAreasToConfigOnScreen),
+        questIdPatternMatchTest: (String answQid) =>
+            answQid.startsWith(QuestionIdStrings.specAreasToConfigOnScreen),
         validateUserAnswerAfterPatternMatchIsTrueCallback:
             (QuestBase priorAnsweredQuest) {
-          return (priorAnsweredQuest.mainAnswer as Iterable<ScreenWidgetArea>)
-                  .length >
-              0;
+          var lst = priorAnsweredQuest.mainAnswer as Iterable<ScreenWidgetArea>;
+          return lst.length > 0;
         },
         //
         derivedQuestGen: DerivedQuestGenerator<List<ScreenWidgetArea>>(
@@ -210,8 +306,9 @@ class QuestionCascadeDispatcher {
             // print(
             //   'info: make ? with target ${priorAnsweredQuest.targetPath} for $currArea',
             // );
-            return priorAnsweredQuest.qTargetIntent.copyWith(
+            return priorAnsweredQuest.qTargetResolution.copyWith(
               screenWidgetArea: currArea,
+              targetComplete: true,
             );
           },
           perNewQuestGenOpts: [
@@ -221,7 +318,7 @@ class QuestionCascadeDispatcher {
                 String lstAreaIdxs,
               ) {
                 List<ScreenAreaWidgetSlot> possibleSlots =
-                    newQuest.qTargetIntent.possibleSlotsForAreaInScreen;
+                    newQuest.qTargetResolution.possibleSlotsForAreaInScreen;
 
                 return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
                     .map((i) => possibleSlots[i])
@@ -302,7 +399,7 @@ class QuestionCascadeDispatcher {
             // print(
             //   'info: make ? with target ${priorAnsweredQuest.targetPath} for $currArea',
             // );
-            return priorAnsweredQuest.qTargetIntent.copyWith(
+            return priorAnsweredQuest.qTargetResolution.copyWith(
               screenWidgetArea: currArea,
             );
           },
@@ -313,7 +410,7 @@ class QuestionCascadeDispatcher {
                 String lstAreaIdxs,
               ) {
                 List<ScreenAreaWidgetSlot> possibleSlots =
-                    newQuest.qTargetIntent.possibleSlotsForAreaInScreen;
+                    newQuest.qTargetResolution.possibleSlotsForAreaInScreen;
 
                 return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
                     .map((i) => possibleSlots[i])
@@ -405,7 +502,7 @@ class QuestionCascadeDispatcher {
                 (priorAnsweredQuest.mainAnswer as Iterable<VisualRuleType>)
                     .toList();
             VisualRuleType currRule = selectedRulesForArea[newQuestIdx];
-            return priorAnsweredQuest.qTargetIntent.copyWith(
+            return priorAnsweredQuest.qTargetResolution.copyWith(
               screenWidgetArea: priorAnsweredQuest.screenWidgetArea,
               slotInArea: priorAnsweredQuest.slotInArea,
               visRuleTypeForAreaOrSlot: currRule,
@@ -419,7 +516,7 @@ class QuestionCascadeDispatcher {
                 String lstVisRuleIdxs,
               ) {
                 List<VisualRuleType> possibleRules =
-                    newAnsQuest.qTargetIntent.possibleRulesForAreaInScreen;
+                    newAnsQuest.qTargetResolution.possibleRulesForAreaInScreen;
                 return castStrOfIdxsToIterOfInts(lstVisRuleIdxs, dflt: 0)
                     .map(
                       (i) => possibleRules[i],
@@ -502,7 +599,7 @@ class QuestionCascadeDispatcher {
                     .mainAnswer as Iterable<ScreenAreaWidgetSlot>)
                 .toList();
             ScreenAreaWidgetSlot currSlot = selectedAreaSlots[newQuestIdx];
-            return priorAnsweredQuest.qTargetIntent.copyWith(
+            return priorAnsweredQuest.qTargetResolution.copyWith(
               screenWidgetArea: priorAnsweredQuest.screenWidgetArea,
               slotInArea: currSlot,
               targetComplete: true,
@@ -515,7 +612,7 @@ class QuestionCascadeDispatcher {
                 String lstAreaIdxs,
               ) {
                 List<VisualRuleType> possibleRules =
-                    newAnsQuest.qTargetIntent.possibleRulesForAreaInScreen;
+                    newAnsQuest.qTargetResolution.possibleRulesForAreaInScreen;
                 return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
                     .map(
                       (i) => possibleRules[i],
@@ -538,6 +635,13 @@ class QuestionCascadeDispatcher {
     //
     return [];
   }
+
+  // test only
+  List<QuestMatcher> get allMatchersTestOnly =>
+      matchersToGenTargetingQuests +
+      matchersToGenRuleSelectQuests +
+      matchersToGenRulePrepQuests +
+      matchersToGenRuleDetailQuests;
 
   //
   // void niu_createPrepQuestions(
@@ -611,93 +715,3 @@ class QuestionCascadeDispatcher {
 }
 
 //
-//
-// top level functions
-
-DerivedQuestGenerator<List<AppScreen>>
-    _getQuestGenForWhichAreasInEachSelectedScreen() {
-  //
-  return DerivedQuestGenerator<List<AppScreen>>(
-    'Select areas you want to configure on screen {0} (resp will gen which rule/slot for each area quest)',
-    newQuestPromptArgGen: (
-      QuestBase priorAnsweredQuest,
-      int newQuIdx,
-    ) {
-      // produce args for {0} in prompt template above
-      String nameOfScreenToConfig =
-          (priorAnsweredQuest.mainAnswer as List<AppScreen>)[newQuIdx].name;
-      return [nameOfScreenToConfig.toUpperCase()];
-    },
-    newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
-      // how many screens selected,
-      // so how many new questions to generate?
-      return (priorAnsweredQuest.mainAnswer as List<AppScreen>).length;
-    },
-    newQuestIdGenFromPriorQuest: (
-      QuestBase priorAnsweredQuest,
-      int newQuIdx,
-    ) {
-      /* each new question about area on screen should
-          have an ID that lets the next QuestMatcher identify it to produce new Q's
-          specAreasToConfigOnScreen is important so appropriate matchers fire
-          on each of these answers
-        */
-      var selectedAppScreens = priorAnsweredQuest.mainAnswer as List<AppScreen>;
-      String scrName = selectedAppScreens[newQuIdx].name;
-
-      return QuestionIdStrings.specAreasToConfigOnScreen + '-' + scrName;
-    },
-    answerChoiceGenerator: (
-      QuestBase priorAnsweredQuest,
-      int newQuIdx,
-    ) {
-      // show allowed possible answers for generated questions
-      // return List<String>
-      var selectedAppScreens = priorAnsweredQuest.mainAnswer as List<AppScreen>;
-      return selectedAppScreens[newQuIdx]
-          .configurableScreenAreas
-          .map((swa) => swa.name)
-          .toList();
-    },
-    deriveTargetFromPriorRespCallbk: (
-      QuestBase priorAnsweredQuest,
-      int newQuIdx,
-    ) {
-      // creates new target + intent (QTargetIntent) for each generated question
-      var selectedAppScreens = priorAnsweredQuest.mainAnswer as List<AppScreen>;
-      return priorAnsweredQuest.qTargetIntent.copyWith(
-        appScreen: selectedAppScreens[newQuIdx],
-        // screenWidgetArea: priorAnsweredQuest.screenWidgetArea,
-      );
-    },
-    /* params to handle converting user responses (String 0,1,2)
-          on NEW QUESTIONS, into the expected response data-type
-          each item in list below is 1-1 sync with question being created
-          if perQuestGenOptions.length < result of newQuestCountCalculator()
-          then LAST item in perQuestGenOptions will be used to configure
-          subsequent new questions
-
-FIXME:
-          TO CONSIDER:  what if generic type in PerQuestGenResponsHandlingOpts
-          is different than 2nd generic type above in
-            QuestMatcher<List<AppScreen>, List<ScreenWidgetArea>>
-        that seems like a design mistake???
-      */
-    perNewQuestGenOpts: [
-      PerQuestGenResponsHandlingOpts<List<ScreenWidgetArea>>(
-        newRespCastFunc: (
-          QuestBase newAnsQuest,
-          String lstAreaIdxs,
-        ) {
-          List<ScreenWidgetArea> possibleAreasForScreen =
-              newAnsQuest.qTargetIntent.possibleAreasForScreen;
-          return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
-              .map(
-                (i) => possibleAreasForScreen[i],
-              )
-              .toList();
-        },
-      ),
-    ],
-  );
-}

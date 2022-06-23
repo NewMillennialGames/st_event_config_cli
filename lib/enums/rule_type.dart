@@ -159,7 +159,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           newQuestIdGenFromPriorQuest: (prevQuest, newQuestIdx) =>
               newQuestNamePrefix + '_askCount_$newQuestIdx',
           deriveTargetFromPriorRespCallbk: (QuestBase qb, int __) {
-            return qb.qTargetIntent.copyWith();
+            return qb.qTargetResolution.copyWith();
           },
           perNewQuestGenOpts: [
             PerQuestGenResponsHandlingOpts<int>(
@@ -180,7 +180,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           newQuestIdGenFromPriorQuest: (prevQuest, newQuestIdx) =>
               newQuestNamePrefix + '_hide_$newQuestIdx',
           deriveTargetFromPriorRespCallbk: (QuestBase qb, int __) {
-            return qb.qTargetIntent.copyWith();
+            return qb.qTargetResolution.copyWith();
           },
           perNewQuestGenOpts: [
             PerQuestGenResponsHandlingOpts<bool>(
@@ -204,7 +204,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           newQuestIdGenFromPriorQuest: (prevQuest, newQuestIdx) =>
               newQuestNamePrefix + '_selFld_$newQuestIdx',
           deriveTargetFromPriorRespCallbk: (QuestBase qb, int __) {
-            return qb.qTargetIntent.copyWith();
+            return qb.qTargetResolution.copyWith();
           },
           perNewQuestGenOpts: [
             PerQuestGenResponsHandlingOpts<DbTableFieldName>(
@@ -220,7 +220,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
       case VisRuleQuestType.selectVisualComponentOrStyle:
         // specify desired style on area or slot
         List<dynamic> possibleVisStyles =
-            prevAnswQuest.qTargetIntent.possibleVisCompStylesForTarget;
+            prevAnswQuest.qTargetResolution.possibleVisCompStylesForTarget;
 
         return DerivedQuestGenerator<int>(
           'Select preferred style for ${prevAnswQuest.targetPath}?',
@@ -231,7 +231,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           newQuestIdGenFromPriorQuest: (prevQuest, newQuestIdx) =>
               newQuestNamePrefix + '_selStyle_$newQuestIdx',
           deriveTargetFromPriorRespCallbk: (QuestBase qb, int __) {
-            return qb.qTargetIntent.copyWith();
+            return qb.qTargetResolution.copyWith();
           },
           perNewQuestGenOpts: [
             PerQuestGenResponsHandlingOpts<dynamic>(
@@ -254,7 +254,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           newQuestIdGenFromPriorQuest: (prevQuest, newQuestIdx) =>
               newQuestNamePrefix + '_sort_$newQuestIdx',
           deriveTargetFromPriorRespCallbk: (QuestBase qb, int __) {
-            return qb.qTargetIntent.copyWith();
+            return qb.qTargetResolution.copyWith();
           },
           perNewQuestGenOpts: [
             PerQuestGenResponsHandlingOpts<bool>(

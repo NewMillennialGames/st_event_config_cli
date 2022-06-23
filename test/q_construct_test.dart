@@ -15,9 +15,10 @@ void main() {
   late QuestBase twoPromptQuest;
 
   setUp(() {
-    final qq = QTargetResolution.areaLevelRules(
+    final qq = QTargetResolution.forVisRulePrep(
       AppScreen.marketView,
       ScreenWidgetArea.tableview,
+      null,
       VisualRuleType.groupCfg,
     );
 

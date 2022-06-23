@@ -165,7 +165,7 @@ class TestRespGenWhenQuestLike {
     isSame = area == null || quest.screenWidgetArea == area;
     isSame = isSame && slot == null || quest.slotInArea == slot;
     isSame = isSame && ruleType == null ||
-        quest.qTargetIntent.visRuleTypeForAreaOrSlot == ruleType;
+        quest.qTargetResolution.visRuleTypeForAreaOrSlot == ruleType;
     isSame = isSame && responsesByQType.length > 0;
     // if (!isSame) return false;
 

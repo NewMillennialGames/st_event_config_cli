@@ -21,9 +21,9 @@ class QMatchCollection {
 
   QMatchCollection(this._matcherList);
 
-  factory QMatchCollection.scoretrader() {
-    return QMatchCollection(stDfltMatcherList);
-  }
+  // factory QMatchCollection.scoretrader() {
+  //   return QMatchCollection(stDfltMatcherList);
+  // }
 
   void append(List<QuestMatcher> ml) {
     _matcherList.addAll(ml);

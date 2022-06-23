@@ -18,9 +18,10 @@ void main() {
     DialogRunner dlogRun = DialogRunner(questPresent);
     //
     // now create user question
-    final qq = QTargetResolution.areaLevelRules(
+    final qq = QTargetResolution.forVisRulePrep(
       AppScreen.marketView,
       ScreenWidgetArea.tableview,
+      null,
       VisualRuleType.groupCfg,
     );
 
@@ -33,10 +34,10 @@ void main() {
       },
       questId: 'blahhh',
     );
-    var _qMatchColl = QMatchCollection.scoretrader();
+    final _qcd = QuestionCascadeDispatcher();
 
     int matchCount = 0;
-    for (QuestMatcher qm in _qMatchColl.allMatchersTestOnly) {
+    for (QuestMatcher qm in _qcd.allMatchersTestOnly) {
       if (qm.doesMatch(askNumSortSlots)) {
         matchCount += 1;
         List<QuestBase> producedQuestions =

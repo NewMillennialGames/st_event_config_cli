@@ -34,19 +34,18 @@ abstract class QuestBase with EquatableMixin {
     it's vital that 5 Factory quest constructors respect
     this standard signature:   QuestFactorytSignature
   */
-  final QTargetResolution qTargetIntent;
+  final QTargetResolution qTargetResolution;
   final QPromptCollection qPromptCollection;
   // optional unique value for expedited matching
   String questId = '';
   String? helpMsgOnError;
-  // bool isDiagnostic = false;
 
   QuestBase(
-    this.qTargetIntent,
+    this.qTargetResolution,
     this.qPromptCollection, {
     String? questId,
     this.helpMsgOnError,
-  }) : questId = questId == null ? qTargetIntent.equatableKey : questId;
+  }) : questId = questId == null ? qTargetResolution.equatableKey : questId;
 
   // constructors with common QuestFactorytSignature
   // called by a DerivedQuestGenerator<PriorAnsType>
@@ -199,7 +198,7 @@ abstract class QuestBase with EquatableMixin {
       this is RuleSelectQuest || this is RulePrepQuest,
       'cant produce detail quests from this prevAnswQuest',
     );
-    return qTargetIntent.visRuleTypeForAreaOrSlot!
+    return qTargetResolution.visRuleTypeForAreaOrSlot!
         .derQuestGenFromSubtypeForRuleGen(this, ruleSubtypeNewQuest);
   }
 
@@ -228,9 +227,9 @@ abstract class QuestBase with EquatableMixin {
 
   // getters
   bool get requiresVisRulePrepQuestion =>
-      qTargetIntent.requiresVisRulePrepQuestion;
+      qTargetResolution.requiresVisRulePrepQuestion;
   bool get requiresBehRulePrepQuestion =>
-      qTargetIntent.requiresBehRulePrepQuestion;
+      qTargetResolution.requiresBehRulePrepQuestion;
 
   bool get doesCreateDerivedQuests =>
       respCascadePatternEm != QRespCascadePatternEm.noCascade;
@@ -243,13 +242,14 @@ abstract class QuestBase with EquatableMixin {
   QuestFactorytSignature get derivedQuestConstructor =>
       QuestBase.eventLevelCfgQuest;
 
-  String get targetPath => qTargetIntent.targetPath;
-  bool get targetPathIsComplete => qTargetIntent.targetComplete;
+  String get targetPath => qTargetResolution.targetPath;
+  bool get targetPathIsComplete => qTargetResolution.targetComplete;
   bool get isFullyAnswered => qPromptCollection.allPartsHaveAnswers;
 
   // define type of question for auto-gen
   bool get isTopLevelEventConfigQuestion =>
-      this is EventLevelCfgQuest && qTargetIntent.isTopLevelEventConfigQuestion;
+      this is EventLevelCfgQuest &&
+      qTargetResolution.isTopLevelEventConfigQuestion;
   bool get isRegionTargetQuestion => this is RegionTargetQuest;
   bool get isRuleSelectionQuestion => this is RuleSelectQuest;
   bool get isRulePrepQuestion => this is RulePrepQuest;
@@ -272,32 +272,32 @@ abstract class QuestBase with EquatableMixin {
   Type get expectedAnswerType => _firstPromptAnswers.cast(this).runtimeType;
 
   bool get existsONLYToGenDialogStructure =>
-      qTargetIntent.isTopLevelEventConfigQuestion;
+      qTargetResolution.isTopLevelEventConfigQuestion;
   bool get isNotForRuleOutput => existsONLYToGenDialogStructure;
   bool get isMultiPart => qPromptCollection.isMultiPart;
 
   // quantified info
-  AppScreen get appScreen => qTargetIntent.appScreen;
-  bool get _areaAlreadySet => qTargetIntent.screenWidgetArea != null;
-  ScreenWidgetArea? get screenWidgetArea => qTargetIntent.screenWidgetArea;
-  ScreenAreaWidgetSlot? get slotInArea => qTargetIntent.slotInArea;
+  AppScreen get appScreen => qTargetResolution.appScreen;
+  bool get _areaAlreadySet => qTargetResolution.screenWidgetArea != null;
+  ScreenWidgetArea? get screenWidgetArea => qTargetResolution.screenWidgetArea;
+  ScreenAreaWidgetSlot? get slotInArea => qTargetResolution.slotInArea;
   //
   VisualRuleType? get visRuleTypeForAreaOrSlot =>
-      qTargetIntent.visRuleTypeForAreaOrSlot;
+      qTargetResolution.visRuleTypeForAreaOrSlot;
   BehaviorRuleType? get behRuleTypeForAreaOrSlot =>
-      qTargetIntent.behRuleTypeForAreaOrSlot;
+      qTargetResolution.behRuleTypeForAreaOrSlot;
   //
   // below controls how each Quest2 causes cascade creation of new Quest2s
   bool get generatesNoNewQuestions => !doesCreateDerivedQuests;
   bool get addsRuleDetailQuestsForSlotOrArea =>
       isRuleSelectionQuestion || isRulePrepQuestion;
 
-  int get sortKey => qTargetIntent.targetSortIndex;
+  int get sortKey => qTargetResolution.targetSortIndex;
   // impl for equatable
   // but really being used as a search filter
   // to find Quest2s in a specific granularity
   @override
-  List<Object> get props => [qTargetIntent];
+  List<Object> get props => [qTargetResolution];
 
   @override
   bool get stringify => true;

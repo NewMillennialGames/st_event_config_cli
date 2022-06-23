@@ -201,7 +201,7 @@ List<QuestMatcher> stDfltMatcherList = [
         VisualRuleType curRule = selectedRulesInArea[newQuestIdx];
         // FIXME: cascadeType: // of created questions
         // QRespCascadePatternEm.noCascade,
-        return priorAnsweredQuest.qTargetIntent.copyWith(
+        return priorAnsweredQuest.qTargetResolution.copyWith(
           visRuleTypeForAreaOrSlot: curRule,
           targetComplete: true,
         );
@@ -465,7 +465,7 @@ List<QuestMatcher> stDfltMatcherList = [
         // ScreenAreaWidgetSlot slot = selectedAreaSlots[idx];
         // FIXME:  cascadeType: // of created questions
         // QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions,
-        return priorAnsweredQuest.qTargetIntent.copyWith(
+        return priorAnsweredQuest.qTargetResolution.copyWith(
           // screenWidgetArea: currArea,
           visRuleTypeForAreaOrSlot: curRule,
         );
@@ -473,7 +473,7 @@ List<QuestMatcher> stDfltMatcherList = [
       perNewQuestGenOpts: [
         PerQuestGenResponsHandlingOpts(
           newRespCastFunc: (QuestBase newQuest, String lstAreaIdxs) {
-            var curRule = newQuest.qTargetIntent.visRuleTypeForAreaOrSlot!;
+            var curRule = newQuest.qTargetResolution.visRuleTypeForAreaOrSlot!;
             return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0).map(
               (i) => curRule.requConfigQuests[i],
             );
@@ -519,7 +519,7 @@ List<QuestMatcher> stDfltMatcherList = [
         idx,
       ) {
         int slotNum = idx + 1;
-        var areaName = (priorAnsweredQuest.qTargetIntent.screenWidgetArea ??
+        var areaName = (priorAnsweredQuest.qTargetResolution.screenWidgetArea ??
                 ScreenWidgetArea.tableview)
             .name;
         return <String>[
@@ -542,7 +542,7 @@ List<QuestMatcher> stDfltMatcherList = [
         QuestBase priorAnsweredQuest,
         int idx,
       ) {
-        return priorAnsweredQuest.qTargetIntent.copyWith(
+        return priorAnsweredQuest.qTargetResolution.copyWith(
           visRuleTypeForAreaOrSlot: VisualRuleType.groupCfg,
         );
       },

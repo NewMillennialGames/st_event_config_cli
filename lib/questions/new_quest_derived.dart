@@ -86,7 +86,7 @@ class DerivedQuestGenerator<PriorAnsType> {
             : deriveTargetFromPriorRespCallbk;
 
   static QTargetResolution _ccTargIntent(QuestBase qb, int idx) =>
-      qb.qTargetIntent.copyWith();
+      qb.qTargetResolution.copyWith();
 
   factory DerivedQuestGenerator.noop() {
     // dummy rec for when we dont need to produce new questions

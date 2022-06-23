@@ -133,7 +133,7 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
       can generate Quest2s for levels below them
   */
 
-  factory QTargetResolution.eventLevel() {
+  factory QTargetResolution.forEvent() {
     /*
       sample Question:    for this event:
       'Select the app screens you`d like to configure?',
@@ -146,8 +146,10 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
     );
   }
 
-  factory QTargetResolution.screenLevel(
+  factory QTargetResolution.forTargetting(
     AppScreen appScreen,
+    ScreenWidgetArea? screenArea,
+    ScreenAreaWidgetSlot? slot,
   ) {
     /*
       sample Question:
@@ -161,9 +163,35 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
     );
   }
 
-  factory QTargetResolution.areaLevelRules(
+  factory QTargetResolution.forRuleSelection(
     AppScreen appScreen,
     ScreenWidgetArea screenArea,
+    ScreenAreaWidgetSlot? slot,
+    // VisualRuleType ruleType,
+  ) {
+    /*  DG note 4/14/22 -> this constructor was commented and removed previously
+          don't remember why or how it's not in use, but I am using it now in tests
+
+    I think this method was deprecated when I switched to sloppy pattern of treating
+    Listview rules as slot rules rather than answers under an area level rule
+
+      sample Question:
+       'Which rules would you like to add to the ${area.name} of ${screen.name}?',
+      when responseAddsWhichRuleTypeQuestsForArea is true
+      this answer will build "rule detail ?? for area" Quest2s
+    */
+    return QTargetResolution(
+      appScreen,
+      screenArea,
+      slotInArea: slot,
+      targetComplete: true,
+    );
+  }
+
+  factory QTargetResolution.forVisRulePrep(
+    AppScreen appScreen,
+    ScreenWidgetArea screenArea,
+    ScreenAreaWidgetSlot? slot,
     VisualRuleType ruleType,
   ) {
     /*  DG note 4/14/22 -> this constructor was commented and removed previously
@@ -180,30 +208,33 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
     return QTargetResolution(
       appScreen,
       screenArea,
+      slotInArea: slot,
       visRuleTypeForAreaOrSlot: ruleType,
+      targetComplete: true,
     );
   }
 
-  factory QTargetResolution.areaLevelSlots(
-    AppScreen appScreen,
-    ScreenWidgetArea screenArea,
-  ) {
-    /*
-      sample Question:
-      'Which slots/widgets on the ${area.name} of ${screen.name} would you like to configure?',
-      when responseAddsWhichRuleQuest2s is true
-      this answer will build "rule detail ?? for slot" Quest2s
-    */
-    return QTargetResolution(
-      appScreen,
-      screenArea,
-    );
-  }
+  // factory QTargetResolution.areaLevelSlots(
+  //   AppScreen appScreen,
+  //   ScreenWidgetArea screenArea,
+  // ) {
+  //   /*
+  //     sample Question:
+  //     'Which slots/widgets on the ${area.name} of ${screen.name} would you like to configure?',
+  //     when responseAddsWhichRuleQuest2s is true
+  //     this answer will build "rule detail ?? for slot" Quest2s
+  //   */
+  //   return QTargetResolution(
+  //     appScreen,
+  //     screenArea,
+  //   );
+  // }
 
-  factory QTargetResolution.ruleLevel(
+  factory QTargetResolution.forVisRuleDetail(
     AppScreen appScreen,
     ScreenWidgetArea screenArea,
     ScreenAreaWidgetSlot? slot,
+    VisualRuleType visRuleType,
   ) {
     /*
       sample Question:
@@ -212,55 +243,34 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
       this answer will build "rule detail ?? for slot" Quest2s
     */
     return QTargetResolution(
-      // QIntentCfg.ruleLevel(VisualRuleType.topDialogStruct),
-      // responseAddsRuleDetailQuest2s
-      //     ? QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions
-      //     : QRespCascadePatternEm.noCascade,
       appScreen,
       screenArea,
       slotInArea: slot,
+      visRuleTypeForAreaOrSlot: visRuleType,
+      targetComplete: true,
     );
   }
 
-  factory QTargetResolution.ruleDetailMultiResponse(
+  factory QTargetResolution.forBehRuleDetail(
     AppScreen appScreen,
-    ScreenWidgetArea screenWidgetArea,
-    VisualRuleType? visRuleTypeForSlotInArea,
-    // rule level always has screen & area; may have slot
+    ScreenWidgetArea screenArea,
     ScreenAreaWidgetSlot? slot,
-    BehaviorRuleType? behRuleTypeForSlotInArea,
+    BehaviorRuleType behRuleType,
   ) {
-    // bool isVisual = visRuleTypeForSlotInArea != null;
+    /*
+      sample Question:
+     'Which rules would you like to add to the ${slotInArea.name} area of ${screenArea.name} on screen ${screen.name}?',
+      when responseAddsRuleDetailQuest2s is true
+      this answer will build "rule detail ?? for slot" Quest2s
+    */
     return QTargetResolution(
       appScreen,
-      screenWidgetArea,
+      screenArea,
       slotInArea: slot,
-      visRuleTypeForAreaOrSlot: visRuleTypeForSlotInArea,
-      behRuleTypeForAreaOrSlot: behRuleTypeForSlotInArea,
+      behRuleTypeForAreaOrSlot: behRuleType,
+      targetComplete: true,
     );
   }
-
-  // List<VisualRuleType> relatedSubVisualRules(RegionTargetQuest quest) {
-  //   if (!this.generatesNoNewQuestions) return [];
-
-  //   List<VisualRuleType> list = [];
-  //   switch (this.visRuleTypeForAreaOrSlot!) {
-  //     case VisualRuleType.filterCfg:
-  //       list.addAll([]);
-  //       break;
-  //     case VisualRuleType.sortCfg:
-  //       list.addAll([]);
-  //       break;
-  //     case VisualRuleType.showOrHide:
-  //       list.addAll([]);
-  //       break;
-  //     case VisualRuleType.styleOrFormat:
-  //       list.addAll([]);
-  //       break;
-  //   }
-
-  //   return list;
-  // }
 
   static int _weightForTargetEnumIdx(dynamic targetEnum) {
     /* allows weighting each QTargetIntent
@@ -291,70 +301,45 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
   bool get stringify => true;
 }
 
-// final QuestCascadeTypEnum cascadeType;
-// final AppScreen appScreen;
-// /* properties below are in ORDER
-// if any property is set (not null)
-// then all properties ABOVE it must also be non-null
-// */
-// final ScreenWidgetArea? screenWidgetArea;
-// final ScreenAreaWidgetSlot? slotInArea;
-// // a rule-type applies to all of:
-// //    appScreen, screenWidgetArea, slotInArea
-// final VisualRuleType? visRuleTypeForAreaOrSlot;
-// final BehaviorRuleType? behRuleTypeForAreaOrSlot;
 
-// const Quest2Quantifier._(
-//   this.cascadeType,
-//   this.appScreen,
-//   this.screenWidgetArea,
-//   this.slotInArea,
-//   this.visRuleTypeForAreaOrSlot,
-//   this.behRuleTypeForAreaOrSlot,
-// );
 
-// below implements local memoize cache
 
-// Map<String, Quest2Quantifier> _qqCache = {};
+  // factory QTargetResolution.ruleDetailMultiResponse(
+  //   AppScreen appScreen,
+  //   ScreenWidgetArea screenWidgetArea,
+  //   VisualRuleType? visRuleTypeForSlotInArea,
+  //   // rule level always has screen & area; may have slot
+  //   ScreenAreaWidgetSlot? slot,
+  //   BehaviorRuleType? behRuleTypeForSlotInArea,
+  // ) {
+  //   // bool isVisual = visRuleTypeForSlotInArea != null;
+  //   return QTargetResolution(
+  //     appScreen,
+  //     screenWidgetArea,
+  //     slotInArea: slot,
+  //     visRuleTypeForAreaOrSlot: visRuleTypeForSlotInArea,
+  //     behRuleTypeForAreaOrSlot: behRuleTypeForSlotInArea,
+  //   );
+  // }
 
-// String _makeQqKey(
-//   QuestCascadeTyp cascadeType,
-//   AppSection appSection,
-//   UiComponent? uiCompInSection,
-//   VisualRuleType? visRuleTypeForComp,
-//   BehaviorRuleType? behRuleTypeForComp,
-// ) {
-//   // bump idx for optionals up by 1 so zero represents unset state
-//   int uiCompIdx = 1 + (uiCompInSection?.index ?? -1);
-//   int visRuleTypeForCompIdx = 1 + (visRuleTypeForComp?.index ?? -1);
-//   int behRuleTypeForCompIdx = 1 + (behRuleTypeForComp?.index ?? -1);
-//   return '${cascadeType.index}-${appSection.index}-$uiCompIdx-$visRuleTypeForCompIdx-$behRuleTypeForCompIdx';
-// }
+  // List<VisualRuleType> relatedSubVisualRules(RegionTargetQuest quest) {
+  //   if (!this.generatesNoNewQuestions) return [];
 
-// var key = _makeQqKey(
-//   cascadeType,
-//   appSection,
-//   uiCompInSection,
-//   visRuleTypeForComp,
-//   behRuleTypeForComp,
-// );
+  //   List<VisualRuleType> list = [];
+  //   switch (this.visRuleTypeForAreaOrSlot!) {
+  //     case VisualRuleType.filterCfg:
+  //       list.addAll([]);
+  //       break;
+  //     case VisualRuleType.sortCfg:
+  //       list.addAll([]);
+  //       break;
+  //     case VisualRuleType.showOrHide:
+  //       list.addAll([]);
+  //       break;
+  //     case VisualRuleType.styleOrFormat:
+  //       list.addAll([]);
+  //       break;
+  //   }
 
-// var cached = _qqCache[key];
-// if (cached != null) return cached;
-
-// Quest2Quantifier qq = Quest2Quantifier._(
-//   cascadeType,
-//   appSection,
-//   uiCompInSection,
-//   visRuleTypeForComp,
-//   behRuleTypeForComp,
-// );
-// store in cache
-// _qqCache[key] = qq;
-// return qq;
-
-// zero out any that are not positive (value empty)
-// areaScore = areaScore > 0 ? areaScore : 0;
-// slotScore = slotScore > 0 ? slotScore : 0;
-// visRuleScore = visRuleScore > 0 ? visRuleScore : 0;
-// behRuleScore = behRuleScore > 0 ? behRuleScore : 0;
+  //   return list;
+  // }
