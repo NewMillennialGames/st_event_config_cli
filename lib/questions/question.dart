@@ -79,7 +79,8 @@ abstract class QuestBase with EquatableMixin {
     // implements QuestFactorytSignature
     // this style quest DOES NOT apply to ui-factory config
     var qDefCollection = QPromptCollection.fromList(prompts);
-    return RuleSelectQuest(targIntent, qDefCollection, questId: questId);
+    var completeTarg = targIntent.copyWith(targetComplete: true);
+    return RuleSelectQuest(completeTarg, qDefCollection, questId: questId);
   }
   //
   factory QuestBase.rulePrepQuest(
@@ -91,31 +92,32 @@ abstract class QuestBase with EquatableMixin {
     // this style quest DOES NOT apply to ui-factory config
     // only creates rule-prep when necessary
     var qDefCollection = QPromptCollection.fromList(prompts);
+    var completeTarg = targIntent.copyWith(targetComplete: true);
+
     // check whether we need rule-prep or just a vis-rule question
-    if (targIntent.visRuleTypeForAreaOrSlot?.requiresRulePrepQuestion ??
-        false) {
+    if (completeTarg.requiresVisRulePrepQuestion) {
       return RulePrepQuest(
-        targIntent,
+        completeTarg,
         qDefCollection,
         questId: questId,
       );
     }
-    if (targIntent.visRuleTypeForAreaOrSlot != null) {
+    if (completeTarg.visRuleTypeForAreaOrSlot != null) {
       return VisualRuleDetailQuest(
-        targIntent,
+        completeTarg,
         qDefCollection,
         questId: questId,
       );
     }
-    if (targIntent.behRuleTypeForAreaOrSlot != null) {
+    if (completeTarg.behRuleTypeForAreaOrSlot != null) {
       return BehaveRuleDetailQuest(
-        targIntent,
+        completeTarg,
         qDefCollection,
         questId: questId,
       );
     }
     print('Error:  QuestBase.rulePrepQuest hit impossible condition');
-    return RulePrepQuest(targIntent, qDefCollection, questId: questId);
+    return RulePrepQuest(completeTarg, qDefCollection, questId: questId);
   }
 
   factory QuestBase.visualRuleDetailQuest(
