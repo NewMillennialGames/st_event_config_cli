@@ -246,6 +246,7 @@ abstract class QuestBase with EquatableMixin {
 
   String get targetPath => qTargetResolution.targetPath;
   bool get targetPathIsComplete => qTargetResolution.targetComplete;
+  bool get targetUncompleted => !targetPathIsComplete;
   bool get isFullyAnswered => qPromptCollection.allPartsHaveAnswers;
 
   // define type of question for auto-gen

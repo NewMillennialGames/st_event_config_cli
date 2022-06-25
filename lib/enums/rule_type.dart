@@ -82,6 +82,28 @@ extension VisualRuleTypeExt1 on VisualRuleType {
         return nm + ' (themePreference)';
     }
   }
+
+  String get prepTemplate {
+    //
+    if (!this.requiresPrepQuestion) return '{0}';
+
+    switch (this) {
+      case VisualRuleType.generalDialogFlow:
+        return '';
+      case VisualRuleType.sortCfg:
+        return 'How many sort fields on {0}?';
+      case VisualRuleType.groupCfg:
+        return 'How many grouping fields on {0}?';
+      case VisualRuleType.filterCfg:
+        return 'How many filter menus on {0}?';
+      case VisualRuleType.styleOrFormat:
+        return '';
+      case VisualRuleType.showOrHide:
+        return '';
+      case VisualRuleType.themePreference:
+        return '';
+    }
+  }
   //
 
   List<VisRuleQuestType> get requConfigQuests {

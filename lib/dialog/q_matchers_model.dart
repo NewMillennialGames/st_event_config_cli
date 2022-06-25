@@ -119,7 +119,7 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
   */
   DerivedQuestGenerator<AnsTypOfMatched> derivedQuestGen;
   // derQuestGeneratorFactory will build a DerivedQuestGenerator when derivedQuestGen is a noop
-  DerQuestGeneratorFactoryClbk<AnsTypOfMatched>? deriveQuestGenCallbk;
+  DerQuestGeneratorFactoryClbk? deriveQuestGenCallbk; // <AnsTypOfMatched>
 
   // AddQuestChkCallbk is for doing more advanced analysis to verify a match
   final AddQuestRespChkCallbk?
