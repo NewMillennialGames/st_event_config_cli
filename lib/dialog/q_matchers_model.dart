@@ -117,7 +117,7 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
   function takes precedence; if deriveQuestGenCallbk passed
   it will be used
   */
-  DerivedQuestGenerator<AnsTypOfMatched> derivedQuestGen;
+  DerivedQuestGenerator derivedQuestGen; // <AnsTypOfMatched>
   // derQuestGeneratorFactory will build a DerivedQuestGenerator when derivedQuestGen is a noop
   DerQuestGeneratorFactoryClbk? deriveQuestGenCallbk; // <AnsTypOfMatched>
 
@@ -152,6 +152,11 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
   bool get usesMatchByQIdPatternCallback => questIdPatternMatchTest != null;
   bool get shouldValidateUserAnswer =>
       validateUserAnswerAfterPatternMatchIsTrueCallback != null;
+  bool get isTargetComplete =>
+      appScreen != null &&
+      screenWidgetArea != null &&
+      visRuleTypeForAreaOrSlot != null;
+
   // expose generic types
   // Type get matchedAnsTyp => AnsTypOfMatched;
   // Type get generatedQuestAnsTyp => AnsTypOfGend;
@@ -183,6 +188,11 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
     bool isAPatternMatch = _doDeeperMatch(prevAnsweredQuest);
     // pattern doesnt match so exit early
     if (!isAPatternMatch) return false;
+
+    // check target resolution
+    // isAPatternMatch =
+    // prevAnsweredQuest.targetPathIsComplete && isTargetComplete;
+
     // pattern match succeeded (isAPatternMatch == true)
     // so now validate user answer if requested
     if (shouldValidateUserAnswer) {
@@ -200,7 +210,7 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
   }
 
   List<QuestBase> getDerivedAutoGenQuestions(QuestBase answeredQuest) {
-    DerivedQuestGenerator<AnsTypOfMatched> dqg = activeDqg(answeredQuest);
+    DerivedQuestGenerator dqg = activeDqg(answeredQuest); // <AnsTypOfMatched>
     return dqg.getDerivedAutoGenQuestions(answeredQuest);
   }
 
@@ -250,13 +260,14 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
     return dMatch;
   }
 
-  DerivedQuestGenerator<AnsTypOfMatched> activeDqg(QuestBase? qb) {
+  DerivedQuestGenerator activeDqg(QuestBase? qb) {
+    // <AnsTypOfMatched>
     if (deriveQuestGenCallbk == null || _hasCreatedDynamicDqg)
       return derivedQuestGen;
 
     // should generate DQG rather than return stored DQG
-    derivedQuestGen =
-        deriveQuestGenCallbk!(qb!, 0) as DerivedQuestGenerator<AnsTypOfMatched>;
+    derivedQuestGen = deriveQuestGenCallbk!(
+        qb!, 0); // as DerivedQuestGenerator<AnsTypOfMatched>
     _hasCreatedDynamicDqg = true;
     return derivedQuestGen;
   }

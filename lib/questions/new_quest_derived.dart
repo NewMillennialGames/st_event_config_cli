@@ -37,8 +37,8 @@ class PerQuestGenResponsHandlingOpts<AnsType> {
   bool get genAsRuleQuestion => visRuleType != null;
 }
 
-class DerivedQuestGenerator<PriorAnsType> {
-  /*
+class DerivedQuestGenerator {
+  /*  <PriorAnsType>
     intersection of an answered Question, plus (usually) a QuestMatcher
     or (alternatively; see below) a specific question that we know already matched
 

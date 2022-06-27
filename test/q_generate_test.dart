@@ -65,21 +65,25 @@ void main() {
     expect(_questMgr.totalAnsweredQuestions, 0);
 
     // now create user question
-    final qTarg = QTargetResolution.forVisRulePrep(
+    var qTarg = QTargetResolution.forVisRulePrep(
       AppScreen.marketView,
       ScreenWidgetArea.tableview,
       null,
       VisualRuleType.groupCfg,
     );
 
+    // qTarg = qTarg.copyWith(targetComplete: true);
+
     QuestBase askGroupDepth = testDataCreator.makeQuestion<int>(
-        qTarg,
-        'set ListView group-by depth on marketView',
-        ['0', '1', '$k_quests_created_in_test', '3'],
-        (QuestBase qb, String selCount) {
-      // print('askNumSlots convert on str $selCount');
-      return int.tryParse(selCount) ?? 0;
-    });
+      qTarg,
+      'set ListView group-by depth on marketView',
+      ['0', '1', '$k_quests_created_in_test', '3'],
+      (QuestBase qb, String selCount) {
+        // print('askNumSlots convert on str $selCount');
+        return int.tryParse(selCount) ?? 0;
+      },
+      questId: '',
+    );
 
     // add question to q-manager
     _questMgr.appendGeneratedQuestsAndAnswers([askGroupDepth]);

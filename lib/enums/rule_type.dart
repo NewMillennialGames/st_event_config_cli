@@ -172,7 +172,8 @@ extension VisualRuleTypeExt1 on VisualRuleType {
       // return DerivedQuestGenerator.noop();
 
       case VisRuleQuestType.askCountOfSlotsToConfigure:
-        return DerivedQuestGenerator<VisualRuleType>(
+        return DerivedQuestGenerator(
+          // <VisualRuleType>
           'How many $ruleTypeName fields do you need for ${prevAnswQuest.targetPath}?',
           newQuestCountCalculator: (qb) => 1,
           newQuestPromptArgGen: (prevQuest, newQuestIdx) => [],
@@ -194,7 +195,8 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           ],
         );
       case VisRuleQuestType.controlsVisibilityOfAreaOrSlot:
-        return DerivedQuestGenerator<VisualRuleType>(
+        return DerivedQuestGenerator(
+          // <VisualRuleType>
           'Do you want to hide the element at ${prevAnswQuest.targetPath}?',
           newQuestCountCalculator: (qb) => 1,
           newQuestPromptArgGen: (prevQuest, newQuestIdx) => [],
@@ -217,7 +219,8 @@ extension VisualRuleTypeExt1 on VisualRuleType {
       //
 
       case VisRuleQuestType.selectDataFieldName:
-        return DerivedQuestGenerator<int>(
+        return DerivedQuestGenerator(
+          // <int>
           'Select field #{0} for ${prevAnswQuest.targetPath}?',
           newQuestCountCalculator: (qb) => qb.mainAnswer as int,
           newQuestPromptArgGen: (prevQuest, newQuestIdx) => ['$newQuestIdx'],
@@ -244,7 +247,8 @@ extension VisualRuleTypeExt1 on VisualRuleType {
         List<dynamic> possibleVisStyles =
             prevAnswQuest.qTargetResolution.possibleVisCompStylesForTarget;
 
-        return DerivedQuestGenerator<int>(
+        return DerivedQuestGenerator(
+          // <int>
           'Select preferred style for ${prevAnswQuest.targetPath}?',
           newQuestCountCalculator: (qb) => 1,
           newQuestPromptArgGen: (prevQuest, newQuestIdx) => [],
@@ -268,7 +272,8 @@ extension VisualRuleTypeExt1 on VisualRuleType {
         );
       //
       case VisRuleQuestType.specifySortAscending:
-        return DerivedQuestGenerator<dynamic>(
+        return DerivedQuestGenerator(
+          // <dynamic>
           'Do you want to sort ${prevAnswQuest.targetPath} ascending? (large vals at end)',
           newQuestCountCalculator: (qb) => 1,
           newQuestPromptArgGen: (prevQuest, newQuestIdx) => [],
