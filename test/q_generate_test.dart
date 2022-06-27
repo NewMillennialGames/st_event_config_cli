@@ -4,11 +4,13 @@ import 'package:st_ev_cfg/st_ev_cfg.dart';
 import 'package:st_ev_cfg/config/all.dart';
 import 'package:st_ev_cfg/util/all.dart';
 //
-import 'shared_utils.dart';
+// import 'shared_utils.dart';
 
 void main() {
   //
   const k_quests_created_in_test = 2;
+  final k_quest_id = QuestionIdStrings.prepQuestForVisRule;
+  // 'groupCount';
 
   /*  
   */
@@ -57,9 +59,8 @@ void main() {
   );
 
   test(
-      'creates user answer abt LV group-by depth, & verifies new Questions generated from it',
+      'creates user answer abt LV group-by depth, & verifies $k_quests_created_in_test new Questions generated from it',
       () {
-    final testDataCreator = TestDataCreation();
     final _qcd = QuestionCascadeDispatcher();
     final _questMgr = QuestListMgr();
     expect(_questMgr.totalAnsweredQuestions, 0);
@@ -72,17 +73,19 @@ void main() {
       VisualRuleType.groupCfg,
     );
 
-    // qTarg = qTarg.copyWith(targetComplete: true);
+    var ask = QuestPromptPayload<int>(
+        'set ListView group-by depth on marketView',
+        ['0', '1', '$k_quests_created_in_test', '3'],
+        VisRuleQuestType.askCountOfSlotsToConfigure,
+        (QuestBase qb, String selCount) {
+      // print('askNumSlots convert on str $selCount');
+      return int.tryParse(selCount) ?? 0;
+    });
 
-    QuestBase askGroupDepth = testDataCreator.makeQuestion<int>(
+    QuestBase askGroupDepth = QuestBase.rulePrepQuest(
       qTarg,
-      'set ListView group-by depth on marketView',
-      ['0', '1', '$k_quests_created_in_test', '3'],
-      (QuestBase qb, String selCount) {
-        // print('askNumSlots convert on str $selCount');
-        return int.tryParse(selCount) ?? 0;
-      },
-      questId: '',
+      [ask],
+      questId: k_quest_id,
     );
 
     // add question to q-manager
@@ -93,7 +96,7 @@ void main() {
 
     QuestBase quest = _questMgr.nextQuestionToAnswer()!;
     // provide answers
-    quest.setAllAnswersWhileTesting(['2']);
+    quest.setAllAnswersWhileTesting(['$k_quests_created_in_test']);
 
     // will auto-respond using value provided in _autoResponseGenerators above
     // testQuestPresenter.askAndWaitForUserResponse(dlogRun, quest);
@@ -101,13 +104,19 @@ void main() {
     // need to bump QuestListMgr to next (null) Question
     // to force prior into the answered queue
     QuestBase? nxtQu = _questMgr.nextQuestionToAnswer();
+    expect(nxtQu, isNull, reason: 'questMgr only has 1 Question');
+    expect(
+      _questMgr.currentOrLastQuestion.questId,
+      k_quest_id,
+      reason: 'should be 1st quest ($k_quest_id)',
+    );
 
     // next line should create 2 new Questions
     _qcd.appendNewQuestsOrInsertImplicitAnswers(
       _questMgr,
       _questMgr.currentOrLastQuestion,
     );
-    expect(nxtQu, null, reason: '_questMgr only has 1 Question');
+
     expect(_questMgr.priorAnswerCount, 1, reason: 'quest was answered');
 
     // they both should be rule Questions, but not yet answered -- so zero exportable
@@ -115,7 +124,7 @@ void main() {
 
     // now check that k_quests_created_in_test Questions were created
     // since there was no 2nd INITIAL Question
-    expect(_questMgr.pendingQuestionCount, 2);
+    expect(_questMgr.pendingQuestionCount, k_quests_created_in_test);
 
     for (QuestBase q in _questMgr.pendingQuestions) {
       print(

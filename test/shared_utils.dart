@@ -10,25 +10,25 @@ import 'package:st_ev_cfg/util/all.dart';
   that create new questions based on existing answers
 */
 
-class TestDataCreation {
-  //
-  QuestBase makeQuestion<T>(
-    QTargetResolution qq,
-    String prompt,
-    List<String> choices,
-    CastStrToAnswTypCallback<T> clbk, {
-    String questId = '',
-  }) {
-    //
-    return QuestBase.regionTargetQuestManual(
-      qq,
-      prompt,
-      choices,
-      CaptureAndCast<T>(clbk),
-      questId: questId,
-    );
-  }
-}
+// class TestDataCreation {
+//   //
+//   // QuestBase makeQuestion<T>(
+//   //   QTargetResolution qq,
+//   //   String prompt,
+//   //   List<String> choices,
+//   //   CastStrToAnswTypCallback<T> clbk, {
+//   //   String questId = '',
+//   // }) {
+//   //   //
+//   //   return QuestBase.regionTargetQuestManual(
+//   //     qq,
+//   //     prompt,
+//   //     choices,
+//   //     CaptureAndCast<T>(clbk),
+//   //     questId: questId,
+//   //   );
+//   // }
+// }
 
 class TestQuestRespGen implements QuestionPresenterIfc {
   // receives Questions for test-automation

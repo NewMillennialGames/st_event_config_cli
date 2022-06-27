@@ -12,7 +12,7 @@ void main() {
   test(
       'validate that QuestMatcher hits question based on QTargetIntent properties',
       () {
-    final testDataCreate = TestDataCreation();
+    // final testDataCreate = TestDataCreation();
     QuestionPresenterIfc questPresent = TestQuestRespGen([]);
     DialogRunner dlogRun = DialogRunner(questPresent);
     //
@@ -24,14 +24,19 @@ void main() {
       VisualRuleType.groupCfg,
     );
 
-    QuestBase askNumSortSlots = testDataCreate.makeQuestion<int>(
+    var ask = QuestPromptPayload<int>('how many sort slots you want?',
+        ['0', '1', '2', '3'], VisRuleQuestType.askCountOfSlotsToConfigure,
+        (QuestBase qb, String selCount) {
+      // print('askNumSlots convert on str $selCount');
+      return int.tryParse(selCount) ?? 0;
+    });
+
+    QuestBase askNumSortSlots = QuestBase.rulePrepQuest(
       qq,
-      'how many sort slots you want?',
-      ['0', '1', '2', '3'],
-      (QuestBase qb, String selCount) {
-        return int.tryParse(selCount) ?? 0;
-      },
+      [ask],
+      questId: 'blahhh',
     );
+
     var _qMatchColl = QMatchCollection([]);
     expect(_qMatchColl.matchCountFor(askNumSortSlots), 0);
     //

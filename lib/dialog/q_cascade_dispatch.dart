@@ -647,6 +647,104 @@ FIXME:
             ),
           ],
         ),
+      ),
+      QuestMatcher<List<VisualRuleType>, List<String>>(
+        '''matches questions in which user specifies rules for screen-areas to config
+      build ?s prep questions if required
+    ''',
+        questIdPatternMatchTest: (qid) =>
+            qid.startsWith(QuestionIdStrings.specRulesForAreaOnScreen) ||
+            qid.startsWith(QuestionIdStrings.specRulesForSlotInArea),
+        validateUserAnswerAfterPatternMatchIsTrueCallback:
+            (QuestBase priorAnsweredQuest) {
+          return (priorAnsweredQuest.mainAnswer as Iterable<VisualRuleType>)
+                      .length >
+                  0 &&
+              priorAnsweredQuest.requiresVisRulePrepQuestion;
+        },
+        //
+        derivedQuestGen: DerivedQuestGenerator.noop(),
+        deriveQuestGenCallbk: (QuestBase qb, int idx) {
+          //
+          VisualRuleType vrt = qb.visRuleTypeForAreaOrSlot!;
+          List<VisRuleQuestType> qts = vrt.requConfigQuests;
+
+          return vrt.derQuestGenFromSubtypeForRuleGen(qb, qts[idx]);
+        },
+      ),
+      QuestMatcher<int, DbTableFieldName>(
+        '''matches any prep question about grouping a list-view
+        ui area
+    ''',
+        questIdPatternMatchTest: (String qid) => // 'xxx-niu' +
+            qid.startsWith(QuestionIdStrings.prepQuestForVisRule),
+        validateUserAnswerAfterPatternMatchIsTrueCallback: (paq) =>
+            (paq.mainAnswer as int) > 0,
+        screenWidgetArea: ScreenWidgetArea.tableview,
+        visRuleTypeForAreaOrSlot: VisualRuleType.groupCfg,
+        derivedQuestGen: DerivedQuestGenerator(
+          'Select group field #{0} within area {1} of screen {2}',
+          newQuestConstructor: QuestBase.visualRuleDetailQuest,
+          newQuestPromptArgGen: (
+            QuestBase priorAnsweredQuest,
+            int idx,
+          ) {
+            var areaName = priorAnsweredQuest.screenWidgetArea?.name ?? 'area';
+            var screenName = priorAnsweredQuest.appScreen.name;
+            return ['$idx', areaName.toUpperCase(), screenName.toUpperCase()];
+          },
+          newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
+            return (priorAnsweredQuest.mainAnswer as int);
+          },
+          newQuestIdGenFromPriorQuest: (
+            QuestBase priorAnsweredQuest,
+            int newQuIdx,
+          ) {
+            // each new question about area on screen should
+            // have an ID that lets the next QM identify it to produce new Q's
+            int selectedRulesInArea = (priorAnsweredQuest.mainAnswer as int);
+            String scrName = priorAnsweredQuest.appScreen.name;
+            String area = priorAnsweredQuest.screenWidgetArea?.name ?? '-na';
+            return QuestionIdStrings.specRuleDetailsForAreaOnScreen +
+                '-' +
+                (priorAnsweredQuest.visRuleTypeForAreaOrSlot?.name ?? 'blah') +
+                '-' +
+                scrName +
+                '-' +
+                area;
+          },
+          answerChoiceGenerator: (
+            QuestBase priorAnsweredQuest,
+            int newQuestIdx,
+          ) {
+            return DbTableFieldName.values.map((e) => e.name).toList();
+          },
+          // deriveTargetFromPriorRespCallbk: (
+          //   QuestBase priorAnsweredQuest,
+          //   int newQuestIdx,
+          // ) {
+          //   List<VisualRuleType> selectedRulesInArea =
+          //       (priorAnsweredQuest.mainAnswer as List<VisualRuleType>);
+          //   VisualRuleType curRule = selectedRulesInArea[newQuestIdx];
+          //   // FIXME: cascadeType: // of created questions
+          //   // QRespCascadePatternEm.noCascade,
+          //   return priorAnsweredQuest.qTargetResolution.copyWith(
+          //     visRuleTypeForAreaOrSlot: curRule,
+          //     targetComplete: true,
+          //   );
+          // },
+          perNewQuestGenOpts: [
+            PerQuestGenResponsHandlingOpts<DbTableFieldName>(
+              newRespCastFunc: (
+                QuestBase newQuest,
+                String lstAreaIdxs,
+              ) {
+                List<int> l = castStrOfIdxsToIterOfInts(lstAreaIdxs).toList();
+                return DbTableFieldName.values[l.first];
+              },
+            ),
+          ],
+        ),
       )
     ];
   }
