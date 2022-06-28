@@ -183,10 +183,8 @@ class QuestionCascadeDispatcher {
 
             return QuestionIdStrings.specAreasToConfigOnScreen + '-' + scrName;
           },
-          answerChoiceGenerator: (
-            QuestBase priorAnsweredQuest,
-            int newQuIdx,
-          ) {
+          answerChoiceGenerator:
+              (QuestBase priorAnsweredQuest, int newQuIdx, int promptIdx) {
             // show allowed possible answers for generated questions
             var selectedAppScreens =
                 priorAnsweredQuest.mainAnswer as List<AppScreen>;
@@ -287,10 +285,8 @@ FIXME:
                 '-' +
                 area;
           },
-          answerChoiceGenerator: (
-            QuestBase priorAnsweredQuest,
-            int newQuestIdx,
-          ) {
+          answerChoiceGenerator:
+              (QuestBase priorAnsweredQuest, int newQuestIdx, int promptIdx) {
             List<ScreenWidgetArea> selectedScreenAreas =
                 (priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>);
             return selectedScreenAreas[newQuestIdx]
@@ -387,10 +383,8 @@ FIXME:
             return QuestionIdStrings.prepQuestForVisRule +
                 priorAnsweredQuest.targetPath;
           },
-          answerChoiceGenerator: (
-            QuestBase priorAnsweredQuest,
-            int newQuestIdx,
-          ) {
+          answerChoiceGenerator:
+              (QuestBase priorAnsweredQuest, int newQuestIdx, int promptIdx) {
             List<VisualRuleType> selectedScreenAreas =
                 (priorAnsweredQuest.mainAnswer as List<VisualRuleType>);
             VisualRuleType area = selectedScreenAreas[newQuestIdx];
@@ -514,10 +508,8 @@ FIXME:
                 '-' +
                 ruleName;
           },
-          answerChoiceGenerator: (
-            QuestBase priorAnsweredQuest,
-            int newQuestIdx,
-          ) {
+          answerChoiceGenerator:
+              (QuestBase priorAnsweredQuest, int newQuestIdx, int promptIdx) {
             List<VisualRuleType> selectedRulesInArea =
                 (priorAnsweredQuest.mainAnswer as List<VisualRuleType>);
             VisualRuleType curRule = selectedRulesInArea[newQuestIdx];
@@ -606,10 +598,8 @@ FIXME:
             // return namePrefix + '-' + scrName + '-' + area + '-' + slotName;
             return priorAnsweredQuest.targetPath;
           },
-          answerChoiceGenerator: (
-            QuestBase priorAnsweredQuest,
-            int newQuestIdx,
-          ) {
+          answerChoiceGenerator:
+              (QuestBase priorAnsweredQuest, int newQuestIdx, int promptIdx) {
             List<VisualRuleType> selectedRules =
                 (priorAnsweredQuest.mainAnswer as List<VisualRuleType>);
             // .toList();
@@ -673,17 +663,20 @@ FIXME:
         },
       ),
       QuestMatcher<int, DbTableFieldName>(
-        '''matches any prep question about grouping a list-view
-        ui area
+        '''matches any rule prep question about
+        a list-view ui area on any screen
     ''',
-        questIdPatternMatchTest: (String qid) => // 'xxx-niu' +
-            qid.startsWith(QuestionIdStrings.prepQuestForVisRule),
-        validateUserAnswerAfterPatternMatchIsTrueCallback: (paq) =>
-            (paq.mainAnswer as int) > 0,
+        validateUserAnswerAfterPatternMatchIsTrueCallback: (QuestBase paq) =>
+            (paq.mainAnswer as int) > 0 &&
+            paq.isRulePrepQuestion &&
+            [
+              VisualRuleType.groupCfg,
+              VisualRuleType.sortCfg,
+              VisualRuleType.filterCfg
+            ].contains(paq.visRuleTypeForAreaOrSlot),
         screenWidgetArea: ScreenWidgetArea.tableview,
-        visRuleTypeForAreaOrSlot: VisualRuleType.groupCfg,
         derivedQuestGen: DerivedQuestGenerator(
-          'Select group field #{0} within area {1} of screen {2}',
+          '{0}',
           newQuestConstructor: QuestBase.visualRuleDetailQuest,
           newQuestPromptArgGen: (
             QuestBase priorAnsweredQuest,
@@ -691,7 +684,16 @@ FIXME:
           ) {
             var areaName = priorAnsweredQuest.screenWidgetArea?.name ?? 'area';
             var screenName = priorAnsweredQuest.appScreen.name;
-            return ['$idx', areaName.toUpperCase(), screenName.toUpperCase()];
+            var templ =
+                priorAnsweredQuest.visRuleTypeForAreaOrSlot!.detailTemplate;
+            var msg = templ.format(
+              [
+                '$idx',
+                areaName.toUpperCase(),
+                screenName.toUpperCase(),
+              ],
+            );
+            return [msg];
           },
           newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
             return (priorAnsweredQuest.mainAnswer as int);
@@ -700,47 +702,41 @@ FIXME:
             QuestBase priorAnsweredQuest,
             int newQuIdx,
           ) {
-            // each new question about area on screen should
-            // have an ID that lets the next QM identify it to produce new Q's
-            int selectedRulesInArea = (priorAnsweredQuest.mainAnswer as int);
             String scrName = priorAnsweredQuest.appScreen.name;
             String area = priorAnsweredQuest.screenWidgetArea?.name ?? '-na';
             return QuestionIdStrings.specRuleDetailsForAreaOnScreen +
                 '-' +
-                (priorAnsweredQuest.visRuleTypeForAreaOrSlot?.name ?? 'blah') +
+                (priorAnsweredQuest.visRuleTypeForAreaOrSlot?.name ??
+                    'lv_rule') +
                 '-' +
-                scrName +
+                area +
                 '-' +
-                area;
+                scrName;
           },
-          answerChoiceGenerator: (
-            QuestBase priorAnsweredQuest,
-            int newQuestIdx,
-          ) {
+          answerChoiceGenerator:
+              (QuestBase priorAnsweredQuest, int newQuestIdx, int promptIdx) {
             return DbTableFieldName.values.map((e) => e.name).toList();
           },
-          // deriveTargetFromPriorRespCallbk: (
-          //   QuestBase priorAnsweredQuest,
-          //   int newQuestIdx,
-          // ) {
-          //   List<VisualRuleType> selectedRulesInArea =
-          //       (priorAnsweredQuest.mainAnswer as List<VisualRuleType>);
-          //   VisualRuleType curRule = selectedRulesInArea[newQuestIdx];
-          //   // FIXME: cascadeType: // of created questions
-          //   // QRespCascadePatternEm.noCascade,
-          //   return priorAnsweredQuest.qTargetResolution.copyWith(
-          //     visRuleTypeForAreaOrSlot: curRule,
-          //     targetComplete: true,
-          //   );
-          // },
           perNewQuestGenOpts: [
             PerQuestGenResponsHandlingOpts<DbTableFieldName>(
+              visRuleQuestType: VisRuleQuestType.selectDataFieldName,
               newRespCastFunc: (
                 QuestBase newQuest,
                 String lstAreaIdxs,
               ) {
                 List<int> l = castStrOfIdxsToIterOfInts(lstAreaIdxs).toList();
                 return DbTableFieldName.values[l.first];
+              },
+            ),
+            PerQuestGenResponsHandlingOpts<bool>(
+              // promptOverride: 'Sort Ascending (yes == 1)',
+              visRuleQuestType: VisRuleQuestType.specifySortAscending,
+              newRespCastFunc: (
+                QuestBase newQuest,
+                String lstAreaIdxs,
+              ) {
+                List<int> l = castStrOfIdxsToIterOfInts(lstAreaIdxs).toList();
+                return l.first > 0;
               },
             ),
           ],
@@ -879,10 +875,8 @@ List<QuestMatcher> _ruleSelectionQuestions = [
             '-' +
             area;
       },
-      answerChoiceGenerator: (
-        QuestBase priorAnsweredQuest,
-        int newQuestIdx,
-      ) {
+      answerChoiceGenerator:
+          (QuestBase priorAnsweredQuest, int newQuestIdx, int promptIdx) {
         List<ScreenWidgetArea> selectedScreenAreas =
             (priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>);
         ScreenWidgetArea area = selectedScreenAreas[newQuestIdx];
@@ -980,10 +974,8 @@ List<QuestMatcher> _ruleSelectionQuestions = [
             '-' +
             slot;
       },
-      answerChoiceGenerator: (
-        QuestBase priorAnsweredQuest,
-        int newQuestIdx,
-      ) {
+      answerChoiceGenerator:
+          (QuestBase priorAnsweredQuest, int newQuestIdx, int promptIdx) {
         List<ScreenAreaWidgetSlot> selectedScreenSlots =
             (priorAnsweredQuest.mainAnswer as List<ScreenAreaWidgetSlot>);
         ScreenAreaWidgetSlot slot = selectedScreenSlots[newQuestIdx];

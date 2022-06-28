@@ -22,7 +22,7 @@ typedef DerQuestGeneratorFactoryClbk = DerivedQuestGenerator Function(
 typedef PriorQuestIdMatchPatternTest = bool Function(String priorQuestId);
 
 typedef ChoiceListFromPriorAnswer<T> = List<String> Function(
-    QuestBase priorAnsweredQuest, int idx);
+    QuestBase priorAnsweredQuest, int newQuestIdx, int promptIdx);
 //
 typedef AddQuestRespChkCallbk = bool Function(QuestBase priorAnsweredQuest);
 //

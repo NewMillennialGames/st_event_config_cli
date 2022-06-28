@@ -134,7 +134,7 @@ void main() {
         'blah {0}',
         newQuestCountCalculator: (q) => 0,
         newQuestPromptArgGen: (_, __) => [],
-        answerChoiceGenerator: (_, __) => [],
+        answerChoiceGenerator: (_, __, niu) => [],
         perNewQuestGenOpts: [],
       ),
     );

@@ -104,6 +104,28 @@ extension VisualRuleTypeExt1 on VisualRuleType {
         return '';
     }
   }
+
+  String get detailTemplate {
+    //
+    if (!this.requiresPrepQuestion) return '{0}';
+
+    switch (this) {
+      case VisualRuleType.generalDialogFlow:
+        return '';
+      case VisualRuleType.sortCfg:
+        return 'Select sort field #{0} for the {1} on {2}.';
+      case VisualRuleType.groupCfg:
+        return 'Select group field #{0} for the {1} on {2}.';
+      case VisualRuleType.filterCfg:
+        return 'Select filter field #{0} for the {1} on {2}.';
+      case VisualRuleType.styleOrFormat:
+        return '';
+      case VisualRuleType.showOrHide:
+        return '';
+      case VisualRuleType.themePreference:
+        return '';
+    }
+  }
   //
 
   List<VisRuleQuestType> get requConfigQuests {
@@ -177,7 +199,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           'How many $ruleTypeName fields do you need for ${prevAnswQuest.targetPath}?',
           newQuestCountCalculator: (qb) => 1,
           newQuestPromptArgGen: (prevQuest, newQuestIdx) => [],
-          answerChoiceGenerator: (prevQuest, newQuestIdx) =>
+          answerChoiceGenerator: (prevQuest, newQuestIdx, int promptIdx) =>
               ['0', '1', '2', '3'],
           newQuestIdGenFromPriorQuest: (prevQuest, newQuestIdx) =>
               newQuestNamePrefix + '_askCount_$newQuestIdx',
@@ -200,7 +222,8 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           'Do you want to hide the element at ${prevAnswQuest.targetPath}?',
           newQuestCountCalculator: (qb) => 1,
           newQuestPromptArgGen: (prevQuest, newQuestIdx) => [],
-          answerChoiceGenerator: (prevQuest, newQuestIdx) => ['no', 'yes'],
+          answerChoiceGenerator: (prevQuest, newQuestIdx, int promptIdx) =>
+              ['no', 'yes'],
           newQuestIdGenFromPriorQuest: (prevQuest, newQuestIdx) =>
               newQuestNamePrefix + '_hide_$newQuestIdx',
           deriveTargetFromPriorRespCallbk: (QuestBase qb, int __) {
@@ -224,7 +247,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           'Select field #{0} for ${prevAnswQuest.targetPath}?',
           newQuestCountCalculator: (qb) => qb.mainAnswer as int,
           newQuestPromptArgGen: (prevQuest, newQuestIdx) => ['$newQuestIdx'],
-          answerChoiceGenerator: (prevQuest, newQuestIdx) =>
+          answerChoiceGenerator: (prevQuest, newQuestIdx, int promptIdx) =>
               DbTableFieldName.values.map((e) => e.name).toList(),
           newQuestIdGenFromPriorQuest: (prevQuest, newQuestIdx) =>
               newQuestNamePrefix + '_selFld_$newQuestIdx',
@@ -252,7 +275,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           'Select preferred style for ${prevAnswQuest.targetPath}?',
           newQuestCountCalculator: (qb) => 1,
           newQuestPromptArgGen: (prevQuest, newQuestIdx) => [],
-          answerChoiceGenerator: (prevQuest, newQuestIdx) =>
+          answerChoiceGenerator: (prevQuest, newQuestIdx, int promptIdx) =>
               possibleVisStyles.map((e) => e.toString()).toList(),
           newQuestIdGenFromPriorQuest: (prevQuest, newQuestIdx) =>
               newQuestNamePrefix + '_selStyle_$newQuestIdx',
@@ -277,7 +300,8 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           'Do you want to sort ${prevAnswQuest.targetPath} ascending? (large vals at end)',
           newQuestCountCalculator: (qb) => 1,
           newQuestPromptArgGen: (prevQuest, newQuestIdx) => [],
-          answerChoiceGenerator: (prevQuest, newQuestIdx) => ['no', 'yes'],
+          answerChoiceGenerator: (prevQuest, newQuestIdx, int promptIdx) =>
+              ['no', 'yes'],
           newQuestIdGenFromPriorQuest: (prevQuest, newQuestIdx) =>
               newQuestNamePrefix + '_sort_$newQuestIdx',
           deriveTargetFromPriorRespCallbk: (QuestBase qb, int __) {

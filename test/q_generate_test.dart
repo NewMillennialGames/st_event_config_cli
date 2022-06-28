@@ -70,7 +70,7 @@ void main() {
       AppScreen.marketView,
       ScreenWidgetArea.tableview,
       null,
-      VisualRuleType.groupCfg,
+      VisualRuleType.filterCfg,
     );
 
     var ask = QuestPromptPayload<int>(

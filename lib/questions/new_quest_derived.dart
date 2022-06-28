@@ -12,6 +12,15 @@ based on answers to a prior question
 
 */
 
+class PerPromptGenDetails {
+  /* individual prompts in a multi-part question
+
+  */
+  final String? promptOverride;
+
+  PerPromptGenDetails(this.promptOverride);
+}
+
 class PerQuestGenResponsHandlingOpts<AnsType> {
   /*
   describes logic and rules for a single auto-generated Question
@@ -25,16 +34,20 @@ class PerQuestGenResponsHandlingOpts<AnsType> {
   final VisualRuleType? visRuleType;
   final VisRuleQuestType? visRuleQuestType;
   final bool acceptsMultiResponses;
+  List<PerPromptGenDetails> promptDetails = [];
 
   PerQuestGenResponsHandlingOpts({
     required this.newRespCastFunc,
     this.visRuleType,
     this.visRuleQuestType,
     this.acceptsMultiResponses = false,
-  });
+    List<String> questPrompts = const [],
+  }) {}
 
-  Type get genType => AnsType;
-  bool get genAsRuleQuestion => visRuleType != null;
+  // Type get genType => AnsType;
+  // bool get genAsRuleQuestion => visRuleType != null;
+  int get promptCount => promptDetails.length;
+  bool get hasMultiPrompts => promptCount > 1;
 }
 
 class DerivedQuestGenerator {
@@ -96,7 +109,7 @@ class DerivedQuestGenerator {
       genBehaviorOfDerivedQuests: DerivedGenBehaviorOnMatchEnum.noop,
       newQuestCountCalculator: (qb) => 0,
       newQuestPromptArgGen: (a, ix) => [],
-      answerChoiceGenerator: (_, __) => [],
+      answerChoiceGenerator: (_, __, niu) => [],
       perNewQuestGenOpts: [],
     );
   }
@@ -142,19 +155,23 @@ class DerivedQuestGenerator {
       String _userPrompt = questPromptTemplate.format(templArgs);
 
       // select correct Gen-Options or use last if list is too short
-      PerQuestGenResponsHandlingOpts instcGenOpt =
-          perNewQuestGenOpts.length > newQIdx
-              ? perNewQuestGenOpts[newQIdx]
-              : perNewQuestGenOpts.last;
+      PerQuestGenResponsHandlingOpts instcGenOpt = perNewQuestGenOpts.first;
+      // perNewQuestGenOpts.length > newQIdx
+      //     ? perNewQuestGenOpts[newQIdx]
+      //     : perNewQuestGenOpts.last;
 
       List<QuestPromptPayload> newQuestPrompts = [
         QuestPromptPayload(
           _userPrompt,
-          answerChoiceGenerator(answeredQuest, newQIdx).toList(),
+          answerChoiceGenerator(answeredQuest, newQIdx, 0).toList(),
           instcGenOpt.visRuleQuestType ?? VisRuleQuestType.dialogStruct,
           instcGenOpt.newRespCastFunc,
         ),
       ];
+
+      if (newQuestContainsMultiPrompts) {
+        newQuestPrompts = newQuestPrompts + _secondaryPrompts(answeredQuest);
+      }
 
       String newQuestId = newQuestIdGenFromPriorQuest == null
           ? answeredQuest.questId + '-$newQIdx'
@@ -174,17 +191,36 @@ class DerivedQuestGenerator {
     return createdQuests;
   }
 
-  bool get addsPendingQuestions =>
-      genBehaviorOfDerivedQuests.addsPendingQuestions;
+  List<QuestPromptPayload> _secondaryPrompts(QuestBase answeredQuest) {
+    //
+    List<QuestPromptPayload> lQpp = [];
+    int secondPromptCount = perNewQuestGenOpts.length - 1;
+    for (int newQIdx = 1; newQIdx < secondPromptCount; newQIdx++) {
+      //
+      PerQuestGenResponsHandlingOpts perPromptGenOps =
+          perNewQuestGenOpts[newQIdx];
+      var qpp = QuestPromptPayload(
+        questPromptTemplate,
+        answerChoiceGenerator(answeredQuest, newQIdx, newQIdx).toList(),
+        perPromptGenOps.visRuleQuestType ?? VisRuleQuestType.dialogStruct,
+        perPromptGenOps.newRespCastFunc,
+      );
+      lQpp.add(qpp);
+    }
+    return lQpp;
+  }
 
-  bool get createsImplicitAnswers =>
-      genBehaviorOfDerivedQuests.createsImplicitAnswers; // || hasOnlyOneChoice;
+  // bool get addsPendingQuestions =>
+  //     genBehaviorOfDerivedQuests.addsPendingQuestions;
+
+  // bool get createsImplicitAnswers =>
+  //     genBehaviorOfDerivedQuests.createsImplicitAnswers; // || hasOnlyOneChoice;
 
   int _newQuestChoiceCount(
     QuestBase priorAnsweredQuest,
     int newQIdx,
   ) {
-    return answerChoiceGenerator(priorAnsweredQuest, newQIdx).length;
+    return answerChoiceGenerator(priorAnsweredQuest, newQIdx, 0).length;
   }
 
   // bool hasOnlyOneChoice(QuestBase qb) => _firstQuestChoiceCount(qb) == 1;
