@@ -178,8 +178,9 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
         );
       }
       if (patternDoesMatch) {
+        var firstPrompt = derivedQuestGen.perPromptDetails.first;
         print(
-          'QID: ${prevAnsweredQuest.questId} does match ${derivedQuestGen.questPromptTemplate}',
+          'QID: ${prevAnsweredQuest.questId} does match ${firstPrompt.promptTemplate}',
         );
       }
       return patternDoesMatch; // always true here
@@ -202,8 +203,9 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
     }
 
     if (isAPatternMatch) {
+      var firstPrompt = derivedQuestGen.perPromptDetails.first;
       print(
-        'QID: ${prevAnsweredQuest.questId} does match ${derivedQuestGen.questPromptTemplate}',
+        'QID: ${prevAnsweredQuest.questId} does match ${firstPrompt.promptTemplate}',
       );
     }
     return isAPatternMatch; // always true here

@@ -77,7 +77,7 @@ void main() {
         appScreen: AppScreen.marketView,
       ),
     ]);
-    expect(_qMatchColl.matchCountFor(askNumSortSlots), 0);
+    expect(_qMatchColl.matchCountFor(askNumSortSlots), 2);
   });
 
   test('validate that QuestMatcher hits question based on QID pattern', () {
@@ -91,20 +91,23 @@ void main() {
       (QuestBase qb, _) => 5,
     );
     String testQuestId = '111222';
-    QuestBase anyBaseQuest =
-        QuestBase.eventLevelCfgQuest(qti, [qpp], questId: testQuestId);
+    QuestBase anyBaseQuest = QuestBase.eventLevelCfgQuest(
+      qti,
+      [qpp],
+      questId: testQuestId,
+    );
 
     var _qMatchColl = QMatchCollection([]);
     expect(_qMatchColl.matchCountFor(anyBaseQuest), 0);
     //
 
     final wontMatchByCascade = QuestMatcher(
-      'should NOT match based on cascadeTypeOfMatchedQuest',
+      'should NOT match based on wrong screenWidgetArea',
       // respCascadePatternEm:
       //     QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions,
       validateUserAnswerAfterPatternMatchIsTrueCallback: (p0) => true,
       appScreen: qti.appScreen,
-      screenWidgetArea: qti.screenWidgetArea,
+      screenWidgetArea: ScreenWidgetArea.banner,
       visRuleTypeForAreaOrSlot: qti.visRuleTypeForAreaOrSlot,
       derivedQuestGen: DerivedQuestGenerator.noop(),
     );
@@ -130,12 +133,12 @@ void main() {
       // respCascadePatternEm:
       //     QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions,
       questIdPatternMatchTest: (qid) => qid == testQuestId,
-      derivedQuestGen: DerivedQuestGenerator(
+      derivedQuestGen: DerivedQuestGenerator.singlePrompt(
         'blah {0}',
         newQuestCountCalculator: (q) => 0,
         newQuestPromptArgGen: (_, __) => [],
         answerChoiceGenerator: (_, __, niu) => [],
-        perNewQuestGenOpts: [],
+        newRespCastFunc: (_, __) => null,
       ),
     );
 

@@ -149,8 +149,7 @@ class QuestionCascadeDispatcher {
           var lst = priorAnsweredQuest.mainAnswer as Iterable<AppScreen>;
           return lst.length > 0 && priorAnsweredQuest.targetUncompleted;
         },
-        derivedQuestGen: DerivedQuestGenerator(
-          // <List<AppScreen>>
+        derivedQuestGen: DerivedQuestGenerator.singlePrompt(
           'Select areas you want to configure on screen {0} (resp will gen which rule/slot for each area quest)',
           newQuestConstructor: QuestBase.regionTargetQuest,
           newQuestPromptArgGen: (
@@ -217,22 +216,18 @@ FIXME:
             QuestMatcher<List<AppScreen>, List<ScreenWidgetArea>>
         that seems like a design mistake???
       */
-          perNewQuestGenOpts: [
-            PerQuestGenResponsHandlingOpts<List<ScreenWidgetArea>>(
-              newRespCastFunc: (
-                QuestBase newAnsQuest,
-                String lstAreaIdxs,
-              ) {
-                List<ScreenWidgetArea> possibleAreasForScreen =
-                    newAnsQuest.qTargetResolution.possibleAreasForScreen;
-                return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
-                    .map(
-                      (i) => possibleAreasForScreen[i],
-                    )
-                    .toList();
-              },
-            ),
-          ],
+          newRespCastFunc: (
+            QuestBase newAnsQuest,
+            String lstAreaIdxs,
+          ) {
+            List<ScreenWidgetArea> possibleAreasForScreen =
+                newAnsQuest.qTargetResolution.possibleAreasForScreen;
+            return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
+                .map(
+                  (i) => possibleAreasForScreen[i],
+                )
+                .toList();
+          },
         ),
       ),
       QuestMatcher<List<ScreenWidgetArea>, List<ScreenAreaWidgetSlot>>(
@@ -251,7 +246,7 @@ FIXME:
           return lst.length > 0 && priorAnsweredQuest.targetUncompleted;
         },
         //
-        derivedQuestGen: DerivedQuestGenerator(
+        derivedQuestGen: DerivedQuestGenerator.singlePrompt(
           // <List<ScreenWidgetArea>>
           'Select which slots to config within area {0} of screen {1}',
           newQuestConstructor: QuestBase.regionTargetQuest,
@@ -308,21 +303,17 @@ FIXME:
               screenWidgetArea: currArea,
             );
           },
-          perNewQuestGenOpts: [
-            PerQuestGenResponsHandlingOpts<List<ScreenAreaWidgetSlot>>(
-              newRespCastFunc: (
-                QuestBase newQuest,
-                String lstAreaIdxs,
-              ) {
-                List<ScreenAreaWidgetSlot> possibleSlots =
-                    newQuest.qTargetResolution.possibleSlotsForAreaInScreen;
+          newRespCastFunc: (
+            QuestBase newQuest,
+            String lstAreaIdxs,
+          ) {
+            List<ScreenAreaWidgetSlot> possibleSlots =
+                newQuest.qTargetResolution.possibleSlotsForAreaInScreen;
 
-                return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
-                    .map((i) => possibleSlots[i])
-                    .toList();
-              },
-            ),
-          ],
+            return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
+                .map((i) => possibleSlots[i])
+                .toList();
+          },
         ),
       ),
       ..._ruleSelectionQuestions
@@ -352,7 +343,7 @@ FIXME:
               priorAnsweredQuest.requiresVisRulePrepQuestion;
         },
         //
-        derivedQuestGen: DerivedQuestGenerator(
+        derivedQuestGen: DerivedQuestGenerator.singlePrompt(
           // <List<VisualRuleType>>
           '{0}',
           newQuestConstructor: QuestBase.rulePrepQuest,
@@ -399,18 +390,14 @@ FIXME:
               targetComplete: true,
             );
           },
-          perNewQuestGenOpts: [
-            PerQuestGenResponsHandlingOpts<List<String>>(
-              newRespCastFunc: (
-                QuestBase newQuest,
-                String lstAreaIdxs,
-              ) {
-                return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
-                    .map((i) => '$i')
-                    .toList();
-              },
-            ),
-          ],
+          newRespCastFunc: (
+            QuestBase newQuest,
+            String lstAreaIdxs,
+          ) {
+            return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
+                .map((i) => '$i')
+                .toList();
+          },
         ),
       )
     ];
@@ -466,7 +453,7 @@ FIXME:
         questIdPatternMatchTest: (String qid) => // 'xxx-niu' +
             qid.startsWith(QuestionIdStrings.specRulesForAreaOnScreen),
         //
-        derivedQuestGen: DerivedQuestGenerator(
+        derivedQuestGen: DerivedQuestGenerator.singlePrompt(
           'Config rule {0} within area {1} of screen {2}',
           newQuestConstructor: QuestBase.visualRuleDetailQuest,
           newQuestPromptArgGen: (
@@ -535,16 +522,12 @@ FIXME:
               targetComplete: true,
             );
           },
-          perNewQuestGenOpts: [
-            PerQuestGenResponsHandlingOpts<String>(
-              newRespCastFunc: (
-                QuestBase newQuest,
-                String lstAreaIdxs,
-              ) {
-                return lstAreaIdxs;
-              },
-            ),
-          ],
+          newRespCastFunc: (
+            QuestBase newQuest,
+            String lstAreaIdxs,
+          ) {
+            return lstAreaIdxs;
+          },
         ),
       ),
       QuestMatcher<List<VisualRuleType>, List<VisRuleQuestType>>(
@@ -557,7 +540,7 @@ FIXME:
         questIdPatternMatchTest: (qid) =>
             qid.startsWith(QuestionIdStrings.specRulesForAreaOnScreen),
         //
-        derivedQuestGen: DerivedQuestGenerator(
+        derivedQuestGen: DerivedQuestGenerator.singlePrompt(
           'Set rule details for rule {0} for slot {1} in area {2} of screen {3}',
           newQuestConstructor: QuestBase.visualRuleDetailQuest,
           newQuestPromptArgGen: (
@@ -625,17 +608,12 @@ FIXME:
               visRuleTypeForAreaOrSlot: curRule,
             );
           },
-          perNewQuestGenOpts: [
-            PerQuestGenResponsHandlingOpts(
-              newRespCastFunc: (QuestBase newQuest, String lstAreaIdxs) {
-                var curRule =
-                    newQuest.qTargetResolution.visRuleTypeForAreaOrSlot!;
-                return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0).map(
-                  (i) => curRule.requConfigQuests[i],
-                );
-              },
-            ),
-          ],
+          newRespCastFunc: (QuestBase newQuest, String lstAreaIdxs) {
+            var curRule = newQuest.qTargetResolution.visRuleTypeForAreaOrSlot!;
+            return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0).map(
+              (i) => curRule.requConfigQuests[i],
+            );
+          },
         ),
       ),
       QuestMatcher<List<VisualRuleType>, List<String>>(
@@ -675,26 +653,65 @@ FIXME:
               VisualRuleType.filterCfg
             ].contains(paq.visRuleTypeForAreaOrSlot),
         screenWidgetArea: ScreenWidgetArea.tableview,
-        derivedQuestGen: DerivedQuestGenerator(
-          '{0}',
+        derivedQuestGen: DerivedQuestGenerator.multiPrompt(
+          [
+            NewQuestPerPromptOpts<DbTableFieldName>(
+              '',
+              visRuleQuestType: VisRuleQuestType.selectDataFieldName,
+              promptTemplArgGen: (
+                QuestBase priorAnsweredQuest,
+                int idx,
+              ) {
+                var areaName =
+                    priorAnsweredQuest.screenWidgetArea?.name ?? 'area';
+                var screenName = priorAnsweredQuest.appScreen.name;
+                var templ =
+                    priorAnsweredQuest.visRuleTypeForAreaOrSlot!.detailTemplate;
+                var msg = templ.format(
+                  [
+                    '$idx',
+                    areaName.toUpperCase(),
+                    screenName.toUpperCase(),
+                  ],
+                );
+                return [msg];
+              },
+              answerChoiceGenerator: (QuestBase priorAnsweredQuest,
+                  int newQuestIdx, int promptIdx) {
+                return DbTableFieldName.values.map((e) => e.name).toList();
+              },
+              newRespCastFunc: (
+                QuestBase newQuest,
+                String lstAreaIdxs,
+              ) {
+                List<int> l = castStrOfIdxsToIterOfInts(lstAreaIdxs).toList();
+                return DbTableFieldName.values[l.first];
+              },
+            ),
+            NewQuestPerPromptOpts<bool>(
+              '',
+              // promptOverride: 'Sort Ascending (yes == 1)',
+              visRuleQuestType: VisRuleQuestType.specifySortAscending,
+              promptTemplArgGen: (
+                QuestBase priorAnsweredQuest,
+                int idx,
+              ) {
+                return [];
+              },
+              newRespCastFunc: (
+                QuestBase newQuest,
+                String lstAreaIdxs,
+              ) {
+                List<int> l = castStrOfIdxsToIterOfInts(lstAreaIdxs).toList();
+                return l.first > 0;
+              },
+              answerChoiceGenerator: (QuestBase priorAnsweredQuest,
+                  int newQuestIdx, int promptIdx) {
+                return DbTableFieldName.values.map((e) => e.name).toList();
+              },
+            ),
+          ],
           newQuestConstructor: QuestBase.visualRuleDetailQuest,
-          newQuestPromptArgGen: (
-            QuestBase priorAnsweredQuest,
-            int idx,
-          ) {
-            var areaName = priorAnsweredQuest.screenWidgetArea?.name ?? 'area';
-            var screenName = priorAnsweredQuest.appScreen.name;
-            var templ =
-                priorAnsweredQuest.visRuleTypeForAreaOrSlot!.detailTemplate;
-            var msg = templ.format(
-              [
-                '$idx',
-                areaName.toUpperCase(),
-                screenName.toUpperCase(),
-              ],
-            );
-            return [msg];
-          },
           newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
             return (priorAnsweredQuest.mainAnswer as int);
           },
@@ -713,33 +730,6 @@ FIXME:
                 '-' +
                 scrName;
           },
-          answerChoiceGenerator:
-              (QuestBase priorAnsweredQuest, int newQuestIdx, int promptIdx) {
-            return DbTableFieldName.values.map((e) => e.name).toList();
-          },
-          perNewQuestGenOpts: [
-            PerQuestGenResponsHandlingOpts<DbTableFieldName>(
-              visRuleQuestType: VisRuleQuestType.selectDataFieldName,
-              newRespCastFunc: (
-                QuestBase newQuest,
-                String lstAreaIdxs,
-              ) {
-                List<int> l = castStrOfIdxsToIterOfInts(lstAreaIdxs).toList();
-                return DbTableFieldName.values[l.first];
-              },
-            ),
-            PerQuestGenResponsHandlingOpts<bool>(
-              // promptOverride: 'Sort Ascending (yes == 1)',
-              visRuleQuestType: VisRuleQuestType.specifySortAscending,
-              newRespCastFunc: (
-                QuestBase newQuest,
-                String lstAreaIdxs,
-              ) {
-                List<int> l = castStrOfIdxsToIterOfInts(lstAreaIdxs).toList();
-                return l.first > 0;
-              },
-            ),
-          ],
         ),
       )
     ];
@@ -839,7 +829,7 @@ List<QuestMatcher> _ruleSelectionQuestions = [
           0;
     },
     //
-    derivedQuestGen: DerivedQuestGenerator(
+    derivedQuestGen: DerivedQuestGenerator.singlePrompt(
       // <List<ScreenWidgetArea>>
       'Select which rules to config within area {0} of screen {1}',
       newQuestConstructor: QuestBase.ruleSelectQuest,
@@ -901,21 +891,17 @@ List<QuestMatcher> _ruleSelectionQuestions = [
           targetComplete: true,
         );
       },
-      perNewQuestGenOpts: [
-        PerQuestGenResponsHandlingOpts<List<VisualRuleType>>(
-          newRespCastFunc: (
-            QuestBase newQuest,
-            String lstAreaIdxs,
-          ) {
-            List<VisualRuleType> possibleRules =
-                newQuest.qTargetResolution.possibleRulesForAreaInScreen;
+      newRespCastFunc: (
+        QuestBase newQuest,
+        String lstAreaIdxs,
+      ) {
+        List<VisualRuleType> possibleRules =
+            newQuest.qTargetResolution.possibleRulesForAreaInScreen;
 
-            return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
-                .map((i) => possibleRules[i])
-                .toList();
-          },
-        ),
-      ],
+        return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
+            .map((i) => possibleRules[i])
+            .toList();
+      },
     ),
   ),
   QuestMatcher<List<ScreenAreaWidgetSlot>, List<VisualRuleType>>(
@@ -933,7 +919,7 @@ List<QuestMatcher> _ruleSelectionQuestions = [
           0;
     },
     //
-    derivedQuestGen: DerivedQuestGenerator(
+    derivedQuestGen: DerivedQuestGenerator.singlePrompt(
       // <List<ScreenAreaWidgetSlot>>
       'Select which rules to config on slot {0} of area {1} of screen {2}',
       newQuestConstructor: QuestBase.ruleSelectQuest,
@@ -1001,21 +987,17 @@ List<QuestMatcher> _ruleSelectionQuestions = [
           targetComplete: true,
         );
       },
-      perNewQuestGenOpts: [
-        PerQuestGenResponsHandlingOpts<List<VisualRuleType>>(
-          newRespCastFunc: (
-            QuestBase newQuest,
-            String lstAreaIdxs,
-          ) {
-            List<VisualRuleType> possibleRules =
-                newQuest.qTargetResolution.possibleRulesForAreaInScreen;
+      newRespCastFunc: (
+        QuestBase newQuest,
+        String lstAreaIdxs,
+      ) {
+        List<VisualRuleType> possibleRules =
+            newQuest.qTargetResolution.possibleRulesForAreaInScreen;
 
-            return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
-                .map((i) => possibleRules[i])
-                .toList();
-          },
-        ),
-      ],
+        return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
+            .map((i) => possibleRules[i])
+            .toList();
+      },
     ),
   ),
 ];

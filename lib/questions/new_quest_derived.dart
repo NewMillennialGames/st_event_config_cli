@@ -12,42 +12,38 @@ based on answers to a prior question
 
 */
 
-class PerPromptGenDetails {
-  /* individual prompts in a multi-part question
-
-  */
-  final String? promptOverride;
-
-  PerPromptGenDetails(this.promptOverride);
-}
-
-class PerQuestGenResponsHandlingOpts<AnsType> {
+class NewQuestPerPromptOpts<AnsType> {
   /*
-  describes logic and rules for a single auto-generated Question
-  each instance lives inside DerivedQuestGenerator.perQuestGenOptions
+  describes logic and rules for a prompt on an auto-generated Question
+  each instance lives inside DerivedQuestGenerator.perPromptDetails
 
-  perhaps I should name it:  PerPrompt ....??
+  acceptsMultiResponses means user can select more
+  than one choice, like:   "0,2,4"
   */
 
+  final String promptTemplate;
+  final NewQuestArgGen promptTemplArgGen;
+  final ChoiceListFromPriorAnswer answerChoiceGenerator;
   final CastStrToAnswTypCallback<AnsType> newRespCastFunc;
-  final int defaultAnswerIdx = 0;
+  final int defaultAnswerIdx;
   final VisualRuleType? visRuleType;
   final VisRuleQuestType? visRuleQuestType;
   final bool acceptsMultiResponses;
-  List<PerPromptGenDetails> promptDetails = [];
 
-  PerQuestGenResponsHandlingOpts({
+  NewQuestPerPromptOpts(
+    this.promptTemplate, {
+    required this.promptTemplArgGen,
+    required this.answerChoiceGenerator,
     required this.newRespCastFunc,
     this.visRuleType,
     this.visRuleQuestType,
     this.acceptsMultiResponses = false,
-    List<String> questPrompts = const [],
+    this.defaultAnswerIdx = 0,
   }) {}
 
   // Type get genType => AnsType;
   // bool get genAsRuleQuestion => visRuleType != null;
-  int get promptCount => promptDetails.length;
-  bool get hasMultiPrompts => promptCount > 1;
+
 }
 
 class DerivedQuestGenerator {
@@ -73,44 +69,93 @@ class DerivedQuestGenerator {
     in that case, we can use upvalues once, and ignore the arg 1 QB
   */
 
-  final String questPromptTemplate;
-  final DerivedGenBehaviorOnMatchEnum genBehaviorOfDerivedQuests;
   final NewQuestCount newQuestCountCalculator;
-  final NewQuestArgGen newQuestPromptArgGen;
-  final ChoiceListFromPriorAnswer answerChoiceGenerator;
   final QTargetIntentUpdateFunc qTargetIntentUpdater;
   final NewQuestIdGenFromPriorAnswer? newQuestIdGenFromPriorQuest;
-  final List<PerQuestGenResponsHandlingOpts> perNewQuestGenOpts;
+  final DerivedGenBehaviorOnMatchEnum genBehaviorOfDerivedQuests;
   QuestFactorytSignature? newQuestConstructor;
+  final List<NewQuestPerPromptOpts> perPromptDetails;
 
-  DerivedQuestGenerator(
-    this.questPromptTemplate, {
+  DerivedQuestGenerator._(
+    this.perPromptDetails, {
     this.genBehaviorOfDerivedQuests =
         DerivedGenBehaviorOnMatchEnum.addPendingQuestions,
     required this.newQuestCountCalculator,
-    required this.newQuestPromptArgGen,
-    required this.answerChoiceGenerator,
-    required this.perNewQuestGenOpts,
-    this.newQuestIdGenFromPriorQuest,
     QTargetIntentUpdateFunc? deriveTargetFromPriorRespCallbk,
+    this.newQuestIdGenFromPriorQuest,
     this.newQuestConstructor,
   }) : this.qTargetIntentUpdater = deriveTargetFromPriorRespCallbk == null
-            ? _ccTargIntent
+            ? _ccTargetRes
             : deriveTargetFromPriorRespCallbk;
 
-  static QTargetResolution _ccTargIntent(QuestBase qb, int idx) =>
-      qb.qTargetResolution.copyWith();
+  factory DerivedQuestGenerator.singlePrompt(
+    String questPromptTemplate, {
+    DerivedGenBehaviorOnMatchEnum genBehaviorOfDerivedQuests =
+        DerivedGenBehaviorOnMatchEnum.addPendingQuestions,
+    required NewQuestCount newQuestCountCalculator,
+    required NewQuestArgGen newQuestPromptArgGen,
+    required ChoiceListFromPriorAnswer answerChoiceGenerator,
+    // required NewQuestPerPromptOpts perNewQuestGenOpts,
+    required CastStrToAnswTypCallback newRespCastFunc,
+    NewQuestIdGenFromPriorAnswer? newQuestIdGenFromPriorQuest,
+    QTargetIntentUpdateFunc? deriveTargetFromPriorRespCallbk,
+    QuestFactorytSignature? newQuestConstructor,
+  }) {
+    var qpp = NewQuestPerPromptOpts(
+      questPromptTemplate,
+      promptTemplArgGen: newQuestPromptArgGen,
+      answerChoiceGenerator: answerChoiceGenerator,
+      newRespCastFunc: newRespCastFunc,
+    );
+
+    return DerivedQuestGenerator._(
+      [qpp],
+      genBehaviorOfDerivedQuests: genBehaviorOfDerivedQuests,
+      newQuestCountCalculator: newQuestCountCalculator,
+      deriveTargetFromPriorRespCallbk: deriveTargetFromPriorRespCallbk,
+      newQuestIdGenFromPriorQuest: newQuestIdGenFromPriorQuest,
+      newQuestConstructor: newQuestConstructor,
+    );
+  }
+
+  factory DerivedQuestGenerator.multiPrompt(
+    List<NewQuestPerPromptOpts> perNewQuestGenOpts, {
+    required NewQuestCount newQuestCountCalculator,
+    // optional args below
+    DerivedGenBehaviorOnMatchEnum genBehaviorOfDerivedQuests =
+        DerivedGenBehaviorOnMatchEnum.addPendingQuestions,
+    NewQuestIdGenFromPriorAnswer? newQuestIdGenFromPriorQuest,
+    QTargetIntentUpdateFunc? deriveTargetFromPriorRespCallbk,
+    QuestFactorytSignature? newQuestConstructor,
+  }) {
+    return DerivedQuestGenerator._(
+      perNewQuestGenOpts,
+      genBehaviorOfDerivedQuests: genBehaviorOfDerivedQuests,
+      newQuestCountCalculator: newQuestCountCalculator,
+      deriveTargetFromPriorRespCallbk: deriveTargetFromPriorRespCallbk,
+      newQuestIdGenFromPriorQuest: newQuestIdGenFromPriorQuest,
+      newQuestConstructor: newQuestConstructor,
+    );
+  }
 
   factory DerivedQuestGenerator.noop() {
-    // dummy rec for when we dont need to produce new questions
-    // eg testing
-    return DerivedQuestGenerator(
-      'no op',
+    /*
+      dummy rec for when we dont need to produce new questions
+      can serve as a placeholder for when this/self (DerivedQuestGenerator)
+      will be generated by a function on the enclosing Matcher model object
+      
+      also used in testing
+    */
+    var qpp = NewQuestPerPromptOpts(
+      'no op quest prompt',
+      promptTemplArgGen: (a, ix) => [],
+      answerChoiceGenerator: (_, __, niu) => [],
+      newRespCastFunc: (_, __) => null,
+    );
+    return DerivedQuestGenerator._(
+      [qpp],
       genBehaviorOfDerivedQuests: DerivedGenBehaviorOnMatchEnum.noop,
       newQuestCountCalculator: (qb) => 0,
-      newQuestPromptArgGen: (a, ix) => [],
-      answerChoiceGenerator: (_, __, niu) => [],
-      perNewQuestGenOpts: [],
     );
   }
 
@@ -136,13 +181,15 @@ class DerivedQuestGenerator {
     }
 
     // TODO:  future
-    bool newQuestContainsMultiPrompts = this.perNewQuestGenOpts.length > 1;
+    bool newQuestContainsMultiPrompts = this.perPromptDetails.length > 1;
+    NewQuestPerPromptOpts firstPromptConfig = this.perPromptDetails[0];
 
     List<QuestBase> createdQuests = [];
     for (int newQIdx = 0; newQIdx < newQuestCount; newQIdx++) {
       //
-
-      int newQuestChoiceCount = _newQuestChoiceCount(answeredQuest, newQIdx);
+      int newQuestChoiceCount = firstPromptConfig
+          .answerChoiceGenerator(answeredQuest, newQIdx, 0)
+          .length;
       if (newQuestChoiceCount < 1) continue;
 
       // values required to build new question:
@@ -151,11 +198,12 @@ class DerivedQuestGenerator {
       // added extra copyWith() in case passed function forgets it
       QTargetResolution targIntent =
           qTargetIntentUpdater(answeredQuest, newQIdx).copyWith();
-      List<String> templArgs = newQuestPromptArgGen(answeredQuest, newQIdx);
-      String _userPrompt = questPromptTemplate.format(templArgs);
+      List<String> templArgs =
+          firstPromptConfig.promptTemplArgGen(answeredQuest, newQIdx);
+      String _userPrompt = firstPromptConfig.promptTemplate.format(templArgs);
 
       // select correct Gen-Options or use last if list is too short
-      PerQuestGenResponsHandlingOpts instcGenOpt = perNewQuestGenOpts.first;
+      NewQuestPerPromptOpts instcGenOpt = perPromptDetails.first;
       // perNewQuestGenOpts.length > newQIdx
       //     ? perNewQuestGenOpts[newQIdx]
       //     : perNewQuestGenOpts.last;
@@ -163,7 +211,9 @@ class DerivedQuestGenerator {
       List<QuestPromptPayload> newQuestPrompts = [
         QuestPromptPayload(
           _userPrompt,
-          answerChoiceGenerator(answeredQuest, newQIdx, 0).toList(),
+          firstPromptConfig
+              .answerChoiceGenerator(answeredQuest, newQIdx, 0)
+              .toList(),
           instcGenOpt.visRuleQuestType ?? VisRuleQuestType.dialogStruct,
           instcGenOpt.newRespCastFunc,
         ),
@@ -194,14 +244,17 @@ class DerivedQuestGenerator {
   List<QuestPromptPayload> _secondaryPrompts(QuestBase answeredQuest) {
     //
     List<QuestPromptPayload> lQpp = [];
-    int secondPromptCount = perNewQuestGenOpts.length - 1;
-    for (int newQIdx = 1; newQIdx < secondPromptCount; newQIdx++) {
+    int secondPromptCount = perPromptDetails.length - 1;
+    for (int nxtPromptIdx = 1;
+        nxtPromptIdx < secondPromptCount;
+        nxtPromptIdx++) {
       //
-      PerQuestGenResponsHandlingOpts perPromptGenOps =
-          perNewQuestGenOpts[newQIdx];
+      NewQuestPerPromptOpts perPromptGenOps = perPromptDetails[nxtPromptIdx];
       var qpp = QuestPromptPayload(
-        questPromptTemplate,
-        answerChoiceGenerator(answeredQuest, newQIdx, newQIdx).toList(),
+        perPromptGenOps.promptTemplate,
+        perPromptGenOps
+            .answerChoiceGenerator(answeredQuest, nxtPromptIdx, nxtPromptIdx)
+            .toList(),
         perPromptGenOps.visRuleQuestType ?? VisRuleQuestType.dialogStruct,
         perPromptGenOps.newRespCastFunc,
       );
@@ -210,20 +263,27 @@ class DerivedQuestGenerator {
     return lQpp;
   }
 
+  // int _newQuestChoiceCount(
+  //   QuestBase priorAnsweredQuest,
+  //   int newQIdx,
+  // ) {
+  //   var answerChoiceGenerator = perPromptDetails[newQIdx].answerChoiceGenerator;
+  //   return answerChoiceGenerator(priorAnsweredQuest, newQIdx, 0).length;
+  // }
+
+  int get promptCount => perPromptDetails.length;
+  bool get createsQuestWithMultiPrompts => promptCount > 1;
+
   // bool get addsPendingQuestions =>
   //     genBehaviorOfDerivedQuests.addsPendingQuestions;
 
   // bool get createsImplicitAnswers =>
   //     genBehaviorOfDerivedQuests.createsImplicitAnswers; // || hasOnlyOneChoice;
 
-  int _newQuestChoiceCount(
-    QuestBase priorAnsweredQuest,
-    int newQIdx,
-  ) {
-    return answerChoiceGenerator(priorAnsweredQuest, newQIdx, 0).length;
-  }
-
   // bool hasOnlyOneChoice(QuestBase qb) => _firstQuestChoiceCount(qb) == 1;
 
   // bool hasZeroValidChoices(QuestBase qb) => _firstQuestChoiceCount(qb) < 1;
+
+  static QTargetResolution _ccTargetRes(QuestBase qb, int idx) =>
+      qb.qTargetResolution.copyWith();
 }
