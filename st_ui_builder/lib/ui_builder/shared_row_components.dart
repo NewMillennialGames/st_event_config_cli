@@ -45,7 +45,7 @@ class CompetitorImage extends StatelessWidget {
   }) : super(key: key);
 
   double get _shrinkSize => shrinkForRank
-      ? (isTwoAssetRow ? 0.44 : 0.76)
+      ? (isTwoAssetRow ? 0.44 : 0.70)
       : (isTwoAssetRow ? 0.66 : 0.88);
 
   double get imgSize => UiSizes.teamImgSide * _shrinkSize;
@@ -96,7 +96,7 @@ class TradeButton extends ConsumerWidget {
     // (optCurEvent?.state ?? EventState.unpublished) == EventState.inProgress;
     return Container(
       height: UiSizes.tradeBtnHeight,
-      width: 80,
+      width: 80.w,
       // width: UiSizes.tradeBtnWidthPctScreen * size.width,
       alignment: Alignment.center,
       child: (assetState.isTradable)
@@ -113,7 +113,7 @@ class TradeButton extends ConsumerWidget {
           : Text(
               tf.labelForGameState(competitionStatus),
               style: StTextStyles.h5.copyWith(
-                fontSize: 15.sp,
+                fontSize: 14.sp,
                 color: tf.colorForGameState(competitionStatus),
               ),
               textAlign: TextAlign.center,
