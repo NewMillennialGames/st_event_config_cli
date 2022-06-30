@@ -17,7 +17,7 @@ class QuestPromptPayload<T> {
     this.choices,
     this.questType,
     CastStrToAnswTypCallback<T> _castFunc,
-  ) : captureAndCast = CaptureAndCast(_castFunc);
+  ) : captureAndCast = CaptureAndCast<T>(_castFunc);
 }
 
 abstract class QuestBase with EquatableMixin {
@@ -192,16 +192,16 @@ abstract class QuestBase with EquatableMixin {
     return nextQpi;
   }
 
-  DerivedQuestGenerator getDerivedRuleQuestGenViaVisType(
-    VisRuleQuestType ruleSubtypeNewQuest,
-  ) {
+  DerivedQuestGenerator getDerivedRuleQuestGenViaVisType(int newQuIdx) {
     //
     assert(
-      this is RuleSelectQuest || this is RulePrepQuest,
-      'cant produce detail quests from this prevAnswQuest',
+      this is RuleSelectQuest ||
+          this is RulePrepQuest &&
+              (qTargetResolution.visRuleTypeForAreaOrSlot != null),
+      'cant produce detail quests from this prevAnswQuest ${qTargetResolution.visRuleTypeForAreaOrSlot?.name}',
     );
     return qTargetResolution.visRuleTypeForAreaOrSlot!
-        .derQuestGenFromSubtypeForRuleGen(this, ruleSubtypeNewQuest);
+        .makeQuestGenForRuleType(this);
   }
 
   bool containsPromptWhere(bool Function(QuestPromptInstance qpi) promptTest) {

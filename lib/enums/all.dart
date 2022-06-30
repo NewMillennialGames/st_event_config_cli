@@ -4,6 +4,8 @@ import 'package:json_annotation/json_annotation.dart';
 //
 import '../app_entity_enums/all.dart';
 import '../questions/all.dart';
+import '../config/all.dart';
+import '../util/all.dart';
 //
 
 part 'rule_type.dart';
