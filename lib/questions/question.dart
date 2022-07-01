@@ -192,18 +192,23 @@ abstract class QuestBase with EquatableMixin {
     return nextQpi;
   }
 
-  DerivedQuestGenerator getDerivedRuleQuestGenViaVisType(int newQuIdx) {
+  DerivedQuestGenerator getDerivedRuleQuestGenViaVisType(
+    int newQuIdx,
+    VisualRuleType? pendingRule,
+  ) {
     //
+    VisualRuleType curRule = pendingRule ?? visRuleTypeForAreaOrSlot!;
+
     assert(
-      this is RuleSelectQuest ||
-          this is RulePrepQuest &&
-              (qTargetResolution.visRuleTypeForAreaOrSlot != null),
-      'cant produce detail quests from this prevAnswQuest ${qTargetResolution.visRuleTypeForAreaOrSlot?.name}',
+      this is RuleSelectQuest || this is RulePrepQuest,
+      'cant produce detail quests on ${this.questId} ${curRule.name}',
     );
     print(
-        'getDerivedRuleQuestGenViaVisType: ${qTargetResolution.visRuleTypeForAreaOrSlot!.name}');
-    return qTargetResolution.visRuleTypeForAreaOrSlot!
-        .makeQuestGenForRuleType(this);
+      'getDerivedRuleQuestGenViaVisType: ${curRule.name}',
+    );
+
+    // var newTarg = qTargetResolution.copyWith(visRuleTypeForAreaOrSlot: curRule);
+    return curRule.makeQuestGenForRuleType(this);
   }
 
   bool containsPromptWhere(bool Function(QuestPromptInstance qpi) promptTest) {

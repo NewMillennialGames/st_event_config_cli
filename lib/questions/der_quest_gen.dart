@@ -264,11 +264,25 @@ class DerivedQuestGenerator {
   int get promptCount => perPromptDetails.length;
   bool get createsQuestWithMultiPrompts => promptCount > 1;
 
-  static QTargetResolution _ccTargetRes(QuestBase qb, int idx) =>
-      /*       returns exact clone of exising target
+  static QTargetResolution _ccTargetRes(QuestBase prevAnswQuest, int newQIdx) {
+    /*       returns near exact clone of exising target
       for when the deriveTargetFromPriorRespCallbk argument
       is not passed (as null) to this constructor 
 
     */
-      qb.qTargetResolution.copyWith();
+    // generic logic to try to update rule asap
+    var existingAnswers = prevAnswQuest.mainAnswer;
+    if (existingAnswers is Iterable<VisualRuleType>) {
+      VisualRuleType curRule = existingAnswers.toList()[newQIdx];
+      return prevAnswQuest.qTargetResolution
+          .copyWith(visRuleTypeForAreaOrSlot: curRule);
+    }
+    if (existingAnswers is Iterable<BehaviorRuleType>) {
+      BehaviorRuleType curRule = existingAnswers.toList()[newQIdx];
+      return prevAnswQuest.qTargetResolution
+          .copyWith(behRuleTypeForAreaOrSlot: curRule);
+    }
+
+    return prevAnswQuest.qTargetResolution.copyWith();
+  }
 }

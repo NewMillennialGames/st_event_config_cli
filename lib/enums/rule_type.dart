@@ -224,16 +224,22 @@ extension VisualRuleTypeExt1 on VisualRuleType {
       prevAnswQuest.targetPathIsComplete,
       'target (area/slot) for rule must be complete to call this method; ${prevAnswQuest.questId}',
     );
-    assert(
-      prevAnswQuest.visRuleTypeForAreaOrSlot != null,
-      'must have a rule specified; ${prevAnswQuest.questId}',
-    );
-    //
-    assert(this == prevAnswQuest.visRuleTypeForAreaOrSlot,
-        'err: ${this.name}  ${prevAnswQuest.visRuleTypeForAreaOrSlot?.name}');
+
+    bool answOnPrevQuestIsIterable = prevAnswQuest.mainAnswer is Iterable;
+    if (prevAnswQuest.visRuleTypeForAreaOrSlot == null &&
+        !answOnPrevQuestIsIterable) {
+      print(
+        'err: user selected 1-n rules but $name not set yet on current question',
+      );
+    } else if (prevAnswQuest.visRuleTypeForAreaOrSlot != null &&
+        prevAnswQuest.visRuleTypeForAreaOrSlot != this) {
+      throw UnimplementedError(
+        'err: impossible condition!  $name != ${prevAnswQuest.visRuleTypeForAreaOrSlot!.name}',
+      );
+    }
     VisualRuleType visRT = this;
 
-    List<VisRuleQuestType> visRequiredSubQuests = visRT.requRuleDetailCfgQuests;
+    List<VisRuleQuestType> visRequiredSubQuests = this.requRuleDetailCfgQuests;
     if (visRequiredSubQuests.isEmpty) {
       throw UnimplementedError(
         'Warn:  building DerQuesGen for ${this.name} when requConfigQuests.isEmpty; ${prevAnswQuest.questId}',
@@ -243,14 +249,13 @@ extension VisualRuleTypeExt1 on VisualRuleType {
     print('makeQuestGenForRuleType is looping on:');
     print(visRequiredSubQuests);
 
-    bool answOnPrevQuestIsIterable = prevAnswQuest.mainAnswer is Iterable;
     int newQuestCountToGenerate = answOnPrevQuestIsIterable
         ? (prevAnswQuest.mainAnswer as Iterable).length
         : 1;
 
     if (newQuestCountToGenerate > 1) {
       print(
-        'info:  ${prevAnswQuest.questId} will generate $newQuestCountToGenerate questions  (prob an error?)',
+        'warn:  ${prevAnswQuest.questId} will generate $newQuestCountToGenerate questions  (prob an error?)',
       );
     }
     String ruleTypeName = this.name;
@@ -349,14 +354,15 @@ extension VisualRuleTypeExt1 on VisualRuleType {
     String qIdSuffix =
         _accumSubQuestNames.reduce((value, element) => value + '-' + element);
 
-    return DerivedQuestGenerator.multiPrompt(
-      newPerPromptDetails,
-      newQuestCountCalculator: ((QuestBase qb) => newQuestCountToGenerate),
-      genBehaviorOfDerivedQuests: DerivedGenBehaviorOnMatchEnum.noop,
-      newQuestIdGenFromPriorQuest: (qb, idx) =>
-          qb.questId + '-rdt-$qIdSuffix-$idx',
-      newQuestConstructor: QuestBase.visualRuleDetailQuest,
-    );
+    return DerivedQuestGenerator.multiPrompt(newPerPromptDetails,
+        newQuestCountCalculator: ((QuestBase qb) => newQuestCountToGenerate),
+        genBehaviorOfDerivedQuests: DerivedGenBehaviorOnMatchEnum.noop,
+        newQuestIdGenFromPriorQuest: (qb, idx) =>
+            qb.questId + '-rdt-$qIdSuffix-$idx',
+        newQuestConstructor: QuestBase.visualRuleDetailQuest,
+        deriveTargetFromPriorRespCallbk: (QuestBase qb, int newQidx) {
+          return qb.qTargetResolution.copyWith(visRuleTypeForAreaOrSlot: this);
+        });
   }
 }
 

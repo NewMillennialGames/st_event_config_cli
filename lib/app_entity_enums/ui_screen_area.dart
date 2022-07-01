@@ -39,9 +39,9 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
         ];
       case ScreenWidgetArea.filterBar:
         return [
-          ScreenAreaWidgetSlot.slot1,
-          ScreenAreaWidgetSlot.slot2,
-          ScreenAreaWidgetSlot.slot3,
+          // ScreenAreaWidgetSlot.slot1,
+          // ScreenAreaWidgetSlot.slot2,
+          // ScreenAreaWidgetSlot.slot3,
         ];
       case ScreenWidgetArea.header:
         return [
@@ -73,7 +73,9 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
       case ScreenWidgetArea.navBar:
         return [VisualRuleType.styleOrFormat];
       case ScreenWidgetArea.filterBar:
-        return [];
+        return [
+          VisualRuleType.filterCfg,
+        ];
       case ScreenWidgetArea.header:
         return [
           VisualRuleType.styleOrFormat,

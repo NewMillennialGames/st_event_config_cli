@@ -457,7 +457,10 @@ FIXME:
         derivedQuestGen: DerivedQuestGenerator.noop(),
         deriveQuestGenCallbk: (QuestBase priorAnsweredQuest, int newQuIdx) {
           //
-          return priorAnsweredQuest.getDerivedRuleQuestGenViaVisType(newQuIdx);
+          var answers = priorAnsweredQuest.mainAnswer as List<VisualRuleType>;
+          VisualRuleType selRule = answers[newQuIdx];
+          return priorAnsweredQuest.getDerivedRuleQuestGenViaVisType(
+              newQuIdx, selRule);
         },
       ),
       QuestMatcher<List<VisualRuleType>, List<String>>(
@@ -477,14 +480,18 @@ FIXME:
           //     'priorAnsweredQuest.isRulePrepQuestion: ${priorAnsweredQuest.isRulePrepQuestion}');
           // print(
           //     'priorAnsweredQuest.targetPathIsComplete: ${priorAnsweredQuest.targetPathIsComplete}');
-          return (priorAnsweredQuest.mainAnswer as int) > 0 &&
+          List<String> rulePrepAnswers = priorAnsweredQuest.mainAnswer;
+          assert(rulePrepAnswers.length > 0, '');
+          int desiredCount = int.tryParse(rulePrepAnswers.first) ?? 1;
+          return desiredCount > 0 &&
               priorAnsweredQuest.isRulePrepQuestion &&
               priorAnsweredQuest.targetPathIsComplete;
         },
         //
         derivedQuestGen: DerivedQuestGenerator.noop(),
         deriveQuestGenCallbk: (QuestBase priorAnsweredQuest, int newQuIdx) {
-          return priorAnsweredQuest.getDerivedRuleQuestGenViaVisType(newQuIdx);
+          return priorAnsweredQuest.getDerivedRuleQuestGenViaVisType(
+              newQuIdx, null);
         },
       ),
       //   QuestMatcher<List<VisualRuleType>, List<String>>(
