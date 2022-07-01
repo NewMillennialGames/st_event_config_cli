@@ -4,6 +4,7 @@ import 'package:test/test.dart';
 import 'package:st_ev_cfg/st_ev_cfg.dart';
 import 'package:st_ev_cfg/interfaces/q_presenter.dart';
 //
+import 'full_ans_expect.dart';
 import 'shared_utils.dart';
 /*
   loop through a fixed dialog pattern & verify
@@ -19,8 +20,8 @@ void main() {
       StreamController<List<String>>();
   QuestListMgr _questMgr = QuestListMgr();
   QuestionCascadeDispatcher _qcd = QuestionCascadeDispatcher();
-  TestQuestRespGen questPresent =
-      TestQuestRespGen(sendAnswersController); // aka QuestionPresenterIfc
+  FullFlowPresenter questPresent =
+      FullFlowPresenter(sendAnswersController); // aka QuestionPresenterIfc
   DialogRunner dlogRun = DialogRunner(
     questPresent,
     qListMgr: _questMgr,

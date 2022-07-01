@@ -1,3 +1,4 @@
+import 'dart:async';
 // import 'package:test/test.dart';
 //
 import 'package:st_ev_cfg/st_ev_cfg.dart';
@@ -52,9 +53,7 @@ QuestMatcher _startWhenMatches = QuestMatcher(
 
 List<AnswAndExpected> _fullData = [];
 
-
-
-// import 'dart:async';
+//
 // //
 // import 'package:st_ev_cfg/st_ev_cfg.dart';
 // import 'package:st_ev_cfg/interfaces/q_presenter.dart';
@@ -68,139 +67,139 @@ List<AnswAndExpected> _fullData = [];
 //   that create new questions based on existing answers
 // */
 
-// class TestQuestRespGen implements QuestionPresenterIfc {
-//   // receives Questions for test-automation
-//   StreamController<List<String>> sendAnswersController;
-//   late List<TestRespGenWhenQuestLike> matchersAndRespGen;
+class FullFlowPresenter implements QuestionPresenterIfc {
+  // receives Questions for test-automation
+  StreamController<List<String>> sendAnswersController;
+  late List<TestRespGenWhenQuestLike> matchersAndRespGen;
 
-//   TestQuestRespGen(this.sendAnswersController) {
-//     this.matchersAndRespGen = [];
+  FullFlowPresenter(this.sendAnswersController) {
+    this.matchersAndRespGen = [];
 
-//     sendAnswersController.stream.listen(_passAnswerAndAdvanceQuestion);
-//   }
+    sendAnswersController.stream.listen(_passAnswerAndAdvanceQuestion);
+  }
 
-//   void _passAnswerAndAdvanceQuestion(List<String> respLst) {
-//     //
-//   }
+  void _passAnswerAndAdvanceQuestion(List<String> respLst) {
+    //
+  }
 
-//   List<TestRespGenWhenQuestLike> _lookForResponseGenerators(QuestBase quest) {
-//     //
-//     // if (!(quest is QuestVisualRule)) {
-//     //   //
-//     //   print('Warn: called _lookForResponseGenerators with non-rule Question');
-//     //   return [];
-//     // }
+  List<TestRespGenWhenQuestLike> _lookForResponseGenerators(QuestBase quest) {
+    //
+    // if (!(quest is QuestVisualRule)) {
+    //   //
+    //   print('Warn: called _lookForResponseGenerators with non-rule Question');
+    //   return [];
+    // }
 
-//     List<TestRespGenWhenQuestLike> lqm = [];
-//     for (TestRespGenWhenQuestLike rg in matchersAndRespGen) {
-//       //
-//       if (rg.matcher.doesMatch(quest)) {
-//         lqm.add(rg);
-//       }
-//     }
-//     return lqm;
-//   }
+    List<TestRespGenWhenQuestLike> lqm = [];
+    for (TestRespGenWhenQuestLike rg in matchersAndRespGen) {
+      //
+      if (rg.matcher.doesMatch(quest)) {
+        lqm.add(rg);
+      }
+    }
+    return lqm;
+  }
 
-//   List<String> _buildUserResponse(
-//     QuestBase quest,
-//     QuestPromptInstance qpi,
-//     List<TestRespGenWhenQuestLike> responseGenerators,
-//   ) {
-//     //
-//     if (responseGenerators.length < 1) return [];
+  List<String> _buildUserResponse(
+    QuestBase quest,
+    QuestPromptInstance qpi,
+    List<TestRespGenWhenQuestLike> responseGenerators,
+  ) {
+    //
+    if (responseGenerators.length < 1) return [];
 
-//     VisRuleQuestType vqt = qpi.visQuestType;
-//     for (TestRespGenWhenQuestLike wql in responseGenerators) {
-//       List<String> gendTestAnswer = wql.answerFor(vqt);
-//       if (gendTestAnswer.isNotEmpty) {
-//         return gendTestAnswer;
-//       }
-//     }
-//     // remove any adjacent comma's
-//     // userAnswer = userAnswer.replaceAll(',,,', ',');
-//     // userAnswer = userAnswer.replaceAll(',,', ',');
-//     // userAnswer = userAnswer.replaceAll(',,', ',');
-//     return [];
-//   }
+    VisRuleQuestType vqt = qpi.visQuestType;
+    for (TestRespGenWhenQuestLike wql in responseGenerators) {
+      List<String> gendTestAnswer = wql.answerFor(vqt);
+      if (gendTestAnswer.isNotEmpty) {
+        return gendTestAnswer;
+      }
+    }
+    // remove any adjacent comma's
+    // userAnswer = userAnswer.replaceAll(',,,', ',');
+    // userAnswer = userAnswer.replaceAll(',,', ',');
+    // userAnswer = userAnswer.replaceAll(',,', ',');
+    return [];
+  }
 
-//   @override
-//   void askAndWaitForUserResponse(
-//     DialogRunner dialoger,
-//     QuestBase quest,
-//   ) {
-//     //
-//     List<TestRespGenWhenQuestLike> responseGenerators =
-//         _lookForResponseGenerators(quest);
-//     if (responseGenerators.length < 1) {
-//       // none so send default
-//       // quest.convertAndStoreUserResponse('0');
-//       // dialoger.advanceToNextQuestionFromGui();
-//       print('no response generators found for ${quest.questId}; exiting!');
-//       dialoger.generateNewQuestionsFromUserResponse(quest);
-//       return;
-//     }
+  @override
+  void askAndWaitForUserResponse(
+    DialogRunner dialoger,
+    QuestBase quest,
+  ) {
+    //
+    List<TestRespGenWhenQuestLike> responseGenerators =
+        _lookForResponseGenerators(quest);
+    if (responseGenerators.length < 1) {
+      // none so send default
+      // quest.convertAndStoreUserResponse('0');
+      // dialoger.advanceToNextQuestionFromGui();
+      print('no response generators found for ${quest.questId}; exiting!');
+      dialoger.generateNewQuestionsFromUserResponse(quest);
+      return;
+    }
 
-//     QuestPromptInstance? promptInst = quest.getNextUserPromptIfExists();
-//     while (promptInst != null) {
-//       List<String> _fullResponse = _buildUserResponse(
-//         quest,
-//         promptInst,
-//         responseGenerators,
-//       );
-//       promptInst.collectResponse(
-//           (_fullResponse.isNotEmpty) ? _fullResponse.first : '');
+    QuestPromptInstance? promptInst = quest.getNextUserPromptIfExists();
+    while (promptInst != null) {
+      List<String> _fullResponse = _buildUserResponse(
+        quest,
+        promptInst,
+        responseGenerators,
+      );
+      promptInst.collectResponse(
+          (_fullResponse.isNotEmpty) ? _fullResponse.first : '');
 
-//       // now see if there is another prompt waiting to be answered
-//       promptInst = quest.getNextUserPromptIfExists();
-//     }
-//     // all prompts answered;  ready to advance to next quest
-//     // now check if user answer will generate new questions
-//     dialoger.generateNewQuestionsFromUserResponse(quest);
-//     // cli test;  not gui
-//     // dialoger.advanceToNextQuestionFromGui();
-//   }
+      // now see if there is another prompt waiting to be answered
+      promptInst = quest.getNextUserPromptIfExists();
+    }
+    // all prompts answered;  ready to advance to next quest
+    // now check if user answer will generate new questions
+    dialoger.generateNewQuestionsFromUserResponse(quest);
+    // cli test;  not gui
+    // dialoger.advanceToNextQuestionFromGui();
+  }
 
-//   void showErrorAndRePresentQuestion(String errTxt, String questHelpMsg) {
-//     //
-//   }
+  void showErrorAndRePresentQuestion(String errTxt, String questHelpMsg) {
+    //
+  }
 
-//   @override
-//   void informUiThatDialogIsComplete() {}
-// }
+  @override
+  void informUiThatDialogIsComplete() {}
+}
 
-// class QTypeResponsePair {
-//   /*
-//     leave qType null to make it always match
-//   */
-//   VisRuleQuestType? qType;
-//   String response;
+class QTypeResponsePair {
+  /*
+    leave qType null to make it always match
+  */
+  VisRuleQuestType? qType;
+  String response;
 
-//   QTypeResponsePair(
-//     this.qType,
-//     this.response,
-//   );
+  QTypeResponsePair(
+    this.qType,
+    this.response,
+  );
 
-//   bool matches(VisRuleQuestType qt) => qt == qType || qType == null;
-// }
+  bool matches(VisRuleQuestType qt) => qt == qType || qType == null;
+}
 
-// class TestRespGenWhenQuestLike {
-//   //
-//   QuestMatcher matcher;
-//   List<QTypeResponsePair> responsesByQType;
+class TestRespGenWhenQuestLike {
+  //
+  QuestMatcher matcher;
+  List<QTypeResponsePair> responsesByQType;
 
-//   TestRespGenWhenQuestLike(this.matcher, this.responsesByQType);
+  TestRespGenWhenQuestLike(this.matcher, this.responsesByQType);
 
-//   List<String> answerFor(VisRuleQuestType qType) {
-//     // each prompt on a Question can have its own: VisRuleQuestType
-//     List<String> l = [];
-//     for (QTypeResponsePair respPair in responsesByQType) {
-//       if (respPair.matches(qType)) {
-//         l.add(respPair.response);
-//       }
-//     }
-//     return l;
-//   }
-// }
+  List<String> answerFor(VisRuleQuestType qType) {
+    // each prompt on a Question can have its own: VisRuleQuestType
+    List<String> l = [];
+    for (QTypeResponsePair respPair in responsesByQType) {
+      if (respPair.matches(qType)) {
+        l.add(respPair.response);
+      }
+    }
+    return l;
+  }
+}
 
 // class TestRespGenWhenQuestLike {
 //   /*  Response to Generate when Question like:
