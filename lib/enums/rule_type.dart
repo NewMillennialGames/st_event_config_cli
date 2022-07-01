@@ -229,13 +229,19 @@ extension VisualRuleTypeExt1 on VisualRuleType {
       'must have a rule specified; ${prevAnswQuest.questId}',
     );
     //
-    VisualRuleType visRT = prevAnswQuest.visRuleTypeForAreaOrSlot!;
+    assert(this == prevAnswQuest.visRuleTypeForAreaOrSlot,
+        'err: ${this.name}  ${prevAnswQuest.visRuleTypeForAreaOrSlot?.name}');
+    VisualRuleType visRT = this;
+
     List<VisRuleQuestType> visRequiredSubQuests = visRT.requRuleDetailCfgQuests;
     if (visRequiredSubQuests.isEmpty) {
       throw UnimplementedError(
         'Warn:  building DerQuesGen for ${this.name} when requConfigQuests.isEmpty; ${prevAnswQuest.questId}',
       );
     }
+
+    print('makeQuestGenForRuleType is looping on:');
+    print(visRequiredSubQuests);
 
     bool answOnPrevQuestIsIterable = prevAnswQuest.mainAnswer is Iterable;
     int newQuestCountToGenerate = answOnPrevQuestIsIterable
@@ -306,6 +312,9 @@ extension VisualRuleTypeExt1 on VisualRuleType {
             promptCountEachQuestion,
           );
           newPerPromptDetails.addAll(qps);
+          print(
+            'promptCountEachQuestion: $promptCountEachQuestion    newPerPromptDetails: ${newPerPromptDetails.length}',
+          );
           break;
 
         case VisRuleQuestType.selectVisualComponentOrStyle:
@@ -331,7 +340,8 @@ extension VisualRuleTypeExt1 on VisualRuleType {
         //
         case VisRuleQuestType.specifySortAscending:
           throw UnimplementedError(
-              'err: not a real rule; hidden under selectDataFieldName');
+            'err: not a real rule; hidden under selectDataFieldName',
+          );
       }
     }
     assert(newPerPromptDetails.length > 0, 'err: no prompts in question');

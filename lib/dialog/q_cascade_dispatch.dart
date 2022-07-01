@@ -108,7 +108,8 @@ class QuestionCascadeDispatcher {
       //
     } else if (questJustAnswered.isRulePrepQuestion) {
       print(
-          '\tUser has answered rule prep quest (normally how many slots to configure)');
+        '\tUser has answered rule prep quest (normally how many slots to configure)',
+      );
       var _qMatchCollToGenRuleDetail =
           QMatchCollection(matchersToGenRuleDetailQuests);
       _qMatchCollToGenRuleDetail.appendNewQuestsOrInsertImplicitAnswers(
@@ -470,6 +471,12 @@ FIXME:
             qid.startsWith(QuestionIdStrings.prepQuestForVisRule),
         validateUserAnswerAfterPatternMatchIsTrueCallback:
             (QuestBase priorAnsweredQuest) {
+          // print(
+          //     'priorAnsweredQuest.mainAnswer: ${priorAnsweredQuest.mainAnswer as int}');
+          // print(
+          //     'priorAnsweredQuest.isRulePrepQuestion: ${priorAnsweredQuest.isRulePrepQuestion}');
+          // print(
+          //     'priorAnsweredQuest.targetPathIsComplete: ${priorAnsweredQuest.targetPathIsComplete}');
           return (priorAnsweredQuest.mainAnswer as int) > 0 &&
               priorAnsweredQuest.isRulePrepQuestion &&
               priorAnsweredQuest.targetPathIsComplete;

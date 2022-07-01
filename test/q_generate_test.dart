@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:test/test.dart';
 //
 import 'package:st_ev_cfg/st_ev_cfg.dart';
@@ -8,9 +10,8 @@ import 'package:st_ev_cfg/util/all.dart';
 
 void main() {
   //
-  const k_quests_created_in_test = 2;
+  const k_num_group_flds_in_test = 2;
   final k_quest_id = QuestionIdStrings.prepQuestForVisRule;
-  // 'groupCount';
 
   /*  
   */
@@ -59,7 +60,7 @@ void main() {
   );
 
   test(
-      'creates user answer abt LV group-by depth, & verifies $k_quests_created_in_test new Questions generated from it',
+      'creates user answer abt LV group-by depth, & verifies 1 quest w 4 prompts generated from it',
       () {
     final _qcd = QuestionCascadeDispatcher();
     final _questMgr = QuestListMgr();
@@ -75,7 +76,7 @@ void main() {
 
     var ask = QuestPromptPayload<int>(
         'set ListView group-by depth on marketView',
-        ['0', '1', '$k_quests_created_in_test', '3'],
+        ['0', '1', '$k_num_group_flds_in_test', '3'],
         VisRuleQuestType.askCountOfSlotsToConfigure,
         (QuestBase qb, String selCount) {
       // print('askNumSlots convert on str $selCount');
@@ -88,6 +89,7 @@ void main() {
       questId: k_quest_id,
     );
 
+    expect(askGroupDepth.isRulePrepQuestion, true);
     // add question to q-manager
     _questMgr.appendGeneratedQuestsAndAnswers([askGroupDepth]);
     // next 2 lines are virtually the same test
@@ -96,7 +98,7 @@ void main() {
 
     QuestBase quest = _questMgr.nextQuestionToAnswer()!;
     // provide answers
-    quest.setAllAnswersWhileTesting(['$k_quests_created_in_test']);
+    quest.setAllAnswersWhileTesting(['$k_num_group_flds_in_test']);
 
     // will auto-respond using value provided in _autoResponseGenerators above
     // testQuestPresenter.askAndWaitForUserResponse(dlogRun, quest);
@@ -127,8 +129,8 @@ void main() {
     expect(_questMgr.pendingQuestionCount, 1);
 
     // confirm 4 prompts
-    expect(_questMgr.currentOrLastQuestion.promptCount,
-        k_quests_created_in_test * 2);
+    nxtQu = _questMgr.nextQuestionToAnswer();
+    expect(nxtQu?.promptCount ?? 0, k_num_group_flds_in_test * 2);
 
     for (QuestBase q in _questMgr.pendingQuestions) {
       print(

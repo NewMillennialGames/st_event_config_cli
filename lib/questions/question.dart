@@ -200,6 +200,8 @@ abstract class QuestBase with EquatableMixin {
               (qTargetResolution.visRuleTypeForAreaOrSlot != null),
       'cant produce detail quests from this prevAnswQuest ${qTargetResolution.visRuleTypeForAreaOrSlot?.name}',
     );
+    print(
+        'getDerivedRuleQuestGenViaVisType: ${qTargetResolution.visRuleTypeForAreaOrSlot!.name}');
     return qTargetResolution.visRuleTypeForAreaOrSlot!
         .makeQuestGenForRuleType(this);
   }
