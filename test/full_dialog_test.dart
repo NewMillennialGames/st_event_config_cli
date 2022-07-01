@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:test/test.dart';
 //
 import 'package:st_ev_cfg/st_ev_cfg.dart';
@@ -11,47 +12,34 @@ import 'shared_utils.dart';
   TODO:  not currently implemented
 */
 
-const String _questId = 'test1';
-
 void main() {
-  QuestionPresenterIfc questPresent = TestQuestRespGen([]);
-  DialogRunner dlogRun = DialogRunner(questPresent);
-  QuestionCascadeDispatcher _qcd = QuestionCascadeDispatcher();
+  //
+  bool setupCompleted = false;
+  StreamController<List<String>> sendAnswersController =
+      StreamController<List<String>>();
   QuestListMgr _questMgr = QuestListMgr();
-
-  late QuestBase twoPromptQuest;
+  QuestionCascadeDispatcher _qcd = QuestionCascadeDispatcher();
+  TestQuestRespGen questPresent =
+      TestQuestRespGen(sendAnswersController); // aka QuestionPresenterIfc
+  DialogRunner dlogRun = DialogRunner(
+    questPresent,
+    qListMgr: _questMgr,
+    questCascadeDisp: _qcd,
+  );
 
   setUp(() {
-    final qq = QTargetResolution.forVisRulePrep(
-      AppScreen.marketView,
-      ScreenWidgetArea.tableview,
-      null,
-      VisualRuleType.groupCfg,
-    );
+    if (setupCompleted) return;
 
-    List<QuestPromptPayload> prompts = [
-      QuestPromptPayload(
-        'how many Grouping positions would you like to configure?',
-        ['0', '1', '2', '3'],
-        VisRuleQuestType.dialogStruct,
-        (QuestBase qb, String selCount) => int.tryParse(selCount) ?? 0,
-      ),
-      QuestPromptPayload(
-        'how many Grouping positions would you like to configure?',
-        ['0', '1', '2', '3'],
-        VisRuleQuestType.dialogStruct,
-        (QuestBase qb, String selCount) => int.tryParse(selCount) ?? 0,
-      ),
-    ];
-
-    twoPromptQuest =
-        QuestBase.visualRuleDetailQuest(qq, prompts, questId: _questId);
+    setupCompleted = true;
   });
 
   test(
-    'verify init and question count',
+    'send answers until top level quests exhausted',
     () {
-      expect(twoPromptQuest.promptCount, 2);
+      questPresent.askAndWaitForUserResponse(
+        dlogRun,
+        _questMgr.currentOrLastQuestion,
+      );
     },
   );
 
