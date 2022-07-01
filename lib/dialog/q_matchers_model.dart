@@ -164,6 +164,11 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
   // public methods
   bool doesMatch(QuestBase prevAnsweredQuest) {
     //
+    if (this.derivedQuestGen.isNoopGenerator) {
+      print('Warn: bailing doesMatch because dqg is a no-op');
+      return false;
+    }
+
     if (usesMatchByQIdPatternCallback) {
       // print('this matcher targeted at a SPECIFIC question & does not consider other atts');
       bool patternDoesMatch =
@@ -202,7 +207,7 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
       );
     }
 
-    if (isAPatternMatch) {
+    if (isAPatternMatch && !this.derivedQuestGen.isNoopGenerator) {
       var firstPrompt = derivedQuestGen.perPromptDetails.first;
       print(
         'QID: ${prevAnsweredQuest.questId} does match ${firstPrompt.promptTemplate}',

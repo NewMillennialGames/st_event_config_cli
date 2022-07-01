@@ -363,8 +363,9 @@ List<NewQuestPerPromptOpts> _getQuestPromptOptsForDataFieldName(
     int promptIdx,
   ) {
     var fldNumLookup = {1: '1st', 2: '2nd', 3: '3rd'};
+    String pos = fldNumLookup[promptIdx] ?? '-na-';
     return [
-      fldNumLookup[promptIdx]!,
+      pos,
       priorAnsweredQuest.targetPath,
     ];
   }

@@ -157,7 +157,22 @@ class DerivedQuestGenerator {
       also used in testing
     */
     return DerivedQuestGenerator._(
-      [], // no prompts means inert (noop) DQG
+      [], // no prompts means inert (noop) DQG (isNoopGenerator true)
+      genBehaviorOfDerivedQuests: DerivedGenBehaviorOnMatchEnum.noop,
+      newQuestCountCalculator: (qb) => 0,
+    );
+  }
+
+  factory DerivedQuestGenerator.noopTest() {
+    // dgq that won't throw off our match count
+    // because isNoopGenerator will be false
+    var qpp = NewQuestPerPromptOpts<bool>('',
+        promptTemplArgGen: (_, __) => [],
+        answerChoiceGenerator: (_, __, n) => [],
+        newRespCastFunc: (_, __) => false);
+
+    return DerivedQuestGenerator._(
+      [qpp], // > 0 prompts means isNoopGenerator is false
       genBehaviorOfDerivedQuests: DerivedGenBehaviorOnMatchEnum.noop,
       newQuestCountCalculator: (qb) => 0,
     );
@@ -245,6 +260,7 @@ class DerivedQuestGenerator {
   bool get isNoopGenerator =>
       promptCount == 0 &&
       genBehaviorOfDerivedQuests == DerivedGenBehaviorOnMatchEnum.noop;
+
   int get promptCount => perPromptDetails.length;
   bool get createsQuestWithMultiPrompts => promptCount > 1;
 

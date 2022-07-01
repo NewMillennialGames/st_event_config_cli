@@ -70,7 +70,7 @@ void main() {
       AppScreen.marketView,
       ScreenWidgetArea.tableview,
       null,
-      VisualRuleType.filterCfg,
+      VisualRuleType.groupCfg,
     );
 
     var ask = QuestPromptPayload<int>(
@@ -111,7 +111,7 @@ void main() {
       reason: 'should be 1st quest ($k_quest_id)',
     );
 
-    // next line should create 2 new Questions
+    // next line should create 1 new Question with 4 prompts in it
     _qcd.appendNewQuestsOrInsertImplicitAnswers(
       _questMgr,
       _questMgr.currentOrLastQuestion,
@@ -119,12 +119,16 @@ void main() {
 
     expect(_questMgr.priorAnswerCount, 1, reason: 'quest was answered');
 
-    // they both should be rule Questions, but not yet answered -- so zero exportable
+    // it's a rule Questions, but not yet answered -- so zero exportable
     expect(_questMgr.exportableRuleQuestions.length, 0);
 
-    // now check that k_quests_created_in_test Questions were created
+    // now check that 1 Question was created
     // since there was no 2nd INITIAL Question
-    expect(_questMgr.pendingQuestionCount, k_quests_created_in_test);
+    expect(_questMgr.pendingQuestionCount, 1);
+
+    // confirm 4 prompts
+    expect(_questMgr.currentOrLastQuestion.promptCount,
+        k_quests_created_in_test * 2);
 
     for (QuestBase q in _questMgr.pendingQuestions) {
       print(

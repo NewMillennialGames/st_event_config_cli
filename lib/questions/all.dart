@@ -11,7 +11,7 @@ import '../interfaces/q_prompt_instance.dart';
 //
 part 'all.g.dart';
 part 'all.freezed.dart';
-part 'new_quest_derived.dart';
+part 'der_quest_gen.dart';
 part 'q_target_resolution.dart';
 part 'answ_capture_cast.dart';
 part 'q_prompt_collection.dart';
