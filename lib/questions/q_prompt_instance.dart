@@ -88,7 +88,7 @@ class QuestPromptInstance<T> implements QPromptIfc {
     VisualRuleType rt,
   ) {
     // return answChoiceCollection;
-    return rt.requConfigQuests
+    return rt.requRuleDetailCfgQuests
         .map(
           (qrq) => ResponseAnswerOption(
             qrq.name,

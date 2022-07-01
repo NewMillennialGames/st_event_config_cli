@@ -29,17 +29,30 @@ extension VisRuleQuestTypeExt1 on VisRuleQuestType {
     String resp = '_unset';
     switch (this) {
       case VisRuleQuestType.dialogStruct:
-        return 'Only relates to dialog structure;  not building real config rules';
+        return 'Err: Only relates to dialog structure;  not building real config rules';
       case VisRuleQuestType.selectDataFieldName:
-        return 'Select field containing the value you wish to use for {0}';
+        switch (ruleTyp) {
+          case VisualRuleType.groupCfg:
+            resp = 'Select {0} field you wish to use for grouping on {1}';
+            break;
+          case VisualRuleType.sortCfg:
+            resp = 'Select {0} field you wish to use for sorting on {1}';
+            break;
+          case VisualRuleType.filterCfg:
+            resp = 'Select {0} field you wish to use for filtering on {1}';
+            break;
+          default:
+            resp = 'err: Select {0} field you wish to use for filtering on {1}';
+        }
+        return resp;
       case VisRuleQuestType.askCountOfSlotsToConfigure:
-        return 'How many Group/Sort/Filter positions do you want to set on {0}';
+        return 'How many {0} (Group/Sort/Filter) fields do you want to use on {1}';
       case VisRuleQuestType.specifySortAscending:
         return 'Sort Ascending';
       case VisRuleQuestType.selectVisualComponentOrStyle:
         switch (ruleTyp) {
           case VisualRuleType.styleOrFormat:
-            resp = 'Pick the Component or Style that applies to target {0}';
+            resp = 'Pick the Component or Style to apply on target {0}';
             break;
           default:
             resp =
@@ -47,7 +60,7 @@ extension VisRuleQuestTypeExt1 on VisRuleQuestType {
         }
         return resp;
       case VisRuleQuestType.controlsVisibilityOfAreaOrSlot:
-        return 'Show this area/slot within {0}?';
+        return 'Show this region within {0} (area or slot)?';
     }
   }
 

@@ -30,7 +30,8 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
 
   RuleResponseBase(this.ruleType);
 
-  List<VisRuleQuestType> get requiredQuest2s => ruleType.requConfigQuests;
+  List<VisRuleQuestType> get requiredQuest2s =>
+      ruleType.requRuleDetailCfgQuests;
   // @override
   // bool get gens2ndOr3rdSortGroupFilterQuests => false;
   //

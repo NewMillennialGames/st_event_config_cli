@@ -86,7 +86,7 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
 
   bool get requiresVisRulePrepQuestion =>
       _requiresRulePrepQuestion ||
-      (visRuleTypeForAreaOrSlot?.requiresRulePrepQuestion ?? false);
+      (visRuleTypeForAreaOrSlot?.requiresVisRulePrepQuestion ?? false);
 
   bool get requiresBehRulePrepQuestion =>
       _requiresRulePrepQuestion ||

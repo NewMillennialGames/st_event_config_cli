@@ -263,13 +263,18 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
   }
 
   DerivedQuestGenerator activeDqg(QuestBase? qb) {
-    // <AnsTypOfMatched>
     if (deriveQuestGenCallbk == null || _hasCreatedDynamicDqg)
       return derivedQuestGen;
 
+    assert(
+      derivedQuestGen.isNoopGenerator,
+      'err:  expected noop stored generator;  why would you add a real DQG when you added deriveQuestGenCallbk to immediately replace it?',
+    );
     // should generate DQG rather than return stored DQG
     derivedQuestGen = deriveQuestGenCallbk!(
-        qb!, 0); // as DerivedQuestGenerator<AnsTypOfMatched>
+      qb!,
+      0,
+    ); // as DerivedQuestGenerator<AnsTypOfMatched>
     _hasCreatedDynamicDqg = true;
     return derivedQuestGen;
   }

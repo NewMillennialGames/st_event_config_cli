@@ -363,7 +363,9 @@ FIXME:
             // how many questions to generate
             var lstRules =
                 priorAnsweredQuest.mainAnswer as Iterable<VisualRuleType>;
-            return lstRules.where((rt) => rt.requiresPrepQuestion).length;
+            return lstRules
+                .where((rt) => rt.requiresVisRulePrepQuestion)
+                .length;
           },
           newQuestIdGenFromPriorQuest: (
             QuestBase priorAnsweredQuest,
@@ -380,7 +382,7 @@ FIXME:
                 (priorAnsweredQuest.mainAnswer as List<VisualRuleType>);
             VisualRuleType area = selectedScreenAreas[newQuestIdx];
             // bail out so question not created
-            if (!area.requiresPrepQuestion) return [];
+            if (!area.requiresVisRulePrepQuestion) return [];
             return ['0', '1', '2', '3'];
           },
           deriveTargetFromPriorRespCallbk: (

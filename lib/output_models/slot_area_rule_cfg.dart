@@ -49,13 +49,13 @@ class SlotOrAreaRuleCfg {
     }
     List<VisRuleQuestType> _questsForWhichWeWantAnswers = [];
     for (VisualRuleType rt in _rulesForWhichWeWantAnswers) {
-      _questsForWhichWeWantAnswers.addAll(rt.requConfigQuests);
+      _questsForWhichWeWantAnswers.addAll(rt.requRuleDetailCfgQuests);
     }
 
     var expectedResponses = Set<VisRuleQuestType>();
     existingAnsweredRuleTypes.forEach((e) {
       // get list of all needed VisRuleQuestType
-      expectedResponses.addAll(e.requConfigQuests);
+      expectedResponses.addAll(e.requRuleDetailCfgQuests);
     });
 
     Iterable<List<VisRuleQuestType>> answerTypesSoFar =

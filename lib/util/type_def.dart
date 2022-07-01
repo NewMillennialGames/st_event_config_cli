@@ -1,6 +1,6 @@
 part of StUtil;
 
-// preferred way to auto-construct all new Question instances
+// signature to auto-construct all new Question instances
 typedef QuestFactorytSignature = QuestBase Function(
   QTargetResolution qTargetIntent,
   List<QuestPromptPayload> promptVals, {
@@ -14,10 +14,10 @@ typedef CastStrToAnswTypCallback<T> = T Function(QuestBase, String);
 // typedef CastPriorAnswToType<T> = T Function(QuestBase);
 
 typedef NewQuestIdGenFromPriorAnswer = String Function(
-    QuestBase priorAnsweredQuest, int idx);
+    QuestBase priorAnsweredQuest, int questIdx);
 
 typedef DerQuestGeneratorFactoryClbk = DerivedQuestGenerator Function(
-    QuestBase priorAnsweredQuest, int idx);
+    QuestBase priorAnsweredQuest, int questIdx);
 
 typedef PriorQuestIdMatchPatternTest = bool Function(String priorQuestId);
 
@@ -31,14 +31,15 @@ typedef SortingRules = Tuple3<TvSortCfg, TvSortCfg?, TvSortCfg?>;
 typedef FilterRules = Tuple3<TvFilterCfg, TvFilterCfg?, TvFilterCfg?>;
 //
 // pass Question, return how many new Questions to create
-typedef NewQuestCount = int Function(QuestBase);
+typedef NewQuestCount = int Function(QuestBase priorAnsweredQuest);
 // pass Question + newIndx, return list of args for Quest2 template
-typedef NewQuestArgGen = List<String> Function(QuestBase, int);
+typedef NewQuestArgGen = List<String> Function(
+    QuestBase priorAnsweredQuest, int questIdx);
 
 // when auto-generating questions (from prior answers)
 // this function lets you pass in the source QTI and get a new one back
-typedef QTargetIntentUpdateFunc = QTargetResolution Function(
-    QuestBase ab, int idx);
+typedef QTargetResUpdateFunc = QTargetResolution Function(
+    QuestBase ab, int questIdx);
 
 
 // typedef RuleQuestTypTup = Tuple2<VisualRuleType, VisRuleQuestType>;
