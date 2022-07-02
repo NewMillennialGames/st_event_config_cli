@@ -235,6 +235,9 @@ abstract class QuestBase with EquatableMixin {
   }
 
   // getters
+  List<VisRuleQuestType> get embeddedQuestTypes =>
+      qPromptCollection.embeddedQuestTypes;
+
   bool get requiresVisRulePrepQuestion =>
       qTargetResolution.requiresVisRulePrepQuestion;
   bool get requiresBehRulePrepQuestion =>

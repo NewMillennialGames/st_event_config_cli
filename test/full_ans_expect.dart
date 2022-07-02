@@ -9,163 +9,30 @@ import 'package:st_ev_cfg/st_ev_cfg.dart';
 import 'package:st_ev_cfg/util/all.dart';
 import 'shared_utils.dart';
 
-class AnswAndExpected {
-  //
-  List<String> answersToPush;
-  QuestMatcher nextQuestMatch;
+/* full-dialog-test helper classes only -- no tests in here
 
-  AnswAndExpected(
-    this.answersToPush,
-    QuestMatcher? _nextQuestMatch,
-  ) : nextQuestMatch =
-            _nextQuestMatch == null ? _startWhenMatches : _nextQuestMatch;
-}
+  contains a QuestionPresenterIfc called FullFlowTestPresenter
+    QuestionPresenterIfc is interface used by DialogRunner to
+    serve questions and get answers from an arbitrary presentation layer
+      (CLI, web, test, etc)
 
-class FullRunState {
-  //
-  List<AnswAndExpected> answAndExpectedLst;
-  QuestMatcher _triggerStartWhen;
-  bool _hasStarted = false;
-  int _curExpected = -1;
+  logical operation of FullFlowTestPresenter (fftp) is:
+    receive each question pushed to fftp.askAndWaitForUserResponse()
+    check to see if question matches a known pattern
+    if yes, the known pattern should be associated with a response-generator
+    use resp-gen to pass answer(s) to that question
+    then tell dialog runner that question has been answered
+    so it can advance and push next question
 
-  FullRunState._(this.answAndExpectedLst, this._triggerStartWhen);
+    at some point, we'll move past Event-Level config quests (they don't cascade)
+    and reach the one about which app-screens we want to customize
+    that should start a more complex process of verifying that the NEXT
+    question we receive after sending an answer is the one we expect
 
-  factory FullRunState.fullTest() {
-    return FullRunState._(_fullData, _startWhenMatches);
-  }
+    all expected questions must arrive in order, or the test will fail
 
-  bool validateNextQuestion(QuestBase nextQueToAnsw) {
-    return true;
-  }
-}
-
-QuestMatcher _startWhenMatches = QuestMatcher(
-  'match on question about which screens to configure',
-  derivedQuestGen: DerivedQuestGenerator.noopTest(),
-  appScreen: AppScreen.eventConfiguration,
-  questIdPatternMatchTest: (id) =>
-      id.startsWith(QuestionIdStrings.selectAppScreens),
-  validateUserAnswerAfterPatternMatchIsTrueCallback: (qb) {
-    return qb.mainAnswer is List<AppScreen> &&
-        (qb.mainAnswer as List<AppScreen>).length == 2;
-  },
-);
-
-List<AnswAndExpected> _fullData = [];
-
-//
-// //
-// import 'package:st_ev_cfg/st_ev_cfg.dart';
-// import 'package:st_ev_cfg/interfaces/q_presenter.dart';
-// import 'package:st_ev_cfg/util/all.dart';
-
-// /* helper classes only
-//   no tests in here
-
-//   allows defining rules for auto-generated answers
-//   to facilitate tesing parts of the system
-//   that create new questions based on existing answers
-// */
-
-class FullFlowPresenter implements QuestionPresenterIfc {
-  // receives Questions for test-automation
-  StreamController<List<String>> sendAnswersController;
-  late List<TestRespGenWhenQuestLike> matchersAndRespGen;
-
-  FullFlowPresenter(this.sendAnswersController) {
-    this.matchersAndRespGen = [];
-
-    sendAnswersController.stream.listen(_passAnswerAndAdvanceQuestion);
-  }
-
-  void _passAnswerAndAdvanceQuestion(List<String> respLst) {
-    //
-  }
-
-  List<TestRespGenWhenQuestLike> _lookForResponseGenerators(QuestBase quest) {
-    //
-    // if (!(quest is QuestVisualRule)) {
-    //   //
-    //   print('Warn: called _lookForResponseGenerators with non-rule Question');
-    //   return [];
-    // }
-
-    List<TestRespGenWhenQuestLike> lqm = [];
-    for (TestRespGenWhenQuestLike rg in matchersAndRespGen) {
-      //
-      if (rg.matcher.doesMatch(quest)) {
-        lqm.add(rg);
-      }
-    }
-    return lqm;
-  }
-
-  List<String> _buildUserResponse(
-    QuestBase quest,
-    QuestPromptInstance qpi,
-    List<TestRespGenWhenQuestLike> responseGenerators,
-  ) {
-    //
-    if (responseGenerators.length < 1) return [];
-
-    VisRuleQuestType vqt = qpi.visQuestType;
-    for (TestRespGenWhenQuestLike wql in responseGenerators) {
-      List<String> gendTestAnswer = wql.answerFor(vqt);
-      if (gendTestAnswer.isNotEmpty) {
-        return gendTestAnswer;
-      }
-    }
-    // remove any adjacent comma's
-    // userAnswer = userAnswer.replaceAll(',,,', ',');
-    // userAnswer = userAnswer.replaceAll(',,', ',');
-    // userAnswer = userAnswer.replaceAll(',,', ',');
-    return [];
-  }
-
-  @override
-  void askAndWaitForUserResponse(
-    DialogRunner dialoger,
-    QuestBase quest,
-  ) {
-    //
-    List<TestRespGenWhenQuestLike> responseGenerators =
-        _lookForResponseGenerators(quest);
-    if (responseGenerators.length < 1) {
-      // none so send default
-      // quest.convertAndStoreUserResponse('0');
-      // dialoger.advanceToNextQuestionFromGui();
-      print('no response generators found for ${quest.questId}; exiting!');
-      dialoger.generateNewQuestionsFromUserResponse(quest);
-      return;
-    }
-
-    QuestPromptInstance? promptInst = quest.getNextUserPromptIfExists();
-    while (promptInst != null) {
-      List<String> _fullResponse = _buildUserResponse(
-        quest,
-        promptInst,
-        responseGenerators,
-      );
-      promptInst.collectResponse(
-          (_fullResponse.isNotEmpty) ? _fullResponse.first : '');
-
-      // now see if there is another prompt waiting to be answered
-      promptInst = quest.getNextUserPromptIfExists();
-    }
-    // all prompts answered;  ready to advance to next quest
-    // now check if user answer will generate new questions
-    dialoger.generateNewQuestionsFromUserResponse(quest);
-    // cli test;  not gui
-    // dialoger.advanceToNextQuestionFromGui();
-  }
-
-  void showErrorAndRePresentQuestion(String errTxt, String questHelpMsg) {
-    //
-  }
-
-  @override
-  void informUiThatDialogIsComplete() {}
-}
+  classes:
+*/
 
 class QTypeResponsePair {
   /*
@@ -182,73 +49,197 @@ class QTypeResponsePair {
   bool matches(VisRuleQuestType qt) => qt == qType || qType == null;
 }
 
-class TestRespGenWhenQuestLike {
+class MatchResponsewGenVerifyNextQuest {
   //
-  QuestMatcher matcher;
-  List<QTypeResponsePair> responsesByQType;
+  List<QTypeResponsePair> ansToPushInOrder;
+  QuestMatcher qMatchForReponses;
+  QuestMatcher? qMatchVerifyNextGendQuest;
 
-  TestRespGenWhenQuestLike(this.matcher, this.responsesByQType);
+  MatchResponsewGenVerifyNextQuest(
+    this.ansToPushInOrder,
+    this.qMatchForReponses,
+    this.qMatchVerifyNextGendQuest,
+  );
 
-  List<String> answerFor(VisRuleQuestType qType) {
-    // each prompt on a Question can have its own: VisRuleQuestType
-    List<String> l = [];
-    for (QTypeResponsePair respPair in responsesByQType) {
-      if (respPair.matches(qType)) {
-        l.add(respPair.response);
-      }
-    }
-    return l;
+  List<String>? questResponsesIfMatches(QuestBase qb) {
+    // gets all string answers when question matches qMatchForReponses
+    if (!qMatchForReponses.doesMatch(qb)) return null;
+
+    List<String> qAnswers = [];
+    List<VisRuleQuestType> rqtsInPromptOrder = qb.embeddedQuestTypes;
+    // List<VisRuleQuestType> rqts =
+    //     qb.visRuleTypeForAreaOrSlot?.requRuleDetailCfgQuests ?? [];
+
+    rqtsInPromptOrder.forEach((rqt) {
+      Iterable<String> l = ansToPushInOrder.where((rp) => rp.matches(rqt)).map(
+            (e) => e.response,
+          );
+      qAnswers.addAll(l);
+    });
+    if (qAnswers.isEmpty) return null;
+
+    return qAnswers;
   }
 }
 
-// class TestRespGenWhenQuestLike {
-//   /*  Response to Generate when Question like:
+class MatchAnswerVerifyWrapper {
+  //
+  int _curExpected = -1;
+  List<MatchResponsewGenVerifyNextQuest> answAndExpectedLst;
 
-//   defines a QuestBase pattern
-//     and the auto-response answer that should be provided
-//     by test (as user) in response to each prompt
-//   */
-//   AppScreen screen;
-//   ScreenWidgetArea? area;
-//   ScreenAreaWidgetSlot? slot;
-//   VisualRuleType? ruleType;
-//   List<QTypeResponsePair> responsesByQType;
+  MatchAnswerVerifyWrapper(this.answAndExpectedLst);
 
-//   TestRespGenWhenQuestLike(
-//     this.screen,
-//     this.area,
-//     this.ruleType, {
-//     this.slot,
-//     this.responsesByQType = const [],
-//   });
+  MatchResponsewGenVerifyNextQuest getNextOrLast() {
+    if (_curExpected < answAndExpectedLst.length - 1) {
+      _curExpected++;
+    }
+    return answAndExpectedLst[_curExpected];
+  }
 
-//   bool matches(QuestBase quest) {
-//     /* return true if this response generator
-//       is a match for the question being tested
-//     */
-//     bool isSame = quest.appScreen == screen;
-//     if (!isSame) return false;
-//     isSame = area == null || quest.screenWidgetArea == area;
-//     isSame = isSame && slot == null || quest.slotInArea == slot;
-//     isSame = isSame && ruleType == null ||
-//         quest.qTargetResolution.visRuleTypeForAreaOrSlot == ruleType;
-//     isSame = isSame && responsesByQType.length > 0;
-//     // if (!isSame) return false;
+  List<String> getResponses(QuestBase qb) {
+    return [];
+  }
 
-//     // Set<String> aua = quest.allUserAnswers.toSet();
-//     // Set<String> allMatchAnswers =
-//     //     responsesByQType.map((e) => e.response).toSet();
-//     // isSame = isSame && aua.intersection(allMatchAnswers).length > 0;
-//     return isSame;
-//   }
+  // int get curExpected => _curExpected;
+  MatchResponsewGenVerifyNextQuest get _curMrgv =>
+      answAndExpectedLst[_curExpected];
 
-//   String? answerFor(VisRuleQuestType qType) {
-//     // each prompt on a Question can have its own: VisRuleQuestType
-//     for (QTypeResponsePair respPair in responsesByQType) {
-//       if (respPair.matches(qType)) {
-//         return respPair.response;
-//       }
-//     }
-//     return null;
-//   }
-// }
+  QuestMatcher get qMatchForReponses => _curMrgv.qMatchForReponses;
+  QuestMatcher? get qMatchVerifyNextGendQuest =>
+      _curMrgv.qMatchVerifyNextGendQuest;
+
+  // List<TestRespGenWhenQuestLike> _lookForResponseGenerators(QuestBase quest) {
+  //   //
+  //   List<MatchResponsewGenVerifyNextQuest> lqm = [];
+  //   for (MatchResponsewGenVerifyNextQuest rg in answAndExpectedLst) {
+  //     //
+  //     // if (rg.matcher.doesMatch(quest)) {
+  //     //   lqm.add(rg);
+  //     // }
+  //   }
+  //   return [];
+  // }
+}
+
+class FullRunState {
+  //
+  MatchAnswerVerifyWrapper _matchAnswWrap;
+  // _triggerStartWhen should match the "which app screens to cfg question"
+  QuestMatcher _triggerStartWhen;
+
+  bool _hasStarted = false;
+
+  FullRunState._(List<MatchResponsewGenVerifyNextQuest> answAndExpectedLst,
+      this._triggerStartWhen)
+      : _matchAnswWrap = MatchAnswerVerifyWrapper(answAndExpectedLst);
+
+  factory FullRunState.fullTest() {
+    return FullRunState._(_fullData, _startWhenMatches);
+  }
+
+  bool validateNextQuestion(QuestBase nextQueToAnsw) {
+    if (!_hasStarted || qMatchVerifyNextGendQuest == null) return true;
+
+    return true;
+  }
+
+  QuestMatcher? get qMatchVerifyNextGendQuest =>
+      _matchAnswWrap.qMatchVerifyNextGendQuest;
+
+  List<String> getResponses(QuestBase qb) => _matchAnswWrap.getResponses(qb);
+}
+//
+
+class FullFlowTestPresenter implements QuestionPresenterIfc {
+  // receives Questions for test-automation
+  StreamController<List<String>> sendAnswersController;
+  QuestListMgr _questMgr;
+  FullRunState runState = FullRunState.fullTest();
+
+  FullFlowTestPresenter(
+    this.sendAnswersController,
+    this._questMgr,
+  ) {
+    sendAnswersController.stream
+        .asBroadcastStream()
+        .listen(_passAnswerAndAdvanceQuestion);
+  }
+
+  void _passAnswerAndAdvanceQuestion(List<String> respLst) {
+    //
+    _questMgr.currentOrLastQuestion.setAllAnswersWhileTesting(respLst);
+  }
+
+  @override
+  void askAndWaitForUserResponse(
+    DialogRunner dialoger,
+    QuestBase quest,
+  ) {
+    //
+    List<String> cannedAnswers = runState.getResponses(quest);
+    if (cannedAnswers.length < 1) {
+      // none so send default
+      // quest.convertAndStoreUserResponse('0');
+      // dialoger.advanceToNextQuestionFromGui();
+      print('no response generators found for ${quest.questId}; exiting!');
+      dialoger.generateNewQuestionsFromUserResponse(quest);
+      return;
+    }
+
+    quest.setAllAnswersWhileTesting(cannedAnswers);
+    // all prompts answered;  ready to advance to next quest
+    // now check if user answer will generate new questions
+    dialoger.generateNewQuestionsFromUserResponse(quest);
+    // cli test;  not gui
+    // dialoger.advanceToNextQuestionFromGui();
+  }
+
+  void showErrorAndRePresentQuestion(String errTxt, String questHelpMsg) {
+    //
+  }
+
+  @override
+  void informUiThatDialogIsComplete() {
+    // _questMgr.
+  }
+}
+
+// static vals for normal test case
+
+QuestMatcher _startWhenMatches = QuestMatcher(
+  'match on question about which screens to configure',
+  derivedQuestGen: DerivedQuestGenerator.noopTest(),
+  appScreen: AppScreen.eventConfiguration,
+  questIdPatternMatchTest: (id) =>
+      id.startsWith(QuestionIdStrings.selectAppScreens),
+  validateUserAnswerAfterPatternMatchIsTrueCallback: (qb) {
+    return qb.mainAnswer is List<AppScreen> &&
+        (qb.mainAnswer as List<AppScreen>).length == 2;
+  },
+);
+
+List<MatchResponsewGenVerifyNextQuest> _fullData = [];
+
+
+
+  // List<String> _buildUserResponse(
+  //   QuestBase quest,
+  //   QuestPromptInstance qpi,
+  //   List<TestRespGenWhenQuestLike> responseGenerators,
+  // ) {
+  //   //
+  //   if (responseGenerators.length < 1) return [];
+
+  //   VisRuleQuestType vqt = qpi.visQuestType;
+  //   for (TestRespGenWhenQuestLike wql in responseGenerators) {
+  //     List<String> gendTestAnswer = wql.answerFor(vqt);
+  //     if (gendTestAnswer.isNotEmpty) {
+  //       return gendTestAnswer;
+  //     }
+  //   }
+  //   // remove any adjacent comma's
+  //   // userAnswer = userAnswer.replaceAll(',,,', ',');
+  //   // userAnswer = userAnswer.replaceAll(',,', ',');
+  //   // userAnswer = userAnswer.replaceAll(',,', ',');
+  //   return [];
+  // }

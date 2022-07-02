@@ -20,8 +20,8 @@ void main() {
       StreamController<List<String>>();
   QuestListMgr _questMgr = QuestListMgr();
   QuestionCascadeDispatcher _qcd = QuestionCascadeDispatcher();
-  FullFlowPresenter questPresent =
-      FullFlowPresenter(sendAnswersController); // aka QuestionPresenterIfc
+  FullFlowTestPresenter questPresent = FullFlowTestPresenter(
+      sendAnswersController, _questMgr); // aka QuestionPresenterIfc
   DialogRunner dlogRun = DialogRunner(
     questPresent,
     qListMgr: _questMgr,

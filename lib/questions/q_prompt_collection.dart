@@ -69,6 +69,9 @@ class QPromptCollection {
   }
 
   // getters
+  List<VisRuleQuestType> get embeddedQuestTypes =>
+      questIterations.map<VisRuleQuestType>((e) => e.visQuestType).toList();
+
   Iterable<CaptureAndCast> get listResponses =>
       questIterations.map((qpi) => qpi._answerRepoAndTypeCast);
 
