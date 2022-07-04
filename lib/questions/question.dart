@@ -197,23 +197,30 @@ abstract class QuestBase with EquatableMixin {
     VisualRuleType? pendingRule,
   ) {
     //
-    VisualRuleType curRule = pendingRule ?? visRuleTypeForAreaOrSlot!;
-
     assert(
       this is RuleSelectQuest || this is RulePrepQuest,
-      'cant produce detail quests on ${this.questId} ${curRule.name}',
+      'cant produce detail quests on ${this.questId}',
     );
+
+    VisualRuleType? selRule =
+        this is RulePrepQuest ? visRuleTypeForAreaOrSlot : null;
+    if (this is RuleSelectQuest) {
+      selRule = (this.mainAnswer as List<VisualRuleType>)[newQuIdx];
+    }
+    VisualRuleType curRule =
+        pendingRule ?? selRule ?? visRuleTypeForAreaOrSlot!;
+
     print(
       'getDerivedRuleQuestGenViaVisType: ${curRule.name}',
     );
 
-    // var newTarg = qTargetResolution.copyWith(visRuleTypeForAreaOrSlot: curRule);
-    return curRule.makeQuestGenForRuleType(this);
+    var newTarg = qTargetResolution.copyWith(visRuleTypeForAreaOrSlot: curRule);
+    return curRule.makeQuestGenForRuleType(this, newTarg);
   }
 
   bool containsPromptWhere(bool Function(QuestPromptInstance qpi) promptTest) {
     // check if this contains an instance that matches promptTest
-    for (QuestPromptInstance qpi in qPromptCollection.questIterations) {
+    for (QuestPromptInstance qpi in qPromptCollection.prompts) {
       if (promptTest(qpi)) {
         return true;
       }
@@ -226,7 +233,7 @@ abstract class QuestBase with EquatableMixin {
   ) {
     // return list of prompt instances
     List<QuestPromptInstance> l = [];
-    for (QuestPromptInstance qpi in qPromptCollection.questIterations) {
+    for (QuestPromptInstance qpi in qPromptCollection.prompts) {
       if (promptTest(qpi)) {
         l.add(qpi);
       }
@@ -272,12 +279,11 @@ abstract class QuestBase with EquatableMixin {
   bool get isBehRuleDetailQuestion => this is BehaveRuleDetailQuest;
 
   Iterable<CaptureAndCast> get listResponses => qPromptCollection.listResponses;
-  int get promptCount => qPromptCollection.questIterations.length;
-  List<VisRuleQuestType> get questTypes => qPromptCollection.questIterations
+  int get promptCount => qPromptCollection.prompts.length;
+  List<VisRuleQuestType> get visQuestTypes => qPromptCollection.prompts
       .map((e) => e.answChoiceCollection.visRuleQuestType)
       .toList();
-  QuestPromptInstance get firstQuestion =>
-      qPromptCollection.questIterations.first;
+  QuestPromptInstance get firstQuestion => qPromptCollection.prompts.first;
   CaptureAndCast get _firstPromptAnswers =>
       firstQuestion._answerRepoAndTypeCast;
   dynamic get mainAnswer => _firstPromptAnswers.cast(this);
@@ -318,7 +324,7 @@ abstract class QuestBase with EquatableMixin {
   void setAllAnswersWhileTesting(List<String> userResponses) {
     // test code only
     int idx = 0;
-    for (QuestPromptInstance qpi in qPromptCollection.questIterations) {
+    for (QuestPromptInstance qpi in qPromptCollection.prompts) {
       //
       qpi.collectResponse(userResponses[idx]);
       idx++;

@@ -5,12 +5,12 @@ class QPromptCollection {
    of a given QuestBase subclass
 
   */
-  List<QuestPromptInstance> questIterations;
+  List<QuestPromptInstance> prompts;
   bool isRuleQuestion;
   int _curPartIdx = -1;
 
   QPromptCollection(
-    this.questIterations, {
+    this.prompts, {
     this.isRuleQuestion = false,
   });
 
@@ -70,26 +70,26 @@ class QPromptCollection {
 
   // getters
   List<VisRuleQuestType> get embeddedQuestTypes =>
-      questIterations.map<VisRuleQuestType>((e) => e.visQuestType).toList();
+      prompts.map<VisRuleQuestType>((e) => e.visQuestType).toList();
 
   Iterable<CaptureAndCast> get listResponses =>
-      questIterations.map((qpi) => qpi._answerRepoAndTypeCast);
+      prompts.map((qpi) => qpi._answerRepoAndTypeCast);
 
-  int get _partCount => questIterations.length;
+  int get _partCount => prompts.length;
   bool get isCompleted => _curPartIdx >= _partCount - 1 || allPartsHaveAnswers;
   bool get isMultiPart => _partCount > 1;
   bool get allPartsHaveAnswers =>
-      questIterations.where((QuestPromptInstance pi) => pi.hasAnswer).length >=
+      prompts.where((QuestPromptInstance pi) => pi.hasAnswer).length >=
       _partCount;
 
   QuestPromptInstance? getNextUserPromptIfExists() {
     _curPartIdx++;
     if (_curPartIdx > _partCount - 1) return null;
-    return questIterations[_curPartIdx];
+    return prompts[_curPartIdx];
   }
 
   Iterable<VisRuleQuestType> get visQuestTypes =>
-      questIterations.map((e) => e.visQuestType);
+      prompts.map((e) => e.visQuestType);
 
   // Iterable<AnswTypValMap> get allTypedAnswers =>
   //     questIterations.map((sqi) => sqi.answerPayload);

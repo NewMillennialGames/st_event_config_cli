@@ -39,7 +39,8 @@ typedef NewQuestArgGen = List<String> Function(
 // when auto-generating questions (from prior answers)
 // this function lets you pass in the source QTI and get a new one back
 typedef QTargetResUpdateFunc = QTargetResolution Function(
-    QuestBase ab, int questIdx);
-
+    QuestBase qb, int questIdx);
+typedef BailQGenWhenTrue = bool Function(
+    QuestBase priorAnswQuest, int questIdx);
 
 // typedef RuleQuestTypTup = Tuple2<VisualRuleType, VisRuleQuestType>;

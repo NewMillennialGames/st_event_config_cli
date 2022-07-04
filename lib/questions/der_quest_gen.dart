@@ -84,6 +84,7 @@ class DerivedQuestGenerator {
   final NewQuestIdGenFromPriorAnswer? newQuestIdGenFromPriorQuest;
   final DerivedGenBehaviorOnMatchEnum genBehaviorOfDerivedQuests;
   QuestFactorytSignature? newQuestConstructor;
+  final BailQGenWhenTrue? bailQGenWhenTrueCallbk;
 
   DerivedQuestGenerator._(
     // private constructor
@@ -94,23 +95,23 @@ class DerivedQuestGenerator {
     this.newQuestConstructor,
     this.genBehaviorOfDerivedQuests =
         DerivedGenBehaviorOnMatchEnum.addPendingQuestions,
+    this.bailQGenWhenTrueCallbk,
   }) : this.qTargetResUpdater = deriveTargetFromPriorRespCallbk == null
             ? _ccTargetRes
             : deriveTargetFromPriorRespCallbk;
 
-  factory DerivedQuestGenerator.singlePrompt(
-    String questPromptTemplate, {
-    required NewQuestCount newQuestCountCalculator,
-    required NewQuestArgGen newQuestPromptArgGen,
-    required ChoiceListFromPriorAnswer answerChoiceGenerator,
-    required CastStrToAnswTypCallback newRespCastFunc,
-    // optional args below
-    DerivedGenBehaviorOnMatchEnum genBehaviorOfDerivedQuests =
-        DerivedGenBehaviorOnMatchEnum.addPendingQuestions,
-    NewQuestIdGenFromPriorAnswer? newQuestIdGenFromPriorQuest,
-    QTargetResUpdateFunc? deriveTargetFromPriorRespCallbk,
-    QuestFactorytSignature? newQuestConstructor,
-  }) {
+  factory DerivedQuestGenerator.singlePrompt(String questPromptTemplate,
+      {required NewQuestCount newQuestCountCalculator,
+      required NewQuestArgGen newQuestPromptArgGen,
+      required ChoiceListFromPriorAnswer answerChoiceGenerator,
+      required CastStrToAnswTypCallback newRespCastFunc,
+      // optional args below
+      DerivedGenBehaviorOnMatchEnum genBehaviorOfDerivedQuests =
+          DerivedGenBehaviorOnMatchEnum.addPendingQuestions,
+      NewQuestIdGenFromPriorAnswer? newQuestIdGenFromPriorQuest,
+      QTargetResUpdateFunc? deriveTargetFromPriorRespCallbk,
+      QuestFactorytSignature? newQuestConstructor,
+      BailQGenWhenTrue? bailQGenWhenTrueCallbk}) {
     var qpp = NewQuestPerPromptOpts(
       questPromptTemplate,
       promptTemplArgGen: newQuestPromptArgGen,
@@ -125,19 +126,20 @@ class DerivedQuestGenerator {
       deriveTargetFromPriorRespCallbk: deriveTargetFromPriorRespCallbk,
       newQuestIdGenFromPriorQuest: newQuestIdGenFromPriorQuest,
       newQuestConstructor: newQuestConstructor,
+      bailQGenWhenTrueCallbk: bailQGenWhenTrueCallbk,
     );
   }
 
   factory DerivedQuestGenerator.multiPrompt(
-    List<NewQuestPerPromptOpts> perNewQuestGenOpts, {
-    required NewQuestCount newQuestCountCalculator,
-    // optional args below
-    DerivedGenBehaviorOnMatchEnum genBehaviorOfDerivedQuests =
-        DerivedGenBehaviorOnMatchEnum.addPendingQuestions,
-    NewQuestIdGenFromPriorAnswer? newQuestIdGenFromPriorQuest,
-    QTargetResUpdateFunc? deriveTargetFromPriorRespCallbk,
-    QuestFactorytSignature? newQuestConstructor,
-  }) {
+      List<NewQuestPerPromptOpts> perNewQuestGenOpts,
+      {required NewQuestCount newQuestCountCalculator,
+      // optional args below
+      DerivedGenBehaviorOnMatchEnum genBehaviorOfDerivedQuests =
+          DerivedGenBehaviorOnMatchEnum.addPendingQuestions,
+      NewQuestIdGenFromPriorAnswer? newQuestIdGenFromPriorQuest,
+      QTargetResUpdateFunc? deriveTargetFromPriorRespCallbk,
+      QuestFactorytSignature? newQuestConstructor,
+      BailQGenWhenTrue? bailQGenWhenTrueCallbk}) {
     return DerivedQuestGenerator._(
       perNewQuestGenOpts,
       genBehaviorOfDerivedQuests: genBehaviorOfDerivedQuests,
@@ -145,6 +147,7 @@ class DerivedQuestGenerator {
       deriveTargetFromPriorRespCallbk: deriveTargetFromPriorRespCallbk,
       newQuestIdGenFromPriorQuest: newQuestIdGenFromPriorQuest,
       newQuestConstructor: newQuestConstructor,
+      bailQGenWhenTrueCallbk: bailQGenWhenTrueCallbk,
     );
   }
 
@@ -210,6 +213,14 @@ class DerivedQuestGenerator {
     // loop once for each new question
     for (int newQIdx = 0; newQIdx < newQuestCount; newQIdx++) {
       List<QuestPromptPayload> newQuestPrompts = [];
+      if (bailQGenWhenTrueCallbk != null &&
+          bailQGenWhenTrueCallbk!(
+            answeredQuest,
+            newQIdx,
+          )) {
+        print('skipping Q# $newQIdx for bailQGenWhenTrueCallbk');
+        continue;
+      }
       for (int promptIdx = 0; promptIdx < newQuestPromptCount; promptIdx++) {
         // loop once for each prompt in a single question
         NewQuestPerPromptOpts currPromptConfig =
@@ -218,7 +229,12 @@ class DerivedQuestGenerator {
         int currPromptChoiceCount = currPromptConfig
             .answerChoiceGenerator(answeredQuest, newQIdx, promptIdx)
             .length;
-        if (currPromptChoiceCount < 1) continue;
+        if (currPromptChoiceCount < 1) {
+          print(
+            'prompt $promptIdx on q# #newQIdx of ${answeredQuest.questId} has no choices so bailing',
+          );
+          continue;
+        }
 
         List<String> templArgs =
             currPromptConfig.promptTemplArgGen(answeredQuest, newQIdx);

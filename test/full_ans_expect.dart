@@ -51,8 +51,12 @@ class QTypeResponsePair {
 
 class MatchResponsewGenVerifyNextQuest {
   //
+  // ansToPushInOrder == list of answers to send to matching question
   List<QTypeResponsePair> ansToPushInOrder;
+  // qMatchForReponses == match for ansToPushInOrder
   QuestMatcher qMatchForReponses;
+  // qMatchVerifyNextGendQuest == verify structure of
+  // next derived (from qMatchForReponses) question
   QuestMatcher? qMatchVerifyNextGendQuest;
 
   MatchResponsewGenVerifyNextQuest(
@@ -61,43 +65,67 @@ class MatchResponsewGenVerifyNextQuest {
     this.qMatchVerifyNextGendQuest,
   );
 
-  List<String>? questResponsesIfMatches(QuestBase qb) {
-    // gets all string answers when question matches qMatchForReponses
-    if (!qMatchForReponses.doesMatch(qb)) return null;
+  bool doesMatch(QuestBase qb) => qMatchForReponses.doesMatch(qb);
 
-    List<String> qAnswers = [];
-    List<VisRuleQuestType> rqtsInPromptOrder = qb.embeddedQuestTypes;
-    // List<VisRuleQuestType> rqts =
-    //     qb.visRuleTypeForAreaOrSlot?.requRuleDetailCfgQuests ?? [];
+  // getters
+  List<String> get answers => ansToPushInOrder.map((e) => e.response).toList();
 
-    rqtsInPromptOrder.forEach((rqt) {
-      Iterable<String> l = ansToPushInOrder.where((rp) => rp.matches(rqt)).map(
-            (e) => e.response,
-          );
-      qAnswers.addAll(l);
-    });
-    if (qAnswers.isEmpty) return null;
+  // List<String>? questResponsesIfMatches(QuestBase qb) {
+  //   // gets all string answers when question matches qMatchForReponses
+  //   if (!qMatchForReponses.doesMatch(qb)) return null;
 
-    return qAnswers;
-  }
+  //   List<String> qAnswers = [];
+  //   List<VisRuleQuestType> rqtsInPromptOrder = qb.embeddedQuestTypes;
+
+  //   rqtsInPromptOrder.forEach((VisRuleQuestType rqt) {
+  //     Iterable<String> l =
+  //         ansToPushInOrder.where((QTypeResponsePair rp) => rp.matches(rqt)).map(
+  //               (e) => e.response,
+  //             );
+  //     qAnswers.addAll(l);
+  //   });
+  //   if (qAnswers.isEmpty) return null;
+
+  //   return qAnswers;
+  // }
 }
 
 class MatchAnswerVerifyWrapper {
   //
   int _curExpected = -1;
+  int _questIdxOfScreenQuest = -1;
   List<MatchResponsewGenVerifyNextQuest> answAndExpectedLst;
 
   MatchAnswerVerifyWrapper(this.answAndExpectedLst);
 
   MatchResponsewGenVerifyNextQuest getNextOrLast() {
     if (_curExpected < answAndExpectedLst.length - 1) {
-      _curExpected++;
+      _bumpIdx();
     }
     return answAndExpectedLst[_curExpected];
   }
 
-  List<String> getResponses(QuestBase qb) {
-    return [];
+  MatchResponsewGenVerifyNextQuest responderFor(QuestBase qb) {
+    //
+    _bumpIdx();
+    Iterable<MatchResponsewGenVerifyNextQuest> lstGv =
+        answAndExpectedLst.where((gv) => gv.doesMatch(qb));
+    if (lstGv.length < 1) {
+      print('Warn: no matcher found');
+      return answAndExpectedLst[_curExpected];
+    } else if (lstGv.length > 1) {
+      print('Warn: multi matchers found');
+    }
+    return lstGv.first;
+  }
+
+  void _bumpIdx() {
+    _curExpected++;
+  }
+
+  void hasStarted() {
+    // just encountered the app-screens question
+    _questIdxOfScreenQuest = _curExpected;
   }
 
   // int get curExpected => _curExpected;
@@ -107,6 +135,21 @@ class MatchAnswerVerifyWrapper {
   QuestMatcher get qMatchForReponses => _curMrgv.qMatchForReponses;
   QuestMatcher? get qMatchVerifyNextGendQuest =>
       _curMrgv.qMatchVerifyNextGendQuest;
+
+  //       List<String> getResponses(QuestBase qb) {
+  //   //
+  //   MatchResponsewGenVerifyNextQuest gv = responderFor(qb);
+  //   return gv.ansToPushInOrder.map((e) => e.response).toList();
+
+  //   // List<MatchResponsewGenVerifyNextQuest> lstGv =
+  //   //     answAndExpectedLst.where((gv) => gv.doesMatch(qb)).toList();
+  //   // return lstGv.fold<List<String>>(
+  //   //   [],
+  //   //   (List<String> lstStr, MatchResponsewGenVerifyNextQuest gv) =>
+  //   //       lstStr +
+  //   //       gv.ansToPushInOrder.map((QTypeResponsePair e) => e.response).toList(),
+  //   // );
+  // }
 
   // List<TestRespGenWhenQuestLike> _lookForResponseGenerators(QuestBase quest) {
   //   //
@@ -122,31 +165,44 @@ class MatchAnswerVerifyWrapper {
 }
 
 class FullRunState {
-  //
+  /* tracks state of the test
+
+  */
   MatchAnswerVerifyWrapper _matchAnswWrap;
   // _triggerStartWhen should match the "which app screens to cfg question"
   QuestMatcher _triggerStartWhen;
 
   bool _hasStarted = false;
 
-  FullRunState._(List<MatchResponsewGenVerifyNextQuest> answAndExpectedLst,
-      this._triggerStartWhen)
-      : _matchAnswWrap = MatchAnswerVerifyWrapper(answAndExpectedLst);
+  FullRunState._(
+    List<MatchResponsewGenVerifyNextQuest> answAndExpectedLst,
+    this._triggerStartWhen,
+  ) : _matchAnswWrap = MatchAnswerVerifyWrapper(answAndExpectedLst);
 
   factory FullRunState.fullTest() {
     return FullRunState._(_fullData, _startWhenMatches);
   }
 
-  bool validateNextQuestion(QuestBase nextQueToAnsw) {
-    if (!_hasStarted || qMatchVerifyNextGendQuest == null) return true;
+  bool processNextQuestion(QuestBase nextQueToAnsw) {
+    // return true of answer set
+    if (!_hasStarted) {
+      if (_triggerStartWhen.doesMatch(nextQueToAnsw)) {
+        _hasStarted = true;
+        _matchAnswWrap.hasStarted();
+      }
+    }
 
-    return true;
+    MatchResponsewGenVerifyNextQuest matchingResponder =
+        _matchAnswWrap.responderFor(nextQueToAnsw);
+
+    nextQueToAnsw.setAllAnswersWhileTesting(matchingResponder.answers);
+    return matchingResponder.answers.isNotEmpty;
   }
 
-  QuestMatcher? get qMatchVerifyNextGendQuest =>
-      _matchAnswWrap.qMatchVerifyNextGendQuest;
+  // QuestMatcher? get qMatchVerifyNextGendQuest =>
+  //     _matchAnswWrap.qMatchVerifyNextGendQuest;
 
-  List<String> getResponses(QuestBase qb) => _matchAnswWrap.getResponses(qb);
+  // List<String> getResponses(QuestBase qb) => _matchAnswWrap.getResponses(qb);
 }
 //
 
@@ -176,17 +232,13 @@ class FullFlowTestPresenter implements QuestionPresenterIfc {
     QuestBase quest,
   ) {
     //
-    List<String> cannedAnswers = runState.getResponses(quest);
-    if (cannedAnswers.length < 1) {
+    bool didSendAnswer = runState.processNextQuestion(quest);
+    if (didSendAnswer) {
       // none so send default
       // quest.convertAndStoreUserResponse('0');
       // dialoger.advanceToNextQuestionFromGui();
-      print('no response generators found for ${quest.questId}; exiting!');
-      dialoger.generateNewQuestionsFromUserResponse(quest);
-      return;
+      print('no (or empty) response generator found for ${quest.questId}');
     }
-
-    quest.setAllAnswersWhileTesting(cannedAnswers);
     // all prompts answered;  ready to advance to next quest
     // now check if user answer will generate new questions
     dialoger.generateNewQuestionsFromUserResponse(quest);
@@ -213,33 +265,49 @@ QuestMatcher _startWhenMatches = QuestMatcher(
   questIdPatternMatchTest: (id) =>
       id.startsWith(QuestionIdStrings.selectAppScreens),
   validateUserAnswerAfterPatternMatchIsTrueCallback: (qb) {
+    // var las = (qb.mainAnswer as List<AppScreen>);
     return qb.mainAnswer is List<AppScreen> &&
         (qb.mainAnswer as List<AppScreen>).length == 2;
   },
 );
 
-List<MatchResponsewGenVerifyNextQuest> _fullData = [];
+List<MatchResponsewGenVerifyNextQuest> _fullData = [
+  MatchResponsewGenVerifyNextQuest(
+    [],
+    QuestMatcher(
+      'match on question about which screens to configure',
+      derivedQuestGen: DerivedQuestGenerator.noopTest(),
+      appScreen: AppScreen.marketView,
+      questIdPatternMatchTest: (id) =>
+          id.startsWith(QuestionIdStrings.selectAppScreens),
+      validateUserAnswerAfterPatternMatchIsTrueCallback: (qb) {
+        // var las = (qb.mainAnswer as List<AppScreen>);
+        return qb.mainAnswer is List<ScreenWidgetArea> &&
+            (qb.mainAnswer as List<ScreenWidgetArea>).length == 2;
+      },
+    ),
+    null,
+  ),
+];
 
+// List<String> _buildUserResponse(
+//   QuestBase quest,
+//   QuestPromptInstance qpi,
+//   List<TestRespGenWhenQuestLike> responseGenerators,
+// ) {
+//   //
+//   if (responseGenerators.length < 1) return [];
 
-
-  // List<String> _buildUserResponse(
-  //   QuestBase quest,
-  //   QuestPromptInstance qpi,
-  //   List<TestRespGenWhenQuestLike> responseGenerators,
-  // ) {
-  //   //
-  //   if (responseGenerators.length < 1) return [];
-
-  //   VisRuleQuestType vqt = qpi.visQuestType;
-  //   for (TestRespGenWhenQuestLike wql in responseGenerators) {
-  //     List<String> gendTestAnswer = wql.answerFor(vqt);
-  //     if (gendTestAnswer.isNotEmpty) {
-  //       return gendTestAnswer;
-  //     }
-  //   }
-  //   // remove any adjacent comma's
-  //   // userAnswer = userAnswer.replaceAll(',,,', ',');
-  //   // userAnswer = userAnswer.replaceAll(',,', ',');
-  //   // userAnswer = userAnswer.replaceAll(',,', ',');
-  //   return [];
-  // }
+//   VisRuleQuestType vqt = qpi.visQuestType;
+//   for (TestRespGenWhenQuestLike wql in responseGenerators) {
+//     List<String> gendTestAnswer = wql.answerFor(vqt);
+//     if (gendTestAnswer.isNotEmpty) {
+//       return gendTestAnswer;
+//     }
+//   }
+//   // remove any adjacent comma's
+//   // userAnswer = userAnswer.replaceAll(',,,', ',');
+//   // userAnswer = userAnswer.replaceAll(',,', ',');
+//   // userAnswer = userAnswer.replaceAll(',,', ',');
+//   return [];
+// }

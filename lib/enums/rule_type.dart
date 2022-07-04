@@ -189,6 +189,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
 
   DerivedQuestGenerator makeQuestGenForRuleType(
     QuestBase prevAnswQuest,
+    QTargetResolution newQTargRes,
   ) {
     /* 
     some rules (eg hide/show an area) are singular (complete with 1 answer)
@@ -309,7 +310,9 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           int promptCountEachQuestion = 1;
           if (prevAnswQuest.isRulePrepQuestion) {
             // we may have different types of rule-prep quests in the future
-            promptCountEachQuestion = prevAnswQuest.mainAnswer as int;
+            // promptCountEachQuestion = prevAnswQuest.mainAnswer as int;
+            var lastResp = prevAnswQuest.mainAnswer as List<String>;
+            promptCountEachQuestion = int.tryParse(lastResp.first) ?? 1;
           }
 
           List<NewQuestPerPromptOpts> qps = _getQuestPromptOptsForDataFieldName(
@@ -325,9 +328,14 @@ extension VisualRuleTypeExt1 on VisualRuleType {
         case VisRuleQuestType.selectVisualComponentOrStyle:
           // specify desired style on area or slot
 
-          List<TvAreaRowStyle> possibleVisStyles = prevAnswQuest
-              .qTargetResolution
-              .possibleVisCompStylesForTarget as List<TvAreaRowStyle>;
+          // List<TvAreaRowStyle> possibleVisStyles = prevAnswQuest
+          // .qTargetResolution
+          // .possibleVisCompStylesForTarget as List<TvAreaRowStyle>;
+
+          // List<TvAreaRowStyle> possibleVisStyles = newQTargRes
+          //     .possibleVisCompStylesForTarget as List<TvAreaRowStyle>;
+          // hack
+          List<TvAreaRowStyle> possibleVisStyles = TvAreaRowStyle.values;
 
           newPerPromptDetails.add(NewQuestPerPromptOpts<TvAreaRowStyle>(
             'Select preferred style for ${prevAnswQuest.targetPath}?',
@@ -361,7 +369,10 @@ extension VisualRuleTypeExt1 on VisualRuleType {
             qb.questId + '-rdt-$qIdSuffix-$idx',
         newQuestConstructor: QuestBase.visualRuleDetailQuest,
         deriveTargetFromPriorRespCallbk: (QuestBase qb, int newQidx) {
-          return qb.qTargetResolution.copyWith(visRuleTypeForAreaOrSlot: this);
+          /*  using QTargetResolution newQTargRes
+              passed as argument above
+          */
+          return newQTargRes.copyWith(visRuleTypeForAreaOrSlot: this);
         });
   }
 }

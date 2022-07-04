@@ -108,7 +108,7 @@ class QuestionCascadeDispatcher {
       //
     } else if (questJustAnswered.isRulePrepQuestion) {
       print(
-        '\tUser has answered rule prep quest (normally how many slots to configure)',
+        '\tUser has answered rule prep quest (normally # of pos to configure)',
       );
       var _qMatchCollToGenRuleDetail =
           QMatchCollection(matchersToGenRuleDetailQuests);
@@ -264,6 +264,15 @@ FIXME:
               screenName.toUpperCase(),
             ];
           },
+          bailQGenWhenTrueCallbk: (QuestBase priorAnsweredQuest, int qIdx) {
+            // print('bail out of creating question when returns true');
+            List<ScreenWidgetArea> respList =
+                (priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>);
+            return respList[qIdx]
+                    .applicableWigetSlots(priorAnsweredQuest.appScreen)
+                    .length <
+                1;
+          },
           newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
             return (priorAnsweredQuest.mainAnswer as Iterable<dynamic>).length;
           },
@@ -281,8 +290,11 @@ FIXME:
                 '-' +
                 area;
           },
-          answerChoiceGenerator:
-              (QuestBase priorAnsweredQuest, int newQuestIdx, int promptIdx) {
+          answerChoiceGenerator: (
+            QuestBase priorAnsweredQuest,
+            int newQuestIdx,
+            int promptIdx,
+          ) {
             List<ScreenWidgetArea> selectedScreenAreas =
                 (priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>);
             return selectedScreenAreas[newQuestIdx]
@@ -381,16 +393,20 @@ FIXME:
               (QuestBase priorAnsweredQuest, int newQuestIdx, int promptIdx) {
             List<VisualRuleType> selectedScreenAreas =
                 (priorAnsweredQuest.mainAnswer as List<VisualRuleType>);
-            VisualRuleType area = selectedScreenAreas[newQuestIdx];
+            VisualRuleType vrt = selectedScreenAreas[newQuestIdx];
             // bail out so question not created
-            if (!area.requiresVisRulePrepQuestion) return [];
+            if (!vrt.requiresVisRulePrepQuestion) return [];
             return ['0', '1', '2', '3'];
           },
           deriveTargetFromPriorRespCallbk: (
             QuestBase priorAnsweredQuest,
             int newQuestIdx,
           ) {
+            List<VisualRuleType> selectedScreenAreas =
+                (priorAnsweredQuest.mainAnswer as List<VisualRuleType>);
+            VisualRuleType vrt = selectedScreenAreas[newQuestIdx];
             return priorAnsweredQuest.qTargetResolution.copyWith(
+              visRuleTypeForAreaOrSlot: vrt,
               targetComplete: true,
             );
           },
@@ -490,6 +506,8 @@ FIXME:
         //
         derivedQuestGen: DerivedQuestGenerator.noop(),
         deriveQuestGenCallbk: (QuestBase priorAnsweredQuest, int newQuIdx) {
+          // var answers = priorAnsweredQuest.mainAnswer as List<VisualRuleType>;
+          // VisualRuleType selRule = answers[newQuIdx];
           return priorAnsweredQuest.getDerivedRuleQuestGenViaVisType(
               newQuIdx, null);
         },
