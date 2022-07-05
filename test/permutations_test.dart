@@ -34,7 +34,11 @@ class Permute {
         for (VisualRuleType areaRt in scrArea.applicableRuleTypes(appScrn)) {
           // loop rules for area
           QTargetResolution qRuleDetArea = QTargetResolution.forVisRuleDetail(
-              appScrn, scrArea, null, areaRt);
+            appScrn,
+            scrArea,
+            null,
+            areaRt,
+          );
           _allTarg.add(qRuleDetArea);
         }
         for (ScreenAreaWidgetSlot widSlot
@@ -72,23 +76,45 @@ class Permute {
     //
     List<QTargetResolution> _allTarg = _allPossibleEnumCombinations();
     _allTarg.sort((t1, t2) => t1.targetSortIndex.compareTo(t2.targetSortIndex));
-    return _allTarg.map((qt) => Permute(qt, qt.guessQuestSignature)).toList();
+    return _allTarg
+        .map((qt) => Permute(qt, qt.guessQuestSignatureForTest))
+        .toList();
   }
 }
 
 void main() {
   //
   bool setupCompleted = false;
-
+  QuestListMgr _questMgr = QuestListMgr();
+  QuestionCascadeDispatcher _qcd = QuestionCascadeDispatcher();
   var allPerm = Permute.buildAllPermutations();
+
+  var questCount = allPerm.length;
+  var addedQuestCount = 0;
+
+  // List<QuestBase> createdQuests = [];
+
+  CastStrToAnswTypCallback<String> _castFunc =
+      (QuestBase qb, String response) => '5';
+
   for (Permute pt in allPerm) {
     print(pt.targetPath);
+    QuestPromptPayload qpp = QuestPromptPayload<String>(
+      pt.qTarg.targetPath,
+      ['0', '1', '2', '3'],
+      VisRuleQuestType.dialogStruct,
+      _castFunc,
+    );
+    QuestBase qb = pt.qFactory(pt.qTarg, [qpp]);
+    qb.setAllAnswersWhileTesting(['0']);
+    _qcd.appendNewQuestsOrInsertImplicitAnswers(_questMgr, qb);
+    // createdQuests.add(qb);
   }
 
   // StreamController<List<String>> sendAnswersController =
   //     StreamController<List<String>>();
   // QuestListMgr _questMgr = QuestListMgr();
-  // QuestionCascadeDispatcher _qcd = QuestionCascadeDispatcher();
+  //
   // FullFlowTestPresenter questPresent = FullFlowTestPresenter(
   //     sendAnswersController, _questMgr); // aka QuestionPresenterIfc
   // DialogRunner dlogRun = DialogRunner(

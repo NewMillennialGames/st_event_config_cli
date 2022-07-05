@@ -279,12 +279,16 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
     );
   }
 
-  QuestFactorytSignature get guessQuestSignature {
-    //
-    if (targetComplete && visRuleTypeForAreaOrSlot != null)
+  QuestFactorytSignature get guessQuestSignatureForTest {
+    // for test only
+    // called from permutations_test;  not validated
+    if (targetComplete && visRuleTypeForAreaOrSlot != null) {
+      if (visRuleTypeForAreaOrSlot!.requiresVisRulePrepQuestion)
+        return QuestBase.rulePrepQuest;
       return QuestBase.visualRuleDetailQuest;
-
-    if (slotInArea != null && visRuleTypeForAreaOrSlot == null)
+    }
+    //
+    if (!targetComplete && visRuleTypeForAreaOrSlot == null)
       return QuestBase.regionTargetQuest;
 
     if (appScreen == AppScreen.eventConfiguration)
@@ -322,45 +326,42 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
   bool get stringify => true;
 }
 
+// factory QTargetResolution.ruleDetailMultiResponse(
+//   AppScreen appScreen,
+//   ScreenWidgetArea screenWidgetArea,
+//   VisualRuleType? visRuleTypeForSlotInArea,
+//   // rule level always has screen & area; may have slot
+//   ScreenAreaWidgetSlot? slot,
+//   BehaviorRuleType? behRuleTypeForSlotInArea,
+// ) {
+//   // bool isVisual = visRuleTypeForSlotInArea != null;
+//   return QTargetResolution(
+//     appScreen,
+//     screenWidgetArea,
+//     slotInArea: slot,
+//     visRuleTypeForAreaOrSlot: visRuleTypeForSlotInArea,
+//     behRuleTypeForAreaOrSlot: behRuleTypeForSlotInArea,
+//   );
+// }
 
+// List<VisualRuleType> relatedSubVisualRules(RegionTargetQuest quest) {
+//   if (!this.generatesNoNewQuestions) return [];
 
+//   List<VisualRuleType> list = [];
+//   switch (this.visRuleTypeForAreaOrSlot!) {
+//     case VisualRuleType.filterCfg:
+//       list.addAll([]);
+//       break;
+//     case VisualRuleType.sortCfg:
+//       list.addAll([]);
+//       break;
+//     case VisualRuleType.showOrHide:
+//       list.addAll([]);
+//       break;
+//     case VisualRuleType.styleOrFormat:
+//       list.addAll([]);
+//       break;
+//   }
 
-  // factory QTargetResolution.ruleDetailMultiResponse(
-  //   AppScreen appScreen,
-  //   ScreenWidgetArea screenWidgetArea,
-  //   VisualRuleType? visRuleTypeForSlotInArea,
-  //   // rule level always has screen & area; may have slot
-  //   ScreenAreaWidgetSlot? slot,
-  //   BehaviorRuleType? behRuleTypeForSlotInArea,
-  // ) {
-  //   // bool isVisual = visRuleTypeForSlotInArea != null;
-  //   return QTargetResolution(
-  //     appScreen,
-  //     screenWidgetArea,
-  //     slotInArea: slot,
-  //     visRuleTypeForAreaOrSlot: visRuleTypeForSlotInArea,
-  //     behRuleTypeForAreaOrSlot: behRuleTypeForSlotInArea,
-  //   );
-  // }
-
-  // List<VisualRuleType> relatedSubVisualRules(RegionTargetQuest quest) {
-  //   if (!this.generatesNoNewQuestions) return [];
-
-  //   List<VisualRuleType> list = [];
-  //   switch (this.visRuleTypeForAreaOrSlot!) {
-  //     case VisualRuleType.filterCfg:
-  //       list.addAll([]);
-  //       break;
-  //     case VisualRuleType.sortCfg:
-  //       list.addAll([]);
-  //       break;
-  //     case VisualRuleType.showOrHide:
-  //       list.addAll([]);
-  //       break;
-  //     case VisualRuleType.styleOrFormat:
-  //       list.addAll([]);
-  //       break;
-  //   }
-
-  //   return list;
-  // }
+//   return list;
+// }
