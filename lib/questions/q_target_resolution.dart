@@ -63,8 +63,8 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
     String screenName = appScreen.name;
     String? area = screenWidgetArea?.name;
     String? slot = slotInArea?.name;
-    String? visRuleName = visRuleTypeForAreaOrSlot?.name;
-    bool hasRule = visRuleName != null;
+    bool hasRule = visRuleTypeForAreaOrSlot != null;
+    String visRuleName = visRuleTypeForAreaOrSlot?.name ?? '';
 
     if (area == null) return screenName;
     if (slot == null)
@@ -287,7 +287,7 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
     if (targetEnum == null) {
       return 0;
     } else if (targetEnum is AppScreen) {
-      return 16;
+      return 32;
     } else if (targetEnum is ScreenWidgetArea) {
       return 8;
     } else if (targetEnum is ScreenAreaWidgetSlot) {
