@@ -77,13 +77,13 @@ extension ScreenAreaWidgetSlotExt1 on ScreenAreaWidgetSlot {
     }
   }
 
-  List<dynamic> possibleVisualStyles(
+  List<Enum> possibleVisualStyles(
     AppScreen appScreen,
     ScreenWidgetArea screenWidgetArea,
   ) {
     switch (this) {
       case ScreenAreaWidgetSlot.header:
-        return [];
+        return TvAreaRowStyle.values;
       case ScreenAreaWidgetSlot.footer:
         return [];
       case ScreenAreaWidgetSlot.slot1:
@@ -123,7 +123,12 @@ extension ScreenAreaWidgetSlotExt1 on ScreenAreaWidgetSlot {
         .forEach((rt) => idxToModifiableRuleTyps[++tempIdx] = rt);
     //
     idxToModifiableRuleTyps.removeWhere(
-        (int idx, VisualRuleType uic) => !providedIdxs.contains(idx));
+      (
+        int idx,
+        VisualRuleType uic,
+      ) =>
+          !providedIdxs.contains(idx),
+    );
     return idxToModifiableRuleTyps.values.toList();
   }
 }

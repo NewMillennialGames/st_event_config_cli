@@ -78,7 +78,7 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
         ];
       case ScreenWidgetArea.header:
         return [
-          VisualRuleType.styleOrFormat,
+          // VisualRuleType.styleOrFormat,
           VisualRuleType.showOrHide,
         ];
       case ScreenWidgetArea.banner:
@@ -102,7 +102,7 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
     }
   }
 
-  List<dynamic> possibleVisualStyles(
+  List<Enum> possibleVisualStyles(
     AppScreen appScreen,
   ) {
     /* what are the visual style options
@@ -146,7 +146,8 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
         .forEach((rt) => idxToModifiableRuleTyps[++tempIdx] = rt);
     //
     idxToModifiableRuleTyps.removeWhere(
-        (int idx, VisualRuleType uic) => !providedIdxs.contains(idx));
+      (int idx, VisualRuleType uic) => !providedIdxs.contains(idx),
+    );
     return idxToModifiableRuleTyps.values.toList();
   }
 }

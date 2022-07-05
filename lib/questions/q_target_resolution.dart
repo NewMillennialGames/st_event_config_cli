@@ -110,8 +110,15 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
     return slotInArea!.possibleConfigRules(screenWidgetArea!);
   }
 
-  List<dynamic> get possibleVisCompStylesForTarget {
+  List<Enum> get possibleVisCompStylesForTarget {
     // component styles for a target area/slot
+
+    if (!targetComplete) {
+      print(
+        'err:  possibleVisCompStylesForTarget called on incomplete QTargResolution (area or area/slot should be set)',
+      );
+      return [];
+    }
 
     if (slotInArea != null)
       return slotInArea!.possibleVisualStyles(appScreen, screenWidgetArea!);

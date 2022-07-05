@@ -27,7 +27,7 @@ enum TvAreaRowStyle {
   driverVsField,
 }
 
-// typedef _Rs = TvAreaRowStyle;
+//
 
 extension TvAreaRowStyleExt1 on TvAreaRowStyle {
   //
@@ -37,15 +37,17 @@ extension TvAreaRowStyleExt1 on TvAreaRowStyle {
         TvAreaRowStyle.assetVsAssetRanked,
       ].contains(this);
 
-  bool get _participantBasedListview => this.name.contains('Field');
-  // bool get _gameBasedListview => !_participantBasedListview;
+  // bool get participantBasedListview => this.name.contains('Field');
+  // bool get gameBasedListview => !participantBasedListview;
 
-  TvBasisForRow get rowFormatStyle => _participantBasedListview
-      ? TvBasisForRow.participantBased
-      : TvBasisForRow.gameBased;
+  // TvBasisForRow get rowFormatStyle => _participantBasedListview
+  //     ? TvBasisForRow.participantBased
+  //     : TvBasisForRow.gameBased;
 }
 
-enum TvBasisForRow { gameBased, participantBased }
+
+
+// enum TvBasisForRow { gameBased, participantBased }
 
 // extension TvBasisForRowExt1 on TvBasisForRow {
 //   //
