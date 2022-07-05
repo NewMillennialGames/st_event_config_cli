@@ -1,5 +1,39 @@
 part of QuestionsLib;
 
+enum TargetPrecision {
+  eventLevel,
+  screenLevel,
+  targetLevel,
+  ruleSelect,
+  rulePrep,
+  ruleDetailVisual,
+  ruleDetailBehavior,
+}
+
+extension TargetPrecisionExt1 on TargetPrecision {
+  bool get targetComplete => this.index >= TargetPrecision.ruleSelect.index;
+
+  QuestFactorytSignature get questSignature {
+    // NIU but useful future helper
+    switch (this) {
+      case TargetPrecision.eventLevel:
+        return QuestBase.eventLevelCfgQuest;
+      case TargetPrecision.screenLevel:
+        return QuestBase.regionTargetQuest;
+      case TargetPrecision.targetLevel:
+        return QuestBase.regionTargetQuest;
+      case TargetPrecision.ruleSelect:
+        return QuestBase.ruleSelectQuest;
+      case TargetPrecision.rulePrep:
+        return QuestBase.rulePrepQuest;
+      case TargetPrecision.ruleDetailVisual:
+        return QuestBase.visualRuleDetailQuest;
+      case TargetPrecision.ruleDetailBehavior:
+        return QuestBase.behaveRuleDetailQuest;
+    }
+  }
+}
+
 @freezed
 class QTargetResolution extends Equatable with _$QTargetResolution {
   /* describes what a Question pertains to
@@ -30,7 +64,7 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
     ScreenAreaWidgetSlot? slotInArea,
     VisualRuleType? visRuleTypeForAreaOrSlot,
     BehaviorRuleType? behRuleTypeForAreaOrSlot,
-    @Default(false) bool targetComplete,
+    @Default(TargetPrecision.eventLevel) TargetPrecision precision,
   }) = _QTargetResolution;
 
   int get targetSortIndex {
@@ -57,6 +91,7 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
     return screenScore + areaScore + slotScore + visRuleScore + behRuleScore;
   }
 
+  bool get targetComplete => precision.targetComplete;
   String get targetPath {
     // describes section of the app that
     // that enclosing question pertains to
@@ -150,6 +185,7 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
     return QTargetResolution(
       AppScreen.eventConfiguration,
       null,
+      precision: TargetPrecision.eventLevel,
     );
   }
 
@@ -166,7 +202,9 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
     */
     return QTargetResolution(
       appScreen,
-      null,
+      screenArea,
+      slotInArea: slot,
+      precision: TargetPrecision.targetLevel,
     );
   }
 
@@ -191,7 +229,7 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
       appScreen,
       screenArea,
       slotInArea: slot,
-      targetComplete: true,
+      precision: TargetPrecision.ruleSelect,
     );
   }
 
@@ -217,7 +255,7 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
       screenArea,
       slotInArea: slot,
       visRuleTypeForAreaOrSlot: ruleType,
-      targetComplete: true,
+      precision: TargetPrecision.rulePrep,
     );
   }
 
@@ -254,7 +292,7 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
       screenArea,
       slotInArea: slot,
       visRuleTypeForAreaOrSlot: visRuleType,
-      targetComplete: true,
+      precision: TargetPrecision.ruleDetailVisual,
     );
   }
 
@@ -275,26 +313,27 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
       screenArea,
       slotInArea: slot,
       behRuleTypeForAreaOrSlot: behRuleType,
-      targetComplete: true,
+      precision: TargetPrecision.ruleDetailBehavior,
     );
   }
 
   QuestFactorytSignature get guessQuestSignatureForTest {
     // for test only
     // called from permutations_test;  not validated
-    if (targetComplete && visRuleTypeForAreaOrSlot != null) {
-      if (visRuleTypeForAreaOrSlot!.requiresVisRulePrepQuestion)
-        return QuestBase.rulePrepQuest;
-      return QuestBase.visualRuleDetailQuest;
-    }
-    //
-    if (!targetComplete && visRuleTypeForAreaOrSlot == null)
-      return QuestBase.regionTargetQuest;
+    return precision.questSignature;
+    // if (targetComplete && visRuleTypeForAreaOrSlot != null) {
+    //   if (visRuleTypeForAreaOrSlot!.requiresVisRulePrepQuestion)
+    //     return QuestBase.rulePrepQuest;
+    //   return QuestBase.visualRuleDetailQuest;
+    // }
+    // //
+    // if (!targetComplete && visRuleTypeForAreaOrSlot == null)
+    //   return QuestBase.regionTargetQuest;
 
-    if (appScreen == AppScreen.eventConfiguration)
-      return QuestBase.eventLevelCfgQuest;
+    // if (appScreen == AppScreen.eventConfiguration)
+    //   return QuestBase.eventLevelCfgQuest;
 
-    return QuestBase.ruleSelectQuest;
+    // return QuestBase.ruleSelectQuest;
   }
 
   static int _weightForTargetEnumIdx(dynamic targetEnum) {
@@ -325,43 +364,3 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
   @override
   bool get stringify => true;
 }
-
-// factory QTargetResolution.ruleDetailMultiResponse(
-//   AppScreen appScreen,
-//   ScreenWidgetArea screenWidgetArea,
-//   VisualRuleType? visRuleTypeForSlotInArea,
-//   // rule level always has screen & area; may have slot
-//   ScreenAreaWidgetSlot? slot,
-//   BehaviorRuleType? behRuleTypeForSlotInArea,
-// ) {
-//   // bool isVisual = visRuleTypeForSlotInArea != null;
-//   return QTargetResolution(
-//     appScreen,
-//     screenWidgetArea,
-//     slotInArea: slot,
-//     visRuleTypeForAreaOrSlot: visRuleTypeForSlotInArea,
-//     behRuleTypeForAreaOrSlot: behRuleTypeForSlotInArea,
-//   );
-// }
-
-// List<VisualRuleType> relatedSubVisualRules(RegionTargetQuest quest) {
-//   if (!this.generatesNoNewQuestions) return [];
-
-//   List<VisualRuleType> list = [];
-//   switch (this.visRuleTypeForAreaOrSlot!) {
-//     case VisualRuleType.filterCfg:
-//       list.addAll([]);
-//       break;
-//     case VisualRuleType.sortCfg:
-//       list.addAll([]);
-//       break;
-//     case VisualRuleType.showOrHide:
-//       list.addAll([]);
-//       break;
-//     case VisualRuleType.styleOrFormat:
-//       list.addAll([]);
-//       break;
-//   }
-
-//   return list;
-// }

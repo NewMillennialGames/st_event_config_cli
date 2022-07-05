@@ -85,11 +85,17 @@ class Permute {
 void main() {
   //
   bool setupCompleted = false;
-  QuestListMgr _questMgr = QuestListMgr();
+  QuestBase seedQuest = QuestBase.initialEventConfigRule(
+    QTargetResolution.forEvent(),
+    'Pick screens to config',
+    AppScreen.values.map((e) => e.name),
+    CaptureAndCast<List<AppScreen>>((qb, idx) => AppScreen.values),
+  );
+  QuestListMgr _questMgr = QuestListMgr([seedQuest]);
   QuestionCascadeDispatcher _qcd = QuestionCascadeDispatcher();
   var allPerm = Permute.buildAllPermutations();
 
-  var questCount = allPerm.length;
+  var questCount = 0;
   var addedQuestCount = 0;
 
   // List<QuestBase> createdQuests = [];
@@ -105,9 +111,11 @@ void main() {
       VisRuleQuestType.dialogStruct,
       _castFunc,
     );
+    questCount = _questMgr.pendingQuestionCount;
     QuestBase qb = pt.qFactory(pt.qTarg, [qpp]);
     qb.setAllAnswersWhileTesting(['0']);
     _qcd.appendNewQuestsOrInsertImplicitAnswers(_questMgr, qb);
+    addedQuestCount = _questMgr.pendingQuestionCount - questCount;
     // createdQuests.add(qb);
   }
 

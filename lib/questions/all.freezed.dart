@@ -23,14 +23,14 @@ class _$QTargetResolutionTearOff {
       {ScreenAreaWidgetSlot? slotInArea,
       VisualRuleType? visRuleTypeForAreaOrSlot,
       BehaviorRuleType? behRuleTypeForAreaOrSlot,
-      bool targetComplete = false}) {
+      TargetPrecision precision = TargetPrecision.eventLevel}) {
     return _QTargetResolution(
       appScreen,
       screenWidgetArea,
       slotInArea: slotInArea,
       visRuleTypeForAreaOrSlot: visRuleTypeForAreaOrSlot,
       behRuleTypeForAreaOrSlot: behRuleTypeForAreaOrSlot,
-      targetComplete: targetComplete,
+      precision: precision,
     );
   }
 }
@@ -47,7 +47,7 @@ mixin _$QTargetResolution {
       throw _privateConstructorUsedError;
   BehaviorRuleType? get behRuleTypeForAreaOrSlot =>
       throw _privateConstructorUsedError;
-  bool get targetComplete => throw _privateConstructorUsedError;
+  TargetPrecision get precision => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $QTargetResolutionCopyWith<QTargetResolution> get copyWith =>
@@ -65,7 +65,7 @@ abstract class $QTargetResolutionCopyWith<$Res> {
       ScreenAreaWidgetSlot? slotInArea,
       VisualRuleType? visRuleTypeForAreaOrSlot,
       BehaviorRuleType? behRuleTypeForAreaOrSlot,
-      bool targetComplete});
+      TargetPrecision precision});
 }
 
 /// @nodoc
@@ -84,7 +84,7 @@ class _$QTargetResolutionCopyWithImpl<$Res>
     Object? slotInArea = freezed,
     Object? visRuleTypeForAreaOrSlot = freezed,
     Object? behRuleTypeForAreaOrSlot = freezed,
-    Object? targetComplete = freezed,
+    Object? precision = freezed,
   }) {
     return _then(_value.copyWith(
       appScreen: appScreen == freezed
@@ -107,10 +107,10 @@ class _$QTargetResolutionCopyWithImpl<$Res>
           ? _value.behRuleTypeForAreaOrSlot
           : behRuleTypeForAreaOrSlot // ignore: cast_nullable_to_non_nullable
               as BehaviorRuleType?,
-      targetComplete: targetComplete == freezed
-          ? _value.targetComplete
-          : targetComplete // ignore: cast_nullable_to_non_nullable
-              as bool,
+      precision: precision == freezed
+          ? _value.precision
+          : precision // ignore: cast_nullable_to_non_nullable
+              as TargetPrecision,
     ));
   }
 }
@@ -128,7 +128,7 @@ abstract class _$QTargetResolutionCopyWith<$Res>
       ScreenAreaWidgetSlot? slotInArea,
       VisualRuleType? visRuleTypeForAreaOrSlot,
       BehaviorRuleType? behRuleTypeForAreaOrSlot,
-      bool targetComplete});
+      TargetPrecision precision});
 }
 
 /// @nodoc
@@ -149,7 +149,7 @@ class __$QTargetResolutionCopyWithImpl<$Res>
     Object? slotInArea = freezed,
     Object? visRuleTypeForAreaOrSlot = freezed,
     Object? behRuleTypeForAreaOrSlot = freezed,
-    Object? targetComplete = freezed,
+    Object? precision = freezed,
   }) {
     return _then(_QTargetResolution(
       appScreen == freezed
@@ -172,10 +172,10 @@ class __$QTargetResolutionCopyWithImpl<$Res>
           ? _value.behRuleTypeForAreaOrSlot
           : behRuleTypeForAreaOrSlot // ignore: cast_nullable_to_non_nullable
               as BehaviorRuleType?,
-      targetComplete: targetComplete == freezed
-          ? _value.targetComplete
-          : targetComplete // ignore: cast_nullable_to_non_nullable
-              as bool,
+      precision: precision == freezed
+          ? _value.precision
+          : precision // ignore: cast_nullable_to_non_nullable
+              as TargetPrecision,
     ));
   }
 }
@@ -187,7 +187,7 @@ class _$_QTargetResolution extends _QTargetResolution {
       {this.slotInArea,
       this.visRuleTypeForAreaOrSlot,
       this.behRuleTypeForAreaOrSlot,
-      this.targetComplete = false})
+      this.precision = TargetPrecision.eventLevel})
       : super._();
 
   @override
@@ -202,7 +202,7 @@ class _$_QTargetResolution extends _QTargetResolution {
   final BehaviorRuleType? behRuleTypeForAreaOrSlot;
   @JsonKey()
   @override
-  final bool targetComplete;
+  final TargetPrecision precision;
 
   @JsonKey(ignore: true)
   @override
@@ -216,7 +216,7 @@ abstract class _QTargetResolution extends QTargetResolution {
       {ScreenAreaWidgetSlot? slotInArea,
       VisualRuleType? visRuleTypeForAreaOrSlot,
       BehaviorRuleType? behRuleTypeForAreaOrSlot,
-      bool targetComplete}) = _$_QTargetResolution;
+      TargetPrecision precision}) = _$_QTargetResolution;
   _QTargetResolution._() : super._();
 
   @override
@@ -230,7 +230,7 @@ abstract class _QTargetResolution extends QTargetResolution {
   @override
   BehaviorRuleType? get behRuleTypeForAreaOrSlot;
   @override
-  bool get targetComplete;
+  TargetPrecision get precision;
   @override
   @JsonKey(ignore: true)
   _$QTargetResolutionCopyWith<_QTargetResolution> get copyWith =>

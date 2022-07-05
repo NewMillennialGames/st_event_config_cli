@@ -57,7 +57,10 @@ abstract class QuestBase with EquatableMixin {
     // implements QuestFactorytSignature
     // applies to ui-factory config rules
     var qDefCollection = QPromptCollection.fromList(prompts);
-    return EventLevelCfgQuest(targIntent, qDefCollection, questId: questId);
+    return EventLevelCfgQuest(
+        targIntent.copyWith(precision: TargetPrecision.eventLevel),
+        qDefCollection,
+        questId: questId);
   }
 
   factory QuestBase.regionTargetQuest(
@@ -68,7 +71,10 @@ abstract class QuestBase with EquatableMixin {
     // implements QuestFactorytSignature
     // this style quest DOES NOT apply to ui-factory config
     var qDefCollection = QPromptCollection.fromList(prompts);
-    return RegionTargetQuest(targIntent, qDefCollection, questId: questId);
+    return RegionTargetQuest(
+        targIntent.copyWith(precision: TargetPrecision.targetLevel),
+        qDefCollection,
+        questId: questId);
   }
 
   factory QuestBase.ruleSelectQuest(
@@ -79,7 +85,8 @@ abstract class QuestBase with EquatableMixin {
     // implements QuestFactorytSignature
     // this style quest DOES NOT apply to ui-factory config
     var qDefCollection = QPromptCollection.fromList(prompts);
-    var completeTarg = targIntent.copyWith(targetComplete: true);
+    var completeTarg =
+        targIntent.copyWith(precision: TargetPrecision.ruleSelect);
     return RuleSelectQuest(completeTarg, qDefCollection, questId: questId);
   }
   //
@@ -92,7 +99,7 @@ abstract class QuestBase with EquatableMixin {
     // this style quest DOES NOT apply to ui-factory config
     // only creates rule-prep when necessary
     var qDefCollection = QPromptCollection.fromList(prompts);
-    var completeTarg = targIntent.copyWith(targetComplete: true);
+    var completeTarg = targIntent.copyWith(precision: TargetPrecision.rulePrep);
 
     // check whether we need rule-prep or just a vis-rule question
     if (completeTarg.requiresVisRulePrepQuestion) {
@@ -104,14 +111,14 @@ abstract class QuestBase with EquatableMixin {
     }
     if (completeTarg.visRuleTypeForAreaOrSlot != null) {
       return VisualRuleDetailQuest(
-        completeTarg,
+        completeTarg.copyWith(precision: TargetPrecision.ruleDetailVisual),
         qDefCollection,
         questId: questId,
       );
     }
     if (completeTarg.behRuleTypeForAreaOrSlot != null) {
       return BehaveRuleDetailQuest(
-        completeTarg,
+        completeTarg.copyWith(precision: TargetPrecision.ruleDetailBehavior),
         qDefCollection,
         questId: questId,
       );
@@ -128,7 +135,10 @@ abstract class QuestBase with EquatableMixin {
     // implements QuestFactorytSignature
     // applies to ui-factory config
     var qDefCollection = QPromptCollection.fromList(prompts);
-    return VisualRuleDetailQuest(targIntent, qDefCollection, questId: questId);
+    return VisualRuleDetailQuest(
+        targIntent.copyWith(precision: TargetPrecision.ruleDetailVisual),
+        qDefCollection,
+        questId: questId);
   }
 
   factory QuestBase.behaveRuleDetailQuest(
@@ -139,7 +149,10 @@ abstract class QuestBase with EquatableMixin {
     // implements QuestFactorytSignature
     // applies to ui-factory config
     var qDefCollection = QPromptCollection.fromList(prompts);
-    return BehaveRuleDetailQuest(targIntent, qDefCollection, questId: questId);
+    return BehaveRuleDetailQuest(
+        targIntent.copyWith(precision: TargetPrecision.ruleDetailBehavior),
+        qDefCollection,
+        questId: questId);
   }
   // end constructors with common QuestFactorytSignature
 
@@ -159,7 +172,7 @@ abstract class QuestBase with EquatableMixin {
       captureAndCast,
     );
     return EventLevelCfgQuest(
-      targIntent,
+      targIntent.copyWith(precision: TargetPrecision.eventLevel),
       qDefCollection,
       questId: questId,
       isSelectScreensQuestion: isSelectScreensQuestion,
@@ -179,7 +192,10 @@ abstract class QuestBase with EquatableMixin {
       choices,
       captureAndCast,
     );
-    return RegionTargetQuest(targIntent, qDefCollection, questId: questId);
+    return RegionTargetQuest(
+        targIntent.copyWith(precision: TargetPrecision.targetLevel),
+        qDefCollection,
+        questId: questId);
   }
 
   QuestPromptInstance? getNextUserPromptIfExists() {
@@ -214,7 +230,10 @@ abstract class QuestBase with EquatableMixin {
       'getDerivedRuleQuestGenViaVisType: ${curRule.name}',
     );
 
-    var newTarg = qTargetResolution.copyWith(visRuleTypeForAreaOrSlot: curRule);
+    var newTarg = qTargetResolution.copyWith(
+      visRuleTypeForAreaOrSlot: curRule,
+      precision: TargetPrecision.ruleDetailVisual,
+    );
     return curRule.makeQuestGenForRuleType(this, newTarg);
   }
 

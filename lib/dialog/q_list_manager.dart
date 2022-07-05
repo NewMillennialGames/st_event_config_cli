@@ -26,7 +26,9 @@ class QuestListMgr {
   Map<AppScreen, List<QuestBase>> _answeredQuestsByScreen = {};
 
   // constructor
-  QuestListMgr();
+  QuestListMgr([List<QuestBase>? pendingQuestions = null]) {
+    _pendingQuestions.addAll(pendingQuestions ?? []);
+  }
 
   //
   Iterable<UiFactoryRuleBase> get exportableRuleQuestions =>

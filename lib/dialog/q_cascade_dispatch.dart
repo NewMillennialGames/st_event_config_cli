@@ -202,6 +202,7 @@ class QuestionCascadeDispatcher {
                 priorAnsweredQuest.mainAnswer as List<AppScreen>;
             return priorAnsweredQuest.qTargetResolution.copyWith(
               appScreen: selectedAppScreens[newQuIdx],
+              precision: TargetPrecision.targetLevel,
             );
           },
           /* params to handle converting user responses (String 0,1,2)
@@ -314,6 +315,7 @@ FIXME:
             // );
             return priorAnsweredQuest.qTargetResolution.copyWith(
               screenWidgetArea: currArea,
+              precision: TargetPrecision.targetLevel,
             );
           },
           newRespCastFunc: (
@@ -407,7 +409,7 @@ FIXME:
             VisualRuleType vrt = selectedScreenAreas[newQuestIdx];
             return priorAnsweredQuest.qTargetResolution.copyWith(
               visRuleTypeForAreaOrSlot: vrt,
-              targetComplete: true,
+              precision: TargetPrecision.rulePrep,
             );
           },
           newRespCastFunc: (
@@ -780,7 +782,7 @@ List<QuestMatcher> _ruleSelectionQuestions = [
         // );
         return priorAnsweredQuest.qTargetResolution.copyWith(
           screenWidgetArea: currArea,
-          targetComplete: true,
+          precision: TargetPrecision.ruleSelect,
         );
       },
       newRespCastFunc: (
@@ -876,7 +878,7 @@ List<QuestMatcher> _ruleSelectionQuestions = [
         // );
         return priorAnsweredQuest.qTargetResolution.copyWith(
           slotInArea: slot,
-          targetComplete: true,
+          precision: TargetPrecision.ruleSelect,
         );
       },
       newRespCastFunc: (
