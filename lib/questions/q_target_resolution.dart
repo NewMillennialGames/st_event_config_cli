@@ -155,7 +155,7 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
 
   factory QTargetResolution.forTargetting(
     AppScreen appScreen,
-    ScreenWidgetArea? screenArea,
+    ScreenWidgetArea screenArea,
     ScreenAreaWidgetSlot? slot,
   ) {
     /*
@@ -277,6 +277,20 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
       behRuleTypeForAreaOrSlot: behRuleType,
       targetComplete: true,
     );
+  }
+
+  QuestFactorytSignature get guessQuestSignature {
+    //
+    if (targetComplete && visRuleTypeForAreaOrSlot != null)
+      return QuestBase.visualRuleDetailQuest;
+
+    if (slotInArea != null && visRuleTypeForAreaOrSlot == null)
+      return QuestBase.regionTargetQuest;
+
+    if (appScreen == AppScreen.eventConfiguration)
+      return QuestBase.eventLevelCfgQuest;
+
+    return QuestBase.ruleSelectQuest;
   }
 
   static int _weightForTargetEnumIdx(dynamic targetEnum) {

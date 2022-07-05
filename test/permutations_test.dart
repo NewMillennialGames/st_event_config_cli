@@ -19,6 +19,8 @@ class Permute {
 
   Permute(this.qTarg, this.qFactory);
 
+  String get targetPath => qTarg.targetPath;
+
   static List<QTargetResolution> _allPossibleEnumCombinations() {
     //
     List<QTargetResolution> _allTarg = [];
@@ -70,10 +72,7 @@ class Permute {
     //
     List<QTargetResolution> _allTarg = _allPossibleEnumCombinations();
     _allTarg.sort((t1, t2) => t1.targetSortIndex.compareTo(t2.targetSortIndex));
-    for (QTargetResolution tr in _allTarg) {
-      print(tr.targetPath);
-    }
-    return [];
+    return _allTarg.map((qt) => Permute(qt, qt.guessQuestSignature)).toList();
   }
 }
 
@@ -82,6 +81,9 @@ void main() {
   bool setupCompleted = false;
 
   var allPerm = Permute.buildAllPermutations();
+  for (Permute pt in allPerm) {
+    print(pt.targetPath);
+  }
 
   // StreamController<List<String>> sendAnswersController =
   //     StreamController<List<String>>();
