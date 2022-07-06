@@ -124,16 +124,18 @@ class TradeButton extends ConsumerWidget {
 
 class CheckAssetType extends StatelessWidget {
   final AssetRowPropertyIfc competitor;
-  final bool? isDriverVsField;
-  final bool? isTeamPlayerVsField;
-  final bool? isPlayerVsFieldRanked;
+  final bool isDriverVsField;
+  final bool isTeamPlayerVsField;
+  final bool isPlayerVsFieldRanked;
+  final String? tradeSource;
 
   const CheckAssetType(
       {Key? key,
       required this.competitor,
       this.isDriverVsField = false,
       this.isTeamPlayerVsField = false,
-      this.isPlayerVsFieldRanked = false})
+      this.isPlayerVsFieldRanked = false,
+      this.tradeSource})
       : super(key: key);
 
   @override
@@ -141,7 +143,7 @@ class CheckAssetType extends StatelessWidget {
     var lst = competitor.topName.split(' ');
     String firstName = lst[0];
     String lastName = lst.length >= 2 ? lst[1] : '';
-    if (isDriverVsField!) {
+    if (isDriverVsField) {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -177,18 +179,28 @@ class CheckAssetType extends StatelessWidget {
                         .copyWith(fontWeight: FontWeight.w800, fontSize: 18.sp))
               ],
             ),
-          )
+          ),
+          if (tradeSource != null) ...[
+            const Spacer(),
+            Text(
+              tradeSource!,
+              style: StTextStyles.p2,
+            ),
+          ],
         ],
       );
     }
-    if (isTeamPlayerVsField!) {
+    if (isTeamPlayerVsField) {
       return ConstrainedBox(
         constraints:
             BoxConstraints(maxWidth: MediaQuery.of(context).size.width * .3),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(competitor.topName, style: StTextStyles.h4),
+            if (tradeSource == null)
+              Text(competitor.topName, style: StTextStyles.h4)
+            else
+              Text(tradeSource!, style: StTextStyles.h4),
             Row(
               children: [
                 Text(competitor.teamNameWhenTradingPlayers,
@@ -204,26 +216,48 @@ class CheckAssetType extends StatelessWidget {
         ),
       );
     }
-    if (isPlayerVsFieldRanked!) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    if (isPlayerVsFieldRanked) {
+      return Row(
         children: [
-          Text(competitor.topName, style: StTextStyles.h4),
-          Text(
-            competitor.rankStr,
-            style: StTextStyles.p2.copyWith(color: StColors.coolGray),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(competitor.topName, style: StTextStyles.h4),
+              Text(
+                competitor.rankStr,
+                style: StTextStyles.p2.copyWith(color: StColors.coolGray),
+              ),
+            ],
           ),
+          if (tradeSource != null) ...[
+            const Spacer(),
+            Text(
+              tradeSource!,
+              style: StTextStyles.p2,
+            ),
+          ],
         ],
       );
     }
-    return ConstrainedBox(
-      constraints:
-          BoxConstraints(maxWidth: MediaQuery.of(context).size.width * .3),
-      child: Text(
-        competitor.topName,
-        overflow: TextOverflow.ellipsis,
-        style: StTextStyles.h4,
-      ),
+    return Row(
+      children: [
+        ConstrainedBox(
+          constraints:
+              BoxConstraints(maxWidth: MediaQuery.of(context).size.width * .3),
+          child: Text(
+            competitor.topName,
+            overflow: TextOverflow.ellipsis,
+            style: StTextStyles.h4,
+          ),
+        ),
+        if (tradeSource != null) ...[
+          const Spacer(),
+          Text(
+            tradeSource!,
+            style: StTextStyles.p2,
+          ),
+        ],
+      ],
     );
   }
 }
@@ -264,8 +298,8 @@ class LeaderboardHalfRow extends StatelessWidget {
         kSpacerLarge,
         CheckAssetType(
           competitor: competitor,
-          isDriverVsField: isDriverVsField,
-          isTeamPlayerVsField: isTeamPlayerVsField,
+          isDriverVsField: isDriverVsField ?? false,
+          isTeamPlayerVsField: isTeamPlayerVsField ?? false,
         ),
         const Spacer(),
         Text(
