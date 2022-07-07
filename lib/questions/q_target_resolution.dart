@@ -1,6 +1,7 @@
 part of QuestionsLib;
 
 enum TargetPrecision {
+  // describes the INTENT of a QTargetResolution instance
   eventLevel,
   screenLevel,
   targetLevel,
@@ -101,11 +102,23 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
     bool hasRule = visRuleTypeForAreaOrSlot != null;
     String visRuleName = visRuleTypeForAreaOrSlot?.name ?? '';
 
-    if (area == null) return screenName;
+    String intentName = '-' + precision.name;
+    if (area == null) return screenName + intentName;
     if (slot == null)
-      return screenName + '-' + area + (hasRule ? '-$visRuleName' : '');
-    if (!hasRule) return screenName + '-' + area + '-' + slot;
-    return screenName + '-' + area + '-' + slot + '-' + visRuleName;
+      return screenName +
+          '-' +
+          area +
+          (hasRule ? '-$visRuleName' : '') +
+          intentName;
+    if (!hasRule) return screenName + '-' + area + '-' + slot + intentName;
+    return screenName +
+        '-' +
+        area +
+        '-' +
+        slot +
+        '-' +
+        visRuleName +
+        intentName;
   }
 
   bool get isTopLevelEventConfigQuestion =>
@@ -143,6 +156,11 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
   List<VisualRuleType> get possibleRulesForSlotInAreaOfScreen {
     if (screenWidgetArea == null || slotInArea == null) return [];
     return slotInArea!.possibleConfigRules(screenWidgetArea!);
+  }
+
+  List<VisualRuleType> get possibleRulesAtAnyTarget {
+    if (slotInArea != null) return possibleRulesForSlotInAreaOfScreen;
+    return possibleRulesForAreaInScreen;
   }
 
   List<Enum> get possibleVisCompStylesForTarget {
@@ -321,19 +339,6 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
     // for test only
     // called from permutations_test;  not validated
     return precision.questSignature;
-    // if (targetComplete && visRuleTypeForAreaOrSlot != null) {
-    //   if (visRuleTypeForAreaOrSlot!.requiresVisRulePrepQuestion)
-    //     return QuestBase.rulePrepQuest;
-    //   return QuestBase.visualRuleDetailQuest;
-    // }
-    // //
-    // if (!targetComplete && visRuleTypeForAreaOrSlot == null)
-    //   return QuestBase.regionTargetQuest;
-
-    // if (appScreen == AppScreen.eventConfiguration)
-    //   return QuestBase.eventLevelCfgQuest;
-
-    // return QuestBase.ruleSelectQuest;
   }
 
   static int _weightForTargetEnumIdx(dynamic targetEnum) {

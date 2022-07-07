@@ -9,7 +9,9 @@ import 'package:st_ev_cfg/st_ev_cfg.dart';
 import 'package:st_ev_cfg/util/all.dart';
 import 'shared_utils.dart';
 
-/* full-dialog-test helper classes only -- no tests in here
+/*  TODO:  not currently finished or in use
+
+full-dialog-test helper classes only -- no tests in here
 
   contains a QuestionPresenterIfc called FullFlowTestPresenter
     QuestionPresenterIfc is interface used by DialogRunner to

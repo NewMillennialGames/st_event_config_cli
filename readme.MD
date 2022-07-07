@@ -248,3 +248,25 @@ defer this until after 1st build:
 #### For future
 1. id love to convert this into a DSL  (target this area of app with this type of rule governed by these cfg-args)
 2. 
+
+
+
+#####  Test pattern
+
+use permutations loop to create all possible
+    1. targetting questions
+    2. rule-select questions
+    3. rule-prep questions
+
+with PRE-CANNED answers (needed by the generators)
+
+and for each above generated set
+    use matchers to confirm that the
+    proper derived questions were created
+    by the default cascade dispatcher
+
+
+regarding PRE-CANNED answers, we may need a top-level
+structure that defines the rule for selecting
+the answer for THIS TEST RUN
+that will allow us to 

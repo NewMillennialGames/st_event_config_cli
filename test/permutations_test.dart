@@ -4,86 +4,36 @@ import 'package:test/test.dart';
 import 'package:st_ev_cfg/st_ev_cfg.dart';
 import 'package:st_ev_cfg/util/all.dart';
 //
-import 'full_ans_expect.dart';
-import 'shared_utils.dart';
-/*
-  create every possible target and question type
+import 'permutation_util.dart';
+/*  Summary:
+  create every possible question type
   and see if correct derived question gets created
 
+  Detail:
+
+  use permutations loop to create all possible
+    1. targetting questions
+    2. rule-select questions
+    3. rule-prep questions
+
+with PRE-CANNED answers (needed by the generators)
+
+and for each above generated set
+    use matchers to confirm that the
+    proper derived questions were created
+    by the default cascade dispatcher
+
+
+regarding PRE-CANNED answers, we may need a top-level
+structure that defines the rule for selecting
+the answer for THIS TEST RUN
+that will allow us to 
 */
 
-class Permute {
-  //
-  QTargetResolution qTarg;
-  QuestFactorytSignature qFactory;
-
-  Permute(this.qTarg, this.qFactory);
-
-  String get targetPath => qTarg.targetPath;
-
-  static List<QTargetResolution> _allPossibleEnumCombinations() {
-    //
-    List<QTargetResolution> _allTarg = [];
-    for (AppScreen appScrn
-        in AppScreen.eventConfiguration.topConfigurableScreens) {
-      for (ScreenWidgetArea scrArea in appScrn.configurableScreenAreas) {
-        // loop areas on screen
-        QTargetResolution? qTargArea =
-            QTargetResolution.forTargetting(appScrn, scrArea, null);
-
-        for (VisualRuleType areaRt in scrArea.applicableRuleTypes(appScrn)) {
-          // loop rules for area
-          QTargetResolution qRuleDetArea = QTargetResolution.forVisRuleDetail(
-            appScrn,
-            scrArea,
-            null,
-            areaRt,
-          );
-          _allTarg.add(qRuleDetArea);
-        }
-        for (ScreenAreaWidgetSlot widSlot
-            in scrArea.applicableWigetSlots(appScrn)) {
-          // loop slots in area
-          if (qTargArea != null) {
-            _allTarg.add(qTargArea);
-            qTargArea = null;
-          }
-          QTargetResolution? qTargSlot =
-              QTargetResolution.forTargetting(appScrn, scrArea, widSlot);
-          for (VisualRuleType rt in widSlot.possibleConfigRules(scrArea)) {
-            // loop rules for slot in area
-
-            if (qTargSlot != null) {
-              _allTarg.add(qTargSlot);
-              qTargSlot = null;
-            }
-
-            QTargetResolution qRuleDet = QTargetResolution.forVisRuleDetail(
-              appScrn,
-              scrArea,
-              widSlot,
-              rt,
-            );
-            _allTarg.add(qRuleDet);
-          }
-        }
-      }
-    }
-    return _allTarg;
-  }
-
-  static List<Permute> buildAllPermutations() {
-    //
-    List<QTargetResolution> _allTarg = _allPossibleEnumCombinations();
-    _allTarg.sort((t1, t2) => t1.targetSortIndex.compareTo(t2.targetSortIndex));
-    return _allTarg
-        .map((qt) => Permute(qt, qt.guessQuestSignatureForTest))
-        .toList();
-  }
-}
-
 void main() {
-  //
+  /*
+
+  */
   bool setupCompleted = false;
   QuestBase seedQuest = QuestBase.initialEventConfigRule(
     QTargetResolution.forEvent(),
@@ -93,7 +43,7 @@ void main() {
   );
   QuestListMgr _questMgr = QuestListMgr([seedQuest]);
   QuestionCascadeDispatcher _qcd = QuestionCascadeDispatcher();
-  var allPerm = Permute.buildAllPermutations();
+  // var allPerm = Permute.buildAllTargetPermutations();
 
   var questCount = 0;
   var addedQuestCount = 0;
@@ -103,7 +53,8 @@ void main() {
   CastStrToAnswTypCallback<String> _castFunc =
       (QuestBase qb, String response) => '5';
 
-  for (Permute pt in allPerm) {
+  for (Permute pt in []) {
+    // allPerm
     print(pt.targetPath);
     QuestPromptPayload qpp = QuestPromptPayload<String>(
       pt.qTarg.targetPath,
