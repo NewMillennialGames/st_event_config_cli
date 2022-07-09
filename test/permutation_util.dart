@@ -27,206 +27,245 @@ class PermuteTest {
   /*  contains data and logic to
     execute all our tests
   */
-  List<RegionTargetQuest> allTargets = [];
-  List<RuleSelectQuest> allRuleSelect = [];
-  List<RulePrepQuest> allRulePrep = [];
+  // List<RegionTargetQuest> allTargets = [];
+  // List<RuleSelectQuest> allRuleSelect = [];
+  // List<RulePrepQuest> allRulePrep = [];
   AnswerFactory answerFactory = AnswerFactory();
 
   PermuteTest() {
-    allTargets = Permute.buildAllPosTargetQuests();
-    allRuleSelect = Permute.buildAllPosRuleSelectQuests();
-    allRulePrep = Permute.buildAllPosRuleRulePreQuests();
+    // allTargets = Permute.buildPosibleTargetQuestsWithAnswers();
+    // allRuleSelect = Permute.buildPossibleRuleSelectQuestsWithAnswers();
+    // allRulePrep = Permute.buildPosibleRuleRulePreQuestsWithAnswers();
   }
 
   void testAllTargetDerived() {
     //
+    List<RegionTargetQuest> allTargets =
+        Permute.buildPosibleTargetQuestsUnanswered();
+
+    // now set default answers on all these questions
+    for (RegionTargetQuest ptq in allTargets) {
+      //
+      List<String> answers = answerFactory.answerFor(ptq);
+      ptq.setAllAnswersWhileTesting(answers);
+    }
+
+    // now all questions have answers
+    // pass each quest to cascade-dispatch
+    // and confirm proper # & type of questions created
   }
 
   void testAllRuleSelectDerived() {
     //
+    List<RuleSelectQuest> allRuleSelect =
+        Permute.buildPossibleRuleSelectQuestsUnanswered();
+
+    // now set default answers on all these questions
+    for (RuleSelectQuest ptq in allRuleSelect) {
+      //
+      List<String> answers = answerFactory.answerFor(ptq);
+      ptq.setAllAnswersWhileTesting(answers);
+    }
   }
 
   void testAllRulePrepDerived() {
     //
+    List<RulePrepQuest> allRulePrep =
+        Permute.buildPosibleRulePrepQuestsUnanswered();
+
+    // now set default answers on all these questions
+    for (RulePrepQuest ptq in allRulePrep) {
+      //
+      List<String> answers = answerFactory.answerFor(ptq);
+      ptq.setAllAnswersWhileTesting(answers);
+    }
   }
 }
 
 class Permute {
   //
-  QTargetResolution qTarg;
-  QuestFactorytSignature qFactory;
-
-  Permute(this.qTarg, this.qFactory);
-
-  String get targetPath => qTarg.targetPath;
+  Permute(); // this.qTarg, this.qFactory
 
   static List<QTargetResolution> _allPossibleTargetCombinations() {
-    /*
-  {
-    bool withRules = false,
-  }
+    /* a complete list of fully resolved possible targets
+
+    these are over-resolved (meaning full target depth set)
+    so that they can be used in any derrived questions generated
+
+    no visual-rules are set in these instances
+
+    the normal implication is that these fully resolved
+    QTR recs will (would normally) be created in the NEW
+    question associated with an explicit user-answer to a targeting question
+
+    in actuality, these (overly resol ed) will be embedded in a pre-question
+    so we can use their "target answer", (set w mock data) as a way to
+    create auto-answers to test creation of all derrived questions
     */
-    List<QTargetResolution> _allTarg = [];
+    List<QTargetResolution> _allPossibleTargets = [];
     for (AppScreen appScrn
         in AppScreen.eventConfiguration.topConfigurableScreens) {
+      // add one with only (each) screen set
+      QTargetResolution qTargScreen =
+          QTargetResolution.forTargetting(appScrn, null, null);
+      _allPossibleTargets.add(qTargScreen);
       for (ScreenWidgetArea scrArea in appScrn.configurableScreenAreas) {
-        // loop areas on screen
-        QTargetResolution? qTargArea =
+        // loop config areas on screen
+        // add a targ with only (each) area set
+        QTargetResolution qTargArea =
             QTargetResolution.forTargetting(appScrn, scrArea, null);
-
-        // if (withRules) {
-        //   for (VisualRuleType areaRt in scrArea.applicableRuleTypes(appScrn)) {
-        //     // loop rules for area
-        //     QTargetResolution qRuleDetArea = QTargetResolution.forVisRuleDetail(
-        //       appScrn,
-        //       scrArea,
-        //       null,
-        //       areaRt,
-        //     );
-        //     _allTarg.add(qRuleDetArea);
-        //   }
-        // }
+        // store QTR where target is not complete
+        _allPossibleTargets.add(qTargArea);
+        // store QTR where target IS complete
+        _allPossibleTargets
+            .add(qTargArea.copyWith(precision: TargetPrecision.ruleSelect));
         for (ScreenAreaWidgetSlot widSlot
             in scrArea.applicableWigetSlots(appScrn)) {
-          // loop slots in area
-          if (qTargArea != null) {
-            _allTarg.add(qTargArea);
-            qTargArea = null;
-          }
-          QTargetResolution? qTargSlot =
+          // loop config slots in area of screen
+          QTargetResolution qTargSlot =
               QTargetResolution.forTargetting(appScrn, scrArea, widSlot);
-
-          if (qTargSlot != null) {
-            _allTarg.add(qTargSlot);
-            qTargSlot = null;
-          }
+          // store QTR where target is not complete
+          _allPossibleTargets.add(qTargSlot);
+          // store QTR where target IS complete
+          _allPossibleTargets
+              .add(qTargSlot.copyWith(precision: TargetPrecision.ruleSelect));
         }
       }
     }
-    return _allTarg;
+    return _allPossibleTargets;
   }
 
-  static List<RegionTargetQuest> buildAllPosTargetQuests() {
-    // build every possible targetting question
-    // generators should build derived questions
-    // to allow user to select which rule
+  static List<RegionTargetQuest> buildPosibleTargetQuestsUnanswered() {
+    /* 
+      my QTargetResolution recs are over-resolved
+      meaning their data exists AS IF they are the result of
+      prior answers adding to a formerly incomplete state
+
+    build every possible targetting question
+    with reasonable default answers
+    generators should build derived questions
+    to allow user to select which rule for area
+    verify those rule-select questions were created!!
+    once slots are set, they are no longer targetting questions
+     */
 
     List<QTargetResolution> _allTarg = _allPossibleTargetCombinations();
-    _allTarg.sort((t1, t2) => t1.targetSortIndex.compareTo(t2.targetSortIndex));
 
-    List<RegionTargetQuest> l = [];
-    String promptTempl = 'Select desired rules targeting ${0}';
+    // targets with only app screen resolved
+    List<QTargetResolution> _allScreenLevelTargets =
+        _allTarg.where((qtr) => qtr.screenWidgetArea == null).toList();
 
-    for (QTargetResolution qtr in _allTarg) {
-      List<VisualRuleType> possibleRulesForTarget =
-          qtr.possibleRulesAtAnyTarget;
+    List<RegionTargetQuest> regTargetQuests = [];
+    // String promptTempl = 'Select area/slot for target ${0}';
 
-      // create custom cast function for selected rule
-      List<VisualRuleType> castAnswer(QuestBase qb, String lstAreaIdxs) {
-        return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
-            .map(
-              (i) => possibleRulesForTarget[i],
-            )
-            .toList();
-      }
-
-      String prompt = promptTempl.format([qtr.targetPath]);
-      QPromptCollection prompts = QPromptCollection.singleDialog(
-        prompt,
-        ['0'],
-        CaptureAndCast<List<VisualRuleType>>(castAnswer),
+    for (QTargetResolution qtr in _allScreenLevelTargets) {
+      regTargetQuests.add(
+        RegionTargetQuest(
+          qtr,
+          QPromptCollection.pickAreasForScreen(qtr.appScreen),
+        ),
       );
-      l.add(RegionTargetQuest(qtr, prompts));
     }
-    return l;
+
+    // keep recs where target is NOT marked complete
+    // but area IS SET (below screen level)
+    List<QTargetResolution> _allQtrWithAreaOnly = _allTarg
+        .where((qtr) =>
+            !qtr.targetComplete &&
+            qtr.screenWidgetArea != null &&
+            qtr.slotInArea == null)
+        .toList();
+
+    // sort QTRs with area set
+    _allQtrWithAreaOnly
+        .sort((t1, t2) => t1.targetSortIndex.compareTo(t2.targetSortIndex));
+
+    for (QTargetResolution areaQtr in _allQtrWithAreaOnly) {
+      //
+      QPromptCollection prompts = QPromptCollection.selectTargetSlotsInArea(
+          areaQtr.appScreen, areaQtr.screenWidgetArea!);
+      regTargetQuests.add(RegionTargetQuest(areaQtr, prompts));
+    }
+    return regTargetQuests;
   }
 
-  static List<RuleSelectQuest> buildAllPosRuleSelectQuests() {
-    // build every possible targetting question
-    // generators should build derived questions
-    // to allow user to select which rule
+  static List<RuleSelectQuest> buildPossibleRuleSelectQuestsUnanswered() {
+    /* 
+      my QTargetResolution recs are over-resolved
+      meaning their data exists AS IF they are the result of
+      prior answers
+     */
 
     List<QTargetResolution> _allTarg = _allPossibleTargetCombinations();
-    _allTarg.sort((t1, t2) => t1.targetSortIndex.compareTo(t2.targetSortIndex));
+    // convert all target QTR to ruleSelect precision
+    List<QTargetResolution> _allQtrAsRuleSelect = _allTarg
+        .map<QTargetResolution>(
+            (e) => e.copyWith(precision: TargetPrecision.ruleSelect))
+        .toList();
 
-    List<RuleSelectQuest> l = [];
-    String promptTempl = 'Select desired rules targeting ${0}';
+    // keep recs where target IS SET complete
+    _allQtrAsRuleSelect = _allTarg.where((qtr) => qtr.targetComplete).toList();
 
-    for (QTargetResolution qtr in _allTarg) {
-      List<VisualRuleType> possibleRulesForTarget =
-          qtr.possibleRulesAtAnyTarget;
+    // sort QTRs with area set
+    _allQtrAsRuleSelect
+        .sort((t1, t2) => t1.targetSortIndex.compareTo(t2.targetSortIndex));
 
-      // create custom cast function for selected rule
-      List<VisualRuleType> castAnswer(QuestBase qb, String lstAreaIdxs) {
-        return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
-            .map(
-              (i) => possibleRulesForTarget[i],
-            )
-            .toList();
-      }
-
-      String prompt = promptTempl.format([qtr.targetPath]);
-      QPromptCollection prompts = QPromptCollection.singleDialog(
-        prompt,
-        ['0'],
-        CaptureAndCast<List<VisualRuleType>>(castAnswer),
-      );
-      l.add(RuleSelectQuest(qtr, prompts));
+    List<RuleSelectQuest> ruleSelectQuests = [];
+    for (QTargetResolution areaQtr in _allQtrAsRuleSelect) {
+      //
+      QPromptCollection prompts =
+          QPromptCollection.selectRulesForTarget(areaQtr);
+      ruleSelectQuests.add(RuleSelectQuest(areaQtr, prompts));
     }
-    return l;
+    return ruleSelectQuests;
   }
 
-  static List<RulePrepQuest> buildAllPosRuleRulePreQuests() {
-    // build every possible targetting question
-    // generators should build derived questions
-    // to allow user to select which rule
+  static List<RulePrepQuest> buildPosibleRulePrepQuestsUnanswered() {
+    /*  only targets with a visual-rule can serve as basis for a
+        rule-prep question
+        but none of the recs coming from _allPossibleTargetCombinations
+        have rules set on them
 
-    // for (VisualRuleType rt in widSlot.possibleConfigRules(scrArea)) {
-    //   // loop rules for slot in area
+        attach sensible visual-rules to all of these
 
-    //   if (qTargSlot != null) {
-    //     _allTarg.add(qTargSlot);
-    //     qTargSlot = null;
-    //   }
-
-    //   // if (withRules) {
-    //   //   QTargetResolution qRuleDet = QTargetResolution.forVisRuleDetail(
-    //   //     appScrn,
-    //   //     scrArea,
-    //   //     widSlot,
-    //   //     rt,
-    //   //   );
-    //   //   _allTarg.add(qRuleDet);
-    //   // }
-    // }
-
+      fyi:  my QTargetResolution recs are over-resolved
+      meaning their data exists AS IF they are the result of
+      prior answers
+    */
     List<QTargetResolution> _allTarg = _allPossibleTargetCombinations();
-    _allTarg.sort((t1, t2) => t1.targetSortIndex.compareTo(t2.targetSortIndex));
 
-    List<RulePrepQuest> l = [];
-    String promptTempl = 'Select desired rules targeting ${0}';
-
+    List<QTargetResolution> _allQtrAsRulePrep = [];
     for (QTargetResolution qtr in _allTarg) {
-      List<VisualRuleType> possibleRulesForTarget =
-          qtr.possibleRulesAtAnyTarget;
-
-      // create custom cast function for selected rule
-      List<VisualRuleType> castAnswer(QuestBase qb, String lstAreaIdxs) {
-        return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
-            .map(
-              (i) => possibleRulesForTarget[i],
-            )
-            .toList();
+      List<VisualRuleType> allowedRules = qtr.possibleRulesAtAnyTarget;
+      for (VisualRuleType vrt in allowedRules) {
+        if (vrt.requiresVisRulePrepQuestion) {
+          _allQtrAsRulePrep.add(
+            qtr.copyWith(
+              visRuleTypeForAreaOrSlot: vrt,
+              precision: TargetPrecision.rulePrep,
+            ),
+          );
+        }
       }
-
-      String prompt = promptTempl.format([qtr.targetPath]);
-      QPromptCollection prompts = QPromptCollection.singleDialog(
-        prompt,
-        ['0'],
-        CaptureAndCast<List<VisualRuleType>>(castAnswer),
-      );
-      l.add(RulePrepQuest(qtr, prompts));
     }
-    return l;
+
+    // keep recs where target IS complete & we have a
+    _allQtrAsRulePrep = _allTarg
+        .where(
+            (qtr) => qtr.targetComplete && qtr.visRuleTypeForAreaOrSlot != null)
+        .toList();
+
+    // sort QTRs
+    _allQtrAsRulePrep
+        .sort((t1, t2) => t1.targetSortIndex.compareTo(t2.targetSortIndex));
+
+    List<RulePrepQuest> rulePrepQuests = [];
+    for (QTargetResolution areaQtr in _allQtrAsRulePrep) {
+      //
+      QPromptCollection prompts =
+          QPromptCollection.forRulePrepQuestion(areaQtr);
+      rulePrepQuests.add(RulePrepQuest(areaQtr, prompts));
+    }
+    return rulePrepQuests;
   }
 }

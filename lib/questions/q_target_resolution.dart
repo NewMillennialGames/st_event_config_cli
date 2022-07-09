@@ -2,6 +2,9 @@ part of QuestionsLib;
 
 enum TargetPrecision {
   // describes the INTENT of a QTargetResolution instance
+  // QTargetResolution instance is embedded in a
+  // QuestBase instance; so this describes the query intent
+  // of that enclosing question; what info is asked of our user
   eventLevel,
   screenLevel,
   targetLevel,
@@ -12,10 +15,21 @@ enum TargetPrecision {
 }
 
 extension TargetPrecisionExt1 on TargetPrecision {
+  //
   bool get targetComplete => this.index >= TargetPrecision.ruleSelect.index;
 
-  QuestFactorytSignature get questSignature {
-    // NIU but useful future helper
+  bool get isPartOfTargetCompletionQuestion =>
+      this == TargetPrecision.targetLevel;
+
+  QuestFactorytSignature get enclosingNewQuestSignature {
+    /*
+    provides method to create a new question which
+    will wrap the enclosing QTargetResolution
+    creates the type of question that should WRAP QTR instance
+    not the type of a DERIVED question
+
+  currently only used in testing
+    */
     switch (this) {
       case TargetPrecision.eventLevel:
         return QuestBase.eventLevelCfgQuest;
@@ -83,16 +97,25 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
         _weightForTargetEnumIdx(screenWidgetArea);
     int slotScore =
         ((slotInArea?.index ?? -1) + 1) * _weightForTargetEnumIdx(slotInArea);
+    int precisionScore = precision.index * _weightForTargetEnumIdx(precision);
     int visRuleScore = ((visRuleTypeForAreaOrSlot?.index ?? -1) + 1) *
         _weightForTargetEnumIdx(visRuleTypeForAreaOrSlot);
     int behRuleScore = ((behRuleTypeForAreaOrSlot?.index ?? -1) + 1) *
         _weightForTargetEnumIdx(behRuleTypeForAreaOrSlot);
+
     // return a priority weighted sort order that should keep
     // all questions in reasonable order
-    return screenScore + areaScore + slotScore + visRuleScore + behRuleScore;
+    return screenScore +
+        areaScore +
+        slotScore +
+        precisionScore +
+        visRuleScore +
+        behRuleScore;
   }
 
-  bool get targetComplete => precision.targetComplete;
+  bool get isPartOfTargetCompletionQuestion =>
+      precision.isPartOfTargetCompletionQuestion;
+  bool get targetComplete => precision.targetComplete || slotInArea != null;
   String get targetPath {
     // describes section of the app that
     // that enclosing question pertains to
@@ -209,7 +232,7 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
 
   factory QTargetResolution.forTargetting(
     AppScreen appScreen,
-    ScreenWidgetArea screenArea,
+    ScreenWidgetArea? screenArea,
     ScreenAreaWidgetSlot? slot,
   ) {
     /*
@@ -335,10 +358,15 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
     );
   }
 
-  QuestFactorytSignature get guessQuestSignatureForTest {
-    // for test only
-    // called from permutations_test;  not validated
-    return precision.questSignature;
+  QuestFactorytSignature get newQuestSignatureForWrapThisInTest {
+    /*     for test only
+    returns constructor
+    to use when creating a question to contain THIS
+    (not a derived question)
+    called from permutations_test
+
+    */
+    return precision.enclosingNewQuestSignature;
   }
 
   static int _weightForTargetEnumIdx(dynamic targetEnum) {
@@ -349,10 +377,14 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
     if (targetEnum == null) {
       return 0;
     } else if (targetEnum is AppScreen) {
-      return 32;
+      return 64;
+      // 32 reserved for spacing
     } else if (targetEnum is ScreenWidgetArea) {
-      return 8;
+      return 16;
     } else if (targetEnum is ScreenAreaWidgetSlot) {
+      return 8;
+    } else if (targetEnum is TargetPrecision) {
+      // 4 reserved for precision score
       return 4;
     } else if (targetEnum is VisualRuleType) {
       return 2;

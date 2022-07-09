@@ -68,6 +68,90 @@ class QPromptCollection {
     return QPromptCollection.fromListQpp(qpp);
   }
 
+  static QPromptCollection pickAreasForScreen(AppScreen as) {
+    // centralized this main prompt for testing ease
+    List<ScreenWidgetArea> configurableAreas = as.configurableScreenAreas;
+
+    List<ScreenWidgetArea> _castAnswer(QuestBase qb, String lstAreaIdxs) {
+      return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
+          .map(
+            (i) => configurableAreas[i],
+          )
+          .toList();
+    }
+
+    return QPromptCollection.singleDialog(
+      'Select areas to config in screen ${as.name}',
+      configurableAreas.map((a) => a.name),
+      CaptureAndCast<List<ScreenWidgetArea>>(_castAnswer),
+    );
+  }
+
+  static QPromptCollection selectTargetSlotsInArea(
+    AppScreen as,
+    ScreenWidgetArea swa,
+  ) {
+    List<ScreenAreaWidgetSlot> configurableSlots = swa.applicableWigetSlots(as);
+
+    List<ScreenAreaWidgetSlot> _castAnswer(QuestBase qb, String lstAreaIdxs) {
+      return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
+          .map(
+            (i) => configurableSlots[i],
+          )
+          .toList();
+    }
+
+    return QPromptCollection.singleDialog(
+      'Select slots to config in area ${swa.name} of screen ${as.name}',
+      configurableSlots.map((a) => a.name),
+      CaptureAndCast<List<ScreenAreaWidgetSlot>>(_castAnswer),
+    );
+  } //
+
+  static QPromptCollection selectRulesForTarget(
+    QTargetResolution qtr,
+  ) {
+    List<VisualRuleType> permissibleRules = qtr.possibleRulesAtAnyTarget;
+
+    List<VisualRuleType> _castAnswer(QuestBase qb, String lstAreaIdxs) {
+      return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
+          .map(
+            (i) => permissibleRules[i],
+          )
+          .toList();
+    }
+
+    return QPromptCollection.singleDialog(
+      'Select desired rules to apply on target ${qtr.targetPath}',
+      permissibleRules.map((a) => a.name),
+      CaptureAndCast<List<VisualRuleType>>(_castAnswer),
+    );
+  } //
+
+  static QPromptCollection forRulePrepQuestion(
+    QTargetResolution qtr,
+  ) {
+    VisualRuleType targetRule =
+        qtr.visRuleTypeForAreaOrSlot ?? VisualRuleType.generalDialogFlow;
+    assert(
+      targetRule.requiresVisRulePrepQuestion,
+      'requires a rule that needs prep',
+    );
+
+    String promptTmpl = targetRule.prepTemplate;
+    String prompt = promptTmpl.format([qtr.targetPath]);
+
+    int _castAnswer(QuestBase qb, String lstAreaIdxs) {
+      return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0).first;
+    }
+
+    return QPromptCollection.singleDialog(
+      prompt,
+      ['0', '1', '2', '3'],
+      CaptureAndCast<int>(_castAnswer),
+    );
+  } //
+
   // getters
   List<VisRuleQuestType> get embeddedQuestTypes =>
       prompts.map<VisRuleQuestType>((e) => e.visQuestType).toList();
@@ -120,15 +204,14 @@ class QPromptCollection {
   // }
 }
 
-
-  // factory QDefCollection.fromMap(
-  //   Map<String, List<String>> questIterations, {
-  //   bool isRuleQuest2 = false,
-  // }) {
-  //   List<SingleQPromptInstance> l =
-  //       SingleQPromptInstance.fromMap(questIterations);
-  //   return QDefCollection(
-  //     l,
-  //     isRuleQuest2: isRuleQuest2,
-  //   );
-  // }
+// factory QDefCollection.fromMap(
+//   Map<String, List<String>> questIterations, {
+//   bool isRuleQuest2 = false,
+// }) {
+//   List<SingleQPromptInstance> l =
+//       SingleQPromptInstance.fromMap(questIterations);
+//   return QDefCollection(
+//     l,
+//     isRuleQuest2: isRuleQuest2,
+//   );
+// }

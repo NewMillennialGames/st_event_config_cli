@@ -35,6 +35,8 @@ void main() {
 
   */
   bool setupCompleted = false;
+  PermuteTest permute = PermuteTest();
+
   QuestBase seedQuest = QuestBase.initialEventConfigRule(
     QTargetResolution.forEvent(),
     'Pick screens to config',
@@ -43,44 +45,9 @@ void main() {
   );
   QuestListMgr _questMgr = QuestListMgr([seedQuest]);
   QuestionCascadeDispatcher _qcd = QuestionCascadeDispatcher();
-  // var allPerm = Permute.buildAllTargetPermutations();
 
   var questCount = 0;
   var addedQuestCount = 0;
-
-  // List<QuestBase> createdQuests = [];
-
-  CastStrToAnswTypCallback<String> _castFunc =
-      (QuestBase qb, String response) => '5';
-
-  for (Permute pt in []) {
-    // allPerm
-    print(pt.targetPath);
-    QuestPromptPayload qpp = QuestPromptPayload<String>(
-      pt.qTarg.targetPath,
-      ['0', '1', '2', '3'],
-      VisRuleQuestType.dialogStruct,
-      _castFunc,
-    );
-    questCount = _questMgr.pendingQuestionCount;
-    QuestBase qb = pt.qFactory(pt.qTarg, [qpp]);
-    qb.setAllAnswersWhileTesting(['0']);
-    _qcd.appendNewQuestsOrInsertImplicitAnswers(_questMgr, qb);
-    addedQuestCount = _questMgr.pendingQuestionCount - questCount;
-    // createdQuests.add(qb);
-  }
-
-  // StreamController<List<String>> sendAnswersController =
-  //     StreamController<List<String>>();
-  // QuestListMgr _questMgr = QuestListMgr();
-  //
-  // FullFlowTestPresenter questPresent = FullFlowTestPresenter(
-  //     sendAnswersController, _questMgr); // aka QuestionPresenterIfc
-  // DialogRunner dlogRun = DialogRunner(
-  //   questPresent,
-  //   qListMgr: _questMgr,
-  //   questCascadeDisp: _qcd,
-  // );
 
   setUp(() {
     if (setupCompleted) return;
@@ -88,21 +55,24 @@ void main() {
     setupCompleted = true;
   });
 
-  // group('', () {
-  //   test(
-  //     'creates Question w several prompts & verifies count + access',
-  //     () {
-  //       expect(twoPromptQuest.promptCount, 2);
-  //       QuestPromptInstance? usrPrompt1 =
-  //           twoPromptQuest.getNextUserPromptIfExists();
-  //       QuestPromptInstance? usrPrompt2 =
-  //           twoPromptQuest.getNextUserPromptIfExists();
-  //       QuestPromptInstance? usrPrompt3 =
-  //           twoPromptQuest.getNextUserPromptIfExists();
-  //       expect(usrPrompt1, isNotNull);
-  //       expect(usrPrompt2, isNotNull);
-  //       expect(usrPrompt3, isNull);
-  //     },
-  //   );
-  // });
+  group('check all derived', () {
+    test(
+      'check derived from target answers',
+      () {
+        permute.testAllTargetDerived();
+      },
+    );
+    test(
+      'check derived from rule-select answers',
+      () {
+        permute.testAllRuleSelectDerived();
+      },
+    );
+    test(
+      'check derived from rule-prep answers',
+      () {
+        permute.testAllRulePrepDerived();
+      },
+    );
+  });
 }
