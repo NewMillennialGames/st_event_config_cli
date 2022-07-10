@@ -15,7 +15,7 @@ class DialogRunner {
   final QuestionPresenterIfc questPresenter;
   final int linesBetweenSections;
   final int linesBetweenQuest2s;
-  final QuestionCascadeDispatcher questCascadeDispatcher;
+  final QCascadeDispatcher questCascadeDispatcher;
   //
 
   DialogRunner(
@@ -24,11 +24,10 @@ class DialogRunner {
     this.linesBetweenSections = 3,
     this.linesBetweenQuest2s = 1,
     bool loadDefaultQuest = true,
-    QuestionCascadeDispatcher? questCascadeDisp,
+    QCascadeDispatcher? questCascadeDisp,
   })  : _qListMgr = qListMgr ?? QuestListMgr(),
-        questCascadeDispatcher = questCascadeDisp == null
-            ? QuestionCascadeDispatcher()
-            : questCascadeDisp {
+        questCascadeDispatcher =
+            questCascadeDisp == null ? QCascadeDispatcher() : questCascadeDisp {
     if (loadDefaultQuest) {
       List<QuestBase> quests = loadInitialConfigQuestions();
       _qListMgr.appendGeneratedQuestsAndAnswers(quests);

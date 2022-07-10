@@ -19,7 +19,7 @@ void main() {
   StreamController<List<String>> sendAnswersController =
       StreamController<List<String>>();
   QuestListMgr _questMgr = QuestListMgr();
-  QuestionCascadeDispatcher _qcd = QuestionCascadeDispatcher();
+  QCascadeDispatcher _qcd = QCascadeDispatcher();
   FullFlowTestPresenter questPresent = FullFlowTestPresenter(
       sendAnswersController, _questMgr); // aka QuestionPresenterIfc
   DialogRunner dlogRun = DialogRunner(

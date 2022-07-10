@@ -33,7 +33,7 @@ void main() {
       );
 
       final _questMgr = QuestListMgr();
-      final _qcd = QuestionCascadeDispatcher();
+      final _qcd = QCascadeDispatcher();
 
       _questMgr.appendGeneratedQuestsAndAnswers([askScreens]);
 
@@ -53,7 +53,7 @@ void main() {
 
       for (QuestBase q in _questMgr.pendingQuestions) {
         print(
-          'QuestMatcher created:  ${q.firstQuestion.userPrompt}  ${q.questId}',
+          'QuestMatcher created:  ${q.firstPrompt.userPrompt}  ${q.questId}',
         );
       }
     },
@@ -62,7 +62,7 @@ void main() {
   test(
       'creates user answer abt LV group-by depth, & verifies 1 quest w 4 prompts generated from it',
       () {
-    final _qcd = QuestionCascadeDispatcher();
+    final _qcd = QCascadeDispatcher();
     final _questMgr = QuestListMgr();
     expect(_questMgr.totalAnsweredQuestions, 0);
 
@@ -134,7 +134,7 @@ void main() {
 
     for (QuestBase q in _questMgr.pendingQuestions) {
       print(
-        'QuestMatcher created:  ${q.firstQuestion.userPrompt}  ${q.questId}',
+        'QuestMatcher created:  ${q.firstPrompt.userPrompt}  ${q.questId}',
       );
     }
   });

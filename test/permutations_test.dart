@@ -35,6 +35,9 @@ void main() {
 
   */
   bool setupCompleted = false;
+  var questCount = 0;
+  var addedQuestCount = 0;
+
   PermuteTest permute = PermuteTest();
 
   QuestBase seedQuest = QuestBase.initialEventConfigRule(
@@ -44,10 +47,7 @@ void main() {
     CaptureAndCast<List<AppScreen>>((qb, idx) => AppScreen.values),
   );
   QuestListMgr _questMgr = QuestListMgr([seedQuest]);
-  QuestionCascadeDispatcher _qcd = QuestionCascadeDispatcher();
-
-  var questCount = 0;
-  var addedQuestCount = 0;
+  QCascadeDispatcher _qcd = QCascadeDispatcher();
 
   setUp(() {
     if (setupCompleted) return;
@@ -59,19 +59,19 @@ void main() {
     test(
       'check derived from target answers',
       () {
-        permute.testAllTargetDerived();
+        permute.testAllTargetDerived(_questMgr, _qcd);
       },
     );
     test(
       'check derived from rule-select answers',
       () {
-        permute.testAllRuleSelectDerived();
+        permute.testAllRuleSelectDerived(_questMgr, _qcd);
       },
     );
     test(
       'check derived from rule-prep answers',
       () {
-        permute.testAllRulePrepDerived();
+        permute.testAllRulePrepDerived(_questMgr, _qcd);
       },
     );
   });

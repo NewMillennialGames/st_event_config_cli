@@ -162,9 +162,10 @@ class QPromptCollection {
   int get _partCount => prompts.length;
   bool get isCompleted => _curPartIdx >= _partCount - 1 || allPartsHaveAnswers;
   bool get isMultiPart => _partCount > 1;
-  bool get allPartsHaveAnswers =>
-      prompts.where((QuestPromptInstance pi) => pi.hasAnswer).length >=
-      _partCount;
+
+  int get userResponseCount =>
+      prompts.where((QuestPromptInstance pi) => pi.hasAnswer).length;
+  bool get allPartsHaveAnswers => userResponseCount >= _partCount;
 
   QuestPromptInstance? getNextUserPromptIfExists() {
     _curPartIdx++;

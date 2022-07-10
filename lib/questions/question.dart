@@ -302,9 +302,8 @@ abstract class QuestBase with EquatableMixin {
   List<VisRuleQuestType> get visQuestTypes => qPromptCollection.prompts
       .map((e) => e.answChoiceCollection.visRuleQuestType)
       .toList();
-  QuestPromptInstance get firstQuestion => qPromptCollection.prompts.first;
-  CaptureAndCast get _firstPromptAnswers =>
-      firstQuestion._answerRepoAndTypeCast;
+  QuestPromptInstance get firstPrompt => qPromptCollection.prompts.first;
+  CaptureAndCast get _firstPromptAnswers => firstPrompt._answerRepoAndTypeCast;
   dynamic get mainAnswer => _firstPromptAnswers.cast(this);
   // Caution --- below may not work
   Type get expectedAnswerType => _firstPromptAnswers.cast(this).runtimeType;

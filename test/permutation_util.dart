@@ -1,25 +1,50 @@
-// import 'dart:async';
-// import 'package:test/test.dart';
 //
 import 'package:st_ev_cfg/st_ev_cfg.dart';
-import 'package:st_ev_cfg/util/all.dart';
-//
-// import 'full_ans_expect.dart';
+
+// import 'package:st_ev_cfg/util/all.dart';
+
 /*
   create every possible target and question type
   and see if correct derived question gets created
 
 */
 
-class AnswerFactory {
+typedef GendQuestPredictionCallback = void Function(
+  QID qid,
+  int unanswered,
+  int answered,
+);
+
+class PermTestAnswerFactory {
   /* produces CONSISTENT mock/dummy answers
     for all questions in the test (both manual and derrived)
 
+    also logs EXPECTED generated questions
+    back to the GenStatsCollector on the QCascadeDispatcher
+    so we can confirm everything is working
   */
-  AnswerFactory();
+  late GendQuestPredictionCallback _genPredictionCallback;
+  PermTestAnswerFactory();
 
   List<String> answerFor(QuestBase qb) {
+    int expectedUnanswered = 0;
+    int expectedAnswered = 0;
+
+    if (qb is RegionTargetQuest) {
+      /*  */
+    } else if (qb is RuleSelectQuest) {
+      /*  */
+    } else if (qb is RulePrepQuest) {
+      /*  */
+    }
+    // store how many derived questions SHOULD be produced
+    _genPredictionCallback(qb.questId, expectedUnanswered, expectedAnswered);
+    // return answers to set on quesion
     return ['0'];
+  }
+
+  void setExpectedGenPredictCallback(GendQuestPredictionCallback cb) {
+    _genPredictionCallback = cb;
   }
 }
 
@@ -30,7 +55,7 @@ class PermuteTest {
   // List<RegionTargetQuest> allTargets = [];
   // List<RuleSelectQuest> allRuleSelect = [];
   // List<RulePrepQuest> allRulePrep = [];
-  AnswerFactory answerFactory = AnswerFactory();
+  PermTestAnswerFactory answerFactory = PermTestAnswerFactory();
 
   PermuteTest() {
     // allTargets = Permute.buildPosibleTargetQuestsWithAnswers();
@@ -38,13 +63,21 @@ class PermuteTest {
     // allRulePrep = Permute.buildPosibleRuleRulePreQuestsWithAnswers();
   }
 
-  void testAllTargetDerived() {
-    //
-    List<RegionTargetQuest> allTargets =
+  void testAllTargetDerived(
+    QuestListMgr qlm,
+    QCascadeDispatcher qcd,
+  ) {
+    // predictionCallback allows the answer generator to say
+    // how many new questions should be produced by each question
+    answerFactory.setExpectedGenPredictCallback(
+      qcd.statsCollector.setExpectedGenPrediction,
+    );
+
+    List<RegionTargetQuest> allTargQuests =
         Permute.buildPosibleTargetQuestsUnanswered();
 
     // now set default answers on all these questions
-    for (RegionTargetQuest ptq in allTargets) {
+    for (RegionTargetQuest ptq in allTargQuests) {
       //
       List<String> answers = answerFactory.answerFor(ptq);
       ptq.setAllAnswersWhileTesting(answers);
@@ -53,9 +86,17 @@ class PermuteTest {
     // now all questions have answers
     // pass each quest to cascade-dispatch
     // and confirm proper # & type of questions created
+
+    // qlm.appendGeneratedQuestsAndAnswers(allTargQuests);
+    for (RegionTargetQuest questJustAnswered in allTargQuests) {
+      qcd.appendNewQuestsOrInsertImplicitAnswers(qlm, questJustAnswered);
+    }
   }
 
-  void testAllRuleSelectDerived() {
+  void testAllRuleSelectDerived(
+    QuestListMgr qlm,
+    QCascadeDispatcher qcd,
+  ) {
     //
     List<RuleSelectQuest> allRuleSelect =
         Permute.buildPossibleRuleSelectQuestsUnanswered();
@@ -66,9 +107,21 @@ class PermuteTest {
       List<String> answers = answerFactory.answerFor(ptq);
       ptq.setAllAnswersWhileTesting(answers);
     }
+
+    // now all questions have answers
+    // pass each quest to cascade-dispatch
+    // and confirm proper # & type of questions created
+
+    // qlm.appendGeneratedQuestsAndAnswers(allTargQuests);
+    for (RuleSelectQuest questJustAnswered in allRuleSelect) {
+      qcd.appendNewQuestsOrInsertImplicitAnswers(qlm, questJustAnswered);
+    }
   }
 
-  void testAllRulePrepDerived() {
+  void testAllRulePrepDerived(
+    QuestListMgr qlm,
+    QCascadeDispatcher qcd,
+  ) {
     //
     List<RulePrepQuest> allRulePrep =
         Permute.buildPosibleRulePrepQuestsUnanswered();
@@ -78,6 +131,15 @@ class PermuteTest {
       //
       List<String> answers = answerFactory.answerFor(ptq);
       ptq.setAllAnswersWhileTesting(answers);
+    }
+
+    // now all questions have answers
+    // pass each quest to cascade-dispatch
+    // and confirm proper # & type of questions created
+
+    // qlm.appendGeneratedQuestsAndAnswers(allTargQuests);
+    for (RulePrepQuest questJustAnswered in allRulePrep) {
+      qcd.appendNewQuestsOrInsertImplicitAnswers(qlm, questJustAnswered);
     }
   }
 }

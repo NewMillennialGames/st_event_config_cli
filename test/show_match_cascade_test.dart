@@ -38,7 +38,7 @@ void main() {
       questId: 'blahhh',
     );
 
-    final _qcd = QuestionCascadeDispatcher();
+    final _qcd = QCascadeDispatcher();
 
     int matchCount = 0;
     for (QuestMatcher qm in _qcd.allMatchersTestOnly) {

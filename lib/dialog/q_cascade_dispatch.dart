@@ -2,13 +2,14 @@ part of ConfigDialogRunner;
 
 const List<QuestMatcher> _EMPTY_LST = const [];
 
-class QuestionCascadeDispatcher {
+class QCascadeDispatcher {
   List<QuestMatcher> matchersToGenTargetingQuests;
   List<QuestMatcher> matchersToGenRuleSelectQuests;
   List<QuestMatcher> matchersToGenRulePrepQuests;
   List<QuestMatcher> matchersToGenRuleDetailQuests;
+  final GenStatsCollector statsCollector = GenStatsCollector();
 
-  QuestionCascadeDispatcher({
+  QCascadeDispatcher({
     this.matchersToGenTargetingQuests = _EMPTY_LST,
     this.matchersToGenRuleSelectQuests = _EMPTY_LST,
     this.matchersToGenRulePrepQuests = _EMPTY_LST,
@@ -49,6 +50,10 @@ class QuestionCascadeDispatcher {
       );
     }
 
+    // collect q-gen stats
+    statsCollector.startCounting(questListMgr, questJustAnswered);
+
+    // generate questions based on type of just answered
     if (questJustAnswered.isTopLevelEventConfigQuestion) {
       // matching question is about: which screens to config?
       // it carries a list of app-screens and generator below
@@ -64,7 +69,7 @@ class QuestionCascadeDispatcher {
         questListMgr,
         questJustAnswered,
       );
-      return;
+
       //
     } else if (questJustAnswered.isRegionTargetQuestion) {
       // target AREA questions created above (by isTopLevelEventConfigQuestion)
@@ -84,7 +89,6 @@ class QuestionCascadeDispatcher {
         questListMgr,
         questJustAnswered,
       );
-      return;
     } else if (questJustAnswered.isRuleSelectionQuestion) {
       // user has selected rule for area or slot
       print(
@@ -104,7 +108,6 @@ class QuestionCascadeDispatcher {
         questListMgr,
         questJustAnswered,
       );
-      return;
       //
     } else if (questJustAnswered.isRulePrepQuestion) {
       print(
@@ -116,20 +119,20 @@ class QuestionCascadeDispatcher {
         questListMgr,
         questJustAnswered,
       );
-      return;
     } else if (questJustAnswered.isVisRuleDetailQuestion) {
       // user has provided details for visual rule
       print(
         '\tvisual rule detail quest has been answered; no derived questions here',
       );
-      return;
     } else if (questJustAnswered.isBehRuleDetailQuestion) {
       // user has provided details for behavioral rule
       print(
         '\tbehavior rule detail quest has been answered; no derived questions here',
       );
-      return;
     }
+
+    // record how many new questions (both unanswered / pending and completed) were generated
+    statsCollector.collectPostGenTotals(questListMgr);
   }
 
   // begin static matchers lists
