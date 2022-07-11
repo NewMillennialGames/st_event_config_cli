@@ -34,44 +34,130 @@ void main() {
   /*
 
   */
-  bool setupCompleted = false;
-  var questCount = 0;
-  var addedQuestCount = 0;
+  // bool setupCompleted = false;
+  // var questCount = 0;
+  // var addedQuestCount = 0;
 
-  PermuteTest permute = PermuteTest();
-
-  QuestBase seedQuest = QuestBase.initialEventConfigRule(
-    QTargetResolution.forEvent(),
-    'Pick screens to config',
-    AppScreen.values.map((e) => e.name),
-    CaptureAndCast<List<AppScreen>>((qb, idx) => AppScreen.values),
-  );
-  QuestListMgr _questMgr = QuestListMgr([seedQuest]);
-  QCascadeDispatcher _qcd = QCascadeDispatcher();
+  late PermuteTest permute;
+  late QuestBase seedQuest;
+  late QuestListMgr _questMgr;
+  late QCascadeDispatcher _qcd;
 
   setUp(() {
-    if (setupCompleted) return;
+    //
+    permute = PermuteTest();
 
-    setupCompleted = true;
+    seedQuest = QuestBase.initialEventConfigRule(
+      QTargetResolution.forEvent(),
+      'Pick screens to config',
+      AppScreen.values.map((e) => e.name),
+      CaptureAndCast<List<AppScreen>>((qb, idx) => AppScreen.values),
+    );
+    _questMgr = QuestListMgr([seedQuest]);
+    _qcd = QCascadeDispatcher();
   });
 
-  group('check all derived', () {
+  group(
+      'check that derived questions are created properly from prior user answers',
+      () {
     test(
       'check derived from target answers',
       () {
+        assert(
+          _questMgr.pendingQuestionCount == 1,
+          'err: seemd setup did not re-init objects??',
+        );
         permute.testAllTargetDerived(_questMgr, _qcd);
+        List<PerQStats> compareVals = _qcd.statsCollector.getComparisonValues();
+
+        print(
+            '**** there were ${compareVals.length} questions in "testAllTargetDerived" test');
+        assert(
+          compareVals.length > 0,
+          'no questions created!!  testAllTargetDerived test invalid',
+        );
+
+        for (PerQStats pqs in compareVals) {
+          expect(
+            pqs.unansweredQsAdded,
+            pqs.unanswered.expected,
+            reason:
+                'QID: ${pqs.qid} was expected to create ${pqs.unanswered.expected} quests but actually created ${pqs.unansweredQsAdded}',
+          );
+
+          expect(
+            pqs.answeredQsAdded,
+            pqs.answered.expected,
+            reason:
+                'QID: ${pqs.qid} was expected to create ${pqs.answered.expected} quests but actually created ${pqs.answeredQsAdded}',
+          );
+        }
       },
     );
     test(
       'check derived from rule-select answers',
       () {
+        assert(
+          _questMgr.pendingQuestionCount == 1,
+          'err: seemd setup did not re-init objects??',
+        );
         permute.testAllRuleSelectDerived(_questMgr, _qcd);
+        List<PerQStats> compareVals = _qcd.statsCollector.getComparisonValues();
+
+        print(
+            '**** there were ${compareVals.length} questions in "testAllRuleSelectDerived" test');
+        assert(
+          compareVals.length > 0,
+          'no questions created!!  testAllRuleSelectDerived test invalid',
+        );
+
+        for (PerQStats pqs in compareVals) {
+          expect(
+            pqs.unansweredQsAdded,
+            pqs.unanswered.expected,
+            reason:
+                'QID: ${pqs.qid} was expected to create ${pqs.unanswered.expected} quests but actually created ${pqs.unansweredQsAdded}',
+          );
+
+          expect(
+            pqs.answeredQsAdded,
+            pqs.answered.expected,
+            reason:
+                'QID: ${pqs.qid} was expected to create ${pqs.answered.expected} quests but actually created ${pqs.answeredQsAdded}',
+          );
+        }
       },
     );
     test(
       'check derived from rule-prep answers',
       () {
+        assert(
+          _questMgr.pendingQuestionCount == 1,
+          'err: seemd setup did not re-init objects??',
+        );
         permute.testAllRulePrepDerived(_questMgr, _qcd);
+        List<PerQStats> compareVals = _qcd.statsCollector.getComparisonValues();
+        print(
+          '**** there were ${compareVals.length} questions in "testAllRulePrepDerived" test',
+        );
+        assert(compareVals.length > 0,
+            'no questions created!!  testAllRulePrepDerived test invalid');
+
+        for (PerQStats pqs in compareVals) {
+          expect(
+            pqs.unansweredQsAdded,
+            pqs.unanswered.expected,
+            reason:
+                'QID: ${pqs.qid} was expected to create ${pqs.unanswered.expected} quests but actually created ${pqs.unansweredQsAdded}',
+          );
+
+          expect(
+            pqs.answeredQsAdded,
+            pqs.answered.expected,
+            reason:
+                'QID: ${pqs.qid} was expected to create ${pqs.answered.expected} quests but actually created ${pqs.answeredQsAdded}',
+          );
+        }
       },
     );
   });

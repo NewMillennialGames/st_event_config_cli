@@ -1,15 +1,20 @@
 //
 import 'package:st_ev_cfg/st_ev_cfg.dart';
 
-// import 'package:st_ev_cfg/util/all.dart';
-
 /*
   create every possible target and question type
   and see if correct derived question gets created
 
+  primary risk to test failure (other than bugs)
+  is duplicate or ambiguous question-ID's
 */
 
 typedef GendQuestPredictionCallback = void Function(
+  /* a callback to allow PermTestAnswerFactory
+    to inform GenStatsCollector about how many
+    new questions should be generated off of each
+    answered question
+  */
   QID qid,
   int unanswered,
   int answered,
@@ -27,23 +32,37 @@ class PermTestAnswerFactory {
   PermTestAnswerFactory();
 
   List<String> answerFor(QuestBase qb) {
-    int expectedUnanswered = 0;
-    int expectedAnswered = 0;
+    /* currently only sending 1 answer to all questions
+      which implies they should only create ONE
+      derived generated question
+    */
+    int expectToGenUnanswered = 0;
+    int expectToGenAnswered = 0;
+
+    List<String> userAnswers = ['0'];
 
     if (qb is RegionTargetQuest) {
       /*  */
+      expectToGenUnanswered = 1;
     } else if (qb is RuleSelectQuest) {
       /*  */
+      expectToGenUnanswered = 1;
     } else if (qb is RulePrepQuest) {
       /*  */
+      expectToGenUnanswered = 1;
     }
     // store how many derived questions SHOULD be produced
-    _genPredictionCallback(qb.questId, expectedUnanswered, expectedAnswered);
+    _genPredictionCallback(
+      qb.questId,
+      expectToGenUnanswered,
+      expectToGenAnswered,
+    );
     // return answers to set on quesion
-    return ['0'];
+    return userAnswers;
   }
 
   void setExpectedGenPredictCallback(GendQuestPredictionCallback cb) {
+    // function from GenStatsCollector
     _genPredictionCallback = cb;
   }
 }
@@ -97,6 +116,11 @@ class PermuteTest {
     QuestListMgr qlm,
     QCascadeDispatcher qcd,
   ) {
+    // predictionCallback allows the answer generator to say
+    // how many new questions should be produced by each question
+    answerFactory.setExpectedGenPredictCallback(
+      qcd.statsCollector.setExpectedGenPrediction,
+    );
     //
     List<RuleSelectQuest> allRuleSelect =
         Permute.buildPossibleRuleSelectQuestsUnanswered();
@@ -122,6 +146,11 @@ class PermuteTest {
     QuestListMgr qlm,
     QCascadeDispatcher qcd,
   ) {
+    // predictionCallback allows the answer generator to say
+    // how many new questions should be produced by each question
+    answerFactory.setExpectedGenPredictCallback(
+      qcd.statsCollector.setExpectedGenPrediction,
+    );
     //
     List<RulePrepQuest> allRulePrep =
         Permute.buildPosibleRulePrepQuestsUnanswered();

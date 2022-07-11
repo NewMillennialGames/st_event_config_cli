@@ -25,9 +25,14 @@ class StatChange {
   int start = 0;
   int end = 0;
 
+  // expected & actual are fields for testing
+  int expected = -1;
+
   StatChange({this.changeType = QGenChngType.unanswered});
 
   int get generatedQuestionCount => end - start;
+  // for testing
+  int get actual => end;
 
   // void update(StatChange sc) {
   //   // NIU
@@ -131,22 +136,23 @@ class GenStatsCollector {
     return _genStats[qid] ?? PerQStats(qid);
   }
 
-  void validateResults() {
+  List<PerQStats> getComparisonValues() {
     /* compare actual to expected
     to validate test results
     */
+
+    List<PerQStats> compareVals = [];
+
     for (MapEntry<QID, GenPrediction> entry in _predictedGenCount.entries) {
       GenPrediction expected = entry.value;
       QID qid = entry.key;
-      PerQStats? actual = _genStats[qid];
-      if (actual == null) {
-        // log error
-        continue;
-      }
-
-      if (actual.unansweredQsAdded != expected.unanswered) {}
-
-      if (actual.answeredQsAdded != expected.answered) {}
+      PerQStats actualStats = _genStats[qid] ?? PerQStats(qid);
+      // copy expected values to inst
+      actualStats.unanswered.expected = expected.unanswered;
+      actualStats.answered.expected = expected.answered;
+      compareVals.add(actualStats);
     }
+
+    return compareVals;
   }
 }
