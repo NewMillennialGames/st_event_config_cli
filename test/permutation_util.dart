@@ -105,8 +105,6 @@ class PermuteTest {
     // now all questions have answers
     // pass each quest to cascade-dispatch
     // and confirm proper # & type of questions created
-
-    // qlm.appendGeneratedQuestsAndAnswers(allTargQuests);
     for (RegionTargetQuest questJustAnswered in allTargQuests) {
       qcd.appendNewQuestsOrInsertImplicitAnswers(qlm, questJustAnswered);
     }
@@ -135,8 +133,6 @@ class PermuteTest {
     // now all questions have answers
     // pass each quest to cascade-dispatch
     // and confirm proper # & type of questions created
-
-    // qlm.appendGeneratedQuestsAndAnswers(allTargQuests);
     for (RuleSelectQuest questJustAnswered in allRuleSelect) {
       qcd.appendNewQuestsOrInsertImplicitAnswers(qlm, questJustAnswered);
     }
@@ -156,17 +152,15 @@ class PermuteTest {
         Permute.buildPosibleRulePrepQuestsUnanswered();
 
     // now set default answers on all these questions
-    for (RulePrepQuest ptq in allRulePrep) {
+    for (RulePrepQuest rpq in allRulePrep) {
       //
-      List<String> answers = answerFactory.answerFor(ptq);
-      ptq.setAllAnswersWhileTesting(answers);
+      List<String> answers = answerFactory.answerFor(rpq);
+      rpq.setAllAnswersWhileTesting(answers);
     }
 
     // now all questions have answers
     // pass each quest to cascade-dispatch
     // and confirm proper # & type of questions created
-
-    // qlm.appendGeneratedQuestsAndAnswers(allTargQuests);
     for (RulePrepQuest questJustAnswered in allRulePrep) {
       qcd.appendNewQuestsOrInsertImplicitAnswers(qlm, questJustAnswered);
     }

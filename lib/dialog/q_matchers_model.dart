@@ -37,15 +37,14 @@ class QMatchCollection {
     //
     if (questJustAnswered.questId !=
         questListMgr.currentOrLastQuestion.questId) {
-      // not sure if this is a real problem or not?
-      print(
-        'Warning:  current quest idx was moved during this process',
-      );
+      // happens durring testing; not sure if this is a real problem or not?
+      // print(
+      //   'Warning:  current quest idx was moved during this process',
+      // );
     }
     // print(
     //   'comparing "${questJustAnswered.questId}" to ${_matcherList.length} matchers for new quests',
     // );
-    int matchCount = 0;
     List<QuestMatcher> _foundQmatchers = [];
     List<QuestBase> newGendPendingQuests = []; // generated questions
     for (QuestMatcher curQuestMatcher in _matcherList) {
@@ -57,19 +56,20 @@ class QMatchCollection {
             questJustAnswered,
           ),
         );
-        matchCount += 1;
       }
     }
     questListMgr.appendGeneratedQuestsAndAnswers(newGendPendingQuests);
 
-    // print(
-    //   '*** appendNewQuestsOrInsertImplicitAnswers found $matchCount QuestMatchers for ${questJustAnswered.questId}',
-    // );
-    _foundQmatchers.forEach((qm) {
-      print('\nScreen: ');
-      print(questJustAnswered.appScreen.name);
-      print('\t\t' + qm.matcherDescrip);
-    });
+    if (_foundQmatchers.length < 1) {
+      print(
+        '*** appendNewQuestsOrInsertImplicitAnswers found ${_foundQmatchers.length} QuestMatchers for ${questJustAnswered.questId}',
+      );
+    }
+    // _foundQmatchers.forEach((qm) {
+    //   print('\nScreen: ');
+    //   print(questJustAnswered.appScreen.name);
+    //   print('\t\t' + qm.matcherDescrip);
+    // });
   }
 
   // testing below

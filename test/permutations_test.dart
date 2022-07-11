@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:test/test.dart';
 //
 import 'package:st_ev_cfg/st_ev_cfg.dart';
@@ -30,14 +29,10 @@ the answer for THIS TEST RUN
 that will allow us to 
 */
 
+const SKIP_SOME_TESTS = true;
+
 void main() {
-  /*
-
-  */
-  // bool setupCompleted = false;
-  // var questCount = 0;
-  // var addedQuestCount = 0;
-
+  /* - */
   late PermuteTest permute;
   late QuestBase seedQuest;
   late QuestListMgr _questMgr;
@@ -49,10 +44,13 @@ void main() {
 
     seedQuest = QuestBase.initialEventConfigRule(
       QTargetResolution.forEvent(),
-      'Pick screens to config',
+      'Select app screens to config',
       AppScreen.values.map((e) => e.name),
       CaptureAndCast<List<AppScreen>>((qb, idx) => AppScreen.values),
     );
+
+    // select 1st 3 screens
+    seedQuest.setAllAnswersWhileTesting(['0,1,2']);
     _questMgr = QuestListMgr([seedQuest]);
     _qcd = QCascadeDispatcher();
   });
@@ -65,7 +63,7 @@ void main() {
       () {
         assert(
           _questMgr.pendingQuestionCount == 1,
-          'err: seemd setup did not re-init objects??',
+          'err: seemed setup did not re-init objects??',
         );
         permute.testAllTargetDerived(_questMgr, _qcd);
         List<PerQStats> compareVals = _qcd.statsCollector.getComparisonValues();
@@ -93,13 +91,14 @@ void main() {
           );
         }
       },
+      skip: false,
     );
     test(
       'check derived from rule-select answers',
       () {
         assert(
           _questMgr.pendingQuestionCount == 1,
-          'err: seemd setup did not re-init objects??',
+          'err: seemed setup did not re-init objects??',
         );
         permute.testAllRuleSelectDerived(_questMgr, _qcd);
         List<PerQStats> compareVals = _qcd.statsCollector.getComparisonValues();
@@ -127,13 +126,14 @@ void main() {
           );
         }
       },
+      skip: SKIP_SOME_TESTS,
     );
     test(
       'check derived from rule-prep answers',
       () {
         assert(
           _questMgr.pendingQuestionCount == 1,
-          'err: seemd setup did not re-init objects??',
+          'err: seemed setup did not re-init objects??',
         );
         permute.testAllRulePrepDerived(_questMgr, _qcd);
         List<PerQStats> compareVals = _qcd.statsCollector.getComparisonValues();
@@ -159,6 +159,7 @@ void main() {
           );
         }
       },
+      skip: SKIP_SOME_TESTS,
     );
   });
 }
