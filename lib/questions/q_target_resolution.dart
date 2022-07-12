@@ -1,5 +1,7 @@
 part of QuestionsLib;
 
+typedef IntRange = Tuple2<int, int>;
+
 enum TargetPrecision {
   // describes the INTENT of a QTargetResolution instance
   // QTargetResolution instance is embedded in a
@@ -118,6 +120,53 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
         precisionScore +
         visRuleScore +
         behRuleScore;
+  }
+
+  IntRange get userRespCountRangeForTest {
+    /*  only for testing
+      return range 1 to max possible answers user could
+      select for prompt #1 of this question
+      ==
+      reasonable # of auto-answers for test framework to generate
+
+      # of answers on TOP-LEVEL (first) prompt
+      generally dictates HOW MANY derived questions will
+      be generated
+    */
+    switch (precision) {
+      case TargetPrecision.eventLevel:
+        return IntRange(1, 1);
+      case TargetPrecision.screenLevel:
+        return IntRange(
+          1,
+          AppScreen.eventConfiguration.topConfigurableScreens.length,
+        );
+      case TargetPrecision.targetLevel:
+        return IntRange(1, this._possibleTargetSubChoices.length);
+      case TargetPrecision.ruleSelect:
+        return IntRange(1, possibleRulesAtAnyTarget.length);
+      case TargetPrecision.rulePrep:
+        return IntRange(1, visRuleTypeForAreaOrSlot!.requPrepQuests.length);
+      case TargetPrecision.ruleDetailVisual:
+        return IntRange(
+          1,
+          visRuleTypeForAreaOrSlot!.requRuleDetailCfgQuests.length,
+        );
+      case TargetPrecision.ruleDetailBehavior:
+        return IntRange(1, 1);
+    }
+  }
+
+  Iterable<dynamic> get _possibleTargetSubChoices {
+    // only valid when precision == TargetPrecision.targetLevel
+    // aka NO RULE SET yet
+    assert(
+        isPartOfTargetCompletionQuestion, 'reading from an invalid instance');
+    if (screenWidgetArea == null) return possibleAreasForScreen;
+    if (slotInArea == null) return possibleSlotsForAreaInScreen;
+    // if (visRuleTypeForAreaOrSlot == null) return possibleRulesAtAnyTarget;
+    // if (behRuleTypeForAreaOrSlot == null) return possibleRulesAtAnyTarget;
+    return [1];
   }
 
   QuestFactorytSignature get derivedNewQuestSignature =>

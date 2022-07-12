@@ -271,6 +271,14 @@ abstract class QuestBase with EquatableMixin {
   }
 
   // getters
+  /* userRespCountRangeForTest
+  reflects the REASONABLE / ALLOWED
+  range of choices the user may pick
+  from FIRST PROMOT of current question
+  */
+  IntRange get userRespCountRangeForTest =>
+      qTargetResolution.userRespCountRangeForTest;
+
   List<VisRuleQuestType> get embeddedQuestTypes =>
       qPromptCollection.embeddedQuestTypes;
 
@@ -303,7 +311,7 @@ abstract class QuestBase with EquatableMixin {
   bool get isRuleSelectionQuestion => this is RuleSelectQuest;
   bool get isRulePrepQuestion => this is RulePrepQuest;
   // rule level
-  bool get isRuleDetailQuestion => this is UiFactoryRuleBase; // controls export
+  bool get isRuleDetailQuestion => this is RuleQuestBaseAbs; // controls export
   bool get isVisRuleDetailQuestion => this is VisualRuleDetailQuest;
   bool get isBehRuleDetailQuestion => this is BehaveRuleDetailQuest;
 
@@ -474,14 +482,14 @@ class RulePrepQuest extends QuestBase {
       : QuestBase.visualRuleDetailQuest;
 }
 
-abstract class UiFactoryRuleBase extends QuestBase {
+abstract class RuleQuestBaseAbs extends QuestBase {
   /* these questions form the end of the dialog chain
     they capture all the details required to fully
     configure one complete rule for the ui-factory-builder
     their answers DO NOT generate new questions
     they simply get converted to JSON for each intended event
   */
-  UiFactoryRuleBase(
+  RuleQuestBaseAbs(
     QTargetResolution qTargetIntent,
     QPromptCollection qDefCollection, {
     String? questId,
@@ -508,7 +516,7 @@ abstract class UiFactoryRuleBase extends QuestBase {
   }
 }
 
-class VisualRuleDetailQuest extends UiFactoryRuleBase {
+class VisualRuleDetailQuest extends RuleQuestBaseAbs {
   /*  ui-factory visual rules
   */
   VisualRuleDetailQuest(
@@ -523,7 +531,7 @@ class VisualRuleDetailQuest extends UiFactoryRuleBase {
   }
 }
 
-class BehaveRuleDetailQuest extends UiFactoryRuleBase {
+class BehaveRuleDetailQuest extends RuleQuestBaseAbs {
   /*  ui-factory behavioral rules
   */
   BehaveRuleDetailQuest(

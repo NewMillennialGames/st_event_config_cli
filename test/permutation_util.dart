@@ -1,3 +1,4 @@
+import 'dart:math';
 //
 import 'package:st_ev_cfg/st_ev_cfg.dart';
 import 'package:st_ev_cfg/config/all.dart';
@@ -8,6 +9,8 @@ import 'package:st_ev_cfg/config/all.dart';
   primary risk to test failure (other than bugs)
   is duplicate or ambiguous question-ID's
 */
+
+var randGen = Random();
 
 typedef GendQuestPredictionCallback = void Function(
   /* a callback to allow PermTestAnswerFactory
@@ -31,37 +34,51 @@ class PermTestAnswerFactory {
   late GendQuestPredictionCallback _genPredictionCallback;
   PermTestAnswerFactory();
 
-  List<String> answerFor(QuestBase qb) {
+  void appendRandomAnswers(QuestBase qb) {
     /* currently only sending 1 answer to all questions
       which implies they should only create ONE
       derived generated question
     */
-    int expectToGenUnanswered = 0;
+    assert(!qb.isFullyAnswered, 'oops!');
+    IntRange firstPromptUserChoiceAllowedRange = qb.userRespCountRangeForTest;
+
+    int _maxUserResponses = firstPromptUserChoiceAllowedRange.item2 + 1;
+    // reduce max to some rand mid-value > zero
+    int expectToGenUnanswered = randGen.nextInt(_maxUserResponses) + 1;
     int expectToGenAnswered = 0;
 
-    List<String> userAnswers = ['0'];
+    print(
+      '_maxUserResponses: $_maxUserResponses, expectToGenUnanswered: $expectToGenUnanswered',
+    );
 
-    if (qb is RegionTargetQuest) {
-      /*  */
-      expectToGenUnanswered = 1;
-      if (qb.questId.startsWith(QuestionIdStrings.specAreasToConfigOnScreen)) {
-        expectToGenUnanswered = 2;
-      }
-    } else if (qb is RuleSelectQuest) {
-      /*  */
-      expectToGenUnanswered = 1;
-    } else if (qb is RulePrepQuest) {
-      /*  */
-      expectToGenUnanswered = 1;
-    }
+    // random always picks up the low numbers
+    List<String> userAnsLst = List.generate(
+      expectToGenUnanswered,
+      (index) => index.toString(),
+    );
+
+    // if (qb is RegionTargetQuest) {
+    //   /*  */
+    //   // expectToGenUnanswered = 1;
+    //   // if (qb.questId.startsWith(QuestionIdStrings.specAreasToConfigOnScreen)) {
+    //   //   expectToGenUnanswered = 2;
+    //   // }
+    // } else if (qb is RuleSelectQuest) {
+    //   /*  */
+    // } else if (qb is RulePrepQuest) {
+    //   /*  */
+    // }
+
     // store how many derived questions SHOULD be produced
+    // based on user answers
     _genPredictionCallback(
       qb.questId,
       expectToGenUnanswered,
       expectToGenAnswered,
     );
-    // return answers to set on quesion
-    return userAnswers;
+
+    String _ansStr = userAnsLst.reduce((full, one) => full + ',' + one);
+    qb.setAllAnswersWhileTesting([_ansStr]);
   }
 
   void setExpectedGenPredictCallback(GendQuestPredictionCallback cb) {
@@ -103,8 +120,7 @@ class PermuteTest {
     // now set default answers on all these questions
     for (RegionTargetQuest ptq in allTargQuests) {
       //
-      List<String> answers = answerFactory.answerFor(ptq);
-      ptq.setAllAnswersWhileTesting(answers);
+      answerFactory.appendRandomAnswers(ptq);
     }
 
     // now all questions have answers
@@ -131,8 +147,7 @@ class PermuteTest {
     // now set default answers on all these questions
     for (RuleSelectQuest ptq in allRuleSelect) {
       //
-      List<String> answers = answerFactory.answerFor(ptq);
-      ptq.setAllAnswersWhileTesting(answers);
+      answerFactory.appendRandomAnswers(ptq);
     }
 
     // now all questions have answers
@@ -159,8 +174,7 @@ class PermuteTest {
     // now set default answers on all these questions
     for (RulePrepQuest rpq in allRulePrep) {
       //
-      List<String> answers = answerFactory.answerFor(rpq);
-      rpq.setAllAnswersWhileTesting(answers);
+      answerFactory.appendRandomAnswers(rpq);
     }
 
     // now all questions have answers

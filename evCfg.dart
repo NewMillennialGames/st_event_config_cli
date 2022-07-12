@@ -43,7 +43,7 @@ void createOutputFileFromResponses(
   //
   List<EventLevelCfgQuest> eventConfigLevelData =
       questListMgr.exportableTopLevelQuestions.toList();
-  List<UiFactoryRuleBase> exportableRuleQuestions =
+  List<RuleQuestBaseAbs> exportableRuleQuestions =
       questListMgr.exportableRuleQuestions.toList();
 
   print(

@@ -31,8 +31,8 @@ class QuestListMgr {
   }
 
   //
-  Iterable<UiFactoryRuleBase> get exportableRuleQuestions =>
-      _allAnsweredQuestions.whereType<UiFactoryRuleBase>();
+  Iterable<RuleQuestBaseAbs> get exportableRuleQuestions =>
+      _allAnsweredQuestions.whereType<RuleQuestBaseAbs>();
 
   Iterable<EventLevelCfgQuest> get exportableTopLevelQuestions =>
       _allAnsweredQuestions.whereType<EventLevelCfgQuest>();
