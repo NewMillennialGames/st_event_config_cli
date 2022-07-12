@@ -44,6 +44,9 @@ class PermTestAnswerFactory {
     if (qb is RegionTargetQuest) {
       /*  */
       expectToGenUnanswered = 1;
+      if (qb.questId.startsWith(QuestionIdStrings.specAreasToConfigOnScreen)) {
+        expectToGenUnanswered = 2;
+      }
     } else if (qb is RuleSelectQuest) {
       /*  */
       expectToGenUnanswered = 1;
@@ -250,7 +253,9 @@ class Permute {
         RegionTargetQuest(
           qtr,
           QPromptCollection.pickAreasForScreen(qtr.appScreen),
-          questId: QuestionIdStrings.specAreasToConfigOnScreen,
+          questId: QuestionIdStrings.specAreasToConfigOnScreen +
+              '-' +
+              qtr.targetPath,
         ),
       );
     }
@@ -278,7 +283,9 @@ class Permute {
         RegionTargetQuest(
           areaQtr,
           prompts,
-          questId: QuestionIdStrings.specSlotsToConfigInArea,
+          questId: QuestionIdStrings.specSlotsToConfigInArea +
+              '-' +
+              areaQtr.targetPath,
         ),
       );
     }
@@ -318,7 +325,9 @@ class Permute {
         RuleSelectQuest(
           areaQtr,
           prompts,
-          questId: QuestionIdStrings.specRulesForSlotInArea,
+          questId: QuestionIdStrings.specRulesForSlotInArea +
+              '-' +
+              areaQtr.targetPath,
         ),
       );
     }
@@ -373,7 +382,8 @@ class Permute {
         RulePrepQuest(
           areaQtr,
           prompts,
-          questId: QuestionIdStrings.prepQuestForVisRule,
+          questId:
+              QuestionIdStrings.prepQuestForVisRule + '-' + areaQtr.targetPath,
         ),
       );
     }
