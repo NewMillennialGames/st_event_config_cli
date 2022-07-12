@@ -69,7 +69,8 @@ class QuestListMgr {
         .matchingPromptsWhere((qpi) => qpi.asksWhichScreensToConfig);
 
     List<AppScreen> uss =
-        (matchingPrompts.first.userAnswers.cast(currentOrLastQuestion) ?? []);
+        (matchingPrompts.first.userRespConverter.cast(currentOrLastQuestion) ??
+            []);
 
     print('userSelectedScreens has ${uss.length} items');
     return uss;
@@ -80,7 +81,7 @@ class QuestListMgr {
     Iterable<QuestPromptInstance> matchingPrompts = _allAnsweredQuestions
         .where((q) => q.appScreen == as)
         .matchingPromptsWhere((qpi) => qpi.asksWhichAreasOfScreenToConfig);
-    return matchingPrompts.first.userAnswers.cast(currentOrLastQuestion);
+    return matchingPrompts.first.userRespConverter.cast(currentOrLastQuestion);
   }
 
   Map<AppScreen, List<ScreenWidgetArea>> get screenAreasPerScreen {
@@ -124,7 +125,7 @@ class QuestListMgr {
     Iterable<QuestPromptInstance> matchingPrompts = _allAnsweredQuestions
         .where((q) => q.appScreen == as && q.screenWidgetArea == area)
         .matchingPromptsWhere((qpi) => qpi.asksWhichAreasOfScreenToConfig);
-    return matchingPrompts.first.userAnswers.cast(currentOrLastQuestion);
+    return matchingPrompts.first.userRespConverter.cast(currentOrLastQuestion);
 
     // return _allAnsweredQuest2s
     //     .whereType<Quest2<String, List<ScreenAreaWidgetSlot>>>()

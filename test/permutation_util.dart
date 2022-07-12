@@ -1,6 +1,6 @@
 //
 import 'package:st_ev_cfg/st_ev_cfg.dart';
-
+import 'package:st_ev_cfg/config/all.dart';
 /*
   create every possible target and question type
   and see if correct derived question gets created
@@ -71,16 +71,18 @@ class PermuteTest {
   /*  contains data and logic to
     execute all our tests
   */
+
+  PermTestAnswerFactory answerFactory = PermTestAnswerFactory();
+
+  PermuteTest();
   // List<RegionTargetQuest> allTargets = [];
   // List<RuleSelectQuest> allRuleSelect = [];
   // List<RulePrepQuest> allRulePrep = [];
-  PermTestAnswerFactory answerFactory = PermTestAnswerFactory();
-
-  PermuteTest() {
-    // allTargets = Permute.buildPosibleTargetQuestsWithAnswers();
-    // allRuleSelect = Permute.buildPossibleRuleSelectQuestsWithAnswers();
-    // allRulePrep = Permute.buildPosibleRuleRulePreQuestsWithAnswers();
-  }
+  //  {
+  //   allTargets = Permute.buildPosibleTargetQuestsWithAnswers();
+  //   allRuleSelect = Permute.buildPossibleRuleSelectQuestsWithAnswers();
+  //   allRulePrep = Permute.buildPosibleRuleRulePreQuestsWithAnswers();
+  // }
 
   void testAllTargetDerived(
     QuestListMgr qlm,
@@ -248,6 +250,7 @@ class Permute {
         RegionTargetQuest(
           qtr,
           QPromptCollection.pickAreasForScreen(qtr.appScreen),
+          questId: QuestionIdStrings.specAreasToConfigOnScreen,
         ),
       );
     }
@@ -268,8 +271,16 @@ class Permute {
     for (QTargetResolution areaQtr in _allQtrWithAreaOnly) {
       //
       QPromptCollection prompts = QPromptCollection.selectTargetSlotsInArea(
-          areaQtr.appScreen, areaQtr.screenWidgetArea!);
-      regTargetQuests.add(RegionTargetQuest(areaQtr, prompts));
+        areaQtr.appScreen,
+        areaQtr.screenWidgetArea!,
+      );
+      regTargetQuests.add(
+        RegionTargetQuest(
+          areaQtr,
+          prompts,
+          questId: QuestionIdStrings.specSlotsToConfigInArea,
+        ),
+      );
     }
     return regTargetQuests;
   }
@@ -285,7 +296,10 @@ class Permute {
     // convert all target QTR to ruleSelect precision
     List<QTargetResolution> _allQtrAsRuleSelect = _allTarg
         .map<QTargetResolution>(
-            (e) => e.copyWith(precision: TargetPrecision.ruleSelect))
+          (e) => e.copyWith(
+            precision: TargetPrecision.ruleSelect,
+          ),
+        )
         .toList();
 
     // keep recs where target IS SET complete
@@ -300,7 +314,13 @@ class Permute {
       //
       QPromptCollection prompts =
           QPromptCollection.selectRulesForTarget(areaQtr);
-      ruleSelectQuests.add(RuleSelectQuest(areaQtr, prompts));
+      ruleSelectQuests.add(
+        RuleSelectQuest(
+          areaQtr,
+          prompts,
+          questId: QuestionIdStrings.specRulesForSlotInArea,
+        ),
+      );
     }
     return ruleSelectQuests;
   }
@@ -349,7 +369,13 @@ class Permute {
       //
       QPromptCollection prompts =
           QPromptCollection.forRulePrepQuestion(areaQtr);
-      rulePrepQuests.add(RulePrepQuest(areaQtr, prompts));
+      rulePrepQuests.add(
+        RulePrepQuest(
+          areaQtr,
+          prompts,
+          questId: QuestionIdStrings.prepQuestForVisRule,
+        ),
+      );
     }
     return rulePrepQuests;
   }

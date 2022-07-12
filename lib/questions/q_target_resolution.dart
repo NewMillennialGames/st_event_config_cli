@@ -47,6 +47,13 @@ extension TargetPrecisionExt1 on TargetPrecision {
         return QuestBase.behaveRuleDetailQuest;
     }
   }
+
+  QuestFactorytSignature get derivedNewQuestSignature {
+    // returns constructor for DERIVED question of this
+    // enclosing QTargetResolution
+    TargetPrecision nextTp = TargetPrecision.values[this.index + 1];
+    return nextTp.enclosingNewQuestSignature;
+  }
 }
 
 @freezed
@@ -113,6 +120,9 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
         behRuleScore;
   }
 
+  QuestFactorytSignature get derivedNewQuestSignature =>
+      precision.derivedNewQuestSignature;
+
   bool get isPartOfTargetCompletionQuestion =>
       precision.isPartOfTargetCompletionQuestion;
   bool get targetComplete => precision.targetComplete || slotInArea != null;
@@ -151,16 +161,16 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
       visRuleTypeForAreaOrSlot == null &&
       behRuleTypeForAreaOrSlot == null;
 
-  bool get _requiresRulePrepQuestion =>
+  bool get _targetRequiresRulePrepQuestion =>
       (screenWidgetArea?.requiresPrepQuestion ?? false) ||
       (slotInArea?.requiresPrepQuestion ?? false);
 
   bool get requiresVisRulePrepQuestion =>
-      _requiresRulePrepQuestion ||
+      _targetRequiresRulePrepQuestion ||
       (visRuleTypeForAreaOrSlot?.requiresVisRulePrepQuestion ?? false);
 
   bool get requiresBehRulePrepQuestion =>
-      _requiresRulePrepQuestion ||
+      _targetRequiresRulePrepQuestion ||
       (behRuleTypeForAreaOrSlot?.requiresRulePrepQuestion ?? false);
 
   List<ScreenWidgetArea> get possibleAreasForScreen =>

@@ -45,7 +45,17 @@ abstract class QuestBase with EquatableMixin {
     this.qPromptCollection, {
     String? questId,
     this.helpMsgOnError,
-  }) : questId = questId == null ? qTargetResolution.equatableKey : questId;
+  }) : questId = questId == null
+            ? (qTargetResolution.targetPath + qTargetResolution.equatableKey)
+            : questId {
+    // confirm that our derived quest signatures
+    // line up and make sense
+    // assert(
+    //   qTargetResolution.derivedNewQuestSignature ==
+    //       this.derivedQuestConstructor,
+    //   'Err: something out of line!!',
+    // );
+  }
 
   // constructors with common QuestFactorytSignature
   // called by a DerivedQuestGenerator<PriorAnsType>
@@ -402,7 +412,7 @@ class RegionTargetQuest extends QuestBase {
     );
   }
 
-  @override
+  @override // && !qTargetResolution.targetComplete
   QRespCascadePatternEm get respCascadePatternEm => _areaAlreadySet
       ? QRespCascadePatternEm.respCreatesWhichSlotOfAreaQuestions
       : QRespCascadePatternEm.respCreatesWhichAreaInScreenQuestions;

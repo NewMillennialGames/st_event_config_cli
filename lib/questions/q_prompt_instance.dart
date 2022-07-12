@@ -46,7 +46,7 @@ class QuestPromptInstance<T> implements QPromptIfc {
       answChoiceCollection.answerOptions;
   // end QPromptIfc impl
 
-  CaptureAndCast<T> get userAnswers => _answerRepoAndTypeCast;
+  CaptureAndCast<T> get userRespConverter => _answerRepoAndTypeCast;
   bool get asksWhichScreensToConfig =>
       _answerRepoAndTypeCast.asksWhichScreensToConfig;
   bool get asksWhichAreasOfScreenToConfig =>

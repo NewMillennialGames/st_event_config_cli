@@ -1,7 +1,7 @@
 import 'package:test/test.dart';
 //
 import 'package:st_ev_cfg/st_ev_cfg.dart';
-import 'package:st_ev_cfg/util/all.dart';
+import 'package:st_ev_cfg/config/all.dart';
 //
 import 'permutation_util.dart';
 /*  Summary:
@@ -47,6 +47,7 @@ void main() {
       'Select app screens to config',
       AppScreen.values.map((e) => e.name),
       CaptureAndCast<List<AppScreen>>((qb, idx) => AppScreen.values),
+      questId: QuestionIdStrings.selectAppScreens,
     );
 
     // select 1st 3 screens
@@ -66,7 +67,8 @@ void main() {
           'err: seemed setup did not re-init objects??',
         );
         permute.testAllTargetDerived(_questMgr, _qcd);
-        List<PerQStats> compareVals = _qcd.statsCollector.getComparisonValues();
+        List<PerQStats> compareVals =
+            _qcd.statsCollector.getTestComparisonValues();
 
         print(
             '**** there were ${compareVals.length} questions in "testAllTargetDerived" test');
@@ -101,7 +103,8 @@ void main() {
           'err: seemed setup did not re-init objects??',
         );
         permute.testAllRuleSelectDerived(_questMgr, _qcd);
-        List<PerQStats> compareVals = _qcd.statsCollector.getComparisonValues();
+        List<PerQStats> compareVals =
+            _qcd.statsCollector.getTestComparisonValues();
 
         print(
             '**** there were ${compareVals.length} questions in "testAllRuleSelectDerived" test');
@@ -136,7 +139,8 @@ void main() {
           'err: seemed setup did not re-init objects??',
         );
         permute.testAllRulePrepDerived(_questMgr, _qcd);
-        List<PerQStats> compareVals = _qcd.statsCollector.getComparisonValues();
+        List<PerQStats> compareVals =
+            _qcd.statsCollector.getTestComparisonValues();
         print(
           '**** there were ${compareVals.length} questions in "testAllRulePrepDerived" test',
         );

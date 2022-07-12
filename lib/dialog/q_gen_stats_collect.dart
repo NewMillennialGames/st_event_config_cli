@@ -136,7 +136,7 @@ class GenStatsCollector {
     return _genStats[qid] ?? PerQStats(qid);
   }
 
-  List<PerQStats> getComparisonValues() {
+  List<PerQStats> getTestComparisonValues() {
     /* compare actual to expected
     to validate test results
     */

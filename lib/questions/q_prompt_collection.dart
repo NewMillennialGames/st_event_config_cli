@@ -94,6 +94,8 @@ class QPromptCollection {
     List<ScreenAreaWidgetSlot> configurableSlots = swa.applicableWigetSlots(as);
 
     List<ScreenAreaWidgetSlot> _castAnswer(QuestBase qb, String lstAreaIdxs) {
+      //
+      if (configurableSlots.isEmpty) return [];
       return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
           .map(
             (i) => configurableSlots[i],
