@@ -54,7 +54,7 @@ class CompetitorImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Image.network(
       imgUrl,
-      height: imgSize,
+      height: imgSize * 1.2,
       width: imgSize,
       fit: BoxFit.cover,
       errorBuilder: (context, error, stackTrace) => const Icon(
@@ -106,7 +106,7 @@ class TradeButton extends ConsumerWidget {
               child: Text(
                 StStrings.tradeUc,
                 // tf.labelForState(status),
-                style: StTextStyles.h6,
+                style: StTextStyles.h6.copyWith(color: StColors.lightGreen),
                 textAlign: TextAlign.center,
               ),
             )
