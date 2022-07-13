@@ -142,11 +142,20 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
           AppScreen.eventConfiguration.topConfigurableScreens.length,
         );
       case TargetPrecision.targetLevel:
-        return IntRange(1, this._possibleTargetSubChoices.length);
+        int subTargetChoiceCnt = this._possibleTargetSubChoices.length;
+        return IntRange(subTargetChoiceCnt > 0 ? 1 : 0, subTargetChoiceCnt);
+
+      // int curTargetRuleCnt = this.possibleRulesAtAnyTarget.length;
+      // int tot = subTargetChoiceCnt + curTargetRuleCnt;
+      // return IntRange(tot > 0 ? 1 : 0, tot);
+
       case TargetPrecision.ruleSelect:
         return IntRange(1, possibleRulesAtAnyTarget.length);
       case TargetPrecision.rulePrep:
-        return IntRange(1, visRuleTypeForAreaOrSlot!.requPrepQuests.length);
+        // asking answer count;  not prompt count:  visRuleTypeForAreaOrSlot!.requPrepQuests.length
+        return IntRange(1, 1);
+
+      // below here DO NOT produce derived questions
       case TargetPrecision.ruleDetailVisual:
         return IntRange(
           1,
@@ -161,13 +170,28 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
     // only valid when precision == TargetPrecision.targetLevel
     // aka NO RULE SET yet
     assert(
-        isPartOfTargetCompletionQuestion, 'reading from an invalid instance');
+      isPartOfTargetCompletionQuestion,
+      'reading from an invalid instance',
+    );
+    // Iterable<dynamic> lst = [];
     if (screenWidgetArea == null) return possibleAreasForScreen;
     if (slotInArea == null) return possibleSlotsForAreaInScreen;
     // if (visRuleTypeForAreaOrSlot == null) return possibleRulesAtAnyTarget;
     // if (behRuleTypeForAreaOrSlot == null) return possibleRulesAtAnyTarget;
     return [1];
   }
+
+  // Iterable<dynamic> get _possibleRuleChoices {
+  //   // only valid when precision == TargetPrecision.targetLevel
+  //   // aka NO RULE SET yet
+  //   assert(
+  //     isPartOfTargetCompletionQuestion,
+  //     'reading from an invalid instance',
+  //   );
+  //   if (screenWidgetArea == null) return possibleRulesForAreaInScreen;
+  //   if (slotInArea == null) return possibleRulesForSlotInAreaOfScreen;
+  //   return [1];
+  // }
 
   QuestFactorytSignature get derivedNewQuestSignature =>
       precision.derivedNewQuestSignature;

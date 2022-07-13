@@ -113,7 +113,10 @@ void main() {
           'no questions created!!  testAllRuleSelectDerived test invalid',
         );
 
+        int loopCnt = 0;
         for (PerQStats pqs in compareVals) {
+          loopCnt++;
+          print('testing quest #$loopCnt');
           expect(
             pqs.unansweredQsAdded,
             pqs.unanswered.expected,

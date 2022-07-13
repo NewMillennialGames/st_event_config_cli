@@ -42,14 +42,25 @@ class PermTestAnswerFactory {
     assert(!qb.isFullyAnswered, 'oops!');
     IntRange firstPromptUserChoiceAllowedRange = qb.userRespCountRangeForTest;
 
-    int _maxUserResponses = firstPromptUserChoiceAllowedRange.item2 + 1;
+    int _maxUserResponses = firstPromptUserChoiceAllowedRange.item2;
+    if (_maxUserResponses < 1) {
+      // no elements to choose from; useless question
+      _genPredictionCallback(
+        qb.questId,
+        0,
+        0,
+      );
+      // qb.setAllAnswersWhileTesting(['1']);
+      return;
+    }
     // reduce max to some rand mid-value > zero
     int expectToGenUnanswered = randGen.nextInt(_maxUserResponses) + 1;
-    int expectToGenAnswered = 0;
 
     print(
       '_maxUserResponses: $_maxUserResponses, expectToGenUnanswered: $expectToGenUnanswered',
     );
+    expectToGenUnanswered = expectToGenUnanswered.clamp(1, _maxUserResponses);
+    int expectToGenAnswered = 0;
 
     // random always picks up the low numbers
     List<String> userAnsLst = List.generate(
