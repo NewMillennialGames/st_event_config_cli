@@ -247,17 +247,17 @@ extension VisualRuleTypeExt1 on VisualRuleType {
       );
     }
 
-    print('makeQuestGenForRuleType is looping on:');
-    print(visRequiredSubQuests);
+    // print('makeQuestGenForRuleType is looping on:');
+    // print(visRequiredSubQuests);
 
     int newQuestCountToGenerate = answOnPrevQuestIsIterable
         ? (prevAnswQuest.mainAnswer as Iterable).length
         : 1;
 
     if (newQuestCountToGenerate > 1) {
-      print(
-        'warn:  ${prevAnswQuest.questId} will generate $newQuestCountToGenerate questions  (prob an error?)',
-      );
+      // print(
+      //   'warn:  ${prevAnswQuest.questId} will generate $newQuestCountToGenerate questions  (prob an error?)',
+      // );
     }
     String ruleTypeName = this.name;
     String newQuestNamePrefix = prevAnswQuest.questId;

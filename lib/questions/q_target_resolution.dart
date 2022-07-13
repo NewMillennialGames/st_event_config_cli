@@ -101,13 +101,14 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
       specific question
     */
     int screenScore =
-        (appScreen.index + 1) * _weightForTargetEnumIdx(appScreen);
-    int areaScore = ((screenWidgetArea?.index ?? -1) + 1) *
+        (appScreen.index + 64) * _weightForTargetEnumIdx(appScreen);
+    int areaScore = ((screenWidgetArea?.index ?? -16) + 16) *
         _weightForTargetEnumIdx(screenWidgetArea);
     int slotScore =
-        ((slotInArea?.index ?? -1) + 1) * _weightForTargetEnumIdx(slotInArea);
-    int precisionScore = precision.index * _weightForTargetEnumIdx(precision);
-    int visRuleScore = ((visRuleTypeForAreaOrSlot?.index ?? -1) + 1) *
+        ((slotInArea?.index ?? -8) + 8) * _weightForTargetEnumIdx(slotInArea);
+    int precisionScore =
+        (precision.index + 4) * _weightForTargetEnumIdx(precision);
+    int visRuleScore = ((visRuleTypeForAreaOrSlot?.index ?? -2) + 2) *
         _weightForTargetEnumIdx(visRuleTypeForAreaOrSlot);
     int behRuleScore = ((behRuleTypeForAreaOrSlot?.index ?? -1) + 1) *
         _weightForTargetEnumIdx(behRuleTypeForAreaOrSlot);
@@ -181,18 +182,6 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
     return [1];
   }
 
-  // Iterable<dynamic> get _possibleRuleChoices {
-  //   // only valid when precision == TargetPrecision.targetLevel
-  //   // aka NO RULE SET yet
-  //   assert(
-  //     isPartOfTargetCompletionQuestion,
-  //     'reading from an invalid instance',
-  //   );
-  //   if (screenWidgetArea == null) return possibleRulesForAreaInScreen;
-  //   if (slotInArea == null) return possibleRulesForSlotInAreaOfScreen;
-  //   return [1];
-  // }
-
   QuestFactorytSignature get derivedNewQuestSignature =>
       precision.derivedNewQuestSignature;
 
@@ -265,6 +254,14 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
   }
 
   List<VisualRuleType> get possibleRulesAtAnyTarget {
+    // empty list if no area or slot specified
+    if (screenWidgetArea == null) {
+      //
+      print(
+        'warn: no rules possible at screen level (rule target must be area or slot)',
+      );
+      return [];
+    }
     if (slotInArea != null) return possibleRulesForSlotInAreaOfScreen;
     return possibleRulesForAreaInScreen;
   }

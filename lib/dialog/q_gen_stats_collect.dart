@@ -73,6 +73,8 @@ class PerQStats {
     //
     unanswered.end = unans;
     answered.end = ans;
+
+    print('$qid\t$unansweredQsAdded\t$answeredQsAdded');
   }
 }
 

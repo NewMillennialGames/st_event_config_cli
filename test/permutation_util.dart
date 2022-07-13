@@ -40,45 +40,57 @@ class PermTestAnswerFactory {
       derived generated question
     */
     assert(!qb.isFullyAnswered, 'oops!');
-    IntRange firstPromptUserChoiceAllowedRange = qb.userRespCountRangeForTest;
+    // IntRange firstPromptUserChoiceAllowedRange = qb.userRespCountRangeForTest;
 
-    int _maxUserResponses = firstPromptUserChoiceAllowedRange.item2;
-    if (_maxUserResponses < 1) {
-      // no elements to choose from; useless question
-      _genPredictionCallback(
-        qb.questId,
-        0,
-        0,
-      );
-      // qb.setAllAnswersWhileTesting(['1']);
-      return;
-    }
+    // int _maxUserResponses = firstPromptUserChoiceAllowedRange.item2;
+    // if (_maxUserResponses < 1) {
+    //   // no elements to choose from; useless question
+    //   _genPredictionCallback(
+    //     qb.questId,
+    //     0,
+    //     0,
+    //   );
+    //   // qb.setAllAnswersWhileTesting(['1']);
+    //   return;
+    // }
+
+    int _maxUserResponses = qb.countChoicesInFirstPrompt;
+    // prep questions offer 4 choices but user can only pick one
+    _maxUserResponses = qb.multiChoicesAllowed ? _maxUserResponses : 1;
+    // some questions may have zero choices; bump to 1
+    _maxUserResponses = _maxUserResponses.clamp(1, _maxUserResponses);
+
     // reduce max to some rand mid-value > zero
-    int expectToGenUnanswered = randGen.nextInt(_maxUserResponses) + 1;
+    // random always picks up the low numbers
+    // int expectToGenUnanswered = randGen.nextInt(_maxUserResponses) + 1;
+    // print(
+    //   '_maxUserResponses: $_maxUserResponses, expectToGenUnanswered: $expectToGenUnanswered',
+    // );
+    // expectToGenUnanswered = expectToGenUnanswered.clamp(1, _maxUserResponses);
 
-    print(
-      '_maxUserResponses: $_maxUserResponses, expectToGenUnanswered: $expectToGenUnanswered',
-    );
-    expectToGenUnanswered = expectToGenUnanswered.clamp(1, _maxUserResponses);
+    int expectToGenUnanswered = _maxUserResponses;
     int expectToGenAnswered = 0;
 
-    // random always picks up the low numbers
+    // skip zero for prep questions
+
     List<String> userAnsLst = List.generate(
       expectToGenUnanswered,
-      (index) => index.toString(),
+      (index) => (index + 1).toString(),
     );
 
-    // if (qb is RegionTargetQuest) {
-    //   /*  */
-    //   // expectToGenUnanswered = 1;
-    //   // if (qb.questId.startsWith(QuestionIdStrings.specAreasToConfigOnScreen)) {
-    //   //   expectToGenUnanswered = 2;
-    //   // }
-    // } else if (qb is RuleSelectQuest) {
-    //   /*  */
-    // } else if (qb is RulePrepQuest) {
-    //   /*  */
-    // }
+    if (qb is RegionTargetQuest) {
+      /*  */
+      // expectToGenUnanswered = 1;
+      // if (qb.questId.startsWith(QuestionIdStrings.specAreasToConfigOnScreen)) {
+      //   expectToGenUnanswered = 2;
+      // }
+    } else if (qb is RuleSelectQuest) {
+      /*  */
+    } else if (qb is RulePrepQuest) {
+      /* will generate the 1 rule detail question */
+      expectToGenUnanswered = 1;
+      userAnsLst = ['1'];
+    }
 
     // store how many derived questions SHOULD be produced
     // based on user answers
@@ -182,16 +194,13 @@ class PermuteTest {
     List<RulePrepQuest> allRulePrep =
         Permute.buildPosibleRulePrepQuestsUnanswered();
 
-    // now set default answers on all these questions
-    for (RulePrepQuest rpq in allRulePrep) {
-      //
-      answerFactory.appendRandomAnswers(rpq);
-    }
-
     // now all questions have answers
     // pass each quest to cascade-dispatch
     // and confirm proper # & type of questions created
     for (RulePrepQuest questJustAnswered in allRulePrep) {
+      // now set default answers on all these questions
+      answerFactory.appendRandomAnswers(questJustAnswered);
+      //
       qcd.appendNewQuestsOrInsertImplicitAnswers(qlm, questJustAnswered);
     }
   }
@@ -370,6 +379,7 @@ class Permute {
       fyi:  my QTargetResolution recs are over-resolved
       meaning their data exists AS IF they are the result of
       prior answers
+
     */
     List<QTargetResolution> _allTarg = _allPossibleTargetCombinations();
 
@@ -388,27 +398,28 @@ class Permute {
       }
     }
 
-    // keep recs where target IS complete & we have a
-    _allQtrAsRulePrep = _allTarg
-        .where(
-            (qtr) => qtr.targetComplete && qtr.visRuleTypeForAreaOrSlot != null)
-        .toList();
+    // keep recs where target IS complete & we have a vis rule specified
+    // _allQtrAsRulePrep = _allQtrAsRulePrep
+    //     .where(
+    //         (qtr) => qtr.targetComplete && qtr.visRuleTypeForAreaOrSlot != null)
+    //     .toList();
 
     // sort QTRs
     _allQtrAsRulePrep
         .sort((t1, t2) => t1.targetSortIndex.compareTo(t2.targetSortIndex));
 
     List<RulePrepQuest> rulePrepQuests = [];
-    for (QTargetResolution areaQtr in _allQtrAsRulePrep) {
+    for (QTargetResolution areaOrSlotQtr in _allQtrAsRulePrep) {
       //
       QPromptCollection prompts =
-          QPromptCollection.forRulePrepQuestion(areaQtr);
+          QPromptCollection.forRulePrepQuestion(areaOrSlotQtr);
       rulePrepQuests.add(
         RulePrepQuest(
-          areaQtr,
+          areaOrSlotQtr,
           prompts,
-          questId:
-              QuestionIdStrings.prepQuestForVisRule + '-' + areaQtr.targetPath,
+          questId: QuestionIdStrings.prepQuestForVisRule +
+              '-' +
+              areaOrSlotQtr.targetPath,
         ),
       );
     }

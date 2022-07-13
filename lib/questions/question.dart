@@ -236,9 +236,9 @@ abstract class QuestBase with EquatableMixin {
     VisualRuleType curRule =
         pendingRule ?? selRule ?? visRuleTypeForAreaOrSlot!;
 
-    print(
-      'getDerivedRuleQuestGenViaVisType: ${curRule.name}',
-    );
+    // print(
+    //   'getDerivedRuleQuestGenViaVisType: ${curRule.name}',
+    // );
 
     var newTarg = qTargetResolution.copyWith(
       visRuleTypeForAreaOrSlot: curRule,
@@ -276,6 +276,10 @@ abstract class QuestBase with EquatableMixin {
   range of choices the user may pick
   from FIRST PROMOT of current question
   */
+
+  int get countChoicesInFirstPrompt =>
+      qPromptCollection.countChoicesInFirstPrompt;
+
   IntRange get userRespCountRangeForTest =>
       qTargetResolution.userRespCountRangeForTest;
 
@@ -329,7 +333,10 @@ abstract class QuestBase with EquatableMixin {
   bool get existsONLYToGenDialogStructure =>
       qTargetResolution.isTopLevelEventConfigQuestion;
   bool get isNotForRuleOutput => existsONLYToGenDialogStructure;
-  bool get isMultiPart => qPromptCollection.isMultiPart;
+  // does questions have multi-prompts
+  bool get isMultiPrompt => qPromptCollection.isMultiPrompt;
+  // does the first prompt allow user to select more than one choice?
+  bool get multiChoicesAllowed => qPromptCollection.multiChoicesAllowed;
 
   // quantified info
   AppScreen get appScreen => qTargetResolution.appScreen;

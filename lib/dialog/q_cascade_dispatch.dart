@@ -37,18 +37,18 @@ class QCascadeDispatcher {
     /*
 
     */
-    if (questJustAnswered.generatesNoNewQuestions) {
-      print(
-        'Info  QID: ' +
-            questJustAnswered.questId +
-            ' generates no new questions',
-      );
-      return;
-    } else {
-      print(
-        'appendNewQuestsOrInsertImplicitAnswers received QID:  ${questJustAnswered.questId}',
-      );
-    }
+    // if (questJustAnswered.generatesNoNewQuestions) {
+    //   print(
+    //     'Info  QID: ' +
+    //         questJustAnswered.questId +
+    //         ' generates no new questions',
+    //   );
+    //   return;
+    // } else {
+    //   print(
+    //     'appendNewQuestsOrInsertImplicitAnswers received QID:  ${questJustAnswered.questId}',
+    //   );
+    // }
 
     // collect q-gen stats
     statsCollector.startCounting(questListMgr, questJustAnswered);
@@ -75,9 +75,9 @@ class QCascadeDispatcher {
       // target AREA questions created above (by isTopLevelEventConfigQuestion)
       // and passed here to generate questions about which slots to target
       // and ask which rules for previously selected area
-      print(
-        '\tUser has specified Region target (area at least);  Now ask which slots in area, or rules for selected areas',
-      );
+      // print(
+      //   '\tUser has specified Region target (area at least);  Now ask which slots in area, or rules for selected areas',
+      // );
 
       var matchersForSlotsOrRules = questJustAnswered.targetPathIsComplete
           ? matchersToGenRuleSelectQuests //
@@ -91,9 +91,9 @@ class QCascadeDispatcher {
       );
     } else if (questJustAnswered.isRuleSelectionQuestion) {
       // user has selected rule for area or slot
-      print(
-        '\tUser has selected rule(s) for area or slot ${questJustAnswered.questId} (now gen rule-prep or rule-detail)',
-      );
+      // print(
+      //   '\tUser has selected rule(s) for area or slot ${questJustAnswered.questId} (now gen rule-prep or rule-detail)',
+      // );
       var requiresRulePrepQuestion =
           questJustAnswered.requiresVisRulePrepQuestion ||
               questJustAnswered.requiresBehRulePrepQuestion;
@@ -110,9 +110,9 @@ class QCascadeDispatcher {
       );
       //
     } else if (questJustAnswered.isRulePrepQuestion) {
-      print(
-        '\tUser has answered rule prep quest (normally # of pos to configure)',
-      );
+      // print(
+      //   '\tUser has answered rule prep quest (normally # of pos to configure)',
+      // );
       var _qMatchCollToGenRuleDetail =
           QMatchCollection(matchersToGenRuleDetailQuests);
       _qMatchCollToGenRuleDetail.appendNewQuestsOrInsertImplicitAnswers(
@@ -334,13 +334,13 @@ FIXME:
           },
         ),
       ),
-      ..._ruleSelectionQuestions
+      ..._matchRuleSelectionQuestions
     ];
   }
 
   static List<QuestMatcher> _getMatchersToGenRuleSelectQuests() {
     // rule select questions were generated above when target is complete
-    return _ruleSelectionQuestions;
+    return _matchRuleSelectionQuestions;
   }
 
   static List<QuestMatcher> _getMatchersToGenRulePrepQuests() {
@@ -495,15 +495,19 @@ FIXME:
             qid.startsWith(QuestionIdStrings.prepQuestForVisRule),
         validateUserAnswerAfterPatternMatchIsTrueCallback:
             (QuestBase priorAnsweredQuest) {
-          // print(
-          //     'priorAnsweredQuest.mainAnswer: ${priorAnsweredQuest.mainAnswer as int}');
-          // print(
-          //     'priorAnsweredQuest.isRulePrepQuestion: ${priorAnsweredQuest.isRulePrepQuestion}');
-          // print(
-          //     'priorAnsweredQuest.targetPathIsComplete: ${priorAnsweredQuest.targetPathIsComplete}');
-          List<String> rulePrepAnswers = priorAnsweredQuest.mainAnswer;
-          assert(rulePrepAnswers.length > 0, '');
-          int desiredCount = int.tryParse(rulePrepAnswers.first) ?? 1;
+          print(
+            'priorAnsweredQuest.mainAnswer: ${priorAnsweredQuest.mainAnswer as int}',
+          );
+          print(
+            'priorAnsweredQuest.isRulePrepQuestion: ${priorAnsweredQuest.isRulePrepQuestion}',
+          );
+          print(
+            'priorAnsweredQuest.targetPathIsComplete: ${priorAnsweredQuest.targetPathIsComplete}',
+          );
+          // List<String> rulePrepAnswers = priorAnsweredQuest.mainAnswer;
+          // assert(rulePrepAnswers.length > 0, '');
+          // int desiredCount = int.tryParse(rulePrepAnswers.first) ?? 1;
+          int desiredCount = priorAnsweredQuest.mainAnswer;
           return desiredCount > 0 &&
               priorAnsweredQuest.isRulePrepQuestion &&
               priorAnsweredQuest.targetPathIsComplete;
@@ -710,7 +714,7 @@ FIXME:
   // end of def for QuestionCascadeDispatcher
 }
 
-List<QuestMatcher> _ruleSelectionQuestions = [
+List<QuestMatcher> _matchRuleSelectionQuestions = [
   QuestMatcher<List<ScreenWidgetArea>, List<VisualRuleType>>(
     '''matches questions in which user specifies screen-areas to config
       build ?s to specify which Rules to config for those selected screen-areas

@@ -155,23 +155,29 @@ class QPromptCollection {
   } //
 
   // getters
+  int get countChoicesInFirstPrompt =>
+      prompts.first.answChoiceCollection.answerOptions.length;
+
   List<VisRuleQuestType> get embeddedQuestTypes =>
       prompts.map<VisRuleQuestType>((e) => e.visQuestType).toList();
 
   Iterable<CaptureAndCast> get listResponses =>
       prompts.map((qpi) => qpi._answerRepoAndTypeCast);
 
-  int get _partCount => prompts.length;
-  bool get isCompleted => _curPartIdx >= _partCount - 1 || allPartsHaveAnswers;
-  bool get isMultiPart => _partCount > 1;
+  int get _promptCount => prompts.length;
+  bool get isCompleted =>
+      _curPartIdx >= _promptCount - 1 || allPartsHaveAnswers;
+  bool get isMultiPrompt => _promptCount > 1;
+  bool get multiChoicesAllowed =>
+      prompts.first.answChoiceCollection.multiChoicesAllowed;
 
   int get userResponseCount =>
       prompts.where((QuestPromptInstance pi) => pi.hasAnswer).length;
-  bool get allPartsHaveAnswers => userResponseCount >= _partCount;
+  bool get allPartsHaveAnswers => userResponseCount >= _promptCount;
 
   QuestPromptInstance? getNextUserPromptIfExists() {
     _curPartIdx++;
-    if (_curPartIdx > _partCount - 1) return null;
+    if (_curPartIdx > _promptCount - 1) return null;
     return prompts[_curPartIdx];
   }
 

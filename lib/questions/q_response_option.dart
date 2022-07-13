@@ -15,12 +15,12 @@ class ResponseOptCollectionBase {
   //
   final List<ResponseAnswerOption> answerOptions;
   final int idxOfDefaultAnsw;
-  final bool multiAllowed;
+  final bool multiChoicesAllowed;
 
   ResponseOptCollectionBase(
     this.answerOptions, {
     this.idxOfDefaultAnsw = 0,
-    this.multiAllowed = false,
+    this.multiChoicesAllowed = false,
   });
 
   bool get hasChoices => answerOptions.length > 0;
@@ -39,7 +39,7 @@ class VisQuestChoiceCollection extends ResponseOptCollectionBase {
   }) : super(
           answerOptions,
           idxOfDefaultAnsw: idxOfDefaultAnsw,
-          multiAllowed: multiAllowed,
+          multiChoicesAllowed: multiAllowed,
         );
 
   factory VisQuestChoiceCollection.fromList(

@@ -220,9 +220,9 @@ class QuestListMgr {
     */
     Set<AppScreen> appScreensSet = quests.map((e) => e.appScreen).toSet();
 
-    print(
-      '$dbgNam is adding ${quests.length} new Questions for these screens $appScreensSet',
-    );
+    // print(
+    //   '$dbgNam is adding ${quests.length} new Questions for these screens $appScreensSet',
+    // );
 
     for (AppScreen as in appScreensSet) {
       int newCntBySec = quests
