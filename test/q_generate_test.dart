@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:test/test.dart';
 //
 import 'package:st_ev_cfg/st_ev_cfg.dart';
@@ -49,7 +47,7 @@ void main() {
       _qcd.appendNewQuestsOrInsertImplicitAnswers(
           _questMgr, _questMgr.currentOrLastQuestion);
       expect(_questMgr.priorAnswerCount, 1);
-      expect(_questMgr.pendingQuestionCount, 0);
+      expect(_questMgr.pendingQuestionCount, 2);
 
       for (QuestBase q in _questMgr.pendingQuestions) {
         print(
