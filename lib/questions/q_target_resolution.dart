@@ -123,7 +123,7 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
         behRuleScore;
   }
 
-  IntRange get userRespCountRangeForTest {
+  IntRange get niu_userRespCountRangeForTest {
     /*  only for testing
       return range 1 to max possible answers user could
       select for prompt #1 of this question

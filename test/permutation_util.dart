@@ -23,6 +23,13 @@ typedef GendQuestPredictionCallback = void Function(
   int answered,
 );
 
+class GenExpected {
+  final String qid;
+  final int unanswered;
+  final int answered;
+  GenExpected(this.qid, this.unanswered, this.answered);
+}
+
 class PermTestAnswerFactory {
   /* produces CONSISTENT mock/dummy answers
     for all questions in the test (both manual and derrived)
@@ -31,51 +38,48 @@ class PermTestAnswerFactory {
     back to the GenStatsCollector on the QCascadeDispatcher
     so we can confirm everything is working
   */
+  Map<String, GenExpected> _expected = {};
   late GendQuestPredictionCallback _genPredictionCallback;
-  PermTestAnswerFactory();
+  PermTestAnswerFactory() {
+    // init expected generator counts
+    for (GenExpected ge in _expectedToGen) {
+      _expected[ge.qid] = ge;
+    }
+    ;
+  }
 
-  void appendRandomAnswers(QuestBase qb) {
+  void appendAnswersSetExpectedQGen(QuestBase qb) {
     /* currently only sending 1 answer to all questions
       which implies they should only create ONE
       derived generated question
     */
     assert(!qb.isFullyAnswered, 'oops!');
-    // IntRange firstPromptUserChoiceAllowedRange = qb.userRespCountRangeForTest;
 
-    // int _maxUserResponses = firstPromptUserChoiceAllowedRange.item2;
-    // if (_maxUserResponses < 1) {
-    //   // no elements to choose from; useless question
-    //   _genPredictionCallback(
-    //     qb.questId,
-    //     0,
-    //     0,
-    //   );
-    //   // qb.setAllAnswersWhileTesting(['1']);
-    //   return;
-    // }
+    // store prediction of derived question count
+    // from answers to this question
+    GenExpected? expectToGen = _expected[qb.questId];
+    if (expectToGen == null) {
+      _bruteGuess(qb);
+    } else {
+      // store how many derived questions WILL be produced
+      // based on user answers
+      _genPredictionCallback(
+        qb.questId,
+        expectToGen.unanswered,
+        expectToGen.answered,
+      );
+    }
 
-    int _maxUserResponses = qb.countChoicesInFirstPrompt;
+    // now set mock question answers
+    int _maxUserResponses =
+        qb.multiChoicesAllowed ? qb.countChoicesInFirstPrompt : 1;
     // prep questions offer 4 choices but user can only pick one
-    _maxUserResponses = qb.multiChoicesAllowed ? _maxUserResponses : 1;
     // some questions may have zero choices; bump to 1
     _maxUserResponses = _maxUserResponses.clamp(1, _maxUserResponses);
 
-    // reduce max to some rand mid-value > zero
-    // random always picks up the low numbers
-    // int expectToGenUnanswered = randGen.nextInt(_maxUserResponses) + 1;
-    // print(
-    //   '_maxUserResponses: $_maxUserResponses, expectToGenUnanswered: $expectToGenUnanswered',
-    // );
-    // expectToGenUnanswered = expectToGenUnanswered.clamp(1, _maxUserResponses);
-
-    int expectToGenUnanswered = _maxUserResponses;
-    int expectToGenAnswered = 0;
-
-    // skip zero for prep questions
-
     List<String> userAnsLst = List.generate(
-      expectToGenUnanswered,
-      (index) => (index + 1).toString(),
+      _maxUserResponses,
+      (index) => (index).toString(),
     );
 
     if (qb is RegionTargetQuest) {
@@ -87,9 +91,43 @@ class PermTestAnswerFactory {
     } else if (qb is RuleSelectQuest) {
       /*  */
     } else if (qb is RulePrepQuest) {
-      /* will generate the 1 rule detail question */
+      /* will generate the 1 rule detail question 
+        including multiple prompts
+        based on how many instances to prep
+      */
+      // skip zero for prep questions; say I want 2 of whatever
+      userAnsLst = ['2'];
+    }
+
+    String _ansStr = userAnsLst.reduce((full, one) => full + ',' + one);
+    qb.setAllAnswersWhileTesting([_ansStr]);
+  }
+
+  void _bruteGuess(QuestBase qb) {
+    //
+    int _maxUserResponses =
+        qb.multiChoicesAllowed ? qb.countChoicesInFirstPrompt : 1;
+    // prep questions offer 4 choices but user can only pick one
+    // some questions may have zero choices; bump to 1
+    _maxUserResponses = _maxUserResponses.clamp(1, _maxUserResponses);
+
+    int expectToGenUnanswered = _maxUserResponses;
+    int expectToGenAnswered = 0;
+
+    if (qb is RegionTargetQuest) {
+      /*  */
+      // expectToGenUnanswered = 1;
+      // if (qb.questId.startsWith(QuestionIdStrings.specAreasToConfigOnScreen)) {
+      //   expectToGenUnanswered = 2;
+      // }
+    } else if (qb is RuleSelectQuest) {
+      /*  */
+    } else if (qb is RulePrepQuest) {
+      /* will generate the 1 rule detail question 
+        including multiple prompts
+        based on how many instances to prep
+      */
       expectToGenUnanswered = 1;
-      userAnsLst = ['1'];
     }
 
     // store how many derived questions SHOULD be produced
@@ -100,8 +138,9 @@ class PermTestAnswerFactory {
       expectToGenAnswered,
     );
 
-    String _ansStr = userAnsLst.reduce((full, one) => full + ',' + one);
-    qb.setAllAnswersWhileTesting([_ansStr]);
+    print(
+      "Warn: venturing a guess of $expectToGenUnanswered Q's generated from ${qb.questId}",
+    );
   }
 
   void setExpectedGenPredictCallback(GendQuestPredictionCallback cb) {
@@ -143,7 +182,7 @@ class PermuteTest {
     // now set default answers on all these questions
     for (RegionTargetQuest ptq in allTargQuests) {
       //
-      answerFactory.appendRandomAnswers(ptq);
+      answerFactory.appendAnswersSetExpectedQGen(ptq);
     }
 
     // now all questions have answers
@@ -170,7 +209,7 @@ class PermuteTest {
     // now set default answers on all these questions
     for (RuleSelectQuest ptq in allRuleSelect) {
       //
-      answerFactory.appendRandomAnswers(ptq);
+      answerFactory.appendAnswersSetExpectedQGen(ptq);
     }
 
     // now all questions have answers
@@ -199,7 +238,7 @@ class PermuteTest {
     // and confirm proper # & type of questions created
     for (RulePrepQuest questJustAnswered in allRulePrep) {
       // now set default answers on all these questions
-      answerFactory.appendRandomAnswers(questJustAnswered);
+      answerFactory.appendAnswersSetExpectedQGen(questJustAnswered);
       //
       qcd.appendNewQuestsOrInsertImplicitAnswers(qlm, questJustAnswered);
     }
@@ -426,3 +465,261 @@ class Permute {
     return rulePrepQuests;
   }
 }
+
+List<GenExpected> _expectedToGen = [
+  GenExpected(
+    "specAreasToConfigOnScreen-marketView-targetLevel",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specAreasToConfigOnScreen-leaderboardTraders-targetLevel",
+    2,
+    0,
+  ),
+  GenExpected(
+    "specAreasToConfigOnScreen-leaderboardAssets-targetLevel",
+    2,
+    0,
+  ),
+  GenExpected(
+    "specAreasToConfigOnScreen-portfolioPositions-targetLevel",
+    2,
+    0,
+  ),
+  GenExpected(
+    "specAreasToConfigOnScreen-portfolioHistory-targetLevel",
+    2,
+    0,
+  ),
+  GenExpected(
+    "specAreasToConfigOnScreen-marketResearch-targetLevel",
+    2,
+    0,
+  ),
+  GenExpected(
+    "specSlotsToConfigInArea-marketView-filterBar-targetLevel",
+    0,
+    0,
+  ),
+  GenExpected(
+    "specSlotsToConfigInArea-marketView-tableview-targetLevel",
+    0,
+    0,
+  ),
+  GenExpected(
+    "specSlotsToConfigInArea-leaderboardTraders-header-targetLevel",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specSlotsToConfigInArea-leaderboardTraders-banner-targetLevel",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specSlotsToConfigInArea-leaderboardAssets-header-targetLevel",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specSlotsToConfigInArea-leaderboardAssets-banner-targetLevel",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specSlotsToConfigInArea-portfolioPositions-header-targetLevel",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specSlotsToConfigInArea-portfolioPositions-banner-targetLevel",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specSlotsToConfigInArea-portfolioPositions-tableview-targetLevel",
+    0,
+    0,
+  ),
+  GenExpected(
+    "specSlotsToConfigInArea-portfolioHistory-header-targetLevel",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specSlotsToConfigInArea-portfolioHistory-banner-targetLevel",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specSlotsToConfigInArea-portfolioHistory-tableview-targetLevel",
+    0,
+    0,
+  ),
+  GenExpected(
+    "specSlotsToConfigInArea-marketResearch-header-targetLevel",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specSlotsToConfigInArea-marketResearch-banner-targetLevel",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specRulesForSlotInArea-leaderboardAssets-banner-bannerUrl-targetLevel",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specRulesForSlotInArea-leaderboardAssets-banner-bannerUrl-ruleSelect",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specRulesForSlotInArea-portfolioHistory-banner-ruleSelect",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specRulesForSlotInArea-portfolioHistory-tableview-ruleSelect",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specRulesForSlotInArea-portfolioPositions-header-title-targetLevel",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specRulesForSlotInArea-portfolioPositions-header-title-ruleSelect",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specRulesForSlotInArea-portfolioPositions-header-subtitle-targetLevel",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specRulesForSlotInArea-portfolioPositions-header-subtitle-ruleSelect",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specRulesForSlotInArea-portfolioPositions-banner-bannerUrl-targetLevel",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specRulesForSlotInArea-portfolioPositions-banner-bannerUrl-ruleSelect",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specRulesForSlotInArea-portfolioHistory-header-title-targetLevel",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specRulesForSlotInArea-portfolioHistory-header-title-ruleSelect",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specRulesForSlotInArea-portfolioHistory-header-subtitle-targetLevel",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specRulesForSlotInArea-portfolioHistory-header-subtitle-ruleSelect",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specRulesForSlotInArea-marketResearch-header-ruleSelect",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specRulesForSlotInArea-portfolioHistory-banner-bannerUrl-targetLevel",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specRulesForSlotInArea-portfolioHistory-banner-bannerUrl-ruleSelect",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specRulesForSlotInArea-marketResearch-banner-ruleSelect",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specRulesForSlotInArea-marketResearch-header-title-targetLevel",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specRulesForSlotInArea-marketResearch-header-title-ruleSelect",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specRulesForSlotInArea-marketResearch-header-subtitle-targetLevel",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specRulesForSlotInArea-marketResearch-header-subtitle-ruleSelect",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specRulesForSlotInArea-marketResearch-banner-bannerUrl-targetLevel",
+    1,
+    0,
+  ),
+  GenExpected(
+    "specRulesForSlotInArea-marketResearch-banner-bannerUrl-ruleSelect",
+    1,
+    0,
+  ),
+  GenExpected(
+    "prepQuestForVisRule-marketView-filterBar-filterCfg-rulePrep",
+    1,
+    0,
+  ),
+  GenExpected(
+    "prepQuestForVisRule-marketView-tableview-sortCfg-rulePrep",
+    1,
+    0,
+  ),
+  GenExpected(
+    "prepQuestForVisRule-marketView-tableview-groupCfg-rulePrep",
+    1,
+    0,
+  ),
+  GenExpected(
+    "prepQuestForVisRule-portfolioPositions-tableview-sortCfg-rulePrep",
+    1,
+    0,
+  ),
+  GenExpected(
+    "prepQuestForVisRule-portfolioPositions-tableview-groupCfg-rulePrep",
+    1,
+    0,
+  ),
+  GenExpected(
+    "prepQuestForVisRule-portfolioHistory-tableview-sortCfg-rulePrep",
+    1,
+    0,
+  ),
+  GenExpected(
+    "prepQuestForVisRule-portfolioHistory-tableview-groupCfg-rulePrep",
+    1,
+    0,
+  ),
+];

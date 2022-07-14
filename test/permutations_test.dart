@@ -67,6 +67,7 @@ void main() {
           _questMgr.pendingQuestionCount == 1,
           'err: seemed setup did not re-init objects??',
         );
+        print('questId\tunansweredQsAdded\tansweredQsAdded');
         permute.testAllTargetDerived(_questMgr, _qcd);
         List<PerQStats> compareVals =
             _qcd.statsCollector.getTestComparisonValues();
@@ -79,21 +80,21 @@ void main() {
           'no questions created!!  testAllTargetDerived test invalid',
         );
 
-        // for (PerQStats pqs in compareVals) {
-        //   expect(
-        //     pqs.unansweredQsAdded,
-        //     pqs.unanswered.expected,
-        //     reason:
-        //         'QID: ${pqs.qid} was expected to create ${pqs.unanswered.expected} quests but actually created ${pqs.unansweredQsAdded}',
-        //   );
+        for (PerQStats pqs in compareVals) {
+          expect(
+            pqs.unansweredQsAdded,
+            pqs.unanswered.expected,
+            reason:
+                'QID: ${pqs.qid} was expected to create ${pqs.unanswered.expected} quests but actually created ${pqs.unansweredQsAdded}',
+          );
 
-        //   expect(
-        //     pqs.answeredQsAdded,
-        //     pqs.answered.expected,
-        //     reason:
-        //         'QID: ${pqs.qid} was expected to create ${pqs.answered.expected} quests but actually created ${pqs.answeredQsAdded}',
-        //   );
-        // }
+          expect(
+            pqs.answeredQsAdded,
+            pqs.answered.expected,
+            reason:
+                'QID: ${pqs.qid} was expected to create ${pqs.answered.expected} quests but actually created ${pqs.answeredQsAdded}',
+          );
+        }
       },
       skip: false,
     );
@@ -117,23 +118,23 @@ void main() {
         );
 
         int loopCnt = 0;
-        // for (PerQStats pqs in compareVals) {
-        //   loopCnt++;
-        //   print('testing quest #$loopCnt');
-        //   expect(
-        //     pqs.unansweredQsAdded,
-        //     pqs.unanswered.expected,
-        //     reason:
-        //         'QID: ${pqs.qid} was expected to create ${pqs.unanswered.expected} quests but actually created ${pqs.unansweredQsAdded}',
-        //   );
+        for (PerQStats pqs in compareVals) {
+          loopCnt++;
+          print('testing quest #$loopCnt');
+          expect(
+            pqs.unansweredQsAdded,
+            pqs.unanswered.expected,
+            reason:
+                'QID: ${pqs.qid} was expected to create ${pqs.unanswered.expected} quests but actually created ${pqs.unansweredQsAdded}',
+          );
 
-        //   expect(
-        //     pqs.answeredQsAdded,
-        //     pqs.answered.expected,
-        //     reason:
-        //         'QID: ${pqs.qid} was expected to create ${pqs.answered.expected} quests but actually created ${pqs.answeredQsAdded}',
-        //   );
-        // }
+          expect(
+            pqs.answeredQsAdded,
+            pqs.answered.expected,
+            reason:
+                'QID: ${pqs.qid} was expected to create ${pqs.answered.expected} quests but actually created ${pqs.answeredQsAdded}',
+          );
+        }
       },
       skip: SKIP_SOME_TESTS,
     );
@@ -155,21 +156,21 @@ void main() {
           'no questions created!!  testAllRulePrepDerived test invalid',
         );
 
-        // for (PerQStats pqs in compareVals) {
-        //   expect(
-        //     pqs.unansweredQsAdded,
-        //     pqs.unanswered.expected,
-        //     reason:
-        //         'QID: ${pqs.qid} was expected to create ${pqs.unanswered.expected} quests but actually created ${pqs.unansweredQsAdded}',
-        //   );
+        for (PerQStats pqs in compareVals) {
+          expect(
+            pqs.unansweredQsAdded,
+            pqs.unanswered.expected,
+            reason:
+                'QID: ${pqs.qid} was expected to create ${pqs.unanswered.expected} quests but actually created ${pqs.unansweredQsAdded}',
+          );
 
-        //   expect(
-        //     pqs.answeredQsAdded,
-        //     pqs.answered.expected,
-        //     reason:
-        //         'QID: ${pqs.qid} was expected to create ${pqs.answered.expected} quests but actually created ${pqs.answeredQsAdded}',
-        //   );
-        // }
+          expect(
+            pqs.answeredQsAdded,
+            pqs.answered.expected,
+            reason:
+                'QID: ${pqs.qid} was expected to create ${pqs.answered.expected} quests but actually created ${pqs.answeredQsAdded}',
+          );
+        }
       },
       skip: SKIP_SOME_TESTS,
     );

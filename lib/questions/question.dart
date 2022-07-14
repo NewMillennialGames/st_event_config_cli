@@ -280,8 +280,8 @@ abstract class QuestBase with EquatableMixin {
   int get countChoicesInFirstPrompt =>
       qPromptCollection.countChoicesInFirstPrompt;
 
-  IntRange get userRespCountRangeForTest =>
-      qTargetResolution.userRespCountRangeForTest;
+  // IntRange get userRespCountRangeForTest =>
+  //     qTargetResolution.userRespCountRangeForTest;
 
   List<VisRuleQuestType> get embeddedQuestTypes =>
       qPromptCollection.embeddedQuestTypes;

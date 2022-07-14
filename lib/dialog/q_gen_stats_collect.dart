@@ -111,7 +111,7 @@ class GenStatsCollector {
     QuestListMgr questListMgr,
     QuestBase questJustAnswered,
   ) {
-    //
+    // begin tracking stats for current question
     activeQuestId = questJustAnswered.questId;
     PerQStats qStats = _genStats[activeQuestId] ?? PerQStats(activeQuestId!);
 
@@ -124,8 +124,10 @@ class GenStatsCollector {
   }
 
   void collectPostGenTotals(QuestListMgr questListMgr) {
-    // pending == unanswered
-    // completed == answered
+    /*  stop accumulating stats for current question
+          pending == unanswered
+          completed == answered
+     */
     PerQStats qStats = _genStats[activeQuestId]!;
     qStats.setEndCounts(
       questListMgr.pendingQuestionCount,
@@ -146,15 +148,14 @@ class GenStatsCollector {
     List<PerQStats> compareVals = [];
 
     for (MapEntry<QID, GenPrediction> entry in _predictedGenCount.entries) {
-      GenPrediction expected = entry.value;
+      GenPrediction expectToGen = entry.value;
       QID qid = entry.key;
       PerQStats actualStats = _genStats[qid] ?? PerQStats(qid);
       // copy expected values to inst
-      actualStats.unanswered.expected = expected.unanswered;
-      actualStats.answered.expected = expected.answered;
+      actualStats.unanswered.expected = expectToGen.unanswered;
+      actualStats.answered.expected = expectToGen.answered;
       compareVals.add(actualStats);
     }
-
     return compareVals;
   }
 }

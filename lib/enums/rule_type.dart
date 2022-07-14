@@ -311,8 +311,9 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           if (prevAnswQuest.isRulePrepQuestion) {
             // we may have different types of rule-prep quests in the future
             // promptCountEachQuestion = prevAnswQuest.mainAnswer as int;
-            var lastResp = prevAnswQuest.mainAnswer as List<String>;
-            promptCountEachQuestion = int.tryParse(lastResp.first) ?? 1;
+            var instCount = prevAnswQuest.mainAnswer as int; // List<String>
+            promptCountEachQuestion = instCount;
+            // int.tryParse(instCount) ?? 1;
           }
 
           List<NewQuestPerPromptOpts> qps = _getQuestPromptOptsForDataFieldName(

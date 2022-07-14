@@ -495,15 +495,15 @@ FIXME:
             qid.startsWith(QuestionIdStrings.prepQuestForVisRule),
         validateUserAnswerAfterPatternMatchIsTrueCallback:
             (QuestBase priorAnsweredQuest) {
-          print(
-            'priorAnsweredQuest.mainAnswer: ${priorAnsweredQuest.mainAnswer as int}',
-          );
-          print(
-            'priorAnsweredQuest.isRulePrepQuestion: ${priorAnsweredQuest.isRulePrepQuestion}',
-          );
-          print(
-            'priorAnsweredQuest.targetPathIsComplete: ${priorAnsweredQuest.targetPathIsComplete}',
-          );
+          // print(
+          //   'priorAnsweredQuest.mainAnswer: ${priorAnsweredQuest.mainAnswer as int}',
+          // );
+          // print(
+          //   'priorAnsweredQuest.isRulePrepQuestion: ${priorAnsweredQuest.isRulePrepQuestion}',
+          // );
+          // print(
+          //   'priorAnsweredQuest.targetPathIsComplete: ${priorAnsweredQuest.targetPathIsComplete}',
+          // );
           // List<String> rulePrepAnswers = priorAnsweredQuest.mainAnswer;
           // assert(rulePrepAnswers.length > 0, '');
           // int desiredCount = int.tryParse(rulePrepAnswers.first) ?? 1;
@@ -521,118 +521,6 @@ FIXME:
               newQuIdx, null);
         },
       ),
-      //   QuestMatcher<List<VisualRuleType>, List<String>>(
-      //     '''matches questions in which user specifies rules for screen-areas to config
-      //   build ?s prep questions if required
-      // ''',
-      //     questIdPatternMatchTest: (qid) =>
-      //         qid.startsWith(QuestionIdStrings.specRulesForAreaOnScreen) ||
-      //         qid.startsWith(QuestionIdStrings.specRulesForSlotInArea),
-      //     validateUserAnswerAfterPatternMatchIsTrueCallback:
-      //         (QuestBase priorAnsweredQuest) {
-      //       return (priorAnsweredQuest.mainAnswer as Iterable<VisualRuleType>)
-      //                   .length >
-      //               0 &&
-      //           priorAnsweredQuest.requiresVisRulePrepQuestion;
-      //     },
-      //     //
-      //     derivedQuestGen: DerivedQuestGenerator.noop(),
-      //     deriveQuestGenCallbk: (QuestBase priorAnsweredQuest, int newQuIdx) {
-      //       return priorAnsweredQuest.getDerivedRuleQuestGenViaVisType(newQuIdx);
-      //     },
-      //   ),
-      //   QuestMatcher<int, DbTableFieldName>(
-      //     '''matches any rule prep question about
-      //     a list-view ui area on any screen
-      // ''',
-      //     validateUserAnswerAfterPatternMatchIsTrueCallback: (QuestBase paq) =>
-      //         (paq.mainAnswer as int) > 0 &&
-      //         paq.isRulePrepQuestion &&
-      //         [
-      //           VisualRuleType.groupCfg,
-      //           VisualRuleType.sortCfg,
-      //           VisualRuleType.filterCfg
-      //         ].contains(paq.visRuleTypeForAreaOrSlot),
-      //     screenWidgetArea: ScreenWidgetArea.tableview,
-      //     derivedQuestGen: DerivedQuestGenerator.multiPrompt(
-      //       [
-      //         NewQuestPerPromptOpts<DbTableFieldName>(
-      //           '',
-      //           visRuleQuestType: VisRuleQuestType.selectDataFieldName,
-      //           promptTemplArgGen: (
-      //             QuestBase priorAnsweredQuest,
-      //             int idx,
-      //           ) {
-      //             var areaName =
-      //                 priorAnsweredQuest.screenWidgetArea?.name ?? 'area';
-      //             var screenName = priorAnsweredQuest.appScreen.name;
-      //             var templ =
-      //                 priorAnsweredQuest.visRuleTypeForAreaOrSlot!.detailTemplate;
-      //             var msg = templ.format(
-      //               [
-      //                 '$idx',
-      //                 areaName.toUpperCase(),
-      //                 screenName.toUpperCase(),
-      //               ],
-      //             );
-      //             return [msg];
-      //           },
-      //           answerChoiceGenerator: (QuestBase priorAnsweredQuest,
-      //               int newQuestIdx, int promptIdx) {
-      //             return DbTableFieldName.values.map((e) => e.name).toList();
-      //           },
-      //           newRespCastFunc: (
-      //             QuestBase newQuest,
-      //             String lstAreaIdxs,
-      //           ) {
-      //             List<int> l = castStrOfIdxsToIterOfInts(lstAreaIdxs).toList();
-      //             return DbTableFieldName.values[l.first];
-      //           },
-      //         ),
-      //         NewQuestPerPromptOpts<bool>(
-      //           '',
-      //           // promptOverride: 'Sort Ascending (yes == 1)',
-      //           visRuleQuestType: VisRuleQuestType.specifySortAscending,
-      //           promptTemplArgGen: (
-      //             QuestBase priorAnsweredQuest,
-      //             int idx,
-      //           ) {
-      //             return [];
-      //           },
-      //           newRespCastFunc: (
-      //             QuestBase newQuest,
-      //             String lstAreaIdxs,
-      //           ) {
-      //             List<int> l = castStrOfIdxsToIterOfInts(lstAreaIdxs).toList();
-      //             return l.first > 0;
-      //           },
-      //           answerChoiceGenerator: (QuestBase priorAnsweredQuest,
-      //               int newQuestIdx, int promptIdx) {
-      //             return DbTableFieldName.values.map((e) => e.name).toList();
-      //           },
-      //         ),
-      //       ],
-      //       newQuestConstructor: QuestBase.visualRuleDetailQuest,
-      //       newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
-      //         return (priorAnsweredQuest.mainAnswer as int);
-      //       },
-      //       newQuestIdGenFromPriorQuest: (
-      //         QuestBase priorAnsweredQuest,
-      //         int newQuIdx,
-      //       ) {
-      //         String scrName = priorAnsweredQuest.appScreen.name;
-      //         String area = priorAnsweredQuest.screenWidgetArea?.name ?? '-na';
-      //         return QuestionIdStrings.specRuleDetailsForAreaOnScreen +
-      //             '-' +
-      //             (priorAnsweredQuest.visRuleTypeForAreaOrSlot?.name ??
-      //                 'lv_rule') +
-      //             '-' +
-      //             area +
-      //             '-' +
-      //             scrName;
-      //       },
-      //     ),
-      //   )
     ];
   }
 
