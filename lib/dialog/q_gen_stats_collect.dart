@@ -15,7 +15,7 @@ part of ConfigDialogRunner;
   each generation pass
 */
 
-typedef QID = String;
+typedef QuestId = String;
 
 enum QGenChngType { unanswered, answered }
 
@@ -54,7 +54,7 @@ class PerQStats {
   completed == answered
   */
 
-  final QID qid;
+  final QuestId qid;
   final StatChange unanswered = StatChange();
   final StatChange answered = StatChange(changeType: QGenChngType.answered);
 
@@ -95,13 +95,13 @@ class GenStatsCollector {
     startCounting() and collectPostGenTotals() cycles
 
   */
-  QID? activeQuestId;
-  final Map<QID, PerQStats> _genStats = {};
-  final Map<QID, GenPrediction> _predictedGenCount = {};
+  QuestId? activeQuestId;
+  final Map<QuestId, PerQStats> _genStats = {};
+  final Map<QuestId, GenPrediction> _predictedGenCount = {};
 
   GenStatsCollector();
 
-  void setExpectedGenPrediction(QID qid, int unanswered, int answered) {
+  void setExpectedGenPrediction(QuestId qid, int unanswered, int answered) {
     // called by PermTestAnswerFactory to log details
     // for comparison to ACTUAL generated counts
     _predictedGenCount[qid] = GenPrediction(unanswered, answered);
@@ -136,7 +136,7 @@ class GenStatsCollector {
     activeQuestId = null;
   }
 
-  PerQStats statsFor(QID qid) {
+  PerQStats statsFor(QuestId qid) {
     return _genStats[qid] ?? PerQStats(qid);
   }
 
@@ -147,9 +147,9 @@ class GenStatsCollector {
 
     List<PerQStats> compareVals = [];
 
-    for (MapEntry<QID, GenPrediction> entry in _predictedGenCount.entries) {
+    for (MapEntry<QuestId, GenPrediction> entry in _predictedGenCount.entries) {
       GenPrediction expectToGen = entry.value;
-      QID qid = entry.key;
+      QuestId qid = entry.key;
       PerQStats actualStats = _genStats[qid] ?? PerQStats(qid);
       // copy expected values to inst
       actualStats.unanswered.expected = expectToGen.unanswered;

@@ -35,7 +35,7 @@ class NewQuestPerPromptOpts<AnsType> {
   final int defaultAnswerIdx;
   final VisualRuleType? visRuleType;
   final VisRuleQuestType? visRuleQuestType;
-  final bool acceptsMultiResponses;
+  bool acceptsMultiResponses;
 
   NewQuestPerPromptOpts(
     this.promptTemplate, {
@@ -100,23 +100,27 @@ class DerivedQuestGenerator {
             ? _ccTargetRes
             : deriveTargetFromPriorRespCallbk;
 
-  factory DerivedQuestGenerator.singlePrompt(String questPromptTemplate,
-      {required NewQuestCount newQuestCountCalculator,
-      required NewQuestArgGen newQuestPromptArgGen,
-      required ChoiceListFromPriorAnswer answerChoiceGenerator,
-      required CastStrToAnswTypCallback newRespCastFunc,
-      // optional args below
-      DerivedGenBehaviorOnMatchEnum genBehaviorOfDerivedQuests =
-          DerivedGenBehaviorOnMatchEnum.addPendingQuestions,
-      NewQuestIdGenFromPriorAnswer? newQuestIdGenFromPriorQuest,
-      QTargetResUpdateFunc? deriveTargetFromPriorRespCallbk,
-      QuestFactorytSignature? newQuestConstructor,
-      BailQGenWhenTrue? bailQGenWhenTrueCallbk}) {
+  factory DerivedQuestGenerator.singlePrompt(
+    String questPromptTemplate, {
+    required NewQuestCount newQuestCountCalculator,
+    required NewQuestArgGen newQuestPromptArgGen,
+    required ChoiceListFromPriorAnswer answerChoiceGenerator,
+    required CastStrToAnswTypCallback newRespCastFunc,
+    // optional args below
+    DerivedGenBehaviorOnMatchEnum genBehaviorOfDerivedQuests =
+        DerivedGenBehaviorOnMatchEnum.addPendingQuestions,
+    NewQuestIdGenFromPriorAnswer? newQuestIdGenFromPriorQuest,
+    QTargetResUpdateFunc? deriveTargetFromPriorRespCallbk,
+    QuestFactorytSignature? newQuestConstructor,
+    BailQGenWhenTrue? bailQGenWhenTrueCallbk,
+    bool acceptsMultiResponses = false,
+  }) {
     var qpp = NewQuestPerPromptOpts(
       questPromptTemplate,
       promptTemplArgGen: newQuestPromptArgGen,
       answerChoiceGenerator: answerChoiceGenerator,
       newRespCastFunc: newRespCastFunc,
+      acceptsMultiResponses: acceptsMultiResponses,
     );
 
     return DerivedQuestGenerator._(
@@ -131,15 +135,22 @@ class DerivedQuestGenerator {
   }
 
   factory DerivedQuestGenerator.multiPrompt(
-      List<NewQuestPerPromptOpts> perNewQuestGenOpts,
-      {required NewQuestCount newQuestCountCalculator,
-      // optional args below
-      DerivedGenBehaviorOnMatchEnum genBehaviorOfDerivedQuests =
-          DerivedGenBehaviorOnMatchEnum.addPendingQuestions,
-      NewQuestIdGenFromPriorAnswer? newQuestIdGenFromPriorQuest,
-      QTargetResUpdateFunc? deriveTargetFromPriorRespCallbk,
-      QuestFactorytSignature? newQuestConstructor,
-      BailQGenWhenTrue? bailQGenWhenTrueCallbk}) {
+    List<NewQuestPerPromptOpts> perNewQuestGenOpts, {
+    required NewQuestCount newQuestCountCalculator,
+    // optional args below
+    DerivedGenBehaviorOnMatchEnum genBehaviorOfDerivedQuests =
+        DerivedGenBehaviorOnMatchEnum.addPendingQuestions,
+    NewQuestIdGenFromPriorAnswer? newQuestIdGenFromPriorQuest,
+    QTargetResUpdateFunc? deriveTargetFromPriorRespCallbk,
+    QuestFactorytSignature? newQuestConstructor,
+    BailQGenWhenTrue? bailQGenWhenTrueCallbk,
+    bool allAcceptsMultiResponses = false,
+  }) {
+    if (allAcceptsMultiResponses) {
+      for (NewQuestPerPromptOpts qpp in perNewQuestGenOpts) {
+        qpp.acceptsMultiResponses = allAcceptsMultiResponses;
+      }
+    }
     return DerivedQuestGenerator._(
       perNewQuestGenOpts,
       genBehaviorOfDerivedQuests: genBehaviorOfDerivedQuests,

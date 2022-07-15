@@ -12,19 +12,22 @@ import 'package:st_ev_cfg/config/all.dart';
 
 var randGen = Random();
 
+typedef QuestId = String;
 typedef GendQuestPredictionCallback = void Function(
   /* a callback to allow PermTestAnswerFactory
     to inform GenStatsCollector about how many
     new questions should be generated off of each
     answered question
   */
-  QID qid,
+  QuestId qid,
   int unanswered,
   int answered,
 );
 
 class GenExpected {
-  final String qid;
+  // defines count of expected derived-questions to be generated
+  // in response to answers on question.qid
+  final QuestId qid;
   final int unanswered;
   final int answered;
   GenExpected(this.qid, this.unanswered, this.answered);
@@ -38,7 +41,7 @@ class PermTestAnswerFactory {
     back to the GenStatsCollector on the QCascadeDispatcher
     so we can confirm everything is working
   */
-  Map<String, GenExpected> _expected = {};
+  Map<QuestId, GenExpected> _expected = {};
   late GendQuestPredictionCallback _genPredictionCallback;
   PermTestAnswerFactory() {
     // init expected generator counts
@@ -53,12 +56,16 @@ class PermTestAnswerFactory {
       which implies they should only create ONE
       derived generated question
     */
-    assert(!qb.isFullyAnswered, 'oops!');
+    assert(
+      !qb.isFullyAnswered,
+      'oops! appendAnswersSetExpectedQGen only works on unanswered quests',
+    );
 
     // store prediction of derived question count
     // from answers to this question
     GenExpected? expectToGen = _expected[qb.questId];
     if (expectToGen == null) {
+      print('err: no expected gen guess found for ${qb.questId}');
       _bruteGuess(qb);
     } else {
       // store how many derived questions WILL be produced
@@ -466,6 +473,8 @@ class Permute {
   }
 }
 
+// counts of how many derived questions will be auto-generated
+// from the question IDs specified below
 List<GenExpected> _expectedToGen = [
   GenExpected(
     "specAreasToConfigOnScreen-marketView-targetLevel",

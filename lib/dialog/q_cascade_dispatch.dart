@@ -233,6 +233,7 @@ FIXME:
                 )
                 .toList();
           },
+          acceptsMultiResponses: true,
         ),
       ),
       QuestMatcher<List<ScreenWidgetArea>, List<ScreenAreaWidgetSlot>>(
@@ -332,6 +333,7 @@ FIXME:
                 .map((i) => possibleSlots[i])
                 .toList();
           },
+          acceptsMultiResponses: true,
         ),
       ),
       ..._matchRuleSelectionQuestions
@@ -423,6 +425,7 @@ FIXME:
                 .map((i) => '$i')
                 .toList();
           },
+          acceptsMultiResponses: true,
         ),
       )
     ];
@@ -481,7 +484,9 @@ FIXME:
           var answers = priorAnsweredQuest.mainAnswer as List<VisualRuleType>;
           VisualRuleType selRule = answers[newQuIdx];
           return priorAnsweredQuest.getDerivedRuleQuestGenViaVisType(
-              newQuIdx, selRule);
+            newQuIdx,
+            selRule,
+          );
         },
       ),
       QuestMatcher<List<VisualRuleType>, List<String>>(
@@ -691,6 +696,7 @@ List<QuestMatcher> _matchRuleSelectionQuestions = [
             .map((i) => possibleRules[i])
             .toList();
       },
+      acceptsMultiResponses: true,
     ),
   ),
   QuestMatcher<List<ScreenAreaWidgetSlot>, List<VisualRuleType>>(
@@ -787,6 +793,7 @@ List<QuestMatcher> _matchRuleSelectionQuestions = [
             .map((i) => possibleRules[i])
             .toList();
       },
+      acceptsMultiResponses: true,
     ),
   ),
 ];
