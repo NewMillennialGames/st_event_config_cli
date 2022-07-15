@@ -30,7 +30,7 @@ that will allow us to
 
 */
 
-const SKIP_THESE_TESTS = false;
+const SKIP_GROUP1_TESTS = false;
 
 void main() {
   /* - */
@@ -54,7 +54,7 @@ void main() {
     // select 1st 3 screens
     seedQuest.setAllAnswersWhileTesting(['0,1,2']);
     _questMgr = QuestListMgr([seedQuest]);
-    _qcd = QCascadeDispatcher();
+    _qcd = QCascadeDispatcher(testMode: true);
   });
 
   group(
@@ -67,7 +67,7 @@ void main() {
             _questMgr.pendingQuestionCount == 1,
             'err: seemed setup did not re-init objects??',
           );
-          print('questId\tunansweredQsAdded\tansweredQsAdded');
+          // print('questId\tunansweredQsAdded\tansweredQsAdded');
           permute.testAllTargetDerived(_questMgr, _qcd);
           List<PerQStats> compareVals =
               _qcd.statsCollector.getTestComparisonValues();
@@ -119,7 +119,7 @@ void main() {
           int loopCnt = 0;
           for (PerQStats pqs in compareVals) {
             loopCnt++;
-            print('testing quest #$loopCnt');
+            // print('testing quest #$loopCnt');
             expect(
               pqs.unansweredQsAdded,
               pqs.unanswered.expected,
@@ -172,6 +172,6 @@ void main() {
         },
       );
     },
-    skip: SKIP_THESE_TESTS,
+    skip: SKIP_GROUP1_TESTS,
   );
 }

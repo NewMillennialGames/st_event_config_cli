@@ -69,12 +69,20 @@ class PerQStats {
     answered.start = ans;
   }
 
-  void setEndCounts(int unans, int ans) {
+  void setEndCounts(
+    int unans,
+    int ans, {
+    bool testMode = false,
+  }) {
     //
     unanswered.end = unans;
     answered.end = ans;
 
-    print('$qid\t$unansweredQsAdded\t$answeredQsAdded');
+    if (testMode) {
+      print(
+        '$qid\t$unansweredQsAdded\t$answeredQsAdded   \t\t\t(from setEndCounts())',
+      );
+    }
   }
 }
 
@@ -123,7 +131,11 @@ class GenStatsCollector {
     _genStats[activeQuestId!] = qStats;
   }
 
-  void collectPostGenTotals(QuestListMgr questListMgr) {
+  void collectPostGenTotals(
+    QuestListMgr questListMgr,
+    QuestBase questJustAnswered, {
+    bool printSummary = false,
+  }) {
     /*  stop accumulating stats for current question
           pending == unanswered
           completed == answered
@@ -133,6 +145,37 @@ class GenStatsCollector {
       questListMgr.pendingQuestionCount,
       questListMgr.totalAnsweredQuestions,
     );
+
+    if (printSummary) {
+      print('Q-Id:\t$activeQuestId');
+      print('\tPrompt:\t${questJustAnswered.firstPrompt.userPrompt}');
+      int choiceCount = questJustAnswered.countChoicesInFirstPrompt;
+      print(
+        '\t$choiceCount Choices:\t${questJustAnswered.firstPrompt.choices}',
+      );
+      int ansCount = questJustAnswered.mainAnswer is Iterable
+          ? (questJustAnswered.mainAnswer as Iterable).length
+          : 1;
+      print('\t$ansCount Answers:\t${questJustAnswered.mainAnswer}');
+      print('\tGenerated:\t${qStats.unansweredQsAdded}');
+
+      int expectedGenCount = ansCount;
+      /*
+        targetting questions at AREA level often generate:
+          1 quest about which rules, and
+          1 quest about which slots
+        so expectedGenCount estimate is not always accurate
+        double it
+      */
+      if (questJustAnswered.isRegionTargetQuestion &&
+          questJustAnswered.slotInArea == null) {
+        // expectedGenCount *= 2;
+      }
+      if (expectedGenCount != qStats.unansweredQsAdded) {
+        print('\tPossible Err: should have generated $expectedGenCount');
+      }
+    }
+
     activeQuestId = null;
   }
 

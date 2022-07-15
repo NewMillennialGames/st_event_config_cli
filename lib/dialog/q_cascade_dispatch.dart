@@ -8,12 +8,14 @@ class QCascadeDispatcher {
   List<QuestMatcher> matchersToGenRulePrepQuests;
   List<QuestMatcher> matchersToGenRuleDetailQuests;
   final GenStatsCollector statsCollector = GenStatsCollector();
+  final bool testMode;
 
   QCascadeDispatcher({
     this.matchersToGenTargetingQuests = _EMPTY_LST,
     this.matchersToGenRuleSelectQuests = _EMPTY_LST,
     this.matchersToGenRulePrepQuests = _EMPTY_LST,
     this.matchersToGenRuleDetailQuests = _EMPTY_LST,
+    this.testMode = false,
   }) {
     // will use scoretrader defaults unless args passed to constructor
     if (matchersToGenTargetingQuests.length < 1) {
@@ -51,7 +53,9 @@ class QCascadeDispatcher {
     // }
 
     // collect q-gen stats
-    statsCollector.startCounting(questListMgr, questJustAnswered);
+    if (testMode) {
+      statsCollector.startCounting(questListMgr, questJustAnswered);
+    }
 
     // generate questions based on type of just answered
     if (questJustAnswered.isTopLevelEventConfigQuestion) {
@@ -131,8 +135,14 @@ class QCascadeDispatcher {
       );
     }
 
-    // record how many new questions (both unanswered / pending and completed) were generated
-    statsCollector.collectPostGenTotals(questListMgr);
+    if (testMode) {
+      // record how many new questions (both unanswered / pending and completed) were generated
+      statsCollector.collectPostGenTotals(
+        questListMgr,
+        questJustAnswered,
+        printSummary: testMode,
+      );
+    }
   }
 
   // begin static matchers lists
