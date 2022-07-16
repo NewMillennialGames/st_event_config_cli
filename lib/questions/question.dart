@@ -277,6 +277,9 @@ abstract class QuestBase with EquatableMixin {
   from FIRST PROMOT of current question
   */
 
+  bool get producesDerivedQuestsFromUserAnswers =>
+      qTargetResolution.producesDerivedQuestsFromUserAnswers;
+
   int get countChoicesInFirstPrompt =>
       qPromptCollection.countChoicesInFirstPrompt;
 

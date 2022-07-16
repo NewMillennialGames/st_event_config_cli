@@ -40,41 +40,45 @@ void main() {
     var _qMatchColl = QMatchCollection([]);
     expect(_qMatchColl.matchCountFor(askNumSortSlots), 0);
     //
-    _qMatchColl.append([
+    _qMatchColl.appendForTesting([
       QuestMatcher(
         'should match 1 based on screen, area ruletype',
+        RulePrepQuest,
         // respCascadePatternEm:
         //     QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions,
         derivedQuestGen: DerivedQuestGenerator.noopTest(),
         // validateUserAnswerAfterPatternMatchIsTrueCallback: (p0) => true,
-        appScreen: qq.appScreen,
-        screenWidgetArea: qq.screenWidgetArea,
-        visRuleTypeForAreaOrSlot: qq.visRuleTypeForAreaOrSlot,
+        // appScreen: qq.appScreen,
+        // screenWidgetArea: qq.screenWidgetArea,
+        // visRuleTypeForAreaOrSlot: qq.visRuleTypeForAreaOrSlot,
       ),
       QuestMatcher(
         'should match 2 based on screen, area ruletype & valid answer',
+        RulePrepQuest,
         // respCascadePatternEm:
         //     QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions,
         derivedQuestGen: DerivedQuestGenerator.noopTest(),
         validateUserAnswerAfterPatternMatchIsTrueCallback: (p0) => true,
-        appScreen: qq.appScreen,
-        screenWidgetArea: qq.screenWidgetArea,
-        visRuleTypeForAreaOrSlot: qq.visRuleTypeForAreaOrSlot,
+        // appScreen: qq.appScreen,
+        // screenWidgetArea: qq.screenWidgetArea,
+        // visRuleTypeForAreaOrSlot: qq.visRuleTypeForAreaOrSlot,
       ),
       QuestMatcher(
         'should NOT match based on wrong screen',
+        RulePrepQuest,
         // respCascadePatternEm:
         //     QRespCascadePatternEm.respCreatesWhichAreaInScreenQuestions,
         derivedQuestGen: DerivedQuestGenerator.noopTest(),
-        appScreen: AppScreen.eventConfiguration,
+        // appScreen: AppScreen.eventConfiguration,
       ),
       QuestMatcher(
         'should NOT match based on invalid user answer',
+        RulePrepQuest,
         // respCascadePatternEm:
         //     QRespCascadePatternEm.respCreatesWhichAreaInScreenQuestions,
         derivedQuestGen: DerivedQuestGenerator.noopTest(),
         validateUserAnswerAfterPatternMatchIsTrueCallback: (p0) => false,
-        appScreen: AppScreen.marketView,
+        // appScreen: AppScreen.marketView,
       ),
     ]);
     expect(_qMatchColl.matchCountFor(askNumSortSlots), 2);
@@ -103,33 +107,37 @@ void main() {
 
     final wontMatchByCascade = QuestMatcher(
       'should NOT match based on wrong screenWidgetArea',
+      EventLevelCfgQuest,
       // respCascadePatternEm:
       //     QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions,
       validateUserAnswerAfterPatternMatchIsTrueCallback: (p0) => true,
-      appScreen: qti.appScreen,
-      screenWidgetArea: ScreenWidgetArea.banner,
-      visRuleTypeForAreaOrSlot: qti.visRuleTypeForAreaOrSlot,
+      // appScreen: qti.appScreen,
+      // screenWidgetArea: ScreenWidgetArea.banner,
+      // visRuleTypeForAreaOrSlot: qti.visRuleTypeForAreaOrSlot,
       derivedQuestGen: DerivedQuestGenerator.noopTest(),
     );
 
     final wontMatchByWrongScreenAndCascade = QuestMatcher(
       'should NOT match based on wrong screen',
+      EventLevelCfgQuest,
       // respCascadePatternEm: QRespCascadePatternEm.noCascade,
-      appScreen: AppScreen.leaderboardTraders,
+      // appScreen: AppScreen.leaderboardTraders,
       derivedQuestGen: DerivedQuestGenerator.noopTest(),
     );
 
     final wontMatchByUserAnser = QuestMatcher(
       'should NOT match based on invalid user answer',
+      EventLevelCfgQuest,
       // respCascadePatternEm:
       //     QRespCascadePatternEm.respCreatesWhichAreaInScreenQuestions,
       validateUserAnswerAfterPatternMatchIsTrueCallback: (p0) => false,
-      appScreen: AppScreen.marketView,
+      // appScreen: AppScreen.marketView,
       derivedQuestGen: DerivedQuestGenerator.noopTest(),
     );
 
     final willMatchByQuestId = QuestMatcher(
       'should match 1 based on same quest ID',
+      EventLevelCfgQuest,
       // respCascadePatternEm:
       //     QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions,
       questIdPatternMatchTest: (qid) => qid == testQuestId,
@@ -142,16 +150,16 @@ void main() {
       ),
     );
 
-    _qMatchColl.append([wontMatchByCascade]);
+    _qMatchColl.appendForTesting([wontMatchByCascade]);
     expect(_qMatchColl.matchCountFor(anyBaseQuest), 0);
 
-    _qMatchColl.append([wontMatchByWrongScreenAndCascade]);
+    _qMatchColl.appendForTesting([wontMatchByWrongScreenAndCascade]);
     expect(_qMatchColl.matchCountFor(anyBaseQuest), 0);
 
-    _qMatchColl.append([wontMatchByUserAnser]);
+    _qMatchColl.appendForTesting([wontMatchByUserAnser]);
     expect(_qMatchColl.matchCountFor(anyBaseQuest), 0);
 
-    _qMatchColl.append([willMatchByQuestId]);
+    _qMatchColl.appendForTesting([willMatchByQuestId]);
     expect(_qMatchColl.matchCountFor(anyBaseQuest), 1);
   });
 }

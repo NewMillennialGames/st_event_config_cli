@@ -1,12 +1,12 @@
 part of QuestionsLib;
 
-typedef IntRange = Tuple2<int, int>;
+// typedef IntRange = Tuple2<int, int>;
 
 enum TargetPrecision {
   // describes the INTENT of a QTargetResolution instance
   // QTargetResolution instance is embedded in a
   // QuestBase instance; so this describes the query intent
-  // of that enclosing question; what info is asked of our user
+  // of that enclosing question; what info is asked of app user
   eventLevel,
   screenLevel,
   targetLevel,
@@ -23,14 +23,32 @@ extension TargetPrecisionExt1 on TargetPrecision {
   bool get isPartOfTargetCompletionQuestion =>
       this == TargetPrecision.targetLevel;
 
+  bool get producesDerivedQuestsFromUserAnswers =>
+      this.index <= TargetPrecision.rulePrep.index;
+
+  QuestFactorytSignature get derivedNewQuestSignature {
+    // returns constructor for DERIVED question of this
+    // enclosing QTargetResolution
+    assert(
+      producesDerivedQuestsFromUserAnswers,
+      'questions w precision > rule-prep DO NOT create derived questions',
+    );
+    TargetPrecision nextTp = TargetPrecision.values[this.index + 1];
+    return nextTp.enclosingNewQuestSignature;
+  }
+
   QuestFactorytSignature get enclosingNewQuestSignature {
-    /*
+    /* used in testing to create appropriate
+    WRAPPER questions from all possible permutations of
+    target
+
+    also used in derivedNewQuestSignature above
+    as a sanity check for enclosing question    
+
     provides method to create a new question which
     will wrap the enclosing QTargetResolution
     creates the type of question that should WRAP QTR instance
     not the type of a DERIVED question
-
-  currently only used in testing
     */
     switch (this) {
       case TargetPrecision.eventLevel:
@@ -48,13 +66,6 @@ extension TargetPrecisionExt1 on TargetPrecision {
       case TargetPrecision.ruleDetailBehavior:
         return QuestBase.behaveRuleDetailQuest;
     }
-  }
-
-  QuestFactorytSignature get derivedNewQuestSignature {
-    // returns constructor for DERIVED question of this
-    // enclosing QTargetResolution
-    TargetPrecision nextTp = TargetPrecision.values[this.index + 1];
-    return nextTp.enclosingNewQuestSignature;
   }
 }
 
@@ -123,64 +134,8 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
         behRuleScore;
   }
 
-  IntRange get niu_userRespCountRangeForTest {
-    /*  only for testing
-      return range 1 to max possible answers user could
-      select for prompt #1 of this question
-      ==
-      reasonable # of auto-answers for test framework to generate
-
-      # of answers on TOP-LEVEL (first) prompt
-      generally dictates HOW MANY derived questions will
-      be generated
-    */
-    switch (precision) {
-      case TargetPrecision.eventLevel:
-        return IntRange(1, 1);
-      case TargetPrecision.screenLevel:
-        return IntRange(
-          1,
-          AppScreen.eventConfiguration.topConfigurableScreens.length,
-        );
-      case TargetPrecision.targetLevel:
-        int subTargetChoiceCnt = this._possibleTargetSubChoices.length;
-        return IntRange(subTargetChoiceCnt > 0 ? 1 : 0, subTargetChoiceCnt);
-
-      // int curTargetRuleCnt = this.possibleRulesAtAnyTarget.length;
-      // int tot = subTargetChoiceCnt + curTargetRuleCnt;
-      // return IntRange(tot > 0 ? 1 : 0, tot);
-
-      case TargetPrecision.ruleSelect:
-        return IntRange(1, possibleRulesAtAnyTarget.length);
-      case TargetPrecision.rulePrep:
-        // asking answer count;  not prompt count:  visRuleTypeForAreaOrSlot!.requPrepQuests.length
-        return IntRange(1, 1);
-
-      // below here DO NOT produce derived questions
-      case TargetPrecision.ruleDetailVisual:
-        return IntRange(
-          1,
-          visRuleTypeForAreaOrSlot!.requRuleDetailCfgQuests.length,
-        );
-      case TargetPrecision.ruleDetailBehavior:
-        return IntRange(1, 1);
-    }
-  }
-
-  Iterable<dynamic> get _possibleTargetSubChoices {
-    // only valid when precision == TargetPrecision.targetLevel
-    // aka NO RULE SET yet
-    assert(
-      isPartOfTargetCompletionQuestion,
-      'reading from an invalid instance',
-    );
-    // Iterable<dynamic> lst = [];
-    if (screenWidgetArea == null) return possibleAreasForScreen;
-    if (slotInArea == null) return possibleSlotsForAreaInScreen;
-    // if (visRuleTypeForAreaOrSlot == null) return possibleRulesAtAnyTarget;
-    // if (behRuleTypeForAreaOrSlot == null) return possibleRulesAtAnyTarget;
-    return [1];
-  }
+  bool get producesDerivedQuestsFromUserAnswers =>
+      precision.producesDerivedQuestsFromUserAnswers;
 
   QuestFactorytSignature get derivedNewQuestSignature =>
       precision.derivedNewQuestSignature;
@@ -198,10 +153,10 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
     String visRuleName = visRuleTypeForAreaOrSlot?.name ?? '';
 
     String intentName = '-' + precision.name;
-    if (precision.targetComplete) {
-      //
-      intentName = '';
-    }
+    // if (precision.targetComplete) {
+    //   //
+    //   intentName = '';
+    // }
     if (area == null) return screenName + intentName;
     if (slot == null)
       return screenName +
@@ -484,4 +439,63 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
 
   @override
   bool get stringify => true;
+
+  // IntRange get niu_userRespCountRangeForTest {
+  //   /*  only for testing
+  //     return range 1 to max possible answers user could
+  //     select for prompt #1 of this question
+  //     ==
+  //     reasonable # of auto-answers for test framework to generate
+
+  //     # of answers on TOP-LEVEL (first) prompt
+  //     generally dictates HOW MANY derived questions will
+  //     be generated
+  //   */
+  //   switch (precision) {
+  //     case TargetPrecision.eventLevel:
+  //       return IntRange(1, 1);
+  //     case TargetPrecision.screenLevel:
+  //       return IntRange(
+  //         1,
+  //         AppScreen.eventConfiguration.topConfigurableScreens.length,
+  //       );
+  //     case TargetPrecision.targetLevel:
+  //       int subTargetChoiceCnt = this._possibleTargetSubChoices.length;
+  //       return IntRange(subTargetChoiceCnt > 0 ? 1 : 0, subTargetChoiceCnt);
+
+  //     // int curTargetRuleCnt = this.possibleRulesAtAnyTarget.length;
+  //     // int tot = subTargetChoiceCnt + curTargetRuleCnt;
+  //     // return IntRange(tot > 0 ? 1 : 0, tot);
+
+  //     case TargetPrecision.ruleSelect:
+  //       return IntRange(1, possibleRulesAtAnyTarget.length);
+  //     case TargetPrecision.rulePrep:
+  //       // asking answer count;  not prompt count:  visRuleTypeForAreaOrSlot!.requPrepQuests.length
+  //       return IntRange(1, 1);
+
+  //     // below here DO NOT produce derived questions
+  //     case TargetPrecision.ruleDetailVisual:
+  //       return IntRange(
+  //         1,
+  //         visRuleTypeForAreaOrSlot!.requRuleDetailCfgQuests.length,
+  //       );
+  //     case TargetPrecision.ruleDetailBehavior:
+  //       return IntRange(1, 1);
+  //   }
+  // }
+
+  // Iterable<dynamic> get _possibleTargetSubChoices {
+  //   // only valid when precision == TargetPrecision.targetLevel
+  //   // aka NO RULE SET yet
+  //   assert(
+  //     isPartOfTargetCompletionQuestion,
+  //     'reading from an invalid instance',
+  //   );
+  //   // Iterable<dynamic> lst = [];
+  //   if (screenWidgetArea == null) return possibleAreasForScreen;
+  //   if (slotInArea == null) return possibleSlotsForAreaInScreen;
+  //   // if (visRuleTypeForAreaOrSlot == null) return possibleRulesAtAnyTarget;
+  //   // if (behRuleTypeForAreaOrSlot == null) return possibleRulesAtAnyTarget;
+  //   return [1];
+  // }
 }
