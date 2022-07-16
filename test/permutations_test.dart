@@ -27,7 +27,6 @@ regarding PRE-CANNED answers, we may need a top-level
 structure that defines the rule for selecting
 the answer for THIS TEST RUN
 that will allow us to 
-
 */
 
 const SKIP_GROUP1_TESTS = false;

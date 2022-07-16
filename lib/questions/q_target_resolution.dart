@@ -198,6 +198,10 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
     String visRuleName = visRuleTypeForAreaOrSlot?.name ?? '';
 
     String intentName = '-' + precision.name;
+    if (precision.targetComplete) {
+      //
+      intentName = '';
+    }
     if (area == null) return screenName + intentName;
     if (slot == null)
       return screenName +

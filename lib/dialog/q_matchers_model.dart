@@ -60,16 +60,17 @@ class QMatchCollection {
     }
     questListMgr.appendGeneratedQuestsAndAnswers(newGendPendingQuests);
 
-    if (_foundQmatchers.length < 1) {
+    if (_foundQmatchers.length > 0) {
+      _foundQmatchers.forEach((QuestMatcher qm) {
+        print('\nQuest: ${questJustAnswered.questId}');
+        // print('\t\ton screen: ' + questJustAnswered.appScreen.name);
+        print('\tmatched: ' + qm.matcherDescrip);
+      });
+    } else {
       // print(
       //   '*** appendNewQuestsOrInsertImplicitAnswers found ${_foundQmatchers.length} QuestMatchers for ${questJustAnswered.questId}',
       // );
     }
-    // _foundQmatchers.forEach((qm) {
-    //   print('\nScreen: ');
-    //   print(questJustAnswered.appScreen.name);
-    //   print('\t\t' + qm.matcherDescrip);
-    // });
   }
 
   // testing below

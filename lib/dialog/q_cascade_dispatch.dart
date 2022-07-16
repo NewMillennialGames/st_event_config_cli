@@ -95,9 +95,9 @@ class QCascadeDispatcher {
       );
     } else if (questJustAnswered.isRuleSelectionQuestion) {
       // user has selected rule for area or slot
-      // print(
-      //   '\tUser has selected rule(s) for area or slot ${questJustAnswered.questId} (now gen rule-prep or rule-detail)',
-      // );
+      print(
+        '\tUser has selected rule(s) for area or slot ${questJustAnswered.questId} (now gen rule-prep or rule-detail)',
+      );
       var requiresRulePrepQuestion =
           questJustAnswered.requiresVisRulePrepQuestion ||
               questJustAnswered.requiresBehRulePrepQuestion;
@@ -114,9 +114,9 @@ class QCascadeDispatcher {
       );
       //
     } else if (questJustAnswered.isRulePrepQuestion) {
-      // print(
-      //   '\tUser has answered rule prep quest (normally # of pos to configure)',
-      // );
+      print(
+        '\tUser has answered rule prep quest (normally # of pos to configure)',
+      );
       var _qMatchCollToGenRuleDetail =
           QMatchCollection(matchersToGenRuleDetailQuests);
       _qMatchCollToGenRuleDetail.appendNewQuestsOrInsertImplicitAnswers(
@@ -385,9 +385,16 @@ FIXME:
                 (priorAnsweredQuest.mainAnswer as List<VisualRuleType>);
             VisualRuleType curRule = respList[newQuestIdx];
 
-            String quest =
-                curRule.prepTemplate.format([priorAnsweredQuest.targetPath]);
-            return [quest];
+            QTargetResolution newTarg =
+                priorAnsweredQuest.qTargetResolution.copyWith(
+              visRuleTypeForAreaOrSlot: curRule,
+              precision: curRule.requiresVisRulePrepQuestion
+                  ? TargetPrecision.rulePrep
+                  : TargetPrecision.ruleDetailVisual,
+            );
+            String promptArg1 =
+                curRule.prepTemplate.format([newTarg.targetPath]);
+            return [promptArg1];
           },
           newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
             // how many questions to generate
@@ -403,8 +410,19 @@ FIXME:
           ) {
             // each new question about area on screen should
             // have an ID that lets the next QM identify it to produce new Q's
-            return QuestionIdStrings.prepQuestForVisRule +
-                priorAnsweredQuest.targetPath;
+
+            List<VisualRuleType> respList =
+                (priorAnsweredQuest.mainAnswer as List<VisualRuleType>);
+            VisualRuleType curRule = respList[newQuIdx];
+
+            QTargetResolution newTarg =
+                priorAnsweredQuest.qTargetResolution.copyWith(
+              visRuleTypeForAreaOrSlot: curRule,
+              precision: curRule.requiresVisRulePrepQuestion
+                  ? TargetPrecision.rulePrep
+                  : TargetPrecision.ruleDetailVisual,
+            );
+            return QuestionIdStrings.prepQuestForVisRule + newTarg.targetPath;
           },
           answerChoiceGenerator:
               (QuestBase priorAnsweredQuest, int newQuestIdx, int promptIdx) {
@@ -435,7 +453,7 @@ FIXME:
                 .map((i) => '$i')
                 .toList();
           },
-          acceptsMultiResponses: true,
+          acceptsMultiResponses: false,
         ),
       )
     ];
@@ -504,7 +522,7 @@ FIXME:
           from rule-prep questions
         
         matches rule prep questions for which user 
-        specifies vis-rules to config on screen-areas
+        specifies # of vis-rules to config on screen-areas
     ''',
         questIdPatternMatchTest: (String qid) =>
             qid.startsWith(QuestionIdStrings.prepQuestForVisRule),
@@ -522,8 +540,8 @@ FIXME:
           // List<String> rulePrepAnswers = priorAnsweredQuest.mainAnswer;
           // assert(rulePrepAnswers.length > 0, '');
           // int desiredCount = int.tryParse(rulePrepAnswers.first) ?? 1;
-          int desiredCount = priorAnsweredQuest.mainAnswer;
-          return desiredCount > 0 &&
+          List<String> desiredCount = priorAnsweredQuest.mainAnswer;
+          return desiredCount.length > 0 &&
               priorAnsweredQuest.isRulePrepQuestion &&
               priorAnsweredQuest.targetPathIsComplete;
         },
