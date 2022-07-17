@@ -175,23 +175,23 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
         intentName;
   }
 
-  bool get isTopLevelEventConfigQuestion =>
+  bool get isEventConfigScreenEntryPointQuest =>
       appScreen == AppScreen.eventConfiguration &&
       screenWidgetArea == null &&
       slotInArea == null &&
       visRuleTypeForAreaOrSlot == null &&
       behRuleTypeForAreaOrSlot == null;
 
-  bool get _targetRequiresRulePrepQuestion =>
-      (screenWidgetArea?.requiresPrepQuestion ?? false) ||
-      (slotInArea?.requiresPrepQuestion ?? false);
+  // bool get _targetRequiresRulePrepQuestion =>
+  //     (screenWidgetArea?.requiresPrepQuestion ?? false) ||
+  //     (slotInArea?.requiresPrepQuestion ?? false);
 
   bool get requiresVisRulePrepQuestion =>
-      _targetRequiresRulePrepQuestion ||
+      // _targetRequiresRulePrepQuestion ||
       (visRuleTypeForAreaOrSlot?.requiresVisRulePrepQuestion ?? false);
 
   bool get requiresBehRulePrepQuestion =>
-      _targetRequiresRulePrepQuestion ||
+      // _targetRequiresRulePrepQuestion ||
       (behRuleTypeForAreaOrSlot?.requiresRulePrepQuestion ?? false);
 
   List<ScreenWidgetArea> get possibleAreasForScreen =>

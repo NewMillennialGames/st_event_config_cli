@@ -87,7 +87,7 @@ class CliQuestionPresenter implements QuestionPresenterIfc {
 
   void _printInstructions(QuestBase quest, QuestPromptInstance promptInst) {
     //
-    if (quest.isTopLevelEventConfigQuestion) {
+    if (quest.isEventConfigScreenEntryPointQuest) {
       // user will enter string or comma delimited list of ints
     } else if (quest.isRegionTargetQuestion) {
       // causes Quest2s to be added or removed from future queue

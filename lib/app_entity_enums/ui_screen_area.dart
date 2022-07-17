@@ -20,7 +20,7 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
   //     'On Section ${section.name}, do you want to configure the ${this.name}?';
 
   bool get hasNoRuleEnabledSlots => [ScreenWidgetArea.tableview].contains(this);
-  bool get requiresPrepQuestion => [ScreenWidgetArea.filterBar].contains(this);
+  // bool get requiresPrepQuestion => [ScreenWidgetArea.filterBar].contains(this);
 
   // intentionally checking rules here (in addition to slots)
   // an area can be configurable EVEN IF it has ZERO

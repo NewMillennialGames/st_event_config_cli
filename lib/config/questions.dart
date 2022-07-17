@@ -6,7 +6,7 @@ List<QuestBase> loadInitialConfigQuestions() {
   return _initQuestionLst
       .where((qb) =>
           qb.appScreen == AppScreen.eventConfiguration &&
-          qb.isTopLevelEventConfigQuestion)
+          qb.isEventConfigScreenEntryPointQuest)
       .toList();
 }
 

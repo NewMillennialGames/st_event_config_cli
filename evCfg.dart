@@ -58,7 +58,7 @@ void createOutputFileFromResponses(
 
   eventConfigLevelData = eventConfigLevelData
       .where(
-        (q) => q.isTopLevelEventConfigQuestion,
+        (q) => q.isEventConfigScreenEntryPointQuest,
       )
       .toList();
 

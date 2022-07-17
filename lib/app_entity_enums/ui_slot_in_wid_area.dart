@@ -29,7 +29,7 @@ extension ScreenAreaWidgetSlotExt1 on ScreenAreaWidgetSlot {
 
   // getters
   // none currently require prep
-  bool get requiresPrepQuestion => [].contains(this);
+  // bool get requiresPrepQuestion => [].contains(this);
   String get choiceName => this.name;
 
   // methods

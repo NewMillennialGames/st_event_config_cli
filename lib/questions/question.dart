@@ -277,6 +277,9 @@ abstract class QuestBase with EquatableMixin {
   from FIRST PROMOT of current question
   */
 
+  RuleResponseBase get asVisRuleResponse =>
+      visRuleTypeForAreaOrSlot!.ruleResponseContainer;
+
   bool get producesDerivedQuestsFromUserAnswers =>
       qTargetResolution.producesDerivedQuestsFromUserAnswers;
 
@@ -311,9 +314,9 @@ abstract class QuestBase with EquatableMixin {
   bool get isFullyAnswered => qPromptCollection.allPartsHaveAnswers;
 
   // define type of question for auto-gen
-  bool get isTopLevelEventConfigQuestion =>
+  bool get isEventConfigScreenEntryPointQuest =>
       this is EventLevelCfgQuest &&
-      qTargetResolution.isTopLevelEventConfigQuestion;
+      qTargetResolution.isEventConfigScreenEntryPointQuest;
   bool get isRegionTargetQuestion => this is RegionTargetQuest;
   bool get isRuleSelectionQuestion => this is RuleSelectQuest;
   bool get isRulePrepQuestion => this is RulePrepQuest;
@@ -334,7 +337,7 @@ abstract class QuestBase with EquatableMixin {
   Type get expectedAnswerType => _firstPromptAnswers.cast(this).runtimeType;
 
   bool get existsONLYToGenDialogStructure =>
-      qTargetResolution.isTopLevelEventConfigQuestion;
+      qTargetResolution.isEventConfigScreenEntryPointQuest;
   bool get isNotForRuleOutput => existsONLYToGenDialogStructure;
   // does questions have multi-prompts
   bool get isMultiPrompt => qPromptCollection.isMultiPrompt;

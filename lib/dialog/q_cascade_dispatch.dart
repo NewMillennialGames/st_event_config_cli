@@ -58,7 +58,7 @@ class QCascadeDispatcher {
     }
 
     // generate questions based on type of just answered
-    if (questJustAnswered.isTopLevelEventConfigQuestion) {
+    if (questJustAnswered.isEventConfigScreenEntryPointQuest) {
       // matching question is about: which screens to config?
       // it carries a list of app-screens and generator below
       // will create one question to select area-list for each screen
@@ -359,7 +359,7 @@ FIXME:
   static List<QuestMatcher> _getMatchersToGenRulePrepQuests() {
     //
     return [
-      QuestMatcher<List<VisualRuleType>, List<String>>(
+      QuestMatcher<List<VisualRuleType>, int>(
         '''matches questions in which user specifies rules for screen-areas to config
         and requiresVisRulePrepQuestion is true
       build ?s prep questions for these rules
@@ -370,10 +370,14 @@ FIXME:
             qid.startsWith(QuestionIdStrings.specRulesForSlotInArea),
         validateUserAnswerAfterPatternMatchIsTrueCallback:
             (QuestBase priorAnsweredQuest) {
-          return (priorAnsweredQuest.mainAnswer as Iterable<VisualRuleType>)
-                      .length >
-                  0 &&
-              priorAnsweredQuest.requiresVisRulePrepQuestion;
+          var selectedRules =
+              priorAnsweredQuest.mainAnswer as Iterable<VisualRuleType>;
+          return priorAnsweredQuest is RuleSelectQuest &&
+              selectedRules.length > 0 &&
+              selectedRules.fold<bool>(
+                  false,
+                  (bool needsPrep, VisualRuleType vtr) =>
+                      needsPrep || vtr.requiresVisRulePrepQuestion);
         },
         //
         derivedQuestGen: DerivedQuestGenerator.singlePrompt(
@@ -414,7 +418,9 @@ FIXME:
             // have an ID that lets the next QM identify it to produce new Q's
 
             List<VisualRuleType> respList =
-                (priorAnsweredQuest.mainAnswer as List<VisualRuleType>);
+                (priorAnsweredQuest.mainAnswer as List<VisualRuleType>)
+                    .where((rt) => rt.requiresVisRulePrepQuestion)
+                    .toList();
             VisualRuleType curRule = respList[newQuIdx];
 
             QTargetResolution newTarg =
@@ -426,10 +432,15 @@ FIXME:
             );
             return QuestionIdStrings.prepQuestForVisRule + newTarg.targetPath;
           },
-          answerChoiceGenerator:
-              (QuestBase priorAnsweredQuest, int newQuestIdx, int promptIdx) {
+          answerChoiceGenerator: (
+            QuestBase priorAnsweredQuest,
+            int newQuestIdx,
+            int promptIdx,
+          ) {
             List<VisualRuleType> selectedScreenAreas =
-                (priorAnsweredQuest.mainAnswer as List<VisualRuleType>);
+                (priorAnsweredQuest.mainAnswer as List<VisualRuleType>)
+                    .where((rt) => rt.requiresVisRulePrepQuestion)
+                    .toList();
             VisualRuleType vrt = selectedScreenAreas[newQuestIdx];
             // bail out so question not created
             if (!vrt.requiresVisRulePrepQuestion) return [];
@@ -439,9 +450,11 @@ FIXME:
             QuestBase priorAnsweredQuest,
             int newQuestIdx,
           ) {
-            List<VisualRuleType> selectedScreenAreas =
-                (priorAnsweredQuest.mainAnswer as List<VisualRuleType>);
-            VisualRuleType vrt = selectedScreenAreas[newQuestIdx];
+            List<VisualRuleType> selectedRules =
+                (priorAnsweredQuest.mainAnswer as List<VisualRuleType>)
+                    .where((rt) => rt.requiresVisRulePrepQuestion)
+                    .toList();
+            VisualRuleType vrt = selectedRules[newQuestIdx];
             return priorAnsweredQuest.qTargetResolution.copyWith(
               visRuleTypeForAreaOrSlot: vrt,
               precision: TargetPrecision.rulePrep,
@@ -451,9 +464,10 @@ FIXME:
             QuestBase newQuest,
             String lstAreaIdxs,
           ) {
+            //                 // .map((i) => '$i')
             return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
-                .map((i) => '$i')
-                .toList();
+                .toList()
+                .first;
           },
           acceptsMultiResponses: false,
         ),

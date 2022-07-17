@@ -33,7 +33,7 @@ class ScreenCfgByArea {
     return areaConfig[area]!;
   }
 
-  void appendRule(
+  void appendVisRule(
     VisualRuleDetailQuest rQuest,
   ) {
     //
@@ -41,15 +41,17 @@ class ScreenCfgByArea {
     assert(swa != null, 'area is required at this level');
     _confirmAreaIsApplicableToThisScreen(swa!, false);
     //
-    RuleResponseBase? answer = rQuest.mainAnswer;
-    if (answer == null) {
-      var msg = 'Err: ${rQuest.questId} ${rQuest.questId} was missing key data';
-      print(
-        msg,
-      );
-      throw UnimplementedError(msg);
-    }
+    RuleResponseBase ruleResp = rQuest.asVisRuleResponse;
+    // if (ruleResp == null) {
+    //   var msg = 'Err: ${rQuest.questId} ${rQuest.questId} was missing key data';
+    //   print(
+    //     msg,
+    //   );
+    //   throw UnimplementedError(msg);
+    // }
 
+    dynamic answer = rQuest.mainAnswer;
+    // ruleResp.
     if (answer is Iterable) {
       throw UnimplementedError('todo');
     } else {
