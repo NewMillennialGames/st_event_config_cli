@@ -156,6 +156,7 @@ class QCascadeDispatcher {
       in which we ask which areas on that screen
       need to be configured
 ''',
+        EventLevelCfgQuest,
         questIdPatternMatchTest: (String answQid) =>
             answQid.startsWith(QuestionIdStrings.selectAppScreens),
         validateUserAnswerAfterPatternMatchIsTrueCallback:
@@ -253,7 +254,7 @@ FIXME:
       the answers to those questions (Area Slots) will match below to
       ask WHICH rules for each selected slot
     ''',
-
+        RegionTargetQuest,
         questIdPatternMatchTest: (String answQid) =>
             answQid.startsWith(QuestionIdStrings.specAreasToConfigOnScreen),
         validateUserAnswerAfterPatternMatchIsTrueCallback:
@@ -363,6 +364,7 @@ FIXME:
         and requiresVisRulePrepQuestion is true
       build ?s prep questions for these rules
     ''',
+        RuleSelectQuest,
         questIdPatternMatchTest: (qid) =>
             qid.startsWith(QuestionIdStrings.specRulesForAreaOnScreen) ||
             qid.startsWith(QuestionIdStrings.specRulesForSlotInArea),
@@ -494,6 +496,7 @@ FIXME:
       the answers to those questions (set of VisRuleQuestType) will be the
       ui config for THAT RULE, on selected screen area
     ''',
+        RuleSelectQuest,
         questIdPatternMatchTest: (String qid) =>
             qid.startsWith(QuestionIdStrings.specRulesForAreaOnScreen) ||
             qid.startsWith(QuestionIdStrings.specRulesForSlotInArea),
@@ -524,6 +527,7 @@ FIXME:
         matches rule prep questions for which user 
         specifies # of vis-rules to config on screen-areas
     ''',
+        RulePrepQuest,
         questIdPatternMatchTest: (String qid) =>
             qid.startsWith(QuestionIdStrings.prepQuestForVisRule),
         validateUserAnswerAfterPatternMatchIsTrueCallback:
@@ -540,8 +544,8 @@ FIXME:
           // List<String> rulePrepAnswers = priorAnsweredQuest.mainAnswer;
           // assert(rulePrepAnswers.length > 0, '');
           // int desiredCount = int.tryParse(rulePrepAnswers.first) ?? 1;
-          List<String> desiredCount = priorAnsweredQuest.mainAnswer;
-          return desiredCount.length > 0 &&
+          int desiredCount = priorAnsweredQuest.mainAnswer;
+          return desiredCount > 0 &&
               priorAnsweredQuest.isRulePrepQuestion &&
               priorAnsweredQuest.targetPathIsComplete;
         },
@@ -642,6 +646,7 @@ List<QuestMatcher> _matchRuleSelectionQuestions = [
 
       skip questions when no rules apply
     ''',
+    RegionTargetQuest,
     questIdPatternMatchTest: (qid) =>
         qid.startsWith(QuestionIdStrings.specAreasToConfigOnScreen),
     validateUserAnswerAfterPatternMatchIsTrueCallback:
@@ -733,6 +738,7 @@ List<QuestMatcher> _matchRuleSelectionQuestions = [
 
       skip questions when no rules apply
     ''',
+    RegionTargetQuest,
     questIdPatternMatchTest: (qid) =>
         qid.startsWith(QuestionIdStrings.specSlotsToConfigInArea),
     validateUserAnswerAfterPatternMatchIsTrueCallback:
