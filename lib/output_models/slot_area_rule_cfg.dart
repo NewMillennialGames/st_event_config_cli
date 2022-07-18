@@ -59,7 +59,7 @@ class SlotOrAreaRuleCfg {
     });
 
     Iterable<List<VisRuleQuestType>> answerTypesSoFar =
-        visRuleList.map((e) => e.requiredQuest2s);
+        visRuleList.map((e) => e.requiredQuestions);
     List<VisRuleQuestType> lstVrqt = [];
     if (answerTypesSoFar.length > 0) {
       lstVrqt = answerTypesSoFar

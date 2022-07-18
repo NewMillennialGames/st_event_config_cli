@@ -30,7 +30,7 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
 
   RuleResponseBase(this.ruleType);
 
-  List<VisRuleQuestType> get requiredQuest2s =>
+  List<VisRuleQuestType> get requiredQuestions =>
       ruleType.requRuleDetailCfgQuests;
   // @override
   // bool get gens2ndOr3rdSortGroupFilterQuests => false;
@@ -40,8 +40,8 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
 
   void _checkArgs(Map<VisRuleQuestType, String> responses) {
     assert(
-      this.requiredQuest2s.length == responses.length,
-      'not enough answers passed: got ${responses.length} exp: ${this.requiredQuest2s.length}',
+      this.requiredQuestions.length == responses.length,
+      'not enough answers passed: got ${responses.length} exp: ${this.requiredQuestions.length}',
     );
   }
 
@@ -151,7 +151,7 @@ class TvRowStyleCfg extends RuleResponseBase {
   // receive str data into instance & make it structured data
   @override
   void _castToRealTypes() {
-    VisRuleQuestType key = requiredQuest2s.first;
+    VisRuleQuestType key = requiredQuestions.first;
     assert(key == VisRuleQuestType.selectVisualComponentOrStyle);
     String uResp = userResponses[key] ?? '0';
     int uRespIdx = int.tryParse(uResp) ?? 0;

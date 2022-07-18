@@ -277,8 +277,17 @@ abstract class QuestBase with EquatableMixin {
   from FIRST PROMOT of current question
   */
 
+  Map<VisRuleQuestType, String> get _userRespMap =>
+      Map<VisRuleQuestType, String>.fromIterable(qPromptCollection.prompts,
+          key: (qpi) {
+        return (qpi as QuestPromptInstance).visQuestType;
+      }, value: (qpi) {
+        return (qpi as QuestPromptInstance)._answerRepoAndTypeCast._answers;
+      });
+
   RuleResponseBase get asVisRuleResponse =>
-      visRuleTypeForAreaOrSlot!.ruleResponseContainer;
+      visRuleTypeForAreaOrSlot!.ruleResponseContainer
+        ..castResponsesToAnswerTypes(_userRespMap);
 
   bool get producesDerivedQuestsFromUserAnswers =>
       qTargetResolution.producesDerivedQuestsFromUserAnswers;

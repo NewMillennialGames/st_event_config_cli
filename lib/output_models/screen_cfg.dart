@@ -37,8 +37,8 @@ class ScreenCfgByArea {
     VisualRuleDetailQuest rQuest,
   ) {
     //
-    var swa = rQuest.screenWidgetArea;
-    assert(swa != null, 'area is required at this level');
+    ScreenWidgetArea? swa = rQuest.screenWidgetArea;
+    assert(swa != null, 'area target is min required at this level');
     _confirmAreaIsApplicableToThisScreen(swa!, false);
     //
     RuleResponseBase ruleResp = rQuest.asVisRuleResponse;
