@@ -98,13 +98,15 @@ class QCascadeDispatcher {
       print(
         '\tUser has selected rule(s) for area or slot ${questJustAnswered.questId} (now gen rule-prep or rule-detail)',
       );
-      var requiresRulePrepQuestion =
-          questJustAnswered.requiresVisRulePrepQuestion ||
-              questJustAnswered.requiresBehRulePrepQuestion;
+      // var userSelectedRules =
+      //     questJustAnswered.mainAnswer as List<VisualRuleType>;
+      // var requiresRulePrepQuestion =
+      //     questJustAnswered.requiresVisRulePrepQuestion ||
+      //         questJustAnswered.requiresBehRulePrepQuestion;
+      // var matchersForPrepOrDetail = requiresRulePrepQuestion ? xx : yy;
 
-      var matchersForPrepOrDetail = requiresRulePrepQuestion
-          ? matchersToGenRulePrepQuests
-          : matchersToGenRuleDetailQuests;
+      var matchersForPrepOrDetail =
+          matchersToGenRulePrepQuests + matchersToGenRuleDetailQuests;
 
       var _qMatchCollToGenRulePrepOrDetail =
           QMatchCollection(matchersForPrepOrDetail);
@@ -528,6 +530,9 @@ FIXME:
           //
           var answers = priorAnsweredQuest.mainAnswer as List<VisualRuleType>;
           VisualRuleType selRule = answers[newQuIdx];
+          if (selRule.requiresVisRulePrepQuestion)
+            return DerivedQuestGenerator.noop();
+
           return priorAnsweredQuest.getDerivedRuleQuestGenViaVisType(
             newQuIdx,
             selRule,
