@@ -1,5 +1,7 @@
 part of QuestionsLib;
 
+typedef ValidateUserResp = bool Function(String);
+
 class QuestPromptInstance<T> implements QPromptIfc {
   /* describes each prompt part of a QuestBase instance
     including list of prompts
@@ -9,12 +11,14 @@ class QuestPromptInstance<T> implements QPromptIfc {
   final VisQuestChoiceCollection answChoiceCollection;
   final CaptureAndCast<T> _answerRepoAndTypeCast;
   final bool allowsMultipleChoices;
+  final ValidateUserResp? validateUserResp;
 
   QuestPromptInstance(
     this.userPrompt,
     this.answChoiceCollection,
     this._answerRepoAndTypeCast, {
     this.allowsMultipleChoices = true,
+    this.validateUserResp = null,
   }); // : _userAnswers = CaptureAndCast<T>(castFunc);
 
   factory QuestPromptInstance.fromRaw(
@@ -33,10 +37,24 @@ class QuestPromptInstance<T> implements QPromptIfc {
 
   // begin QPromptIfc impl
   @override
-  void collectResponse(String s) {
+  void collectResponse(String userResp) {
     // store user answer response into  CaptureAndCast<T> _answerRepoAndTypeCast
     // print('Qpi.colResp:  Prompt: "$userPrompt" answered with $s!');
-    _answerRepoAndTypeCast.captureUserRespStr(s);
+    _validateUserResponse(userResp);
+    _answerRepoAndTypeCast.captureUserRespStr(userResp);
+    print('userResp of "$userResp" stored on $userPrompt');
+  }
+
+  void _validateUserResponse(String userResp) {
+    if (userResp.isEmpty) {
+      throw Exception('user response cant be empty');
+    }
+    if (validateUserResp == null) return;
+
+    bool isValid = validateUserResp!(userResp);
+    if (!isValid) {
+      throw Exception('user response failed validation');
+    }
   }
 
   // getters

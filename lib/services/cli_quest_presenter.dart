@@ -15,12 +15,20 @@ class CliQuestionPresenter implements QuestionPresenterIfc {
     QuestBase quest,
   ) {
     QuestPromptInstance? promptInst = quest.getNextUserPromptIfExists();
+    print(
+      'beginning askAndWaitForUserResponse with ${promptInst?.userPrompt ?? '-na'}',
+    );
     while (promptInst != null) {
       _askAndStoreAnswer(dialoger, quest, promptInst);
       promptInst = quest.getNextUserPromptIfExists();
+      print(
+        'cont askAndWaitForUserResponse with ${promptInst?.userPrompt ?? '-done'}',
+      );
     }
     // user answer might generate new questions
-    dialoger.generateNewQuestionsFromUserResponse(quest);
+    if (!quest.isRuleDetailQuestion) {
+      dialoger.generateNewQuestionsFromUserResponse(quest);
+    }
   }
 
   void _askAndStoreAnswer(
@@ -33,8 +41,8 @@ class CliQuestionPresenter implements QuestionPresenterIfc {
     //     'Config ${promptInst} in the ${ruleQuest.screenWidgetArea?.name} of ${ruleQuest.appScreen.name} screen  (please answer each Quest2 below)';
     // print(ruleQuestoverview);
 
-    _printQuestion(promptInst);
-    _printOptions(promptInst);
+    _printQPrompt(promptInst);
+    _printPromptChoices(promptInst);
     _printInstructions(quest, promptInst);
 
     bool validAnswerProvided = true;
@@ -65,20 +73,21 @@ class CliQuestionPresenter implements QuestionPresenterIfc {
   ) {
     //
     String userResp = stdin.readLineSync() ?? '';
+    // make the next command throw if response is invalid
     promptInst.collectResponse(userResp);
   }
 
-  void _printQuestion(QuestPromptInstance promptInst) {
+  void _printQPrompt(QuestPromptInstance promptInst) {
     // show the Question
     print(promptInst.userPrompt);
   }
 
-  void _printOptions(QuestPromptInstance promptInst) {
+  void _printPromptChoices(QuestPromptInstance promptInst) {
     //
     if (!promptInst.hasChoices) return;
 
     print('Select from these options:\n');
-    promptInst.choices.forEachIndexed((idx, opt) {
+    promptInst.choices.forEachIndexed((int idx, String opt) {
       String forDflt = '';
       // promptInst.a == idx ? '  (default: just press return)' : '';
       print('\t$idx) $opt $forDflt');
