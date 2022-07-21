@@ -285,9 +285,15 @@ abstract class QuestBase with EquatableMixin {
         return (qpi as QuestPromptInstance)._answerRepoAndTypeCast._answers;
       });
 
-  RuleResponseBase get asVisRuleResponse =>
-      visRuleTypeForAreaOrSlot!.ruleResponseContainer
-        ..castResponsesToAnswerTypes(_userRespMap);
+  RuleResponseBase get asVisRuleResponse {
+    //
+    RuleResponseBase rrb = visRuleTypeForAreaOrSlot!.ruleResponseContainer;
+    print('asVisRuleResponse using:\n');
+    print(_userRespMap);
+
+    rrb.castResponsesToAnswerTypes(_userRespMap);
+    return rrb;
+  }
 
   bool get producesDerivedQuestsFromUserAnswers =>
       qTargetResolution.producesDerivedQuestsFromUserAnswers;

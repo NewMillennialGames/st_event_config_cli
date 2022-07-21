@@ -9,13 +9,10 @@ abstract class RuleResponseWrapperIfc {
   // receive user-answers IN
   void castResponsesToAnswerTypes(Map<VisRuleQuestType, String> responses);
   // send user answers OUT as whatever class rule is
-  RuleResponseBase get asRuleResponse;
-  // bool get gens2ndOr3rdSortGroupFilterQuests;
+
+  VisualRuleType get ruleType;
+  List<VisRuleQuestType> get requiredQuestions;
 }
-
-// extension IntExt1 on int  RuleResponseWrapperIfc {
-
-// }
 
 @JsonSerializable()
 class RuleResponseBase implements RuleResponseWrapperIfc {
@@ -25,18 +22,10 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
   */
   VisualRuleType ruleType;
 
-  // @JsonKey(ignore: true)
-  late Map<VisRuleQuestType, String> userResponses;
-
   RuleResponseBase(this.ruleType);
 
   List<VisRuleQuestType> get requiredQuestions =>
       ruleType.requRuleDetailCfgQuests;
-  // @override
-  // bool get gens2ndOr3rdSortGroupFilterQuests => false;
-  //
-  RuleResponseBase get asRuleResponse =>
-      throw UnimplementedError('impl in sub class');
 
   void _checkArgs(Map<VisRuleQuestType, String> responses) {
     assert(
@@ -55,27 +44,22 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
     i'm looping instead of assigning; oh, its final
     */
     _checkArgs(responses);
-    this.userResponses = responses;
-    // for (MapEntry<VisRuleQuestType, String> e in responses.entries) {
-    //   this.userResponses[e.key] = e.value;
-    // }
-    // each subclass should impl its own method
-    _castToRealTypes();
+    // each subclass should impl its own _castToRealTypes() method
+    _castToRealTypes(responses);
   }
 
-  void _castToRealTypes() {
+  void _castToRealTypes(Map<VisRuleQuestType, String> userResponses) {
     throw UnimplementedError('impl in subclass');
   }
 
   @override
   String toString() {
-    return 'RuleResponseBase for ${ruleType.name} with ${userResponses.length} responses';
+    return 'RuleResponseBase for ${ruleType.name}';
   }
 
   // JsonSerializable
   factory RuleResponseBase.fromJson(Map<String, dynamic> json) {
     //
-    // return _$RuleResponseBaseFromJson(json);
     VisualRuleType rt =
         VisualRuleType.values.where((e) => e.name == json['ruleType']).first;
     switch (rt) {
@@ -105,34 +89,6 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
   }
 }
 
-// typedef ConverterFunc<T> = T Function(String st);
-
-// class QuestResponseGeneric<T> extends RuleResponseBase {
-//   //
-//   final ConverterFunc<T> _confFunc;
-//   late T typedAnswer;
-
-//   QuestResponseGeneric(
-//     VisualRuleType vrt,
-//     this._confFunc,
-//   ) : super(vrt);
-//   //
-//   T inputToType(String s) => _confFunc(s);
-
-//   @override
-//   void castResponsesToAnswerTypes(Map<VisRuleQuestType, String> responses) {
-//     //
-//     this.userResponses = responses;
-//     _castToRealTypes();
-//   }
-
-//   @override
-//   void _castToRealTypes() {
-//     MapEntry me = userResponses.entries.first;
-//     this.typedAnswer = _confFunc(me.value);
-//   }
-// }
-
 // table row style
 @JsonSerializable()
 class TvRowStyleCfg extends RuleResponseBase {
@@ -146,16 +102,17 @@ class TvRowStyleCfg extends RuleResponseBase {
     return TvRowStyleCfg._(rowStyle);
   }
 
-  TvRowStyleCfg get asRuleResponse => this;
+  // TvRowStyleCfg get asRuleResponse => this;
 
   // receive str data into instance & make it structured data
   @override
-  void _castToRealTypes() {
-    VisRuleQuestType key = requiredQuestions.first;
-    assert(key == VisRuleQuestType.selectVisualComponentOrStyle);
-    String uResp = userResponses[key] ?? '0';
-    int uRespIdx = int.tryParse(uResp) ?? 0;
-    this.selectedRowStyle = TvAreaRowStyle.values[uRespIdx];
+  void _castToRealTypes(Map<VisRuleQuestType, String> userResponses) {
+    //
+    MapEntry<VisRuleQuestType, String> _ruleData = userResponses.entries.first;
+    assert(_ruleData.key == VisRuleQuestType.selectVisualComponentOrStyle);
+    String rowStyleIdxStr = _ruleData.value;
+    int rowStyleIdx = int.tryParse(rowStyleIdxStr) ?? 0;
+    this.selectedRowStyle = TvAreaRowStyle.values[rowStyleIdx];
   }
 
   @override
@@ -171,7 +128,7 @@ class TvRowStyleCfg extends RuleResponseBase {
 
 @JsonSerializable()
 class SortGroupFilterEntry {
-  //
+  // describes field & order to sort/group/filter with
   DbTableFieldName colName;
   bool asc = false;
 
@@ -179,7 +136,7 @@ class SortGroupFilterEntry {
 
   @override
   String toString() {
-    return colName.name + ': asc: $asc';
+    return colName.name + ': asc: $asc; ';
   }
 
   // JsonSerializable
@@ -188,47 +145,46 @@ class SortGroupFilterEntry {
   Map<String, dynamic> toJson() => _$SortGroupFilterEntryToJson(this);
 }
 
-// base for all classes that track these 3 fields
+// base for all rule classes that involve db fields & ordering
 class TvSortGroupFilterBase extends RuleResponseBase {
   //
   List<SortGroupFilterEntry> fieldList = [];
 
   TvSortGroupFilterBase(
-    VisualRuleType rt, [
-    DbTableFieldName colName = DbTableFieldName.assetName,
-  ]) : super(rt);
-  // TvSortGroupFilterBase([VisualRuleType rt = VisualRuleType.filterCfg])
-  //   : super(rt);
+    VisualRuleType rt,
+  ) : super(rt);
   //
   @override
-  TvSortGroupFilterBase get asRuleResponse => this;
-
-  @override
-  void _castToRealTypes() {
+  void _castToRealTypes(Map<VisRuleQuestType, String> userResponses) {
     /* for these answers:
         Vrq.selectDataFieldName,
         Vrq.specifySortAscending
     */
-    DbTableFieldName _curSelField = DbTableFieldName.imageUrl;
-    for (MapEntry e in this.userResponses.entries) {
-      /* FIXME:
-        this loop depends on userResponses.entries order being:
-        field1 + ascend;  field2 + asc;  field3 + asc
-      */
-      String resp = e.value;
-      int answIdx = int.tryParse(resp) ?? 0;
+    // empty fieldList
+    this.fieldList = [];
 
-      switch (e.key) {
-        case VisRuleQuestType.selectDataFieldName:
-          _curSelField = DbTableFieldName.values[answIdx];
-          break;
-        // case VisRuleQuestType.specifyPositionInGroup:
-        //   this.order = SortOrGroupIdxOrder.values[answIdx];
-        //   break;
-        case VisRuleQuestType.specifySortAscending:
-          fieldList.add(SortGroupFilterEntry(_curSelField, answIdx > 0));
-          break;
-      }
+    List<MapEntry<VisRuleQuestType, String>> usrEntries =
+        userResponses.entries.toList();
+
+    for (int i = 0; i > userResponses.length - 2; i + 2) {
+      MapEntry<VisRuleQuestType, String> fldNameEntry = usrEntries[i];
+      assert(
+        fldNameEntry.key == VisRuleQuestType.selectDataFieldName,
+        'list is in bad order',
+      );
+      String fldIdx = fldNameEntry.value;
+      int answIdx = int.tryParse(fldIdx) ?? 0;
+      DbTableFieldName _curSelField = DbTableFieldName.values[answIdx];
+
+      MapEntry<VisRuleQuestType, String> ascendEntry = usrEntries[i + 1];
+      assert(
+        ascendEntry.key == VisRuleQuestType.specifySortAscending,
+        'list is in bad order',
+      );
+      String ascBool = ascendEntry.value;
+      bool sortAsc = (int.tryParse(ascBool) ?? 0) > 0;
+
+      fieldList.add(SortGroupFilterEntry(_curSelField, sortAsc));
     }
   }
 
@@ -246,27 +202,17 @@ class TvSortGroupFilterBase extends RuleResponseBase {
     }
     return summary;
   }
-
-  // // JsonSerializable
-  // factory TvSortGroupFilterBase.fromJson(Map<String, dynamic> json) {
-  //   return _$TvSortGroupFilterBaseFromJson(json);
-  // }
-
-  // Map<String, dynamic> toJson() {
-  //   return _$TvSortGroupFilterBaseToJson(this);
-  // }
 }
 
 @JsonSerializable()
 class TvSortCfg extends TvSortGroupFilterBase {
   //
-  TvSortCfg._(DbTableFieldName colName)
-      : super(VisualRuleType.sortCfg, colName);
+  TvSortCfg._() : super(VisualRuleType.sortCfg);
   TvSortCfg() : super(VisualRuleType.sortCfg);
 
   factory TvSortCfg.noop() {
     // cancels all sorting when this is the first sort-param
-    return TvSortCfg._(DbTableFieldName.imageUrl);
+    return TvSortCfg._();
   }
   //
   // JsonSerializable
@@ -305,10 +251,10 @@ class ShowHideCfg extends RuleResponseBase {
 
   ShowHideCfg() : super(VisualRuleType.showOrHide);
   //
-  ShowHideCfg get asRuleResponse => this;
+  // ShowHideCfg get asRuleResponse => this;
 
   @override
-  void _castToRealTypes() {
+  void _castToRealTypes(Map<VisRuleQuestType, String> userResponses) {
     this.shouldShow =
         userResponses[VisRuleQuestType.controlsVisibilityOfAreaOrSlot] != '0';
   }
@@ -323,3 +269,36 @@ class ShowHideCfg extends RuleResponseBase {
       _$ShowHideCfgFromJson(json);
   Map<String, dynamic> toJson() => _$ShowHideCfgToJson(this);
 }
+
+
+
+      // DbTableFieldName _curSelField = DbTableFieldName.imageUrl;
+    // for (MapEntry e in userResponses.entries) {
+    //   /* FIXME:
+    //     this loop depends on userResponses.entries order being:
+    //     field1 + ascend;  field2 + asc;  field3 + asc
+    //   */
+    //   String resp = e.value;
+    //   int answIdx = int.tryParse(resp) ?? 0;
+
+    //   switch (e.key) {
+    //     case VisRuleQuestType.selectDataFieldName:
+    //       _curSelField = DbTableFieldName.values[answIdx];
+    //       break;
+    //     // case VisRuleQuestType.specifyPositionInGroup:
+    //     //   this.order = SortOrGroupIdxOrder.values[answIdx];
+    //     //   break;
+    //     case VisRuleQuestType.specifySortAscending:
+    //       fieldList.add(SortGroupFilterEntry(_curSelField, answIdx > 0));
+    //       break;
+    //   }
+    // }
+
+  // // JsonSerializable
+  // factory TvSortGroupFilterBase.fromJson(Map<String, dynamic> json) {
+  //   return _$TvSortGroupFilterBaseFromJson(json);
+  // }
+
+  // Map<String, dynamic> toJson() {
+  //   return _$TvSortGroupFilterBaseToJson(this);
+  // }
