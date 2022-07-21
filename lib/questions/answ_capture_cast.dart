@@ -42,6 +42,7 @@ class CaptureAndCast<T> {
 
   // getters  (use == not "is")
 
+  String get answer => _answers;
   bool get hasAnswer => !_answers.isEmpty;
   bool get asksWhichScreensToConfig =>
       (T == Iterable<AppScreen>) || T == List<AppScreen>;

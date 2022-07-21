@@ -22,10 +22,10 @@ class CliQuestionPresenter implements QuestionPresenterIfc {
     while (promptInst != null) {
       pInstIdx++;
       _askAndStoreAnswer(dialoger, quest, promptInst);
-      promptInst = quest.getNextUserPromptIfExists();
       print(
-        'cont askAndWaitForUserResponse with ${promptInst?.userPrompt ?? '-done'}',
+        'cont askAndWaitForUserResponse with ${promptInst.userPrompt}',
       );
+      promptInst = quest.getNextUserPromptIfExists();
     }
     // user answer might generate new questions
     if (!quest.isRuleDetailQuestion) {

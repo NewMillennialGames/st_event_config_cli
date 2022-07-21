@@ -11,8 +11,8 @@ enum VisRuleQuestType {
 
   */
   dialogStruct, // noop
+  askCountOfSlotsToConfigure, // possibly niu
   selectDataFieldName,
-  askCountOfSlotsToConfigure,
   specifySortAscending,
   selectVisualComponentOrStyle,
   controlsVisibilityOfAreaOrSlot,
@@ -30,6 +30,8 @@ extension VisRuleQuestTypeExt1 on VisRuleQuestType {
     switch (this) {
       case VisRuleQuestType.dialogStruct:
         return 'Err: Only relates to dialog structure;  not building real config rules';
+      case VisRuleQuestType.askCountOfSlotsToConfigure:
+        return 'How many {0} (Group/Sort/Filter) fields do you want to use on {1}';
       case VisRuleQuestType.selectDataFieldName:
         switch (ruleTyp) {
           case VisualRuleType.groupCfg:
@@ -45,8 +47,7 @@ extension VisRuleQuestTypeExt1 on VisRuleQuestType {
             resp = 'err: Select {0} field you wish to use for filtering on {1}';
         }
         return resp;
-      case VisRuleQuestType.askCountOfSlotsToConfigure:
-        return 'How many {0} (Group/Sort/Filter) fields do you want to use on {1}';
+
       case VisRuleQuestType.specifySortAscending:
         return 'Sort Ascending';
       case VisRuleQuestType.selectVisualComponentOrStyle:

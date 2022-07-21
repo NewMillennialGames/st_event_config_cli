@@ -1,9 +1,22 @@
 part of QuestionsLib;
 
+class PairedQuestAndResp {
+  VisRuleQuestType type;
+  String userAnswer;
+
+  PairedQuestAndResp(this.type, this.userAnswer);
+
+  @override
+  String toString() {
+    return type.name + ': ' + userAnswer + '; ';
+  }
+}
+
 class QPromptCollection {
   /* describes iteration (prompt) properties
    of a given QuestBase subclass
-
+    collects user answers as they come in
+    List<PairedQuestAndResp> is passed OUT to the rule-parsing system
   */
   List<QuestPromptInstance> prompts;
   bool isRuleQuestion;
@@ -158,11 +171,30 @@ class QPromptCollection {
   int get countChoicesInFirstPrompt =>
       prompts.first.answChoiceCollection.answerOptions.length;
 
-  List<VisRuleQuestType> get embeddedQuestTypes =>
-      prompts.map<VisRuleQuestType>((e) => e.visQuestType).toList();
+  List<VisRuleQuestType> get embeddedQuestTypes => prompts
+      .map<VisRuleQuestType>((QuestPromptInstance qpi) => qpi.visQuestType)
+      .toList();
 
-  Iterable<CaptureAndCast> get listResponses =>
-      prompts.map((qpi) => qpi._answerRepoAndTypeCast);
+  List<PairedQuestAndResp> get listTypedResponses {
+    return prompts
+        .map<PairedQuestAndResp>(
+          (QuestPromptInstance qpi) => (PairedQuestAndResp(
+            qpi.visQuestType,
+            qpi._answerRepoAndTypeCast.answer,
+          )),
+        )
+        .toList();
+  }
+
+  // do we really need listResponseCasters??;  I think listTypedResponses is better
+  Iterable<CaptureAndCast> get listResponseCasters =>
+      prompts.map((QuestPromptInstance qpi) => qpi._answerRepoAndTypeCast);
+
+  // List<String> get listTypedResponses =>
+  //     listResponseCasters.fold<List<String>>([], (lst, cac) {
+  //       lst.add(cac.answer);
+  //       return lst;
+  //     });
 
   int get _promptCount => prompts.length;
   bool get isCompleted =>

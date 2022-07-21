@@ -24,7 +24,7 @@ class SlotOrAreaRuleCfg {
       visRuleList.map((e) => e.ruleType);
 
   void appendQuestion(VisualRuleDetailQuest rQuest) {
-    print('adding QuestVisualRule ${rQuest.firstPrompt} in');
+    // print('adding QuestVisualRule abt ${rQuest.firstPrompt.userPrompt} to SlotOrAreaRuleCfg on ${rQuest.appScreen.name}');
     this.visRuleList.add(rQuest.asVisRuleResponse);
   }
 

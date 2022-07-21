@@ -7,7 +7,7 @@ part of QuestionsLib;
 abstract class RuleResponseWrapperIfc {
   // handles answers for real Rule Quest2s
   // receive user-answers IN
-  void castResponsesToAnswerTypes(Map<VisRuleQuestType, String> responses);
+  void castResponsesToAnswerTypes(List<PairedQuestAndResp> responses);
   // send user answers OUT as whatever class rule is
 
   VisualRuleType get ruleType;
@@ -27,14 +27,14 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
   List<VisRuleQuestType> get requiredQuestions =>
       ruleType.requRuleDetailCfgQuests;
 
-  void _checkArgs(Map<VisRuleQuestType, String> responses) {
+  void _checkArgs(List<PairedQuestAndResp> responses) {
     assert(
       this.requiredQuestions.length == responses.length,
       'not enough answers passed: got ${responses.length} exp: ${this.requiredQuestions.length}',
     );
   }
 
-  void castResponsesToAnswerTypes(Map<VisRuleQuestType, String> responses) {
+  void castResponsesToAnswerTypes(List<PairedQuestAndResp> responses) {
     /* let this method fill the userResponses map
     (same for all rule-types)
     and then call a subclass method to parse the strings
@@ -48,7 +48,7 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
     _castToRealTypes(responses);
   }
 
-  void _castToRealTypes(Map<VisRuleQuestType, String> userResponses) {
+  void _castToRealTypes(List<PairedQuestAndResp> userResponses) {
     throw UnimplementedError('impl in subclass');
   }
 
@@ -106,11 +106,11 @@ class TvRowStyleCfg extends RuleResponseBase {
 
   // receive str data into instance & make it structured data
   @override
-  void _castToRealTypes(Map<VisRuleQuestType, String> userResponses) {
+  void _castToRealTypes(List<PairedQuestAndResp> userResponses) {
     //
-    MapEntry<VisRuleQuestType, String> _ruleData = userResponses.entries.first;
-    assert(_ruleData.key == VisRuleQuestType.selectVisualComponentOrStyle);
-    String rowStyleIdxStr = _ruleData.value;
+    PairedQuestAndResp _ruleData = userResponses.first;
+    assert(_ruleData.type == VisRuleQuestType.selectVisualComponentOrStyle);
+    String rowStyleIdxStr = _ruleData.userAnswer;
     int rowStyleIdx = int.tryParse(rowStyleIdxStr) ?? 0;
     this.selectedRowStyle = TvAreaRowStyle.values[rowStyleIdx];
   }
@@ -155,7 +155,7 @@ class TvSortGroupFilterBase extends RuleResponseBase {
   ) : super(rt);
   //
   @override
-  void _castToRealTypes(Map<VisRuleQuestType, String> userResponses) {
+  void _castToRealTypes(List<PairedQuestAndResp> userResponses) {
     /* for these answers:
         Vrq.selectDataFieldName,
         Vrq.specifySortAscending
@@ -163,25 +163,22 @@ class TvSortGroupFilterBase extends RuleResponseBase {
     // empty fieldList
     this.fieldList = [];
 
-    List<MapEntry<VisRuleQuestType, String>> usrEntries =
-        userResponses.entries.toList();
-
     for (int i = 0; i > userResponses.length - 2; i + 2) {
-      MapEntry<VisRuleQuestType, String> fldNameEntry = usrEntries[i];
+      PairedQuestAndResp fldNameEntry = userResponses[i];
       assert(
-        fldNameEntry.key == VisRuleQuestType.selectDataFieldName,
+        fldNameEntry.type == VisRuleQuestType.selectDataFieldName,
         'list is in bad order',
       );
-      String fldIdx = fldNameEntry.value;
+      String fldIdx = fldNameEntry.userAnswer;
       int answIdx = int.tryParse(fldIdx) ?? 0;
       DbTableFieldName _curSelField = DbTableFieldName.values[answIdx];
 
-      MapEntry<VisRuleQuestType, String> ascendEntry = usrEntries[i + 1];
+      PairedQuestAndResp ascendEntry = userResponses[i + 1];
       assert(
-        ascendEntry.key == VisRuleQuestType.specifySortAscending,
+        ascendEntry.type == VisRuleQuestType.specifySortAscending,
         'list is in bad order',
       );
-      String ascBool = ascendEntry.value;
+      String ascBool = ascendEntry.userAnswer;
       bool sortAsc = (int.tryParse(ascBool) ?? 0) > 0;
 
       fieldList.add(SortGroupFilterEntry(_curSelField, sortAsc));
@@ -254,9 +251,9 @@ class ShowHideCfg extends RuleResponseBase {
   // ShowHideCfg get asRuleResponse => this;
 
   @override
-  void _castToRealTypes(Map<VisRuleQuestType, String> userResponses) {
-    this.shouldShow =
-        userResponses[VisRuleQuestType.controlsVisibilityOfAreaOrSlot] != '0';
+  void _castToRealTypes(List<PairedQuestAndResp> userResponses) {
+    PairedQuestAndResp resp = userResponses.first;
+    this.shouldShow = resp.userAnswer != '0';
   }
 
   @override

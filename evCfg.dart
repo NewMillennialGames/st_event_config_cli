@@ -47,16 +47,21 @@ void createOutputFileFromResponses(
       questListMgr.exportableRuleQuestions.toList();
 
   print(
-    'found ${exportableRuleQuestions.length} exportable answers to convert',
+    'found ${eventConfigLevelData.length} event-cfg entries, and ${exportableRuleQuestions.length} rules to convert',
   );
-  // for (Quest2 q in exportableQuest2s) {
-  //   print(q.questStr);
-  //   print(q.response?.answers.toString());
-  //   print('\n\n');
-  // }
+  for (QuestBase q in exportableRuleQuestions) {
+    print(q.firstPrompt.userPrompt);
+    Iterable<CaptureAndCast> cac = q.qPromptCollection.listResponseCasters;
+    List<String> allAnsw = cac.fold<List<String>>([],
+        ((List<String> accumLst, CaptureAndCast cac) {
+      accumLst.add(cac.answer);
+      return accumLst;
+    }));
+    print(allAnsw);
+    print('\n\n');
+  }
 
-  print('Now building Event Config rules...');
-
+  // print('Now building Event Config rules...');
   eventConfigLevelData = eventConfigLevelData
       .where(
         (q) => q.isEventConfigScreenEntryPointQuest,
@@ -67,7 +72,8 @@ void createOutputFileFromResponses(
   // create the per-area or per-slot rules
   var ruleResponses =
       exportableRuleQuestions.whereType<VisualRuleDetailQuest>();
-  // print('ruleResponse answer count: ${ruleResponses.length}');
+  print('ruleResponse answer count: ${ruleResponses.length}');
+  assert(ruleResponses.length == exportableRuleQuestions.length, '???');
   evCfg.fillFromVisualRuleAnswers(ruleResponses);
   // now dump evCfg to file
   evCfg.dumpCfgToFile(filename);

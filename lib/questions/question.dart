@@ -277,21 +277,23 @@ abstract class QuestBase with EquatableMixin {
   from FIRST PROMOT of current question
   */
 
-  Map<VisRuleQuestType, String> get _userRespMap =>
-      Map<VisRuleQuestType, String>.fromIterable(qPromptCollection.prompts,
-          key: (qpi) {
-        return (qpi as QuestPromptInstance).visQuestType;
-      }, value: (qpi) {
-        return (qpi as QuestPromptInstance)._answerRepoAndTypeCast._answers;
-      });
+  // Map<VisRuleQuestType, String> get _userRespMap =>
+  //     Map<VisRuleQuestType, String>.fromIterable(qPromptCollection.prompts,
+  //         key: (qpi) {
+  //       return (qpi as QuestPromptInstance).visQuestType;
+  //     }, value: (qpi) {
+  //       return (qpi as QuestPromptInstance)._answerRepoAndTypeCast._answers;
+  //     });
 
   RuleResponseBase get asVisRuleResponse {
     //
     RuleResponseBase rrb = visRuleTypeForAreaOrSlot!.ruleResponseContainer;
-    print('asVisRuleResponse using:\n');
-    print(_userRespMap);
+    print('\nasVisRuleResponse using:   (${qPromptCollection.prompts.length})');
 
-    rrb.castResponsesToAnswerTypes(_userRespMap);
+    List<PairedQuestAndResp> pqr = qPromptCollection.listTypedResponses;
+    print(pqr);
+
+    rrb.castResponsesToAnswerTypes(pqr);
     return rrb;
   }
 
@@ -340,7 +342,12 @@ abstract class QuestBase with EquatableMixin {
   bool get isVisRuleDetailQuestion => this is VisualRuleDetailQuest;
   bool get isBehRuleDetailQuestion => this is BehaveRuleDetailQuest;
 
-  Iterable<CaptureAndCast> get listResponses => qPromptCollection.listResponses;
+  Iterable<CaptureAndCast> get listResponses =>
+      qPromptCollection.listResponseCasters;
+
+  List<PairedQuestAndResp> get listTypedResponses =>
+      qPromptCollection.listTypedResponses;
+
   int get promptCount => qPromptCollection.prompts.length;
   List<VisRuleQuestType> get visQuestTypes => qPromptCollection.prompts
       .map((e) => e.answChoiceCollection.visRuleQuestType)
