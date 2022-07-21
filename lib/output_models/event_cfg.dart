@@ -163,6 +163,7 @@ class EventCfgTree {
       ScreenCfgByArea screenCfg = this.screenConfigMap[rQuest.appScreen] ??
           ScreenCfgByArea(rQuest.appScreen, {});
       screenCfg.appendVisRule(rQuest);
+      // store when newly created above
       this.screenConfigMap[rQuest.appScreen] = screenCfg;
     }
   }

@@ -169,12 +169,29 @@ class TvRowStyleCfg extends RuleResponseBase {
   Map<String, dynamic> toJson() => _$TvRowStyleCfgToJson(this);
 }
 
+@JsonSerializable()
+class SortGroupFilterEntry {
+  //
+  DbTableFieldName colName;
+  bool asc = false;
+
+  SortGroupFilterEntry(this.colName, this.asc);
+
+  @override
+  String toString() {
+    return colName.name + ': asc: $asc';
+  }
+
+  // JsonSerializable
+  factory SortGroupFilterEntry.fromJson(Map<String, dynamic> json) =>
+      _$SortGroupFilterEntryFromJson(json);
+  Map<String, dynamic> toJson() => _$SortGroupFilterEntryToJson(this);
+}
+
 // base for all classes that track these 3 fields
-// @JsonSerializable()
 class TvSortGroupFilterBase extends RuleResponseBase {
   //
-  late DbTableFieldName colName;
-  late bool asc = false;
+  List<SortGroupFilterEntry> fieldList = [];
 
   TvSortGroupFilterBase(
     VisualRuleType rt, [
@@ -190,22 +207,26 @@ class TvSortGroupFilterBase extends RuleResponseBase {
   void _castToRealTypes() {
     /* for these answers:
         Vrq.selectDataFieldName,
-        Vrq.specifyPositionInGroup,
         Vrq.specifySortAscending
     */
+    DbTableFieldName _curSelField = DbTableFieldName.imageUrl;
     for (MapEntry e in this.userResponses.entries) {
+      /* FIXME:
+        this loop depends on userResponses.entries order being:
+        field1 + ascend;  field2 + asc;  field3 + asc
+      */
       String resp = e.value;
       int answIdx = int.tryParse(resp) ?? 0;
 
       switch (e.key) {
         case VisRuleQuestType.selectDataFieldName:
-          this.colName = DbTableFieldName.values[answIdx];
+          _curSelField = DbTableFieldName.values[answIdx];
           break;
         // case VisRuleQuestType.specifyPositionInGroup:
         //   this.order = SortOrGroupIdxOrder.values[answIdx];
         //   break;
         case VisRuleQuestType.specifySortAscending:
-          this.asc = answIdx == 1;
+          fieldList.add(SortGroupFilterEntry(_curSelField, answIdx > 0));
           break;
       }
     }
@@ -217,7 +238,14 @@ class TvSortGroupFilterBase extends RuleResponseBase {
     return '$className for ${ruleType.name} with responses: $_answerSummary';
   }
 
-  String get _answerSummary => '${colName.name}-$asc';
+  String get _answerSummary {
+    Iterable<String> xx = fieldList.map((e) => e.toString());
+    String summary = this.runtimeType.toString() + '';
+    for (String fieldCfg in xx) {
+      summary += fieldCfg;
+    }
+    return summary;
+  }
 
   // // JsonSerializable
   // factory TvSortGroupFilterBase.fromJson(Map<String, dynamic> json) {

@@ -44,6 +44,7 @@ class ScreenCfgByArea {
 
     var areaCfg = this.areaConfig[swa] ?? CfgForAreaAndNestedSlots(swa, {}, {});
     areaCfg.appendAreaOrSlotRule(rQuest);
+    // store when newly created above
     areaConfig[swa] = areaCfg;
     // }
   }

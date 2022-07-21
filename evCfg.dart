@@ -47,7 +47,8 @@ void createOutputFileFromResponses(
       questListMgr.exportableRuleQuestions.toList();
 
   print(
-      'found ${exportableRuleQuestions.length} exportable answers to convert');
+    'found ${exportableRuleQuestions.length} exportable answers to convert',
+  );
   // for (Quest2 q in exportableQuest2s) {
   //   print(q.questStr);
   //   print(q.response?.answers.toString());

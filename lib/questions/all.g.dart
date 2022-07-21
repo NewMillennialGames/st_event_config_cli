@@ -73,18 +73,16 @@ const _$TvAreaRowStyleEnumMap = {
   TvAreaRowStyle.driverVsField: 'driverVsField',
 };
 
-TvSortCfg _$TvSortCfgFromJson(Map<String, dynamic> json) => TvSortCfg()
-  ..ruleType = $enumDecode(_$VisualRuleTypeEnumMap, json['ruleType'])
-  ..userResponses = (json['userResponses'] as Map<String, dynamic>).map(
-    (k, e) => MapEntry($enumDecode(_$VisRuleQuestTypeEnumMap, k), e as String),
-  )
-  ..colName = $enumDecode(_$DbTableFieldNameEnumMap, json['colName'])
-  ..asc = json['asc'] as bool;
+SortGroupFilterEntry _$SortGroupFilterEntryFromJson(
+        Map<String, dynamic> json) =>
+    SortGroupFilterEntry(
+      $enumDecode(_$DbTableFieldNameEnumMap, json['colName']),
+      json['asc'] as bool,
+    );
 
-Map<String, dynamic> _$TvSortCfgToJson(TvSortCfg instance) => <String, dynamic>{
-      'ruleType': _$VisualRuleTypeEnumMap[instance.ruleType],
-      'userResponses': instance.userResponses
-          .map((k, e) => MapEntry(_$VisRuleQuestTypeEnumMap[k], e)),
+Map<String, dynamic> _$SortGroupFilterEntryToJson(
+        SortGroupFilterEntry instance) =>
+    <String, dynamic>{
       'colName': _$DbTableFieldNameEnumMap[instance.colName],
       'asc': instance.asc,
     };
@@ -105,21 +103,37 @@ const _$DbTableFieldNameEnumMap = {
   DbTableFieldName.assetPosition: 'assetPosition',
 };
 
+TvSortCfg _$TvSortCfgFromJson(Map<String, dynamic> json) => TvSortCfg()
+  ..ruleType = $enumDecode(_$VisualRuleTypeEnumMap, json['ruleType'])
+  ..userResponses = (json['userResponses'] as Map<String, dynamic>).map(
+    (k, e) => MapEntry($enumDecode(_$VisRuleQuestTypeEnumMap, k), e as String),
+  )
+  ..fieldList = (json['fieldList'] as List<dynamic>)
+      .map((e) => SortGroupFilterEntry.fromJson(e as Map<String, dynamic>))
+      .toList();
+
+Map<String, dynamic> _$TvSortCfgToJson(TvSortCfg instance) => <String, dynamic>{
+      'ruleType': _$VisualRuleTypeEnumMap[instance.ruleType],
+      'userResponses': instance.userResponses
+          .map((k, e) => MapEntry(_$VisRuleQuestTypeEnumMap[k], e)),
+      'fieldList': instance.fieldList.map((e) => e.toJson()).toList(),
+    };
+
 TvGroupCfg _$TvGroupCfgFromJson(Map<String, dynamic> json) => TvGroupCfg()
   ..ruleType = $enumDecode(_$VisualRuleTypeEnumMap, json['ruleType'])
   ..userResponses = (json['userResponses'] as Map<String, dynamic>).map(
     (k, e) => MapEntry($enumDecode(_$VisRuleQuestTypeEnumMap, k), e as String),
   )
-  ..colName = $enumDecode(_$DbTableFieldNameEnumMap, json['colName'])
-  ..asc = json['asc'] as bool;
+  ..fieldList = (json['fieldList'] as List<dynamic>)
+      .map((e) => SortGroupFilterEntry.fromJson(e as Map<String, dynamic>))
+      .toList();
 
 Map<String, dynamic> _$TvGroupCfgToJson(TvGroupCfg instance) =>
     <String, dynamic>{
       'ruleType': _$VisualRuleTypeEnumMap[instance.ruleType],
       'userResponses': instance.userResponses
           .map((k, e) => MapEntry(_$VisRuleQuestTypeEnumMap[k], e)),
-      'colName': _$DbTableFieldNameEnumMap[instance.colName],
-      'asc': instance.asc,
+      'fieldList': instance.fieldList.map((e) => e.toJson()).toList(),
     };
 
 TvFilterCfg _$TvFilterCfgFromJson(Map<String, dynamic> json) => TvFilterCfg()
@@ -127,16 +141,16 @@ TvFilterCfg _$TvFilterCfgFromJson(Map<String, dynamic> json) => TvFilterCfg()
   ..userResponses = (json['userResponses'] as Map<String, dynamic>).map(
     (k, e) => MapEntry($enumDecode(_$VisRuleQuestTypeEnumMap, k), e as String),
   )
-  ..colName = $enumDecode(_$DbTableFieldNameEnumMap, json['colName'])
-  ..asc = json['asc'] as bool;
+  ..fieldList = (json['fieldList'] as List<dynamic>)
+      .map((e) => SortGroupFilterEntry.fromJson(e as Map<String, dynamic>))
+      .toList();
 
 Map<String, dynamic> _$TvFilterCfgToJson(TvFilterCfg instance) =>
     <String, dynamic>{
       'ruleType': _$VisualRuleTypeEnumMap[instance.ruleType],
       'userResponses': instance.userResponses
           .map((k, e) => MapEntry(_$VisRuleQuestTypeEnumMap[k], e)),
-      'colName': _$DbTableFieldNameEnumMap[instance.colName],
-      'asc': instance.asc,
+      'fieldList': instance.fieldList.map((e) => e.toJson()).toList(),
     };
 
 ShowHideCfg _$ShowHideCfgFromJson(Map<String, dynamic> json) => ShowHideCfg()
