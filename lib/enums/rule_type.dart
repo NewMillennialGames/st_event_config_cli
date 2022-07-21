@@ -416,7 +416,7 @@ List<NewQuestPerPromptOpts> _getQuestPromptOptsForDataFieldName(
   }
 
   List<NewQuestPerPromptOpts> perPromptDetails = [];
-  for (int i = 1; i <= numOfFieldsToSpecify; i++) {
+  for (int i = 0; i < numOfFieldsToSpecify; i++) {
     // adds 2 prompts for each field question
     perPromptDetails.addAll([
       NewQuestPerPromptOpts<DbTableFieldName>(
@@ -425,6 +425,7 @@ List<NewQuestPerPromptOpts> _getQuestPromptOptsForDataFieldName(
         promptTemplArgGen: _promptTemplArgGenFunc,
         answerChoiceGenerator: _answerChoiceGeneratorFunc,
         newRespCastFunc: _newRespCastFunc,
+        instanceIdx: i,
       ),
       NewQuestPerPromptOpts<bool>(
         'Sort Ascending?',
@@ -444,6 +445,7 @@ List<NewQuestPerPromptOpts> _getQuestPromptOptsForDataFieldName(
         ) {
           return ['no', 'yes'];
         },
+        instanceIdx: i,
       ),
     ]);
   }

@@ -35,6 +35,7 @@ class NewQuestPerPromptOpts<AnsType> {
   final int defaultAnswerIdx;
   final VisualRuleType? visRuleType;
   final VisRuleQuestType? visRuleQuestType;
+  final int instanceIdx;
   bool acceptsMultiResponses;
 
   NewQuestPerPromptOpts(
@@ -46,6 +47,7 @@ class NewQuestPerPromptOpts<AnsType> {
     this.visRuleQuestType,
     this.acceptsMultiResponses = false,
     this.defaultAnswerIdx = 0,
+    this.instanceIdx = 0,
   }) {
     //
   }
@@ -232,29 +234,32 @@ class DerivedQuestGenerator {
         // print('skipping Q# $newQIdx for bailQGenWhenTrueCallbk; new derived quests generated');
         continue;
       }
-      for (int promptIdx = 0; promptIdx < newQuestPromptCount; promptIdx++) {
+      for (int promptEntryListIdx = 0;
+          promptEntryListIdx < newQuestPromptCount;
+          promptEntryListIdx++) {
         // loop once for each prompt in a single question
         NewQuestPerPromptOpts currPromptConfig =
-            this.perPromptDetails[promptIdx];
+            this.perPromptDetails[promptEntryListIdx];
 
         int currPromptChoiceCount = currPromptConfig
-            .answerChoiceGenerator(answeredQuest, newQIdx, promptIdx)
+            .answerChoiceGenerator(
+                answeredQuest, newQIdx, currPromptConfig.instanceIdx)
             .length;
         if (currPromptChoiceCount < 1) {
           print(
-            'prompt $promptIdx on q# #newQIdx of ${answeredQuest.questId} has no choices so bailing',
+            'prompt $promptEntryListIdx on q# #newQIdx of ${answeredQuest.questId} has no choices so bailing',
           );
           continue;
         }
 
-        List<String> templArgs =
-            currPromptConfig.promptTemplArgGen(answeredQuest, newQIdx);
+        List<String> templArgs = currPromptConfig.promptTemplArgGen(
+            answeredQuest, currPromptConfig.instanceIdx);
         String _userPrompt = currPromptConfig.promptTemplate.format(templArgs);
 
         newQuestPrompts.add(QuestPromptPayload(
           _userPrompt,
           currPromptConfig
-              .answerChoiceGenerator(answeredQuest, newQIdx, promptIdx)
+              .answerChoiceGenerator(answeredQuest, newQIdx, promptEntryListIdx)
               .toList(),
           currPromptConfig.visRuleQuestType ?? VisRuleQuestType.dialogStruct,
           currPromptConfig.newRespCastFunc,

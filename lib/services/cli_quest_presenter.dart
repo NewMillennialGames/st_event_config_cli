@@ -18,7 +18,9 @@ class CliQuestionPresenter implements QuestionPresenterIfc {
     print(
       'beginning askAndWaitForUserResponse with ${promptInst?.userPrompt ?? '-na'}',
     );
+    int pInstIdx = -1;
     while (promptInst != null) {
+      pInstIdx++;
       _askAndStoreAnswer(dialoger, quest, promptInst);
       promptInst = quest.getNextUserPromptIfExists();
       print(
