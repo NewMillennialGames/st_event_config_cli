@@ -155,9 +155,9 @@ class EventCfgTree {
         out the tree of configuration data
         that will customize the client UI
     */
-    print(
-      'fillFromVisualRuleAnswers got ${answeredQuestions.length} answeredQuestions',
-    );
+    // print(
+    //   'fillFromVisualRuleAnswers got ${answeredQuestions.length} answeredQuestions',
+    // );
     for (VisualRuleDetailQuest rQuest in answeredQuestions) {
       // look up or create it
       ScreenCfgByArea screenCfg = this.screenConfigMap[rQuest.appScreen] ??

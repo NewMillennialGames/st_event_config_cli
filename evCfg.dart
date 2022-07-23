@@ -49,17 +49,17 @@ void createOutputFileFromResponses(
   print(
     'found ${eventConfigLevelData.length} event-cfg entries, and ${exportableRuleQuestions.length} rules to convert',
   );
-  for (QuestBase q in exportableRuleQuestions) {
-    print(q.firstPrompt.userPrompt);
-    Iterable<CaptureAndCast> cac = q.qPromptCollection.listResponseCasters;
-    List<String> allAnsw = cac.fold<List<String>>([],
-        ((List<String> accumLst, CaptureAndCast cac) {
-      accumLst.add(cac.answer);
-      return accumLst;
-    }));
-    print(allAnsw);
-    print('\n\n');
-  }
+  // for (QuestBase q in exportableRuleQuestions) {
+  //   print(q.firstPrompt.userPrompt);
+  //   Iterable<CaptureAndCast> cac = q.qPromptCollection.listResponseCasters;
+  //   List<String> allAnsw = cac.fold<List<String>>([],
+  //       ((List<String> accumLst, CaptureAndCast cac) {
+  //     accumLst.add(cac.answer);
+  //     return accumLst;
+  //   }));
+  //   print(allAnsw);
+  //   print('\n\n');
+  // }
 
   // print('Now building Event Config rules...');
   eventConfigLevelData = eventConfigLevelData

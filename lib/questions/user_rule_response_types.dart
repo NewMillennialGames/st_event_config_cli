@@ -161,9 +161,11 @@ class TvSortGroupFilterBase extends RuleResponseBase {
         Vrq.specifySortAscending
     */
     // empty fieldList
-    this.fieldList = [];
-
-    for (int i = 0; i > userResponses.length - 2; i + 2) {
+    // this.fieldList = [];
+    print(
+      'TvSortGroupFilter.castToRealTypes got ${userResponses.length} userResponses',
+    );
+    for (int i = 0; i < userResponses.length - 1; i += 2) {
       PairedQuestAndResp fldNameEntry = userResponses[i];
       assert(
         fldNameEntry.type == VisRuleQuestType.selectDataFieldName,
@@ -183,6 +185,9 @@ class TvSortGroupFilterBase extends RuleResponseBase {
 
       fieldList.add(SortGroupFilterEntry(_curSelField, sortAsc));
     }
+    print(
+      '${fieldList.length} entries added to TvSortGroupFilterBase!  (${this.runtimeType})',
+    );
   }
 
   @override
