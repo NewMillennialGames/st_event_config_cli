@@ -21,7 +21,11 @@ class CliQuestionPresenter implements QuestionPresenterIfc {
     int pInstIdx = -1;
     while (promptInst != null) {
       pInstIdx++;
-      _askAndStoreAnswer(dialoger, quest, promptInst);
+      if (promptInst.shouldAutoAnswer) {
+        continue;
+      } else {
+        _askAndStoreAnswer(dialoger, quest, promptInst);
+      }
       print(
         'cont askAndWaitForUserResponse with ${promptInst.userPrompt}',
       );

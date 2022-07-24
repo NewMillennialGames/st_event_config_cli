@@ -58,6 +58,8 @@ class QuestPromptInstance<T> implements QPromptIfc {
   }
 
   // getters
+  bool get shouldAutoAnswer => answChoiceCollection.canAutoAnswer;
+  String? get autoAnswerIfAppropriate => shouldAutoAnswer ? "0" : null;
   bool get hasAnswer => _answerRepoAndTypeCast.hasAnswer;
   bool get hasChoices => answChoiceCollection.hasChoices;
   List<ResponseAnswerOption> get questsAndChoices =>

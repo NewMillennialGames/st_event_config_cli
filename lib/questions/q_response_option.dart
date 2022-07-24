@@ -19,12 +19,14 @@ class ResponseOptCollectionBase {
 
   ResponseOptCollectionBase(
     this.answerOptions, {
-    this.idxOfDefaultAnsw = 0,
+    this.idxOfDefaultAnsw = -1,
     this.multiChoicesAllowed = false,
   });
 
   bool get hasChoices => answerOptions.length > 0;
   Iterable<String> get choices => answerOptions.map((e) => e.displayStr);
+
+  bool get canAutoAnswer => answerOptions.length == 1 && idxOfDefaultAnsw == -1;
 }
 
 class VisQuestChoiceCollection extends ResponseOptCollectionBase {
