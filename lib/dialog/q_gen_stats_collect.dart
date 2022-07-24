@@ -151,7 +151,7 @@ class GenStatsCollector {
       print('\tPrompt:\t${questJustAnswered.firstPrompt.userPrompt}');
       int choiceCount = questJustAnswered.countChoicesInFirstPrompt;
       print(
-        '\t$choiceCount Choices:\t${questJustAnswered.firstPrompt.choices}',
+        '\t$choiceCount Choices:\t${questJustAnswered.firstPrompt.answerOptions}',
       );
       int ansCount = questJustAnswered.mainAnswer is Iterable
           ? (questJustAnswered.mainAnswer as Iterable).length

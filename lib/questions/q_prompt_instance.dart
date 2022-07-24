@@ -59,7 +59,8 @@ class QuestPromptInstance<T> implements QPromptIfc {
 
   // getters
   bool get shouldAutoAnswer => answChoiceCollection.canAutoAnswer;
-  String? get autoAnswerIfAppropriate => shouldAutoAnswer ? "0" : null;
+  String? get autoAnswerIfAppropriate =>
+      shouldAutoAnswer ? answChoiceCollection.autoAnswerIfAppropriate : null;
   bool get hasAnswer => _answerRepoAndTypeCast.hasAnswer;
   bool get hasChoices => answChoiceCollection.hasChoices;
   List<ResponseAnswerOption> get questsAndChoices =>
@@ -74,7 +75,8 @@ class QuestPromptInstance<T> implements QPromptIfc {
   bool get asksWhichSlotsOfAreaToConfig =>
       _answerRepoAndTypeCast.asksWhichSlotsOfAreaToConfig;
 
-  Iterable<String> get choices => answChoiceCollection.choices;
+  Iterable<ResponseAnswerOption> get answerOptions =>
+      answChoiceCollection.answerOptions;
 
   String createFormattedQuestion(RegionTargetQuest quest) {
     String templ = answChoiceCollection.questTemplByRuleType(
@@ -104,7 +106,7 @@ class QuestPromptInstance<T> implements QPromptIfc {
 
   VisRuleQuestType get visQuestType => answChoiceCollection.visRuleQuestType;
 
-  static List<ResponseAnswerOption> getSubQuest2sAndChoiceOptions(
+  static List<ResponseAnswerOption> getSubQuestionsAndChoiceOptions(
     VisualRuleType rt,
   ) {
     // return answChoiceCollection;

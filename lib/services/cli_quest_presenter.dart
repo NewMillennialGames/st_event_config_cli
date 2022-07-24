@@ -18,17 +18,24 @@ class CliQuestionPresenter implements QuestionPresenterIfc {
     print(
       'beginning askAndWaitForUserResponse with ${promptInst?.userPrompt ?? '-na'}',
     );
-    int pInstIdx = -1;
+    // int pInstIdx = -1;
     while (promptInst != null) {
-      pInstIdx++;
-      if (promptInst.shouldAutoAnswer) {
-        continue;
+      // pInstIdx++;
+      print(
+        'askAndWaitForUserResponse debug ${promptInst.shouldAutoAnswer} with ${promptInst.autoAnswerIfAppropriate}',
+      );
+      if (promptInst.shouldAutoAnswer &&
+          (promptInst.autoAnswerIfAppropriate ?? "").isNotEmpty) {
+        promptInst.collectResponse(promptInst.autoAnswerIfAppropriate!);
+        print(
+          'askAndWaitForUserResponse answered ${promptInst.userPrompt} with ${promptInst.autoAnswerIfAppropriate}',
+        );
       } else {
         _askAndStoreAnswer(dialoger, quest, promptInst);
+        // print(
+        //   'cont askAndWaitForUserResponse with ${promptInst.userPrompt}',
+        // );
       }
-      print(
-        'cont askAndWaitForUserResponse with ${promptInst.userPrompt}',
-      );
       promptInst = quest.getNextUserPromptIfExists();
     }
     // user answer might generate new questions
@@ -85,18 +92,19 @@ class CliQuestionPresenter implements QuestionPresenterIfc {
 
   void _printQPrompt(QuestPromptInstance promptInst) {
     // show the Question
-    print(promptInst.userPrompt);
+    print(promptInst.userPrompt + "(select from options below)");
   }
 
   void _printPromptChoices(QuestPromptInstance promptInst) {
     //
     if (!promptInst.hasChoices) return;
 
-    print('Select from these options:\n');
-    promptInst.choices.forEachIndexed((int idx, String opt) {
-      String forDflt = '';
+    // print('Select from these options:\n');
+    // int defltIdx = promptInst.answChoiceCollection.idxOfDefaultAnsw;
+    promptInst.answerOptions.forEach((ResponseAnswerOption opt) {
+      // String forDflt = '';
       // promptInst.a == idx ? '  (default: just press return)' : '';
-      print('\t$idx) $opt $forDflt');
+      print('\t${opt.selectVal}) ${opt.displayStr}');
     });
   }
 
