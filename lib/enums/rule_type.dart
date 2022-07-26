@@ -54,7 +54,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
       case VisualRuleType.showOrHide:
         return ShowHideCfg();
       case VisualRuleType.themePreference:
-        return ShowHideCfg();
+        return TvRowStyleCfg();
     }
   }
 
@@ -95,11 +95,13 @@ extension VisualRuleTypeExt1 on VisualRuleType {
       case VisualRuleType.filterCfg:
         return 'How many filter menus on {0}?';
       case VisualRuleType.styleOrFormat:
-        return '';
+        throw UnimplementedError(
+            'styleOrFormat does not use a prep template  ');
+        return 'styleOrFormat does not use a prep template  ';
       case VisualRuleType.showOrHide:
-        return '';
+        return 'showOrHide does not use a prep template  ';
       case VisualRuleType.themePreference:
-        return '';
+        return 'themePreference does not use a prep template  ';
     }
   }
 
@@ -126,7 +128,9 @@ extension VisualRuleTypeExt1 on VisualRuleType {
   }
   //
 
-  List<VisRuleQuestType> get requPrepQuests {
+  bool get requiresRulePrepQuest => requiredPrepQuests.length > 0;
+
+  List<VisRuleQuestType> get requiredPrepQuests {
     // prep question required BEFORE you can ask
     // rule detail questions
     switch (this) {
@@ -270,7 +274,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           );
           perQuestPromptDetails.add(NewQuestPerPromptOpts<int>(
             'How many $ruleTypeName fields do you need for ${prevAnswQuest.targetPath}?',
-            promptTemplArgGen: (prevQuest, newQuestIdx) => [],
+            promptTemplArgGen: (prevQuest, newQuestIdx, promptIdx) => [],
             answerChoiceGenerator: (prevQuest, newQuestIdx, int promptIdx) =>
                 ['0', '1', '2', '3'],
             newRespCastFunc: (QuestBase qb, String ans) {
@@ -284,7 +288,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
         case VisRuleQuestType.controlsVisibilityOfAreaOrSlot:
           perQuestPromptDetails.add(NewQuestPerPromptOpts<bool>(
             'Do you want to hide the element at ${prevAnswQuest.targetPath}?',
-            promptTemplArgGen: (prevQuest, newQuestIdx) => [],
+            promptTemplArgGen: (prevQuest, newQuestIdx, promptIdx) => [],
             answerChoiceGenerator: (prevQuest, newQuestIdx, int promptIdx) =>
                 ['no', 'yes'],
             newRespCastFunc: (QuestBase qb, String ans) {
@@ -334,7 +338,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
 
           perQuestPromptDetails.add(NewQuestPerPromptOpts<TvAreaRowStyle>(
             'Select preferred style for ${prevAnswQuest.targetPath}?',
-            promptTemplArgGen: (prevQuest, newQuestIdx) => [],
+            promptTemplArgGen: (prevQuest, newQuestIdx, promptIdx) => [],
             answerChoiceGenerator: (prevQuest, newQuestIdx, int promptIdx) =>
                 possibleVisStyles.map((e) => e.name).toList(),
             newRespCastFunc: (QuestBase qb, String ans) {
@@ -357,18 +361,23 @@ extension VisualRuleTypeExt1 on VisualRuleType {
     String qIdSuffix =
         _accumSubQuestNames.reduce((value, element) => value + '-' + element);
 
-    return DerivedQuestGenerator.multiPrompt(perQuestPromptDetails,
-        newQuestCountCalculator: ((QuestBase qb) => newQuestCountToGenerate),
-        genBehaviorOfDerivedQuests: DerivedGenBehaviorOnMatchEnum.noop,
-        newQuestIdGenFromPriorQuest: (qb, idx) =>
-            qb.questId + '-rdt-$qIdSuffix-$idx',
-        newQuestConstructor: QuestBase.visualRuleDetailQuest,
-        deriveTargetFromPriorRespCallbk: (QuestBase qb, int newQidx) {
-          /*  using QTargetResolution newQTargRes
+    return DerivedQuestGenerator.multiPrompt(
+      perQuestPromptDetails,
+      newQuestCountCalculator: ((QuestBase qb) => newQuestCountToGenerate),
+      genBehaviorOfDerivedQuests: DerivedGenBehaviorOnMatchEnum.noop,
+      newQuestIdGenFromPriorQuest: (qb, idx) =>
+          qb.questId + '-rdt-$qIdSuffix-$idx',
+      newQuestConstructor: QuestBase.visualRuleDetailQuest,
+      deriveTargetFromPriorRespCallbk: (QuestBase qb, int newQidx) {
+        /*  using QTargetResolution newQTargRes
               passed as argument above
           */
-          return newQTargRes.copyWith(visRuleTypeForAreaOrSlot: this);
-        });
+        return newQTargRes.copyWith(
+          visRuleTypeForAreaOrSlot: this,
+          precision: TargetPrecision.ruleDetailVisual,
+        );
+      },
+    );
   }
 }
 
@@ -387,6 +396,7 @@ List<NewQuestPerPromptOpts> _getQuestPromptOptsForDataFieldName(
 
   List<String> _promptTemplArgGenFunc(
     QuestBase priorAnsweredQuest,
+    int questIdx,
     int promptIdx,
   ) {
     var fldNumLookup = {0: '1st', 1: '2nd', 2: '3rd'};
@@ -430,7 +440,7 @@ List<NewQuestPerPromptOpts> _getQuestPromptOptsForDataFieldName(
       NewQuestPerPromptOpts<bool>(
         'Sort Ascending?',
         visRuleQuestType: VisRuleQuestType.specifySortAscending,
-        promptTemplArgGen: (_, __) => [],
+        promptTemplArgGen: (_, __, pi) => [],
         newRespCastFunc: (
           QuestBase newQuest,
           String lstAreaIdxs,

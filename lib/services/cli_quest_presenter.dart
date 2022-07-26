@@ -27,9 +27,9 @@ class CliQuestionPresenter implements QuestionPresenterIfc {
       if (promptInst.shouldAutoAnswer &&
           (promptInst.autoAnswerIfAppropriate ?? "").isNotEmpty) {
         promptInst.collectResponse(promptInst.autoAnswerIfAppropriate!);
-        print(
-          'askAndWaitForUserResponse answered ${promptInst.userPrompt} with ${promptInst.autoAnswerIfAppropriate}',
-        );
+        // print(
+        //   'askAndWaitForUserResponse answered ${promptInst.userPrompt} with ${promptInst.autoAnswerIfAppropriate}',
+        // );
       } else {
         _askAndStoreAnswer(dialoger, quest, promptInst);
         // print(
@@ -92,7 +92,7 @@ class CliQuestionPresenter implements QuestionPresenterIfc {
 
   void _printQPrompt(QuestPromptInstance promptInst) {
     // show the Question
-    print(promptInst.userPrompt + "(select from options below)");
+    print(promptInst.userPrompt + "  (select from options below)");
   }
 
   void _printPromptChoices(QuestPromptInstance promptInst) {

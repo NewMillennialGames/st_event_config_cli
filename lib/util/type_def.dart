@@ -34,7 +34,7 @@ typedef FilterRules = Tuple3<TvFilterCfg, TvFilterCfg?, TvFilterCfg?>;
 typedef NewQuestCount = int Function(QuestBase priorAnsweredQuest);
 // pass Question + newIndx, return list of args for Quest2 template
 typedef NewQuestArgGen = List<String> Function(
-    QuestBase priorAnsweredQuest, int questIdx);
+    QuestBase priorAnsweredQuest, int questIdx, int promptIdx);
 
 // when auto-generating questions (from prior answers)
 // this function lets you pass in the source QTI and get a new one back

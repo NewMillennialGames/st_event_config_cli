@@ -183,7 +183,7 @@ class DerivedQuestGenerator {
     // dgq that won't throw off our match count
     // because isNoopGenerator will be false
     var qpp = NewQuestPerPromptOpts<bool>('',
-        promptTemplArgGen: (_, __) => [],
+        promptTemplArgGen: (_, __, pi) => [],
         answerChoiceGenerator: (_, __, n) => [],
         newRespCastFunc: (_, __) => false);
 
@@ -243,7 +243,10 @@ class DerivedQuestGenerator {
 
         int currPromptChoiceCount = currPromptConfig
             .answerChoiceGenerator(
-                answeredQuest, newQIdx, currPromptConfig.instanceIdx)
+              answeredQuest,
+              newQIdx,
+              currPromptConfig.instanceIdx,
+            )
             .length;
         if (currPromptChoiceCount < 1) {
           print(
@@ -253,7 +256,10 @@ class DerivedQuestGenerator {
         }
 
         List<String> templArgs = currPromptConfig.promptTemplArgGen(
-            answeredQuest, currPromptConfig.instanceIdx);
+          answeredQuest,
+          newQIdx,
+          currPromptConfig.instanceIdx,
+        );
         String _userPrompt = currPromptConfig.promptTemplate.format(templArgs);
 
         newQuestPrompts.add(QuestPromptPayload(

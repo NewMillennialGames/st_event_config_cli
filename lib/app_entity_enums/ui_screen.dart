@@ -30,8 +30,8 @@ enum AppScreen {
   marketView,
   socialPools,
   news,
-  leaderboardTraders,
-  leaderboardAssets,
+  leaderboardTraders, // pools
+  leaderboardAssets, // football & Fantasy
   portfolioPositions,
   portfolioHistory,
   trading,

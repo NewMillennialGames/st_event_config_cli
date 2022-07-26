@@ -144,7 +144,7 @@ void main() {
       derivedQuestGen: DerivedQuestGenerator.singlePrompt(
         'blah {0}',
         newQuestCountCalculator: (q) => 0,
-        newQuestPromptArgGen: (_, __) => [],
+        newQuestPromptArgGen: (_, __, pi) => [],
         answerChoiceGenerator: (_, __, niu) => [],
         newRespCastFunc: (_, __) => null,
       ),

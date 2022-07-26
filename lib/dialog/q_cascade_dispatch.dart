@@ -172,6 +172,7 @@ class QCascadeDispatcher {
           newQuestPromptArgGen: (
             QuestBase priorAnsweredQuest,
             int newQuIdx,
+            int promptIdx,
           ) {
             // produce args for {0} in prompt template above
             String nameOfScreenToConfig =
@@ -272,6 +273,7 @@ FIXME:
           newQuestPromptArgGen: (
             QuestBase priorAnsweredQuest,
             int newQuestIdx,
+            int promptIdx,
           ) {
             List<ScreenWidgetArea> respList =
                 (priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>);
@@ -388,6 +390,7 @@ FIXME:
           newQuestPromptArgGen: (
             QuestBase priorAnsweredQuest,
             int newQuestIdx,
+            int promptIdx,
           ) {
             List<VisualRuleType> respList =
                 (priorAnsweredQuest.mainAnswer as List<VisualRuleType>);
@@ -586,76 +589,6 @@ FIXME:
       matchersToGenRuleSelectQuests +
       matchersToGenRulePrepQuests +
       matchersToGenRuleDetailQuests;
-
-  //
-  // void niu_createPrepQuestions(
-  //   QuestListMgr questListMgr,
-  //   QuestBase _answeredQuest,
-  // ) {
-  //   /*
-  //     use intended rule info from current question
-  //     to fabricate a DerivedQuestGenerator for each
-  //     question-subtype
-  //     and then use those to produce required new questions
-  //   */
-  //   assert(
-  //     _answeredQuest is RuleSelectQuest,
-  //     'cant produce detail quests from prevAnswQuest ${_answeredQuest.questId} which is a ${_answeredQuest.runtimeType}',
-  //   );
-  //   assert(
-  //     _answeredQuest.visRuleTypeForAreaOrSlot != null,
-  //     'oops; can only create rule-prep questions at vis-rule level',
-  //   );
-  //   VisualRuleType visRuleTyp = _answeredQuest.visRuleTypeForAreaOrSlot!;
-  //   List<VisRuleQuestType> ruleSubtypeLst = visRuleTyp.requConfigQuests;
-
-  //   assert(ruleSubtypeLst.isNotEmpty, 'need subtypes to guide prep');
-  //   List<QuestBase> newQuests = [];
-  //   for (VisRuleQuestType ruleSubtype in ruleSubtypeLst) {
-  //     //
-  //     DerivedQuestGenerator dqg =
-  //         _answeredQuest.getDerivedRuleQuestGenViaVisType(ruleSubtype);
-  //     Iterable<QuestBase> generatedQuestions =
-  //         dqg.getDerivedAutoGenQuestions(_answeredQuest);
-  //     newQuests.addAll(generatedQuestions);
-  //   }
-
-  //   questListMgr.appendGeneratedQuestsAndAnswers(newQuests);
-  // }
-
-  // void niu_createRuleDetailQuestions(
-  //   QuestListMgr questListMgr,
-  //   QuestBase _answeredQuest,
-  // ) {
-  //   /*
-  //     use intended rule info from current question
-  //     to fabricate a DerivedQuestGenerator for each
-  //     question-subtype
-  //     and then use those to produce required new questions
-  //   */
-  //   assert(
-  //     _answeredQuest.visRuleTypeForAreaOrSlot != null &&
-  //         (_answeredQuest.isRulePrepQuestion ||
-  //             _answeredQuest.isRuleSelectionQuestion),
-  //     'oops; can only create rule questions below the vis-rule level',
-  //   );
-  //   VisualRuleType visRuleTyp = _answeredQuest.visRuleTypeForAreaOrSlot!;
-  //   List<VisRuleQuestType> ruleSubtypeLst = visRuleTyp.requConfigQuests;
-
-  //   List<QuestBase> newQuests = [];
-  //   for (VisRuleQuestType ruleSubtype in ruleSubtypeLst) {
-  //     //
-  //     DerivedQuestGenerator dqg =
-  //         _answeredQuest.getDerivedRuleQuestGenViaVisType(ruleSubtype);
-  //     Iterable<QuestBase> generatedQuestions =
-  //         dqg.getDerivedAutoGenQuestions(_answeredQuest);
-  //     newQuests.addAll(generatedQuestions);
-  //   }
-
-  //   questListMgr.appendGeneratedQuestsAndAnswers(newQuests);
-  // }
-
-  // end of def for QuestionCascadeDispatcher
 }
 
 List<QuestMatcher> _matchRuleSelectionQuestions = [
@@ -676,16 +609,23 @@ List<QuestMatcher> _matchRuleSelectionQuestions = [
     },
     //
     derivedQuestGen: DerivedQuestGenerator.singlePrompt(
-      // <List<ScreenWidgetArea>>
       'Select which rules to config within area {0} of screen {1}',
       newQuestConstructor: QuestBase.ruleSelectQuest,
-      newQuestPromptArgGen: (
-        QuestBase priorAnsweredQuest,
-        int newQuestIdx,
-      ) {
+      newQuestPromptArgGen:
+          (QuestBase priorAnsweredQuest, int newQuestIdx, int promptIdx) {
         List<ScreenWidgetArea> respList =
             (priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>);
+        // .where(
+        //   (swa) =>
+        //       swa
+        //           .applicableRuleTypes(priorAnsweredQuest.appScreen)
+        //           .length >
+        //       0,
+        // )
+        // .toList();
         var areaName = respList[newQuestIdx].name;
+        // var areaName = priorAnsweredQuest.screenWidgetArea?.name ??
+        //     respList[newQuestIdx].name;
         var screenName = priorAnsweredQuest.appScreen.name;
         return [
           areaName.toUpperCase(),
@@ -774,6 +714,7 @@ List<QuestMatcher> _matchRuleSelectionQuestions = [
       newQuestPromptArgGen: (
         QuestBase priorAnsweredQuest,
         int newQuestIdx,
+        int promptIdx,
       ) {
         List<ScreenAreaWidgetSlot> selectedSlots =
             (priorAnsweredQuest.mainAnswer as List<ScreenAreaWidgetSlot>);
@@ -850,3 +791,75 @@ List<QuestMatcher> _matchRuleSelectionQuestions = [
     ),
   ),
 ];
+
+
+
+//
+  // void niu_createPrepQuestions(
+  //   QuestListMgr questListMgr,
+  //   QuestBase _answeredQuest,
+  // ) {
+  //   /*
+  //     use intended rule info from current question
+  //     to fabricate a DerivedQuestGenerator for each
+  //     question-subtype
+  //     and then use those to produce required new questions
+  //   */
+  //   assert(
+  //     _answeredQuest is RuleSelectQuest,
+  //     'cant produce detail quests from prevAnswQuest ${_answeredQuest.questId} which is a ${_answeredQuest.runtimeType}',
+  //   );
+  //   assert(
+  //     _answeredQuest.visRuleTypeForAreaOrSlot != null,
+  //     'oops; can only create rule-prep questions at vis-rule level',
+  //   );
+  //   VisualRuleType visRuleTyp = _answeredQuest.visRuleTypeForAreaOrSlot!;
+  //   List<VisRuleQuestType> ruleSubtypeLst = visRuleTyp.requConfigQuests;
+
+  //   assert(ruleSubtypeLst.isNotEmpty, 'need subtypes to guide prep');
+  //   List<QuestBase> newQuests = [];
+  //   for (VisRuleQuestType ruleSubtype in ruleSubtypeLst) {
+  //     //
+  //     DerivedQuestGenerator dqg =
+  //         _answeredQuest.getDerivedRuleQuestGenViaVisType(ruleSubtype);
+  //     Iterable<QuestBase> generatedQuestions =
+  //         dqg.getDerivedAutoGenQuestions(_answeredQuest);
+  //     newQuests.addAll(generatedQuestions);
+  //   }
+
+  //   questListMgr.appendGeneratedQuestsAndAnswers(newQuests);
+  // }
+
+  // void niu_createRuleDetailQuestions(
+  //   QuestListMgr questListMgr,
+  //   QuestBase _answeredQuest,
+  // ) {
+  //   /*
+  //     use intended rule info from current question
+  //     to fabricate a DerivedQuestGenerator for each
+  //     question-subtype
+  //     and then use those to produce required new questions
+  //   */
+  //   assert(
+  //     _answeredQuest.visRuleTypeForAreaOrSlot != null &&
+  //         (_answeredQuest.isRulePrepQuestion ||
+  //             _answeredQuest.isRuleSelectionQuestion),
+  //     'oops; can only create rule questions below the vis-rule level',
+  //   );
+  //   VisualRuleType visRuleTyp = _answeredQuest.visRuleTypeForAreaOrSlot!;
+  //   List<VisRuleQuestType> ruleSubtypeLst = visRuleTyp.requConfigQuests;
+
+  //   List<QuestBase> newQuests = [];
+  //   for (VisRuleQuestType ruleSubtype in ruleSubtypeLst) {
+  //     //
+  //     DerivedQuestGenerator dqg =
+  //         _answeredQuest.getDerivedRuleQuestGenViaVisType(ruleSubtype);
+  //     Iterable<QuestBase> generatedQuestions =
+  //         dqg.getDerivedAutoGenQuestions(_answeredQuest);
+  //     newQuests.addAll(generatedQuestions);
+  //   }
+
+  //   questListMgr.appendGeneratedQuestsAndAnswers(newQuests);
+  // }
+
+  // end of def for QuestionCascadeDispatcher
