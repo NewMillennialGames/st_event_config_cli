@@ -119,11 +119,11 @@ extension VisualRuleTypeExt1 on VisualRuleType {
       case VisualRuleType.filterCfg:
         return 'Select filter field #{0} for the {1} on {2}.';
       case VisualRuleType.styleOrFormat:
-        return '';
+        return 'styleOrFormat does not use a detailTemplate  ';
       case VisualRuleType.showOrHide:
-        return '';
+        return 'showOrHide does not use a detailTemplate  ';
       case VisualRuleType.themePreference:
-        return '';
+        return 'themePreference does not use a detailTemplate  ';
     }
   }
   //
@@ -250,6 +250,12 @@ extension VisualRuleTypeExt1 on VisualRuleType {
     //   );
     // }
 
+    // normally creates a rule-detail question but sometimes (VisRuleQuestType.askCountOfSlotsToConfigure) creates rulePrep
+    newQTargRes = newQTargRes.copyWith(
+      visRuleTypeForAreaOrSlot: thisVisRT,
+      precision: TargetPrecision.ruleDetailVisual,
+    );
+
     // collect question prompts for construction of the der-quest generator
     List<NewQuestPerPromptOpts> perQuestPromptDetails = [];
 
@@ -269,11 +275,22 @@ extension VisualRuleTypeExt1 on VisualRuleType {
         case VisRuleQuestType.askCountOfSlotsToConfigure:
           //
           assert(
-            prevAnswQuest.isRuleSelectionQuestion,
-            'oops!! something weird??',
+            prevAnswQuest.isRuleSelectionQuestion &&
+                (newQTargRes.visRuleTypeForAreaOrSlot?.requiresRulePrepQuest ??
+                    false),
+            'oops!! something weird??  ${newQTargRes.targetPath}',
+          );
+
+          newQTargRes = newQTargRes.copyWith(
+            precision: TargetPrecision.rulePrep,
+          );
+
+          String templ = newQTargRes.visRuleTypeForAreaOrSlot!.prepTemplate;
+          print(
+            'askCountOfSlotsToConfigure:  ${newQTargRes.visRuleTypeForAreaOrSlot!} uses $templ   ($ruleTypeName)',
           );
           perQuestPromptDetails.add(NewQuestPerPromptOpts<int>(
-            'How many $ruleTypeName fields do you need for ${prevAnswQuest.targetPath}?',
+            'How many $ruleTypeName fields do you need for ${newQTargRes.targetPath}?',
             promptTemplArgGen: (prevQuest, newQuestIdx, promptIdx) => [],
             answerChoiceGenerator: (prevQuest, newQuestIdx, int promptIdx) =>
                 ['0', '1', '2', '3'],
@@ -287,7 +304,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
 
         case VisRuleQuestType.controlsVisibilityOfAreaOrSlot:
           perQuestPromptDetails.add(NewQuestPerPromptOpts<bool>(
-            'Do you want to hide the element at ${prevAnswQuest.targetPath}?',
+            'Do you want to hide the element at ${newQTargRes.targetPath}?',
             promptTemplArgGen: (prevQuest, newQuestIdx, promptIdx) => [],
             answerChoiceGenerator: (prevQuest, newQuestIdx, int promptIdx) =>
                 ['no', 'yes'],
@@ -337,7 +354,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           List<TvAreaRowStyle> possibleVisStyles = TvAreaRowStyle.values;
 
           perQuestPromptDetails.add(NewQuestPerPromptOpts<TvAreaRowStyle>(
-            'Select preferred style for ${prevAnswQuest.targetPath}?',
+            'Select preferred style for ${newQTargRes.targetPath}?',
             promptTemplArgGen: (prevQuest, newQuestIdx, promptIdx) => [],
             answerChoiceGenerator: (prevQuest, newQuestIdx, int promptIdx) =>
                 possibleVisStyles.map((e) => e.name).toList(),
@@ -372,10 +389,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
         /*  using QTargetResolution newQTargRes
               passed as argument above
           */
-        return newQTargRes.copyWith(
-          visRuleTypeForAreaOrSlot: this,
-          precision: TargetPrecision.ruleDetailVisual,
-        );
+        return newQTargRes;
       },
     );
   }

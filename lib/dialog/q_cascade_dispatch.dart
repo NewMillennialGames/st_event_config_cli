@@ -385,7 +385,7 @@ FIXME:
         },
         //
         derivedQuestGen: DerivedQuestGenerator.singlePrompt(
-          '{0}',
+          '{0}  (rule prep ?)',
           newQuestConstructor: QuestBase.rulePrepQuest,
           newQuestPromptArgGen: (
             QuestBase priorAnsweredQuest,
@@ -396,15 +396,20 @@ FIXME:
                 (priorAnsweredQuest.mainAnswer as List<VisualRuleType>);
             VisualRuleType curRule = respList[newQuestIdx];
 
+            TargetPrecision tp = curRule.requiresVisRulePrepQuestion
+                ? TargetPrecision.rulePrep
+                : TargetPrecision.ruleDetailVisual;
+
             QTargetResolution newTarg =
                 priorAnsweredQuest.qTargetResolution.copyWith(
               visRuleTypeForAreaOrSlot: curRule,
-              precision: curRule.requiresVisRulePrepQuestion
-                  ? TargetPrecision.rulePrep
-                  : TargetPrecision.ruleDetailVisual,
+              precision: tp,
             );
-            String promptArg1 =
-                curRule.prepTemplate.format([newTarg.targetPath]);
+
+            String templ = curRule.requiresVisRulePrepQuestion
+                ? curRule.prepTemplate
+                : curRule.detailTemplate;
+            String promptArg1 = templ.format([newTarg.targetPath]);
             return [promptArg1];
           },
           newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
