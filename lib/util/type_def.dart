@@ -43,4 +43,5 @@ typedef QTargetResUpdateFunc = QTargetResolution Function(
 typedef BailQGenWhenTrue = bool Function(
     QuestBase priorAnswQuest, int questIdx);
 
+typedef RuleTypeFilterFunction = bool Function(VisualRuleType usrSelVrt);
 // typedef RuleQuestTypTup = Tuple2<VisualRuleType, VisRuleQuestType>;

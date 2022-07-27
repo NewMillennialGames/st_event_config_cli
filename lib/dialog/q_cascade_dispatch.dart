@@ -365,8 +365,10 @@ FIXME:
     return [
       QuestMatcher<List<VisualRuleType>, int>(
         '''matches questions in which user specifies rules for screen-areas to config
-        and requiresVisRulePrepQuestion is true
-      build ?s prep questions for these rules
+        and at least 1 selected rule requiresVisRulePrepQuestion
+      build prep questions (eg how many slots) for these rules
+
+      matcher to build rule-detail questions is below
     ''',
         RuleSelectQuest,
         questIdPatternMatchTest: (qid) =>
@@ -376,12 +378,14 @@ FIXME:
             (QuestBase priorAnsweredQuest) {
           var selectedRules =
               priorAnsweredQuest.mainAnswer as Iterable<VisualRuleType>;
+
+          bool atLeastOneNeedsPrep = selectedRules.fold<bool>(
+              false,
+              (bool needsPrep, VisualRuleType vrt) =>
+                  needsPrep || vrt.requiresRulePrepQuest);
           return priorAnsweredQuest is RuleSelectQuest &&
               selectedRules.length > 0 &&
-              selectedRules.fold<bool>(
-                  false,
-                  (bool needsPrep, VisualRuleType vtr) =>
-                      needsPrep || vtr.requiresVisRulePrepQuestion);
+              atLeastOneNeedsPrep;
         },
         //
         derivedQuestGen: DerivedQuestGenerator.singlePrompt(
@@ -393,7 +397,9 @@ FIXME:
             int promptIdx,
           ) {
             List<VisualRuleType> respList =
-                (priorAnsweredQuest.mainAnswer as List<VisualRuleType>);
+                (priorAnsweredQuest.mainAnswer as List<VisualRuleType>)
+                    .where((vrt) => vrt.requiresRulePrepQuest)
+                    .toList();
             VisualRuleType curRule = respList[newQuestIdx];
 
             TargetPrecision tp = curRule.requiresVisRulePrepQuestion
@@ -429,7 +435,7 @@ FIXME:
 
             List<VisualRuleType> respList =
                 (priorAnsweredQuest.mainAnswer as List<VisualRuleType>)
-                    .where((rt) => rt.requiresVisRulePrepQuestion)
+                    .where((vrt) => vrt.requiresRulePrepQuest)
                     .toList();
             VisualRuleType curRule = respList[newQuIdx];
 
@@ -474,7 +480,7 @@ FIXME:
             QuestBase newQuest,
             String lstAreaIdxs,
           ) {
-            //                 // .map((i) => '$i')
+            //  return # of slots selected
             return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
                 .toList()
                 .first;
@@ -514,8 +520,9 @@ FIXME:
         
         matches questions in which user specifies rules for
         screen-areas or slots to config
-        not for rule-prep questions
-        that matcher is below
+        and the rules DO NOT require an intermediate "prep" step
+        (eg not for rule-prep questions)
+        rule-prep matcher is defined above
 
       the answers to those questions (set of VisRuleQuestType) will be the
       ui config for THAT RULE, on selected screen area
@@ -526,24 +533,41 @@ FIXME:
             qid.startsWith(QuestionIdStrings.specRulesForSlotInArea),
         validateUserAnswerAfterPatternMatchIsTrueCallback:
             (QuestBase priorAnsweredQuest) {
-          return (priorAnsweredQuest.mainAnswer as Iterable<VisualRuleType>)
-                      .length >
-                  0 &&
-              priorAnsweredQuest.isRuleSelectionQuestion &&
+          Iterable<VisualRuleType> answr =
+              priorAnsweredQuest.mainAnswer as Iterable<VisualRuleType>;
+          Iterable<VisualRuleType> selRulesNoPrep =
+              answr.where((vrt) => !vrt.requiresRulePrepQuest);
+          bool atLeastOneHasNoPrep = selRulesNoPrep.length > 0;
+          if (!atLeastOneHasNoPrep) return false;
+
+          print('validateUserAnswerAfterPatternMatchIsTrueCallback:');
+          print('\tAnswLen: ${selRulesNoPrep.length} (1 in example)');
+          print(
+              '\tisRuleSelectionQuestion: ${priorAnsweredQuest.isRuleSelectionQuestion}');
+          print(
+              '\ttargetPathIsComplete: ${priorAnsweredQuest.targetPathIsComplete}');
+          print('\ttargetPath: ${priorAnsweredQuest.targetPath}');
+          print('\tatLeastOneHasNoPrep: ${atLeastOneHasNoPrep}');
+          return priorAnsweredQuest.isRuleSelectionQuestion &&
               priorAnsweredQuest.targetPathIsComplete;
         },
         //
         derivedQuestGen: DerivedQuestGenerator.noop(),
         deriveQuestGenCallbk: (QuestBase priorAnsweredQuest, int newQuIdx) {
           //
-          var answers = priorAnsweredQuest.mainAnswer as List<VisualRuleType>;
-          VisualRuleType selRule = answers[newQuIdx];
+          Iterable<VisualRuleType> answr =
+              priorAnsweredQuest.mainAnswer as Iterable<VisualRuleType>;
+          List<VisualRuleType> selRulesNoPrep =
+              answr.where((vrt) => !vrt.requiresRulePrepQuest).toList();
+          VisualRuleType selRule = selRulesNoPrep[newQuIdx];
+          // bail out if requiresVisRulePrepQuestion
           if (selRule.requiresVisRulePrepQuestion)
             return DerivedQuestGenerator.noop();
 
           return priorAnsweredQuest.getDerivedRuleQuestGenViaVisType(
             newQuIdx,
             selRule,
+            null,
           );
         },
       ),
@@ -582,7 +606,10 @@ FIXME:
           // var answers = priorAnsweredQuest.mainAnswer as List<VisualRuleType>;
           // VisualRuleType selRule = answers[newQuIdx];
           return priorAnsweredQuest.getDerivedRuleQuestGenViaVisType(
-              newQuIdx, null);
+            newQuIdx,
+            null,
+            null,
+          );
         },
       ),
     ];

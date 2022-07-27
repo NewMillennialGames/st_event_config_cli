@@ -220,31 +220,50 @@ abstract class QuestBase with EquatableMixin {
 
   DerivedQuestGenerator getDerivedRuleQuestGenViaVisType(
     int newQuIdx,
-    VisualRuleType? pendingRule,
+    VisualRuleType? pendingVisRule,
+    RuleTypeFilterFunction? filterFunc,
   ) {
-    //
+    /*
+    called by q_cascade_dispatch
+      to build a DerivedQuestGenerator
+      from answers to this (current question)
+    */
     assert(
       this is RuleSelectQuest || this is RulePrepQuest,
       'cant produce detail quests on ${this.questId}',
     );
 
+    int newQuestCountToGenerate = 1;
     VisualRuleType? selRule =
         this is RulePrepQuest ? visRuleTypeForAreaOrSlot : null;
-    if (this is RuleSelectQuest) {
-      selRule = (this.mainAnswer as List<VisualRuleType>)[newQuIdx];
-    }
-    VisualRuleType curRule =
-        pendingRule ?? selRule ?? visRuleTypeForAreaOrSlot!;
 
-    // print(
-    //   'getDerivedRuleQuestGenViaVisType: ${curRule.name}',
-    // );
+    if (this is RuleSelectQuest) {
+      // && pendingVisRule == null
+      List<VisualRuleType> selRules = this.mainAnswer as List<VisualRuleType>;
+      if (filterFunc != null) {
+        selRules = selRules.where(filterFunc).toList();
+      } else {
+        selRules = selRules.where((vrt) => !vrt.requiresRulePrepQuest).toList();
+      }
+      selRule = selRules[newQuIdx];
+      newQuestCountToGenerate = selRules.length;
+    }
+    VisualRuleType ruleForNextQuestion =
+        pendingVisRule ?? selRule ?? visRuleTypeForAreaOrSlot!;
+
+    print(
+      'getDerivedRuleQuestGenViaVisType: ${ruleForNextQuestion.name}',
+    );
 
     var newTarg = qTargetResolution.copyWith(
-      visRuleTypeForAreaOrSlot: curRule,
+      visRuleTypeForAreaOrSlot: ruleForNextQuestion,
       precision: TargetPrecision.ruleDetailVisual,
     );
-    return curRule.makeQuestGenForRuleType(this, newTarg);
+    return ruleForNextQuestion.makeQuestGenForRuleType(
+      this,
+      newTarg,
+      newQuestCountToGenerate,
+    );
   }
 
   bool containsPromptWhere(bool Function(QuestPromptInstance qpi) promptTest) {

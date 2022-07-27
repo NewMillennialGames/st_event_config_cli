@@ -194,9 +194,16 @@ extension VisualRuleTypeExt1 on VisualRuleType {
   DerivedQuestGenerator makeQuestGenForRuleType(
     QuestBase prevAnswQuest,
     QTargetResolution newQTargRes,
+    int newQuestCountToGenerate,
   ) {
     /*   DQG should ALWAYS build 1 question (w possibly multiple prompts)
+
+    wrong!!!  if prevAnswQuest is a list of selected rules (not answer to rule prep)
+    we'll need to build several questions
+
+    see "newQuestCountToGenerate" below!
     
+
     some rules (eg hide/show an area) are singular (complete with 1 prompt/answer)
     some rules (eg sort a list-view) might have up to 3 sort-fields
     and each of those fields can be sorted asc or descending  (+ 3 sort directions)
@@ -230,12 +237,15 @@ extension VisualRuleTypeExt1 on VisualRuleType {
     );
 
     VisualRuleType thisVisRT = this;
+    assert(thisVisRT == newQTargRes.visRuleTypeForAreaOrSlot, 'wtf?');
+
     String ruleTypeName = thisVisRT.name;
-    String newQuestNamePrefix = prevAnswQuest.questId;
+    // String newQuestNamePrefix = prevAnswQuest.questId;
 
     // visRequiredSubQuests should contain exactly 1 value
     List<VisRuleQuestType> visRequiredSubQuests =
         thisVisRT.requRuleDetailCfgQuests;
+
     assert(
       visRequiredSubQuests.length == 1,
       'each VRT should have 1 main VisRuleQuestType',
@@ -250,6 +260,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
     //   );
     // }
 
+    // this newQTargRes.copyWith was normally done in the caller but repeating to just be safe!!
     // normally creates a rule-detail question but sometimes (VisRuleQuestType.askCountOfSlotsToConfigure) creates rulePrep
     newQTargRes = newQTargRes.copyWith(
       visRuleTypeForAreaOrSlot: thisVisRT,
@@ -262,7 +273,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
     List<String> _accumSubQuestNames = [];
     // create 1-n NewQuestPerPromptOpts for each required subQuest
     // as needed by VisualRuleType visRT
-    int newQuestCountToGenerate = 1;
+
     for (VisRuleQuestType ruleSubtypeNewQuest in visRequiredSubQuests) {
       //
       _accumSubQuestNames.add(ruleSubtypeNewQuest.name);
@@ -276,8 +287,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           //
           assert(
             prevAnswQuest.isRuleSelectionQuestion &&
-                (newQTargRes.visRuleTypeForAreaOrSlot?.requiresRulePrepQuest ??
-                    false),
+                thisVisRT.requiresRulePrepQuest,
             'oops!! something weird??  ${newQTargRes.targetPath}',
           );
 
@@ -285,9 +295,9 @@ extension VisualRuleTypeExt1 on VisualRuleType {
             precision: TargetPrecision.rulePrep,
           );
 
-          String templ = newQTargRes.visRuleTypeForAreaOrSlot!.prepTemplate;
+          String templ = thisVisRT.prepTemplate;
           print(
-            'askCountOfSlotsToConfigure:  ${newQTargRes.visRuleTypeForAreaOrSlot!} uses $templ   ($ruleTypeName)',
+            'askCountOfSlotsToConfigure:  ${thisVisRT} uses $templ   ($ruleTypeName)',
           );
           perQuestPromptDetails.add(NewQuestPerPromptOpts<int>(
             'How many $ruleTypeName fields do you need for ${newQTargRes.targetPath}?',
@@ -353,18 +363,20 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           // hack
           List<TvAreaRowStyle> possibleVisStyles = TvAreaRowStyle.values;
 
-          perQuestPromptDetails.add(NewQuestPerPromptOpts<TvAreaRowStyle>(
-            'Select preferred style for ${newQTargRes.targetPath}?',
-            promptTemplArgGen: (prevQuest, newQuestIdx, promptIdx) => [],
-            answerChoiceGenerator: (prevQuest, newQuestIdx, int promptIdx) =>
-                possibleVisStyles.map((e) => e.name).toList(),
-            newRespCastFunc: (QuestBase qb, String ans) {
-              int n = int.tryParse(ans) ?? 0;
-              return possibleVisStyles[n];
-            },
-            visRuleType: thisVisRT,
-            visRuleQuestType: VisRuleQuestType.selectVisualComponentOrStyle,
-          ));
+          perQuestPromptDetails.add(
+            NewQuestPerPromptOpts<TvAreaRowStyle>(
+              'Select preferred style for ${newQTargRes.targetPath}?',
+              promptTemplArgGen: (prevQuest, newQuestIdx, promptIdx) => [],
+              answerChoiceGenerator: (prevQuest, newQuestIdx, int promptIdx) =>
+                  possibleVisStyles.map((e) => e.name).toList(),
+              newRespCastFunc: (QuestBase qb, String ans) {
+                int n = int.tryParse(ans) ?? 0;
+                return possibleVisStyles[n];
+              },
+              visRuleType: thisVisRT,
+              visRuleQuestType: VisRuleQuestType.selectVisualComponentOrStyle,
+            ),
+          );
           break;
         //
         case VisRuleQuestType.specifySortAscending:
@@ -375,8 +387,9 @@ extension VisualRuleTypeExt1 on VisualRuleType {
     }
     assert(perQuestPromptDetails.length > 0, 'err: no prompts in question');
 
-    String qIdSuffix =
-        _accumSubQuestNames.reduce((value, element) => value + '-' + element);
+    String qIdSuffix = _accumSubQuestNames.reduce(
+        (String compRuleTypeNames, String rtName) =>
+            compRuleTypeNames + '-' + rtName);
 
     return DerivedQuestGenerator.multiPrompt(
       perQuestPromptDetails,
@@ -389,7 +402,14 @@ extension VisualRuleTypeExt1 on VisualRuleType {
         /*  using QTargetResolution newQTargRes
               passed as argument above
           */
-        return newQTargRes;
+        List<VisualRuleType> selRules = newQuestCountToGenerate < 2
+            ? [newQTargRes.visRuleTypeForAreaOrSlot!]
+            : qb.mainAnswer as List<VisualRuleType>;
+
+        VisualRuleType curRule = selRules.length <= newQidx
+            ? newQTargRes.visRuleTypeForAreaOrSlot!
+            : selRules[newQidx];
+        return newQTargRes.copyWith(visRuleTypeForAreaOrSlot: curRule);
       },
     );
   }
