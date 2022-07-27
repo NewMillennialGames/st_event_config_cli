@@ -347,7 +347,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           );
           perQuestPromptDetails.addAll(qps);
           print(
-            'promptCountEachQuestion: $promptSetCount    newPerPromptDetails: ${perQuestPromptDetails.length}',
+            'promptCountEachQuestion: $promptSetCount    newPerPromptDetails: ${perQuestPromptDetails.length}   vrt: ${thisVisRT.name}',
           );
           break;
 

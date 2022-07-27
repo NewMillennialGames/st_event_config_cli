@@ -97,9 +97,9 @@ final List<QuestBase> _initQuestionLst = [
     QuestBase.initialEventConfigRule(
       QTargetResolution.forEvent(),
       DlgStr.eventGameAgeOffPolicy,
-      EvAgeOffGameRule.values.map((e) => e.name),
-      CaptureAndCast<EvAgeOffGameRule>(
-        (qb, s) => EvAgeOffGameRule.values[int.tryParse(s) ?? 0],
+      EvGameAgeOffRule.values.map((e) => e.name),
+      CaptureAndCast<EvGameAgeOffRule>(
+        (qb, s) => EvGameAgeOffRule.values[int.tryParse(s) ?? 0],
       ),
       questId: QuestionIdStrings.eventAgeOffGameRule,
     ),

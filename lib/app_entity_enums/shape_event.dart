@@ -52,11 +52,14 @@ enum EvOpponentType {
 }
 
 @JsonEnum()
-enum EvAgeOffGameRule {
-  whenRoundChanges,
-  everyWeek,
-  oneDayAfterEnds,
-  byEvEliminationStrategy,
+enum EvGameAgeOffRule {
+  /* governs behavior of the:
+      Event Round Manager (ERM)
+      ERM decides when to hide old games
+      on the ST UI
+  */
+  whenRoundChanges, // via the competition stream
+  everyWeek, // via the clock compared to game-end-dttm
+  oneDayAfterEnds, // via the clock
+  byEvEliminationStrategy, // see EvEliminationStrategy above
 }
-
-// enum EvStyling { sortKey, groupKey, bannerUrl, assetIconUrlTemplate }

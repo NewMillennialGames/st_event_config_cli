@@ -126,18 +126,12 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
   final PriorQuestIdMatchPatternTest? questIdPatternMatchTest;
 
   // pattern matching values;  leave null to not match on them
-  Type questType;
+  Type matchedQuestType;
   TargetPrecision? targetPrecision;
-  // final AppScreen? appScreen;
-  // final ScreenWidgetArea? screenWidgetArea;
-  // final ScreenAreaWidgetSlot? slotInArea;
-  // final VisualRuleType? visRuleTypeForAreaOrSlot;
-  // final BehaviorRuleType? behRuleTypeForAreaOrSlot;
-
   //
   QuestMatcher(
     this.matcherDescrip,
-    this.questType, {
+    this.matchedQuestType, {
     required this.derivedQuestGen,
     this.targetPrecision,
     this.validateUserAnswerAfterPatternMatchIsTrueCallback,
@@ -145,11 +139,6 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
     // send DerivedQuestGenerator.noop to derivedQuestGen
     // when you wish to use deriveQuestGenCallbk
     this.deriveQuestGenCallbk,
-    // this.appScreen,
-    // this.screenWidgetArea,
-    // this.slotInArea,
-    // this.visRuleTypeForAreaOrSlot,
-    // this.behRuleTypeForAreaOrSlot,
   }) {
     // below crashes all tests
     // assert(questType is QuestBase, 'questType must be subclass of QuestBase');
@@ -168,7 +157,7 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
     //
     bool isAPatternMatch = targetPrecision == null ||
         targetPrecision == prevAnsweredQuest.qTargetResolution.precision;
-    if (!isAPatternMatch || prevAnsweredQuest.runtimeType != questType) {
+    if (!isAPatternMatch || prevAnsweredQuest.runtimeType != matchedQuestType) {
       return false;
     }
 

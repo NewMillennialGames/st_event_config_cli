@@ -480,7 +480,7 @@ FIXME:
             QuestBase newQuest,
             String lstAreaIdxs,
           ) {
-            //  return # of slots selected
+            //  return # of (filter/sort/group) slots selected
             return castStrOfIdxsToIterOfInts(lstAreaIdxs, dflt: 0)
                 .toList()
                 .first;
@@ -555,11 +555,11 @@ FIXME:
         derivedQuestGen: DerivedQuestGenerator.noop(),
         deriveQuestGenCallbk: (QuestBase priorAnsweredQuest, int newQuIdx) {
           //
-          Iterable<VisualRuleType> answr =
-              priorAnsweredQuest.mainAnswer as Iterable<VisualRuleType>;
-          List<VisualRuleType> selRulesNoPrep =
-              answr.where((vrt) => !vrt.requiresRulePrepQuest).toList();
-          VisualRuleType selRule = selRulesNoPrep[newQuIdx];
+          List<VisualRuleType> answr =
+              priorAnsweredQuest.mainAnswer as List<VisualRuleType>;
+          // List<VisualRuleType> selRulesNoPrep =
+          //     answr.where((vrt) => !vrt.requiresRulePrepQuest).toList();
+          VisualRuleType selRule = answr[newQuIdx];
           // bail out if requiresVisRulePrepQuestion
           if (selRule.requiresVisRulePrepQuestion)
             return DerivedQuestGenerator.noop();

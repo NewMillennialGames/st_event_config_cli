@@ -79,6 +79,7 @@ class EventCfgTree {
     EvOpponentType evOpponentType = EvOpponentType.sameAsCompetitorType;
     EvDuration evDuration = EvDuration.oneGame;
     EvEliminationStrategy evEliminationType = EvEliminationStrategy.singleGame;
+    EvGameAgeOffRule evGameAgeRule = EvGameAgeOffRule.byEvEliminationStrategy;
     bool applySameRowStyleToAllScreens = true;
     // use try to catch errs and allow easy debugging
     try {
@@ -107,9 +108,14 @@ class EventCfgTree {
           .where((q) => q.mainAnswer is EvEliminationStrategy)
           .first
           .mainAnswer as EvEliminationStrategy;
+      // tells app how to age-off finished games
+      evGameAgeRule = responses
+          .where((q) => q.mainAnswer is EvGameAgeOffRule)
+          .first
+          .mainAnswer as EvGameAgeOffRule;
     } catch (e) {
       print(
-        'Warnnig:  key Event level quests/fields missing.  Hope you are debugging',
+        'Warnnig:  key Event level quests/fields missing.  Hope you are debugging testing',
       );
     }
 
