@@ -21,11 +21,11 @@ enum VisRuleQuestType {
 extension VisRuleQuestTypeExt1 on VisRuleQuestType {
   //
 
-  String questTemplByRuleType(VisualRuleType ruleTyp) {
+  String questTemplByRuleType(VisualRuleType visRuleTyp) {
     /* return Question template for each of these rules
 
-
     */
+    assert(visRuleTyp != VisualRuleType.filterCfg, 'caught you!!');
     String resp = '_unset';
     switch (this) {
       case VisRuleQuestType.dialogStruct:
@@ -33,7 +33,7 @@ extension VisRuleQuestTypeExt1 on VisRuleQuestType {
       case VisRuleQuestType.askCountOfSlotsToConfigure:
         return 'How many {0} (Group/Sort/Filter) fields do you want to use on {1}';
       case VisRuleQuestType.selectDataFieldName:
-        switch (ruleTyp) {
+        switch (visRuleTyp) {
           case VisualRuleType.groupCfg:
             resp = 'Select {0} field you wish to use for grouping on {1}';
             break;
@@ -44,14 +44,14 @@ extension VisRuleQuestTypeExt1 on VisRuleQuestType {
             resp = 'Select {0} field you wish to use for filtering on {1}';
             break;
           default:
-            resp = 'err: Select {0} field you wish to use for filtering on {1}';
+            resp = 'err: Select {0} field you wish to use for ??? on {1}';
         }
         return resp;
 
       case VisRuleQuestType.specifySortAscending:
         return 'Sort Ascending';
       case VisRuleQuestType.selectVisualComponentOrStyle:
-        switch (ruleTyp) {
+        switch (visRuleTyp) {
           case VisualRuleType.styleOrFormat:
             resp = 'Pick the Component or Style to apply on target {0}';
             break;
@@ -91,29 +91,29 @@ extension VisRuleQuestTypeExt1 on VisRuleQuestType {
     }
   }
 
-  List<VisRuleQuestType> subquestionsForEachPrepInstance(VisualRuleType vrt) {
-    /* sub-questions to ask for a given combo of 
-        VisualRuleType and VisRuleQuestType
-    */
-    switch (this) {
-      case VisRuleQuestType.dialogStruct:
-        // placeholder;  related to a top-level question
-        return [];
-      case VisRuleQuestType.selectDataFieldName:
-        return [];
-      case VisRuleQuestType.askCountOfSlotsToConfigure:
-        return [
-          VisRuleQuestType.selectDataFieldName,
-          VisRuleQuestType.specifySortAscending,
-        ];
-      case VisRuleQuestType.specifySortAscending:
-        return [];
-      case VisRuleQuestType.selectVisualComponentOrStyle:
-        return [];
-      case VisRuleQuestType.controlsVisibilityOfAreaOrSlot:
-        return [];
-    }
-  }
+  // List<VisRuleQuestType> subquestionsForEachPrepInstance(VisualRuleType vrt) {
+  //   /* sub-questions to ask for a given combo of
+  //       VisualRuleType and VisRuleQuestType
+  //   */
+  //   switch (this) {
+  //     case VisRuleQuestType.dialogStruct:
+  //       // placeholder;  related to a top-level question
+  //       return [];
+  //     case VisRuleQuestType.selectDataFieldName:
+  //       return [];
+  //     case VisRuleQuestType.askCountOfSlotsToConfigure:
+  //       return [
+  //         VisRuleQuestType.selectDataFieldName,
+  //         VisRuleQuestType.specifySortAscending,
+  //       ];
+  //     case VisRuleQuestType.specifySortAscending:
+  //       return [];
+  //     case VisRuleQuestType.selectVisualComponentOrStyle:
+  //       return [];
+  //     case VisRuleQuestType.controlsVisibilityOfAreaOrSlot:
+  //       return [];
+  //   }
+  // }
 
   int get defaultChoice {
     // each Quest2 can have different default choice

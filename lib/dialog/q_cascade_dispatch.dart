@@ -583,15 +583,15 @@ FIXME:
             qid.startsWith(QuestionIdStrings.prepQuestForVisRule),
         validateUserAnswerAfterPatternMatchIsTrueCallback:
             (QuestBase priorAnsweredQuest) {
-          // print(
-          //   'priorAnsweredQuest.mainAnswer: ${priorAnsweredQuest.mainAnswer as int}',
-          // );
-          // print(
-          //   'priorAnsweredQuest.isRulePrepQuestion: ${priorAnsweredQuest.isRulePrepQuestion}',
-          // );
-          // print(
-          //   'priorAnsweredQuest.targetPathIsComplete: ${priorAnsweredQuest.targetPathIsComplete}',
-          // );
+          print(
+            'rulePrep:  priorAnsweredQuest.mainAnswer: ${priorAnsweredQuest.mainAnswer as int}',
+          );
+          print(
+            '\tpriorAnsweredQuest.isRulePrepQuestion: ${priorAnsweredQuest.isRulePrepQuestion}',
+          );
+          print(
+            '\tpriorAnsweredQuest.targetPathIsComplete: ${priorAnsweredQuest.targetPathIsComplete}',
+          );
           // List<String> rulePrepAnswers = priorAnsweredQuest.mainAnswer;
           // assert(rulePrepAnswers.length > 0, '');
           // int desiredCount = int.tryParse(rulePrepAnswers.first) ?? 1;
@@ -602,10 +602,11 @@ FIXME:
         },
         //
         derivedQuestGen: DerivedQuestGenerator.noop(),
-        deriveQuestGenCallbk: (QuestBase priorAnsweredQuest, int newQuIdx) {
+        deriveQuestGenCallbk:
+            (QuestBase priorAnsweredRulePrepQuest, int newQuIdx) {
           // var answers = priorAnsweredQuest.mainAnswer as List<VisualRuleType>;
           // VisualRuleType selRule = answers[newQuIdx];
-          return priorAnsweredQuest.getDerivedRuleQuestGenViaVisType(
+          return priorAnsweredRulePrepQuest.getDerivedRuleQuestGenViaVisType(
             newQuIdx,
             null,
             null,
