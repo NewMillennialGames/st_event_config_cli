@@ -16,9 +16,8 @@ class TopEventCfg {
   EvOpponentType evOpponentType;
   EvDuration evDuration;
   EvEliminationStrategy evEliminationType;
-  // TODO  below not connected to Constructor or JSON
+  EvGameAgeOffRule evGameAgeOffRule;
   bool applySameRowStyleToAllScreens = true;
-  // bool groupOnlyByDate = false;
 
   TopEventCfg(
     this.evTemplateName,
@@ -28,6 +27,8 @@ class TopEventCfg {
     this.evOpponentType = EvOpponentType.sameAsCompetitorType,
     this.evDuration = EvDuration.oneGame,
     this.evEliminationType = EvEliminationStrategy.roundRobin,
+    this.evGameAgeOffRule = EvGameAgeOffRule.byEvEliminationStrategy,
+    this.applySameRowStyleToAllScreens = true,
   });
 
   bool skipGroupingOnScreen(AppScreen screen) =>
@@ -79,7 +80,8 @@ class EventCfgTree {
     EvOpponentType evOpponentType = EvOpponentType.sameAsCompetitorType;
     EvDuration evDuration = EvDuration.oneGame;
     EvEliminationStrategy evEliminationType = EvEliminationStrategy.singleGame;
-    EvGameAgeOffRule evGameAgeRule = EvGameAgeOffRule.byEvEliminationStrategy;
+    EvGameAgeOffRule evGameAgeOffRule =
+        EvGameAgeOffRule.byEvEliminationStrategy;
     bool applySameRowStyleToAllScreens = true;
     // use try to catch errs and allow easy debugging
     try {
@@ -109,7 +111,7 @@ class EventCfgTree {
           .first
           .mainAnswer as EvEliminationStrategy;
       // tells app how to age-off finished games
-      evGameAgeRule = responses
+      evGameAgeOffRule = responses
           .where((q) => q.mainAnswer is EvGameAgeOffRule)
           .first
           .mainAnswer as EvGameAgeOffRule;
@@ -120,13 +122,12 @@ class EventCfgTree {
     }
 
     final eventCfg = TopEventCfg(
-      evTemplateName,
-      evTemplateDescription,
-      evType,
+      evTemplateName, evTemplateDescription, evType,
       evCompetitorType: evCompetitorType,
       evOpponentType: evOpponentType,
       evDuration: evDuration,
       evEliminationType: evEliminationType,
+      evGameAgeOffRule: evGameAgeOffRule,
       // applySameRowStyleToAllScreens,
     );
 

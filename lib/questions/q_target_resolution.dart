@@ -175,7 +175,7 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
         intentName;
   }
 
-  bool get isEventConfigScreenEntryPointQuest =>
+  bool get isEventConfigQuest =>
       appScreen == AppScreen.eventConfiguration &&
       screenWidgetArea == null &&
       slotInArea == null &&

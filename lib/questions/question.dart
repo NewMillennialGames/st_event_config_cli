@@ -350,9 +350,8 @@ abstract class QuestBase with EquatableMixin {
   bool get isFullyAnswered => qPromptCollection.allPartsHaveAnswers;
 
   // define type of question for auto-gen
-  bool get isEventConfigScreenEntryPointQuest =>
-      this is EventLevelCfgQuest &&
-      qTargetResolution.isEventConfigScreenEntryPointQuest;
+  bool get isEventConfigQuest =>
+      this is EventLevelCfgQuest && qTargetResolution.isEventConfigQuest;
   bool get isRegionTargetQuestion => this is RegionTargetQuest;
   bool get isRuleSelectionQuestion => this is RuleSelectQuest;
   bool get isRulePrepQuestion => this is RulePrepQuest;
@@ -378,7 +377,7 @@ abstract class QuestBase with EquatableMixin {
   Type get expectedAnswerType => _firstPromptAnswers.cast(this).runtimeType;
 
   bool get existsONLYToGenDialogStructure =>
-      qTargetResolution.isEventConfigScreenEntryPointQuest;
+      qTargetResolution.isEventConfigQuest;
   bool get isNotForRuleOutput => existsONLYToGenDialogStructure;
   // does questions have multi-prompts
   bool get isMultiPrompt => qPromptCollection.isMultiPrompt;

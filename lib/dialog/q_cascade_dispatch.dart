@@ -58,7 +58,7 @@ class QCascadeDispatcher {
     }
 
     // generate questions based on type of just answered
-    if (questJustAnswered.isEventConfigScreenEntryPointQuest) {
+    if (questJustAnswered.isEventConfigQuest) {
       // matching question is about: which screens to config?
       // it carries a list of app-screens and generator below
       // will create one question to select area-list for each screen

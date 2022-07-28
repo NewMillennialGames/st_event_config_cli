@@ -42,7 +42,7 @@ void createOutputFileFromResponses(
 ]) {
   //
   List<EventLevelCfgQuest> eventConfigLevelData =
-      questListMgr.exportableTopLevelQuestions.toList();
+      questListMgr.exportableTopLevelQuestions;
   List<RuleQuestBaseAbs> exportableRuleQuestions =
       questListMgr.exportableRuleQuestions.toList();
 
@@ -60,13 +60,6 @@ void createOutputFileFromResponses(
   //   print(allAnsw);
   //   print('\n\n');
   // }
-
-  // print('Now building Event Config rules...');
-  eventConfigLevelData = eventConfigLevelData
-      .where(
-        (q) => q.isEventConfigScreenEntryPointQuest,
-      )
-      .toList();
 
   final evCfg = EventCfgTree.fromEventLevelConfig(eventConfigLevelData);
   // create the per-area or per-slot rules

@@ -34,8 +34,13 @@ class QuestListMgr {
   Iterable<RuleQuestBaseAbs> get exportableRuleQuestions =>
       _allAnsweredQuestions.whereType<RuleQuestBaseAbs>();
 
-  Iterable<EventLevelCfgQuest> get exportableTopLevelQuestions =>
-      _allAnsweredQuestions.whereType<EventLevelCfgQuest>();
+  List<EventLevelCfgQuest> get exportableTopLevelQuestions =>
+      _allAnsweredQuestions
+          .whereType<EventLevelCfgQuest>()
+          .where(
+            (q) => q.isEventConfigQuest,
+          )
+          .toList();
 
   // bool _exportFilterLogic(QuestBase q) {
   //   // print(

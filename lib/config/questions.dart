@@ -5,8 +5,7 @@ List<QuestBase> loadInitialConfigQuestions() {
   // event config Quest2s DO NOT have areas or uiComponents
   return _initQuestionLst
       .where((qb) =>
-          qb.appScreen == AppScreen.eventConfiguration &&
-          qb.isEventConfigScreenEntryPointQuest)
+          qb.appScreen == AppScreen.eventConfiguration && qb.isEventConfigQuest)
       .toList();
 }
 
