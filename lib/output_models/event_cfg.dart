@@ -31,8 +31,13 @@ class TopEventCfg {
     this.applySameRowStyleToAllScreens = true,
   });
 
-  bool skipGroupingOnScreen(AppScreen screen) =>
-      evCompetitorType.skipGroupingOnMarketView;
+  bool skipGroupingOnScreen(AppScreen screen) {
+    assert(
+      screen == AppScreen.marketView,
+      'currently only works for marketview',
+    );
+    return evCompetitorType.skipGroupingOnMarketView;
+  }
 
   bool skipGroupingForName(String evNameSubStr) {
     return evTemplateName.toLowerCase().contains(evNameSubStr.toLowerCase()) ||

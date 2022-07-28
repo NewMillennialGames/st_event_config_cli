@@ -62,8 +62,14 @@ class QCascadeDispatcher {
       // matching question is about: which screens to config?
       // it carries a list of app-screens and generator below
       // will create one question to select area-list for each screen
+
+      if (!(questJustAnswered.mainAnswer is List<AppScreen>)) return;
+
+      String topTargets = (questJustAnswered.mainAnswer as List<AppScreen>)
+          .fold<String>(
+              '', (String allNames, AppScreen as) => allNames + as.name + '; ');
       print(
-        '\tUser has specified which screens  (building "target" questions to ask which areas in those screens)',
+        '\tUser has specified ${topTargets} screens for configuration',
       );
       QMatchCollection _qMatchCollToGenTarget =
           QMatchCollection(matchersToGenTargetingQuests);

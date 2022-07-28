@@ -22,8 +22,12 @@ TopEventCfg _$TopEventCfgFromJson(Map<String, dynamic> json) => TopEventCfg(
       evEliminationType: $enumDecodeNullable(
               _$EvEliminationStrategyEnumMap, json['evEliminationType']) ??
           EvEliminationStrategy.roundRobin,
-    )..applySameRowStyleToAllScreens =
-        json['applySameRowStyleToAllScreens'] as bool;
+      evGameAgeOffRule: $enumDecodeNullable(
+              _$EvGameAgeOffRuleEnumMap, json['evGameAgeOffRule']) ??
+          EvGameAgeOffRule.byEvEliminationStrategy,
+      applySameRowStyleToAllScreens:
+          json['applySameRowStyleToAllScreens'] as bool? ?? true,
+    );
 
 Map<String, dynamic> _$TopEventCfgToJson(TopEventCfg instance) =>
     <String, dynamic>{
@@ -35,6 +39,7 @@ Map<String, dynamic> _$TopEventCfgToJson(TopEventCfg instance) =>
       'evDuration': _$EvDurationEnumMap[instance.evDuration],
       'evEliminationType':
           _$EvEliminationStrategyEnumMap[instance.evEliminationType],
+      'evGameAgeOffRule': _$EvGameAgeOffRuleEnumMap[instance.evGameAgeOffRule],
       'applySameRowStyleToAllScreens': instance.applySameRowStyleToAllScreens,
     };
 
@@ -70,6 +75,13 @@ const _$EvEliminationStrategyEnumMap = {
   EvEliminationStrategy.singleElim: 'singleElim',
   EvEliminationStrategy.doubeElim: 'doubeElim',
   EvEliminationStrategy.audienceVote: 'audienceVote',
+};
+
+const _$EvGameAgeOffRuleEnumMap = {
+  EvGameAgeOffRule.whenRoundChanges: 'whenRoundChanges',
+  EvGameAgeOffRule.everyWeek: 'everyWeek',
+  EvGameAgeOffRule.oneDayAfterEnds: 'oneDayAfterEnds',
+  EvGameAgeOffRule.byEvEliminationStrategy: 'byEvEliminationStrategy',
 };
 
 EventCfgTree _$EventCfgTreeFromJson(Map<String, dynamic> json) => EventCfgTree(

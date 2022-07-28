@@ -61,11 +61,11 @@ class QMatchCollection {
     questListMgr.appendGeneratedQuestsAndAnswers(newGendPendingQuests);
 
     if (_foundQmatchers.length > 0) {
-      _foundQmatchers.forEach((QuestMatcher qm) {
-        print('\nQuest: ${questJustAnswered.questId}');
-        // print('\t\ton screen: ' + questJustAnswered.appScreen.name);
-        print('\tmatched: ' + qm.matcherDescrip);
-      });
+      // _foundQmatchers.forEach((QuestMatcher qm) {
+      //   print('\nQuest: ${questJustAnswered.questId}');
+      //   // print('\t\ton screen: ' + questJustAnswered.appScreen.name);
+      //   print('\tmatched: ' + qm.matcherDescrip);
+      // });
     } else {
       // print(
       //   '*** appendNewQuestsOrInsertImplicitAnswers found ${_foundQmatchers.length} QuestMatchers for ${questJustAnswered.questId}',

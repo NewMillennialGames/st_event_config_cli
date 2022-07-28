@@ -22,6 +22,8 @@ Future<void> main(List<String> arguments) async {
   // add empy lines befor starting dialog
   print('\n' * 0);
 
+  assert(false, 'should fail instantly');
+
   final cliQuestPresenter = CliQuestionPresenter();
   // using DI to make it easy for web app to use same dialog runner
   final dialoger = DialogRunner(cliQuestPresenter);
