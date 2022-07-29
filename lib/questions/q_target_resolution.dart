@@ -3,10 +3,13 @@ part of QuestionsLib;
 // typedef IntRange = Tuple2<int, int>;
 
 enum TargetPrecision {
-  // describes the INTENT of a QTargetResolution instance
-  // QTargetResolution instance is embedded in a
-  // QuestBase instance; so this describes the query intent
-  // of that enclosing question; what info is asked of app user
+  /*
+  describes the INTENT of a QTargetResolution instance
+  QTargetResolution instance is embedded in a
+  QuestBase instance; so this describes the query intent
+  of that enclosing question; i.e. what info is
+  THIS QUESTION asking of app user
+  */
   eventLevel,
   screenLevel,
   targetLevel,
@@ -239,6 +242,10 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
       return slotInArea!.possibleVisualStyles(appScreen, screenWidgetArea!);
     return screenWidgetArea!.possibleVisualStyles(appScreen);
   }
+
+  String get screenNmUpper => appScreen.name.toUpperCase();
+  String get areaNmUpper => (screenWidgetArea?.name ?? '_AREA').toUpperCase();
+  String get slotNmUpper => (slotInArea?.name ?? '_SLOT').toUpperCase();
 
   // equatableKey must be distinct & unique
   String get equatableKey {
