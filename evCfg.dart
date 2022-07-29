@@ -2,9 +2,8 @@ import 'dart:io';
 import 'dart:core';
 import 'package:args/args.dart';
 //
-import 'lib/scoretrader/all.dart';
-import 'lib/dialog/all.dart';
 import 'lib/questions/all.dart';
+import 'lib/dialog/all.dart';
 import 'lib/output_models/all.dart';
 import 'lib/services/cli_quest_presenter.dart';
 /*
@@ -23,6 +22,8 @@ Future<void> main(List<String> arguments) async {
   // add empy lines befor starting dialog
   print('\n' * 0);
 
+  assert(false, 'should fail instantly');
+
   final cliQuestPresenter = CliQuestionPresenter();
   // using DI to make it easy for web app to use same dialog runner
   final dialoger = DialogRunner(cliQuestPresenter);
@@ -33,33 +34,41 @@ Future<void> main(List<String> arguments) async {
   }
 
   // now generate results into a config file
-  createOutputFileFromResponses(dialoger.questionMgr, null);
+  createOutputFileFromResponses(dialoger.questionLstMgr, null);
   stdout.writeln("Done:\n");
 }
 
 void createOutputFileFromResponses(
-  QuestListMgr questionMgr, [
+  QuestListMgr questListMgr, [
   String? filename,
 ]) {
   //
-  final List<Question> exportableQuestions = questionMgr.exportableQuestions;
+  List<EventLevelCfgQuest> eventConfigLevelData =
+      questListMgr.exportableTopLevelQuestions;
+  List<RuleQuestBaseAbs> exportableRuleQuestions =
+      questListMgr.exportableRuleQuestions.toList();
 
-  print('found ${exportableQuestions.length} exportable answers to convert');
-  // for (Question q in exportableQuestions) {
-  //   print(q.questStr);
-  //   print(q.response?.answers.toString());
+  print(
+    'found ${eventConfigLevelData.length} event-cfg entries, and ${exportableRuleQuestions.length} rules to convert',
+  );
+  // for (QuestBase q in exportableRuleQuestions) {
+  //   print(q.firstPrompt.userPrompt);
+  //   Iterable<CaptureAndCast> cac = q.qPromptCollection.listResponseCasters;
+  //   List<String> allAnsw = cac.fold<List<String>>([],
+  //       ((List<String> accumLst, CaptureAndCast cac) {
+  //     accumLst.add(cac.answer);
+  //     return accumLst;
+  //   }));
+  //   print(allAnsw);
   //   print('\n\n');
   // }
 
-  print('Now building Event Config rules...');
-
-  Iterable<Question> eventConfigLevelData = exportableQuestions.where(
-    (q) => q.isTopLevelConfigOrScreenQuestion,
-  );
   final evCfg = EventCfgTree.fromEventLevelConfig(eventConfigLevelData);
   // create the per-area or per-slot rules
-  var ruleResponses = exportableQuestions.whereType<VisRuleStyleQuest>();
-  // print('ruleResponse answer count: ${ruleResponses.length}');
+  var ruleResponses =
+      exportableRuleQuestions.whereType<VisualRuleDetailQuest>();
+  print('ruleResponse answer count: ${ruleResponses.length}');
+  assert(ruleResponses.length == exportableRuleQuestions.length, '???');
   evCfg.fillFromVisualRuleAnswers(ruleResponses);
   // now dump evCfg to file
   evCfg.dumpCfgToFile(filename);

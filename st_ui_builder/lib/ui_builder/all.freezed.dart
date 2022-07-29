@@ -339,27 +339,27 @@ abstract class _AssetStateUpdates extends AssetStateUpdates {
   const _AssetStateUpdates._() : super._();
 
   @override
-  String get assetKey => throw _privateConstructorUsedError;
+  String get assetKey;
   @override
-  String get name => throw _privateConstructorUsedError;
+  String get name;
   @override
-  String get ticker => throw _privateConstructorUsedError;
+  String get ticker;
   @override
-  AssetState get assetState => throw _privateConstructorUsedError;
+  AssetState get assetState;
   @override
-  TradeMode get tradeMode => throw _privateConstructorUsedError;
+  TradeMode get tradeMode;
   @override
-  bool get isWatched => throw _privateConstructorUsedError;
+  bool get isWatched;
   @override
-  bool get isOwned => throw _privateConstructorUsedError;
+  bool get isOwned;
   @override
-  Decimal get curPrice => throw _privateConstructorUsedError;
+  Decimal get curPrice;
   @override
-  Decimal get hiPrice => throw _privateConstructorUsedError;
+  Decimal get hiPrice;
   @override
-  Decimal get lowPrice => throw _privateConstructorUsedError;
+  Decimal get lowPrice;
   @override
-  Decimal get openPrice => throw _privateConstructorUsedError;
+  Decimal get openPrice;
   @override
   @JsonKey(ignore: true)
   _$$_AssetStateUpdatesCopyWith<_$_AssetStateUpdates> get copyWith =>
@@ -627,20 +627,19 @@ abstract class _ActiveGameDetails extends ActiveGameDetails {
   const _ActiveGameDetails._() : super._();
 
   @override
-  String get competitionKey => throw _privateConstructorUsedError;
+  String get competitionKey;
   @override
-  DateTime get scheduledStartDtTm => throw _privateConstructorUsedError;
+  DateTime get scheduledStartDtTm;
   @override
-  CompetitionStatus get gameStatus => throw _privateConstructorUsedError;
+  CompetitionStatus get gameStatus;
   @override // @Default(CompetitionType.game) CompetitionType gameType,
-  String get roundName => throw _privateConstructorUsedError;
+  String get roundName;
   @override
-  String get regionOrConference => throw _privateConstructorUsedError;
+  String get regionOrConference;
   @override
-  String get location => throw _privateConstructorUsedError;
+  String get location;
   @override
-  List<AssetStateUpdates> get participantAssetInfo =>
-      throw _privateConstructorUsedError;
+  List<AssetStateUpdates> get participantAssetInfo;
   @override
   @JsonKey(ignore: true)
   _$$_ActiveGameDetailsCopyWith<_$_ActiveGameDetails> get copyWith =>

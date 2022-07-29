@@ -100,17 +100,6 @@ class StUiBuilderFactory {
       ScreenWidgetArea.tableview,
     );
 
-    // cloning row-style
-    // if ((_eConfig?.eventCfg.applySameRowStyleToAllScreens ?? false) &&
-    //     tableAreaAndSlotCfg.isMissingRuleTyp(VisualRuleType.styleOrFormat)) {
-    //   //
-    //   CfgForAreaAndNestedSlots mktViewTableAreaAndSlotCfg = _eConfig!.screenAreaCfg(
-    //   AppScreen.marketView,
-    //   ScreenWidgetArea.tableview,
-    // );
-    //   tableAreaAndSlotCfg.copyStyleFromCfg(mktViewTableAreaAndSlotCfg.rowStyleCfg);
-    // }
-
     return TableRowDataMgr(
       screen,
       rows,

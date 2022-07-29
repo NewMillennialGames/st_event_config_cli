@@ -4,66 +4,75 @@ class DialogRunner {
   /* actually runs the conversation
 
   the top-level obj that coordinates:
-    DialogMgr
     QuestListMgr
-    CliQuestionFormatter
+    QuestionPresenter
+    NewQuestionCollector
     
   to produce CLI output to the user
   */
-  final QuestListMgr _questMgr = QuestListMgr();
-  final NewQuestionCollector _newQuestComposer = NewQuestionCollector();
-  late final DialogMgr _questGroupMgr;
+  final QuestListMgr _qListMgr; // = QuestListMgr();
   // set in init
-  final QuestionPresenter questFormatter;
+  final QuestionPresenterIfc questPresenter;
   final int linesBetweenSections;
-  final int linesBetweenQuestions;
+  final int linesBetweenQuest2s;
+  final QCascadeDispatcher questCascadeDispatcher;
   //
 
   DialogRunner(
-    this.questFormatter, [
+    this.questPresenter, {
+    QuestListMgr? qListMgr,
     this.linesBetweenSections = 3,
-    this.linesBetweenQuestions = 1,
-  ]) {
-    _questGroupMgr = DialogMgr(_questMgr);
-    _questGroupMgr.loadBeginningDialog();
+    this.linesBetweenQuest2s = 1,
+    bool loadDefaultQuest = true,
+    QCascadeDispatcher? questCascadeDisp,
+  })  : _qListMgr = qListMgr ?? QuestListMgr(),
+        questCascadeDispatcher =
+            questCascadeDisp == null ? QCascadeDispatcher() : questCascadeDisp {
+    if (loadDefaultQuest) {
+      List<QuestBase> quests = loadInitialConfigQuestions();
+      _qListMgr.appendGeneratedQuestsAndAnswers(quests);
+    }
   }
 
-  QuestListMgr get questionMgr => _questMgr;
-  List<UserResponse> getPriorAnswersList() {
-    // used when a question needs to review prior
+  QuestListMgr get questionLstMgr => _qListMgr;
+  List<CaptureAndCast> getPriorAnswersList() {
+    // used when a Quest2 needs to review prior
     // answers to configure itself
-    return _questMgr.priorAnswers;
+    return _qListMgr.priorAnswers;
   }
 
-  //
-  // web logic;  start asking questions for GUI
+  // web logic;  start asking Questions for GUI
   bool serveNextQuestionToGui() {
     //
-    Question? _quest = _questGroupMgr.getNextQuestInCurrentSection();
+    QuestBase? _quest = _qListMgr.nextQuestionToAnswer();
     if (_quest == null) return false;
-    questFormatter.askAndWaitForUserResponse(this, _quest);
+    questPresenter.askAndWaitForUserResponse(this, _quest);
     return true;
   }
 
-  void advanceToNextQuestion() {
-    //
-    // logic to add new questions based on user response
-    // two different methods
-    bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(
-      // _questGroupMgr,
-      _questMgr,
+  void advanceToNextQuestionFromGui() {
+    /* called by web presenter
+      run logic to add new Questions based on user response to current Question
+      we currently have two different methods:
+        1) _newQuestComposer.handleAcquiringNewQuest2s() was my original brute-force approach
+          it's brittle and hard to test (will remove this eventually)
+        2) appendNewQuestsOrInsertImplicitAnswers is a much more elegant and flexible
+          approach based on pattern matching and Quest2 generation functions
+
+      I'm leaving both in place right now because we don't currently have this
+      package under test and I don't want to break existing functionality
+      but new auto-generated Quest2s should be placed under #2 (appendNewQuestsOrInsertImplicitAnswers)
+    */
+
+    questCascadeDispatcher.appendNewQuestsOrInsertImplicitAnswers(
+      _qListMgr,
+      _qListMgr.currentOrLastQuestion,
     );
-    if (!didAddNew & false) {
-      // new version of handleAcquiringNewQuestions
-      // run it only if handleAcquiringNewQuestions does no work
-      appendNewQuestsOrInsertImplicitAnswers(
-          _questMgr, _questMgr._currentOrLastQuestion);
-    }
-    // end of logic to add new questions based on user response
+    // end of logic to add new Quest2s based on user response
 
     bool hasNextQuest = serveNextQuestionToGui();
     if (!hasNextQuest) {
-      questFormatter.informUiWeAreDone();
+      questPresenter.informUiThatDialogIsComplete();
     }
   }
 
@@ -71,40 +80,48 @@ class DialogRunner {
   bool cliLoopUntilComplete() {
     //
     // questFormatter manages display output
-    // final questFormatter = CliQuestionFormatter();
+    // final questFormatter = CliQuest2Formatter();
 
     _outputSpacerLines(forSection: true);
-    // check for another question
-    Question? _quest = _questGroupMgr.getNextQuestInCurrentSection();
+    // check for another Quest2
+    QuestBase? _quest = _qListMgr.nextQuestionToAnswer();
     while (_quest != null) {
-      // askAndWaitForUserResponse() will callback to this
-      // to create any derived questions for this section
-      questFormatter.askAndWaitForUserResponse(this, _quest);
+      // askAndWaitForUserResponse() will callback to gentNewQuestionsFromUserResponse (below)
+      // to create any derived Questions based on user answers
 
-      // logic to add new questions based on user response
-      // two different methods
-      bool didAddNew = _newQuestComposer.handleAcquiringNewQuestions(
-        // _questGroupMgr,
-        _questMgr,
-      );
-      if (!didAddNew && _quest.isRuleQuestion) {
-        // new version of handleAcquiringNewQuestions
-        // run it only if handleAcquiringNewQuestions does no work
-        appendNewQuestsOrInsertImplicitAnswers(_questMgr, _quest);
-      }
-      // end of logic to add new questions based on user response
+      // next line for testing
+      questPresenter.askAndWaitForUserResponse(this, _quest);
+      // TODO:  enable block below for production
+      // try {
+      //   questPresenter.askAndWaitForUserResponse(this, _quest);
+      // } catch (e, _) {
+      //   print(
+      //       'Err:  cliLoopUntilComplete running questPresenter.askAndWaitForUserResponse');
+      //   print('Err thrown was ${e.toString()}');
+      //   questPresenter.showErrorAndRePresentQuestion(
+      //       e as String, _quest.helpMsgOnError ?? '');
+      //   continue;
+      // }
 
-      _quest = _questGroupMgr.getNextQuestInCurrentSection();
+      _quest = _qListMgr.nextQuestionToAnswer();
       if (_quest != null) _outputSpacerLines();
     }
     return true;
+  }
+
+  void generateNewQuestionsFromUserResponse(QuestBase questJustAnswered) {
+    // logic to add new Questions based on user response
+    questCascadeDispatcher.appendNewQuestsOrInsertImplicitAnswers(
+      _qListMgr,
+      questJustAnswered,
+    );
   }
 
   void _outputSpacerLines({bool forSection = false}) {
     if (forSection) {
       print('\n' * this.linesBetweenSections);
     } else {
-      print('\n' * this.linesBetweenQuestions);
+      print('\n' * this.linesBetweenQuest2s);
     }
   }
 }

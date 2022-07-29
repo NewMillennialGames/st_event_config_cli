@@ -1,16 +1,16 @@
 library ConfigDialogRunner;
 
+import 'package:tuple/tuple.dart';
+
+import '../config/all.dart';
 import '../enums/all.dart';
-import '../util/type_cast.dart';
+import '../util/all.dart';
 import '../questions/all.dart';
 import '../app_entity_enums/all.dart';
-import '../config/all.dart';
-import '../interfaces/question_presenter.dart';
-import '../scoretrader/all.dart';
-
-part 'quest_list_mgr.dart';
+import '../interfaces/q_presenter.dart';
+//
+part 'q_list_manager.dart';
 part 'dialog_runner.dart';
-part 'dialog_mgr.dart';
-part 'new_quest_collector.dart';
-part 'new_quest_matchers.dart';
-part 'new_quest_derived.dart';
+part 'q_cascade_dispatch.dart';
+part 'q_matchers_model.dart';
+part 'q_gen_stats_collect.dart';

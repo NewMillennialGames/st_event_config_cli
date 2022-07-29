@@ -1,4 +1,4 @@
-import '../enums/all.dart';
+part of StUtil;
 
 extension StringFormating on String {
   // hacky templating system for rule templates
@@ -17,12 +17,13 @@ extension StringFormating on String {
       final mapped = mappedValues[match[1]];
       if (mapped == null)
         throw ArgumentError(
-            '$mappedValues does not contain the key "${match[1]}"');
+          '$mappedValues does not contain the key "${match[1]}"',
+        );
       return mapped;
     });
   }
 
-  // String makeRuleQuestionStr(
+  // String makeRuleQuest2Str(
   //   VisualRuleType rt,
   //   bool isAreaScopedRule, // not a slot-level rule
   //   List<dynamic> valsDyn,

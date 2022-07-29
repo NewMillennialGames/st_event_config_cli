@@ -31,18 +31,13 @@ class CfgForAreaAndNestedSlots {
 
   bool isMissingRuleTyp(VisualRuleType typ) => visCfgForArea[typ] == null;
 
-  // void copyStyleFromCfg(TvRowStyleCfg rowCfg) {
-  //   //
-  //   visCfgForArea[VisualRuleType.styleOrFormat] = SlotOrAreaRuleCfg([]);
-  // }
-
   //add rules to this object
-  void appendAreaOrSlotRule(VisRuleStyleQuest rQuest) {
+  void appendAreaOrSlotRule(VisualRuleDetailQuest rQuest) {
     //
     VisualRuleType? vrt = rQuest.visRuleTypeForAreaOrSlot;
     assert(
       vrt != null,
-      'cant add question that has no attached rule',
+      'cant add Quest2 that has no attached rule',
     );
     //
     ScreenAreaWidgetSlot? optSlotInArea = rQuest.slotInArea;
@@ -78,6 +73,23 @@ class CfgForAreaAndNestedSlots {
     List<RuleResponseBase> lstRules =
         tableAreaRules.rulesOfType(VisualRuleType.styleOrFormat);
     return lstRules.first as TvRowStyleCfg;
+  }
+
+  GroupingRules? get groupingRules {
+    // what grouping Rules to apply to the TableView
+    assert(
+      screenArea == ScreenWidgetArea.tableview,
+      'method only works for TableVw areas',
+    );
+
+    List<TvGroupCfg> definedGroupRules =
+        _loadRulesInOrder<TvGroupCfg>(VisualRuleType.groupCfg);
+    int ruleCnt = definedGroupRules.length;
+    if (ruleCnt < 1) return null;
+
+    TvGroupCfg? gr2 = ruleCnt > 1 ? definedGroupRules[1] : null;
+    TvGroupCfg? gr3 = ruleCnt > 2 ? definedGroupRules[2] : null;
+    return GroupingRules(definedGroupRules.first, gr2, gr3);
   }
 
   SortingRules? get sortingRules {
@@ -151,9 +163,9 @@ class CfgForAreaAndNestedSlots {
     List<SlotOrAreaRuleCfg> ruleByPos = _slotRuleCollectionInOrder(
       ruleType,
       [
-        ScreenAreaWidgetSlot.menuSortPosOrSlot1,
-        ScreenAreaWidgetSlot.menuSortPosOrSlot2,
-        ScreenAreaWidgetSlot.menuSortPosOrSlot3,
+        ScreenAreaWidgetSlot.slot1,
+        ScreenAreaWidgetSlot.slot2,
+        ScreenAreaWidgetSlot.slot3,
       ],
     );
 

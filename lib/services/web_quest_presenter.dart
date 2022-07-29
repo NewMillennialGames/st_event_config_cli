@@ -1,19 +1,20 @@
 import "dart:async";
 //
-import '../interfaces/question_presenter.dart';
-import '../questions/all.dart';
+import '../interfaces/q_presenter.dart';
+// import '../questions/all.dart';
 import '../dialog/all.dart';
+import '../questions/all.dart';
 
-class WebQuestionPresenter implements QuestionPresenter {
-  // to render widget views of the question
+class WebQuest2Presenter implements QuestionPresenterIfc {
+  // to render widget views of the Quest2
   // move this class to the parent flutter project
 
-  final StreamController<Question> questDispatcher;
+  final StreamController<QuestBase> questDispatcher;
   final Stream<String> answerStream;
   DialogRunner? dRunner;
-  late Question _quest;
+  late QuestBase _quest;
 
-  WebQuestionPresenter(
+  WebQuest2Presenter(
     this.questDispatcher,
     this.answerStream,
   ) {
@@ -23,7 +24,7 @@ class WebQuestionPresenter implements QuestionPresenter {
   @override
   void askAndWaitForUserResponse(
     DialogRunner dialoger,
-    Question quest,
+    QuestBase quest,
   ) {
     if (dRunner == null) {
       this.dRunner = dialoger;
@@ -32,14 +33,22 @@ class WebQuestionPresenter implements QuestionPresenter {
     // should pump a widget to some provider
     // to redraw the whole screen
     questDispatcher.add(quest);
+
+    // user answer might generate new questions
+    dialoger.generateNewQuestionsFromUserResponse(quest);
   }
 
   void _receiveAnswer(String answer) {
-    _quest.convertAndStoreUserResponse(answer);
-    dRunner!.advanceToNextQuestion();
+    // _quest.convertAndStoreUserResponse(answer);
+    dRunner!.advanceToNextQuestionFromGui();
   }
 
-  void informUiWeAreDone() {
+  @override
+  void showErrorAndRePresentQuestion(String errTxt, String questHelpMsg) {
+    //
+  }
+
+  void informUiThatDialogIsComplete() {
     questDispatcher.close();
     // need to save generated file to user desktop
   }

@@ -16,9 +16,8 @@ class TopEventCfg {
   EvOpponentType evOpponentType;
   EvDuration evDuration;
   EvEliminationStrategy evEliminationType;
-  // TODO  below not connected to Constructor or JSON
+  EvGameAgeOffRule evGameAgeOffRule;
   bool applySameRowStyleToAllScreens = true;
-  // bool groupOnlyByDate = false;
 
   TopEventCfg(
     this.evTemplateName,
@@ -28,10 +27,17 @@ class TopEventCfg {
     this.evOpponentType = EvOpponentType.sameAsCompetitorType,
     this.evDuration = EvDuration.oneGame,
     this.evEliminationType = EvEliminationStrategy.roundRobin,
+    this.evGameAgeOffRule = EvGameAgeOffRule.byEvEliminationStrategy,
+    this.applySameRowStyleToAllScreens = true,
   });
 
-  bool skipGroupingOnScreen(AppScreen screen) =>
-      evCompetitorType.skipGroupingOnMarketView;
+  bool skipGroupingOnScreen(AppScreen screen) {
+    assert(
+      screen == AppScreen.marketView,
+      'currently only works for marketview',
+    );
+    return evCompetitorType.skipGroupingOnMarketView;
+  }
 
   bool skipGroupingForName(String evNameSubStr) {
     return evTemplateName.toLowerCase().contains(evNameSubStr.toLowerCase()) ||
@@ -61,14 +67,16 @@ class EventCfgTree {
     this.screenConfigMap,
   );
 
-  factory EventCfgTree.fromEventLevelConfig(Iterable<Question> responses) {
+  factory EventCfgTree.fromEventLevelConfig(Iterable<QuestBase> responses) {
     //
-    String evTemplateName = (responses
-            .where((q) => q.questionId == QuestionIds.eventName)
-            .first
-            .response
-            ?.answers ??
-        '_eventNameMissing') as String;
+    Iterable<QuestBase> listOneMainQuest =
+        responses.where((q) => q.questId == QuestionIdStrings.eventName);
+
+    if (listOneMainQuest.length < 1)
+      throw UnimplementedError('top level question missing');
+
+    String evTemplateName =
+        (listOneMainQuest.first.mainAnswer ?? '_eventNameMissing') as String;
 
     // declare Event level vals to be captured
     String evTemplateDescription = '';
@@ -77,56 +85,54 @@ class EventCfgTree {
     EvOpponentType evOpponentType = EvOpponentType.sameAsCompetitorType;
     EvDuration evDuration = EvDuration.oneGame;
     EvEliminationStrategy evEliminationType = EvEliminationStrategy.singleGame;
+    EvGameAgeOffRule evGameAgeOffRule =
+        EvGameAgeOffRule.byEvEliminationStrategy;
     bool applySameRowStyleToAllScreens = true;
     // use try to catch errs and allow easy debugging
     try {
       evTemplateDescription = (responses
-              .where((q) => q.questionId == QuestionIds.eventDescrip)
+              .where((q) => q.questId == QuestionIdStrings.eventDescrip)
               .first
-              .response
-              ?.answers ??
+              .mainAnswer ??
           '') as String;
 
-      evType = responses
-          .where((q) => q.response?.answers is EvType)
-          .first
-          .response!
-          .answers as EvType;
+      evType = responses.where((q) => q.mainAnswer is EvType).first.mainAnswer
+          as EvType;
       //
       evCompetitorType = responses
-          .where((q) => q.response?.answers is EvCompetitorType)
+          .where((q) => q.mainAnswer is EvCompetitorType)
           .first
-          .response!
-          .answers as EvCompetitorType;
+          .mainAnswer as EvCompetitorType;
       evOpponentType = responses
-          .where((q) => q.response?.answers is EvOpponentType)
+          .where((q) => q.mainAnswer is EvOpponentType)
           .first
-          .response!
-          .answers as EvOpponentType;
+          .mainAnswer as EvOpponentType;
       evDuration = responses
-          .where((q) => q.response?.answers is EvDuration)
+          .where((q) => q.mainAnswer is EvDuration)
           .first
-          .response!
-          .answers as EvDuration;
+          .mainAnswer as EvDuration;
       evEliminationType = responses
-          .where((q) => q.response?.answers is EvEliminationStrategy)
+          .where((q) => q.mainAnswer is EvEliminationStrategy)
           .first
-          .response!
-          .answers as EvEliminationStrategy;
+          .mainAnswer as EvEliminationStrategy;
+      // tells app how to age-off finished games
+      evGameAgeOffRule = responses
+          .where((q) => q.mainAnswer is EvGameAgeOffRule)
+          .first
+          .mainAnswer as EvGameAgeOffRule;
     } catch (e) {
       print(
-        'Warnnig:  key Event level quests/fields missing.  Hope you are debugging',
+        'Warnnig:  key Event level quests/fields missing.  Hope you are debugging testing',
       );
     }
 
     final eventCfg = TopEventCfg(
-      evTemplateName,
-      evTemplateDescription,
-      evType,
+      evTemplateName, evTemplateDescription, evType,
       evCompetitorType: evCompetitorType,
       evOpponentType: evOpponentType,
       evDuration: evDuration,
       evEliminationType: evEliminationType,
+      evGameAgeOffRule: evGameAgeOffRule,
       // applySameRowStyleToAllScreens,
     );
 
@@ -154,21 +160,22 @@ class EventCfgTree {
   }
 
   void fillFromVisualRuleAnswers(
-    Iterable<VisRuleStyleQuest> answeredQuestions,
+    Iterable<VisualRuleDetailQuest> answeredQuestions,
   ) {
     /*  part of instance construction
-      receive all vis-rule-questions, and fill
+      receive all vis-rule-Quest2s, and fill
         out the tree of configuration data
         that will customize the client UI
     */
-    print(
-      'fillFromVisualRuleAnswers got ${answeredQuestions.length} answeredQuestions',
-    );
-    for (VisRuleStyleQuest rQuest in answeredQuestions) {
+    // print(
+    //   'fillFromVisualRuleAnswers got ${answeredQuestions.length} answeredQuestions',
+    // );
+    for (VisualRuleDetailQuest rQuest in answeredQuestions) {
       // look up or create it
       ScreenCfgByArea screenCfg = this.screenConfigMap[rQuest.appScreen] ??
           ScreenCfgByArea(rQuest.appScreen, {});
-      screenCfg.appendRule(rQuest);
+      screenCfg.appendVisRule(rQuest);
+      // store when newly created above
       this.screenConfigMap[rQuest.appScreen] = screenCfg;
     }
   }
@@ -180,9 +187,14 @@ class EventCfgTree {
 
     // set default vals before passing to encoder
     this._fillMissingWithDefaults();
-    var jsonData = json.encode(this);
+
+    // try {
+    String jsonData = json.encode(this);
     outFile.writeAsStringSync(jsonData, mode: FileMode.write, flush: true);
     print('Config written (in JSON fmt) to ${outFile.path}');
+    // } catch (e) {
+    //   print(e.toString());
+    // }
     // outFile.close();
   }
 
@@ -227,6 +239,11 @@ extension EventCfgTreeExt1 on EventCfgTree {
   SortingRules? tvSortingRules(AppScreen screen) {
     //
     return screenAreaCfg(screen, ScreenWidgetArea.tableview).sortingRules;
+  }
+
+  GroupingRules? tvGroupingRules(AppScreen screen) {
+    //
+    return screenAreaCfg(screen, ScreenWidgetArea.tableview).groupingRules;
   }
 
   FilterRules? tvFilteringRules(AppScreen screen) {

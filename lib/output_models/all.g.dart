@@ -22,19 +22,24 @@ TopEventCfg _$TopEventCfgFromJson(Map<String, dynamic> json) => TopEventCfg(
       evEliminationType: $enumDecodeNullable(
               _$EvEliminationStrategyEnumMap, json['evEliminationType']) ??
           EvEliminationStrategy.roundRobin,
-    )..applySameRowStyleToAllScreens =
-        json['applySameRowStyleToAllScreens'] as bool;
+      evGameAgeOffRule: $enumDecodeNullable(
+              _$EvGameAgeOffRuleEnumMap, json['evGameAgeOffRule']) ??
+          EvGameAgeOffRule.byEvEliminationStrategy,
+      applySameRowStyleToAllScreens:
+          json['applySameRowStyleToAllScreens'] as bool? ?? true,
+    );
 
 Map<String, dynamic> _$TopEventCfgToJson(TopEventCfg instance) =>
     <String, dynamic>{
       'evTemplateName': instance.evTemplateName,
       'evTemplateDescription': instance.evTemplateDescription,
-      'evType': _$EvTypeEnumMap[instance.evType],
-      'evCompetitorType': _$EvCompetitorTypeEnumMap[instance.evCompetitorType],
-      'evOpponentType': _$EvOpponentTypeEnumMap[instance.evOpponentType],
-      'evDuration': _$EvDurationEnumMap[instance.evDuration],
+      'evType': _$EvTypeEnumMap[instance.evType]!,
+      'evCompetitorType': _$EvCompetitorTypeEnumMap[instance.evCompetitorType]!,
+      'evOpponentType': _$EvOpponentTypeEnumMap[instance.evOpponentType]!,
+      'evDuration': _$EvDurationEnumMap[instance.evDuration]!,
       'evEliminationType':
-          _$EvEliminationStrategyEnumMap[instance.evEliminationType],
+          _$EvEliminationStrategyEnumMap[instance.evEliminationType]!,
+      'evGameAgeOffRule': _$EvGameAgeOffRuleEnumMap[instance.evGameAgeOffRule]!,
       'applySameRowStyleToAllScreens': instance.applySameRowStyleToAllScreens,
     };
 
@@ -72,6 +77,13 @@ const _$EvEliminationStrategyEnumMap = {
   EvEliminationStrategy.audienceVote: 'audienceVote',
 };
 
+const _$EvGameAgeOffRuleEnumMap = {
+  EvGameAgeOffRule.whenRoundChanges: 'whenRoundChanges',
+  EvGameAgeOffRule.everyWeek: 'everyWeek',
+  EvGameAgeOffRule.oneDayAfterEnds: 'oneDayAfterEnds',
+  EvGameAgeOffRule.byEvEliminationStrategy: 'byEvEliminationStrategy',
+};
+
 EventCfgTree _$EventCfgTreeFromJson(Map<String, dynamic> json) => EventCfgTree(
       TopEventCfg.fromJson(json['eventCfg'] as Map<String, dynamic>),
       (json['screenConfigMap'] as Map<String, dynamic>).map(
@@ -84,7 +96,7 @@ Map<String, dynamic> _$EventCfgTreeToJson(EventCfgTree instance) =>
     <String, dynamic>{
       'eventCfg': instance.eventCfg.toJson(),
       'screenConfigMap': instance.screenConfigMap
-          .map((k, e) => MapEntry(_$AppScreenEnumMap[k], e.toJson())),
+          .map((k, e) => MapEntry(_$AppScreenEnumMap[k]!, e.toJson())),
     };
 
 const _$AppScreenEnumMap = {
@@ -94,8 +106,10 @@ const _$AppScreenEnumMap = {
   AppScreen.marketView: 'marketView',
   AppScreen.socialPools: 'socialPools',
   AppScreen.news: 'news',
-  AppScreen.leaderboard: 'leaderboard',
-  AppScreen.portfolio: 'portfolio',
+  AppScreen.leaderboardTraders: 'leaderboardTraders',
+  AppScreen.leaderboardAssets: 'leaderboardAssets',
+  AppScreen.portfolioPositions: 'portfolioPositions',
+  AppScreen.portfolioHistory: 'portfolioHistory',
   AppScreen.trading: 'trading',
   AppScreen.marketResearch: 'marketResearch',
 };
@@ -111,9 +125,9 @@ ScreenCfgByArea _$ScreenCfgByAreaFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$ScreenCfgByAreaToJson(ScreenCfgByArea instance) =>
     <String, dynamic>{
-      'appScreen': _$AppScreenEnumMap[instance.appScreen],
+      'appScreen': _$AppScreenEnumMap[instance.appScreen]!,
       'areaConfig': instance.areaConfig
-          .map((k, e) => MapEntry(_$ScreenWidgetAreaEnumMap[k], e.toJson())),
+          .map((k, e) => MapEntry(_$ScreenWidgetAreaEnumMap[k]!, e.toJson())),
     };
 
 const _$ScreenWidgetAreaEnumMap = {
@@ -146,29 +160,32 @@ CfgForAreaAndNestedSlots _$CfgForAreaAndNestedSlotsFromJson(
 Map<String, dynamic> _$CfgForAreaAndNestedSlotsToJson(
         CfgForAreaAndNestedSlots instance) =>
     <String, dynamic>{
-      'screenArea': _$ScreenWidgetAreaEnumMap[instance.screenArea],
+      'screenArea': _$ScreenWidgetAreaEnumMap[instance.screenArea]!,
       'visCfgForArea': instance.visCfgForArea
-          .map((k, e) => MapEntry(_$VisualRuleTypeEnumMap[k], e.toJson())),
+          .map((k, e) => MapEntry(_$VisualRuleTypeEnumMap[k]!, e.toJson())),
       'visCfgForSlotsByRuleType': instance.visCfgForSlotsByRuleType.map(
           (k, e) => MapEntry(
-              _$VisualRuleTypeEnumMap[k],
+              _$VisualRuleTypeEnumMap[k]!,
               e.map((k, e) =>
-                  MapEntry(_$ScreenAreaWidgetSlotEnumMap[k], e.toJson())))),
+                  MapEntry(_$ScreenAreaWidgetSlotEnumMap[k]!, e.toJson())))),
     };
 
 const _$VisualRuleTypeEnumMap = {
+  VisualRuleType.generalDialogFlow: 'generalDialogFlow',
   VisualRuleType.sortCfg: 'sortCfg',
+  VisualRuleType.groupCfg: 'groupCfg',
   VisualRuleType.filterCfg: 'filterCfg',
   VisualRuleType.styleOrFormat: 'styleOrFormat',
   VisualRuleType.showOrHide: 'showOrHide',
+  VisualRuleType.themePreference: 'themePreference',
 };
 
 const _$ScreenAreaWidgetSlotEnumMap = {
   ScreenAreaWidgetSlot.header: 'header',
   ScreenAreaWidgetSlot.footer: 'footer',
-  ScreenAreaWidgetSlot.menuSortPosOrSlot1: 'menuSortPosOrSlot1',
-  ScreenAreaWidgetSlot.menuSortPosOrSlot2: 'menuSortPosOrSlot2',
-  ScreenAreaWidgetSlot.menuSortPosOrSlot3: 'menuSortPosOrSlot3',
+  ScreenAreaWidgetSlot.slot1: 'slot1',
+  ScreenAreaWidgetSlot.slot2: 'slot2',
+  ScreenAreaWidgetSlot.slot3: 'slot3',
   ScreenAreaWidgetSlot.title: 'title',
   ScreenAreaWidgetSlot.subtitle: 'subtitle',
   ScreenAreaWidgetSlot.bannerUrl: 'bannerUrl',

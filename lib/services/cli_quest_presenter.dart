@@ -1,65 +1,67 @@
 import "dart:io";
 import 'package:collection/collection.dart';
 //
-import '../interfaces/question_presenter.dart';
+import '../interfaces/q_presenter.dart';
 import '../questions/all.dart';
 import '../dialog/all.dart';
-import '../enums/all.dart';
 
-class CliQuestionPresenter implements QuestionPresenter {
+class CliQuestionPresenter implements QuestionPresenterIfc {
   // formatter for command-line IO
   CliQuestionPresenter();
-
-  // @override
-  // bool askSectionQuestionAndWaitForUserResponse(
-  //   DialogRunner dialoger,
-  //   DialogSectionCfg sectionCfg,
-  // ) {
-  //   // no longer needed
-  //   return true;
-  //   AppScreen screen = sectionCfg.appScreen;
-  //   if (screen == AppScreen.eventConfiguration) return true;
-
-  //   if (!screen.isConfigurable) return false;
-
-  //   print(screen.includeStr + ' (enter y/yes or n/no)');
-  //   var userResp = stdin.readLineSync() ?? 'Y';
-  //   // print("askIfNeeded got: $userResp");
-  //   return userResp.toUpperCase().startsWith('Y');
-  // }
 
   @override
   void askAndWaitForUserResponse(
     DialogRunner dialoger,
-    Question quest,
+    QuestBase quest,
   ) {
-    // rule questions are more complex and handled by
-    // looping for multiple answers
-    if (quest is VisualRuleQuestion) {
-      Map<VisRuleQuestType, String> multiAnswerRespList =
-          _handleVisualRuleQuestions(
-        dialoger,
-        quest,
+    QuestPromptInstance? promptInst = quest.getNextUserPromptIfExists();
+    print(
+      'beginning askAndWaitForUserResponse with ${promptInst?.userPrompt ?? '-na'}',
+    );
+    // int pInstIdx = -1;
+    while (promptInst != null) {
+      // pInstIdx++;
+      print(
+        'askAndWaitForUserResponse debug ${promptInst.shouldAutoAnswer} with ${promptInst.autoAnswerIfAppropriate}',
       );
-      // store response payload on the question
-      quest.castResponseListAndStore(multiAnswerRespList);
-      return;
+      if (promptInst.shouldAutoAnswer &&
+          (promptInst.autoAnswerIfAppropriate ?? "").isNotEmpty) {
+        promptInst.collectResponse(promptInst.autoAnswerIfAppropriate!);
+        // print(
+        //   'askAndWaitForUserResponse answered ${promptInst.userPrompt} with ${promptInst.autoAnswerIfAppropriate}',
+        // );
+      } else {
+        _askAndStoreAnswer(dialoger, quest, promptInst);
+        // print(
+        //   'cont askAndWaitForUserResponse with ${promptInst.userPrompt}',
+        // );
+      }
+      promptInst = quest.getNextUserPromptIfExists();
     }
-    // else if (quest is BehaviorRuleQuestion) {
-    //   // else do behavioral question
-    // return;
-    // }
+    // user answer might generate new questions
+    if (!quest.isRuleDetailQuestion) {
+      dialoger.generateNewQuestionsFromUserResponse(quest);
+    }
+  }
 
-    // normal question to figure out which rule questions to actually ask user
-    _printQuestion(quest);
-    _printOptions(quest);
-    _printInstructions(quest);
-    // now capture user answer
+  void _askAndStoreAnswer(
+    DialogRunner dialoger,
+    QuestBase quest,
+    QuestPromptInstance promptInst,
+  ) {
+    //
+    //     String ruleQuestoverview =
+    //     'Config ${promptInst} in the ${ruleQuest.screenWidgetArea?.name} of ${ruleQuest.appScreen.name} screen  (please answer each Quest2 below)';
+    // print(ruleQuestoverview);
+
+    _printQPrompt(promptInst);
+    _printPromptChoices(promptInst);
+    _printInstructions(quest, promptInst);
 
     bool validAnswerProvided = true;
     try {
       // bad user input or incomplete cast function can throw exception
-      _getResponseThenCastAndStoreIt(dialoger, quest);
+      _getAnswerAndStoreIt(dialoger, quest, promptInst);
     } catch (e) {
       validAnswerProvided = false;
       // just rethrow until error handling is implemented
@@ -77,101 +79,55 @@ class CliQuestionPresenter implements QuestionPresenter {
     }
   }
 
-  void _getResponseThenCastAndStoreIt(
-    DialogRunner dlogRunner,
-    Question quest,
-  ) {
-    //
-    quest.configSelfIfNecessary(dlogRunner.getPriorAnswersList);
-
-    String userResp = stdin.readLineSync() ?? '';
-    // print("You entered: '$userResp'");
-    quest.convertAndStoreUserResponse(userResp);
-    // print("You entered: '$userResp' and ${derivedUserResponse.toString()}");
-  }
-
-  Map<VisRuleQuestType, String> _handleVisualRuleQuestions(
+  void _getAnswerAndStoreIt(
     DialogRunner dialoger,
-    VisualRuleQuestion ruleQuest,
+    QuestBase quest,
+    QuestPromptInstance promptInst,
   ) {
     //
-    String ruleQuestoverview =
-        'Config ${ruleQuest.questDef.ruleTyp.name} in the ${ruleQuest.screenWidgetArea?.name} of ${ruleQuest.appScreen.name} screen  (please answer each question below)';
-    print(ruleQuestoverview);
-
-    Map<VisRuleQuestType, String> accumResponses = {};
-
-    for (VisRuleQuestWithChoices questWithChoices
-        in ruleQuest.questsAndChoices) {
-      //
-      String answer =
-          _showOptionsAndWaitForResponse(ruleQuest, questWithChoices) ?? '';
-      accumResponses[questWithChoices.ruleQuestType] = answer;
-    }
-    return accumResponses;
+    String userResp = stdin.readLineSync() ?? '';
+    // make the next command throw if response is invalid
+    promptInst.collectResponse(userResp);
   }
 
-  String? _showOptionsAndWaitForResponse(
-    VisualRuleQuestion rQuest,
-    VisRuleQuestWithChoices rQuestAndChoices,
-  ) {
+  void _printQPrompt(QuestPromptInstance promptInst) {
+    // show the Question
+    print(promptInst.userPrompt + "  (select from options below)");
+  }
+
+  void _printPromptChoices(QuestPromptInstance promptInst) {
     //
-    String questForuser = rQuestAndChoices.createFormattedQuestion(rQuest);
-    print(questForuser);
-    print('\n');
-    rQuestAndChoices.choices.forEachIndexed((idx, opt) {
-      print('\t$idx) $opt ');
-    });
+    if (!promptInst.hasChoices) return;
 
-    String? userResp;
-    // todo -- add validation here
-    bool inputIsInvalid = true;
-    while (inputIsInvalid) {
-      userResp = stdin.readLineSync();
-      inputIsInvalid = userResp == null || userResp.isEmpty;
-      if (inputIsInvalid) print('invalid answer; pls try again');
-    }
-    print('' * 4); // create space after answer
-    return userResp;
-  }
-
-  void _printQuestion(Question quest) {
-    // show the question
-    print(quest.questStr);
-  }
-
-  void _printOptions(Question quest) {
-    //
-    if (!quest.hasChoices) return;
-
-    print('Select from these options:\n');
-    quest.answerChoicesList?.forEachIndexed((idx, opt) {
-      String forDflt =
-          quest.defaultAnswerIdx == idx ? '  (default: just press return)' : '';
-      print('\t$idx) $opt $forDflt');
+    // print('Select from these options:\n');
+    // int defltIdx = promptInst.answChoiceCollection.idxOfDefaultAnsw;
+    promptInst.answerOptions.forEach((ResponseAnswerOption opt) {
+      // String forDflt = '';
+      // promptInst.a == idx ? '  (default: just press return)' : '';
+      print('\t${opt.selectVal}) ${opt.displayStr}');
     });
   }
 
-  void _printInstructions(Question quest) {
+  void _printInstructions(QuestBase quest, QuestPromptInstance promptInst) {
     //
-    if (quest.addsWhichAreaInSelectedScreenQuestions) {
+    if (quest.isEventConfigQuest) {
       // user will enter string or comma delimited list of ints
-    } else if (quest.addsWhichRulesForSelectedAreaQuestions) {
-      // causes questions to be added or removed from future queue
+    } else if (quest.isRegionTargetQuestion) {
+      // causes Quest2s to be added or removed from future queue
       // user may enter int or comma delimited list of ints
-    } else if (quest.addsWhichRulesForSlotsInArea) {
+    } else if (quest.isRuleSelectionQuestion) {
       //
-    } else if (quest.addsRuleDetailQuestsForSlotOrArea) {
+    } else if (quest.isRulePrepQuestion) {
       // needs to produce visual formatting rules
       // user will select a widget display option
-    } else if (false) {
+    } else if (quest.isRuleDetailQuestion) {
       // needs to produce behavioral rules
       // future;  not yet implemented
     }
 
     //
-    if (quest.hasChoices) {
-      if (quest.acceptsMultiResponses) {
+    if (promptInst.hasChoices) {
+      if (promptInst.questsAndChoices.length > 1) {
         print('Enter row #s of choices (eg 0,1,2) then press enter/return!');
       } else {
         print('Enter row # of preferred choice, then press enter/return!');
@@ -181,5 +137,11 @@ class CliQuestionPresenter implements QuestionPresenter {
     }
   }
 
-  void informUiWeAreDone() {}
+  @override
+  void showErrorAndRePresentQuestion(String errTxt, String questHelpMsg) {
+    //
+  }
+
+  @override
+  void informUiThatDialogIsComplete() {}
 }

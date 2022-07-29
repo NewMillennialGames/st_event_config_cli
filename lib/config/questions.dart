@@ -1,64 +1,18 @@
 part of EvCfgConfig;
 
 // public api
-List<Question> loadInitialConfigQuestions() {
-  // event config questions DO NOT have areas or uiComponents
-  return _questionLst
+List<QuestBase> loadInitialConfigQuestions() {
+  // event config Quest2s DO NOT have areas or uiComponents
+  return _initQuestionLst
       .where((qb) =>
-          qb.appScreen == AppScreen.eventConfiguration &&
-          qb.isTopLevelConfigOrScreenQuestion)
+          qb.appScreen == AppScreen.eventConfiguration && qb.isEventConfigQuest)
       .toList();
 }
 
-// List<Question> loadQuestionsAtTopOfSection(AppScreen appSection) {
-//   return _questionLst
-//       .where((qb) =>
-//           qb.appScreen == appSection && qb.isTopLevelConfigOrScreenQuestion)
-//       .toList();
-// }
-
-// List<Question> loadQuestionsUnderSelectedSections(
-//   UserResponse<List<AppScreen>> response,
-// ) {
-//   // load questions about areas in section
-//   List<AppScreen> appSectionsToConfigure = response.answers;
-//   List<Question> newQuestions = _questionLst
-//       .where((q) =>
-//           appSectionsToConfigure.contains(q.appScreen) &&
-//           !q.isTopLevelConfigOrScreenQuestion)
-//       .toList();
-//   return newQuestions;
-// }
-
-// List<Question> loadVisualRuleQuestionsForArea(
-//   AppScreen screen,
-//   ScreenWidgetArea screenWidgetArea,
-//   ScreenAreaWidgetSlot slotInArea,
-//   UserResponse<List<VisualRuleType>> response,
-// ) {
-//   /*
-//     this method fabricates the rule rather than
-//     loading an existing one
-//   */
-//   List<Question> lst = [];
-//   for (VisualRuleType applicableRuleForSlot in response.answers) {
-//     lst.add(
-//       VisualRuleQuestion<String, RuleResponseWrapper>(
-//         screen,
-//         screenWidgetArea,
-//         slotInArea,
-//         applicableRuleForSlot,
-//         null,
-//       ),
-//     );
-//   }
-//   return lst;
-// }
-
 // accumulate configuration data
-final List<Question> _questionLst = [
+final List<QuestBase> _initQuestionLst = [
   /*  
-    eventConfiguration questions list below
+    eventConfiguration Quest2s list below
 
     1st generic describes data-type of ultimate
     user ANSWER (value stored in class UserResponse)
@@ -71,145 +25,101 @@ final List<Question> _questionLst = [
     but then I'd have more boilerplate in ALL
     of my Qb.castFunc code
   */
-  Qb<String, String>(
-    QuestionQuantifier.eventLevel(),
+  QuestBase.initialEventConfigRule(
+    QTargetResolution.forEvent(),
     DlgStr.eventName,
-    null,
-    null,
-    questId: QuestionIds.eventName,
+    [],
+    CaptureAndCast<String>((qb, s) => s),
+    questId: QuestionIdStrings.eventName,
   ),
   // set true false to shorten manual testing
-  if (true) ...[
-    Qb<String, String>(
-      QuestionQuantifier.eventLevel(),
+  if (false) ...[
+    QuestBase.initialEventConfigRule(
+      QTargetResolution.forEvent(),
       DlgStr.eventDescrip,
-      null,
-      null,
-      questId: QuestionIds.eventDescrip,
+      [],
+      CaptureAndCast<String>((qb, s) => s),
+      questId: QuestionIdStrings.eventDescrip,
     ),
-    Qb<int, EvType>(
-      QuestionQuantifier.eventLevel(),
+    QuestBase.initialEventConfigRule(
+      QTargetResolution.forEvent(),
       DlgStr.eventType,
       EvType.values.map((e) => e.name),
-      (i) => EvType.values[i],
-      questId: QuestionIds.eventType,
+      CaptureAndCast<EvType>(
+        (qb, s) => EvType.values[int.tryParse(s) ?? 0],
+      ),
+      questId: QuestionIdStrings.eventType,
     ),
-    Qb<int, EvCompetitorType>(
-      QuestionQuantifier.eventLevel(),
+    QuestBase.initialEventConfigRule(
+      QTargetResolution.forEvent(),
       DlgStr.eventWhosCompeting,
       EvCompetitorType.values.map((e) => e.name),
-      (i) => EvCompetitorType.values[i],
-      questId: QuestionIds.competitorType,
+      CaptureAndCast<EvCompetitorType>(
+        (qb, s) => EvCompetitorType.values[int.tryParse(s) ?? 0],
+      ),
+      questId: QuestionIdStrings.competitorType,
     ),
-    Qb<int, EvOpponentType>(
-      QuestionQuantifier.eventLevel(),
+    QuestBase.initialEventConfigRule(
+      QTargetResolution.forEvent(),
       DlgStr.eventCompPlayAgainst,
       EvOpponentType.values.map((e) => e.name),
-      (i) => EvOpponentType.values[i],
-      questId: QuestionIds.competeAgainstType,
+      CaptureAndCast<EvOpponentType>(
+        (qb, s) => EvOpponentType.values[int.tryParse(s) ?? 0],
+      ),
+      questId: QuestionIdStrings.competeAgainstType,
     ),
-    Qb<int, EvDuration>(
-      QuestionQuantifier.eventLevel(),
+    QuestBase.initialEventConfigRule(
+      QTargetResolution.forEvent(),
       DlgStr.eventDuration,
       EvDuration.values.map((e) => e.name),
-      (i) => EvDuration.values[i],
-      questId: QuestionIds.eventDuration,
+      CaptureAndCast<EvDuration>(
+        (qb, s) => EvDuration.values[int.tryParse(s) ?? 0],
+      ),
+      questId: QuestionIdStrings.eventDuration,
     ),
-    Qb<int, EvEliminationStrategy>(
-      QuestionQuantifier.eventLevel(),
+    QuestBase.initialEventConfigRule(
+      QTargetResolution.forEvent(),
       DlgStr.eventEliminationStrategy,
       EvEliminationStrategy.values.map((e) => e.name),
-      (i) => EvEliminationStrategy.values[i],
-      questId: QuestionIds.eventEliminationStrategy,
+      CaptureAndCast<EvEliminationStrategy>(
+        (qb, s) => EvEliminationStrategy.values[int.tryParse(s) ?? 0],
+      ),
+      questId: QuestionIdStrings.eventEliminationStrategy,
     ),
-    Qb<String, bool>(
-      QuestionQuantifier.eventLevel(),
-      'Apply 1st selected TblView row style to all other screens?',
+    QuestBase.initialEventConfigRule(
+      QTargetResolution.forEvent(),
+      DlgStr.useSameRowStyleForAllScreens,
       ['no', 'yes'],
-      (i) => i == '1',
-      defaultAnswerIdx: 1,
-      questId: QuestionIds.globalRowStyle,
+      CaptureAndCast<bool>((qb, ls) => ls == '1'),
+      questId: QuestionIdStrings.globalRowStyle,
+    ),
+    QuestBase.initialEventConfigRule(
+      QTargetResolution.forEvent(),
+      DlgStr.eventGameAgeOffPolicy,
+      EvGameAgeOffRule.values.map((e) => e.name),
+      CaptureAndCast<EvGameAgeOffRule>(
+        (qb, s) => EvGameAgeOffRule.values[int.tryParse(s) ?? 0],
+      ),
+      questId: QuestionIdStrings.eventAgeOffGameRule,
     ),
   ],
   // ask which screens to configure
-  Qb<String, List<AppScreen>>(
-    QuestionQuantifier.eventLevel(responseAddsWhichAreaQuestions: true),
-    'Select the app screens you`d like to configure?',
+  QuestBase.initialEventConfigRule(
+    QTargetResolution.forEvent(),
+    DlgStr.selectAppScreens, // <String, List<AppScreen>>
     AppScreen.eventConfiguration.topConfigurableScreens.map((e) => e.name),
-    (String strLstIdxs) {
-      //
-      return castStrOfIdxsToIterOfInts(strLstIdxs)
+    CaptureAndCast<List<AppScreen>>(
+      (QuestBase qb, String s) => castStrOfIdxsToIterOfInts(s)
           .map(
-              (idx) => AppScreen.eventConfiguration.topConfigurableScreens[idx])
-          .toList();
-    },
-    acceptsMultiResponses: true,
-    isNotForOutput: true,
-    questId: QuestionIds.selectAppScreens,
+            (idx) => AppScreen.eventConfiguration.topConfigurableScreens[idx],
+          )
+          .toList(),
+    ),
+    questId: QuestionIdStrings.selectAppScreens,
+    isSelectScreensQuestion: true,
   ),
   // after user selects desired screens to configure, then
   // which screen areas (and slots on those areas) are asked automatically;
   // then we ask them which visual rules they'd like to apply
-  // to those areas and/or area-slots
+  // to those areas and/or which area-slots are desired
 ];
-
- 
-  // we don't need defined questions for them
-
-  // if (AppSection.eventSelection.isConfigureable)
-  //   Qb<List<UiComponent>, String>(
-  //     QuestionQuantifier.appSectionLevel(AppSection.eventSelection),
-  //     AppSection.eventSelection.includeStr,
-  //     AppSection.eventSelection.applicableComponents.map((e) => e.name),
-  //     AppSection.eventSelection.convertIdxsToComponentList,
-  //   ),
-  // if (AppSection.poolSelection.isConfigureable)
-  //   Qb<List<UiComponent>, String>(
-  //     QuestionQuantifier.appSectionLevel(AppSection.poolSelection),
-  //     AppSection.poolSelection.includeStr,
-  //     AppSection.poolSelection.applicableComponents.map((e) => e.name),
-  //     AppSection.poolSelection.convertIdxsToComponentList,
-  //   ),
-
-  // if (AppSection.socialPools.isConfigureable)
-  //   Qb<List<UiComponent>, String>(
-  //     QuestionQuantifier.appSectionLevel(AppSection.socialPools),
-  //     AppSection.socialPools.includeStr,
-  //     AppSection.socialPools.applicableComponents.map((e) => e.name),
-  //     AppSection.socialPools.convertIdxsToComponentList,
-  //   ),
-  // if (AppSection.news.isConfigureable)
-  //   Qb<List<UiComponent>, String>(
-  //     QuestionQuantifier.appSectionLevel(AppSection.news),
-  //     AppSection.news.includeStr,
-  //     AppSection.news.applicableComponents.map((e) => e.name),
-  //     AppSection.news.convertIdxsToComponentList,
-  //   ),
-  // if (AppSection.leaderboard.isConfigureable)
-  //   Qb<List<UiComponent>, String>(
-  //     QuestionQuantifier.appSectionLevel(AppSection.leaderboard),
-  //     AppSection.leaderboard.includeStr,
-  //     AppSection.leaderboard.applicableComponents.map((e) => e.name),
-  //     AppSection.leaderboard.convertIdxsToComponentList,
-  //   ),
-  // if (AppSection.portfolio.isConfigureable)
-  //   Qb<List<UiComponent>, String>(
-  //     QuestionQuantifier.appSectionLevel(AppSection.portfolio),
-  //     AppSection.portfolio.includeStr,
-  //     AppSection.portfolio.applicableComponents.map((e) => e.name),
-  //     AppSection.portfolio.convertIdxsToComponentList,
-  //   ),
-  // if (AppSection.trading.isConfigureable)
-  //   Qb<List<UiComponent>, String>(
-  //     QuestionQuantifier.appSectionLevel(AppSection.trading),
-  //     AppSection.trading.includeStr,
-  //     AppSection.trading.applicableComponents.map((e) => e.name),
-  //     AppSection.trading.convertIdxsToComponentList,
-  //   ),
-  // if (AppSection.marketResearch.isConfigureable)
-  //   Qb<List<UiComponent>, String>(
-  //     QuestionQuantifier.appSectionLevel(AppSection.marketResearch),
-  //     AppSection.marketResearch.includeStr,
-  //     AppSection.marketResearch.applicableComponents.map((e) => e.name),
-  //     AppSection.marketResearch.convertIdxsToComponentList,
-  //   ),
