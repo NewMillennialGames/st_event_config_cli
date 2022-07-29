@@ -22,12 +22,14 @@ void main() {
         QTargetResolution.forEvent(),
         DlgStr.selectAppScreens, // <String, List<AppScreen>>
         AppScreen.eventConfiguration.topConfigurableScreens.map((e) => e.name),
-        CaptureAndCast<List<AppScreen>>((QuestBase qb, s) =>
-            castStrOfIdxsToIterOfInts(s)
-                .map((idx) =>
-                    AppScreen.eventConfiguration.topConfigurableScreens[idx])
-                .toList()),
+        CaptureAndCast<List<AppScreen>>(
+          (QuestBase qb, s) => castStrOfIdxsToIterOfInts(s)
+              .map((idx) =>
+                  AppScreen.eventConfiguration.topConfigurableScreens[idx])
+              .toList(),
+        ),
         questId: QuestionIdStrings.selectAppScreens,
+        isSelectScreensQuestion: true,
       );
 
       final _questMgr = QuestListMgr();

@@ -247,6 +247,14 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
   String get areaNmUpper => (screenWidgetArea?.name ?? '_AREA').toUpperCase();
   String get slotNmUpper => (slotInArea?.name ?? '_SLOT').toUpperCase();
 
+  String get rulePromptTemplate {
+    if (visRuleTypeForAreaOrSlot == null) return '';
+    VisualRuleType curRule = visRuleTypeForAreaOrSlot!;
+    return curRule.requiresVisRulePrepQuestion
+        ? curRule.prepTemplate
+        : curRule.detailTemplate;
+  }
+
   // equatableKey must be distinct & unique
   String get equatableKey {
     // makes equatable work for searching & sorting Quest2 list
