@@ -25,7 +25,7 @@ extension VisRuleQuestTypeExt1 on VisRuleQuestType {
     /* return Question template for each of these rules
 
     */
-    assert(visRuleTyp != VisualRuleType.filterCfg, 'caught you!!');
+    // assert(visRuleTyp != VisualRuleType.filterCfg, 'caught you!!');
     String resp = '_unset';
     switch (this) {
       case VisRuleQuestType.dialogStruct:
