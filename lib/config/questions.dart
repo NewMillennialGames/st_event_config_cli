@@ -33,7 +33,7 @@ final List<QuestBase> _initQuestionLst = [
     questId: QuestionIdStrings.eventName,
   ),
   // set true false to shorten manual testing
-  if (false) ...[
+  if (true) ...[
     QuestBase.initialEventConfigRule(
       QTargetResolution.forEvent(),
       DlgStr.eventDescrip,
