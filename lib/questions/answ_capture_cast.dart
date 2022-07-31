@@ -25,21 +25,6 @@ class CaptureAndCast<T> {
     return ans;
   }
 
-  // int derivedQuestionsToProduce(QuestBase qb) {
-  //   // not finished
-  //   bool hasMulti = (T is Iterable);
-  //   if (qb is RegionTargetQuest) {
-  //     /*  */
-  //     // if (hasMulti) {}
-  //   } else if (qb is RuleSelectQuest) {
-  //     /*  */
-
-  //   } else if (qb is RulePrepQuest) {
-  //     /*  */
-  //   }
-  //   return 0;
-  // }
-
   // getters  (use == not "is")
 
   String get answer => _answers;
@@ -55,3 +40,19 @@ class CaptureAndCast<T> {
       asksWhichAreasOfScreenToConfig ||
       asksWhichSlotsOfAreaToConfig;
 }
+
+
+  // int derivedQuestionsToProduce(QuestBase qb) {
+  //   // not finished
+  //   bool hasMulti = (T is Iterable);
+  //   if (qb is RegionTargetQuest) {
+  //     /*  */
+  //     // if (hasMulti) {}
+  //   } else if (qb is RuleSelectQuest) {
+  //     /*  */
+
+  //   } else if (qb is RulePrepQuest) {
+  //     /*  */
+  //   }
+  //   return 0;
+  // }

@@ -218,41 +218,71 @@ abstract class QuestBase with EquatableMixin {
     return nextQpi;
   }
 
+  QTargetResolution derivedQuestTargetAtAnswerIdx(
+    int newQuestIdx,
+    int newQuestPromptIdx, {
+    bool forRuleSelection = false,
+  }) {
+    /* returns the next (more precise) QTargetResolution
+      instance that will be used on a NEW
+      DERIVED (auto-generated) question
+      based on user-answers held in this current question
+
+      forRuleSelection means: set target complete
+      on this new QTargetResolution
+
+      intended to be overriden in subclass
+    */
+    assert(isFullyAnswered, 'cant call this method before ? is answered!');
+    throw UnimplementedError('should be overriden in subclass');
+    // return qTargetResolution.copyWith();
+  }
+
   DerivedQuestGenerator getDerivedRuleQuestGenViaVisType(
     int newQuIdx,
-    VisualRuleType? pendingVisRule,
+    VisualRuleType? optRuleTypeToCreateDqg,
     RuleTypeFilterFunction? filterFunc,
   ) {
-    /*
+    /*  uses a VisualRuleType to dynamically build a DerivedQuestGenerator
+    
+    ONLY returns a DQG intended create VISIBLE rule-DETAIL questions
+          may be invoked on (this) EITHER a RuleSelectQuest or RulePrepQuest
+
     called by q_cascade_dispatch
       to build a DerivedQuestGenerator
       from answers to this (current question)
     */
     assert(
       this is RuleSelectQuest || this is RulePrepQuest,
-      'cant produce detail quests on ${this.questId}',
+      'cant produce detail quests on ${this.questId} because its not a SELECT or PREP quest type',
     );
 
+    // when this is RulePrepQuest, we're only dealing with ONE VisualRuleType; so create 1 derived
     int newQuestCountToGenerate = 1;
     VisualRuleType? selRule =
         this is RulePrepQuest ? visRuleTypeForAreaOrSlot : null;
 
     if (this is RuleSelectQuest) {
-      // && pendingVisRule == null
+      // answer is a list so may create MULTIPLE derived questions
       List<VisualRuleType> selRules = this.mainAnswer as List<VisualRuleType>;
       if (filterFunc != null) {
         selRules = selRules.where(filterFunc).toList();
       } else {
+        // skip VRTs that requiresRulePrepQuest;  another matcher will handle those
         selRules = selRules.where((vrt) => !vrt.requiresRulePrepQuest).toList();
       }
       selRule = selRules[newQuIdx];
       newQuestCountToGenerate = selRules.length;
+      print(
+        'INFO: dynamic DQG from type selected ${selRule.name.toUpperCase()} for $newQuIdx  (${(optRuleTypeToCreateDqg?.name ?? '_noVrtArg').toUpperCase()} could be used instead)',
+      );
     }
     VisualRuleType ruleForNextQuestion =
-        pendingVisRule ?? selRule ?? visRuleTypeForAreaOrSlot!;
+        optRuleTypeToCreateDqg ?? selRule ?? visRuleTypeForAreaOrSlot!;
 
+    String instanceTypeUC = this.runtimeType.toString().toUpperCase();
     print(
-      'getDerivedRuleQuestGenViaVisType: ${ruleForNextQuestion.name}',
+      'INFO: getDerivedRuleQuestGenViaVisType creating question for: ${ruleForNextQuestion.name.toUpperCase()} from a $instanceTypeUC question',
     );
 
     var newTarg = qTargetResolution.copyWith(
@@ -452,6 +482,27 @@ class EventLevelCfgQuest extends QuestBase {
   @override
   QuestFactorytSignature get derivedQuestConstructor =>
       QuestBase.regionTargetQuest;
+
+  @override
+  QTargetResolution derivedQuestTargetAtAnswerIdx(
+    int newQuestIdx,
+    int newQuestPromptIdx, {
+    bool forRuleSelection = false,
+  }) {
+    assert(
+      isFullyAnswered && isSelectScreensQuestion,
+      'cant call this method before ? is answered or this is wrong event-level quest!',
+    );
+    assert(
+      !forRuleSelection,
+      'Event lvl cfg ??s are not precise enough for a complete area-target',
+    );
+    List<AppScreen> screensToConfig = mainAnswer as List<AppScreen>;
+    return qTargetResolution.copyWith(
+      appScreen: screensToConfig[newQuestIdx],
+      precision: TargetPrecision.screenLevel,
+    );
+  }
 }
 
 class RegionTargetQuest extends QuestBase {
@@ -482,6 +533,50 @@ class RegionTargetQuest extends QuestBase {
   QuestFactorytSignature get derivedQuestConstructor => targetPathIsComplete
       ? QuestBase.ruleSelectQuest
       : QuestBase.regionTargetQuest;
+
+  @override
+  QTargetResolution derivedQuestTargetAtAnswerIdx(
+    int newQuestIdx,
+    int newQuestPromptIdx, {
+    bool forRuleSelection = false,
+  }) {
+    assert(
+      isFullyAnswered,
+      'cant call this method before ? is answered!',
+    );
+    assert(
+      !targetPathIsComplete,
+      'seems like target should NOT be Complete, or this is not really a RegionTargetQuest instance?? ${this.runtimeType}',
+    );
+    forRuleSelection = forRuleSelection || targetPathIsComplete;
+    // if not for rule-selection, then this question
+    // must be intended to define more precise targetting (area or slot)
+
+    TargetPrecision _nextPrecision = TargetPrecision.targetLevel;
+    if (forRuleSelection) {
+      _nextPrecision = TargetPrecision.ruleSelect;
+    }
+
+    if (mainAnswer is List<ScreenWidgetArea>) {
+      //
+      ScreenWidgetArea area =
+          (mainAnswer as List<ScreenWidgetArea>)[newQuestIdx];
+      return qTargetResolution.copyWith(
+        screenWidgetArea: area,
+        precision: _nextPrecision,
+      );
+    } else if (mainAnswer is List<ScreenAreaWidgetSlot>) {
+      //
+      ScreenAreaWidgetSlot slot =
+          (mainAnswer as List<ScreenAreaWidgetSlot>)[newQuestIdx];
+      return qTargetResolution.copyWith(
+        slotInArea: slot,
+        precision: _nextPrecision,
+      );
+    }
+    throw UnimplementedError('err: should have been one or the other');
+    // return qTargetResolution.copyWith();
+  }
 }
 
 class RuleSelectQuest extends QuestBase {
@@ -503,6 +598,32 @@ class RuleSelectQuest extends QuestBase {
 
   @override
   QuestFactorytSignature get derivedQuestConstructor => QuestBase.rulePrepQuest;
+
+  @override
+  QTargetResolution derivedQuestTargetAtAnswerIdx(
+    int newQuestIdx,
+    int newQuestPromptIdx, {
+    bool forRuleSelection = true,
+  }) {
+    assert(
+      isFullyAnswered,
+      'cant call this method before ? is answered!',
+    );
+    assert(
+      targetPathIsComplete,
+      'target must be complete in a rule select question!',
+    );
+    List<VisualRuleType> rulesOffered =
+        qTargetResolution.possibleRulesAtAnyTarget;
+    VisualRuleType selRule = rulesOffered[newQuestIdx];
+    TargetPrecision newPrecision = selRule.requiresRulePrepQuest
+        ? TargetPrecision.rulePrep
+        : TargetPrecision.ruleDetailVisual;
+    return qTargetResolution.copyWith(
+      visRuleTypeForAreaOrSlot: selRule,
+      precision: newPrecision,
+    );
+  }
 }
 
 class RulePrepQuest extends QuestBase {
@@ -533,6 +654,26 @@ class RulePrepQuest extends QuestBase {
   QuestFactorytSignature get derivedQuestConstructor => createsBehavioralQuests
       ? QuestBase.behaveRuleDetailQuest
       : QuestBase.visualRuleDetailQuest;
+
+  @override
+  QTargetResolution derivedQuestTargetAtAnswerIdx(
+    int newQuestIdx,
+    int newQuestPromptIdx, {
+    bool forRuleSelection = true,
+  }) {
+    assert(
+      isFullyAnswered,
+      'cant call this method before ? is answered!',
+    );
+    assert(
+      targetPathIsComplete,
+      'target must be complete in a rule prep question!',
+    );
+
+    return qTargetResolution.copyWith(
+      precision: TargetPrecision.ruleDetailVisual,
+    );
+  }
 }
 
 abstract class RuleQuestBaseAbs extends QuestBase {
@@ -566,6 +707,27 @@ abstract class RuleQuestBaseAbs extends QuestBase {
     throw UnimplementedError(
       'Rule details questions do not generate new questions; they contain the final rule-config details & cascade stops at this level',
     );
+  }
+
+  @override
+  QTargetResolution derivedQuestTargetAtAnswerIdx(
+    int newQuestIdx,
+    int newQuestPromptIdx, {
+    bool forRuleSelection = true,
+  }) {
+    assert(
+      isFullyAnswered,
+      'cant call this method before ? is answered!',
+    );
+    assert(
+      targetPathIsComplete,
+      'target must be complete in a rule prep question!',
+    );
+    String m =
+        'Error:  Rule detail questions DO NOT produce derived questions.  Why are you calling me?';
+    // print(m);
+    throw UnimplementedError(m);
+    // return qTargetResolution.copyWith();
   }
 }
 

@@ -181,8 +181,9 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
     if (isAPatternMatch) {
       //
       bool isNoopGenerator = this.derivedQuestGen.isNoopGenerator;
+      String shortDesc = matcherDescrip.substring(0, 80);
       print(
-        'QID: ${prevAnsweredQuest.questId} does match $matcherDescrip  (${isNoopGenerator ? "DQG callback" : "DQG static"})',
+        'Matcher: ${prevAnsweredQuest.questId} HIT on:\n\t"$shortDesc"\n\t(matcher uses: ${isNoopGenerator ? "CALLBACK" : "STATIC"} as source for DQG)',
       );
     }
     return isAPatternMatch;
