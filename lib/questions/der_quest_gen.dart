@@ -82,6 +82,8 @@ class DerivedQuestGenerator {
 
   final List<NewQuestPerPromptOpts> perPromptDetails;
   final NewQuestCount newQuestCountCalculator;
+  // qTargetResUpdater func may not be necessary now that each question
+  // knows how to generate it's own derived QTargetResolution
   final QTargetResUpdateFunc qTargetResUpdater;
   final NewQuestIdGenFromPriorAnswer? newQuestIdGenFromPriorQuest;
   final DerivedGenBehaviorOnMatchEnum genBehaviorOfDerivedQuests;
@@ -223,17 +225,20 @@ class DerivedQuestGenerator {
     int newQuestPromptCount = this.perPromptDetails.length;
 
     // values required to build new question:
-    // loop once for each new question
+    // loop once for each new question & again for each prompt
     for (int newQIdx = 0; newQIdx < newQuestCount; newQIdx++) {
-      List<QuestPromptPayload> newQuestPrompts = [];
       if (bailQGenWhenTrueCallbk != null &&
           bailQGenWhenTrueCallbk!(
             answeredQuest,
             newQIdx,
           )) {
-        // print('skipping Q# $newQIdx for bailQGenWhenTrueCallbk; new derived quests generated');
+        print(
+          'skipping Q# $newQIdx for bailQGenWhenTrueCallbk; new derived quests generated',
+        );
         continue;
       }
+
+      List<QuestPromptPayload> newQuestPrompts = [];
       for (int promptEntryListIdx = 0;
           promptEntryListIdx < newQuestPromptCount;
           promptEntryListIdx++) {
@@ -241,36 +246,40 @@ class DerivedQuestGenerator {
         NewQuestPerPromptOpts currPromptConfig =
             this.perPromptDetails[promptEntryListIdx];
 
-        int currPromptChoiceCount = currPromptConfig
-            .answerChoiceGenerator(
-              answeredQuest,
-              newQIdx,
-              currPromptConfig.instanceIdx,
-            )
-            .length;
-        if (currPromptChoiceCount < 1) {
-          print(
-            'prompt $promptEntryListIdx on q# #newQIdx of ${answeredQuest.questId} has no choices so bailing',
-          );
+        List<String> promptChoices = currPromptConfig.answerChoiceGenerator(
+          answeredQuest,
+          newQIdx,
+          promptEntryListIdx,
+        );
+
+        if (promptChoices.length < 1) {
+          // print(
+          //   'prompt $promptEntryListIdx (${currPromptConfig.instanceIdx}) on PREV questId ${answeredQuest.questId} has no choices so bailing.',
+          // );
+          // print(
+          //   '''\tCan occur when answer has a mix of rules requiring BOTH prep & detail as next step.
+          //   \tThe rule going directly to detail can return no choices to prevent a prep question prompt from being created!''',
+          // );
           continue;
         }
 
         List<String> templArgs = currPromptConfig.promptTemplArgGen(
           answeredQuest,
           newQIdx,
-          currPromptConfig.instanceIdx,
+          promptEntryListIdx,
         );
         String _userPrompt = currPromptConfig.promptTemplate.format(templArgs);
 
         newQuestPrompts.add(QuestPromptPayload(
           _userPrompt,
-          currPromptConfig
-              .answerChoiceGenerator(answeredQuest, newQIdx, promptEntryListIdx)
-              .toList(),
+          promptChoices,
           currPromptConfig.visRuleQuestType ?? VisRuleQuestType.dialogStruct,
           currPromptConfig.newRespCastFunc,
         ));
       }
+
+      // dont create new quests if there are ZERO prompts
+      if (newQuestPrompts.length < 1) continue;
 
       // convert old (answered) targIntent into one for new question
       // added extra copyWith() in case passed function forgets it

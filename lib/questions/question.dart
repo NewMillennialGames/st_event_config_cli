@@ -240,39 +240,49 @@ abstract class QuestBase with EquatableMixin {
 
   DerivedQuestGenerator getDerivedRuleQuestGenViaVisType(
     int newQuIdx,
-    VisualRuleType? pendingVisRule,
+    VisualRuleType? optRuleTypeToCreateDqg,
     RuleTypeFilterFunction? filterFunc,
   ) {
-    /*
+    /*  uses a VisualRuleType to dynamically build a DerivedQuestGenerator
+    
+    ONLY returns a DQG intended create VISIBLE rule-DETAIL questions
+          may be invoked on (this) EITHER a RuleSelectQuest or RulePrepQuest
+
     called by q_cascade_dispatch
       to build a DerivedQuestGenerator
       from answers to this (current question)
     */
     assert(
       this is RuleSelectQuest || this is RulePrepQuest,
-      'cant produce detail quests on ${this.questId}',
+      'cant produce detail quests on ${this.questId} because its not a SELECT or PREP quest type',
     );
 
+    // when this is RulePrepQuest, we're only dealing with ONE VisualRuleType; so create 1 derived
     int newQuestCountToGenerate = 1;
     VisualRuleType? selRule =
         this is RulePrepQuest ? visRuleTypeForAreaOrSlot : null;
 
     if (this is RuleSelectQuest) {
-      // && pendingVisRule == null
+      // answer is a list so may create MULTIPLE derived questions
       List<VisualRuleType> selRules = this.mainAnswer as List<VisualRuleType>;
       if (filterFunc != null) {
         selRules = selRules.where(filterFunc).toList();
       } else {
+        // skip VRTs that requiresRulePrepQuest;  another matcher will handle those
         selRules = selRules.where((vrt) => !vrt.requiresRulePrepQuest).toList();
       }
       selRule = selRules[newQuIdx];
       newQuestCountToGenerate = selRules.length;
+      print(
+        'INFO: dynamic DQG from type selected ${selRule.name.toUpperCase()} for $newQuIdx  (${(optRuleTypeToCreateDqg?.name ?? '_noVrtArg').toUpperCase()} could be used instead)',
+      );
     }
     VisualRuleType ruleForNextQuestion =
-        pendingVisRule ?? selRule ?? visRuleTypeForAreaOrSlot!;
+        optRuleTypeToCreateDqg ?? selRule ?? visRuleTypeForAreaOrSlot!;
 
+    String instanceTypeUC = this.runtimeType.toString().toUpperCase();
     print(
-      'getDerivedRuleQuestGenViaVisType: ${ruleForNextQuestion.name}',
+      'INFO: getDerivedRuleQuestGenViaVisType creating question for: ${ruleForNextQuestion.name.toUpperCase()} from a $instanceTypeUC question',
     );
 
     var newTarg = qTargetResolution.copyWith(

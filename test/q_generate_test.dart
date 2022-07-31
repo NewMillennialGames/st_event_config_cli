@@ -51,7 +51,7 @@ void main() {
       expect(_questMgr.priorAnswerCount, 1);
       expect(_questMgr.pendingQuestionCount, 2);
 
-      for (QuestBase q in _questMgr.pendingQuestions) {
+      for (QuestBase q in _questMgr.pendingQuestions.sublist(1)) {
         print(
           'QuestMatcher created:  ${q.firstPrompt.userPrompt}  ${q.questId}',
         );
@@ -122,7 +122,7 @@ void main() {
     expect(_questMgr.priorAnswerCount, 1, reason: 'quest was answered');
 
     // it's a rule Questions, but not yet answered -- so zero exportable
-    expect(_questMgr.exportableRuleQuestions.length, 0);
+    expect(_questMgr.exportableVisRuleQuestions.length, 0);
 
     // now check that 1 Question was created
     // since there was no 2nd INITIAL Question

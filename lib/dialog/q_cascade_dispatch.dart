@@ -125,15 +125,9 @@ class QCascadeDispatcher {
       );
     } else if (questJustAnswered.isRuleSelectionQuestion) {
       // user has selected rule for area or slot
-      print(
-        '\tUser has selected rule(s) for area or slot ${questJustAnswered.questId} (now gen rule-prep or rule-detail)',
-      );
-      // var userSelectedRules =
-      //     questJustAnswered.mainAnswer as List<VisualRuleType>;
-      // var requiresRulePrepQuestion =
-      //     questJustAnswered.requiresVisRulePrepQuestion ||
-      //         questJustAnswered.requiresBehRulePrepQuestion;
-      // var matchersForPrepOrDetail = requiresRulePrepQuestion ? xx : yy;
+      // print(
+      //   '\tUser has selected rule(s) for area or slot ${questJustAnswered.questId} (now gen rule-prep or rule-detail)',
+      // );
 
       var matchersForPrepOrDetail =
           matchersToGenRulePrepQuests + matchersToGenRuleDetailQuests;
@@ -571,7 +565,9 @@ FIXME:
               newQuIdx,
               0,
             );
-            return QuestionIdStrings.prepQuestForVisRule + newQtr.targetPath;
+            return QuestionIdStrings.prepQuestForVisRule +
+                '-' +
+                newQtr.targetPath;
           },
           answerChoiceGenerator: (
             QuestBase priorAnsweredQuest,
@@ -675,14 +671,14 @@ FIXME:
           bool atLeastOneHasNoPrep = selRulesNoPrep.length > 0;
           if (!atLeastOneHasNoPrep) return false;
 
-          print('validateUserAnswerAfterPatternMatchIsTrueCallback:');
-          print('\tAnswLen: ${selRulesNoPrep.length} (1 in example)');
-          print(
-              '\tisRuleSelectionQuestion: ${priorAnsweredQuest.isRuleSelectionQuestion}');
-          print(
-              '\ttargetPathIsComplete: ${priorAnsweredQuest.targetPathIsComplete}');
-          print('\ttargetPath: ${priorAnsweredQuest.targetPath}');
-          print('\tatLeastOneHasNoPrep: ${atLeastOneHasNoPrep}');
+          // print('validateUserAnswerAfterPatternMatchIsTrueCallback:');
+          // print('\tAnswLen: ${selRulesNoPrep.length} (1 in example)');
+          // print(
+          //     '\tisRuleSelectionQuestion: ${priorAnsweredQuest.isRuleSelectionQuestion}');
+          // print(
+          //     '\ttargetPathIsComplete: ${priorAnsweredQuest.targetPathIsComplete}');
+          // print('\ttargetPath: ${priorAnsweredQuest.targetPath}');
+          // print('\tatLeastOneHasNoPrep: ${atLeastOneHasNoPrep}');
           return priorAnsweredQuest.isRuleSelectionQuestion &&
               priorAnsweredQuest.targetPathIsComplete;
         },

@@ -18,7 +18,7 @@ extension ListQuestExt1 on Iterable<QuestBase> {
 class QuestListMgr {
   /*
     does nothing but track and manage the full
-    list of Quest2s, both pending and completed/answered
+    list of Questions, both pending and completed/answered
   */
   int _currQuestionIdx = -1;
   List<QuestBase> _pendingQuestions = [];
@@ -27,13 +27,21 @@ class QuestListMgr {
 
   // constructor
   QuestListMgr([List<QuestBase>? pendingQuestions = null]) {
+    if ((pendingQuestions ?? <QuestBase>[]).length < 1)
+      print(
+        'warn: QuestListMgr may not behave well without min 1 seed question!!',
+      );
     _pendingQuestions.addAll(pendingQuestions ?? []);
   }
 
-  //
-  Iterable<RuleQuestBaseAbs> get exportableRuleQuestions =>
+  Iterable<VisualRuleDetailQuest> get exportableVisRuleQuestions =>
       _allAnsweredQuestions
-          .whereType<RuleQuestBaseAbs>()
+          .whereType<VisualRuleDetailQuest>()
+          .where((rq) => rq.isFullyAnswered);
+
+  Iterable<BehaveRuleDetailQuest> get exportableBehRuleQuestions =>
+      _allAnsweredQuestions
+          .whereType<BehaveRuleDetailQuest>()
           .where((rq) => rq.isFullyAnswered);
 
   List<EventLevelCfgQuest> get exportableTopLevelQuestions =>
@@ -43,13 +51,6 @@ class QuestListMgr {
             (q) => q.isEventConfigQuest && q.isFullyAnswered,
           )
           .toList();
-
-  // bool _exportFilterLogic(QuestBase q) {
-  //   // print(
-  //   //   'QID: ${q.Quest2Id}  runtimeType: ${q.runtimeType}  appliesToClientConfiguration: ${q.appliesToClientConfiguration}',
-  //   // );
-  //   return q.appliesToClientConfiguration;
-  // }
 
   List<QuestBase> get pendingQuestions => _pendingQuestions;
   QuestBase get currentOrLastQuestion => _isAtBeginning
@@ -65,11 +66,13 @@ class QuestListMgr {
       ? pendingQuestions.length
       : _pendingQuestions.length - (_currQuestionIdx + 1);
 
-  List<QuestBase> get _allAnsweredQuestions =>
-      _answeredQuestsByScreen.values.fold<List<QuestBase>>(
-        <QuestBase>[],
-        (List<QuestBase> l0, List<QuestBase> l1) => l0..addAll(l1),
-      );
+  List<QuestBase> get _allAnsweredQuestions {
+    //
+    List<QuestBase> allAnswered = _answeredQuestsByScreen.values
+        .fold<List<QuestBase>>(<QuestBase>[],
+            (List<QuestBase> l0, List<QuestBase> l1) => l0..addAll(l1));
+    return allAnswered;
+  }
 
   List<AppScreen> get userSelectedScreens {
     Iterable<QuestPromptInstance> matchingPrompts = _allAnsweredQuestions
@@ -117,11 +120,6 @@ class QuestListMgr {
     }
     return tree;
   }
-
-  // List<ScreenWidgetArea> configurableAreasForScreen(AppScreen as) {
-  //   // return previously answered config areas for this screen
-
-  // }
 
   List<ScreenAreaWidgetSlot> screenSlotsInAreasFor(
     AppScreen as,
@@ -178,8 +176,15 @@ class QuestListMgr {
 
   void _moveCurrentQuestToAnswered() {
     // dont add at start or end
-    if (_currQuestionIdx < 0 ||
-        totalAnsweredQuestions >= _pendingQuestions.length) return;
+    if ( // _currQuestionIdx < 0 ||
+        totalAnsweredQuestions >= _pendingQuestions.length) {
+      // pending questions represents ALL questions
+      // if answered count > all, then we'd be moving duplicates
+      // print(
+      //   'moveCurrentQuestToAnswered BAILING out:  $_currQuestionIdx  $totalAnsweredQuestions  ${_pendingQuestions.length}',
+      // );
+      return;
+    }
     //
     List<QuestBase> lstQuestInCurScreen =
         _answeredQuestsByScreen[currentOrLastQuestion.appScreen] ?? [];
@@ -203,6 +208,9 @@ class QuestListMgr {
     }
     // store into list for this section;  but DO NOT remove from pendingQuest2s or messes up cur_idx tracking
     lstQuestInCurScreen.add(currentOrLastQuestion);
+    // make sure new list is attached
+    // _answeredQuestsByScreen[currentOrLastQuestion.appScreen] =
+    //     lstQuestInCurScreen;
   }
 
   void loadInitialQuestions() {
@@ -217,7 +225,7 @@ class QuestListMgr {
   }
 
   void appendGeneratedQuestsAndAnswers(
-    List<QuestBase> quests, {
+    List<QuestBase> newQuests, {
     String dbgNam = 'apndNewQs', // debug-name
   }) {
     /*
@@ -225,30 +233,35 @@ class QuestListMgr {
       and auto-answered questions to this method
 
     */
-    Set<AppScreen> appScreensSet = quests.map((e) => e.appScreen).toSet();
+    Set<AppScreen> appScreensSet = newQuests.map((e) => e.appScreen).toSet();
 
     // print(
     //   '$dbgNam is adding ${quests.length} new Questions for these screens $appScreensSet',
     // );
 
     for (AppScreen as in appScreensSet) {
-      int newCntBySec = quests
+      int newCntBySec = newQuests
           .where((q) => q.appScreen == as)
           .fold<int>(0, (accumVal, _) => accumVal + 1);
       _questCountByScreen[as] = (_questCountByScreen[as] ?? 0) + newCntBySec;
     }
 
-    var fullyAnsweredQuests = quests.where((q) => q.isFullyAnswered);
-    _insertPreviouslyAnsweredQuestions(fullyAnsweredQuests);
+    // add fully answered first
+    Iterable<QuestBase> fullyAnsweredQuests =
+        newQuests.where((q) => q.isFullyAnswered);
+    if (fullyAnsweredQuests.length > 0) {
+      _insertPreviouslyAnsweredQuestions(fullyAnsweredQuests);
+    }
 
-    var unAnsweredQuests = quests.where((q) => !q.isFullyAnswered);
+    Iterable<QuestBase> unAnsweredQuests =
+        newQuests.where((q) => !q.isFullyAnswered);
     _pendingQuestions.addAll(unAnsweredQuests);
 
     _sortPendingQuestions();
   }
 
   void _insertPreviouslyAnsweredQuestions(
-    Iterable<QuestBase> autoAnsweredQuests,
+    Iterable<QuestBase> answeredQuests,
   ) {
     /*
       puts questions into the corrrect
@@ -258,22 +271,22 @@ class QuestListMgr {
 
       we already updated per-screen counts in calling method
     */
-    int countToAddToCurIdx = autoAnsweredQuests.length;
+    int countToAddToCurIdx = answeredQuests.length;
     if (countToAddToCurIdx < 1) return;
 
     Set<AppScreen> appScreensSet =
-        autoAnsweredQuests.map((e) => e.appScreen).toSet();
+        answeredQuests.map((e) => e.appScreen).toSet();
 
     for (AppScreen as in appScreensSet) {
       Iterable<QuestBase> quest4Screen =
-          autoAnsweredQuests.where((q) => q.appScreen == as);
+          answeredQuests.where((q) => q.appScreen == as);
 
       if (_answeredQuestsByScreen[as] == null) _answeredQuestsByScreen[as] = [];
 
       _answeredQuestsByScreen[as]!.addAll(quest4Screen);
     }
 
-    this._pendingQuestions.addAll(autoAnsweredQuests);
+    this._pendingQuestions.addAll(answeredQuests);
     // now update index to skip asking these questions
     _currQuestionIdx = _currQuestionIdx + countToAddToCurIdx;
   }

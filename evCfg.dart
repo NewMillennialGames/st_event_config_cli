@@ -46,7 +46,7 @@ void createOutputFileFromResponses(
   List<EventLevelCfgQuest> eventConfigLevelData =
       questListMgr.exportableTopLevelQuestions;
   List<RuleQuestBaseAbs> exportableRuleQuestions =
-      questListMgr.exportableRuleQuestions.toList();
+      questListMgr.exportableVisRuleQuestions.toList();
 
   print(
     'found ${eventConfigLevelData.length} event-cfg entries, and ${exportableRuleQuestions.length} rules to convert',
