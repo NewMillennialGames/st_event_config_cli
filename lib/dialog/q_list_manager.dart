@@ -176,7 +176,7 @@ class QuestListMgr {
 
   void _moveCurrentQuestToAnswered() {
     // dont add at start or end
-    if ( // _currQuestionIdx < 0 ||
+    if (_currQuestionIdx < 0 ||
         totalAnsweredQuestions >= _pendingQuestions.length) {
       // pending questions represents ALL questions
       // if answered count > all, then we'd be moving duplicates
