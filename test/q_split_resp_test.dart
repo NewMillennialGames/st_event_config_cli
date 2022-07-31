@@ -4,6 +4,14 @@ import 'package:st_ev_cfg/st_ev_cfg.dart';
 import 'package:st_ev_cfg/config/all.dart';
 import 'package:st_ev_cfg/util/all.dart';
 
+/*
+  remaining bugs:
+  1) showing "3rd" when should show 2nd
+  2) asking 2nd when only one sort field
+  3) showing sort when I selected group (offset problem)
+  4) 
+*/
+
 void main() {
   test(
     '''asks which rules to config for listView (TV) on MarketView screen 
