@@ -117,15 +117,20 @@ void main() {
 
       int prepCount = 0;
       int detailCount = 0;
+      print('\n\nCreation summary:');
+      // skip 1st question as it was already answered in this test
       for (QuestBase q in _questMgr.pendingQuestions.sublist(1)) {
         prepCount += q.isRulePrepQuestion ? 1 : 0;
         detailCount += q.isRuleDetailQuestion ? 1 : 0;
-        var userPrompt = q.firstPrompt.userPrompt;
-        print('QuestMatcher created:  $userPrompt  ${q.questId}');
+        var userPrompt = q.firstPrompt.userPrompt.substring(0, 52);
+        print(
+            'QuestMatcher created QID:  ${q.questId}\n\tprompt: $userPrompt\n\t(${q.isRulePrepQuestion ? "PREP ?" : "DETAIL ?"})');
       }
       print(
         'appendNewQuestsOrInsertImplicitAnswers created:  prepCount: $prepCount  detailCount: $detailCount',
       );
+      expect(prepCount, 1, reason: '');
+      expect(detailCount, 1, reason: '');
     },
     // skip: true,
   );
