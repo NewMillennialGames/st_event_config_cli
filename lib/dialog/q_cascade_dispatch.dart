@@ -458,10 +458,10 @@ FIXME:
     //
     return [
       QuestMatcher<List<VisualRuleType>, int>(
-        '''matches questions in which user specifies rules for screen-areas to config
+        '''builds rule-prep questions (eg how many slots) from answers on rule-select question
+        matches questions in which user specifies rules to config for an area or slot 
         and at least 1 selected rule requiresVisRulePrepQuestion
-      build prep questions (eg how many slots) for these rules
-
+  --
       matcher to build rule-detail questions is below
     ''',
         RuleSelectQuest,

@@ -181,9 +181,15 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
     if (isAPatternMatch) {
       //
       bool isNoopGenerator = this.derivedQuestGen.isNoopGenerator;
-      String shortDesc = matcherDescrip.substring(0, 80);
+      String shortDesc = matcherDescrip
+          .replaceAll("\n", "")
+          .replaceAll("    ", " ")
+          .substring(0, 120)
+          .trimRight();
+      // shortDesc = shortDesc;
+      ;
       print(
-        'Matcher: ${prevAnsweredQuest.questId} HIT on:\n\t"$shortDesc"\n\t(matcher uses: ${isNoopGenerator ? "CALLBACK" : "STATIC"} as source for DQG)',
+        'Matcher Hit -- QID: ${prevAnsweredQuest.questId}\n\thit -> "$shortDesc"\n\t(using: ${isNoopGenerator ? "CALLBACK" : "STATIC"} as source for DQG)',
       );
     }
     return isAPatternMatch;
