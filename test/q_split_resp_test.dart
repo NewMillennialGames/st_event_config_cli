@@ -9,7 +9,7 @@ import 'package:st_ev_cfg/util/all.dart';
   1) showing "3rd" when should show 2nd
   2) asking 2nd when only one sort field
   3) showing sort when I selected group (offset problem)
-  4) 
+  4) selecting ONLY tableview did the auto-answer when there was > 1 rule possible
 */
 
 void main() {

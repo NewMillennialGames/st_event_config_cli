@@ -353,18 +353,18 @@ FIXME:
           },
           bailQGenWhenTrueCallbk: (QuestBase priorAnsweredQuest, int qIdx) {
             // print('bail out of creating question when returns true');
-            // List<ScreenWidgetArea> respList =
-            //     (priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>);
-            // return respList[qIdx]
-            //         .applicableWigetSlots(priorAnsweredQuest.appScreen)
-            //         .length <
-            //     1;
-            QTargetResolution newQtr =
-                priorAnsweredQuest.derivedQuestTargetAtAnswerIdx(
-              qIdx,
-              0,
-            );
-            return newQtr.possibleSlotsForAreaInScreen.length < 1;
+            List<ScreenWidgetArea> respList =
+                (priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>);
+            return respList[qIdx]
+                    .applicableWigetSlots(priorAnsweredQuest.appScreen)
+                    .length <
+                1;
+            // QTargetResolution newQtr =
+            //     priorAnsweredQuest.derivedQuestTargetAtAnswerIdx(
+            //   qIdx,
+            //   0,
+            // );
+            // return newQtr.possibleSlotsForAreaInScreen.length < 1;
           },
           newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
             return (priorAnsweredQuest.mainAnswer as Iterable<dynamic>).length;
@@ -472,14 +472,13 @@ FIXME:
             (QuestBase priorAnsweredQuest) {
           var selectedRules =
               priorAnsweredQuest.mainAnswer as Iterable<VisualRuleType>;
+          if (selectedRules.length < 1) return false;
 
           bool atLeastOneNeedsPrep = selectedRules.fold<bool>(
               false,
               (bool needsPrep, VisualRuleType vrt) =>
                   needsPrep || vrt.requiresRulePrepQuest);
-          return priorAnsweredQuest is RuleSelectQuest &&
-              selectedRules.length > 0 &&
-              atLeastOneNeedsPrep;
+          return priorAnsweredQuest is RuleSelectQuest && atLeastOneNeedsPrep;
         },
         //
         derivedQuestGen: DerivedQuestGenerator.singlePrompt(
@@ -523,20 +522,21 @@ FIXME:
           },
           newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
             // how many questions to generate
-            // var lstRules =
-            //     priorAnsweredQuest.mainAnswer as Iterable<VisualRuleType>;
-            // return lstRules
-            //     .where((rt) => rt.requiresVisRulePrepQuestion)
-            //     .length;
-
-            QTargetResolution newQtr =
-                priorAnsweredQuest.derivedQuestTargetAtAnswerIdx(
-              0,
-              0,
-            );
-            return newQtr.possibleRulesAtAnyTarget
+            var lstRules =
+                priorAnsweredQuest.mainAnswer as Iterable<VisualRuleType>;
+            return lstRules
                 .where((rt) => rt.requiresVisRulePrepQuestion)
                 .length;
+
+            // below does not work
+            // QTargetResolution newQtr =
+            //     priorAnsweredQuest.derivedQuestTargetAtAnswerIdx(
+            //   0,
+            //   0,
+            // );
+            // return newQtr.possibleRulesAtAnyTarget
+            //     .where((rt) => rt.requiresVisRulePrepQuestion)
+            //     .length;
           },
           newQuestIdGenFromPriorQuest: (
             QuestBase priorAnsweredQuest,

@@ -155,19 +155,19 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
     bool hasRule = visRuleTypeForAreaOrSlot != null;
     String visRuleName = visRuleTypeForAreaOrSlot?.name ?? '';
 
-    String intentName = '-' + precision.name;
+    String intentNm4Debug = ' (intent: ' + precision.name + ')';
     // if (precision.targetComplete) {
     //   //
     //   intentName = '';
     // }
-    if (area == null) return screenName + intentName;
+    if (area == null) return screenName + intentNm4Debug;
     if (slot == null)
       return screenName +
           '-' +
           area +
           (hasRule ? '-$visRuleName' : '') +
-          intentName;
-    if (!hasRule) return screenName + '-' + area + '-' + slot + intentName;
+          intentNm4Debug;
+    if (!hasRule) return screenName + '-' + area + '-' + slot + intentNm4Debug;
     return screenName +
         '-' +
         area +
@@ -175,7 +175,7 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
         slot +
         '-' +
         visRuleName +
-        intentName;
+        intentNm4Debug;
   }
 
   bool get isEventConfigQuest =>

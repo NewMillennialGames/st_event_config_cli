@@ -7,6 +7,8 @@ part of EvCfgEnums;
 //   VisualRuleType.themePreference,
 // ];
 
+const Map<int, String> _fldPosLookupMap = {0: '1st', 1: '2nd', 2: '3rd'};
+
 @JsonEnum()
 enum VisualRuleType {
   /*  generalDialogFlow is a placeholder value
@@ -433,8 +435,7 @@ List<NewQuestPerPromptOpts> _getQuestPromptOptsForDataFieldName(
     int questIdx,
     int promptIdx,
   ) {
-    var fldNumLookup = {0: '1st', 1: '2nd', 2: '3rd'};
-    String pos = fldNumLookup[promptIdx] ?? '-$promptIdx-';
+    String pos = _fldPosLookupMap[promptIdx] ?? '-$promptIdx-';
     return [
       pos,
       priorAnsweredQuest.targetPath,
@@ -460,6 +461,7 @@ List<NewQuestPerPromptOpts> _getQuestPromptOptsForDataFieldName(
   }
 
   List<NewQuestPerPromptOpts> perPromptDetails = [];
+  int promptInstanceIdx = 0;
   for (int i = 0; i < numOfFieldsToSpecify; i++) {
     // adds 2 prompts for each field question
     perPromptDetails.addAll([
@@ -469,7 +471,7 @@ List<NewQuestPerPromptOpts> _getQuestPromptOptsForDataFieldName(
         promptTemplArgGen: _promptTemplArgGenFunc,
         answerChoiceGenerator: _answerChoiceGeneratorFunc,
         newRespCastFunc: _newRespCastFunc,
-        instanceIdx: i,
+        instanceIdx: promptInstanceIdx,
       ),
       NewQuestPerPromptOpts<bool>(
         'Sort Ascending?',
@@ -489,9 +491,10 @@ List<NewQuestPerPromptOpts> _getQuestPromptOptsForDataFieldName(
         ) {
           return ['no', 'yes'];
         },
-        instanceIdx: i,
+        instanceIdx: promptInstanceIdx + 1,
       ),
     ]);
+    promptInstanceIdx += 2;
   }
   return perPromptDetails;
 }

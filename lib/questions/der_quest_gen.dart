@@ -197,8 +197,9 @@ class DerivedQuestGenerator {
   }
 
   List<QuestBase> getDerivedAutoGenQuestions(
-    QuestBase answeredQuest,
-  ) {
+    QuestBase answeredQuest, {
+    String matcherDescrip4Debug = '',
+  }) {
     /* use existing answered Question
     plus logic defined in both this and perPromptDetails
     to build and return a list of new Questions
@@ -207,7 +208,7 @@ class DerivedQuestGenerator {
 
     if (newQuestCount < 1) {
       print(
-        'DeQuestGen.getDerivedAutoGenQuestions bailed empty due to:\nnewQuestCount: $newQuestCount',
+        'DeQuestGen.getDerivedAutoGenQuestions aborted due to:\n\tnewQuestCount: $newQuestCount from matcher:\n\t$matcherDescrip4Debug',
       );
       return [];
     }
@@ -233,7 +234,7 @@ class DerivedQuestGenerator {
             newQIdx,
           )) {
         print(
-          'skipping Q# $newQIdx for bailQGenWhenTrueCallbk; new derived quests generated',
+          'skipping Q# $newQIdx on ${answeredQuest.questId} for bailQGenWhenTrueCallbk; no derived quest generated from matcher $matcherDescrip4Debug',
         );
         continue;
       }

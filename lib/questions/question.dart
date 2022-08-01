@@ -613,9 +613,11 @@ class RuleSelectQuest extends QuestBase {
       targetPathIsComplete,
       'target must be complete in a rule select question!',
     );
-    List<VisualRuleType> rulesOffered =
-        qTargetResolution.possibleRulesAtAnyTarget;
-    VisualRuleType selRule = rulesOffered[newQuestIdx];
+    // List<VisualRuleType> rulesOffered =
+    //     qTargetResolution.possibleRulesAtAnyTarget;
+
+    var selectedRules = mainAnswer as List<VisualRuleType>;
+    VisualRuleType selRule = selectedRules[newQuestIdx];
     TargetPrecision newPrecision = selRule.requiresRulePrepQuest
         ? TargetPrecision.rulePrep
         : TargetPrecision.ruleDetailVisual;

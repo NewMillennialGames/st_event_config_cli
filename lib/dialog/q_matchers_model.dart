@@ -196,12 +196,15 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
   }
 
   List<QuestBase> getDerivedAutoGenQuestions(QuestBase answeredQuest) {
-    DerivedQuestGenerator dqg = activeDqg(answeredQuest); // <AnsTypOfMatched>
+    DerivedQuestGenerator dqg = activeDqg(answeredQuest);
     if (dqg.isNoopGenerator) {
-      print('Warn: bailing getDerivedAutoGenQuestions because dqg is a no-op');
+      print('Err: bailing getDerivedAutoGenQuestions because dqg is a no-op');
       return [];
     }
-    return dqg.getDerivedAutoGenQuestions(answeredQuest);
+    return dqg.getDerivedAutoGenQuestions(
+      answeredQuest,
+      matcherDescrip4Debug: this.matcherDescrip,
+    );
   }
 
   AnsTypOfMatched getTypedAnswer(QuestBase priorAnsweredQuest) {
