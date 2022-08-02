@@ -508,101 +508,17 @@ extension BehaviorRuleTypeExt1 on BehaviorRuleType {
   bool get requiresRulePrepQuestion => false;
 }
 
-enum RuleSelectOffsetBehavior {
+enum RuleSelectionOffsetBehavior {
+  /* for handling questions in which user-answer
+    is split between multiple matchers
+    eg some rules requiring prep-question
+      and others going straight for rule-detail
+  */
   none,
   selectFromVrtNeedPrep,
   selectFromVrtNoPrep,
 }
 
-extension RuleSelectOffsetBehaviorExt1 on RuleSelectOffsetBehavior {
-  // return properties needed on RuleSelectQuest instance
-
-  VisualRuleType selectedVrtByAdjustedIndex(
-    List<VisualRuleType> lstVrt,
-    int questIdx,
-  ) {
-    /*  this method takes a list of VisualRuleType
-        and a question index, and does the logic to figure
-        out which CONVERTED index to use on the orginal
-        list to select the correct VisualRuleType
-        for question generation
-        (depending on whether we're looking for those
-        requiring rule prep or those NOT needing prep)
-    */
-    if (this == RuleSelectOffsetBehavior.none) return lstVrt[questIdx];
-
-    List<VisualRuleType> sublist = lstVrt.sublist(0, questIdx);
-
-    int countNoPrepB4IdxPos =
-        sublist.where((vrt) => !vrt.requiresRulePrepQuest).length;
-    int countNeedsPrepB4IdxPos =
-        sublist.where((vrt) => vrt.requiresRulePrepQuest).length;
-
-    switch (this) {
-      case RuleSelectOffsetBehavior.none:
-        return lstVrt[questIdx];
-      case RuleSelectOffsetBehavior.selectFromVrtNeedPrep:
-        return lstVrt[questIdx - countNoPrepB4IdxPos];
-      case RuleSelectOffsetBehavior.selectFromVrtNoPrep:
-        return lstVrt[questIdx - countNeedsPrepB4IdxPos];
-    }
-  }
-
-  int derQuestCountFromSublist(List<VisualRuleType> lstVrt) {
-    switch (this) {
-      case RuleSelectOffsetBehavior.none:
-        return lstVrt.length;
-      case RuleSelectOffsetBehavior.selectFromVrtNeedPrep:
-        return lstVrt.where((vrt) => vrt.requiresRulePrepQuest).length;
-      case RuleSelectOffsetBehavior.selectFromVrtNoPrep:
-        return lstVrt.where((vrt) => !vrt.requiresRulePrepQuest).length;
-    }
-  }
-}
-
-// String Quest2Str(
-//   AppScreen screen,
-//   ScreenWidgetArea screenArea,
-//   ScreenAreaWidgetSlot? slotInArea,
-// ) {
-//   bool isAreaScopedRule = slotInArea == null;
-//   final List<dynamic> valsDyn = [
-//     screen,
-//     screenArea,
-//     // valsDyn.length (of 2 or3) will inform depth of rule being created
-//     if (!isAreaScopedRule) slotInArea,
-//   ];
-
-//   switch (this) {
-//     case VisualRuleType.sort:
-//       return RuleTemplStr.sort.makeRuleQuest2Str(
-//         this,
-//         isAreaScopedRule,
-//         valsDyn,
-//       );
-//     case VisualRuleType.group:
-//       return RuleTemplStr.group.makeRuleQuest2Str(
-//         this,
-//         isAreaScopedRule,
-//         valsDyn,
-//       );
-//     case VisualRuleType.filter:
-//       return RuleTemplStr.filter.makeRuleQuest2Str(
-//         this,
-//         isAreaScopedRule,
-//         valsDyn,
-//       );
-//     case VisualRuleType.format:
-//       return RuleTemplStr.format.makeRuleQuest2Str(
-//         this,
-//         isAreaScopedRule,
-//         valsDyn,
-//       );
-//     case VisualRuleType.show:
-//       return RuleTemplStr.show.makeRuleQuest2Str(
-//         this,
-//         isAreaScopedRule,
-//         valsDyn,
-//       );
-//   }
+// extension RuleSelectionOffsetBehaviorExt1 on RuleSelectionOffsetBehavior {
+//   // return properties needed on RuleSelectQuest instance
 // }

@@ -239,65 +239,6 @@ abstract class QuestBase with EquatableMixin {
     // return qTargetResolution.copyWith();
   }
 
-  DerivedQuestGenerator getDerivedRuleQuestGenViaVisType(
-    int newQuIdx,
-    VisualRuleType? optRuleTypeToCreateDqg,
-    RuleTypeFilterFunction? filterFunc,
-  ) {
-    /*  uses a VisualRuleType to dynamically build a DerivedQuestGenerator
-    
-    ONLY returns a DQG intended create VISIBLE rule-DETAIL questions
-          may be invoked on (this) EITHER a RuleSelectQuest or RulePrepQuest
-
-    called by q_cascade_dispatch
-      to build a DerivedQuestGenerator
-      from answers to this (current question)
-    */
-    assert(
-      this is RuleSelectQuest || this is RulePrepQuest,
-      'cant generate rule-detail quests on QID: "${this.questId}" because its not a rule SELECT or PREP type',
-    );
-    assert(targetPathIsComplete, 'target must be complete to run this method');
-
-    // when this is RulePrepQuest, we're only dealing with ONE VisualRuleType; so create 1 derived
-    int newQuestCountToGenerate = 1;
-    VisualRuleType? selRule =
-        this is RulePrepQuest ? visRuleTypeForAreaOrSlot : null;
-
-    if (this is RuleSelectQuest) {
-      // answer is a list so may create MULTIPLE derived questions
-      List<VisualRuleType> selRules = this.mainAnswer as List<VisualRuleType>;
-      if (filterFunc != null) {
-        selRules = selRules.where(filterFunc).toList();
-      } else {
-        // skip VRTs that requiresRulePrepQuest;  another matcher will handle those
-        selRules = selRules.where((vrt) => !vrt.requiresRulePrepQuest).toList();
-      }
-      selRule = selRules[newQuIdx];
-      newQuestCountToGenerate = selRules.length;
-      print(
-        'INFO: dynamic DQG from type selected ${selRule.name.toUpperCase()} for $newQuIdx  (${(optRuleTypeToCreateDqg?.name ?? '_noVrtArg').toUpperCase()} could be used instead)',
-      );
-    }
-    VisualRuleType ruleForNextQuestion =
-        optRuleTypeToCreateDqg ?? selRule ?? visRuleTypeForAreaOrSlot!;
-
-    String instanceTypeUC = this.runtimeType.toString().toUpperCase();
-    print(
-      'INFO: getDerivedRuleQuestGenViaVisType creating question for: ${ruleForNextQuestion.name.toUpperCase()} from a $instanceTypeUC question',
-    );
-
-    var newTarg = qTargetResolution.copyWith(
-      visRuleTypeForAreaOrSlot: ruleForNextQuestion,
-      precision: TargetPrecision.ruleDetailVisual,
-    );
-    return ruleForNextQuestion.makeQuestGenForRuleType(
-      this,
-      newTarg,
-      newQuestCountToGenerate,
-    );
-  }
-
   bool containsPromptWhere(bool Function(QuestPromptInstance qpi) promptTest) {
     // check if this contains an instance that matches promptTest
     for (QuestPromptInstance qpi in qPromptCollection.prompts) {
@@ -571,7 +512,84 @@ class RegionTargetQuest extends QuestBase {
   }
 }
 
-class RuleSelectQuest extends QuestBase {
+abstract class SelectAndPrepQBase extends QuestBase {
+  //
+  SelectAndPrepQBase(
+    QTargetResolution qTargetIntent,
+    QPromptCollection qDefCollection, {
+    String? questId,
+  }) : super(qTargetIntent, qDefCollection, questId: questId) {
+    assert(qTargetIntent.appScreen != AppScreen.eventConfiguration, 'wtf');
+    assert(qTargetIntent.screenWidgetArea != null, 'wtf');
+    assert(
+      qTargetIntent.visRuleTypeForAreaOrSlot != null ||
+          qTargetIntent.behRuleTypeForAreaOrSlot != null,
+      'must contain an explicit rule type',
+    );
+  }
+
+  DerivedQuestGenerator getDerivedRuleQuestGenViaVisType(
+    // int newQuIdx,
+    // VisualRuleType? optRuleTypeToCreateDqg,
+    // RuleTypeFilterFunction? filterFunc,
+    QTargetResolution newQtr,
+  ) {
+    /*  uses a VisualRuleType to dynamically build a DerivedQuestGenerator
+    
+    ONLY returns a DQG intended create VISIBLE rule-DETAIL questions
+          may be invoked on (this) EITHER a RuleSelectQuest or RulePrepQuest
+
+    called by q_cascade_dispatch
+      to build a DerivedQuestGenerator
+      from answers to this (current question)
+    */
+    assert(
+      this is RuleSelectQuest || this is RulePrepQuest,
+      'cant generate rule-detail quests on QID: "${this.questId}" because its not a rule SELECT or PREP type',
+    );
+    assert(targetPathIsComplete, 'target must be complete to run this method');
+
+    // when this is RulePrepQuest, we're only dealing with ONE VisualRuleType; so create 1 derived
+    // int newQuestCountToGenerate = 1;
+    // VisualRuleType? selRule =
+    //     this is RulePrepQuest ? visRuleTypeForAreaOrSlot : null;
+
+    // if (this is RuleSelectQuest) {
+    //   // answer is a list so may create MULTIPLE derived questions
+    //   List<VisualRuleType> selRules = this.mainAnswer as List<VisualRuleType>;
+    //   if (filterFunc != null) {
+    //     selRules = selRules.where(filterFunc).toList();
+    //   } else {
+    //     // skip VRTs that requiresRulePrepQuest;  another matcher will handle those
+    //     selRules = selRules.where((vrt) => !vrt.requiresRulePrepQuest).toList();
+    //   }
+    //   selRule = selRules[newQuIdx];
+    //   newQuestCountToGenerate = selRules.length;
+    //   print(
+    //     'INFO: dynamic DQG from type selected ${selRule.name.toUpperCase()} for $newQuIdx  (${(optRuleTypeToCreateDqg?.name ?? '_noVrtArg').toUpperCase()} could be used instead)',
+    //   );
+    // }
+    // VisualRuleType ruleForNextQuestion =
+    //     optRuleTypeToCreateDqg ?? selRule ?? visRuleTypeForAreaOrSlot!;
+
+    // String instanceTypeUC = this.runtimeType.toString().toUpperCase();
+    // print(
+    //   'INFO: getDerivedRuleQuestGenViaVisType creating question for: ${ruleForNextQuestion.name.toUpperCase()} from a $instanceTypeUC question',
+    // );
+
+    // var newTarg = qTargetResolution.copyWith(
+    //   visRuleTypeForAreaOrSlot: ruleForNextQuestion,
+    //   precision: TargetPrecision.ruleDetailVisual,
+    // );
+    return newQtr.visRuleTypeForAreaOrSlot!.makeQuestGenForRuleType(
+      this,
+      newQtr,
+      1,
+    );
+  }
+}
+
+class RuleSelectQuest extends SelectAndPrepQBase {
   /*  this class behaves very differently
       from other QuestBase instances
       because its answer can carry BOTH
@@ -614,8 +632,8 @@ class RuleSelectQuest extends QuestBase {
 
   QTargetResolution derivedQuestTargetAtAnswerIdxRuleSelection(
     int newQuestIdx, {
-    RuleSelectOffsetBehavior selectionOffsetBehavior =
-        RuleSelectOffsetBehavior.selectFromVrtNeedPrep,
+    RuleSelectionOffsetBehavior selectionOffsetBehavior =
+        RuleSelectionOffsetBehavior.selectFromVrtNeedPrep,
   }) {
     /* rule selection questions get confusing when user
       selects a mix of rules that both DO and DO NOT 
@@ -650,12 +668,24 @@ class RuleSelectQuest extends QuestBase {
       'target must be complete (fully resolved) within a rule select question!',
     );
     //
-    // String userSelectedOptions = _firstPromptAnswers.answer;
+    List<VisualRuleType> lstVrt = mainAnswer as List<VisualRuleType>;
 
-    VisualRuleType selRule = selectionOffsetBehavior.selectedVrtByAdjustedIndex(
-      mainAnswer as List<VisualRuleType>,
-      newQuestIdx,
-    );
+    VisualRuleType selRule;
+    switch (selectionOffsetBehavior) {
+      case RuleSelectionOffsetBehavior.none:
+        selRule = lstVrt[newQuestIdx];
+        break;
+      case RuleSelectionOffsetBehavior.selectFromVrtNeedPrep:
+        selRule = lstVrt
+            .where((vrt) => vrt.requiresRulePrepQuest)
+            .toList()[newQuestIdx];
+        break;
+      case RuleSelectionOffsetBehavior.selectFromVrtNoPrep:
+        selRule = lstVrt
+            .where((vrt) => !vrt.requiresRulePrepQuest)
+            .toList()[newQuestIdx];
+        break;
+    }
 
     TargetPrecision newPrecision = selRule.requiresRulePrepQuest
         ? TargetPrecision.rulePrep
@@ -666,14 +696,23 @@ class RuleSelectQuest extends QuestBase {
     );
   }
 
-  int derivedQuestCount(RuleSelectOffsetBehavior selectionOffsetBehavior) {
+  int derivedQuestCount(RuleSelectionOffsetBehavior selectionOffsetBehavior) {
     // how many derived questions to create (depends on rule-prep or rule-detail matcher)
-    return selectionOffsetBehavior
-        .derQuestCountFromSublist(mainAnswer as List<VisualRuleType>);
+    var lstVrt = mainAnswer as List<VisualRuleType>;
+    switch (selectionOffsetBehavior) {
+      case RuleSelectionOffsetBehavior.none:
+        return lstVrt.length;
+      case RuleSelectionOffsetBehavior.selectFromVrtNeedPrep:
+        return lstVrt.where((vrt) => vrt.requiresRulePrepQuest).length;
+      case RuleSelectionOffsetBehavior.selectFromVrtNoPrep:
+        return lstVrt.where((vrt) => !vrt.requiresRulePrepQuest).length;
+    }
+    // return selectionOffsetBehavior
+    //     .derQuestCountFromSublist(mainAnswer as List<VisualRuleType>);
   }
 }
 
-class RulePrepQuest extends QuestBase {
+class RulePrepQuest extends SelectAndPrepQBase {
   /*  intermediate step to guide creation of Rule detail questions
       not every rule-type requires one of these
   */

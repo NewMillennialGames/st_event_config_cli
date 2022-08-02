@@ -679,27 +679,26 @@ FIXME:
         derivedQuestGen: DerivedQuestGenerator.noop(),
         deriveQuestGenCallbk: (QuestBase priorAnsweredQuest, int newQuIdx) {
           //
-          List<VisualRuleType> answr =
-              priorAnsweredQuest.mainAnswer as List<VisualRuleType>;
-          // List<VisualRuleType> selRulesNoPrep =
-          //     answr.where((vrt) => !vrt.requiresRulePrepQuest).toList();
-          VisualRuleType selRule = answr[newQuIdx];
+          RuleSelectQuest ansRuleSelQuest =
+              priorAnsweredQuest as RuleSelectQuest;
 
-          // QTargetResolution newQtr =
-          //     priorAnsweredQuest.derivedQuestTargetAtAnswerIdx(
-          //   newQuIdx,
-          //   0,
-          // );
-          // VisualRuleType selRule = newQtr.visRuleTypeForAreaOrSlot!;
+          QTargetResolution newQtr =
+              ansRuleSelQuest.derivedQuestTargetAtAnswerIdxRuleSelection(
+            newQuIdx,
+            selectionOffsetBehavior:
+                RuleSelectionOffsetBehavior.selectFromVrtNoPrep,
+          );
+
+          VisualRuleType selRule = newQtr.visRuleTypeForAreaOrSlot!;
           // bail out if requiresVisRulePrepQuestion
           if (selRule.requiresVisRulePrepQuestion)
             return DerivedQuestGenerator.noop();
 
-          return priorAnsweredQuest.getDerivedRuleQuestGenViaVisType(
-            newQuIdx,
-            selRule,
-            null,
-          );
+          return ansRuleSelQuest.getDerivedRuleQuestGenViaVisType(newQtr
+              // newQuIdx,
+              // selRule,
+              // null,
+              );
         },
       ),
       QuestMatcher<List<VisualRuleType>, List<String>>(
@@ -733,15 +732,30 @@ FIXME:
         },
         //
         derivedQuestGen: DerivedQuestGenerator.noop(),
-        deriveQuestGenCallbk:
-            (QuestBase priorAnsweredRulePrepQuest, int newQuIdx) {
+        deriveQuestGenCallbk: (
+          QuestBase priorAnsweredRulePrepQuest,
+          int newQuIdx,
+        ) {
           // var answers = priorAnsweredQuest.mainAnswer as List<VisualRuleType>;
           // VisualRuleType selRule = answers[newQuIdx];
-          return priorAnsweredRulePrepQuest.getDerivedRuleQuestGenViaVisType(
-            newQuIdx,
-            null,
-            null,
-          );
+          // return priorAnsweredRulePrepQuest.getDerivedRuleQuestGenViaVisType(
+          //   newQuIdx,
+          //   null,
+          //   null,
+          // );
+
+          RulePrepQuest ansRulePrepQuest =
+              priorAnsweredRulePrepQuest as RulePrepQuest;
+
+          QTargetResolution newQtr =
+              ansRulePrepQuest.derivedQuestTargetAtAnswerIdx(newQuIdx, 0);
+
+          // VisualRuleType selRule = newQtr.visRuleTypeForAreaOrSlot!;
+          return ansRulePrepQuest.getDerivedRuleQuestGenViaVisType(newQtr
+              // newQuIdx,
+              // selRule,
+              // null,
+              );
         },
       ),
     ];
