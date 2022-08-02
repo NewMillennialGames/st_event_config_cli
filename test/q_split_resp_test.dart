@@ -102,7 +102,7 @@ void main() {
       expect(
         _questMgr.exportableVisRuleQuestions.length,
         0,
-        reason: '2 new but not yet answered',
+        reason: '2 new rule quests but not yet answered',
       );
       //
       // now check that 2 questions were created
@@ -129,8 +129,8 @@ void main() {
       print(
         'appendNewQuestsOrInsertImplicitAnswers created:  prepCount: $prepCount  detailCount: $detailCount',
       );
-      expect(prepCount, 1, reason: '');
-      expect(detailCount, 1, reason: '');
+      expect(prepCount, 1, reason: 'need to ask # of group-by fields');
+      expect(detailCount, 1, reason: 'need to ask TV row style');
     },
     // skip: true,
   );

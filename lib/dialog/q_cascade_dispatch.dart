@@ -140,9 +140,9 @@ class QCascadeDispatcher {
       );
       //
     } else if (questJustAnswered.isRulePrepQuestion) {
-      print(
-        '\tUser has answered rule prep quest (normally # of pos to configure)',
-      );
+      // print(
+      //   '\tUser has answered rule prep quest (normally # of pos to configure)',
+      // );
       var _qMatchCollToGenRuleDetail =
           QMatchCollection(matchersToGenRuleDetailQuests);
       _qMatchCollToGenRuleDetail.appendNewQuestsOrInsertImplicitAnswers(
@@ -475,7 +475,7 @@ FIXME:
               false,
               (bool needsPrep, VisualRuleType vrt) =>
                   needsPrep || vrt.requiresRulePrepQuest);
-          return priorAnsweredQuest is RuleSelectQuest && atLeastOneNeedsPrep;
+          return atLeastOneNeedsPrep;
         },
         //
         derivedQuestGen: DerivedQuestGenerator.singlePrompt(
@@ -513,7 +513,7 @@ FIXME:
               newQuestIdx,
               promptIdx,
             );
-            String templ = newQtr.rulePromptTemplate;
+            String templ = newQtr.rulePromptTemplate(forRuleDetail: false);
             String promptArg1 = templ.format([newQtr.targetPath]);
             return [promptArg1];
           },
@@ -573,14 +573,10 @@ FIXME:
           ) {
             List<VisualRuleType> selectedScreenAreas =
                 (priorAnsweredQuest.mainAnswer as List<VisualRuleType>)
-                    .where((rt) => rt.requiresVisRulePrepQuestion)
+                    .where((vrt) => vrt.requiresRulePrepQuest)
                     .toList();
             VisualRuleType vrt = selectedScreenAreas[newQuestIdx];
-            // QTargetResolution newQtr =
-            //     priorAnsweredQuest.derivedQuestTargetAtAnswerIdx(
-            //   newQuestIdx,
-            //   promptIdx,
-            // );
+            print('55555555  ${vrt.name}');
             // bail out so question not created
             if (!vrt.requiresVisRulePrepQuestion) return [];
             return ['0', '1', '2', '3'];
@@ -683,18 +679,18 @@ FIXME:
         derivedQuestGen: DerivedQuestGenerator.noop(),
         deriveQuestGenCallbk: (QuestBase priorAnsweredQuest, int newQuIdx) {
           //
-          // List<VisualRuleType> answr =
-          //     priorAnsweredQuest.mainAnswer as List<VisualRuleType>;
-          // // List<VisualRuleType> selRulesNoPrep =
-          // //     answr.where((vrt) => !vrt.requiresRulePrepQuest).toList();
-          // VisualRuleType selRule = answr[newQuIdx];
+          List<VisualRuleType> answr =
+              priorAnsweredQuest.mainAnswer as List<VisualRuleType>;
+          // List<VisualRuleType> selRulesNoPrep =
+          //     answr.where((vrt) => !vrt.requiresRulePrepQuest).toList();
+          VisualRuleType selRule = answr[newQuIdx];
 
-          QTargetResolution newQtr =
-              priorAnsweredQuest.derivedQuestTargetAtAnswerIdx(
-            newQuIdx,
-            0,
-          );
-          VisualRuleType selRule = newQtr.visRuleTypeForAreaOrSlot!;
+          // QTargetResolution newQtr =
+          //     priorAnsweredQuest.derivedQuestTargetAtAnswerIdx(
+          //   newQuIdx,
+          //   0,
+          // );
+          // VisualRuleType selRule = newQtr.visRuleTypeForAreaOrSlot!;
           // bail out if requiresVisRulePrepQuestion
           if (selRule.requiresVisRulePrepQuestion)
             return DerivedQuestGenerator.noop();

@@ -251,10 +251,13 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
   String get areaNmUpper => (screenWidgetArea?.name ?? '_AREA').toUpperCase();
   String get slotNmUpper => (slotInArea?.name ?? '_SLOT').toUpperCase();
 
-  String get rulePromptTemplate {
-    if (visRuleTypeForAreaOrSlot == null) return '';
+  String rulePromptTemplate({
+    bool forRuleDetail = false,
+  }) {
+    if (visRuleTypeForAreaOrSlot == null)
+      return '{0}   (${forRuleDetail ? 'Detail' : 'Prep'})';
     VisualRuleType curRule = visRuleTypeForAreaOrSlot!;
-    return curRule.requiresVisRulePrepQuestion
+    return (curRule.requiresVisRulePrepQuestion && !forRuleDetail)
         ? curRule.prepTemplate
         : curRule.detailTemplate;
   }
