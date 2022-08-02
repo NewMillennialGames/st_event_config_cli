@@ -203,9 +203,10 @@ abstract class QuestBase with EquatableMixin {
       captureAndCast,
     );
     return RegionTargetQuest(
-        targIntent.copyWith(precision: TargetPrecision.targetLevel),
-        qDefCollection,
-        questId: questId);
+      targIntent.copyWith(precision: TargetPrecision.targetLevel),
+      qDefCollection,
+      questId: questId,
+    );
   }
 
   QuestPromptInstance? getNextUserPromptIfExists() {
@@ -213,7 +214,7 @@ abstract class QuestBase with EquatableMixin {
     QuestPromptInstance? nextQpi =
         qPromptCollection.getNextUserPromptIfExists();
     if (nextQpi == null) {
-      // out of Quest2s
+      // out of Questions
     }
     return nextQpi;
   }
@@ -254,8 +255,9 @@ abstract class QuestBase with EquatableMixin {
     */
     assert(
       this is RuleSelectQuest || this is RulePrepQuest,
-      'cant produce detail quests on ${this.questId} because its not a SELECT or PREP quest type',
+      'cant generate rule-detail quests on QID: "${this.questId}" because its not a rule SELECT or PREP type',
     );
+    assert(targetPathIsComplete, 'target must be complete to run this method');
 
     // when this is RulePrepQuest, we're only dealing with ONE VisualRuleType; so create 1 derived
     int newQuestCountToGenerate = 1;
@@ -352,9 +354,6 @@ abstract class QuestBase with EquatableMixin {
   int get countChoicesInFirstPrompt =>
       qPromptCollection.countChoicesInFirstPrompt;
 
-  // IntRange get userRespCountRangeForTest =>
-  //     qTargetResolution.userRespCountRangeForTest;
-
   List<VisRuleQuestType> get embeddedQuestTypes =>
       qPromptCollection.embeddedQuestTypes;
 
@@ -362,13 +361,6 @@ abstract class QuestBase with EquatableMixin {
       qTargetResolution.requiresVisRulePrepQuestion;
   bool get requiresBehRulePrepQuestion =>
       qTargetResolution.requiresBehRulePrepQuestion;
-
-  bool get doesCreateDerivedQuests =>
-      respCascadePatternEm != QRespCascadePatternEm.noCascade;
-
-  // respCascadePatternEm overridden in subclasses
-  QRespCascadePatternEm get respCascadePatternEm =>
-      QRespCascadePatternEm.noCascade;
 
   // derivedQuestConstructor overridden in subclasses
   QuestFactorytSignature get derivedQuestConstructor =>
@@ -425,8 +417,6 @@ abstract class QuestBase with EquatableMixin {
   BehaviorRuleType? get behRuleTypeForAreaOrSlot =>
       qTargetResolution.behRuleTypeForAreaOrSlot;
   //
-  // below controls how each Quest2 causes cascade creation of new Quest2s
-  bool get generatesNoNewQuestions => !doesCreateDerivedQuests;
   bool get addsRuleDetailQuestsForSlotOrArea =>
       isRuleSelectionQuestion || isRulePrepQuestion;
 
@@ -474,10 +464,10 @@ class EventLevelCfgQuest extends QuestBase {
         'target should not be specified at this level');
   }
 
-  @override
-  QRespCascadePatternEm get respCascadePatternEm => isSelectScreensQuestion
-      ? QRespCascadePatternEm.respCreatesWhichAreaInScreenQuestions
-      : QRespCascadePatternEm.noCascade;
+  // @override
+  // QRespCascadePatternEm get respCascadePatternEm => isSelectScreensQuestion
+  //     ? QRespCascadePatternEm.respCreatesWhichAreaInScreenQuestions
+  //     : QRespCascadePatternEm.noCascade;
 
   @override
   QuestFactorytSignature get derivedQuestConstructor =>
@@ -524,10 +514,10 @@ class RegionTargetQuest extends QuestBase {
     );
   }
 
-  @override // && !qTargetResolution.targetComplete
-  QRespCascadePatternEm get respCascadePatternEm => _areaAlreadySet
-      ? QRespCascadePatternEm.respCreatesWhichSlotOfAreaQuestions
-      : QRespCascadePatternEm.respCreatesWhichAreaInScreenQuestions;
+  // @override // && !qTargetResolution.targetComplete
+  // QRespCascadePatternEm get respCascadePatternEm => _areaAlreadySet
+  //     ? QRespCascadePatternEm.respCreatesWhichSlotOfAreaQuestions
+  //     : QRespCascadePatternEm.respCreatesWhichAreaInScreenQuestions;
 
   @override
   QuestFactorytSignature get derivedQuestConstructor => targetPathIsComplete
@@ -600,11 +590,12 @@ class RuleSelectQuest extends QuestBase {
   }
 
   @override
-  QRespCascadePatternEm get respCascadePatternEm =>
-      QRespCascadePatternEm.respCreatesRulePrepQuestions;
-
-  @override
-  QuestFactorytSignature get derivedQuestConstructor => QuestBase.rulePrepQuest;
+  QuestFactorytSignature get derivedQuestConstructor {
+    return QuestBase.rulePrepQuest;
+    // throw UnimplementedError(
+    //   'you should be calling derivedQuestConstructorRuleSelection (only exists on this class)',
+    // );
+  }
 
   @override
   QTargetResolution derivedQuestTargetAtAnswerIdx(
@@ -616,6 +607,10 @@ class RuleSelectQuest extends QuestBase {
       'you should be calling derivedQuestTargetAtAnswerIdxRuleSelection (only exists on this class)',
     );
   }
+
+  // replacements for overrides above
+  // QuestFactorytSignature derivedQuestConstructorRuleSelection(RuleSelectOffsetBehavior selectionOffsetBehavior) =>
+  //     QuestBase.rulePrepQuest;
 
   QTargetResolution derivedQuestTargetAtAnswerIdxRuleSelection(
     int newQuestIdx, {
@@ -630,18 +625,18 @@ class RuleSelectQuest extends QuestBase {
       dont line up with the 
       because sublist of VRT does not line up 1-1
 
-      example:
-      select from following rules for ListView on MarketView  (multiple allowed)
+      example question scenario:
+      select from following rules for to config ListView on MarketView  (multiple allowed)
         0  Select ListView rowStyle  (eg teamVsTeamRanked)
         1  Set sort fields
         2  Set group-by fields
 
-        user selects 0,2  (rowstyle and group-by)
+        user selects 0,2  (rowStyle and group-by)
       group-by needs prep (how many grouping fields?)
-      and matcher for rule-prep will only build 1 derived question
+      and matcher for rule-prep will only build ONE derived question
       however, questIdx 0 (#1) will select rowStyle, not group-by
 
-      so we need methods to convert 0 into 2
+      so we need methods to convert questIdx 0 into index position #2
       so that derivedQuestTargetAtAnswerIdx (QTargetResolution) 
       gets group-by and not rowStyle
       as its VisualRuleType
@@ -698,9 +693,9 @@ class RulePrepQuest extends QuestBase {
     );
   }
 
-  @override
-  QRespCascadePatternEm get respCascadePatternEm =>
-      QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions;
+  // @override
+  // QRespCascadePatternEm get respCascadePatternEm =>
+  //     QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions;
 
   @override
   QuestFactorytSignature get derivedQuestConstructor => createsBehavioralQuests
@@ -750,9 +745,9 @@ abstract class RuleQuestBaseAbs extends QuestBase {
   }
 
   // getters
-  @override
-  QRespCascadePatternEm get respCascadePatternEm =>
-      QRespCascadePatternEm.noCascade;
+  // @override
+  // QRespCascadePatternEm get respCascadePatternEm =>
+  //     QRespCascadePatternEm.noCascade;
 
   @override
   QuestFactorytSignature get derivedQuestConstructor {
