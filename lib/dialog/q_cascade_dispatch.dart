@@ -182,12 +182,9 @@ class QCascadeDispatcher {
     */
     return [
       QuestMatcher<List<AppScreen>, List<ScreenWidgetArea>>(
-        '''
-      match quest containing list of app-screens
-      that user wants to configure
-      and generate one question for each
-      in which we ask which areas on that screen
-      need to be configured
+        '''match quest containing list of app-screens that user wants to configure
+      and generate one question for each in which we ask which areas
+      on that screen will be configured
 ''',
         EventLevelCfgQuest,
         questIdPatternMatchTest: (String answQid) =>
@@ -352,19 +349,19 @@ FIXME:
             ];
           },
           bailQGenWhenTrueCallbk: (QuestBase priorAnsweredQuest, int qIdx) {
-            // print('bail out of creating question when returns true');
-            List<ScreenWidgetArea> respList =
-                (priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>);
-            return respList[qIdx]
-                    .applicableWigetSlots(priorAnsweredQuest.appScreen)
-                    .length <
-                1;
-            // QTargetResolution newQtr =
-            //     priorAnsweredQuest.derivedQuestTargetAtAnswerIdx(
-            //   qIdx,
-            //   0,
-            // );
-            // return newQtr.possibleSlotsForAreaInScreen.length < 1;
+            // bail (return true) when no configurable slots exist in area of screen
+            // List<ScreenWidgetArea> respList =
+            //     (priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>);
+            // return respList[qIdx]
+            //         .applicableWigetSlots(priorAnsweredQuest.appScreen)
+            //         .length <
+            //     1;
+            QTargetResolution newQtr =
+                priorAnsweredQuest.derivedQuestTargetAtAnswerIdx(
+              qIdx,
+              0,
+            );
+            return newQtr.possibleSlotsForAreaInScreen.length < 1;
           },
           newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
             return (priorAnsweredQuest.mainAnswer as Iterable<dynamic>).length;
@@ -574,19 +571,18 @@ FIXME:
             int newQuestIdx,
             int promptIdx,
           ) {
-            // List<VisualRuleType> selectedScreenAreas =
-            //     (priorAnsweredQuest.mainAnswer as List<VisualRuleType>)
-            //         .where((rt) => rt.requiresVisRulePrepQuestion)
-            //         .toList();
-            // VisualRuleType vrt = selectedScreenAreas[newQuestIdx];
-            QTargetResolution newQtr =
-                priorAnsweredQuest.derivedQuestTargetAtAnswerIdx(
-              newQuestIdx,
-              promptIdx,
-            );
+            List<VisualRuleType> selectedScreenAreas =
+                (priorAnsweredQuest.mainAnswer as List<VisualRuleType>)
+                    .where((rt) => rt.requiresVisRulePrepQuestion)
+                    .toList();
+            VisualRuleType vrt = selectedScreenAreas[newQuestIdx];
+            // QTargetResolution newQtr =
+            //     priorAnsweredQuest.derivedQuestTargetAtAnswerIdx(
+            //   newQuestIdx,
+            //   promptIdx,
+            // );
             // bail out so question not created
-            if (!newQtr.visRuleTypeForAreaOrSlot!.requiresVisRulePrepQuestion)
-              return [];
+            if (!vrt.requiresVisRulePrepQuestion) return [];
             return ['0', '1', '2', '3'];
           },
           deriveTargetFromPriorRespCallbk: (
@@ -669,6 +665,7 @@ FIXME:
           Iterable<VisualRuleType> selRulesNoPrep =
               answr.where((vrt) => !vrt.requiresRulePrepQuest);
           bool atLeastOneHasNoPrep = selRulesNoPrep.length > 0;
+          print(')))))  atLeastOneHasNoPrep: $atLeastOneHasNoPrep');
           if (!atLeastOneHasNoPrep) return false;
 
           // print('validateUserAnswerAfterPatternMatchIsTrueCallback:');
@@ -814,8 +811,12 @@ List<QuestMatcher> _matchTargetCompleteAndGenRuleSelectQuests = [
       newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
         var selectedScreenAreas =
             priorAnsweredQuest.mainAnswer as Iterable<ScreenWidgetArea>;
-        var screenAreasWithRules = selectedScreenAreas.where((swa) =>
-            swa.applicableRuleTypes(priorAnsweredQuest.appScreen).length > 0);
+        var screenAreasWithRules = selectedScreenAreas.where(
+            (swa) => swa.isConfigureableOnScreen(priorAnsweredQuest.appScreen));
+
+        // print(
+        //   '(((((( screenAreasWithRules.len ${screenAreasWithRules.length}  (${qtr2.possibleRulesForAreaInScreen.length})',
+        // );
         return screenAreasWithRules.length;
       },
       newQuestIdGenFromPriorQuest: (
@@ -849,23 +850,18 @@ List<QuestMatcher> _matchTargetCompleteAndGenRuleSelectQuests = [
         int newQuestIdx,
         int promptIdx,
       ) {
-        // List<ScreenWidgetArea> selectedScreenAreas =
-        //     (priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>);
-        // var screenAreasWithRules = selectedScreenAreas
-        //     .where((swa) =>
-        //         swa.applicableRuleTypes(priorAnsweredQuest.appScreen).length >
-        //         0)
-        //     .toList();
+        List<ScreenWidgetArea> selectedScreenAreas =
+            (priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>);
+        var screenAreasWithRules = selectedScreenAreas
+            .where((swa) =>
+                swa.applicableRuleTypes(priorAnsweredQuest.appScreen).length >
+                0)
+            .toList();
 
-        QTargetResolution newQtr =
-            priorAnsweredQuest.derivedQuestTargetAtAnswerIdx(
-          newQuestIdx,
-          promptIdx,
-          forRuleSelection: true,
-        );
-        var screenAreasWithRules = newQtr.possibleAreasForScreen;
         ScreenWidgetArea area = screenAreasWithRules[newQuestIdx];
-        if (!area.isConfigureable) return [];
+        if (area.applicableRuleTypes(priorAnsweredQuest.appScreen).length < 1)
+          return [];
+
         return area
             .applicableRuleTypes(priorAnsweredQuest.appScreen)
             .map((e) => e.name)

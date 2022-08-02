@@ -542,7 +542,7 @@ class RegionTargetQuest extends QuestBase {
   }) {
     assert(
       isFullyAnswered,
-      'cant call this method before ? is answered!',
+      'cant call this method before question has been answered!',
     );
     assert(
       !targetPathIsComplete,
@@ -574,7 +574,9 @@ class RegionTargetQuest extends QuestBase {
         precision: _nextPrecision,
       );
     }
-    throw UnimplementedError('err: should have been one or the other');
+    throw UnimplementedError(
+      'err: should have been one or the other  ${mainAnswer.runtimeType}',
+    );
     // return qTargetResolution.copyWith();
   }
 }
@@ -611,11 +613,9 @@ class RuleSelectQuest extends QuestBase {
     );
     assert(
       targetPathIsComplete,
-      'target must be complete in a rule select question!',
+      'target must be complete (fully resolved) within a rule select question!',
     );
-    // List<VisualRuleType> rulesOffered =
-    //     qTargetResolution.possibleRulesAtAnyTarget;
-
+    //
     var selectedRules = mainAnswer as List<VisualRuleType>;
     VisualRuleType selRule = selectedRules[newQuestIdx];
     TargetPrecision newPrecision = selRule.requiresRulePrepQuest

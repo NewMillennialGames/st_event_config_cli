@@ -15,15 +15,15 @@ class CliQuestionPresenter implements QuestionPresenterIfc {
     QuestBase quest,
   ) {
     QuestPromptInstance? promptInst = quest.getNextUserPromptIfExists();
-    print(
-      'beginning askAndWaitForUserResponse with ${promptInst?.userPrompt ?? '-na'}',
-    );
+    // print(
+    //   'beginning askAndWaitForUserResponse with ${promptInst?.userPrompt ?? '-na'}',
+    // );
     // int pInstIdx = -1;
     while (promptInst != null) {
       // pInstIdx++;
-      print(
-        'askAndWaitForUserResponse debug ${promptInst.shouldAutoAnswer} with ${promptInst.autoAnswerIfAppropriate}',
-      );
+      // print(
+      //   'askAndWaitForUserResponse debug ${promptInst.shouldAutoAnswer} with ${promptInst.autoAnswerIfAppropriate}',
+      // );
       if (promptInst.shouldAutoAnswer &&
           (promptInst.autoAnswerIfAppropriate ?? "").isNotEmpty) {
         promptInst.collectResponse(promptInst.autoAnswerIfAppropriate!);

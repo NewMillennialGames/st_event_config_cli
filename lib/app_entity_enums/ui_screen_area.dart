@@ -25,7 +25,8 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
   // intentionally checking rules here (in addition to slots)
   // an area can be configurable EVEN IF it has ZERO
   // configurable slots (if it just has rules available)
-  bool get isConfigureable => true;
+  bool isConfigureableOnScreen(AppScreen screen) =>
+      true; // applicableRuleTypes(screen).length > 0;
   // this.applicableRuleTypes.length > 0 ||
   // this.applicableWigetSlots.length > 0;
 

@@ -35,6 +35,7 @@ class NewQuestPerPromptOpts<AnsType> {
   final int defaultAnswerIdx;
   final VisualRuleType? visRuleType;
   final VisRuleQuestType? visRuleQuestType;
+  // instanceIdx used to order prompts in multi-part questions
   final int instanceIdx;
   bool acceptsMultiResponses;
 
@@ -206,9 +207,15 @@ class DerivedQuestGenerator {
     */
     int newQuestCount = newQuestCountCalculator(answeredQuest);
 
+    // priscilla can make debugInfo differ based on debug-level;  example below
+    // Debug.info
+    String debugInfo = firstPromptOrNoOp;
+    // Debug.finer
+    // String debugInfo = matcherDescrip4Debug;
+
     if (newQuestCount < 1) {
       print(
-        'DeQuestGen.getDerivedAutoGenQuestions aborted due to:\n\tnewQuestCount: $newQuestCount from matcher:\n\t$matcherDescrip4Debug',
+        'DeQuestGen.getDerivedAutoGenQuestions aborted due to:\n\tnewQuestCount: $newQuestCount from matcher:\n\t$debugInfo',
       );
       return [];
     }
@@ -233,9 +240,9 @@ class DerivedQuestGenerator {
             answeredQuest,
             newQIdx,
           )) {
-        print(
-          'skipping Q# $newQIdx on ${answeredQuest.questId} for bailQGenWhenTrueCallbk; no derived quest generated from matcher $matcherDescrip4Debug',
-        );
+        // print(
+        //   'skipping Q# $newQIdx on ${answeredQuest.questId} for bailQGenWhenTrueCallbk; no derived quest generated from matcher $matcherDescrip4Debug',
+        // );
         continue;
       }
 
@@ -303,6 +310,11 @@ class DerivedQuestGenerator {
       newQuestConstructor = null;
     }
     return createdQuests;
+  }
+
+  String get firstPromptOrNoOp {
+    if (isNoopGenerator || perPromptDetails.length < 1) return 'noop_dqg';
+    return perPromptDetails.first.promptTemplate;
   }
 
   bool get isNoopGenerator =>

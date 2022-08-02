@@ -145,6 +145,7 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
   }
 
   // getters
+  String get firstDqgPrompt => derivedQuestGen.firstPromptOrNoOp;
   bool get producesBuilderRules => false;
   bool get usesMatchByQIdPatternCallback => questIdPatternMatchTest != null;
   bool get shouldValidateUserAnswer =>
