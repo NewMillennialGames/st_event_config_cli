@@ -182,10 +182,11 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
     if (isAPatternMatch) {
       //
       bool isNoopGenerator = this.derivedQuestGen.isNoopGenerator;
+      int strLen = min(120, matcherDescrip.length);
       String shortDesc = matcherDescrip
           .replaceAll("\n", "")
           .replaceAll("    ", " ")
-          .substring(0, 120)
+          .substring(0, strLen)
           .trimRight();
       // shortDesc = shortDesc;
       ;
