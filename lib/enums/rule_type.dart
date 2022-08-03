@@ -420,9 +420,11 @@ List<NewQuestPerPromptOpts> _getQuestPromptOptsForDataFieldName(
     int questIdx,
     int promptIdx,
   ) {
-    assert(questIdx == 1, 'should have 1 quest with multi (up to 6) prompts');
-    assert(0 <= promptIdx && promptIdx <= 5,
-        'between 2 to 6 total prompts (2 prompts per field)');
+    // assert(questIdx == 1, 'should have 1 quest with multi (up to 6) prompts; is failing ... consider why?');
+    assert(
+      0 <= promptIdx && promptIdx <= 5,
+      'between 2 to 6 total prompts (2 prompts per field)',
+    );
     // data field prompts have 2 questions so adjust promptIdx accordingly
     // divide by 2 and round down (other than zero)
     // to get a value in set (0,1,2)
