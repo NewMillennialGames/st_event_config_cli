@@ -708,14 +708,6 @@ class RuleSelectQuest extends SelectAndPrepQBase {
     );
   }
 
-  // int selRuleCount = lstVrt.length;
-  // int needPrepCount = 0;
-  // int noPrepCount = 0;
-  // for (VisualRuleType vrt in lstVrt) {
-  //   needPrepCount += vrt.requiresRulePrepQuest ? 1 : 0;
-  //   noPrepCount += !vrt.requiresRulePrepQuest ? 1 : 0;
-  // }
-
   int derivedQuestCount(RuleSelectionOffsetBehavior selectionOffsetBehavior) {
     // how many derived questions to create (depends on rule-prep or rule-detail matcher)
     var lstVrt = mainAnswer as List<VisualRuleType>;

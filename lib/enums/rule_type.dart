@@ -324,9 +324,6 @@ extension VisualRuleTypeExt1 on VisualRuleType {
 
             we need 1 of that set for each SLOT being configured
           */
-        // for (int i = 0; i < requiredPromptInstances; i++) {
-        // }
-
         List<NewQuestPerPromptOpts> qps = _getQuestPromptOptsForDataFieldName(
           thisVisRT,
           requiredPromptInstances,
@@ -339,13 +336,6 @@ extension VisualRuleTypeExt1 on VisualRuleType {
 
       case VisRuleQuestType.selectVisualComponentOrStyle:
         // specify desired style on area or slot
-
-        // List<TvAreaRowStyle> possibleVisStyles = prevAnswQuest
-        // .qTargetResolution
-        // .possibleVisCompStylesForTarget as List<TvAreaRowStyle>;
-
-        // List<TvAreaRowStyle> possibleVisStyles = newQTargRes
-        //     .possibleVisCompStylesForTarget as List<TvAreaRowStyle>;
         // hack
         List<TvAreaRowStyle> possibleVisStyles = TvAreaRowStyle.values;
 
@@ -389,13 +379,6 @@ extension VisualRuleTypeExt1 on VisualRuleType {
         /*  using QTargetResolution newQTargRes
               passed as argument above
           */
-        // List<VisualRuleType> selRules = requiredPromptInstances < 2
-        //     ? [newQTargRes.visRuleTypeForAreaOrSlot!]
-        //     : qb.mainAnswer as List<VisualRuleType>;
-
-        // VisualRuleType curRule = selRules.length <= newQidx
-        //     ? newQTargRes.visRuleTypeForAreaOrSlot!
-        //     : selRules[newQidx];
         return newQTargRes.copyWith(visRuleTypeForAreaOrSlot: this);
       },
     );
