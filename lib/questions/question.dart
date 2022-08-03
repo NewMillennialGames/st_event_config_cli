@@ -518,14 +518,18 @@ abstract class SelectAndPrepQBase extends QuestBase {
     QTargetResolution qTargetIntent,
     QPromptCollection qDefCollection, {
     String? questId,
-  }) : super(qTargetIntent, qDefCollection, questId: questId) {
+  }) : super(
+          qTargetIntent,
+          qDefCollection,
+          questId: questId,
+        ) {
     assert(qTargetIntent.appScreen != AppScreen.eventConfiguration, 'wtf');
     assert(qTargetIntent.screenWidgetArea != null, 'wtf');
-    assert(
-      qTargetIntent.visRuleTypeForAreaOrSlot != null ||
-          qTargetIntent.behRuleTypeForAreaOrSlot != null,
-      'must contain an explicit rule type',
-    );
+    // assert(
+    //   qTargetIntent.visRuleTypeForAreaOrSlot != null ||
+    //       qTargetIntent.behRuleTypeForAreaOrSlot != null,
+    //   'must contain an explicit rule type',
+    // );
   }
 
   DerivedQuestGenerator getDerivedRuleQuestGenViaVisType(
@@ -668,33 +672,43 @@ class RuleSelectQuest extends SelectAndPrepQBase {
       'target must be complete (fully resolved) within a rule select question!',
     );
     //
-    List<VisualRuleType> lstVrt = mainAnswer as List<VisualRuleType>;
-
+    List<VisualRuleType> lstUserSelVrt = mainAnswer as List<VisualRuleType>;
+    print('66666  lstUserSelVrt: $lstUserSelVrt---$questId');
     VisualRuleType selRule;
     switch (selectionOffsetBehavior) {
       case RuleSelectionOffsetBehavior.none:
-        selRule = lstVrt[newQuestIdx];
+        selRule = lstUserSelVrt[newQuestIdx];
         break;
       case RuleSelectionOffsetBehavior.selectFromVrtNeedPrep:
-        selRule = lstVrt
-            .where((vrt) => vrt.requiresRulePrepQuest)
-            .toList()[newQuestIdx];
+        List<VisualRuleType> selRulesNeedPrep =
+            lstUserSelVrt.where((vrt) => vrt.requiresRulePrepQuest).toList();
+        selRule = selRulesNeedPrep[newQuestIdx];
         break;
       case RuleSelectionOffsetBehavior.selectFromVrtNoPrep:
-        selRule = lstVrt
-            .where((vrt) => !vrt.requiresRulePrepQuest)
-            .toList()[newQuestIdx];
+        List<VisualRuleType> selRulesNoPrep =
+            lstUserSelVrt.where((vrt) => !vrt.requiresRulePrepQuest).toList();
+        selRule = selRulesNoPrep[newQuestIdx];
         break;
     }
-
     TargetPrecision newPrecision = selRule.requiresRulePrepQuest
         ? TargetPrecision.rulePrep
         : TargetPrecision.ruleDetailVisual;
+
+    print(
+        '77777  lstUserSelVrt: ${selRule.name}    newPrecision: ${newPrecision.name}');
     return qTargetResolution.copyWith(
       visRuleTypeForAreaOrSlot: selRule,
       precision: newPrecision,
     );
   }
+
+  // int selRuleCount = lstVrt.length;
+  // int needPrepCount = 0;
+  // int noPrepCount = 0;
+  // for (VisualRuleType vrt in lstVrt) {
+  //   needPrepCount += vrt.requiresRulePrepQuest ? 1 : 0;
+  //   noPrepCount += !vrt.requiresRulePrepQuest ? 1 : 0;
+  // }
 
   int derivedQuestCount(RuleSelectionOffsetBehavior selectionOffsetBehavior) {
     // how many derived questions to create (depends on rule-prep or rule-detail matcher)

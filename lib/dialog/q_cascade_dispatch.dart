@@ -508,10 +508,11 @@ FIXME:
             // String promptArg1 = templ.format([newTarg.targetPath]);
             // return [promptArg1];
 
-            QTargetResolution newQtr =
-                priorAnsweredQuest.derivedQuestTargetAtAnswerIdx(
+            QTargetResolution newQtr = (priorAnsweredQuest as RuleSelectQuest)
+                .derivedQuestTargetAtAnswerIdxRuleSelection(
               newQuestIdx,
-              promptIdx,
+              selectionOffsetBehavior:
+                  RuleSelectionOffsetBehavior.selectFromVrtNeedPrep,
             );
             String templ = newQtr.rulePromptTemplate(forRuleDetail: false);
             String promptArg1 = templ.format([newQtr.targetPath]);
@@ -557,10 +558,11 @@ FIXME:
             // );
             // return QuestionIdStrings.prepQuestForVisRule + newTarg.targetPath;
 
-            QTargetResolution newQtr =
-                priorAnsweredQuest.derivedQuestTargetAtAnswerIdx(
+            QTargetResolution newQtr = (priorAnsweredQuest as RuleSelectQuest)
+                .derivedQuestTargetAtAnswerIdxRuleSelection(
               newQuIdx,
-              0,
+              selectionOffsetBehavior:
+                  RuleSelectionOffsetBehavior.selectFromVrtNeedPrep,
             );
             return QuestionIdStrings.prepQuestForVisRule +
                 '-' +
@@ -594,9 +596,11 @@ FIXME:
             //   visRuleTypeForAreaOrSlot: vrt,
             //   precision: TargetPrecision.rulePrep,
             // );
-            return priorAnsweredQuest.derivedQuestTargetAtAnswerIdx(
+            return (priorAnsweredQuest as RuleSelectQuest)
+                .derivedQuestTargetAtAnswerIdxRuleSelection(
               newQuestIdx,
-              0,
+              selectionOffsetBehavior:
+                  RuleSelectionOffsetBehavior.selectFromVrtNeedPrep,
             );
           },
           newRespCastFunc: (
