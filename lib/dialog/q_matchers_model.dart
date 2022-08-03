@@ -191,7 +191,7 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
       // shortDesc = shortDesc;
       ;
       print(
-        'Matcher Hit -- QID: ${prevAnsweredQuest.questId}\n\thit -> "$shortDesc"\n\t(using: ${isNoopGenerator ? "CALLBACK" : "STATIC"} as source for DQG)',
+        '\n\tMatcher Hit -- QID: ${prevAnsweredQuest.questId}\n\t\thit -> "$shortDesc"\n\t\t(using: ${isNoopGenerator ? "CALLBACK" : "STATIC"} as source for DQG)',
       );
     }
     return isAPatternMatch;

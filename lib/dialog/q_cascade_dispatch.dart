@@ -92,9 +92,9 @@ class QCascadeDispatcher {
       String topTargets = (questJustAnswered.mainAnswer as List<AppScreen>)
           .fold<String>(
               '', (String allNames, AppScreen as) => allNames + as.name + '; ');
-      print(
-        '\tUser has specified ${topTargets} screens for configuration',
-      );
+      // print(
+      //   '\tUser has specified ${topTargets} screens for configuration',
+      // );
       QMatchCollection _qMatchCollToGenTarget =
           QMatchCollection(matchersToGenTargetingQuests);
       // next line will produce questions that are class RegionTargetQuest
@@ -578,7 +578,7 @@ FIXME:
                     .where((vrt) => vrt.requiresRulePrepQuest)
                     .toList();
             VisualRuleType vrt = selectedScreenAreas[newQuestIdx];
-            print('55555555  ${vrt.name}');
+            // print('VisualRuleType.name:  ${vrt.name}');
             // bail out so question not created
             if (!vrt.requiresVisRulePrepQuestion) return [];
             return ['0', '1', '2', '3'];
@@ -665,7 +665,7 @@ FIXME:
           Iterable<VisualRuleType> selRulesNoPrep =
               answr.where((vrt) => !vrt.requiresRulePrepQuest);
           bool atLeastOneHasNoPrep = selRulesNoPrep.length > 0;
-          print(')))))  atLeastOneHasNoPrep: $atLeastOneHasNoPrep');
+          // print('atLeastOneHasNoPrep: $atLeastOneHasNoPrep');
           if (!atLeastOneHasNoPrep) return false;
 
           // print('validateUserAnswerAfterPatternMatchIsTrueCallback:');
@@ -717,17 +717,13 @@ FIXME:
             qid.startsWith(QuestionIdStrings.prepQuestForVisRule),
         validateUserAnswerAfterPatternMatchIsTrueCallback:
             (QuestBase priorAnsweredQuest) {
-          print(
-            'rulePrep:  priorAnsweredQuest.mainAnswer: ${priorAnsweredQuest.mainAnswer as int}',
-          );
-          print(
-            '\tpriorAnsweredQuest.isRulePrepQuestion: ${priorAnsweredQuest.isRulePrepQuestion}',
-          );
-          print(
-            '\tpriorAnsweredQuest.targetPathIsComplete: ${priorAnsweredQuest.targetPathIsComplete}',
-          );
-          // List<String> rulePrepAnswers = priorAnsweredQuest.mainAnswer;
-          // assert(rulePrepAnswers.length > 0, '');
+          // print(
+          //   'rulePrep:  priorAnsweredQuest.mainAnswer: ${priorAnsweredQuest.mainAnswer as int}',
+          // );
+          // print(
+          //   '\tpriorAnsweredQuest.targetPathIsComplete: ${priorAnsweredQuest.targetPathIsComplete}',
+          // );
+
           // int desiredCount = int.tryParse(rulePrepAnswers.first) ?? 1;
           int desiredCount = priorAnsweredQuest.mainAnswer;
           return desiredCount > 0 &&
@@ -753,13 +749,7 @@ FIXME:
 
           QTargetResolution newQtr =
               ansRulePrepQuest.derivedQuestTargetAtAnswerIdx(newQuIdx, 0);
-
-          // VisualRuleType selRule = newQtr.visRuleTypeForAreaOrSlot!;
-          return ansRulePrepQuest.getDerivedRuleQuestGenViaVisType(newQtr
-              // newQuIdx,
-              // selRule,
-              // null,
-              );
+          return ansRulePrepQuest.getDerivedRuleQuestGenViaVisType(newQtr);
         },
       ),
     ];

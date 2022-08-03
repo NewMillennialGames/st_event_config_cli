@@ -124,7 +124,8 @@ void main() {
         detailCount += q.isRuleDetailQuestion ? 1 : 0;
         var userPrompt = q.firstPrompt.userPrompt.substring(0, 52);
         print(
-            'QuestMatcher created QID:  ${q.questId}\n\tprompt: $userPrompt\n\t(${q.isRulePrepQuestion ? "PREP ?" : "DETAIL ?"})');
+          'QuestMatcher created QID:  ${q.questId}\n\tprompt: $userPrompt\n\t(${q.isRulePrepQuestion ? "PREP ?" : "DETAIL ?"})',
+        );
       }
       print(
         'appendNewQuestsOrInsertImplicitAnswers created:  prepCount: $prepCount  detailCount: $detailCount',
