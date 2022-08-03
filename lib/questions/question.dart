@@ -203,9 +203,10 @@ abstract class QuestBase with EquatableMixin {
       captureAndCast,
     );
     return RegionTargetQuest(
-        targIntent.copyWith(precision: TargetPrecision.targetLevel),
-        qDefCollection,
-        questId: questId);
+      targIntent.copyWith(precision: TargetPrecision.targetLevel),
+      qDefCollection,
+      questId: questId,
+    );
   }
 
   QuestPromptInstance? getNextUserPromptIfExists() {
@@ -213,7 +214,7 @@ abstract class QuestBase with EquatableMixin {
     QuestPromptInstance? nextQpi =
         qPromptCollection.getNextUserPromptIfExists();
     if (nextQpi == null) {
-      // out of Quest2s
+      // out of Questions
     }
     return nextQpi;
   }
@@ -236,64 +237,6 @@ abstract class QuestBase with EquatableMixin {
     assert(isFullyAnswered, 'cant call this method before ? is answered!');
     throw UnimplementedError('should be overriden in subclass');
     // return qTargetResolution.copyWith();
-  }
-
-  DerivedQuestGenerator getDerivedRuleQuestGenViaVisType(
-    int newQuIdx,
-    VisualRuleType? optRuleTypeToCreateDqg,
-    RuleTypeFilterFunction? filterFunc,
-  ) {
-    /*  uses a VisualRuleType to dynamically build a DerivedQuestGenerator
-    
-    ONLY returns a DQG intended create VISIBLE rule-DETAIL questions
-          may be invoked on (this) EITHER a RuleSelectQuest or RulePrepQuest
-
-    called by q_cascade_dispatch
-      to build a DerivedQuestGenerator
-      from answers to this (current question)
-    */
-    assert(
-      this is RuleSelectQuest || this is RulePrepQuest,
-      'cant produce detail quests on ${this.questId} because its not a SELECT or PREP quest type',
-    );
-
-    // when this is RulePrepQuest, we're only dealing with ONE VisualRuleType; so create 1 derived
-    int newQuestCountToGenerate = 1;
-    VisualRuleType? selRule =
-        this is RulePrepQuest ? visRuleTypeForAreaOrSlot : null;
-
-    if (this is RuleSelectQuest) {
-      // answer is a list so may create MULTIPLE derived questions
-      List<VisualRuleType> selRules = this.mainAnswer as List<VisualRuleType>;
-      if (filterFunc != null) {
-        selRules = selRules.where(filterFunc).toList();
-      } else {
-        // skip VRTs that requiresRulePrepQuest;  another matcher will handle those
-        selRules = selRules.where((vrt) => !vrt.requiresRulePrepQuest).toList();
-      }
-      selRule = selRules[newQuIdx];
-      newQuestCountToGenerate = selRules.length;
-      print(
-        'INFO: dynamic DQG from type selected ${selRule.name.toUpperCase()} for $newQuIdx  (${(optRuleTypeToCreateDqg?.name ?? '_noVrtArg').toUpperCase()} could be used instead)',
-      );
-    }
-    VisualRuleType ruleForNextQuestion =
-        optRuleTypeToCreateDqg ?? selRule ?? visRuleTypeForAreaOrSlot!;
-
-    String instanceTypeUC = this.runtimeType.toString().toUpperCase();
-    print(
-      'INFO: getDerivedRuleQuestGenViaVisType creating question for: ${ruleForNextQuestion.name.toUpperCase()} from a $instanceTypeUC question',
-    );
-
-    var newTarg = qTargetResolution.copyWith(
-      visRuleTypeForAreaOrSlot: ruleForNextQuestion,
-      precision: TargetPrecision.ruleDetailVisual,
-    );
-    return ruleForNextQuestion.makeQuestGenForRuleType(
-      this,
-      newTarg,
-      newQuestCountToGenerate,
-    );
   }
 
   bool containsPromptWhere(bool Function(QuestPromptInstance qpi) promptTest) {
@@ -352,9 +295,6 @@ abstract class QuestBase with EquatableMixin {
   int get countChoicesInFirstPrompt =>
       qPromptCollection.countChoicesInFirstPrompt;
 
-  // IntRange get userRespCountRangeForTest =>
-  //     qTargetResolution.userRespCountRangeForTest;
-
   List<VisRuleQuestType> get embeddedQuestTypes =>
       qPromptCollection.embeddedQuestTypes;
 
@@ -362,13 +302,6 @@ abstract class QuestBase with EquatableMixin {
       qTargetResolution.requiresVisRulePrepQuestion;
   bool get requiresBehRulePrepQuestion =>
       qTargetResolution.requiresBehRulePrepQuestion;
-
-  bool get doesCreateDerivedQuests =>
-      respCascadePatternEm != QRespCascadePatternEm.noCascade;
-
-  // respCascadePatternEm overridden in subclasses
-  QRespCascadePatternEm get respCascadePatternEm =>
-      QRespCascadePatternEm.noCascade;
 
   // derivedQuestConstructor overridden in subclasses
   QuestFactorytSignature get derivedQuestConstructor =>
@@ -425,8 +358,6 @@ abstract class QuestBase with EquatableMixin {
   BehaviorRuleType? get behRuleTypeForAreaOrSlot =>
       qTargetResolution.behRuleTypeForAreaOrSlot;
   //
-  // below controls how each Quest2 causes cascade creation of new Quest2s
-  bool get generatesNoNewQuestions => !doesCreateDerivedQuests;
   bool get addsRuleDetailQuestsForSlotOrArea =>
       isRuleSelectionQuestion || isRulePrepQuestion;
 
@@ -474,10 +405,10 @@ class EventLevelCfgQuest extends QuestBase {
         'target should not be specified at this level');
   }
 
-  @override
-  QRespCascadePatternEm get respCascadePatternEm => isSelectScreensQuestion
-      ? QRespCascadePatternEm.respCreatesWhichAreaInScreenQuestions
-      : QRespCascadePatternEm.noCascade;
+  // @override
+  // QRespCascadePatternEm get respCascadePatternEm => isSelectScreensQuestion
+  //     ? QRespCascadePatternEm.respCreatesWhichAreaInScreenQuestions
+  //     : QRespCascadePatternEm.noCascade;
 
   @override
   QuestFactorytSignature get derivedQuestConstructor =>
@@ -524,10 +455,10 @@ class RegionTargetQuest extends QuestBase {
     );
   }
 
-  @override // && !qTargetResolution.targetComplete
-  QRespCascadePatternEm get respCascadePatternEm => _areaAlreadySet
-      ? QRespCascadePatternEm.respCreatesWhichSlotOfAreaQuestions
-      : QRespCascadePatternEm.respCreatesWhichAreaInScreenQuestions;
+  // @override // && !qTargetResolution.targetComplete
+  // QRespCascadePatternEm get respCascadePatternEm => _areaAlreadySet
+  //     ? QRespCascadePatternEm.respCreatesWhichSlotOfAreaQuestions
+  //     : QRespCascadePatternEm.respCreatesWhichAreaInScreenQuestions;
 
   @override
   QuestFactorytSignature get derivedQuestConstructor => targetPathIsComplete
@@ -542,7 +473,7 @@ class RegionTargetQuest extends QuestBase {
   }) {
     assert(
       isFullyAnswered,
-      'cant call this method before ? is answered!',
+      'cant call this method before question has been answered!',
     );
     assert(
       !targetPathIsComplete,
@@ -574,14 +505,102 @@ class RegionTargetQuest extends QuestBase {
         precision: _nextPrecision,
       );
     }
-    throw UnimplementedError('err: should have been one or the other');
+    throw UnimplementedError(
+      'err: should have been one or the other  ${mainAnswer.runtimeType}',
+    );
     // return qTargetResolution.copyWith();
   }
 }
 
-class RuleSelectQuest extends QuestBase {
-  /*  
+abstract class SelectAndPrepQBase extends QuestBase {
+  //
+  SelectAndPrepQBase(
+    QTargetResolution qTargetIntent,
+    QPromptCollection qDefCollection, {
+    String? questId,
+  }) : super(
+          qTargetIntent,
+          qDefCollection,
+          questId: questId,
+        ) {
+    assert(qTargetIntent.appScreen != AppScreen.eventConfiguration, 'wtf');
+    assert(qTargetIntent.screenWidgetArea != null, 'wtf');
+    // assert(
+    //   qTargetIntent.visRuleTypeForAreaOrSlot != null ||
+    //       qTargetIntent.behRuleTypeForAreaOrSlot != null,
+    //   'must contain an explicit rule type',
+    // );
+  }
 
+  DerivedQuestGenerator getDerivedRuleQuestGenViaVisType(
+    // int newQuIdx,
+    // VisualRuleType? optRuleTypeToCreateDqg,
+    // RuleTypeFilterFunction? filterFunc,
+    QTargetResolution newQtr,
+  ) {
+    /*  uses a VisualRuleType to dynamically build a DerivedQuestGenerator
+    
+    ONLY returns a DQG intended create VISIBLE rule-DETAIL questions
+          may be invoked on (this) EITHER a RuleSelectQuest or RulePrepQuest
+
+    called by q_cascade_dispatch
+      to build a DerivedQuestGenerator
+      from answers to this (current question)
+    */
+    assert(
+      this is RuleSelectQuest || this is RulePrepQuest,
+      'cant generate rule-detail quests on QID: "${this.questId}" because its not a rule SELECT or PREP type',
+    );
+    assert(targetPathIsComplete, 'target must be complete to run this method');
+
+    // when this is RulePrepQuest, we're only dealing with ONE VisualRuleType; so create 1 derived
+    // int newQuestCountToGenerate = 1;
+    // VisualRuleType? selRule =
+    //     this is RulePrepQuest ? visRuleTypeForAreaOrSlot : null;
+
+    // if (this is RuleSelectQuest) {
+    //   // answer is a list so may create MULTIPLE derived questions
+    //   List<VisualRuleType> selRules = this.mainAnswer as List<VisualRuleType>;
+    //   if (filterFunc != null) {
+    //     selRules = selRules.where(filterFunc).toList();
+    //   } else {
+    //     // skip VRTs that requiresRulePrepQuest;  another matcher will handle those
+    //     selRules = selRules.where((vrt) => !vrt.requiresRulePrepQuest).toList();
+    //   }
+    //   selRule = selRules[newQuIdx];
+    //   newQuestCountToGenerate = selRules.length;
+    //   print(
+    //     'INFO: dynamic DQG from type selected ${selRule.name.toUpperCase()} for $newQuIdx  (${(optRuleTypeToCreateDqg?.name ?? '_noVrtArg').toUpperCase()} could be used instead)',
+    //   );
+    // }
+    // VisualRuleType ruleForNextQuestion =
+    //     optRuleTypeToCreateDqg ?? selRule ?? visRuleTypeForAreaOrSlot!;
+
+    // String instanceTypeUC = this.runtimeType.toString().toUpperCase();
+    // print(
+    //   'INFO: getDerivedRuleQuestGenViaVisType creating question for: ${ruleForNextQuestion.name.toUpperCase()} from a $instanceTypeUC question',
+    // );
+
+    // var newTarg = qTargetResolution.copyWith(
+    //   visRuleTypeForAreaOrSlot: ruleForNextQuestion,
+    //   precision: TargetPrecision.ruleDetailVisual,
+    // );
+    return newQtr.visRuleTypeForAreaOrSlot!.makeQuestGenForRuleType(
+      this,
+      newQtr,
+      1,
+    );
+  }
+}
+
+class RuleSelectQuest extends SelectAndPrepQBase {
+  /*  this class behaves very differently
+      from other QuestBase instances
+      because its answer can carry BOTH
+      VisualRuleType's that need PREP 
+      (generate quests to ask how many definitions)
+      and those that don't need a prep-question
+      (generate quests to directly ask selected rule details)
   */
   RuleSelectQuest(
     QTargetResolution qTargetIntent,
@@ -593,11 +612,12 @@ class RuleSelectQuest extends QuestBase {
   }
 
   @override
-  QRespCascadePatternEm get respCascadePatternEm =>
-      QRespCascadePatternEm.respCreatesRulePrepQuestions;
-
-  @override
-  QuestFactorytSignature get derivedQuestConstructor => QuestBase.rulePrepQuest;
+  QuestFactorytSignature get derivedQuestConstructor {
+    return QuestBase.rulePrepQuest;
+    // throw UnimplementedError(
+    //   'you should be calling derivedQuestConstructorRuleSelection (only exists on this class)',
+    // );
+  }
 
   @override
   QTargetResolution derivedQuestTargetAtAnswerIdx(
@@ -605,28 +625,108 @@ class RuleSelectQuest extends QuestBase {
     int newQuestPromptIdx, {
     bool forRuleSelection = true,
   }) {
+    throw UnimplementedError(
+      'you should be calling derivedQuestTargetAtAnswerIdxRuleSelection (only exists on this class)',
+    );
+  }
+
+  // replacements for overrides above
+  // QuestFactorytSignature derivedQuestConstructorRuleSelection(RuleSelectOffsetBehavior selectionOffsetBehavior) =>
+  //     QuestBase.rulePrepQuest;
+
+  QTargetResolution derivedQuestTargetAtAnswerIdxRuleSelection(
+    int newQuestIdx, {
+    RuleSelectionOffsetBehavior selectionOffsetBehavior =
+        RuleSelectionOffsetBehavior.selectFromVrtNeedPrep,
+  }) {
+    /* rule selection questions get confusing when user
+      selects a mix of rules that both DO and DO NOT 
+      require a prep-question
+      derived questions are generated by different matchers
+      and thus user-selection indexes 
+      dont line up with the 
+      because sublist of VRT does not line up 1-1
+
+      example question scenario:
+      select from following rules for to config ListView on MarketView  (multiple allowed)
+        0  Select ListView rowStyle  (eg teamVsTeamRanked)
+        1  Set sort fields
+        2  Set group-by fields
+
+        user selects 0,2  (rowStyle and group-by)
+      group-by needs prep (how many grouping fields?)
+      and matcher for rule-prep will only build ONE derived question
+      however, questIdx 0 (#1) will select rowStyle, not group-by
+
+      so we need methods to convert questIdx 0 into index position #2
+      so that derivedQuestTargetAtAnswerIdx (QTargetResolution) 
+      gets group-by and not rowStyle
+      as its VisualRuleType
+    */
     assert(
       isFullyAnswered,
       'cant call this method before ? is answered!',
     );
     assert(
       targetPathIsComplete,
-      'target must be complete in a rule select question!',
+      'target must be complete (fully resolved) within a rule select question!',
     );
-    List<VisualRuleType> rulesOffered =
-        qTargetResolution.possibleRulesAtAnyTarget;
-    VisualRuleType selRule = rulesOffered[newQuestIdx];
+    //
+    List<VisualRuleType> lstUserSelVrt = mainAnswer as List<VisualRuleType>;
+    print('66666  lstUserSelVrt: $lstUserSelVrt---$questId');
+    VisualRuleType selRule;
+    switch (selectionOffsetBehavior) {
+      case RuleSelectionOffsetBehavior.none:
+        selRule = lstUserSelVrt[newQuestIdx];
+        break;
+      case RuleSelectionOffsetBehavior.selectFromVrtNeedPrep:
+        List<VisualRuleType> selRulesNeedPrep =
+            lstUserSelVrt.where((vrt) => vrt.requiresRulePrepQuest).toList();
+        selRule = selRulesNeedPrep[newQuestIdx];
+        break;
+      case RuleSelectionOffsetBehavior.selectFromVrtNoPrep:
+        List<VisualRuleType> selRulesNoPrep =
+            lstUserSelVrt.where((vrt) => !vrt.requiresRulePrepQuest).toList();
+        selRule = selRulesNoPrep[newQuestIdx];
+        break;
+    }
     TargetPrecision newPrecision = selRule.requiresRulePrepQuest
         ? TargetPrecision.rulePrep
         : TargetPrecision.ruleDetailVisual;
+
+    print(
+        '77777  lstUserSelVrt: ${selRule.name}    newPrecision: ${newPrecision.name}');
     return qTargetResolution.copyWith(
       visRuleTypeForAreaOrSlot: selRule,
       precision: newPrecision,
     );
   }
+
+  // int selRuleCount = lstVrt.length;
+  // int needPrepCount = 0;
+  // int noPrepCount = 0;
+  // for (VisualRuleType vrt in lstVrt) {
+  //   needPrepCount += vrt.requiresRulePrepQuest ? 1 : 0;
+  //   noPrepCount += !vrt.requiresRulePrepQuest ? 1 : 0;
+  // }
+
+  int derivedQuestCount(RuleSelectionOffsetBehavior selectionOffsetBehavior) {
+    // how many derived questions to create (depends on rule-prep or rule-detail matcher)
+    var lstVrt = mainAnswer as List<VisualRuleType>;
+    switch (selectionOffsetBehavior) {
+      case RuleSelectionOffsetBehavior.none:
+        return lstVrt.length;
+      case RuleSelectionOffsetBehavior.selectFromVrtNeedPrep:
+        return lstVrt.where((vrt) => vrt.requiresRulePrepQuest).length;
+      case RuleSelectionOffsetBehavior.selectFromVrtNoPrep:
+        return lstVrt.where((vrt) => !vrt.requiresRulePrepQuest).length;
+    }
+    // return selectionOffsetBehavior
+    //     .derQuestCountFromSublist(mainAnswer as List<VisualRuleType>);
+  }
 }
 
-class RulePrepQuest extends QuestBase {
+class RulePrepQuest extends SelectAndPrepQBase {
   /*  intermediate step to guide creation of Rule detail questions
       not every rule-type requires one of these
   */
@@ -646,9 +746,9 @@ class RulePrepQuest extends QuestBase {
     );
   }
 
-  @override
-  QRespCascadePatternEm get respCascadePatternEm =>
-      QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions;
+  // @override
+  // QRespCascadePatternEm get respCascadePatternEm =>
+  //     QRespCascadePatternEm.respCreatesRuleDetailForSlotOrAreaQuestions;
 
   @override
   QuestFactorytSignature get derivedQuestConstructor => createsBehavioralQuests
@@ -698,9 +798,9 @@ abstract class RuleQuestBaseAbs extends QuestBase {
   }
 
   // getters
-  @override
-  QRespCascadePatternEm get respCascadePatternEm =>
-      QRespCascadePatternEm.noCascade;
+  // @override
+  // QRespCascadePatternEm get respCascadePatternEm =>
+  //     QRespCascadePatternEm.noCascade;
 
   @override
   QuestFactorytSignature get derivedQuestConstructor {

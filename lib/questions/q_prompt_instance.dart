@@ -78,31 +78,31 @@ class QuestPromptInstance<T> implements QPromptIfc {
   Iterable<ResponseAnswerOption> get answerOptions =>
       answChoiceCollection.answerOptions;
 
-  String createFormattedQuestion(RegionTargetQuest quest) {
-    String templ = answChoiceCollection.questTemplByRuleType(
-      quest.visRuleTypeForAreaOrSlot!,
-    );
+  // String createFormattedQuestion(RegionTargetQuest quest) {
+  //   String templ = answChoiceCollection.questTemplByRuleType(
+  //     quest.visRuleTypeForAreaOrSlot!,
+  //   );
 
-    String slotStr =
-        quest.slotInArea == null ? '' : quest.slotInArea!.name + ' on';
-    Map<String, String> templFillerVals = {
-      'slot': slotStr,
-      'area':
-          quest.screenWidgetArea?.name ?? 'error -- vis rule quest w no area?',
-      'screen': quest.appScreen.name,
-    };
-    templ = templ.formatWithMap(templFillerVals);
-    return templ;
-  }
+  //   String slotStr =
+  //       quest.slotInArea == null ? '' : quest.slotInArea!.name + ' on';
+  //   Map<String, String> templFillerVals = {
+  //     'slot': slotStr,
+  //     'area':
+  //         quest.screenWidgetArea?.name ?? 'error -- vis rule quest w no area?',
+  //     'screen': quest.appScreen.name,
+  //   };
+  //   templ = templ.formatWithMap(templFillerVals);
+  //   return templ;
+  // }
 
   // String get _subQuests => answChoiceCollection.toString();
   // String get choiceName => visRuleType.friendlyName;
   // String get questStr => 'QwC: ' + qType.visRuleName + '\n' + _subQuests;
-  String questStr(String choiceName) =>
-      'Rule: $choiceName:  SubQs: "${questsAndChoices.fold<String>(
-        '',
-        (ac, uc) => ac + '' + uc.selectVal + ', ' + uc.displayStr,
-      )}"';
+  // String questStr(String choiceName) =>
+  //     'Rule: $choiceName:  SubQs: "${questsAndChoices.fold<String>(
+  //       '',
+  //       (ac, uc) => ac + '' + uc.selectVal + ', ' + uc.displayStr,
+  //     )}"';
 
   VisRuleQuestType get visQuestType => answChoiceCollection.visRuleQuestType;
 

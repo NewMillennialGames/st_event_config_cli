@@ -1,5 +1,7 @@
 library ConfigDialogRunner;
 
+import 'dart:math';
+
 import 'package:tuple/tuple.dart';
 
 import '../config/all.dart';

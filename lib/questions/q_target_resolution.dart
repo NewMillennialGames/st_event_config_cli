@@ -137,6 +137,10 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
         behRuleScore;
   }
 
+  bool get hasAreaWithConfigurableRules => screenWidgetArea == null
+      ? false
+      : screenWidgetArea!.isConfigureableOnScreen(appScreen);
+
   bool get producesDerivedQuestsFromUserAnswers =>
       precision.producesDerivedQuestsFromUserAnswers;
 
@@ -155,19 +159,19 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
     bool hasRule = visRuleTypeForAreaOrSlot != null;
     String visRuleName = visRuleTypeForAreaOrSlot?.name ?? '';
 
-    String intentName = '-' + precision.name;
+    String intentNm4Debug = ' (intent: ' + precision.name + ')';
     // if (precision.targetComplete) {
     //   //
     //   intentName = '';
     // }
-    if (area == null) return screenName + intentName;
+    if (area == null) return screenName + intentNm4Debug;
     if (slot == null)
       return screenName +
           '-' +
           area +
           (hasRule ? '-$visRuleName' : '') +
-          intentName;
-    if (!hasRule) return screenName + '-' + area + '-' + slot + intentName;
+          intentNm4Debug;
+    if (!hasRule) return screenName + '-' + area + '-' + slot + intentNm4Debug;
     return screenName +
         '-' +
         area +
@@ -175,7 +179,7 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
         slot +
         '-' +
         visRuleName +
-        intentName;
+        intentNm4Debug;
   }
 
   bool get isEventConfigQuest =>
@@ -247,10 +251,13 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
   String get areaNmUpper => (screenWidgetArea?.name ?? '_AREA').toUpperCase();
   String get slotNmUpper => (slotInArea?.name ?? '_SLOT').toUpperCase();
 
-  String get rulePromptTemplate {
-    if (visRuleTypeForAreaOrSlot == null) return '';
+  String rulePromptTemplate({
+    bool forRuleDetail = false,
+  }) {
+    if (visRuleTypeForAreaOrSlot == null)
+      return '{0}   (${forRuleDetail ? 'Detail' : 'Prep'})';
     VisualRuleType curRule = visRuleTypeForAreaOrSlot!;
-    return curRule.requiresVisRulePrepQuestion
+    return (curRule.requiresVisRulePrepQuestion && !forRuleDetail)
         ? curRule.prepTemplate
         : curRule.detailTemplate;
   }
@@ -454,63 +461,4 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
 
   @override
   bool get stringify => true;
-
-  // IntRange get niu_userRespCountRangeForTest {
-  //   /*  only for testing
-  //     return range 1 to max possible answers user could
-  //     select for prompt #1 of this question
-  //     ==
-  //     reasonable # of auto-answers for test framework to generate
-
-  //     # of answers on TOP-LEVEL (first) prompt
-  //     generally dictates HOW MANY derived questions will
-  //     be generated
-  //   */
-  //   switch (precision) {
-  //     case TargetPrecision.eventLevel:
-  //       return IntRange(1, 1);
-  //     case TargetPrecision.screenLevel:
-  //       return IntRange(
-  //         1,
-  //         AppScreen.eventConfiguration.topConfigurableScreens.length,
-  //       );
-  //     case TargetPrecision.targetLevel:
-  //       int subTargetChoiceCnt = this._possibleTargetSubChoices.length;
-  //       return IntRange(subTargetChoiceCnt > 0 ? 1 : 0, subTargetChoiceCnt);
-
-  //     // int curTargetRuleCnt = this.possibleRulesAtAnyTarget.length;
-  //     // int tot = subTargetChoiceCnt + curTargetRuleCnt;
-  //     // return IntRange(tot > 0 ? 1 : 0, tot);
-
-  //     case TargetPrecision.ruleSelect:
-  //       return IntRange(1, possibleRulesAtAnyTarget.length);
-  //     case TargetPrecision.rulePrep:
-  //       // asking answer count;  not prompt count:  visRuleTypeForAreaOrSlot!.requPrepQuests.length
-  //       return IntRange(1, 1);
-
-  //     // below here DO NOT produce derived questions
-  //     case TargetPrecision.ruleDetailVisual:
-  //       return IntRange(
-  //         1,
-  //         visRuleTypeForAreaOrSlot!.requRuleDetailCfgQuests.length,
-  //       );
-  //     case TargetPrecision.ruleDetailBehavior:
-  //       return IntRange(1, 1);
-  //   }
-  // }
-
-  // Iterable<dynamic> get _possibleTargetSubChoices {
-  //   // only valid when precision == TargetPrecision.targetLevel
-  //   // aka NO RULE SET yet
-  //   assert(
-  //     isPartOfTargetCompletionQuestion,
-  //     'reading from an invalid instance',
-  //   );
-  //   // Iterable<dynamic> lst = [];
-  //   if (screenWidgetArea == null) return possibleAreasForScreen;
-  //   if (slotInArea == null) return possibleSlotsForAreaInScreen;
-  //   // if (visRuleTypeForAreaOrSlot == null) return possibleRulesAtAnyTarget;
-  //   // if (behRuleTypeForAreaOrSlot == null) return possibleRulesAtAnyTarget;
-  //   return [1];
-  // }
 }

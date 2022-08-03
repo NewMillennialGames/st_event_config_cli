@@ -7,6 +7,8 @@ part of EvCfgEnums;
 //   VisualRuleType.themePreference,
 // ];
 
+const Map<int, String> _fldPosLookupMap = {0: '1st', 1: '2nd', 2: '3rd'};
+
 @JsonEnum()
 enum VisualRuleType {
   /*  generalDialogFlow is a placeholder value
@@ -433,8 +435,7 @@ List<NewQuestPerPromptOpts> _getQuestPromptOptsForDataFieldName(
     int questIdx,
     int promptIdx,
   ) {
-    var fldNumLookup = {0: '1st', 1: '2nd', 2: '3rd'};
-    String pos = fldNumLookup[promptIdx] ?? '-$promptIdx-';
+    String pos = _fldPosLookupMap[promptIdx] ?? '-$promptIdx-';
     return [
       pos,
       priorAnsweredQuest.targetPath,
@@ -460,6 +461,7 @@ List<NewQuestPerPromptOpts> _getQuestPromptOptsForDataFieldName(
   }
 
   List<NewQuestPerPromptOpts> perPromptDetails = [];
+  int promptInstanceIdx = 0;
   for (int i = 0; i < numOfFieldsToSpecify; i++) {
     // adds 2 prompts for each field question
     perPromptDetails.addAll([
@@ -469,7 +471,7 @@ List<NewQuestPerPromptOpts> _getQuestPromptOptsForDataFieldName(
         promptTemplArgGen: _promptTemplArgGenFunc,
         answerChoiceGenerator: _answerChoiceGeneratorFunc,
         newRespCastFunc: _newRespCastFunc,
-        instanceIdx: i,
+        instanceIdx: promptInstanceIdx,
       ),
       NewQuestPerPromptOpts<bool>(
         'Sort Ascending?',
@@ -489,9 +491,10 @@ List<NewQuestPerPromptOpts> _getQuestPromptOptsForDataFieldName(
         ) {
           return ['no', 'yes'];
         },
-        instanceIdx: i,
+        instanceIdx: promptInstanceIdx + 1,
       ),
     ]);
+    promptInstanceIdx += 2;
   }
   return perPromptDetails;
 }
@@ -505,49 +508,17 @@ extension BehaviorRuleTypeExt1 on BehaviorRuleType {
   bool get requiresRulePrepQuestion => false;
 }
 
-// String Quest2Str(
-//   AppScreen screen,
-//   ScreenWidgetArea screenArea,
-//   ScreenAreaWidgetSlot? slotInArea,
-// ) {
-//   bool isAreaScopedRule = slotInArea == null;
-//   final List<dynamic> valsDyn = [
-//     screen,
-//     screenArea,
-//     // valsDyn.length (of 2 or3) will inform depth of rule being created
-//     if (!isAreaScopedRule) slotInArea,
-//   ];
+enum RuleSelectionOffsetBehavior {
+  /* for handling questions in which user-answer
+    is split between multiple matchers
+    eg some rules requiring prep-question
+      and others going straight for rule-detail
+  */
+  none,
+  selectFromVrtNeedPrep,
+  selectFromVrtNoPrep,
+}
 
-//   switch (this) {
-//     case VisualRuleType.sort:
-//       return RuleTemplStr.sort.makeRuleQuest2Str(
-//         this,
-//         isAreaScopedRule,
-//         valsDyn,
-//       );
-//     case VisualRuleType.group:
-//       return RuleTemplStr.group.makeRuleQuest2Str(
-//         this,
-//         isAreaScopedRule,
-//         valsDyn,
-//       );
-//     case VisualRuleType.filter:
-//       return RuleTemplStr.filter.makeRuleQuest2Str(
-//         this,
-//         isAreaScopedRule,
-//         valsDyn,
-//       );
-//     case VisualRuleType.format:
-//       return RuleTemplStr.format.makeRuleQuest2Str(
-//         this,
-//         isAreaScopedRule,
-//         valsDyn,
-//       );
-//     case VisualRuleType.show:
-//       return RuleTemplStr.show.makeRuleQuest2Str(
-//         this,
-//         isAreaScopedRule,
-//         valsDyn,
-//       );
-//   }
+// extension RuleSelectionOffsetBehaviorExt1 on RuleSelectionOffsetBehavior {
+//   // return properties needed on RuleSelectQuest instance
 // }

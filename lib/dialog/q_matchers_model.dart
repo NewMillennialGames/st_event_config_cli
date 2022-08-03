@@ -145,6 +145,7 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
   }
 
   // getters
+  String get firstDqgPrompt => derivedQuestGen.firstPromptOrNoOp;
   bool get producesBuilderRules => false;
   bool get usesMatchByQIdPatternCallback => questIdPatternMatchTest != null;
   bool get shouldValidateUserAnswer =>
@@ -181,21 +182,31 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
     if (isAPatternMatch) {
       //
       bool isNoopGenerator = this.derivedQuestGen.isNoopGenerator;
-      String shortDesc = matcherDescrip.substring(0, 80);
+      int strLen = min(120, matcherDescrip.length);
+      String shortDesc = matcherDescrip
+          .replaceAll("\n", "")
+          .replaceAll("    ", " ")
+          .substring(0, strLen)
+          .trimRight();
+      // shortDesc = shortDesc;
+      ;
       print(
-        'Matcher: ${prevAnsweredQuest.questId} HIT on:\n\t"$shortDesc"\n\t(matcher uses: ${isNoopGenerator ? "CALLBACK" : "STATIC"} as source for DQG)',
+        'Matcher Hit -- QID: ${prevAnsweredQuest.questId}\n\thit -> "$shortDesc"\n\t(using: ${isNoopGenerator ? "CALLBACK" : "STATIC"} as source for DQG)',
       );
     }
     return isAPatternMatch;
   }
 
   List<QuestBase> getDerivedAutoGenQuestions(QuestBase answeredQuest) {
-    DerivedQuestGenerator dqg = activeDqg(answeredQuest); // <AnsTypOfMatched>
+    DerivedQuestGenerator dqg = activeDqg(answeredQuest);
     if (dqg.isNoopGenerator) {
-      print('Warn: bailing getDerivedAutoGenQuestions because dqg is a no-op');
+      print('Err: bailing getDerivedAutoGenQuestions because dqg is a no-op');
       return [];
     }
-    return dqg.getDerivedAutoGenQuestions(answeredQuest);
+    return dqg.getDerivedAutoGenQuestions(
+      answeredQuest,
+      matcherDescrip4Debug: this.matcherDescrip,
+    );
   }
 
   AnsTypOfMatched getTypedAnswer(QuestBase priorAnsweredQuest) {

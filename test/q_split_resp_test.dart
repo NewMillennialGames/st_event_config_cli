@@ -4,6 +4,14 @@ import 'package:st_ev_cfg/st_ev_cfg.dart';
 import 'package:st_ev_cfg/config/all.dart';
 import 'package:st_ev_cfg/util/all.dart';
 
+/*
+  remaining bugs:
+  1) showing "3rd" when should show 2nd
+  2) asking 2nd when only one sort field
+  3) showing sort when I selected group (offset problem)
+  4) selecting ONLY tableview did the auto-answer when there was > 1 rule possible
+*/
+
 void main() {
   test(
     '''asks which rules to config for listView (TV) on MarketView screen 
@@ -94,7 +102,7 @@ void main() {
       expect(
         _questMgr.exportableVisRuleQuestions.length,
         0,
-        reason: '2 new but not yet answered',
+        reason: '2 new rule quests but not yet answered',
       );
       //
       // now check that 2 questions were created
@@ -109,15 +117,20 @@ void main() {
 
       int prepCount = 0;
       int detailCount = 0;
+      print('\n\nCreation summary:');
+      // skip 1st question as it was already answered in this test
       for (QuestBase q in _questMgr.pendingQuestions.sublist(1)) {
         prepCount += q.isRulePrepQuestion ? 1 : 0;
         detailCount += q.isRuleDetailQuestion ? 1 : 0;
-        var userPrompt = q.firstPrompt.userPrompt;
-        print('QuestMatcher created:  $userPrompt  ${q.questId}');
+        var userPrompt = q.firstPrompt.userPrompt.substring(0, 52);
+        print(
+            'QuestMatcher created QID:  ${q.questId}\n\tprompt: $userPrompt\n\t(${q.isRulePrepQuestion ? "PREP ?" : "DETAIL ?"})');
       }
       print(
         'appendNewQuestsOrInsertImplicitAnswers created:  prepCount: $prepCount  detailCount: $detailCount',
       );
+      expect(prepCount, 1, reason: 'need to ask # of group-by fields');
+      expect(detailCount, 1, reason: 'need to ask TV row style');
     },
     // skip: true,
   );

@@ -140,9 +140,9 @@ class QCascadeDispatcher {
       );
       //
     } else if (questJustAnswered.isRulePrepQuestion) {
-      print(
-        '\tUser has answered rule prep quest (normally # of pos to configure)',
-      );
+      // print(
+      //   '\tUser has answered rule prep quest (normally # of pos to configure)',
+      // );
       var _qMatchCollToGenRuleDetail =
           QMatchCollection(matchersToGenRuleDetailQuests);
       _qMatchCollToGenRuleDetail.appendNewQuestsOrInsertImplicitAnswers(
@@ -182,12 +182,9 @@ class QCascadeDispatcher {
     */
     return [
       QuestMatcher<List<AppScreen>, List<ScreenWidgetArea>>(
-        '''
-      match quest containing list of app-screens
-      that user wants to configure
-      and generate one question for each
-      in which we ask which areas on that screen
-      need to be configured
+        '''match quest containing list of app-screens that user wants to configure
+      and generate one question for each in which we ask which areas
+      on that screen will be configured
 ''',
         EventLevelCfgQuest,
         questIdPatternMatchTest: (String answQid) =>
@@ -352,7 +349,7 @@ FIXME:
             ];
           },
           bailQGenWhenTrueCallbk: (QuestBase priorAnsweredQuest, int qIdx) {
-            // print('bail out of creating question when returns true');
+            // bail (return true) when no configurable slots exist in area of screen
             // List<ScreenWidgetArea> respList =
             //     (priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>);
             // return respList[qIdx]
@@ -458,10 +455,10 @@ FIXME:
     //
     return [
       QuestMatcher<List<VisualRuleType>, int>(
-        '''matches questions in which user specifies rules for screen-areas to config
+        '''builds rule-prep questions (eg how many slots) from answers on rule-select question
+        matches questions in which user specifies rules to config for an area or slot 
         and at least 1 selected rule requiresVisRulePrepQuestion
-      build prep questions (eg how many slots) for these rules
-
+  --
       matcher to build rule-detail questions is below
     ''',
         RuleSelectQuest,
@@ -472,14 +469,13 @@ FIXME:
             (QuestBase priorAnsweredQuest) {
           var selectedRules =
               priorAnsweredQuest.mainAnswer as Iterable<VisualRuleType>;
+          if (selectedRules.length < 1) return false;
 
           bool atLeastOneNeedsPrep = selectedRules.fold<bool>(
               false,
               (bool needsPrep, VisualRuleType vrt) =>
                   needsPrep || vrt.requiresRulePrepQuest);
-          return priorAnsweredQuest is RuleSelectQuest &&
-              selectedRules.length > 0 &&
-              atLeastOneNeedsPrep;
+          return atLeastOneNeedsPrep;
         },
         //
         derivedQuestGen: DerivedQuestGenerator.singlePrompt(
@@ -512,31 +508,33 @@ FIXME:
             // String promptArg1 = templ.format([newTarg.targetPath]);
             // return [promptArg1];
 
-            QTargetResolution newQtr =
-                priorAnsweredQuest.derivedQuestTargetAtAnswerIdx(
+            QTargetResolution newQtr = (priorAnsweredQuest as RuleSelectQuest)
+                .derivedQuestTargetAtAnswerIdxRuleSelection(
               newQuestIdx,
-              promptIdx,
+              selectionOffsetBehavior:
+                  RuleSelectionOffsetBehavior.selectFromVrtNeedPrep,
             );
-            String templ = newQtr.rulePromptTemplate;
+            String templ = newQtr.rulePromptTemplate(forRuleDetail: false);
             String promptArg1 = templ.format([newQtr.targetPath]);
             return [promptArg1];
           },
           newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
             // how many questions to generate
-            // var lstRules =
-            //     priorAnsweredQuest.mainAnswer as Iterable<VisualRuleType>;
-            // return lstRules
-            //     .where((rt) => rt.requiresVisRulePrepQuestion)
-            //     .length;
-
-            QTargetResolution newQtr =
-                priorAnsweredQuest.derivedQuestTargetAtAnswerIdx(
-              0,
-              0,
-            );
-            return newQtr.possibleRulesAtAnyTarget
+            var lstRules =
+                priorAnsweredQuest.mainAnswer as Iterable<VisualRuleType>;
+            return lstRules
                 .where((rt) => rt.requiresVisRulePrepQuestion)
                 .length;
+
+            // below does not work
+            // QTargetResolution newQtr =
+            //     priorAnsweredQuest.derivedQuestTargetAtAnswerIdx(
+            //   0,
+            //   0,
+            // );
+            // return newQtr.possibleRulesAtAnyTarget
+            //     .where((rt) => rt.requiresVisRulePrepQuestion)
+            //     .length;
           },
           newQuestIdGenFromPriorQuest: (
             QuestBase priorAnsweredQuest,
@@ -560,10 +558,11 @@ FIXME:
             // );
             // return QuestionIdStrings.prepQuestForVisRule + newTarg.targetPath;
 
-            QTargetResolution newQtr =
-                priorAnsweredQuest.derivedQuestTargetAtAnswerIdx(
+            QTargetResolution newQtr = (priorAnsweredQuest as RuleSelectQuest)
+                .derivedQuestTargetAtAnswerIdxRuleSelection(
               newQuIdx,
-              0,
+              selectionOffsetBehavior:
+                  RuleSelectionOffsetBehavior.selectFromVrtNeedPrep,
             );
             return QuestionIdStrings.prepQuestForVisRule +
                 '-' +
@@ -574,19 +573,14 @@ FIXME:
             int newQuestIdx,
             int promptIdx,
           ) {
-            // List<VisualRuleType> selectedScreenAreas =
-            //     (priorAnsweredQuest.mainAnswer as List<VisualRuleType>)
-            //         .where((rt) => rt.requiresVisRulePrepQuestion)
-            //         .toList();
-            // VisualRuleType vrt = selectedScreenAreas[newQuestIdx];
-            QTargetResolution newQtr =
-                priorAnsweredQuest.derivedQuestTargetAtAnswerIdx(
-              newQuestIdx,
-              promptIdx,
-            );
+            List<VisualRuleType> selectedScreenAreas =
+                (priorAnsweredQuest.mainAnswer as List<VisualRuleType>)
+                    .where((vrt) => vrt.requiresRulePrepQuest)
+                    .toList();
+            VisualRuleType vrt = selectedScreenAreas[newQuestIdx];
+            print('55555555  ${vrt.name}');
             // bail out so question not created
-            if (!newQtr.visRuleTypeForAreaOrSlot!.requiresVisRulePrepQuestion)
-              return [];
+            if (!vrt.requiresVisRulePrepQuestion) return [];
             return ['0', '1', '2', '3'];
           },
           deriveTargetFromPriorRespCallbk: (
@@ -602,9 +596,11 @@ FIXME:
             //   visRuleTypeForAreaOrSlot: vrt,
             //   precision: TargetPrecision.rulePrep,
             // );
-            return priorAnsweredQuest.derivedQuestTargetAtAnswerIdx(
+            return (priorAnsweredQuest as RuleSelectQuest)
+                .derivedQuestTargetAtAnswerIdxRuleSelection(
               newQuestIdx,
-              0,
+              selectionOffsetBehavior:
+                  RuleSelectionOffsetBehavior.selectFromVrtNeedPrep,
             );
           },
           newRespCastFunc: (
@@ -669,6 +665,7 @@ FIXME:
           Iterable<VisualRuleType> selRulesNoPrep =
               answr.where((vrt) => !vrt.requiresRulePrepQuest);
           bool atLeastOneHasNoPrep = selRulesNoPrep.length > 0;
+          print(')))))  atLeastOneHasNoPrep: $atLeastOneHasNoPrep');
           if (!atLeastOneHasNoPrep) return false;
 
           // print('validateUserAnswerAfterPatternMatchIsTrueCallback:');
@@ -686,27 +683,26 @@ FIXME:
         derivedQuestGen: DerivedQuestGenerator.noop(),
         deriveQuestGenCallbk: (QuestBase priorAnsweredQuest, int newQuIdx) {
           //
-          // List<VisualRuleType> answr =
-          //     priorAnsweredQuest.mainAnswer as List<VisualRuleType>;
-          // // List<VisualRuleType> selRulesNoPrep =
-          // //     answr.where((vrt) => !vrt.requiresRulePrepQuest).toList();
-          // VisualRuleType selRule = answr[newQuIdx];
+          RuleSelectQuest ansRuleSelQuest =
+              priorAnsweredQuest as RuleSelectQuest;
 
           QTargetResolution newQtr =
-              priorAnsweredQuest.derivedQuestTargetAtAnswerIdx(
+              ansRuleSelQuest.derivedQuestTargetAtAnswerIdxRuleSelection(
             newQuIdx,
-            0,
+            selectionOffsetBehavior:
+                RuleSelectionOffsetBehavior.selectFromVrtNoPrep,
           );
+
           VisualRuleType selRule = newQtr.visRuleTypeForAreaOrSlot!;
           // bail out if requiresVisRulePrepQuestion
           if (selRule.requiresVisRulePrepQuestion)
             return DerivedQuestGenerator.noop();
 
-          return priorAnsweredQuest.getDerivedRuleQuestGenViaVisType(
-            newQuIdx,
-            selRule,
-            null,
-          );
+          return ansRuleSelQuest.getDerivedRuleQuestGenViaVisType(newQtr
+              // newQuIdx,
+              // selRule,
+              // null,
+              );
         },
       ),
       QuestMatcher<List<VisualRuleType>, List<String>>(
@@ -740,15 +736,30 @@ FIXME:
         },
         //
         derivedQuestGen: DerivedQuestGenerator.noop(),
-        deriveQuestGenCallbk:
-            (QuestBase priorAnsweredRulePrepQuest, int newQuIdx) {
+        deriveQuestGenCallbk: (
+          QuestBase priorAnsweredRulePrepQuest,
+          int newQuIdx,
+        ) {
           // var answers = priorAnsweredQuest.mainAnswer as List<VisualRuleType>;
           // VisualRuleType selRule = answers[newQuIdx];
-          return priorAnsweredRulePrepQuest.getDerivedRuleQuestGenViaVisType(
-            newQuIdx,
-            null,
-            null,
-          );
+          // return priorAnsweredRulePrepQuest.getDerivedRuleQuestGenViaVisType(
+          //   newQuIdx,
+          //   null,
+          //   null,
+          // );
+
+          RulePrepQuest ansRulePrepQuest =
+              priorAnsweredRulePrepQuest as RulePrepQuest;
+
+          QTargetResolution newQtr =
+              ansRulePrepQuest.derivedQuestTargetAtAnswerIdx(newQuIdx, 0);
+
+          // VisualRuleType selRule = newQtr.visRuleTypeForAreaOrSlot!;
+          return ansRulePrepQuest.getDerivedRuleQuestGenViaVisType(newQtr
+              // newQuIdx,
+              // selRule,
+              // null,
+              );
         },
       ),
     ];
@@ -814,8 +825,12 @@ List<QuestMatcher> _matchTargetCompleteAndGenRuleSelectQuests = [
       newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
         var selectedScreenAreas =
             priorAnsweredQuest.mainAnswer as Iterable<ScreenWidgetArea>;
-        var screenAreasWithRules = selectedScreenAreas.where((swa) =>
-            swa.applicableRuleTypes(priorAnsweredQuest.appScreen).length > 0);
+        var screenAreasWithRules = selectedScreenAreas.where(
+            (swa) => swa.isConfigureableOnScreen(priorAnsweredQuest.appScreen));
+
+        // print(
+        //   '(((((( screenAreasWithRules.len ${screenAreasWithRules.length}  (${qtr2.possibleRulesForAreaInScreen.length})',
+        // );
         return screenAreasWithRules.length;
       },
       newQuestIdGenFromPriorQuest: (
@@ -849,23 +864,18 @@ List<QuestMatcher> _matchTargetCompleteAndGenRuleSelectQuests = [
         int newQuestIdx,
         int promptIdx,
       ) {
-        // List<ScreenWidgetArea> selectedScreenAreas =
-        //     (priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>);
-        // var screenAreasWithRules = selectedScreenAreas
-        //     .where((swa) =>
-        //         swa.applicableRuleTypes(priorAnsweredQuest.appScreen).length >
-        //         0)
-        //     .toList();
+        List<ScreenWidgetArea> selectedScreenAreas =
+            (priorAnsweredQuest.mainAnswer as List<ScreenWidgetArea>);
+        var screenAreasWithRules = selectedScreenAreas
+            .where((swa) =>
+                swa.applicableRuleTypes(priorAnsweredQuest.appScreen).length >
+                0)
+            .toList();
 
-        QTargetResolution newQtr =
-            priorAnsweredQuest.derivedQuestTargetAtAnswerIdx(
-          newQuestIdx,
-          promptIdx,
-          forRuleSelection: true,
-        );
-        var screenAreasWithRules = newQtr.possibleAreasForScreen;
         ScreenWidgetArea area = screenAreasWithRules[newQuestIdx];
-        if (!area.isConfigureable) return [];
+        if (area.applicableRuleTypes(priorAnsweredQuest.appScreen).length < 1)
+          return [];
+
         return area
             .applicableRuleTypes(priorAnsweredQuest.appScreen)
             .map((e) => e.name)
