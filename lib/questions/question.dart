@@ -585,10 +585,15 @@ abstract class SelectAndPrepQBase extends QuestBase {
     //   visRuleTypeForAreaOrSlot: ruleForNextQuestion,
     //   precision: TargetPrecision.ruleDetailVisual,
     // );
+
+    int requiredPromptInstances = 1;
+    if (this is RulePrepQuest) {
+      requiredPromptInstances = this.mainAnswer as int;
+    }
     return newQtr.visRuleTypeForAreaOrSlot!.makeQuestGenForRuleType(
       this,
       newQtr,
-      1,
+      requiredPromptInstances,
     );
   }
 }
@@ -673,7 +678,7 @@ class RuleSelectQuest extends SelectAndPrepQBase {
     );
     //
     List<VisualRuleType> lstUserSelVrt = mainAnswer as List<VisualRuleType>;
-    print('66666  lstUserSelVrt: $lstUserSelVrt---$questId');
+    // print('lstUserSelVrt: $lstUserSelVrt---$questId');
     VisualRuleType selRule;
     switch (selectionOffsetBehavior) {
       case RuleSelectionOffsetBehavior.none:
@@ -694,8 +699,9 @@ class RuleSelectQuest extends SelectAndPrepQBase {
         ? TargetPrecision.rulePrep
         : TargetPrecision.ruleDetailVisual;
 
-    print(
-        '77777  lstUserSelVrt: ${selRule.name}    newPrecision: ${newPrecision.name}');
+    // print(
+    //   'lstUserSelVrt: ${selRule.name}    newPrecision: ${newPrecision.name}',
+    // );
     return qTargetResolution.copyWith(
       visRuleTypeForAreaOrSlot: selRule,
       precision: newPrecision,
