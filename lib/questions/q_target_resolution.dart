@@ -195,7 +195,7 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
 
   bool get requiresVisRulePrepQuestion =>
       // _targetRequiresRulePrepQuestion ||
-      (visRuleTypeForAreaOrSlot?.requiresVisRulePrepQuestion ?? false);
+      (visRuleTypeForAreaOrSlot?.needsVisRulePrepQuestion ?? false);
 
   bool get requiresBehRulePrepQuestion =>
       // _targetRequiresRulePrepQuestion ||
@@ -257,7 +257,7 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
     if (visRuleTypeForAreaOrSlot == null)
       return '{0}   (${forRuleDetail ? 'Detail' : 'Prep'})';
     VisualRuleType curRule = visRuleTypeForAreaOrSlot!;
-    return (curRule.requiresVisRulePrepQuestion && !forRuleDetail)
+    return (curRule.needsVisRulePrepQuestion && !forRuleDetail)
         ? curRule.prepTemplate
         : curRule.detailTemplate;
   }

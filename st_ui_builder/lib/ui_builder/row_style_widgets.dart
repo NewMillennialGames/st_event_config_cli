@@ -7,7 +7,25 @@ part of StUiController;
     Portfolio
     MarketResearch
 we have one style for each value of:
-    enum TvAreaRowStyle
+    enum TvAreaRowStyle with values of:
+
+        assetVsAsset, // aka teamVsTeam & playerVsPlayer
+        assetVsAssetRanked, // aka teamVsTeamRanked & playerVsPlayerRanked
+        teamVsField,
+        teamVsFieldRanked,
+        teamDraft,
+        teamLine,
+        teamPlayerVsField,
+        playerVsField,
+        playerVsFieldRanked,
+        playerDraft,
+        driverVsField,
+
+    and there can be up-to one of each of the above style-classes
+    for each screen in the app
+    class names below should append the intended
+    screen-name so it's clear where the row should
+    be rendered
   */
 
 final _redrawAssetRowProvider = StateProvider<bool>((ref) => false);

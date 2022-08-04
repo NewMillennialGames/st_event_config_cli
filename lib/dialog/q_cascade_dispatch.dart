@@ -474,7 +474,7 @@ FIXME:
           bool atLeastOneNeedsPrep = selectedRules.fold<bool>(
               false,
               (bool needsPrep, VisualRuleType vrt) =>
-                  needsPrep || vrt.requiresRulePrepQuest);
+                  needsPrep || vrt.needsVisRulePrepQuestion);
           return atLeastOneNeedsPrep;
         },
         //
@@ -522,9 +522,7 @@ FIXME:
             // how many questions to generate
             var lstRules =
                 priorAnsweredQuest.mainAnswer as Iterable<VisualRuleType>;
-            return lstRules
-                .where((rt) => rt.requiresVisRulePrepQuestion)
-                .length;
+            return lstRules.where((rt) => rt.needsVisRulePrepQuestion).length;
 
             // below does not work
             // QTargetResolution newQtr =
@@ -575,12 +573,12 @@ FIXME:
           ) {
             List<VisualRuleType> selectedScreenAreas =
                 (priorAnsweredQuest.mainAnswer as List<VisualRuleType>)
-                    .where((vrt) => vrt.requiresRulePrepQuest)
+                    .where((vrt) => vrt.needsVisRulePrepQuestion)
                     .toList();
             VisualRuleType vrt = selectedScreenAreas[newQuestIdx];
             // print('VisualRuleType.name:  ${vrt.name}');
             // bail out so question not created
-            if (!vrt.requiresVisRulePrepQuestion) return [];
+            if (!vrt.needsVisRulePrepQuestion) return [];
             return ['0', '1', '2', '3'];
           },
           deriveTargetFromPriorRespCallbk: (
@@ -663,7 +661,7 @@ FIXME:
           Iterable<VisualRuleType> answr =
               priorAnsweredQuest.mainAnswer as Iterable<VisualRuleType>;
           Iterable<VisualRuleType> selRulesNoPrep =
-              answr.where((vrt) => !vrt.requiresRulePrepQuest);
+              answr.where((vrt) => !vrt.needsVisRulePrepQuestion);
           bool atLeastOneHasNoPrep = selRulesNoPrep.length > 0;
           // print('atLeastOneHasNoPrep: $atLeastOneHasNoPrep');
           if (!atLeastOneHasNoPrep) return false;
@@ -695,7 +693,7 @@ FIXME:
 
           VisualRuleType selRule = newQtr.visRuleTypeForAreaOrSlot!;
           // bail out if requiresVisRulePrepQuestion
-          if (selRule.requiresVisRulePrepQuestion)
+          if (selRule.needsVisRulePrepQuestion)
             return DerivedQuestGenerator.noop();
 
           return ansRuleSelQuest.getDerivedRuleQuestGenViaVisType(newQtr
