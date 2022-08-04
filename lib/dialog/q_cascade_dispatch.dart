@@ -479,7 +479,7 @@ FIXME:
         },
         //
         derivedQuestGen: DerivedQuestGenerator.singlePrompt(
-          '{0}  (rule prep ?)',
+          '{0}', //  (rule prep ?)
           newQuestConstructor: QuestBase.rulePrepQuest,
           newQuestPromptArgGen: (
             QuestBase priorAnsweredQuest,

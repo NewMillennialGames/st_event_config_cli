@@ -68,10 +68,10 @@ class EventCfgTree {
   );
 
   factory EventCfgTree.fromEventLevelConfig(
-      Iterable<EventLevelCfgQuest> responses) {
+      Iterable<EventLevelCfgQuest> evCfgResponses) {
     //
-    EventLevelCfgQuest evTemplateQuest =
-        responses.firstWhere((q) => q.questId == QuestionIdStrings.eventName);
+    EventLevelCfgQuest evTemplateQuest = evCfgResponses
+        .firstWhere((q) => q.questId == QuestionIdStrings.eventName);
 
     // if (evTemplateQuest == null)
     //   throw UnimplementedError('top level question missing');
@@ -91,31 +91,32 @@ class EventCfgTree {
     bool applySameRowStyleToAllScreens = true;
     // use try to catch errs and allow easy debugging
     try {
-      evTemplateDescription = (responses
+      evTemplateDescription = (evCfgResponses
               .firstWhere((q) => q.questId == QuestionIdStrings.eventDescrip)
               .mainAnswer ??
           '') as String;
 
-      evType = responses.firstWhere((q) => q.mainAnswer is EvType).mainAnswer
-          as EvType;
+      evType = evCfgResponses
+          .firstWhere((q) => q.mainAnswer is EvType)
+          .mainAnswer as EvType;
       //
-      evCompetitorType = responses
+      evCompetitorType = evCfgResponses
           .firstWhere((q) => q.mainAnswer is EvCompetitorType)
           .mainAnswer as EvCompetitorType;
-      evOpponentType = responses
+      evOpponentType = evCfgResponses
           .firstWhere((q) => q.mainAnswer is EvOpponentType)
           .mainAnswer as EvOpponentType;
-      evDuration = responses
+      evDuration = evCfgResponses
           .firstWhere((q) => q.mainAnswer is EvDuration)
           .mainAnswer as EvDuration;
-      evEliminationType = responses
+      evEliminationType = evCfgResponses
           .firstWhere((q) => q.mainAnswer is EvEliminationStrategy)
           .mainAnswer as EvEliminationStrategy;
       // tells app how to age-off finished games
-      evGameAgeOffRule = responses
+      evGameAgeOffRule = evCfgResponses
           .firstWhere((q) => q.mainAnswer is EvGameAgeOffRule)
           .mainAnswer as EvGameAgeOffRule;
-      applySameRowStyleToAllScreens = responses
+      applySameRowStyleToAllScreens = evCfgResponses
           .firstWhere((q) => q.questId == QuestionIdStrings.globalRowStyle)
           .mainAnswer as bool;
     } catch (e) {
@@ -170,13 +171,13 @@ class EventCfgTree {
     // print(
     //   'fillFromVisualRuleAnswers got ${answeredQuestions.length} answeredQuestions',
     // );
-    for (VisualRuleDetailQuest rQuest in answeredQuestions) {
-      // look up or create it
-      ScreenCfgByArea screenCfg = this.screenConfigMap[rQuest.appScreen] ??
-          ScreenCfgByArea(rQuest.appScreen, {});
-      screenCfg.appendVisRule(rQuest);
+    for (VisualRuleDetailQuest vrQuest in answeredQuestions) {
+      // look up or create config for this screen;  top of tree
+      ScreenCfgByArea screenCfg = this.screenConfigMap[vrQuest.appScreen] ??
+          ScreenCfgByArea(vrQuest.appScreen, {});
+      screenCfg.appendVisRule(vrQuest);
       // store when newly created above
-      this.screenConfigMap[rQuest.appScreen] = screenCfg;
+      this.screenConfigMap[vrQuest.appScreen] = screenCfg;
     }
   }
 
