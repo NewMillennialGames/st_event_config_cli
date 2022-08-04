@@ -686,16 +686,17 @@ class RuleSelectQuest extends SelectAndPrepQBase {
         break;
       case RuleSelectionOffsetBehavior.selectFromVrtNeedPrep:
         List<VisualRuleType> selRulesNeedPrep =
-            lstUserSelVrt.where((vrt) => vrt.requiresRulePrepQuest).toList();
+            lstUserSelVrt.where((vrt) => vrt.needsVisRulePrepQuestion).toList();
         selRule = selRulesNeedPrep[newQuestIdx];
         break;
       case RuleSelectionOffsetBehavior.selectFromVrtNoPrep:
-        List<VisualRuleType> selRulesNoPrep =
-            lstUserSelVrt.where((vrt) => !vrt.requiresRulePrepQuest).toList();
+        List<VisualRuleType> selRulesNoPrep = lstUserSelVrt
+            .where((vrt) => !vrt.needsVisRulePrepQuestion)
+            .toList();
         selRule = selRulesNoPrep[newQuestIdx];
         break;
     }
-    TargetPrecision newPrecision = selRule.requiresRulePrepQuest
+    TargetPrecision newPrecision = selRule.needsVisRulePrepQuestion
         ? TargetPrecision.rulePrep
         : TargetPrecision.ruleDetailVisual;
 
@@ -708,14 +709,6 @@ class RuleSelectQuest extends SelectAndPrepQBase {
     );
   }
 
-  // int selRuleCount = lstVrt.length;
-  // int needPrepCount = 0;
-  // int noPrepCount = 0;
-  // for (VisualRuleType vrt in lstVrt) {
-  //   needPrepCount += vrt.requiresRulePrepQuest ? 1 : 0;
-  //   noPrepCount += !vrt.requiresRulePrepQuest ? 1 : 0;
-  // }
-
   int derivedQuestCount(RuleSelectionOffsetBehavior selectionOffsetBehavior) {
     // how many derived questions to create (depends on rule-prep or rule-detail matcher)
     var lstVrt = mainAnswer as List<VisualRuleType>;
@@ -723,9 +716,9 @@ class RuleSelectQuest extends SelectAndPrepQBase {
       case RuleSelectionOffsetBehavior.none:
         return lstVrt.length;
       case RuleSelectionOffsetBehavior.selectFromVrtNeedPrep:
-        return lstVrt.where((vrt) => vrt.requiresRulePrepQuest).length;
+        return lstVrt.where((vrt) => vrt.needsVisRulePrepQuestion).length;
       case RuleSelectionOffsetBehavior.selectFromVrtNoPrep:
-        return lstVrt.where((vrt) => !vrt.requiresRulePrepQuest).length;
+        return lstVrt.where((vrt) => !vrt.needsVisRulePrepQuestion).length;
     }
     // return selectionOffsetBehavior
     //     .derQuestCountFromSublist(mainAnswer as List<VisualRuleType>);

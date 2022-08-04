@@ -433,7 +433,7 @@ class Permute {
     for (QTargetResolution qtr in _allTarg) {
       List<VisualRuleType> allowedRules = qtr.possibleRulesAtAnyTarget;
       for (VisualRuleType vrt in allowedRules) {
-        if (vrt.requiresVisRulePrepQuestion) {
+        if (vrt.needsVisRulePrepQuestion) {
           _allQtrAsRulePrep.add(
             qtr.copyWith(
               visRuleTypeForAreaOrSlot: vrt,

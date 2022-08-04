@@ -110,7 +110,7 @@ class GroupedTableDataMgr {
 
   bool get hasColumnFilters {
     // set imageUrl as first filter field to hide/disable the whole filter bar
-    return filterRules?.item1.colName != DbTableFieldName.imageUrl &&
+    return filterRules?.item1.firstColName != DbTableFieldName.imageUrl &&
         !disableAllGrouping;
   }
 
@@ -143,10 +143,12 @@ class GroupedTableDataMgr {
 
     const _kLstMin = 2;
 
-    bool has2ndList =
-        i2 != null && listItems2.length > _kLstMin && i2.colName != i1.colName;
-    bool has3rdList =
-        i3 != null && listItems3.length > _kLstMin && i3.colName != i2!.colName;
+    bool has2ndList = i2 != null &&
+        listItems2.length > _kLstMin &&
+        i2.firstColName != i1.firstColName;
+    bool has3rdList = i3 != null &&
+        listItems3.length > _kLstMin &&
+        i3.firstColName != i2!.firstColName;
 
     int dropLstCount = 1 + (has2ndList ? 1 : 0) + (has3rdList ? 1 : 0);
     // allocate dropdown button width
@@ -165,7 +167,7 @@ class GroupedTableDataMgr {
         children: [
           _dropMenuList(
             listItems1,
-            i1.colName,
+            i1.firstColName,
             _filter1Selection,
             (s) => _filter1Selection = s,
             allocBtnWidth,
@@ -173,7 +175,7 @@ class GroupedTableDataMgr {
           if (has2ndList)
             _dropMenuList(
               listItems2,
-              i2.colName,
+              i2.firstColName,
               _filter2Selection,
               (s) => _filter2Selection = s,
               allocBtnWidth,
@@ -181,7 +183,7 @@ class GroupedTableDataMgr {
           if (has3rdList)
             _dropMenuList(
               listItems3,
-              i3.colName,
+              i3.firstColName,
               _filter3Selection,
               (s) => _filter3Selection = s,
               allocBtnWidth,
@@ -261,7 +263,7 @@ class GroupedTableDataMgr {
           },
           dropdownColor: StColors.black,
           iconEnabledColor: StColors.gray,
-          style:  TextStyle(
+          style: TextStyle(
             color: StColors.lightGray,
             fontSize: 16.sp,
           ),
@@ -289,12 +291,12 @@ class GroupedTableDataMgr {
     // elim dups and sort
     var l = _allAssetRows
         .map(
-          (e) => e.item1.labelExtractor(fCfg.colName),
+          (e) => e.item1.labelExtractor(fCfg.firstColName),
         )
         .toSet()
         .toList()
       ..sort((v1, v2) => v1.compareTo(v2));
-    l.insert(0, fCfg.colName.labelName); // CLEAR_FILTER_LABEL + ' ' +
+    l.insert(0, fCfg.firstColName.labelName); // CLEAR_FILTER_LABEL + ' ' +
     return l.toSet();
   }
 

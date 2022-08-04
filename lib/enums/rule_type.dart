@@ -7,7 +7,7 @@ part of EvCfgEnums;
 //   VisualRuleType.themePreference,
 // ];
 
-// question-prompt-index will select one of these values
+// question-prompt-index (adjusted for prompt-count) will select one of these values
 const Map<int, String> _fldPosLookupMap = {0: '1st', 1: '2nd', 2: '3rd'};
 
 @JsonEnum()
@@ -28,9 +28,11 @@ enum VisualRuleType {
 
 extension VisualRuleTypeExt1 on VisualRuleType {
   //
-  bool get requiresVisRulePrepQuestion => [
-        // hasVariableSubRuleCount
-        // these rules can configure 0-3 slots
+  bool get needsVisRulePrepQuestion => [
+        /* for some rules, we must ask "how many"
+        before we know how many prompts to create
+    these rules can configure between 0-3 slots
+        */
         VisualRuleType.sortCfg,
         VisualRuleType.groupCfg,
         VisualRuleType.filterCfg
@@ -85,12 +87,15 @@ extension VisualRuleTypeExt1 on VisualRuleType {
   }
 
   String get prepTemplate {
-    //
-    if (!this.requiresVisRulePrepQuestion) return '{0}';
+    // throw error rather than returning a bs value
+    // if (!this.requiresVisRulePrepQuestion) return '{0}';
 
     switch (this) {
       case VisualRuleType.generalDialogFlow:
-        return '';
+        // return '';
+        throw UnimplementedError(
+          'generalDialogFlow does not use a prep template',
+        );
       case VisualRuleType.sortCfg:
         return 'How many sort fields on {0}?';
       case VisualRuleType.groupCfg:
@@ -99,22 +104,27 @@ extension VisualRuleTypeExt1 on VisualRuleType {
         return 'How many filter menus on {0}?';
       case VisualRuleType.styleOrFormat:
         throw UnimplementedError(
-            'styleOrFormat does not use a prep template  ');
-        return 'styleOrFormat does not use a prep template  ';
+          'styleOrFormat does not use a prep template',
+        );
+      // return 'styleOrFormat does not use a prep template  ';
       case VisualRuleType.showOrHide:
-        return 'showOrHide does not use a prep template  ';
+        // return 'showOrHide does not use a prep template  ';
+        throw UnimplementedError(
+          'showOrHide does not use a prep template',
+        );
       case VisualRuleType.themePreference:
-        return 'themePreference does not use a prep template  ';
+        // return 'themePreference does not use a prep template  ';
+        throw UnimplementedError(
+          'themePreference does not use a prep template',
+        );
     }
   }
 
   String get detailTemplate {
     //
-    if (!this.requiresVisRulePrepQuestion) return '{0}';
-
     switch (this) {
       case VisualRuleType.generalDialogFlow:
-        return '';
+        return '{0}';
       case VisualRuleType.sortCfg:
         return 'Select sort field #{0} for the {1} on {2}.';
       case VisualRuleType.groupCfg:
@@ -122,7 +132,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
       case VisualRuleType.filterCfg:
         return 'Select filter field #{0} for the {1} on {2}.';
       case VisualRuleType.styleOrFormat:
-        return 'styleOrFormat does not use a detailTemplate  ';
+        return 'Select row-style for {0} from list below: ';
       case VisualRuleType.showOrHide:
         return 'showOrHide does not use a detailTemplate  ';
       case VisualRuleType.themePreference:
@@ -131,14 +141,16 @@ extension VisualRuleTypeExt1 on VisualRuleType {
   }
   //
 
-  bool get requiresRulePrepQuest => requiredPrepQuests.length > 0;
-
   List<VisRuleQuestType> get requiredPrepQuests {
-    // prep question required BEFORE you can ask
-    // rule detail questions
+    /* prep question required BEFORE you can ask rule detail questions
+    its important to only return ONE
+    */
     switch (this) {
       case VisualRuleType.generalDialogFlow:
-        return [];
+        // return [];
+        throw UnimplementedError(
+          'generalDialogFlow does not use prep questions',
+        );
       case VisualRuleType.sortCfg:
         return [
           Vrq.askCountOfSlotsToConfigure,
@@ -152,11 +164,20 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           Vrq.askCountOfSlotsToConfigure,
         ];
       case VisualRuleType.styleOrFormat:
-        return [];
+        // return []; // [Vrq.selectVisualComponentOrStyle];
+        throw UnimplementedError(
+          'styleOrFormat does not use prep questions',
+        );
       case VisualRuleType.showOrHide:
-        return [];
+        // return []; // [Vrq.controlsVisibilityOfAreaOrSlot];
+        throw UnimplementedError(
+          'showOrHide does not use prep questions',
+        );
       case VisualRuleType.themePreference:
-        return [];
+        // return []; // [Vrq.selectVisualComponentOrStyle];
+        throw UnimplementedError(
+          'themePreference does not use prep questions',
+        );
     }
   }
 
@@ -276,7 +297,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
         );
         assert(
           prevAnswQuest.isRuleSelectionQuestion &&
-              thisVisRT.requiresRulePrepQuest,
+              thisVisRT.needsVisRulePrepQuestion,
           'oops!! something weird??  ${newQTargRes.targetPath}',
         );
 
@@ -324,9 +345,6 @@ extension VisualRuleTypeExt1 on VisualRuleType {
 
             we need 1 of that set for each SLOT being configured
           */
-        // for (int i = 0; i < requiredPromptInstances; i++) {
-        // }
-
         List<NewQuestPerPromptOpts> qps = _getQuestPromptOptsForDataFieldName(
           thisVisRT,
           requiredPromptInstances,
@@ -339,13 +357,6 @@ extension VisualRuleTypeExt1 on VisualRuleType {
 
       case VisRuleQuestType.selectVisualComponentOrStyle:
         // specify desired style on area or slot
-
-        // List<TvAreaRowStyle> possibleVisStyles = prevAnswQuest
-        // .qTargetResolution
-        // .possibleVisCompStylesForTarget as List<TvAreaRowStyle>;
-
-        // List<TvAreaRowStyle> possibleVisStyles = newQTargRes
-        //     .possibleVisCompStylesForTarget as List<TvAreaRowStyle>;
         // hack
         List<TvAreaRowStyle> possibleVisStyles = TvAreaRowStyle.values;
 
@@ -389,13 +400,6 @@ extension VisualRuleTypeExt1 on VisualRuleType {
         /*  using QTargetResolution newQTargRes
               passed as argument above
           */
-        // List<VisualRuleType> selRules = requiredPromptInstances < 2
-        //     ? [newQTargRes.visRuleTypeForAreaOrSlot!]
-        //     : qb.mainAnswer as List<VisualRuleType>;
-
-        // VisualRuleType curRule = selRules.length <= newQidx
-        //     ? newQTargRes.visRuleTypeForAreaOrSlot!
-        //     : selRules[newQidx];
         return newQTargRes.copyWith(visRuleTypeForAreaOrSlot: this);
       },
     );

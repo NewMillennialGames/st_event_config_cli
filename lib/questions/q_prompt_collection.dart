@@ -149,7 +149,7 @@ class QPromptCollection {
     VisualRuleType targetRule =
         qtr.visRuleTypeForAreaOrSlot ?? VisualRuleType.generalDialogFlow;
     assert(
-      targetRule.requiresVisRulePrepQuestion,
+      targetRule.needsVisRulePrepQuestion,
       'requires a rule that needs prep',
     );
 

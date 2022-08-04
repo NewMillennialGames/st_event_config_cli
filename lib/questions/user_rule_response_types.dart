@@ -49,7 +49,7 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
   }
 
   void _castToRealTypes(List<PairedQuestAndResp> userResponses) {
-    throw UnimplementedError('impl in subclass');
+    throw UnimplementedError('implement in subclass');
   }
 
   @override
@@ -190,7 +190,7 @@ class TvSortGroupFilterBase extends RuleResponseBase {
     );
   }
 
-  DbTableFieldName get colName => fieldList.first.colName;
+  DbTableFieldName get firstColName => fieldList.first.colName;
 
   @override
   String toString() {
@@ -218,6 +218,8 @@ class TvSortCfg extends TvSortGroupFilterBase {
     // cancels all sorting when this is the first sort-param
     return TvSortCfg._();
   }
+
+  bool get disableSorting => fieldList.length < 1;
   //
   // JsonSerializable
   factory TvSortCfg.fromJson(Map<String, dynamic> json) =>
@@ -230,6 +232,7 @@ class TvGroupCfg extends TvSortGroupFilterBase {
   //
   TvGroupCfg() : super(VisualRuleType.groupCfg);
   //
+  bool get disableGrouping => fieldList.length < 1;
 
   // JsonSerializable
   factory TvGroupCfg.fromJson(Map<String, dynamic> json) =>
@@ -242,6 +245,8 @@ class TvFilterCfg extends TvSortGroupFilterBase {
   //
   TvFilterCfg() : super(VisualRuleType.filterCfg);
   //
+  bool get disableFiltering => fieldList.length < 1;
+
   // JsonSerializable
   factory TvFilterCfg.fromJson(Map<String, dynamic> json) =>
       _$TvFilterCfgFromJson(json);
@@ -255,7 +260,6 @@ class ShowHideCfg extends RuleResponseBase {
 
   ShowHideCfg() : super(VisualRuleType.showOrHide);
   //
-  // ShowHideCfg get asRuleResponse => this;
 
   @override
   void _castToRealTypes(List<PairedQuestAndResp> userResponses) {
@@ -273,36 +277,3 @@ class ShowHideCfg extends RuleResponseBase {
       _$ShowHideCfgFromJson(json);
   Map<String, dynamic> toJson() => _$ShowHideCfgToJson(this);
 }
-
-
-
-      // DbTableFieldName _curSelField = DbTableFieldName.imageUrl;
-    // for (MapEntry e in userResponses.entries) {
-    //   /* FIXME:
-    //     this loop depends on userResponses.entries order being:
-    //     field1 + ascend;  field2 + asc;  field3 + asc
-    //   */
-    //   String resp = e.value;
-    //   int answIdx = int.tryParse(resp) ?? 0;
-
-    //   switch (e.key) {
-    //     case VisRuleQuestType.selectDataFieldName:
-    //       _curSelField = DbTableFieldName.values[answIdx];
-    //       break;
-    //     // case VisRuleQuestType.specifyPositionInGroup:
-    //     //   this.order = SortOrGroupIdxOrder.values[answIdx];
-    //     //   break;
-    //     case VisRuleQuestType.specifySortAscending:
-    //       fieldList.add(SortGroupFilterEntry(_curSelField, answIdx > 0));
-    //       break;
-    //   }
-    // }
-
-  // // JsonSerializable
-  // factory TvSortGroupFilterBase.fromJson(Map<String, dynamic> json) {
-  //   return _$TvSortGroupFilterBaseFromJson(json);
-  // }
-
-  // Map<String, dynamic> toJson() {
-  //   return _$TvSortGroupFilterBaseToJson(this);
-  // }
