@@ -37,7 +37,7 @@ class CfgForAreaAndNestedSlots {
     VisualRuleType? vrt = rQuest.visRuleTypeForAreaOrSlot;
     assert(
       vrt != null,
-      'cant add Quest2 that has no attached rule',
+      'VisualRuleType is required at this level',
     );
     //
     ScreenAreaWidgetSlot? optSlotInArea = rQuest.slotInArea;

@@ -102,8 +102,6 @@ class TvRowStyleCfg extends RuleResponseBase {
     return TvRowStyleCfg._(rowStyle);
   }
 
-  // TvRowStyleCfg get asRuleResponse => this;
-
   // receive str data into instance & make it structured data
   @override
   void _castToRealTypes(List<PairedQuestAndResp> userResponses) {

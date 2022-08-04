@@ -22,12 +22,12 @@ Future<void> main(List<String> arguments) async {
   // add empy lines befor starting dialog
   print('\n' * 0);
 
-  assert(false, 'should fail instantly');
+  // assert(false, 'should fail instantly');
 
   final cliQuestPresenter = CliQuestionPresenter();
   // using DI to make it easy for web app to use same dialog runner
   final dialoger = DialogRunner(cliQuestPresenter);
-  final succeeded = dialoger.cliLoopUntilComplete();
+  final bool succeeded = dialoger.cliLoopUntilComplete();
   if (!succeeded) {
     exitCode = 2;
     print('Something went wrong!!');
@@ -45,7 +45,7 @@ void createOutputFileFromResponses(
   //
   List<EventLevelCfgQuest> eventConfigLevelData =
       questListMgr.exportableTopLevelQuestions;
-  List<RuleQuestBaseAbs> exportableRuleQuestions =
+  List<VisualRuleDetailQuest> exportableRuleQuestions =
       questListMgr.exportableVisRuleQuestions.toList();
 
   print(
@@ -65,11 +65,11 @@ void createOutputFileFromResponses(
 
   final evCfg = EventCfgTree.fromEventLevelConfig(eventConfigLevelData);
   // create the per-area or per-slot rules
-  var ruleResponses =
-      exportableRuleQuestions.whereType<VisualRuleDetailQuest>();
-  print('ruleResponse answer count: ${ruleResponses.length}');
-  assert(ruleResponses.length == exportableRuleQuestions.length, '???');
-  evCfg.fillFromVisualRuleAnswers(ruleResponses);
+
+  print('ruleResponse answer count: ${exportableRuleQuestions.length}');
+  assert(
+      exportableRuleQuestions.length == exportableRuleQuestions.length, '???');
+  evCfg.fillFromVisualRuleAnswers(exportableRuleQuestions);
   // now dump evCfg to file
   evCfg.dumpCfgToFile(filename);
 }
