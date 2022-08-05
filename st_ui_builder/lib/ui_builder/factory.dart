@@ -112,6 +112,10 @@ class StUiBuilderFactory {
     );
   }
 
+  void printSummary() {
+    _eConfig?.printSummary();
+  }
+
   // FilterRules filterBarConfigForScreen(AppScreen screen) {
   //   // this data also embedded in the GroupedTableDataMgr
   //   // this is NIU I believe

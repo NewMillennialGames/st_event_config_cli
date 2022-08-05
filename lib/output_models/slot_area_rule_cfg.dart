@@ -99,8 +99,8 @@ class SlotOrAreaRuleCfg {
     print('$targetScope RuleCfg on $targetName contains:');
     for (RuleResponseBase rrb in visRuleList) {
       //
-      String cfgRuleTypeName = rrb.runtimeType.toString();
-      print('\t$cfgRuleTypeName has:');
+      // String cfgRuleTypeName = rrb.runtimeType.toString();
+      // print('\t$cfgRuleTypeName has:');
       print('\t\t$rrb');
     }
   }

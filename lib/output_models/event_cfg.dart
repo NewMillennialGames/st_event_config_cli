@@ -211,6 +211,23 @@ class EventCfgTree {
     this.screenConfigMap.values.forEach((sc) => sc.fillMissingWithDefaults());
   }
 
+  void printSummary() {
+    print('EventCfgTree for: ${eventCfg.evTemplateName}\n');
+    for (MapEntry<AppScreen, ScreenCfgByArea> cfg in screenConfigMap.entries) {
+      //
+      print('\tScreen: ${cfg.key.name}:');
+      for (MapEntry<ScreenWidgetArea, CfgForAreaAndNestedSlots> areaCfg
+          in cfg.value.areaConfig.entries) {
+        //
+        print('\t\tArea: ${areaCfg.key.name}\n');
+        for (MapEntry<VisualRuleType, SlotOrAreaRuleCfg> areaCfg
+            in areaCfg.value.visCfgForArea.entries) {
+          print('\t\t\tVRT: ${areaCfg}\n');
+        }
+      }
+    }
+  }
+
   // impl for JsonSerializable above
   factory EventCfgTree.fromJson(Map<String, dynamic> json) =>
       _$EventCfgTreeFromJson(json);

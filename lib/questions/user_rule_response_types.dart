@@ -54,7 +54,7 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
 
   @override
   String toString() {
-    return 'RuleResponseBase for ${ruleType.name}';
+    return 'RuleResp for ${ruleType.name}';
   }
 
   // JsonSerializable
@@ -134,7 +134,7 @@ class SortGroupFilterEntry {
 
   @override
   String toString() {
-    return colName.name + ': asc: $asc; ';
+    return colName.name + ': asc: $asc';
   }
 
   // JsonSerializable
@@ -193,14 +193,14 @@ class TvSortGroupFilterBase extends RuleResponseBase {
   @override
   String toString() {
     String className = this.runtimeType.toString();
-    return '$className for ${ruleType.name} with responses: $_answerSummary';
+    return '$className for ${ruleType.name} with responses:$_answerSummary';
   }
 
   String get _answerSummary {
     Iterable<String> xx = fieldList.map((e) => e.toString());
-    String summary = this.runtimeType.toString() + '';
+    String summary = '\n\t'; // this.runtimeType.toString() +
     for (String fieldCfg in xx) {
-      summary += fieldCfg;
+      summary += fieldCfg + '\n\t';
     }
     return summary;
   }
