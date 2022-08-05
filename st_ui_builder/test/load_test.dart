@@ -1,3 +1,5 @@
+import 'package:grouped_list/sliver_grouped_list.dart';
+import 'package:st_ev_cfg/st_ev_cfg.dart';
 import 'package:test/test.dart';
 
 // import 'package:flutter/material.dart';
@@ -13,13 +15,33 @@ void main() {
   group('various methods on the ui factory', () {
     test('validate loading json', () async {
       //
-      builderFactory = StUiBuilderFactory();
-      Map<String, dynamic> eCfgJsonMap = await readJsonFile('assets/one.json');
-      builderFactory.setConfigForCurrentEvent(eCfgJsonMap);
+      builderFactory = await loadFactory('assets/one.json');
       expect(builderFactory.marketViewIsGameCentricAndTwoPerRow, true);
       expect(builderFactory.marketViewRowsAreSingleAssetOnly, false);
     });
-    test('', () {});
-    test('', () {});
+    test('confirm list view config settings', () async {
+      //
+      builderFactory = await loadFactory('assets/one.json');
+      TableRowDataMgr trdm = builderFactory.listTvConfigForScreen(
+        AppScreen.marketView,
+        [],
+        () {},
+      );
+      expect(trdm.rowStyle == TvAreaRowStyle.driverVsField, '');
+      GroupedListOrder glo = trdm.sortOrder;
+      expect(glo.name == '', '');
+    });
+    test('', () async {
+      //
+      builderFactory = await loadFactory('assets/one.json');
+    });
   });
+}
+
+Future<StUiBuilderFactory> loadFactory(String filePath) async {
+  //
+  var builderFactory = StUiBuilderFactory();
+  Map<String, dynamic> eCfgJsonMap = await readJsonFile(filePath);
+  builderFactory.setConfigForCurrentEvent(eCfgJsonMap);
+  return builderFactory;
 }

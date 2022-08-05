@@ -88,6 +88,23 @@ class SlotOrAreaRuleCfg {
     visRuleList.addAll(answerBuilder.defaultAnswers);
   }
 
+  void printSummary(dynamic slotOrArea) {
+    //
+    bool isAreaRule = slotOrArea is ScreenWidgetArea;
+    String targetScope = isAreaRule ? 'AREA' : 'SLOT';
+    String targetName = isAreaRule
+        ? (slotOrArea as ScreenWidgetArea).name
+        : (slotOrArea as ScreenAreaWidgetSlot).name;
+
+    print('$targetScope RuleCfg on $targetName contains:');
+    for (RuleResponseBase rrb in visRuleList) {
+      //
+      String cfgRuleTypeName = rrb.runtimeType.toString();
+      print('\t$cfgRuleTypeName has:');
+      print('\t\t$rrb');
+    }
+  }
+
   // JsonSerializable
   factory SlotOrAreaRuleCfg.fromJson(Map<String, dynamic> json) =>
       _$SlotOrAreaRuleCfgFromJson(json);

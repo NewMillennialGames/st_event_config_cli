@@ -35,8 +35,11 @@ class TableRowDataMgr {
   // FilterRules get filterRules => _tableViewCfg.filterRules;
 
   // rowBuilder is function to return a Tv-Row for this screen
-  IndexedWidgetBuilder get rowBuilder => (BuildContext ctx, int i) {
-        var asset = _allAssetRows[i];
+  IndexedWidgetBuilder get rowBuilder => (
+        BuildContext ctx,
+        int idx,
+      ) {
+        var asset = _allAssetRows[idx];
         return _tableViewCfg.rowConstructor(asset);
       };
 
