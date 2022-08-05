@@ -334,6 +334,7 @@ class DerivedQuestGenerator {
     var existingAnswers = prevAnswQuest.mainAnswer;
     if (existingAnswers is Iterable<VisualRuleType>) {
       VisualRuleType curRule = existingAnswers.toList()[newQIdx];
+      print('_ccTargetRes got ${curRule.name}');
       return prevAnswQuest.qTargetResolution
           .copyWith(visRuleTypeForAreaOrSlot: curRule);
     }

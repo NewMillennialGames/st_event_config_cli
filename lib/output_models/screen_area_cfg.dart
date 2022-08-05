@@ -47,13 +47,12 @@ class CfgForAreaAndNestedSlots {
       optSlotInArea,
     );
 
-    print('\nappendAreaOrSlotRule got:  ${rQuest.questId}');
-    print('\tArea:  ${rQuest.screenWidgetArea?.name}');
-    print('\tSlot:  ${optSlotInArea?.name}');
-    print(
-      '\tfor a ${optSlotInArea == null ? "AREA" : "SLOT"} level rule on VRT: ${vrt.name}',
-    );
-    // print('\tVRT:  ${vrt.name}');
+    // print('\nappendAreaOrSlotRule got:  ${rQuest.questId}');
+    // print('\tArea:  ${rQuest.screenWidgetArea?.name}');
+    // print('\tSlot:  ${optSlotInArea?.name}');
+    // print(
+    //   '\tfor a ${optSlotInArea == null ? "AREA" : "SLOT"} level rule on VRT: ${vrt.name}',
+    // );
 
     SlotOrAreaRuleCfg cfgForSlotOrArea;
     if (optSlotInArea == null) {
@@ -61,7 +60,7 @@ class CfgForAreaAndNestedSlots {
       cfgForSlotOrArea = visCfgForArea[vrt] ?? SlotOrAreaRuleCfg([]);
       cfgForSlotOrArea.appendQuestion(rQuest);
       visCfgForArea[vrt] = cfgForSlotOrArea;
-      print('\t area rule count:  ${visCfgForArea.length} (post add)');
+      // print('\t area rule count:  ${visCfgForArea.length} (post add)');
     } else {
       // this is a slot level rule
       Map<ScreenAreaWidgetSlot, SlotOrAreaRuleCfg> slotCfgMap =

@@ -280,7 +280,7 @@ abstract class QuestBase with EquatableMixin {
   RuleResponseBase get asVisRuleResponse {
     //
     RuleResponseBase rrb = visRuleTypeForAreaOrSlot!.ruleResponseContainer;
-    print('\nasVisRuleResponse using:   (${qPromptCollection.prompts.length})');
+    // print('\nasVisRuleResponse using:   (${qPromptCollection.prompts.length})');
 
     List<PairedQuestAndResp> pqr = qPromptCollection.listTypedResponses;
     print(pqr);
@@ -533,9 +533,6 @@ abstract class SelectAndPrepQBase extends QuestBase {
   }
 
   DerivedQuestGenerator getDerivedRuleQuestGenViaVisType(
-    // int newQuIdx,
-    // VisualRuleType? optRuleTypeToCreateDqg,
-    // RuleTypeFilterFunction? filterFunc,
     QTargetResolution newQtr,
   ) {
     /*  uses a VisualRuleType to dynamically build a DerivedQuestGenerator
@@ -769,6 +766,9 @@ class RulePrepQuest extends SelectAndPrepQBase {
       'target must be complete in a rule prep question!',
     );
 
+    print(
+      'derivedQuestTargetAtAnswerIdx.visRule: ${qTargetResolution.visRuleTypeForAreaOrSlot!.name}',
+    );
     return qTargetResolution.copyWith(
       precision: TargetPrecision.ruleDetailVisual,
     );

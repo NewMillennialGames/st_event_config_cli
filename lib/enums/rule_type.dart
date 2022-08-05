@@ -255,6 +255,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
     assert(thisVisRT == newQTargRes.visRuleTypeForAreaOrSlot, 'wtf?');
 
     String ruleTypeName = thisVisRT.name;
+    print('ruleTypeName: $ruleTypeName');
     // String newQuestNamePrefix = prevAnswQuest.questId;
 
     // visRequiredSubQuests should contain exactly 1 value

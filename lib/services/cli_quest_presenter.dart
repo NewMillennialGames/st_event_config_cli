@@ -88,6 +88,8 @@ class CliQuestionPresenter implements QuestionPresenterIfc {
     String userResp = stdin.readLineSync() ?? '';
     // make the next command throw if response is invalid
     promptInst.collectResponse(userResp);
+
+    // print('\nuser answered $userResp on ${quest.targetPath}');
   }
 
   void _printQPrompt(QuestPromptInstance promptInst) {
