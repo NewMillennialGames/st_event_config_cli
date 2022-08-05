@@ -67,16 +67,17 @@ class EventCfgTree {
     this.screenConfigMap,
   );
 
-  factory EventCfgTree.fromEventLevelConfig(Iterable<QuestBase> responses) {
+  factory EventCfgTree.fromEventLevelConfig(
+      Iterable<EventLevelCfgQuest> evCfgResponses) {
     //
-    Iterable<QuestBase> listOneMainQuest =
-        responses.where((q) => q.questId == QuestionIdStrings.eventName);
+    EventLevelCfgQuest evTemplateQuest = evCfgResponses
+        .firstWhere((q) => q.questId == QuestionIdStrings.eventName);
 
-    if (listOneMainQuest.length < 1)
-      throw UnimplementedError('top level question missing');
+    // if (evTemplateQuest == null)
+    //   throw UnimplementedError('top level question missing');
 
     String evTemplateName =
-        (listOneMainQuest.first.mainAnswer ?? '_eventNameMissing') as String;
+        (evTemplateQuest.mainAnswer ?? '_eventNameMissing') as String;
 
     // declare Event level vals to be captured
     String evTemplateDescription = '';
@@ -90,36 +91,34 @@ class EventCfgTree {
     bool applySameRowStyleToAllScreens = true;
     // use try to catch errs and allow easy debugging
     try {
-      evTemplateDescription = (responses
-              .where((q) => q.questId == QuestionIdStrings.eventDescrip)
-              .first
+      evTemplateDescription = (evCfgResponses
+              .firstWhere((q) => q.questId == QuestionIdStrings.eventDescrip)
               .mainAnswer ??
           '') as String;
 
-      evType = responses.where((q) => q.mainAnswer is EvType).first.mainAnswer
-          as EvType;
+      evType = evCfgResponses
+          .firstWhere((q) => q.mainAnswer is EvType)
+          .mainAnswer as EvType;
       //
-      evCompetitorType = responses
-          .where((q) => q.mainAnswer is EvCompetitorType)
-          .first
+      evCompetitorType = evCfgResponses
+          .firstWhere((q) => q.mainAnswer is EvCompetitorType)
           .mainAnswer as EvCompetitorType;
-      evOpponentType = responses
-          .where((q) => q.mainAnswer is EvOpponentType)
-          .first
+      evOpponentType = evCfgResponses
+          .firstWhere((q) => q.mainAnswer is EvOpponentType)
           .mainAnswer as EvOpponentType;
-      evDuration = responses
-          .where((q) => q.mainAnswer is EvDuration)
-          .first
+      evDuration = evCfgResponses
+          .firstWhere((q) => q.mainAnswer is EvDuration)
           .mainAnswer as EvDuration;
-      evEliminationType = responses
-          .where((q) => q.mainAnswer is EvEliminationStrategy)
-          .first
+      evEliminationType = evCfgResponses
+          .firstWhere((q) => q.mainAnswer is EvEliminationStrategy)
           .mainAnswer as EvEliminationStrategy;
       // tells app how to age-off finished games
-      evGameAgeOffRule = responses
-          .where((q) => q.mainAnswer is EvGameAgeOffRule)
-          .first
+      evGameAgeOffRule = evCfgResponses
+          .firstWhere((q) => q.mainAnswer is EvGameAgeOffRule)
           .mainAnswer as EvGameAgeOffRule;
+      applySameRowStyleToAllScreens = evCfgResponses
+          .firstWhere((q) => q.questId == QuestionIdStrings.globalRowStyle)
+          .mainAnswer as bool;
     } catch (e) {
       print(
         'Warnnig:  key Event level quests/fields missing.  Hope you are debugging testing',
@@ -127,13 +126,15 @@ class EventCfgTree {
     }
 
     final eventCfg = TopEventCfg(
-      evTemplateName, evTemplateDescription, evType,
+      evTemplateName,
+      evTemplateDescription,
+      evType,
       evCompetitorType: evCompetitorType,
       evOpponentType: evOpponentType,
       evDuration: evDuration,
       evEliminationType: evEliminationType,
       evGameAgeOffRule: evGameAgeOffRule,
-      // applySameRowStyleToAllScreens,
+      applySameRowStyleToAllScreens: applySameRowStyleToAllScreens,
     );
 
     return EventCfgTree(eventCfg, {});
@@ -170,13 +171,13 @@ class EventCfgTree {
     // print(
     //   'fillFromVisualRuleAnswers got ${answeredQuestions.length} answeredQuestions',
     // );
-    for (VisualRuleDetailQuest rQuest in answeredQuestions) {
-      // look up or create it
-      ScreenCfgByArea screenCfg = this.screenConfigMap[rQuest.appScreen] ??
-          ScreenCfgByArea(rQuest.appScreen, {});
-      screenCfg.appendVisRule(rQuest);
+    for (VisualRuleDetailQuest vrQuest in answeredQuestions) {
+      // look up or create config for this screen;  top of tree
+      ScreenCfgByArea screenCfg = this.screenConfigMap[vrQuest.appScreen] ??
+          ScreenCfgByArea(vrQuest.appScreen, {});
+      screenCfg.appendVisRule(vrQuest);
       // store when newly created above
-      this.screenConfigMap[rQuest.appScreen] = screenCfg;
+      this.screenConfigMap[vrQuest.appScreen] = screenCfg;
     }
   }
 

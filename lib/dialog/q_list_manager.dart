@@ -8,9 +8,9 @@ extension ListQuestExt1 on Iterable<QuestBase> {
           .where((q) => q.containsPromptWhere(test))
           .fold<List<QuestPromptInstance>>(
         <QuestPromptInstance>[],
-        (l, qu2) => l
+        (List<QuestPromptInstance> l, QuestBase qb) => l
           ..addAll(
-            qu2.matchingPromptsWhere(test),
+            qb.matchingPromptsWhere(test),
           ),
       );
 }
@@ -19,6 +19,8 @@ class QuestListMgr {
   /*
     does nothing but track and manage the full
     list of Questions, both pending and completed/answered
+
+    future: will dump and hydrate itself for testing in debug mode
   */
   int _currQuestionIdx = -1;
   List<QuestBase> _pendingQuestions = [];
@@ -303,5 +305,15 @@ class QuestListMgr {
         <CaptureAndCast>[], (l1, l2) => l1..addAll(l2));
 
     return resLst.toList();
+  }
+
+  // debug logic below
+  void debugDumpToFile(String fileName) {
+    // write this json data out to file   TODO
+  }
+
+  void debugLoadFromFile(String fileName) {
+    // hydrate this instance from json file of previously dumped questions
+    // TODO
   }
 }

@@ -37,7 +37,7 @@ class CfgForAreaAndNestedSlots {
     VisualRuleType? vrt = rQuest.visRuleTypeForAreaOrSlot;
     assert(
       vrt != null,
-      'cant add Quest2 that has no attached rule',
+      'VisualRuleType is required at this level',
     );
     //
     ScreenAreaWidgetSlot? optSlotInArea = rQuest.slotInArea;
@@ -47,18 +47,29 @@ class CfgForAreaAndNestedSlots {
       optSlotInArea,
     );
 
+    // print('\nappendAreaOrSlotRule got:  ${rQuest.questId}');
+    // print('\tArea:  ${rQuest.screenWidgetArea?.name}');
+    // print('\tSlot:  ${optSlotInArea?.name}');
+    // print(
+    //   '\tfor a ${optSlotInArea == null ? "AREA" : "SLOT"} level rule on VRT: ${vrt.name}',
+    // );
+
     SlotOrAreaRuleCfg cfgForSlotOrArea;
     if (optSlotInArea == null) {
       // this is an area level rule by specific type
       cfgForSlotOrArea = visCfgForArea[vrt] ?? SlotOrAreaRuleCfg([]);
       cfgForSlotOrArea.appendQuestion(rQuest);
       visCfgForArea[vrt] = cfgForSlotOrArea;
+      // print('\t area rule count:  ${visCfgForArea.length} (post add)');
     } else {
       // this is a slot level rule
       Map<ScreenAreaWidgetSlot, SlotOrAreaRuleCfg> slotCfgMap =
           _setAndGetMapForRuleAndSlot(vrt, optSlotInArea);
       slotCfgMap[optSlotInArea]!.appendQuestion(rQuest);
       visCfgForSlotsByRuleType[vrt] = slotCfgMap;
+      print(
+        '\t slot rule count:  ${visCfgForSlotsByRuleType.length} (post add)',
+      );
     }
   }
 

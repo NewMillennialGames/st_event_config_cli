@@ -104,7 +104,6 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
   which receives the prior question ID as a test for match succcess
   */
   final String matcherDescrip;
-  bool _hasCreatedDynamicDqg = false;
   /* cascadeTypeOfMatchedQuest indicates what type of
     new Questions (or potentially auto-answers)
     will be added by the DerivedQuestGenerator
@@ -115,25 +114,28 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
   next 2 cannot be final;  only one is used
   function takes precedence; if deriveQuestGenCallbk passed
   it will be used
+
+  ALWAYS use _getActiveDqg(qb)
+  and NEVER READ derivedQuestGen directly
   */
   DerivedQuestGenerator derivedQuestGen;
-  // derQuestGeneratorFactory will build a DerivedQuestGenerator when derivedQuestGen is a noop
-  DerQuestGeneratorFactoryClbk? deriveQuestGenCallbk; // <AnsTypOfMatched>
+  // derQuestGeneratorFactory will build a DerivedQuestGenerator when derivedQuestGen is a noop instance
+  DerQuestGeneratorFactoryClbk? deriveQuestGenCallbk;
 
-  // AddQuestChkCallbk is for doing more advanced analysis to verify a match
+  // AddQuestRespChkCallbk is for doing more advanced analysis to verify a match
   final AddQuestRespChkCallbk?
       validateUserAnswerAfterPatternMatchIsTrueCallback;
   final PriorQuestIdMatchPatternTest? questIdPatternMatchTest;
 
   // pattern matching values;  leave null to not match on them
   Type matchedQuestType;
-  TargetPrecision? targetPrecision;
+  // TargetPrecision? targetPrecision;
   //
   QuestMatcher(
     this.matcherDescrip,
     this.matchedQuestType, {
     required this.derivedQuestGen,
-    this.targetPrecision,
+    // this.targetPrecision,
     this.validateUserAnswerAfterPatternMatchIsTrueCallback,
     this.questIdPatternMatchTest,
     // send DerivedQuestGenerator.noop to derivedQuestGen
@@ -145,20 +147,21 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
   }
 
   // getters
-  String get firstDqgPrompt => derivedQuestGen.firstPromptOrNoOp;
   bool get producesBuilderRules => false;
   bool get usesMatchByQIdPatternCallback => questIdPatternMatchTest != null;
   bool get shouldValidateUserAnswer =>
       validateUserAnswerAfterPatternMatchIsTrueCallback != null;
-  bool get isTargetComplete =>
-      targetPrecision != null ? targetPrecision!.targetComplete : false;
+  // bool get isTargetComplete =>
+  //     targetPrecision != null ? targetPrecision!.targetComplete : false;
 
   // public methods
   bool doesMatch(QuestBase prevAnsweredQuest) {
     //
-    bool isAPatternMatch = targetPrecision == null ||
-        targetPrecision == prevAnsweredQuest.qTargetResolution.precision;
-    if (!isAPatternMatch || prevAnsweredQuest.runtimeType != matchedQuestType) {
+    // bool isAPatternMatch = targetPrecision == null ||
+    //     targetPrecision == prevAnsweredQuest.qTargetResolution.precision;
+
+    bool isAPatternMatch = true;
+    if (prevAnsweredQuest.runtimeType != matchedQuestType) {
       return false;
     }
 
@@ -181,7 +184,9 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
     }
     if (isAPatternMatch) {
       //
-      bool isNoopGenerator = this.derivedQuestGen.isNoopGenerator;
+      bool isNoopGenerator = _getActiveDqg(prevAnsweredQuest).isNoopGenerator;
+      isAPatternMatch = isNoopGenerator ? false : isAPatternMatch;
+
       int strLen = min(120, matcherDescrip.length);
       String shortDesc = matcherDescrip
           .replaceAll("\n", "")
@@ -198,7 +203,7 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
   }
 
   List<QuestBase> getDerivedAutoGenQuestions(QuestBase answeredQuest) {
-    DerivedQuestGenerator dqg = activeDqg(answeredQuest);
+    DerivedQuestGenerator dqg = _getActiveDqg(answeredQuest);
     if (dqg.isNoopGenerator) {
       print('Err: bailing getDerivedAutoGenQuestions because dqg is a no-op');
       return [];
@@ -218,59 +223,25 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
     return priorAnsweredQuest.mainAnswer as AnsTypOfMatched;
   }
 
-  DerivedQuestGenerator activeDqg(QuestBase? qb) {
-    if (deriveQuestGenCallbk == null || _hasCreatedDynamicDqg)
-      return derivedQuestGen;
+  DerivedQuestGenerator _getActiveDqg(QuestBase qb) {
+    // never replace the STORED derivedQuestGen or many problems will result
+    assert(
+      deriveQuestGenCallbk == null || derivedQuestGen.isNoopGenerator,
+      'its an error to provide BOTH a valid derivedQuestGen and a callback to generate one',
+      // matchers are reused between questions; cannot leave a DYNAMIC/CALLBACK built value stored on this instance or it will mix question types
+    );
+    if (deriveQuestGenCallbk == null) return derivedQuestGen;
 
     assert(
       derivedQuestGen.isNoopGenerator,
-      'err:  expected noop stored generator;  why would you add a real DQG when you added deriveQuestGenCallbk to immediately replace it?',
+      'err:  expected noop generator when callback specified;  why would you add a real DQG when you added deriveQuestGenCallbk to immediately replace it?',
     );
-    // should generate DQG rather than return stored DQG
-    derivedQuestGen = deriveQuestGenCallbk!(
-      qb!,
+    // should generate DQG rather than return stored DQG;  always generated it fresh for each question
+    return deriveQuestGenCallbk!(
+      qb,
       0,
-    ); // as DerivedQuestGenerator<AnsTypOfMatched>
-    _hasCreatedDynamicDqg = true;
-    return derivedQuestGen;
+    );
   }
-
-  // bool _doDeeperMatch(QuestBase quest) {
-  //   // compare all properties instead of only QuestionId
-  //   bool dMatch = true;
-  //   // dMatch = dMatch &&
-  //   //     (this.respCascadePatternEm == null ||
-  //   //         this.respCascadePatternEm == quest.respCascadePatternEm);
-  //   // if (!dMatch) return false; // only continue tests when succeeding
-  //   // print('Cascade matches: $dMatch');
-
-  //   // dMatch =
-  //   //     dMatch && (this.appScreen == null || this.appScreen == quest.appScreen);
-  //   // if (!dMatch) return false;
-  //   // // print('appScreen matches: $dMatch');
-
-  //   // dMatch = dMatch &&
-  //   //     (this.screenWidgetArea == null ||
-  //   //         this.screenWidgetArea == quest.screenWidgetArea);
-  //   // if (!dMatch) return false;
-  //   // // print('screenWidgetArea matches: $dMatch');
-
-  //   // dMatch = dMatch &&
-  //   //     (this.slotInArea == null || this.slotInArea == quest.slotInArea);
-  //   // if (!dMatch) return false;
-  //   // // print('slotInArea matches: $dMatch');
-
-  //   // dMatch = dMatch &&
-  //   //     (this.visRuleTypeForAreaOrSlot == null ||
-  //   //         this.visRuleTypeForAreaOrSlot == quest.visRuleTypeForAreaOrSlot);
-  //   // if (!dMatch) return false;
-  //   // print('visRuleTypeForAreaOrSlot matches: $dMatch');
-  //   // print('isRuleQuestion: ${quest.isRuleDetailQuestion}');
-
-  //   // dMatch =
-  //   //     dMatch && (this.typ == null || quest.response.runtimeType == this.typ);
-  //   return dMatch;
-  // }
 }
 
 

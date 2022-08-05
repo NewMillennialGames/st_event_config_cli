@@ -10,27 +10,42 @@ import 'lib/services/cli_quest_presenter.dart';
   check ReadMe.MD
 */
 
+const String DEBUG_LOAD_OPT = 'loadDebugData';
+const String DEBUG_LOAD_FILENAME = 'one.json';
+const String DEBUG_DUMP_ANSWERS = 'dumpAnswers';
+
 late ArgResults argResults;
 
-Future<void> main(List<String> arguments) async {
+Future<void> main(List<String> cliArgs) async {
   exitCode = 0; // presume success
 
-  // final parser = setupOptions();
-  // argResults = parser.parse(arguments);
+  final parser = setupOptions();
+  argResults = parser.parse(cliArgs);
   // final paths = argResults.rest;
 
   // add empy lines befor starting dialog
   print('\n' * 0);
 
-  assert(false, 'should fail instantly');
+  // assert(false, 'should fail instantly');
 
   final cliQuestPresenter = CliQuestionPresenter();
   // using DI to make it easy for web app to use same dialog runner
   final dialoger = DialogRunner(cliQuestPresenter);
-  final succeeded = dialoger.cliLoopUntilComplete();
-  if (!succeeded) {
-    exitCode = 2;
-    print('Something went wrong!!');
+
+  bool inDebugMode = argResults.wasParsed(DEBUG_LOAD_OPT);
+  if (inDebugMode) {
+    String debugFileName = argResults[DEBUG_LOAD_OPT];
+    dialoger.questionLstMgr.debugLoadFromFile(debugFileName);
+  } else {
+    final bool succeeded = dialoger.cliLoopUntilComplete();
+    if (!succeeded) {
+      exitCode = 2;
+      print('Something went wrong!!');
+    }
+
+    if (argResults.wasParsed(DEBUG_DUMP_ANSWERS)) {
+      dialoger.questionLstMgr.debugDumpToFile(argResults[DEBUG_DUMP_ANSWERS]);
+    }
   }
 
   // now generate results into a config file
@@ -45,7 +60,7 @@ void createOutputFileFromResponses(
   //
   List<EventLevelCfgQuest> eventConfigLevelData =
       questListMgr.exportableTopLevelQuestions;
-  List<RuleQuestBaseAbs> exportableRuleQuestions =
+  List<VisualRuleDetailQuest> exportableRuleQuestions =
       questListMgr.exportableVisRuleQuestions.toList();
 
   print(
@@ -65,31 +80,30 @@ void createOutputFileFromResponses(
 
   final evCfg = EventCfgTree.fromEventLevelConfig(eventConfigLevelData);
   // create the per-area or per-slot rules
-  var ruleResponses =
-      exportableRuleQuestions.whereType<VisualRuleDetailQuest>();
-  print('ruleResponse answer count: ${ruleResponses.length}');
-  assert(ruleResponses.length == exportableRuleQuestions.length, '???');
-  evCfg.fillFromVisualRuleAnswers(ruleResponses);
+
+  print('ruleResponse answer count: ${exportableRuleQuestions.length}');
+  assert(
+      exportableRuleQuestions.length == exportableRuleQuestions.length, '???');
+  evCfg.fillFromVisualRuleAnswers(exportableRuleQuestions);
   // now dump evCfg to file
   evCfg.dumpCfgToFile(filename);
 }
 
-// ArgParser setupOptions() {
-//   final parser = ArgParser()
-//     ..addFlag('create', abbr: 'c', help: 'pass -c to create new user')
-//     ..addFlag('withprospect', abbr: 'p', help: 'pass -p to add a prospect')
-//     ..addFlag('data', abbr: 'd', help: 'pass -d to add data to prospect');
-//   // ..addOption('help', abbr: 'h');
+ArgParser setupOptions() {
+  final parser = ArgParser();
+  parser.addOption(
+    DEBUG_DUMP_ANSWERS,
+    abbr: 'd',
+    defaultsTo: DEBUG_LOAD_FILENAME,
+    help: 'pass -d to dump NEW answers to DEBUG_LOAD_FILENAME',
+  );
 
-//   parser.addOption('email',
-//       abbr: 'e',
-//       defaultsTo: 'dg100@pathoz.com',
-//       help: 'pass -e to set user email');
-//   parser.addOption(
-//     'pw',
-//     abbr: 'w',
-//     defaultsTo: '123456',
-//     help: 'pass -w to set user pw',
-//   );
-//   return parser;
-// }
+  parser.addOption(
+    DEBUG_LOAD_OPT,
+    abbr: 'l',
+    defaultsTo: DEBUG_LOAD_FILENAME,
+    help:
+        'pass -l plus filename to load existing (previously dumped) answers for testing',
+  );
+  return parser;
+}
