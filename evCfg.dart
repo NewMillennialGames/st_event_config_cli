@@ -83,10 +83,14 @@ void createOutputFileFromResponses(
 
   print('ruleResponse answer count: ${exportableRuleQuestions.length}');
   assert(
-      exportableRuleQuestions.length == exportableRuleQuestions.length, '???');
+    exportableRuleQuestions.length == exportableRuleQuestions.length,
+    '???',
+  );
   evCfg.fillFromVisualRuleAnswers(exportableRuleQuestions);
   // now dump evCfg to file
   evCfg.dumpCfgToFile(filename);
+
+  evCfg.printSummary();
 }
 
 ArgParser setupOptions() {

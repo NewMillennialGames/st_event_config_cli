@@ -213,16 +213,39 @@ class EventCfgTree {
 
   void printSummary() {
     print('EventCfgTree for: ${eventCfg.evTemplateName}\n');
-    for (MapEntry<AppScreen, ScreenCfgByArea> cfg in screenConfigMap.entries) {
+    for (MapEntry<AppScreen, ScreenCfgByArea> screenCfg
+        in screenConfigMap.entries) {
       //
-      print('\tScreen: ${cfg.key.name}:');
+      print('\tScreen: ${screenCfg.key.name}:');
       for (MapEntry<ScreenWidgetArea, CfgForAreaAndNestedSlots> areaCfg
-          in cfg.value.areaConfig.entries) {
+          in screenCfg.value.areaConfig.entries) {
         //
         print('\t\tArea: ${areaCfg.key.name}\n');
-        for (MapEntry<VisualRuleType, SlotOrAreaRuleCfg> areaCfg
+        for (MapEntry<VisualRuleType, SlotOrAreaRuleCfg> ruleCfg
             in areaCfg.value.visCfgForArea.entries) {
-          print('\t\t\tVRT: ${areaCfg}\n');
+          // print('\t\t\tVRT: ${ruleCfg.key.name}\n');
+          ruleCfg.value.printSummary(areaCfg.key);
+          print('\t\tSlots under Area: ${areaCfg.key.name}');
+          _printSlotsInAreaWithRuleCfg(areaCfg);
+        }
+      }
+    }
+  }
+
+  void _printSlotsInAreaWithRuleCfg(
+    MapEntry<ScreenWidgetArea, CfgForAreaAndNestedSlots> areaCfg,
+  ) {
+    for (MapEntry<VisualRuleType,
+            Map<ScreenAreaWidgetSlot, SlotOrAreaRuleCfg>> vrtWithSlotCfg
+        in areaCfg.value.visCfgForSlotsByRuleType.entries) {
+      // print('\n\t\t\tSlot VRT:  ${vrtWithSlotCfg.key.name}');
+      for (MapEntry<ScreenAreaWidgetSlot, SlotOrAreaRuleCfg> bySlotCfg
+          in vrtWithSlotCfg.value.entries) {
+        print(
+          '\t\tSlot: ${bySlotCfg.key.name} under VRT ${vrtWithSlotCfg.key.name}',
+        );
+        for (RuleResponseBase rrb in bySlotCfg.value.visRuleList) {
+          print('\t\t\t' + rrb.toString());
         }
       }
     }
