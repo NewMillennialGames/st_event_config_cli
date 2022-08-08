@@ -81,7 +81,7 @@ void createOutputFileFromResponses(
   final evCfg = EventCfgTree.fromEventLevelConfig(eventConfigLevelData);
   // create the per-area or per-slot rules
 
-  print('ruleResponse answer count: ${exportableRuleQuestions.length}');
+  // print('ruleResponse answer count: ${exportableRuleQuestions.length}');
   assert(
     exportableRuleQuestions.length == exportableRuleQuestions.length,
     '???',

@@ -88,7 +88,7 @@ class SlotOrAreaRuleCfg {
     visRuleList.addAll(answerBuilder.defaultAnswers);
   }
 
-  void printSummary(dynamic slotOrArea) {
+  void printSummary(dynamic slotOrArea, {String padding = '  '}) {
     //
     bool isAreaRule = slotOrArea is ScreenWidgetArea;
     String targetScope = isAreaRule ? 'AREA' : 'SLOT';
@@ -96,12 +96,12 @@ class SlotOrAreaRuleCfg {
         ? (slotOrArea as ScreenWidgetArea).name
         : (slotOrArea as ScreenAreaWidgetSlot).name;
 
-    print('$targetScope RuleCfg on $targetName contains:');
+    print(padding + '$targetScope RuleCfg on $targetName contains:');
     for (RuleResponseBase rrb in visRuleList) {
       //
       // String cfgRuleTypeName = rrb.runtimeType.toString();
       // print('\t$cfgRuleTypeName has:');
-      print('\t\t$rrb');
+      print(padding + padding + '$rrb');
     }
   }
 

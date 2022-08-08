@@ -115,7 +115,7 @@ class TvRowStyleCfg extends RuleResponseBase {
 
   @override
   String toString() {
-    return 'TvRowStyleCfg for ${ruleType.name} applying rowstyle: ${selectedRowStyle.name}';
+    return 'TvRowStyleCfg (${ruleType.name}) applying rowstyle: ${selectedRowStyle.name}';
   }
 
   // JsonSerializable
@@ -160,9 +160,9 @@ class TvSortGroupFilterBase extends RuleResponseBase {
     */
     // empty fieldList
     // this.fieldList = [];
-    print(
-      'TvSortGroupFilter.castToRealTypes got ${userResponses.length} userResponses',
-    );
+    // print(
+    //   'TvSortGroupFilter.castToRealTypes got ${userResponses.length} userResponses',
+    // );
     for (int i = 0; i < userResponses.length - 1; i += 2) {
       PairedQuestAndResp fldNameEntry = userResponses[i];
       assert(
@@ -183,9 +183,9 @@ class TvSortGroupFilterBase extends RuleResponseBase {
 
       fieldList.add(SortGroupFilterEntry(_curSelField, sortAsc));
     }
-    print(
-      '${fieldList.length} entries added to TvSortGroupFilterBase!  (${this.runtimeType})',
-    );
+    // print(
+    //   '${fieldList.length} entries (contains 2 vals) added to TvSortGroupFilterBase!  (${this.runtimeType})',
+    // );
   }
 
   DbTableFieldName get firstColName => fieldList.first.colName;
@@ -193,14 +193,15 @@ class TvSortGroupFilterBase extends RuleResponseBase {
   @override
   String toString() {
     String className = this.runtimeType.toString();
-    return '$className for ${ruleType.name} with responses:$_answerSummary';
+    return '$className (${ruleType.name}) w cfg:\n$_answerSummary';
   }
 
   String get _answerSummary {
-    Iterable<String> xx = fieldList.map((e) => e.toString());
-    String summary = '\n\t'; // this.runtimeType.toString() +
+    Iterable<String> xx =
+        fieldList.map((SortGroupFilterEntry fldEntry) => fldEntry.toString());
+    String summary = '\t'; // this.runtimeType.toString() +
     for (String fieldCfg in xx) {
-      summary += fieldCfg + '\n\t';
+      summary += fieldCfg + ';  ';
     }
     return summary;
   }
@@ -267,7 +268,7 @@ class ShowHideCfg extends RuleResponseBase {
 
   @override
   String toString() {
-    return 'ShowHideCfg for ${ruleType.name} should show: $shouldShow';
+    return 'ShowHideCfg (${ruleType.name}) should show: $shouldShow';
   }
 
   // JsonSerializable
