@@ -93,10 +93,10 @@ class SlotOrAreaRuleCfg {
     bool isAreaRule = slotOrArea is ScreenWidgetArea;
     String targetScope = isAreaRule ? 'AREA' : 'SLOT';
     String targetName = isAreaRule
-        ? (slotOrArea as ScreenWidgetArea).name
-        : (slotOrArea as ScreenAreaWidgetSlot).name;
+        ? (slotOrArea as ScreenWidgetArea).name.toUpperCase()
+        : (slotOrArea as ScreenAreaWidgetSlot).name.toUpperCase();
 
-    print(padding + '$targetScope RuleCfg on $targetName contains:');
+    print(padding + '$targetName $targetScope RuleCfg:');
     for (RuleResponseBase rrb in visRuleList) {
       //
       // String cfgRuleTypeName = rrb.runtimeType.toString();

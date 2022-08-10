@@ -212,11 +212,11 @@ class EventCfgTree {
   }
 
   void printSummary() {
-    print('EventCfgTree for: ${eventCfg.evTemplateName}\n');
+    print('EventCfgTree for: ${eventCfg.evTemplateName}');
     for (MapEntry<AppScreen, ScreenCfgByArea> screenCfg
         in screenConfigMap.entries) {
       //
-      print('  Screen: ${screenCfg.key.name.toUpperCase()}:');
+      print('\n  Screen: ${screenCfg.key.name.toUpperCase()}:');
       for (MapEntry<ScreenWidgetArea, CfgForAreaAndNestedSlots> areaCfg
           in screenCfg.value.areaConfig.entries) {
         //
@@ -225,7 +225,7 @@ class EventCfgTree {
             in areaCfg.value.visCfgForArea.entries) {
           // print('\t\t\tVRT: ${ruleCfg.key.name}\n');
           ruleCfg.value.printSummary(areaCfg.key);
-          print('\tSlots under Area: ${areaCfg.key.name}');
+          // only print slots if rules exist there
           _printSlotsInAreaWithRuleCfg(areaCfg);
         }
       }
@@ -235,14 +235,19 @@ class EventCfgTree {
   void _printSlotsInAreaWithRuleCfg(
     MapEntry<ScreenWidgetArea, CfgForAreaAndNestedSlots> areaCfg,
   ) {
+    var cfgMap = areaCfg.value.visCfgForSlotsByRuleType.entries;
+    // only print slots if rules exist there
+    if (cfgMap.length < 1) return;
+
+    print('\t${areaCfg.key.name.toUpperCase()} AREA has:');
     for (MapEntry<VisualRuleType,
             Map<ScreenAreaWidgetSlot, SlotOrAreaRuleCfg>> vrtWithSlotCfg
-        in areaCfg.value.visCfgForSlotsByRuleType.entries) {
+        in cfgMap) {
       // print('\n\t\t\tSlot VRT:  ${vrtWithSlotCfg.key.name}');
       for (MapEntry<ScreenAreaWidgetSlot, SlotOrAreaRuleCfg> bySlotCfg
           in vrtWithSlotCfg.value.entries) {
         print(
-          '\tSlot: ${bySlotCfg.key.name} under VRT ${vrtWithSlotCfg.key.name}',
+          '\SLOT: ${bySlotCfg.key.name.toUpperCase()} with ${vrtWithSlotCfg.key.name.toUpperCase()} (VisRule)',
         );
         for (RuleResponseBase rrb in bySlotCfg.value.visRuleList) {
           print('\t  ' + rrb.toString());
