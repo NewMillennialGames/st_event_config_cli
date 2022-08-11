@@ -82,7 +82,7 @@ class CfgForAreaAndNestedSlots {
     SlotOrAreaRuleCfg tableAreaRules =
         this.areaRulesByRuleType(VisualRuleType.styleOrFormat);
     List<RuleResponseBase> lstRules =
-        tableAreaRules.rulesOfType(VisualRuleType.styleOrFormat);
+        tableAreaRules.rulesOfVRType(VisualRuleType.styleOrFormat);
     return lstRules.first as TvRowStyleCfg;
   }
 
@@ -110,14 +110,16 @@ class CfgForAreaAndNestedSlots {
       'method only works for TableVw areas',
     );
 
-    List<TvSortCfg> definedSortRules =
-        _loadRulesInOrder<TvSortCfg>(VisualRuleType.sortCfg);
-    int sortRuleCnt = definedSortRules.length;
-    if (sortRuleCnt < 1) return null;
+    SlotOrAreaRuleCfg? areaSortCfg = visCfgForArea[VisualRuleType.sortCfg];
+    if (areaSortCfg == null || areaSortCfg.visRuleList.length < 1) return null;
 
-    TvSortCfg? gr2 = sortRuleCnt > 1 ? definedSortRules[1] : null;
-    TvSortCfg? gr3 = sortRuleCnt > 2 ? definedSortRules[2] : null;
-    return SortingRules(definedSortRules.first, gr2, gr3);
+    TvSortCfg? definedSortRules =
+        areaSortCfg.ruleForObjType(TvSortCfg) as TvSortCfg;
+    // int sortRuleCnt = definedSortRules.fieldList.length;
+    // TvSortCfg? gr2 = sortRuleCnt > 1 ? areaSortCfg[1] : null;
+    // TvSortCfg? gr3 = sortRuleCnt > 2 ? areaSortCfg[2] : null;
+    return SortingRules(definedSortRules.first, definedSortRules.second,
+        definedSortRules.third);
   }
 
   FilterRules? get filterRules {

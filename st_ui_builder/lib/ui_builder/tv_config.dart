@@ -43,7 +43,8 @@ class TableviewConfigPayload {
     return TableviewConfigPayload._(
       appScreen,
       tableAreaCfg.rowStyleCfg.selectedRowStyle,
-      tableAreaCfg.sortingRules ?? SortingRules(TvSortCfg.noop(), null, null),
+      tableAreaCfg.sortingRules ??
+          SortingRules(SortGroupFilterEntry.noop(), null, null),
       filterBarAreaCfg?.filterRules,
     );
   }

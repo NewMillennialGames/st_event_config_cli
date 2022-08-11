@@ -27,9 +27,9 @@ void main() {
         [],
         () {},
       );
-      expect(trdm.rowStyle == TvAreaRowStyle.driverVsField, '');
+      expect(trdm.rowStyle, TvAreaRowStyle.driverVsField, reason: '');
       GroupedListOrder glo = trdm.sortOrder;
-      expect(glo.name == '', '');
+      expect(glo.name, 'ASC', reason: '');
     });
     test('', () async {
       //

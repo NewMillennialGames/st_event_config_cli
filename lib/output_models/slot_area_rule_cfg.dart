@@ -17,8 +17,16 @@ class SlotOrAreaRuleCfg {
     this.visRuleList,
   );
 
-  List<RuleResponseBase> rulesOfType(VisualRuleType rt) =>
+  List<RuleResponseBase> rulesOfVRType(VisualRuleType rt) =>
       visRuleList.where((rr) => rr.ruleType == rt).toList();
+
+  RuleResponseBase? ruleForObjType(Type objTyp) {
+    // not tested
+    assert(objTyp is RuleResponseBase);
+    Iterable<RuleResponseBase> matchLst =
+        visRuleList.where((rr) => rr.runtimeType == objTyp);
+    return matchLst.length < 1 ? null : matchLst.first;
+  }
 
   Iterable<VisualRuleType> get existingAnsweredRuleTypes =>
       visRuleList.map((e) => e.ruleType);

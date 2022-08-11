@@ -132,6 +132,12 @@ class SortGroupFilterEntry {
 
   SortGroupFilterEntry(this.colName, this.asc);
 
+  factory SortGroupFilterEntry.noop() {
+    return SortGroupFilterEntry(DbTableFieldName.imageUrl, false);
+  }
+
+  bool get sortingDisabled => colName == DbTableFieldName.imageUrl;
+
   @override
   String toString() {
     return colName.name + ': asc: $asc';
@@ -219,6 +225,11 @@ class TvSortCfg extends TvSortGroupFilterBase {
   }
 
   bool get disableSorting => fieldList.length < 1;
+
+  SortGroupFilterEntry get first => fieldList.first;
+  SortGroupFilterEntry? get second =>
+      fieldList.length < 2 ? null : fieldList[1];
+  SortGroupFilterEntry? get third => fieldList.length < 3 ? null : fieldList[2];
   //
   // JsonSerializable
   factory TvSortCfg.fromJson(Map<String, dynamic> json) =>

@@ -5,7 +5,7 @@ import '../interfaces/q_presenter.dart';
 import '../dialog/all.dart';
 import '../questions/all.dart';
 
-class WebQuest2Presenter implements QuestionPresenterIfc {
+class WebQuestionPresenter implements QuestionPresenterIfc {
   // to render widget views of the Quest2
   // move this class to the parent flutter project
 
@@ -14,7 +14,7 @@ class WebQuest2Presenter implements QuestionPresenterIfc {
   DialogRunner? dRunner;
   late QuestBase _quest;
 
-  WebQuest2Presenter(
+  WebQuestionPresenter(
     this.questDispatcher,
     this.answerStream,
   ) {

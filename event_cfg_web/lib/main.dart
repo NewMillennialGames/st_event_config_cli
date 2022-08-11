@@ -27,7 +27,7 @@ class EvCfgApp extends ConsumerStatefulWidget {
 
 class _EvCfgAppState extends ConsumerState<EvCfgApp> {
   //
-  late WebQuest2Presenter wqp;
+  late WebQuestionPresenter wqp;
   late DialogRunner dRunner;
 
   @override
@@ -36,7 +36,7 @@ class _EvCfgAppState extends ConsumerState<EvCfgApp> {
       questDispatcherProvider,
     );
     Stream<String> answerStream = ref.read(answerStreamProvier.stream);
-    this.wqp = WebQuest2Presenter(questDispatcher, answerStream);
+    this.wqp = WebQuestionPresenter(questDispatcher, answerStream);
     this.dRunner = DialogRunner(wqp);
     super.initState();
     //
