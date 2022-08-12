@@ -25,7 +25,7 @@ class GroupHeaderData
   }) : _sortKey = sortKey.toLowerCase();
 
   static GetGroupHeaderLblsFromCompetitionRow groupHeaderPayloadConstructor(
-    SortingRules sortAndGroupRules,
+    TvSortCfg sortAndGroupRules,
   ) {
     // returns a func that creates a GroupHeaderData
     // NOT the sort values (comparables) used in sortComparator below
@@ -119,7 +119,7 @@ class GroupHeaderData
   }
 
   static SectionSortComparator sortComparator(
-    SortingRules sr, [
+    TvSortCfg sr, [
     bool sortAsc = false,
   ]) {
     // return the function that performs the sorting logic

@@ -33,17 +33,17 @@ void main() {
         reason: 'json specifies driverVsField',
       );
       expect(
-        trdm.filterRules?.item1.disableFiltering,
+        trdm.filterRules?.disableFiltering,
         false,
         reason: 'json HAS filtering rules',
       );
       expect(
-        trdm.filterRules?.item1.firstColName,
+        trdm.filterRules?.item1.colName,
         DbTableFieldName.assetName,
         reason: 'json specifies 1 filter menu on assetName',
       );
       expect(
-        trdm.groupingRules?.item1.firstColName,
+        trdm.groupingRules?.item1.colName,
         DbTableFieldName.assetOrgName,
         reason: 'json specifies grouping on 2 fields; first is assetOrgName',
       );

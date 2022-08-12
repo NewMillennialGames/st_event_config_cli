@@ -40,10 +40,10 @@ typedef AddQuestRespChkCallbk = bool Function(QuestBase priorAnsweredQuest);
 //   }
 // }
 
-typedef GroupingRules = Tuple3<TvGroupCfg, TvGroupCfg?, TvGroupCfg?>;
-typedef SortingRules = Tuple3<SortGroupFilterEntry, SortGroupFilterEntry?,
-    SortGroupFilterEntry?>;
-typedef FilterRules = Tuple3<TvFilterCfg, TvFilterCfg?, TvFilterCfg?>;
+// typedef GroupingRules = Tuple3<TvGroupCfg, TvGroupCfg?, TvGroupCfg?>;
+// typedef SortingRules = Tuple3<SortGroupFilterEntry, SortGroupFilterEntry?,
+//     SortGroupFilterEntry?>;
+// typedef FilterRules = Tuple3<TvFilterCfg, TvFilterCfg?, TvFilterCfg?>;
 //
 // pass Question, return how many new Questions to create
 typedef NewQuestCount = int Function(QuestBase priorAnsweredQuest);

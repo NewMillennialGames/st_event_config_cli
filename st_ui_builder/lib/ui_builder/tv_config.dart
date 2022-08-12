@@ -15,9 +15,9 @@ class TableviewConfigPayload {
   // style / appearance of rows in its listview
   final TvAreaRowStyle rowStyle;
   //
-  final SortingRules sortRules;
-  final FilterRules? filterRules;
-  final GroupingRules? groupByRules;
+  final TvSortCfg sortRules;
+  final TvFilterCfg? filterRules;
+  final TvGroupCfg? groupByRules;
 
   TableviewConfigPayload._(
     // private constructor
@@ -44,8 +44,8 @@ class TableviewConfigPayload {
     return TableviewConfigPayload._(
       appScreen,
       tableAreaCfg.rowStyleCfg.selectedRowStyle,
-      tableAreaCfg.sortingRules ??
-          SortingRules(SortGroupFilterEntry.noop(), null, null),
+      tableAreaCfg.sortingRules ?? TvSortCfg.noop(),
+      // SortingRules(SortGroupFilterEntry.noop(), null, null),
       filterBarAreaCfg?.filterRules,
       null,
     );

@@ -29,9 +29,9 @@ class TableRowDataMgr {
   // _filteredAssetRows = _allAssetRows.toList();
 
   // List<TableviewDataRowTuple> get listData => _filteredAssetRows;
-  SortingRules get sortingRules => _tableViewCfg.sortRules;
-  GroupingRules? get groupingRules => _tableViewCfg.groupByRules;
-  FilterRules? get filterRules => _tableViewCfg.filterRules;
+  TvSortCfg get sortingRules => _tableViewCfg.sortRules;
+  TvGroupCfg? get groupingRules => _tableViewCfg.groupByRules;
+  TvFilterCfg? get filterRules => _tableViewCfg.filterRules;
 
   // rowBuilder is function to return a Tv-Row for this screen
   IndexedWidgetBuilder get rowBuilder => (

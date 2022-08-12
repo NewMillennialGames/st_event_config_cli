@@ -86,24 +86,28 @@ class CfgForAreaAndNestedSlots {
     return lstRules.first as TvRowStyleCfg;
   }
 
-  GroupingRules? get groupingRules {
+  TvGroupCfg? get groupingRules {
     // what grouping Rules to apply to the TableView
     assert(
       screenArea == ScreenWidgetArea.tableview,
       'method only works for TableVw areas',
     );
 
-    List<TvGroupCfg> definedGroupRules =
-        _loadRulesInOrder<TvGroupCfg>(VisualRuleType.groupCfg);
-    int ruleCnt = definedGroupRules.length;
-    if (ruleCnt < 1) return null;
+    // List<TvGroupCfg> definedGroupRules =
+    //     _loadRulesInOrder<TvGroupCfg>(VisualRuleType.groupCfg);
+    // int ruleCnt = definedGroupRules.length;
+    // if (ruleCnt < 1) return null;
 
-    TvGroupCfg? gr2 = ruleCnt > 1 ? definedGroupRules[1] : null;
-    TvGroupCfg? gr3 = ruleCnt > 2 ? definedGroupRules[2] : null;
-    return GroupingRules(definedGroupRules.first, gr2, gr3);
+    // TvGroupCfg? gr2 = ruleCnt > 1 ? definedGroupRules[1] : null;
+    // TvGroupCfg? gr3 = ruleCnt > 2 ? definedGroupRules[2] : null;
+    // return GroupingRules(definedGroupRules.first, gr2, gr3);
+
+    SlotOrAreaRuleCfg? areaSortCfg = visCfgForArea[VisualRuleType.groupCfg];
+    if (areaSortCfg == null || areaSortCfg.visRuleList.length < 1) return null;
+    return areaSortCfg.ruleForObjType(TvGroupCfg) as TvGroupCfg;
   }
 
-  SortingRules? get sortingRules {
+  TvSortCfg? get sortingRules {
     // what sorting Rules to apply to the TableView
     assert(
       screenArea == ScreenWidgetArea.tableview,
@@ -118,25 +122,27 @@ class CfgForAreaAndNestedSlots {
     // int sortRuleCnt = definedSortRules.fieldList.length;
     // TvSortCfg? gr2 = sortRuleCnt > 1 ? areaSortCfg[1] : null;
     // TvSortCfg? gr3 = sortRuleCnt > 2 ? areaSortCfg[2] : null;
-    return SortingRules(definedSortRules.first, definedSortRules.second,
-        definedSortRules.third);
+    return definedSortRules;
   }
 
-  FilterRules? get filterRules {
+  TvFilterCfg? get filterRules {
     // what filter Rules to apply to the TableView
     assert(
       screenArea == ScreenWidgetArea.filterBar,
       'method only works for filterBar areas',
     );
 
-    var definedFilterRules =
-        _loadRulesInOrder<TvFilterCfg>(VisualRuleType.filterCfg);
-    int len = definedFilterRules.length;
-    if (len < 1) return null;
+    // var definedFilterRules =
+    //     _loadRulesInOrder<TvFilterCfg>(VisualRuleType.filterCfg);
+    // int len = definedFilterRules.length;
+    // if (len < 1) return null;
 
-    TvFilterCfg? gr2 = len > 1 ? definedFilterRules[1] : null;
-    TvFilterCfg? gr3 = len > 2 ? definedFilterRules[2] : null;
-    return FilterRules(definedFilterRules.first, gr2, gr3);
+    // TvFilterCfg? gr2 = len > 1 ? definedFilterRules[1] : null;
+    // TvFilterCfg? gr3 = len > 2 ? definedFilterRules[2] : null;
+
+    SlotOrAreaRuleCfg? areaSortCfg = visCfgForArea[VisualRuleType.filterCfg];
+    if (areaSortCfg == null || areaSortCfg.visRuleList.length < 1) return null;
+    return areaSortCfg.ruleForObjType(TvFilterCfg) as TvFilterCfg;
   }
 
   // ********

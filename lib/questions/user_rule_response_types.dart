@@ -194,7 +194,11 @@ class TvSortGroupFilterBase extends RuleResponseBase {
     // );
   }
 
-  DbTableFieldName get firstColName => fieldList.first.colName;
+  SortGroupFilterEntry get item1 => fieldList.first;
+  SortGroupFilterEntry? get item2 => fieldList.length > 1 ? fieldList[1] : null;
+  SortGroupFilterEntry? get item3 => fieldList.length > 2 ? fieldList[2] : null;
+
+  DbTableFieldName get firstColName => item1.colName;
 
   @override
   String toString() {

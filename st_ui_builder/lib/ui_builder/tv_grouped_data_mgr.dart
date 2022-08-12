@@ -47,9 +47,9 @@ class GroupedTableDataMgr {
         _filteredAssetRows = _allAssetRows.toList();
 
   List<TableviewDataRowTuple> get listData => _filteredAssetRows;
-  // GroupingRules get groupRules => _tableViewCfg.groupByRules;
-  SortingRules get sortingRules => _tableViewCfg.sortRules;
-  FilterRules? get filterRules => _tableViewCfg.filterRules;
+  TvGroupCfg? get groupRules => _tableViewCfg.groupByRules;
+  TvSortCfg get sortingRules => _tableViewCfg.sortRules;
+  TvFilterCfg? get filterRules => _tableViewCfg.filterRules;
 
   GetGroupHeaderLblsFromCompetitionRow get groupBy {
     return GroupHeaderData.groupHeaderPayloadConstructor(
@@ -110,7 +110,7 @@ class GroupedTableDataMgr {
 
   bool get hasColumnFilters {
     // set imageUrl as first filter field to hide/disable the whole filter bar
-    return filterRules?.item1.firstColName != DbTableFieldName.imageUrl &&
+    return filterRules?.item1.colName != DbTableFieldName.imageUrl &&
         !disableAllGrouping;
   }
 
@@ -133,9 +133,9 @@ class GroupedTableDataMgr {
     if (filterRules == null || disableAllGrouping)
       return const SizedBox.shrink();
 
-    TvFilterCfg i1 = filterRules!.item1;
-    TvFilterCfg? i2 = filterRules!.item2;
-    TvFilterCfg? i3 = filterRules!.item3;
+    SortGroupFilterEntry i1 = filterRules!.item1;
+    SortGroupFilterEntry? i2 = filterRules!.item2;
+    SortGroupFilterEntry? i3 = filterRules!.item3;
 
     Set<String> listItems1 = _getListItemsByCfgField(i1);
     Set<String> listItems2 = i2 == null ? {} : _getListItemsByCfgField(i2);
@@ -143,12 +143,10 @@ class GroupedTableDataMgr {
 
     const _kLstMin = 2;
 
-    bool has2ndList = i2 != null &&
-        listItems2.length > _kLstMin &&
-        i2.firstColName != i1.firstColName;
-    bool has3rdList = i3 != null &&
-        listItems3.length > _kLstMin &&
-        i3.firstColName != i2!.firstColName;
+    bool has2ndList =
+        i2 != null && listItems2.length > _kLstMin && i2.colName != i1.colName;
+    bool has3rdList =
+        i3 != null && listItems3.length > _kLstMin && i3.colName != i2!.colName;
 
     int dropLstCount = 1 + (has2ndList ? 1 : 0) + (has3rdList ? 1 : 0);
     // allocate dropdown button width
@@ -167,7 +165,7 @@ class GroupedTableDataMgr {
         children: [
           _dropMenuList(
             listItems1,
-            i1.firstColName,
+            i1.colName,
             _filter1Selection,
             (s) => _filter1Selection = s,
             allocBtnWidth,
@@ -175,7 +173,7 @@ class GroupedTableDataMgr {
           if (has2ndList)
             _dropMenuList(
               listItems2,
-              i2.firstColName,
+              i2.colName,
               _filter2Selection,
               (s) => _filter2Selection = s,
               allocBtnWidth,
@@ -183,7 +181,7 @@ class GroupedTableDataMgr {
           if (has3rdList)
             _dropMenuList(
               listItems3,
-              i3.firstColName,
+              i3.colName,
               _filter3Selection,
               (s) => _filter3Selection = s,
               allocBtnWidth,
@@ -286,17 +284,17 @@ class GroupedTableDataMgr {
     }
   }
 
-  Set<String> _getListItemsByCfgField(TvFilterCfg fCfg) {
+  Set<String> _getListItemsByCfgField(SortGroupFilterEntry filterItem) {
     // build list of unique values from selected field
     // elim dups and sort
     var l = _allAssetRows
         .map(
-          (e) => e.item1.labelExtractor(fCfg.firstColName),
+          (e) => e.item1.labelExtractor(filterItem.colName),
         )
         .toSet()
         .toList()
       ..sort((v1, v2) => v1.compareTo(v2));
-    l.insert(0, fCfg.firstColName.labelName); // CLEAR_FILTER_LABEL + ' ' +
+    l.insert(0, filterItem.colName.labelName); // CLEAR_FILTER_LABEL + ' ' +
     return l.toSet();
   }
 

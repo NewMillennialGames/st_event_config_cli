@@ -282,17 +282,17 @@ extension EventCfgTreeExt1 on EventCfgTree {
   ) =>
       _fullScreenCfg(screen).configForArea(area);
 
-  SortingRules? tvSortingRules(AppScreen screen) {
+  TvSortCfg? tvSortingRules(AppScreen screen) {
     //
     return screenAreaCfg(screen, ScreenWidgetArea.tableview).sortingRules;
   }
 
-  GroupingRules? tvGroupingRules(AppScreen screen) {
+  TvGroupCfg? tvGroupingRules(AppScreen screen) {
     //
     return screenAreaCfg(screen, ScreenWidgetArea.tableview).groupingRules;
   }
 
-  FilterRules? tvFilteringRules(AppScreen screen) {
+  TvFilterCfg? tvFilteringRules(AppScreen screen) {
     //
     return screenAreaCfg(screen, ScreenWidgetArea.tableview).filterRules;
   }
