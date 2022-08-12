@@ -17,6 +17,7 @@ class TableviewConfigPayload {
   //
   final SortingRules sortRules;
   final FilterRules? filterRules;
+  final GroupingRules? groupByRules;
 
   TableviewConfigPayload._(
     // private constructor
@@ -24,7 +25,7 @@ class TableviewConfigPayload {
     this.rowStyle,
     this.sortRules,
     this.filterRules,
-    // this.groupByRules,
+    this.groupByRules,
   );
 
   factory TableviewConfigPayload(
@@ -46,6 +47,7 @@ class TableviewConfigPayload {
       tableAreaCfg.sortingRules ??
           SortingRules(SortGroupFilterEntry.noop(), null, null),
       filterBarAreaCfg?.filterRules,
+      null,
     );
   }
 

@@ -27,9 +27,26 @@ void main() {
         [],
         () {},
       );
-      expect(trdm.rowStyle, TvAreaRowStyle.driverVsField, reason: '');
-      GroupedListOrder glo = trdm.sortOrder;
-      expect(glo.name, 'ASC', reason: '');
+      expect(
+        trdm.rowStyle,
+        TvAreaRowStyle.driverVsField,
+        reason: 'json specifies driverVsField',
+      );
+      expect(
+        trdm.filterRules?.item1.disableFiltering,
+        false,
+        reason: 'json HAS filtering rules',
+      );
+      expect(
+        trdm.filterRules?.item1.firstColName,
+        DbTableFieldName.assetName,
+        reason: 'json specifies 1 filter menu on assetName',
+      );
+      expect(
+        trdm.groupingRules?.item1.firstColName,
+        DbTableFieldName.assetOrgName,
+        reason: 'json specifies grouping on 2 fields; first is assetOrgName',
+      );
     });
     test('', () async {
       //
