@@ -21,7 +21,7 @@ void main() {
     });
     test('confirm list view config settings', () async {
       //
-      builderFactory = await loadFactory('assets/one.json');
+      builderFactory = await loadFactory('assets/test.json');
       TableRowDataMgr trdm = builderFactory.listTvConfigForScreen(
         AppScreen.marketView,
         [],
@@ -33,7 +33,7 @@ void main() {
     });
     test('', () async {
       //
-      builderFactory = await loadFactory('assets/one.json');
+      builderFactory = await loadFactory('assets/test.json');
     });
   });
 }
