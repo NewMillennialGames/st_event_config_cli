@@ -15,13 +15,13 @@ void main() {
   group('various methods on the ui factory', () {
     test('validate loading json succeds to build factory', () async {
       //
-      builderFactory = await loadFactory('assets/test.json');
+      builderFactory = await loadFactory('assets/driverVsField.json');
       expect(builderFactory.marketViewIsGameCentricAndTwoPerRow, true);
       expect(builderFactory.marketViewRowsAreSingleAssetOnly, false);
     });
     test('confirm list view config settings', () async {
       //
-      builderFactory = await loadFactory('assets/test.json');
+      builderFactory = await loadFactory('assets/driverVsField.json');
       TableRowDataMgr trdm = builderFactory.listTvConfigForScreen(
         AppScreen.marketView,
         [],
@@ -55,7 +55,7 @@ void main() {
     });
     test('', () async {
       //
-      builderFactory = await loadFactory('assets/test.json');
+      builderFactory = await loadFactory('assets/driverVsField.json');
     });
   });
 }

@@ -1,6 +1,8 @@
 part of StUtil;
 
-Type typeOf<T>() => T;
+// Type typeOf<T>() => T;
+
+bool isSubtype<S, T>() => <S>[] is List<T>;
 
 Iterable<int> castStrOfIdxsToIterOfInts(
   String componentIdxsStr, {

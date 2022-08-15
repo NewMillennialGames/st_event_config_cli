@@ -22,7 +22,9 @@ class SlotOrAreaRuleCfg {
 
   RuleResponseBase? ruleForObjType(Type objTyp) {
     // not tested
-    assert(objTyp is RuleResponseBase);
+    // bool isTp = isSubtype<objTyp.runtimeType, RuleResponseBase>();
+    // assert(objTyp is RuleResponseBase, 'invalid arg');
+
     Iterable<RuleResponseBase> matchLst =
         visRuleList.where((rr) => rr.runtimeType == objTyp);
     return matchLst.length < 1 ? null : matchLst.first;
