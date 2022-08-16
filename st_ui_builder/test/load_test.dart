@@ -16,6 +16,8 @@ void main() {
     test('validate loading json succeds to build factory', () async {
       //
       builderFactory = await loadFactory('assets/driverVsField.json');
+      // marketViewIsGameCentricAndTwoPerRow would not normally be true for driverVsField
+      // but we created this test JSON by editing assetVsAsset so below is correct
       expect(builderFactory.marketViewIsGameCentricAndTwoPerRow, true);
       expect(builderFactory.marketViewRowsAreSingleAssetOnly, false);
     });
@@ -33,7 +35,7 @@ void main() {
         reason: 'json specifies driverVsField',
       );
       expect(
-        trdm.filterRules?.disableFiltering ?? false,
+        trdm.filterRules?.disableFiltering ?? true,
         false,
         reason: 'json HAS filtering rules',
       );

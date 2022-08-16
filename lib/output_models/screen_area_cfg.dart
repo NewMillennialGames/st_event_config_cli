@@ -129,7 +129,7 @@ class CfgForAreaAndNestedSlots {
     // what filter Rules to apply to the TableView
     assert(
       screenArea == ScreenWidgetArea.filterBar,
-      'method only works for filterBar areas',
+      'method only works within cfg for tableview areas  ${screenArea.name}',
     );
 
     // var definedFilterRules =
@@ -141,7 +141,15 @@ class CfgForAreaAndNestedSlots {
     // TvFilterCfg? gr3 = len > 2 ? definedFilterRules[2] : null;
 
     SlotOrAreaRuleCfg? areaSortCfg = visCfgForArea[VisualRuleType.filterCfg];
-    if (areaSortCfg == null || areaSortCfg.visRuleList.length < 1) return null;
+    if (areaSortCfg == null || areaSortCfg.visRuleList.length < 1) {
+      //
+      print('Warning: defgh');
+      print('*** areaSortCfg is null: ${areaSortCfg == null}');
+      print(
+        '*** areaSortCfg visRuleList: ${areaSortCfg?.visRuleList ?? " na"}',
+      );
+      return null;
+    }
     return areaSortCfg.ruleForObjType(TvFilterCfg) as TvFilterCfg;
   }
 

@@ -11,7 +11,7 @@ class StUiBuilderFactory {
     when each screen inits, they will request
     the configuration objs they need from the methods below
   */
-  EventCfgTree? _eConfig;
+  late EventCfgTree? _eConfig;
   //
   StUiBuilderFactory();
 
@@ -26,7 +26,7 @@ class StUiBuilderFactory {
       send api payload (upon event switching) here
       to reconfigure the factory
 
-      TODO:  add versioning
+      TODO:  add versioning to json so we can improve it over time
     */
     try {
       _eConfig = EventCfgTree.fromJson(eCfgJsonMap);
@@ -43,18 +43,20 @@ class StUiBuilderFactory {
   }
 
   void _readRowStyleFromMarketViewAndClone() {
-    //
+    // apply row style from market-view to all screens
     CfgForAreaAndNestedSlots mktViewTableAreaAndSlotCfg =
         _eConfig!.screenAreaCfg(
       AppScreen.marketView,
       ScreenWidgetArea.tableview,
     );
-    TvAreaRowStyle rowStyle =
+    TvAreaRowStyle appWideRowStyle =
         mktViewTableAreaAndSlotCfg.rowStyleCfg.selectedRowStyle;
-    for (AppScreen scr in AppScreen.values) {
-      if (scr == AppScreen.marketView) continue;
 
-      _eConfig?.setConfigFor(scr, ScreenWidgetArea.tableview, rowStyle);
+    for (AppScreen appScreen in AppScreen.marketView.configurableAppScreens) {
+      if (appScreen == AppScreen.marketView) continue;
+
+      _eConfig?.setConfigFor(
+          appScreen, ScreenWidgetArea.tableview, appWideRowStyle);
     }
   }
 
@@ -93,14 +95,14 @@ class StUiBuilderFactory {
     // );
 
     // new updated method!
-    TvSortCfg sort = _eConfig!.tvSortingRules(screen) ?? TvSortCfg.noop();
+    TvSortCfg sortCfg = _eConfig!.tvSortingRules(screen) ?? TvSortCfg.noop();
     TvGroupCfg? group = _eConfig!.tvGroupingRules(screen);
     TvFilterCfg? filter = _eConfig!.tvFilteringRules(screen);
 
     TableviewConfigPayload tvcp = TableviewConfigPayload(
       screen,
       tableAreaAndSlotCfg.rowStyleCfg.selectedRowStyle,
-      sort,
+      sortCfg,
       filter,
       group,
     );
@@ -124,13 +126,18 @@ class StUiBuilderFactory {
       ScreenWidgetArea.tableview,
     );
 
+    CfgForAreaAndNestedSlots filterAreaCfg = _eConfig!.screenAreaCfg(
+      screen,
+      ScreenWidgetArea.filterBar,
+    );
+
     return TableRowDataMgr(
       screen,
       rows,
       TableviewConfigPayload.orig(
         screen,
         tableAreaAndSlotCfg,
-        null,
+        filterAreaCfg,
       ),
       redrawCallback: redrawTvCallback,
     );

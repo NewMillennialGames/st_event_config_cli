@@ -204,7 +204,7 @@ class EventCfgTree {
     // fill out any missing rules with defaults
     // because its called on the create-json side
     // we dont need this on the load json side
-    for (AppScreen as in AppScreen.eventConfiguration.topConfigurableScreens) {
+    for (AppScreen as in AppScreen.eventConfiguration.configurableAppScreens) {
       if (screenConfigMap.containsKey(as)) continue;
       screenConfigMap[as] = ScreenCfgByArea(as, {});
     }

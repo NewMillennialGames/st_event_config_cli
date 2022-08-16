@@ -274,7 +274,7 @@ class Permute {
     */
     List<QTargetResolution> _allPossibleTargets = [];
     for (AppScreen appScrn
-        in AppScreen.eventConfiguration.topConfigurableScreens) {
+        in AppScreen.eventConfiguration.configurableAppScreens) {
       // add one with only (each) screen set
       QTargetResolution qTargScreen =
           QTargetResolution.forTargetting(appScrn, null, null);

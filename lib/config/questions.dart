@@ -107,11 +107,11 @@ final List<QuestBase> _initQuestionLst = [
   QuestBase.initialEventConfigRule(
     QTargetResolution.forEvent(),
     DlgStr.selectAppScreens, // <String, List<AppScreen>>
-    AppScreen.eventConfiguration.topConfigurableScreens.map((e) => e.name),
+    AppScreen.eventConfiguration.configurableAppScreens.map((e) => e.name),
     CaptureAndCast<List<AppScreen>>(
       (QuestBase qb, String s) => castStrOfIdxsToIterOfInts(s)
           .map(
-            (idx) => AppScreen.eventConfiguration.topConfigurableScreens[idx],
+            (idx) => AppScreen.eventConfiguration.configurableAppScreens[idx],
           )
           .toList(),
     ),

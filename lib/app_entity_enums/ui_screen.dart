@@ -51,7 +51,7 @@ extension AppScreenExt1 on AppScreen {
       this.configurableScreenAreas.length > 0 ||
       this == AppScreen.eventConfiguration;
 
-  List<AppScreen> get topConfigurableScreens => AppScreen.values
+  List<AppScreen> get configurableAppScreens => AppScreen.values
       .where(
         (as) => as.isConfigurable && !_notCurrentlyConfigurable.contains(as),
       )
