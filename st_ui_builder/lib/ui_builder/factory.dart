@@ -71,20 +71,44 @@ class StUiBuilderFactory {
   ) {
     /* build object that wraps all data and display rules
     */
-    CfgForAreaAndNestedSlots tableAreaAndSlotCfg =
-        _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.tableview);
-
-    CfgForAreaAndNestedSlots filterBarAndSlotCfg =
-        _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.filterBar);
 
     // hack for Nascar b4 configurator is updated
     bool disableAllGrouping = _eConfig!.eventCfg.skipGroupingOnScreen(screen) ||
         _eConfig!.eventCfg.skipGroupingForName('nascar');
 
+    CfgForAreaAndNestedSlots tableAreaAndSlotCfg =
+        _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.tableview);
+
+    // old method
+    // CfgForAreaAndNestedSlots filterBarAndSlotCfg =
+    //     _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.filterBar);
+
+    // return GroupedTableDataMgr(
+    //   screen,
+    //   rows,
+    //   TableviewConfigPayload.orig(
+    //       screen, tableAreaAndSlotCfg, filterBarAndSlotCfg),
+    //   redrawCallback: redrawTvCallback,
+    //   disableAllGrouping: disableAllGrouping,
+    // );
+
+    // new updated method!
+    TvSortCfg sort = _eConfig!.tvSortingRules(screen) ?? TvSortCfg.noop();
+    TvGroupCfg? group = _eConfig!.tvGroupingRules(screen);
+    TvFilterCfg? filter = _eConfig!.tvFilteringRules(screen);
+
+    TableviewConfigPayload tvcp = TableviewConfigPayload(
+      screen,
+      tableAreaAndSlotCfg.rowStyleCfg.selectedRowStyle,
+      sort,
+      filter,
+      group,
+    );
+
     return GroupedTableDataMgr(
       screen,
       rows,
-      TableviewConfigPayload(screen, tableAreaAndSlotCfg, filterBarAndSlotCfg),
+      tvcp,
       redrawCallback: redrawTvCallback,
       disableAllGrouping: disableAllGrouping,
     );
@@ -103,7 +127,7 @@ class StUiBuilderFactory {
     return TableRowDataMgr(
       screen,
       rows,
-      TableviewConfigPayload(
+      TableviewConfigPayload.orig(
         screen,
         tableAreaAndSlotCfg,
         null,

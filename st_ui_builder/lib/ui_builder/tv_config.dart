@@ -19,7 +19,7 @@ class TableviewConfigPayload {
   final TvFilterCfg? filterRules;
   final TvGroupCfg? groupByRules;
 
-  TableviewConfigPayload._(
+  TableviewConfigPayload(
     // private constructor
     this.appScreen,
     this.rowStyle,
@@ -28,7 +28,7 @@ class TableviewConfigPayload {
     this.groupByRules,
   );
 
-  factory TableviewConfigPayload(
+  factory TableviewConfigPayload.orig(
     AppScreen appScreen,
     CfgForAreaAndNestedSlots tableAreaCfg,
     CfgForAreaAndNestedSlots? filterBarAreaCfg,
@@ -41,12 +41,12 @@ class TableviewConfigPayload {
       'oops!',
     );
 
-    return TableviewConfigPayload._(
+    return TableviewConfigPayload(
       appScreen,
       tableAreaCfg.rowStyleCfg.selectedRowStyle,
       tableAreaCfg.sortingRules ?? TvSortCfg.noop(),
       // SortingRules(SortGroupFilterEntry.noop(), null, null),
-      filterBarAreaCfg?.filterRules,
+      filterBarAreaCfg?.filterRules, // ?? TvFilterCfg.noop()
       null,
     );
   }

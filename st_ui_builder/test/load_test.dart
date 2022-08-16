@@ -33,7 +33,7 @@ void main() {
         reason: 'json specifies driverVsField',
       );
       expect(
-        trdm.filterRules?.disableFiltering ?? true,
+        trdm.filterRules?.disableFiltering ?? false,
         false,
         reason: 'json HAS filtering rules',
       );
