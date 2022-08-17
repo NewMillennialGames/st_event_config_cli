@@ -55,10 +55,14 @@ void main() {
         reason: 'json specifies grouping on 2 fields; 2nd is conference',
       );
     });
-    test('', () async {
-      //
-      builderFactory = await loadFactory('assets/driverVsField.json');
-    });
+    test(
+      'empty placeholder for future test (currently skipped)',
+      () async {
+        //
+        builderFactory = await loadFactory('assets/driverVsField.json');
+      },
+      skip: true,
+    );
   });
 }
 
