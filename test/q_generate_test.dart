@@ -21,11 +21,11 @@ void main() {
       QuestBase askScreens = QuestBase.initialEventConfigRule(
         QTargetResolution.forEvent(),
         DlgStr.selectAppScreens, // <String, List<AppScreen>>
-        AppScreen.eventConfiguration.topConfigurableScreens.map((e) => e.name),
+        AppScreen.eventConfiguration.configurableAppScreens.map((e) => e.name),
         CaptureAndCast<List<AppScreen>>(
           (QuestBase qb, s) => castStrOfIdxsToIterOfInts(s)
               .map((idx) =>
-                  AppScreen.eventConfiguration.topConfigurableScreens[idx])
+                  AppScreen.eventConfiguration.configurableAppScreens[idx])
               .toList(),
         ),
         questId: QuestionIdStrings.selectAppScreens,

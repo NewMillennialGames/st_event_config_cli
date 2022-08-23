@@ -27,10 +27,10 @@ the UI factory   (Filter Bar and TableView)
 */
 
 // demo example config data
-const String cfgEmpl1 = 'blueRow.json';
+const String cfgEmpl1 = 'assetVsAsset.json';
 // cfgEmpl2 seems to be invalid json; replace it to continue testing
-const String cfgEmpl2 = 'five.json';
-const String cfgEmpl3 = 'NASCAR.json';
+const String cfgEmpl2 = 'teamVsFieldRanked.json';
+const String cfgEmpl3 = 'driverVsField.json';
 
 // evCfgDataFromServer contains the JSON payload produced by the CLI configurator
 Map<String, dynamic> evCfgDataFromServer = {};

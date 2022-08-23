@@ -26,9 +26,24 @@ typedef ChoiceListFromPriorAnswer<T> = List<String> Function(
 //
 typedef AddQuestRespChkCallbk = bool Function(QuestBase priorAnsweredQuest);
 //
-typedef GroupingRules = Tuple3<TvGroupCfg, TvGroupCfg?, TvGroupCfg?>;
-typedef SortingRules = Tuple3<TvSortCfg, TvSortCfg?, TvSortCfg?>;
-typedef FilterRules = Tuple3<TvFilterCfg, TvFilterCfg?, TvFilterCfg?>;
+// class GroupingRules {
+//   TvGroupCfg item1;
+//   TvGroupCfg? item2;
+//   TvGroupCfg? item3;
+
+//   GroupingRules(this.item1, this.item2, this.item3);
+
+//   void removeByField(DbTableFieldName fld) {
+//     //
+//     int delIdx = -1;
+//     if (item1.f)
+//   }
+// }
+
+// typedef GroupingRules = Tuple3<TvGroupCfg, TvGroupCfg?, TvGroupCfg?>;
+// typedef SortingRules = Tuple3<SortGroupFilterEntry, SortGroupFilterEntry?,
+//     SortGroupFilterEntry?>;
+// typedef FilterRules = Tuple3<TvFilterCfg, TvFilterCfg?, TvFilterCfg?>;
 //
 // pass Question, return how many new Questions to create
 typedef NewQuestCount = int Function(QuestBase priorAnsweredQuest);

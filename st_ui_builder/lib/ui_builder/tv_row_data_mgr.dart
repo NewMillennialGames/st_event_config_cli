@@ -29,14 +29,16 @@ class TableRowDataMgr {
   // _filteredAssetRows = _allAssetRows.toList();
 
   // List<TableviewDataRowTuple> get listData => _filteredAssetRows;
-  // ``GroupingRules`` get groupRules => _tableViewCfg.groupByRules;
-  SortingRules get sortingRules => _tableViewCfg.sortRules;
-
-  // FilterRules get filterRules => _tableViewCfg.filterRules;
+  TvSortCfg get sortingRules => _tableViewCfg.sortRules;
+  TvGroupCfg? get groupingRules => _tableViewCfg.groupByRules;
+  TvFilterCfg? get filterRules => _tableViewCfg.filterRules;
 
   // rowBuilder is function to return a Tv-Row for this screen
-  IndexedWidgetBuilder get rowBuilder => (BuildContext ctx, int i) {
-        var asset = _allAssetRows[i];
+  IndexedWidgetBuilder get rowBuilder => (
+        BuildContext ctx,
+        int idx,
+      ) {
+        var asset = _allAssetRows[idx];
         return _tableViewCfg.rowConstructor(asset);
       };
 
@@ -48,6 +50,7 @@ class TableRowDataMgr {
   }) {
     /* 
     */
+
     _allAssetRows = _assetRows.toList();
     if (redraw && redrawCallback != null) {
       redrawCallback!();

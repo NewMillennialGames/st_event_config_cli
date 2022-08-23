@@ -15,19 +15,20 @@ class TableviewConfigPayload {
   // style / appearance of rows in its listview
   final TvAreaRowStyle rowStyle;
   //
-  final SortingRules sortRules;
-  final FilterRules? filterRules;
+  final TvSortCfg sortRules;
+  final TvFilterCfg? filterRules;
+  final TvGroupCfg? groupByRules;
 
-  TableviewConfigPayload._(
+  TableviewConfigPayload(
     // private constructor
     this.appScreen,
     this.rowStyle,
     this.sortRules,
     this.filterRules,
-    // this.groupByRules,
+    this.groupByRules,
   );
 
-  factory TableviewConfigPayload(
+  factory TableviewConfigPayload.orig(
     AppScreen appScreen,
     CfgForAreaAndNestedSlots tableAreaCfg,
     CfgForAreaAndNestedSlots? filterBarAreaCfg,
@@ -40,11 +41,12 @@ class TableviewConfigPayload {
       'oops!',
     );
 
-    return TableviewConfigPayload._(
+    return TableviewConfigPayload(
       appScreen,
       tableAreaCfg.rowStyleCfg.selectedRowStyle,
-      tableAreaCfg.sortingRules ?? SortingRules(TvSortCfg.noop(), null, null),
-      filterBarAreaCfg?.filterRules,
+      tableAreaCfg.sortingRules ?? TvSortCfg.noop(),
+      filterBarAreaCfg?.filterRules, // ?? TvFilterCfg.noop()
+      tableAreaCfg.groupingRules,
     );
   }
 

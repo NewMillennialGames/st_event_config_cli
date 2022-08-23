@@ -54,7 +54,7 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
 
   @override
   String toString() {
-    return 'RuleResponseBase for ${ruleType.name}';
+    return 'RuleResp for ${ruleType.name}';
   }
 
   // JsonSerializable
@@ -115,7 +115,7 @@ class TvRowStyleCfg extends RuleResponseBase {
 
   @override
   String toString() {
-    return 'TvRowStyleCfg for ${ruleType.name} applying rowstyle: ${selectedRowStyle.name}';
+    return 'TvRowStyleCfg (${ruleType.name}) applying rowstyle: ${selectedRowStyle.name}';
   }
 
   // JsonSerializable
@@ -132,9 +132,15 @@ class SortGroupFilterEntry {
 
   SortGroupFilterEntry(this.colName, this.asc);
 
+  factory SortGroupFilterEntry.noop() {
+    return SortGroupFilterEntry(DbTableFieldName.imageUrl, false);
+  }
+
+  bool get sortingDisabled => colName == DbTableFieldName.imageUrl;
+
   @override
   String toString() {
-    return colName.name + ': asc: $asc; ';
+    return colName.name + ': asc: $asc';
   }
 
   // JsonSerializable
@@ -160,9 +166,9 @@ class TvSortGroupFilterBase extends RuleResponseBase {
     */
     // empty fieldList
     // this.fieldList = [];
-    print(
-      'TvSortGroupFilter.castToRealTypes got ${userResponses.length} userResponses',
-    );
+    // print(
+    //   'TvSortGroupFilter.castToRealTypes got ${userResponses.length} userResponses',
+    // );
     for (int i = 0; i < userResponses.length - 1; i += 2) {
       PairedQuestAndResp fldNameEntry = userResponses[i];
       assert(
@@ -183,24 +189,29 @@ class TvSortGroupFilterBase extends RuleResponseBase {
 
       fieldList.add(SortGroupFilterEntry(_curSelField, sortAsc));
     }
-    print(
-      '${fieldList.length} entries added to TvSortGroupFilterBase!  (${this.runtimeType})',
-    );
+    // print(
+    //   '${fieldList.length} entries (contains 2 vals) added to TvSortGroupFilterBase!  (${this.runtimeType})',
+    // );
   }
 
-  DbTableFieldName get firstColName => fieldList.first.colName;
+  SortGroupFilterEntry get item1 => fieldList.first;
+  SortGroupFilterEntry? get item2 => fieldList.length > 1 ? fieldList[1] : null;
+  SortGroupFilterEntry? get item3 => fieldList.length > 2 ? fieldList[2] : null;
+
+  DbTableFieldName get firstColName => item1.colName;
 
   @override
   String toString() {
     String className = this.runtimeType.toString();
-    return '$className for ${ruleType.name} with responses: $_answerSummary';
+    return '$className (${ruleType.name}) w cfg:\n$_answerSummary';
   }
 
   String get _answerSummary {
-    Iterable<String> xx = fieldList.map((e) => e.toString());
-    String summary = this.runtimeType.toString() + '';
+    Iterable<String> xx =
+        fieldList.map((SortGroupFilterEntry fldEntry) => fldEntry.toString());
+    String summary = '\t'; // this.runtimeType.toString() +
     for (String fieldCfg in xx) {
-      summary += fieldCfg;
+      summary += fieldCfg + ';  ';
     }
     return summary;
   }
@@ -218,6 +229,11 @@ class TvSortCfg extends TvSortGroupFilterBase {
   }
 
   bool get disableSorting => fieldList.length < 1;
+
+  SortGroupFilterEntry get first => fieldList.first;
+  SortGroupFilterEntry? get second =>
+      fieldList.length < 2 ? null : fieldList[1];
+  SortGroupFilterEntry? get third => fieldList.length < 3 ? null : fieldList[2];
   //
   // JsonSerializable
   factory TvSortCfg.fromJson(Map<String, dynamic> json) =>
@@ -267,7 +283,7 @@ class ShowHideCfg extends RuleResponseBase {
 
   @override
   String toString() {
-    return 'ShowHideCfg for ${ruleType.name} should show: $shouldShow';
+    return 'ShowHideCfg (${ruleType.name}) should show: $shouldShow';
   }
 
   // JsonSerializable

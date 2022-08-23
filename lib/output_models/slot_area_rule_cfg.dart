@@ -17,8 +17,18 @@ class SlotOrAreaRuleCfg {
     this.visRuleList,
   );
 
-  List<RuleResponseBase> rulesOfType(VisualRuleType rt) =>
+  List<RuleResponseBase> rulesOfVRType(VisualRuleType rt) =>
       visRuleList.where((rr) => rr.ruleType == rt).toList();
+
+  RuleResponseBase? ruleForObjType(Type objTyp) {
+    // not tested
+    // bool isTp = isSubtype<objTyp.runtimeType, RuleResponseBase>();
+    // assert(objTyp is RuleResponseBase, 'invalid arg');
+
+    Iterable<RuleResponseBase> matchLst =
+        visRuleList.where((rr) => rr.runtimeType == objTyp);
+    return matchLst.length < 1 ? null : matchLst.first;
+  }
 
   Iterable<VisualRuleType> get existingAnsweredRuleTypes =>
       visRuleList.map((e) => e.ruleType);
@@ -86,6 +96,23 @@ class SlotOrAreaRuleCfg {
       missingResponses,
     );
     visRuleList.addAll(answerBuilder.defaultAnswers);
+  }
+
+  void printSummary(dynamic slotOrArea, {String padding = '  '}) {
+    //
+    bool isAreaRule = slotOrArea is ScreenWidgetArea;
+    String targetScope = isAreaRule ? 'AREA' : 'SLOT';
+    String targetName = isAreaRule
+        ? (slotOrArea as ScreenWidgetArea).name.toUpperCase()
+        : (slotOrArea as ScreenAreaWidgetSlot).name.toUpperCase();
+
+    print(padding + '$targetName $targetScope RuleCfg:');
+    for (RuleResponseBase rrb in visRuleList) {
+      //
+      // String cfgRuleTypeName = rrb.runtimeType.toString();
+      // print('\t$cfgRuleTypeName has:');
+      print(padding + padding + '$rrb');
+    }
   }
 
   // JsonSerializable

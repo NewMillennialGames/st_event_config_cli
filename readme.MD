@@ -197,6 +197,9 @@ you can call the "cast()" function to get user answers converted into expected o
   3) filtering logic also fits app-screen & config requirements
   4) sorting & grouping output matches json config
 
+  to run tests with PRINT stmts active, run this:
+    dart run test -r expanded
+
 ###### Specs for Web UI:
 
 You MUST NOT break the CLI ... we need it to keep running

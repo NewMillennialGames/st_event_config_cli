@@ -204,11 +204,56 @@ class EventCfgTree {
     // fill out any missing rules with defaults
     // because its called on the create-json side
     // we dont need this on the load json side
-    for (AppScreen as in AppScreen.eventConfiguration.topConfigurableScreens) {
+    for (AppScreen as in AppScreen.eventConfiguration.configurableAppScreens) {
       if (screenConfigMap.containsKey(as)) continue;
       screenConfigMap[as] = ScreenCfgByArea(as, {});
     }
     this.screenConfigMap.values.forEach((sc) => sc.fillMissingWithDefaults());
+  }
+
+  void printSummary() {
+    print('EventCfgTree for: ${eventCfg.evTemplateName}');
+    for (MapEntry<AppScreen, ScreenCfgByArea> screenCfg
+        in screenConfigMap.entries) {
+      //
+      print('\n  Screen: ${screenCfg.key.name.toUpperCase()}:');
+      for (MapEntry<ScreenWidgetArea, CfgForAreaAndNestedSlots> areaCfg
+          in screenCfg.value.areaConfig.entries) {
+        //
+        // print('\tArea: ${areaCfg.key.name}\n');
+        for (MapEntry<VisualRuleType, SlotOrAreaRuleCfg> ruleCfg
+            in areaCfg.value.visCfgForArea.entries) {
+          // print('\t\t\tVRT: ${ruleCfg.key.name}\n');
+          ruleCfg.value.printSummary(areaCfg.key);
+          // only print slots if rules exist there
+          _printSlotsInAreaWithRuleCfg(areaCfg);
+        }
+      }
+    }
+  }
+
+  void _printSlotsInAreaWithRuleCfg(
+    MapEntry<ScreenWidgetArea, CfgForAreaAndNestedSlots> areaCfg,
+  ) {
+    var cfgMap = areaCfg.value.visCfgForSlotsByRuleType.entries;
+    // only print slots if rules exist there
+    if (cfgMap.length < 1) return;
+
+    print('\t${areaCfg.key.name.toUpperCase()} AREA has:');
+    for (MapEntry<VisualRuleType,
+            Map<ScreenAreaWidgetSlot, SlotOrAreaRuleCfg>> vrtWithSlotCfg
+        in cfgMap) {
+      // print('\n\t\t\tSlot VRT:  ${vrtWithSlotCfg.key.name}');
+      for (MapEntry<ScreenAreaWidgetSlot, SlotOrAreaRuleCfg> bySlotCfg
+          in vrtWithSlotCfg.value.entries) {
+        print(
+          '\SLOT: ${bySlotCfg.key.name.toUpperCase()} with ${vrtWithSlotCfg.key.name.toUpperCase()} (VisRule)',
+        );
+        for (RuleResponseBase rrb in bySlotCfg.value.visRuleList) {
+          print('\t  ' + rrb.toString());
+        }
+      }
+    }
   }
 
   // impl for JsonSerializable above
@@ -237,17 +282,17 @@ extension EventCfgTreeExt1 on EventCfgTree {
   ) =>
       _fullScreenCfg(screen).configForArea(area);
 
-  SortingRules? tvSortingRules(AppScreen screen) {
+  TvSortCfg? tvSortingRules(AppScreen screen) {
     //
     return screenAreaCfg(screen, ScreenWidgetArea.tableview).sortingRules;
   }
 
-  GroupingRules? tvGroupingRules(AppScreen screen) {
+  TvGroupCfg? tvGroupingRules(AppScreen screen) {
     //
     return screenAreaCfg(screen, ScreenWidgetArea.tableview).groupingRules;
   }
 
-  FilterRules? tvFilteringRules(AppScreen screen) {
+  TvFilterCfg? tvFilteringRules(AppScreen screen) {
     //
     return screenAreaCfg(screen, ScreenWidgetArea.tableview).filterRules;
   }
