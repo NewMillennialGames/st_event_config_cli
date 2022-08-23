@@ -901,8 +901,7 @@ class TeamVsFieldRankedRowTest extends StBaseTvRow with ShowsOneAsset {
   }
 }
 
-class DistressedAssetRanked extends StBaseTvRow
-    with ShowsTwoAssets, RequiresGameStatus {
+class DistressedAssetRanked extends StBaseTvRow {
   // TODO for Chrysalis
 
   bool get showRank => false;
@@ -922,9 +921,9 @@ class DistressedAssetRanked extends StBaseTvRow
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        AssetVsAssetHalfRow(comp1, agd, showRank, comp1.assetHoldingsSummary),
+        // AssetVsAssetHalfRow(comp1, agd, showRank, comp1.assetHoldingsSummary),
         SizedBox(height: UiSizes.spaceBtwnRows),
-        AssetVsAssetHalfRow(comp2, agd, showRank, comp2.assetHoldingsSummary)
+        // AssetVsAssetHalfRow(comp2, agd, showRank, comp2.assetHoldingsSummary)
       ],
     );
   }
