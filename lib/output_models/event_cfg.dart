@@ -294,7 +294,7 @@ extension EventCfgTreeExt1 on EventCfgTree {
 
   TvFilterCfg? tvFilteringRules(AppScreen screen) {
     //
-    return screenAreaCfg(screen, ScreenWidgetArea.tableview).filterRules;
+    return screenAreaCfg(screen, ScreenWidgetArea.filterBar).filterRules;
   }
 
   TvAreaRowStyle tableRowStyleFor(AppScreen screen) {

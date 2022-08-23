@@ -668,7 +668,7 @@ class TeamVsFieldRowMktView extends StBaseTvRow
 class TeamVsFieldRowRankedMktView extends TeamVsFieldRowMktView {
   //
   @override
-  bool get showRanked => true;
+  bool get isPlayerVsFieldRanked => true;
 
   const TeamVsFieldRowRankedMktView(
     TableviewDataRowTuple assets, {
