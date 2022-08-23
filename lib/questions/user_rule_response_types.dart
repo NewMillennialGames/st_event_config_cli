@@ -194,7 +194,8 @@ class TvSortGroupFilterBase extends RuleResponseBase {
     // );
   }
 
-  SortGroupFilterEntry get item1 => fieldList.first;
+  SortGroupFilterEntry get item1 =>
+      fieldList.length > 0 ? fieldList.first : SortGroupFilterEntry.noop();
   SortGroupFilterEntry? get item2 => fieldList.length > 1 ? fieldList[1] : null;
   SortGroupFilterEntry? get item3 => fieldList.length > 2 ? fieldList[2] : null;
 

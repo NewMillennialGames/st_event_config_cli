@@ -174,10 +174,24 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
       ),
       body: ListView(
         children: [
-          if (hasColumnFilters)
+          if (hasColumnFilters) ...{
             tvMgr.columnFilterBarWidget(
               backColor: StColors.primaryDarkGray,
             ),
+            SizedBox(
+              height: 520.h,
+              child: GroupedListView<TableviewDataRowTuple, GroupHeaderData>(
+                elements: tvMgr.listData,
+                groupBy: tvMgr.groupBy,
+                groupHeaderBuilder: tvMgr.groupHeaderBuilder,
+                indexedItemBuilder: tvMgr.indexedItemBuilder,
+                sort: true,
+                useStickyGroupSeparators: true,
+                // next line should not be needed??
+                groupComparator: tvMgr.groupComparator,
+              ),
+            ),
+          },
           Container(
             height: 30,
           ),
@@ -217,7 +231,6 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
             label: "TeamVsField Row Market Reasearch View",
             row: TeamVsFieldRowMktResearchView(assetRows.first),
           ),
-
           DemoRow(
             label: "AssetVsAsset Row Portfolio View",
             row: AssetVsAssetRowPortfolioView(assetRows.first),
@@ -254,20 +267,6 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
             label: "TeamplayerVsField Row Leaderboard View",
             row: TeamPlayerVsFieldLeaderBoardView(assetRows.first),
           ),
-          // Container(
-          //   height: hasColumnFilters ? 500.h : 740.h,
-          //   padding: EdgeInsets.fromLTRB(20.w, 0, 20.w, 10.h),
-          //   child: GroupedListView<TableviewDataRowTuple, GroupHeaderData>(
-          //     elements: tvMgr.listData,
-          //     groupBy: tvMgr.groupBy,
-          //     groupHeaderBuilder: tvMgr.groupHeaderBuilder,
-          //     indexedItemBuilder: tvMgr.indexedItemBuilder,
-          //     sort: true,
-          //     useStickyGroupSeparators: true,
-          // next line should not be needed??
-          // groupComparator: tvMgr.groupComparator,
-          //   ),
-          // ),
         ],
       ),
       // floatingActionButton: FloatingActionButton(onPressed: _updateGameStatus),
