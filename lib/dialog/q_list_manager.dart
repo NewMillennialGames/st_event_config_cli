@@ -30,7 +30,7 @@ class QuestListMgr {
   // constructor
   QuestListMgr([List<QuestBase>? pendingQuestions = null]) {
     if ((pendingQuestions ?? <QuestBase>[]).length < 1)
-      print(
+      ConfigLogger.log(Level.WARNING, 
         'warn: QuestListMgr may not behave well without min 1 seed question!!',
       );
     _pendingQuestions.addAll(pendingQuestions ?? []);
@@ -84,7 +84,7 @@ class QuestListMgr {
         (matchingPrompts.first.userRespConverter.cast(currentOrLastQuestion) ??
             []);
 
-    print('userSelectedScreens has ${uss.length} items');
+    ConfigLogger.log(Level.INFO, 'userSelectedScreens has ${uss.length} items');
     return uss;
   }
 
@@ -203,7 +203,7 @@ class QuestListMgr {
         mostRecentSaved.questId == currentOrLastQuestion.questId &&
         _notYetAtEnd) {
       //
-      print(
+     ConfigLogger.log(Level.SEVERE, 
         'Error: QID: ${mostRecentSaved.questId} seemd to be duplicate & wasnt moved into _answeredQuestsBySection',
       );
       return;

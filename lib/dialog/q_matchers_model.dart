@@ -195,7 +195,7 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
           .trimRight();
       // shortDesc = shortDesc;
       ;
-      print(
+      ConfigLogger.log(Level.INFO, 
         '\n\tMatcher Hit -- QID: ${prevAnsweredQuest.questId}\n\t\thit -> "$shortDesc"\n\t\t(using: ${isNoopGenerator ? "CALLBACK" : "STATIC"} as source for DQG)',
       );
     }
@@ -205,7 +205,7 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
   List<QuestBase> getDerivedAutoGenQuestions(QuestBase answeredQuest) {
     DerivedQuestGenerator dqg = _getActiveDqg(answeredQuest);
     if (dqg.isNoopGenerator) {
-      print('Err: bailing getDerivedAutoGenQuestions because dqg is a no-op');
+     ConfigLogger.log(Level.SEVERE, 'Err: bailing getDerivedAutoGenQuestions because dqg is a no-op');
       return [];
     }
     return dqg.getDerivedAutoGenQuestions(

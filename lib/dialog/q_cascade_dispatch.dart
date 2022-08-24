@@ -151,12 +151,12 @@ class QCascadeDispatcher {
       );
     } else if (questJustAnswered.isVisRuleDetailQuestion) {
       // user has provided details for visual rule
-      print(
+     ConfigLogger.log(Level.INFO, 
         '\tvisual rule detail quest has been answered; no derived questions here',
       );
     } else if (questJustAnswered.isBehRuleDetailQuestion) {
       // user has provided details for behavioral rule
-      print(
+     ConfigLogger.log(Level.INFO, 
         '\tbehavior rule detail quest has been answered; no derived questions here',
       );
     }

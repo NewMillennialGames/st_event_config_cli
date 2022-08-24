@@ -119,9 +119,9 @@ class DialogRunner {
 
   void _outputSpacerLines({bool forSection = false}) {
     if (forSection) {
-      print('\n' * this.linesBetweenSections);
+       ConfigLogger.log(Level.INFO, '\n' * this.linesBetweenSections);
     } else {
-      print('\n' * this.linesBetweenQuest2s);
+      ConfigLogger.log(Level.INFO, '\n' * this.linesBetweenQuest2s);
     }
   }
 }

@@ -67,7 +67,7 @@ class CfgForAreaAndNestedSlots {
           _setAndGetMapForRuleAndSlot(vrt, optSlotInArea);
       slotCfgMap[optSlotInArea]!.appendQuestion(rQuest);
       visCfgForSlotsByRuleType[vrt] = slotCfgMap;
-      print(
+    ConfigLogger.log(Level.INFO, 
         '\t slot rule count:  ${visCfgForSlotsByRuleType.length} (post add)',
       );
     }
@@ -143,9 +143,9 @@ class CfgForAreaAndNestedSlots {
     SlotOrAreaRuleCfg? areaSortCfg = visCfgForArea[VisualRuleType.filterCfg];
     if (areaSortCfg == null || areaSortCfg.visRuleList.length < 1) {
       //
-      print('Warning: defgh');
-      print('*** areaSortCfg is null: ${areaSortCfg == null}');
-      print(
+     ConfigLogger.log(Level.WARNING, 'Warning: defgh');
+      ConfigLogger.log(Level.WARNING, '*** areaSortCfg is null: ${areaSortCfg == null}');
+    ConfigLogger.log(Level.INFO, 
         '*** areaSortCfg visRuleList: ${areaSortCfg?.visRuleList ?? " na"}',
       );
       return null;

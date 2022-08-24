@@ -2,6 +2,8 @@ library ConfigDialogRunner;
 
 import 'dart:math';
 
+import 'package:logging/logging.dart';
+import 'package:st_ev_cfg/util/config_logger.dart';
 import 'package:tuple/tuple.dart';
 
 import '../config/all.dart';

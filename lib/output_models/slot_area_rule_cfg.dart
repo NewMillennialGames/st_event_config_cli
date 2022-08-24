@@ -106,12 +106,12 @@ class SlotOrAreaRuleCfg {
         ? (slotOrArea as ScreenWidgetArea).name.toUpperCase()
         : (slotOrArea as ScreenAreaWidgetSlot).name.toUpperCase();
 
-    print(padding + '$targetName $targetScope RuleCfg:');
+   ConfigLogger.log(Level.INFO, padding + '$targetName $targetScope RuleCfg:');
     for (RuleResponseBase rrb in visRuleList) {
       //
       // String cfgRuleTypeName = rrb.runtimeType.toString();
       // print('\t$cfgRuleTypeName has:');
-      print(padding + padding + '$rrb');
+     ConfigLogger.log(Level.INFO, padding + padding + '$rrb');
     }
   }
 

@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:core';
 import 'package:args/args.dart';
+import 'package:logging/logging.dart';
+import 'package:st_ev_cfg/util/config_logger.dart';
 //
 import 'lib/questions/all.dart';
 import 'lib/dialog/all.dart';
@@ -17,6 +19,11 @@ const String DEBUG_DUMP_ANSWERS = 'dumpAnswers';
 late ArgResults argResults;
 
 Future<void> main(List<String> cliArgs) async {
+  Logger.root.level = Level.ALL; // defaults to Level.INFO
+  Logger.root.onRecord.listen((record) {
+    print('${record.level.name}: ${record.message}');
+  });
+
   exitCode = 0; // presume success
 
   final parser = setupOptions();
@@ -24,7 +31,7 @@ Future<void> main(List<String> cliArgs) async {
   // final paths = argResults.rest;
 
   // add empy lines befor starting dialog
-  print('\n' * 0);
+  ConfigLogger.log(Level.INFO, '\n' * 0);
 
   // assert(false, 'should fail instantly');
 
@@ -40,7 +47,7 @@ Future<void> main(List<String> cliArgs) async {
     final bool succeeded = dialoger.cliLoopUntilComplete();
     if (!succeeded) {
       exitCode = 2;
-      print('Something went wrong!!');
+      ConfigLogger.log(Level.WARNING, 'Something went wrong!!');
     }
 
     if (argResults.wasParsed(DEBUG_DUMP_ANSWERS)) {
@@ -63,7 +70,8 @@ void createOutputFileFromResponses(
   List<VisualRuleDetailQuest> exportableRuleQuestions =
       questListMgr.exportableVisRuleQuestions.toList();
 
-  print(
+  ConfigLogger.log(
+    Level.INFO,
     'found ${eventConfigLevelData.length} event-cfg entries, and ${exportableRuleQuestions.length} rules to convert',
   );
   // for (QuestBase q in exportableRuleQuestions) {

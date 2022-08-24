@@ -133,7 +133,7 @@ abstract class QuestBase with EquatableMixin {
         questId: questId,
       );
     }
-    print('Error:  QuestBase.rulePrepQuest hit impossible condition');
+   ConfigLogger.log(Level.WARNING, 'Error:  QuestBase.rulePrepQuest hit impossible condition');
     return RulePrepQuest(completeTarg, qDefCollection, questId: questId);
   }
 
@@ -283,7 +283,7 @@ abstract class QuestBase with EquatableMixin {
     // print('\nasVisRuleResponse using:   (${qPromptCollection.prompts.length})');
 
     List<PairedQuestAndResp> pqr = qPromptCollection.listTypedResponses;
-    print(pqr);
+    ConfigLogger.log(Level.INFO, pqr);
 
     rrb.castResponsesToAnswerTypes(pqr);
     return rrb;
@@ -766,7 +766,7 @@ class RulePrepQuest extends SelectAndPrepQBase {
       'target must be complete in a rule prep question!',
     );
 
-    print(
+ ConfigLogger.log(Level.INFO, 
       'derivedQuestTargetAtAnswerIdx.visRule: ${qTargetResolution.visRuleTypeForAreaOrSlot!.name}',
     );
     return qTargetResolution.copyWith(

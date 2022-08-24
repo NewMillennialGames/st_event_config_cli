@@ -214,7 +214,7 @@ class DerivedQuestGenerator {
     // String debugInfo = matcherDescrip4Debug;
 
     if (newQuestCount < 1) {
-      print(
+     ConfigLogger.log(Level.WARNING, 
         'DeQuestGen.getDerivedAutoGenQuestions aborted due to:\n\tnewQuestCount: $newQuestCount from matcher:\n\t$debugInfo',
       );
       return [];
@@ -334,7 +334,7 @@ class DerivedQuestGenerator {
     var existingAnswers = prevAnswQuest.mainAnswer;
     if (existingAnswers is Iterable<VisualRuleType>) {
       VisualRuleType curRule = existingAnswers.toList()[newQIdx];
-      print('_ccTargetRes got ${curRule.name}');
+     ConfigLogger.log(Level.INFO, '_ccTargetRes got ${curRule.name}');
       return prevAnswQuest.qTargetResolution
           .copyWith(visRuleTypeForAreaOrSlot: curRule);
     }

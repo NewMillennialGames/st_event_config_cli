@@ -79,7 +79,7 @@ class PerQStats {
     answered.end = ans;
 
     if (testMode) {
-      print(
+     ConfigLogger.log(Level.INFO, 
         '$qid\t$unansweredQsAdded\t$answeredQsAdded   \t\t\t(from setEndCounts())',
       );
     }
@@ -147,17 +147,17 @@ class GenStatsCollector {
     );
 
     if (printSummary) {
-      print('Q-Id:\t$activeQuestId');
-      print('\tPrompt:\t${questJustAnswered.firstPrompt.userPrompt}');
+      ConfigLogger.log(Level.INFO, 'Q-Id:\t$activeQuestId');
+      ConfigLogger.log(Level.INFO, '\tPrompt:\t${questJustAnswered.firstPrompt.userPrompt}');
       int choiceCount = questJustAnswered.countChoicesInFirstPrompt;
-      print(
+      ConfigLogger.log(Level.INFO, 
         '\t$choiceCount Choices:\t${questJustAnswered.firstPrompt.answerOptions}',
       );
       int ansCount = questJustAnswered.mainAnswer is Iterable
           ? (questJustAnswered.mainAnswer as Iterable).length
           : 1;
-      print('\t$ansCount Answers:\t${questJustAnswered.mainAnswer}');
-      print('\tGenerated:\t${qStats.unansweredQsAdded}');
+      ConfigLogger.log(Level.INFO, '\t$ansCount Answers:\t${questJustAnswered.mainAnswer}');
+     ConfigLogger.log(Level.INFO, '\tGenerated:\t${qStats.unansweredQsAdded}');
 
       int expectedGenCount = ansCount;
       /*
@@ -172,7 +172,7 @@ class GenStatsCollector {
         // expectedGenCount *= 2;
       }
       if (expectedGenCount != qStats.unansweredQsAdded) {
-        print('\tPossible Err: should have generated $expectedGenCount');
+        ConfigLogger.log(Level.WARNING, '\tPossible Err: should have generated $expectedGenCount');
       }
     }
 
