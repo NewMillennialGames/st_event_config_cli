@@ -38,11 +38,11 @@ class QMatchCollection {
     if (questJustAnswered.questId !=
         questListMgr.currentOrLastQuestion.questId) {
       // happens durring testing; not sure if this is a real problem or not?
-      // print(
+      // ConfigLogger.log(Level.FINER,
       //   'Warning:  current quest idx was moved during this process',
       // );
     }
-    // print(
+    // ConfigLogger.log(Level.FINER,
     //   'comparing "${questJustAnswered.questId}" to ${_matcherList.length} matchers for new quests',
     // );
     List<QuestMatcher> _foundQmatchers = [];
@@ -62,12 +62,12 @@ class QMatchCollection {
 
     if (_foundQmatchers.length > 0) {
       // _foundQmatchers.forEach((QuestMatcher qm) {
-      //   print('\nQuest: ${questJustAnswered.questId}');
-      //   // print('\t\ton screen: ' + questJustAnswered.appScreen.name);
-      //   print('\tmatched: ' + qm.matcherDescrip);
+      //   ConfigLogger.log(Level.FINER, '\nQuest: ${questJustAnswered.questId}');
+      //   // ConfigLogger.log(Level.FINER, '\t\ton screen: ' + questJustAnswered.appScreen.name);
+      //   ConfigLogger.log(Level.FINER, '\tmatched: ' + qm.matcherDescrip);
       // });
     } else {
-      // print(
+      // ConfigLogger.log(Level.FINER,
       //   '*** appendNewQuestsOrInsertImplicitAnswers found ${_foundQmatchers.length} QuestMatchers for ${questJustAnswered.questId}',
       // );
     }
@@ -166,7 +166,7 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
     }
 
     if (usesMatchByQIdPatternCallback) {
-      // print('this matcher targeted at a SPECIFIC question & does not consider other atts');
+      // ConfigLogger.log(Level.FINER, 'this matcher targeted at a SPECIFIC question & does not consider other atts');
       isAPatternMatch =
           this.questIdPatternMatchTest!(prevAnsweredQuest.questId);
       if (!isAPatternMatch) {
@@ -274,46 +274,46 @@ void main() {
   TypeTest ttA = TypeTest(OneA);
   TypeTest ttB = TypeTest(OneB);
   
-  print('Class (Base) level:');
-  print(tt.typ is Base);
-  print(tt.typ.runtimeType is Base);
+  ConfigLogger.log(Level.FINER,'Class (Base) level:');
+  ConfigLogger.log(Level.FINER,tt.typ is Base);
+  ConfigLogger.log(Level.FINER,tt.typ.runtimeType is Base);
   // below works
-  print(tt.typ == Base);
-  print(tt.typ.runtimeType == Base);
+  ConfigLogger.log(Level.FINER,tt.typ == Base);
+  ConfigLogger.log(Level.FINER,tt.typ.runtimeType == Base);
   
-  print('\nInstance level:');
+  ConfigLogger.log(Level.FINER,'\nInstance level:');
   Base b = Base();
   // below works
-  print(tt.typ == b.runtimeType);
-  print(tt.typ.runtimeType == b);
+  ConfigLogger.log(Level.FINER,tt.typ == b.runtimeType);
+  ConfigLogger.log(Level.FINER,tt.typ.runtimeType == b);
   
   
-  print('\nClass (OneA) level:');
-  print(ttA.typ is OneA);
-  print(ttA.typ.runtimeType is OneA);
+  ConfigLogger.log(Level.FINER,'\nClass (OneA) level:');
+  ConfigLogger.log(Level.FINER,ttA.typ is OneA);
+  ConfigLogger.log(Level.FINER,ttA.typ.runtimeType is OneA);
   // below works
-  print(ttA.typ == OneA);
-  print(ttA.typ.runtimeType == OneA);
+  ConfigLogger.log(Level.FINER,ttA.typ == OneA);
+  ConfigLogger.log(Level.FINER,ttA.typ.runtimeType == OneA);
   
-  print('\nInstance level:');
+  ConfigLogger.log(Level.FINER,'\nInstance level:');
   OneA on = OneA();
   // below works
-  print(ttA.typ == on.runtimeType);
-  print(ttA.typ.runtimeType == on);
+  ConfigLogger.log(Level.FINER,ttA.typ == on.runtimeType);
+  ConfigLogger.log(Level.FINER,ttA.typ.runtimeType == on);
   
   
-  print('\nClass (OneB) level:');
-  print(ttB.typ is OneB);
-  print(ttB.typ.runtimeType is OneB);
+  ConfigLogger.log(Level.FINER,'\nClass (OneB) level:');
+  ConfigLogger.log(Level.FINER,ttB.typ is OneB);
+  ConfigLogger.log(Level.FINER,ttB.typ.runtimeType is OneB);
   // below works
-  print(ttB.typ == OneB);
-  print(ttB.typ.runtimeType == OneB);
+  ConfigLogger.log(Level.FINER,ttB.typ == OneB);
+  ConfigLogger.log(Level.FINER,ttB.typ.runtimeType == OneB);
   
-  print('\nInstance level:');
+  ConfigLogger.log(Level.FINER,'\nInstance level:');
   OneB ob = OneB();
   // below works
-  print(ttB.typ == ob.runtimeType);
-  print(ttB.typ.runtimeType == ob);
+  ConfigLogger.log(Level.FINER,ttB.typ == ob.runtimeType);
+  ConfigLogger.log(Level.FINER,ttB.typ.runtimeType == ob);
 }
 
 

@@ -95,9 +95,9 @@ class DialogRunner {
       // try {
       //   questPresenter.askAndWaitForUserResponse(this, _quest);
       // } catch (e, _) {
-      //   print(
+      //   ConfigLogger.log(Level.FINER,
       //       'Err:  cliLoopUntilComplete running questPresenter.askAndWaitForUserResponse');
-      //   print('Err thrown was ${e.toString()}');
+      //   ConfigLogger.log(Level.FINER, 'Err thrown was ${e.toString()}');
       //   questPresenter.showErrorAndRePresentQuestion(
       //       e as String, _quest.helpMsgOnError ?? '');
       //   continue;

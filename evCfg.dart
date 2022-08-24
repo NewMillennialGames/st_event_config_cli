@@ -75,21 +75,21 @@ void createOutputFileFromResponses(
     'found ${eventConfigLevelData.length} event-cfg entries, and ${exportableRuleQuestions.length} rules to convert',
   );
   // for (QuestBase q in exportableRuleQuestions) {
-  //   print(q.firstPrompt.userPrompt);
+  //   ConfigLogger.log(Level.FINER, q.firstPrompt.userPrompt);
   //   Iterable<CaptureAndCast> cac = q.qPromptCollection.listResponseCasters;
   //   List<String> allAnsw = cac.fold<List<String>>([],
   //       ((List<String> accumLst, CaptureAndCast cac) {
   //     accumLst.add(cac.answer);
   //     return accumLst;
   //   }));
-  //   print(allAnsw);
-  //   print('\n\n');
+  //   ConfigLogger.log(Level.FINER, allAnsw);
+  //  ConfigLogger.log(Level.FINER, '\n\n');
   // }
 
   final evCfg = EventCfgTree.fromEventLevelConfig(eventConfigLevelData);
   // create the per-area or per-slot rules
 
-  // print('ruleResponse answer count: ${exportableRuleQuestions.length}');
+  //ConfigLogger.log(Level.FINER, 'ruleResponse answer count: ${exportableRuleQuestions.length}');
   assert(
     exportableRuleQuestions.length == exportableRuleQuestions.length,
     '???',

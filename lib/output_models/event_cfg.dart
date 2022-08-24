@@ -169,7 +169,7 @@ class EventCfgTree {
         out the tree of configuration data
         that will customize the client UI
     */
-    // print(
+    // ConfigLogger.log(Level.FINER,
     //   'fillFromVisualRuleAnswers got ${answeredQuestions.length} answeredQuestions',
     // );
     for (VisualRuleDetailQuest vrQuest in answeredQuestions) {
@@ -196,7 +196,7 @@ class EventCfgTree {
     ConfigLogger.log(
         Level.INFO, 'Config written (in JSON fmt) to ${outFile.path}');
     // } catch (e) {
-    //   print(e.toString());
+    //   ConfigLogger.log(Level.FINER,e.toString());
     // }
     // outFile.close();
   }
@@ -222,10 +222,10 @@ class EventCfgTree {
       for (MapEntry<ScreenWidgetArea, CfgForAreaAndNestedSlots> areaCfg
           in screenCfg.value.areaConfig.entries) {
         //
-        // print('\tArea: ${areaCfg.key.name}\n');
+        // ConfigLogger.log(Level.FINER,'\tArea: ${areaCfg.key.name}\n');
         for (MapEntry<VisualRuleType, SlotOrAreaRuleCfg> ruleCfg
             in areaCfg.value.visCfgForArea.entries) {
-          // print('\t\t\tVRT: ${ruleCfg.key.name}\n');
+          // ConfigLogger.log(Level.FINER,'\t\t\tVRT: ${ruleCfg.key.name}\n');
           ruleCfg.value.printSummary(areaCfg.key);
           // only print slots if rules exist there
           _printSlotsInAreaWithRuleCfg(areaCfg);
@@ -245,7 +245,7 @@ class EventCfgTree {
     for (MapEntry<VisualRuleType,
             Map<ScreenAreaWidgetSlot, SlotOrAreaRuleCfg>> vrtWithSlotCfg
         in cfgMap) {
-      // print('\n\t\t\tSlot VRT:  ${vrtWithSlotCfg.key.name}');
+      // ConfigLogger.log(Level.FINER,'\n\t\t\tSlot VRT:  ${vrtWithSlotCfg.key.name}');
       for (MapEntry<ScreenAreaWidgetSlot, SlotOrAreaRuleCfg> bySlotCfg
           in vrtWithSlotCfg.value.entries) {
        ConfigLogger.log(Level.INFO, 

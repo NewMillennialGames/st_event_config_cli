@@ -240,7 +240,7 @@ class DerivedQuestGenerator {
             answeredQuest,
             newQIdx,
           )) {
-        // print(
+        // ConfigLogger.log(Level.FINER,
         //   'skipping Q# $newQIdx on ${answeredQuest.questId} for bailQGenWhenTrueCallbk; no derived quest generated from matcher $matcherDescrip4Debug',
         // );
         continue;
@@ -261,10 +261,10 @@ class DerivedQuestGenerator {
         );
 
         if (promptChoices.length < 1) {
-          // print(
+          // ConfigLogger.log(Level.FINER,
           //   'prompt $promptEntryListIdx (${currPromptConfig.instanceIdx}) on PREV questId ${answeredQuest.questId} has no choices so bailing.',
           // );
-          // print(
+          // ConfigLogger.log(Level.FINER,
           //   '''\tCan occur when answer has a mix of rules requiring BOTH prep & detail as next step.
           //   \tThe rule going directly to detail can return no choices to prevent a prep question prompt from being created!''',
           // );
