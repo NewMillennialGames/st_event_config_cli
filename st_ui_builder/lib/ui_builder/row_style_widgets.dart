@@ -20,6 +20,7 @@ we have one style for each value of:
         playerVsFieldRanked,
         playerDraft,
         driverVsField,
+        distressedAssetRanked,
 
     and there can be up-to one of each of the above style-classes
     for each screen in the app
@@ -667,7 +668,7 @@ class TeamVsFieldRowMktView extends StBaseTvRow
 class TeamVsFieldRowRankedMktView extends TeamVsFieldRowMktView {
   //
   @override
-  bool get showRanked => true;
+  bool get isPlayerVsFieldRanked => true;
 
   const TeamVsFieldRowRankedMktView(
     TableviewDataRowTuple assets, {
@@ -899,6 +900,36 @@ class TeamVsFieldRankedRowTest extends StBaseTvRow with ShowsOneAsset {
     );
   }
 }
+
+class DistressedAssetRanked extends StBaseTvRow {
+  // TODO for Chrysalis
+
+  bool get showRank => false;
+
+  const DistressedAssetRanked(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+
+  @override
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
+    // print('AssetVsAssetRow_MktView is rebuilding');
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        // AssetVsAssetHalfRow(comp1, agd, showRank, comp1.assetHoldingsSummary),
+        SizedBox(height: UiSizes.spaceBtwnRows),
+        // AssetVsAssetHalfRow(comp2, agd, showRank, comp2.assetHoldingsSummary)
+      ],
+    );
+  }
+}
+
+
 
 // @override
 //   Widget rowBody(BuildContext context) {

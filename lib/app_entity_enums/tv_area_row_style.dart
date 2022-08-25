@@ -25,6 +25,7 @@ enum TvAreaRowStyle {
   playerVsFieldRanked,
   playerDraft,
   driverVsField,
+  distressedAssetRanked,
 }
 
 //
