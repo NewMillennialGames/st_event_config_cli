@@ -32,7 +32,14 @@ class MockAsset {
   String get key => id;
 
   MockAsset(
-      this.name, this.region, this.teamName, this.gameKey, this.displayNumber);
+    this.name,
+    this.region,
+    this.teamName,
+    this.gameKey,
+    this.displayNumber,
+  ) {
+    imgUrl = 'https://ui-avatars.com/api/?$name';
+  }
 
   static List<MockAssetWrapper> get mockRows =>
       _fakeData.map(MockAssetWrapper.new).toList();
@@ -68,7 +75,7 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
   String get position => 'p-Quarterback';
 
   @override
-  int get rank => 3;
+  int get rank => int.tryParse(asset.displayNumber) ?? 3;
 
   String get rankStr => '$rank';
 
@@ -103,6 +110,7 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
   @override
   UserEventSummaryIfc get userEventSummary => MockEventSummary();
 
+  @override
   // should be on the game
   String get roundName => throw UnimplementedError();
 
@@ -130,7 +138,7 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
   Decimal get openPrice => Decimal.parse('2.33');
 
   @override
-  int get displayNumber => 5;
+  int get displayNumber => int.tryParse(asset.displayNumber) ?? 5;
 }
 
 List<MockAsset> _fakeData = [

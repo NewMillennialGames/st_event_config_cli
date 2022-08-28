@@ -16,8 +16,6 @@ import 'package:st_ev_cfg/st_ev_cfg.dart';
 
 //
 import 'mock_data.dart';
-import 'config/colors.dart';
-import './ui_builder/all.dart';
 /*
 this is a Flutter project
 but it's built as a dependency for 
@@ -31,11 +29,12 @@ const String cfgEmpl1 = 'assetVsAsset.json';
 // cfgEmpl2 seems to be invalid json; replace it to continue testing
 const String cfgEmpl2 = 'teamVsFieldRanked.json';
 const String cfgEmpl3 = 'driverVsField.json';
+const String cfgEmpl4 = 'demo.json';
 
 // evCfgDataFromServer contains the JSON payload produced by the CLI configurator
 Map<String, dynamic> evCfgDataFromServer = {};
 
-Future<void> readExampleEventConfig({String filename = cfgEmpl3}) async {
+Future<void> readExampleEventConfig({String filename = cfgEmpl4}) async {
   final String response = await rootBundle.loadString('assets/$filename');
   evCfgDataFromServer = json.decode(response);
 }
@@ -176,6 +175,7 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
         children: [
           if (hasColumnFilters) ...{
             tvMgr.columnFilterBarWidget(
+              totAvailWidth: MediaQuery.of(context).size.width,
               backColor: StColors.primaryDarkGray,
             ),
             SizedBox(
