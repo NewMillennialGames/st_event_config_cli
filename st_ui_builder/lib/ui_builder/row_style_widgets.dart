@@ -587,7 +587,7 @@ class TeamVsFieldRowMktView extends StBaseTvRow
         ),
         kSpacerSm,
         SizedBox(
-          width: size.width * .52,
+          width: size.width * .5,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
