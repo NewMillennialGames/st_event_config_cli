@@ -30,7 +30,7 @@ class QuestListMgr {
   // constructor
   QuestListMgr([List<QuestBase>? pendingQuestions = null]) {
     if ((pendingQuestions ?? <QuestBase>[]).length < 1)
-      print(
+      ConfigLogger.log(Level.WARNING, 
         'warn: QuestListMgr may not behave well without min 1 seed question!!',
       );
     _pendingQuestions.addAll(pendingQuestions ?? []);
@@ -84,7 +84,7 @@ class QuestListMgr {
         (matchingPrompts.first.userRespConverter.cast(currentOrLastQuestion) ??
             []);
 
-    print('userSelectedScreens has ${uss.length} items');
+    ConfigLogger.log(Level.INFO, 'userSelectedScreens has ${uss.length} items');
     return uss;
   }
 
@@ -154,7 +154,7 @@ class QuestListMgr {
     if (!CfgConst.inTestMode && _currQuestionIdx < CfgConst.questCountB4Sorting)
       return;
 
-    // print('running sortPendingQuestions');
+    // ConfigLogger.log(Level.FINER, 'running sortPendingQuestions');
 
     List<QuestBase> unaskedQuests =
         _pendingQuestions.sublist(_currQuestionIdx + 1);
@@ -182,7 +182,7 @@ class QuestListMgr {
         totalAnsweredQuestions >= _pendingQuestions.length) {
       // pending questions represents ALL questions
       // if answered count > all, then we'd be moving duplicates
-      // print(
+      // ConfigLogger.log(Level.FINER,
       //   'moveCurrentQuestToAnswered BAILING out:  $_currQuestionIdx  $totalAnsweredQuestions  ${_pendingQuestions.length}',
       // );
       return;
@@ -203,7 +203,7 @@ class QuestListMgr {
         mostRecentSaved.questId == currentOrLastQuestion.questId &&
         _notYetAtEnd) {
       //
-      print(
+     ConfigLogger.log(Level.SEVERE, 
         'Error: QID: ${mostRecentSaved.questId} seemd to be duplicate & wasnt moved into _answeredQuestsBySection',
       );
       return;
@@ -237,7 +237,7 @@ class QuestListMgr {
     */
     Set<AppScreen> appScreensSet = newQuests.map((e) => e.appScreen).toSet();
 
-    // print(
+    //ConfigLogger.log(Level.FINER,
     //   '$dbgNam is adding ${quests.length} new Questions for these screens $appScreensSet',
     // );
 

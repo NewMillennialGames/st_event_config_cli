@@ -133,7 +133,7 @@ abstract class QuestBase with EquatableMixin {
         questId: questId,
       );
     }
-    print('Error:  QuestBase.rulePrepQuest hit impossible condition');
+   ConfigLogger.log(Level.WARNING, 'Error:  QuestBase.rulePrepQuest hit impossible condition');
     return RulePrepQuest(completeTarg, qDefCollection, questId: questId);
   }
 
@@ -280,10 +280,10 @@ abstract class QuestBase with EquatableMixin {
   RuleResponseBase get asVisRuleResponse {
     //
     RuleResponseBase rrb = visRuleTypeForAreaOrSlot!.ruleResponseContainer;
-    // print('\nasVisRuleResponse using:   (${qPromptCollection.prompts.length})');
+    // ConfigLogger.log(Level.FINER,'\nasVisRuleResponse using:   (${qPromptCollection.prompts.length})');
 
     List<PairedQuestAndResp> pqr = qPromptCollection.listTypedResponses;
-    print(pqr);
+    ConfigLogger.log(Level.INFO, pqr);
 
     rrb.castResponsesToAnswerTypes(pqr);
     return rrb;
@@ -566,7 +566,7 @@ abstract class SelectAndPrepQBase extends QuestBase {
     //   }
     //   selRule = selRules[newQuIdx];
     //   newQuestCountToGenerate = selRules.length;
-    //   print(
+    //   ConfigLogger.log(Level.FINER,
     //     'INFO: dynamic DQG from type selected ${selRule.name.toUpperCase()} for $newQuIdx  (${(optRuleTypeToCreateDqg?.name ?? '_noVrtArg').toUpperCase()} could be used instead)',
     //   );
     // }
@@ -574,7 +574,7 @@ abstract class SelectAndPrepQBase extends QuestBase {
     //     optRuleTypeToCreateDqg ?? selRule ?? visRuleTypeForAreaOrSlot!;
 
     // String instanceTypeUC = this.runtimeType.toString().toUpperCase();
-    // print(
+    // ConfigLogger.log(Level.FINER,
     //   'INFO: getDerivedRuleQuestGenViaVisType creating question for: ${ruleForNextQuestion.name.toUpperCase()} from a $instanceTypeUC question',
     // );
 
@@ -675,7 +675,7 @@ class RuleSelectQuest extends SelectAndPrepQBase {
     );
     //
     List<VisualRuleType> lstUserSelVrt = mainAnswer as List<VisualRuleType>;
-    // print('lstUserSelVrt: $lstUserSelVrt---$questId');
+    // ConfigLogger.log(Level.FINER,'lstUserSelVrt: $lstUserSelVrt---$questId');
     VisualRuleType selRule;
     switch (selectionOffsetBehavior) {
       case RuleSelectionOffsetBehavior.none:
@@ -697,7 +697,7 @@ class RuleSelectQuest extends SelectAndPrepQBase {
         ? TargetPrecision.rulePrep
         : TargetPrecision.ruleDetailVisual;
 
-    // print(
+    // ConfigLogger.log(Level.FINER,
     //   'lstUserSelVrt: ${selRule.name}    newPrecision: ${newPrecision.name}',
     // );
     return qTargetResolution.copyWith(
@@ -766,7 +766,7 @@ class RulePrepQuest extends SelectAndPrepQBase {
       'target must be complete in a rule prep question!',
     );
 
-    print(
+ ConfigLogger.log(Level.INFO, 
       'derivedQuestTargetAtAnswerIdx.visRule: ${qTargetResolution.visRuleTypeForAreaOrSlot!.name}',
     );
     return qTargetResolution.copyWith(
@@ -824,7 +824,7 @@ abstract class RuleQuestBaseAbs extends QuestBase {
     );
     String m =
         'Error:  Rule detail questions DO NOT produce derived questions.  Why are you calling me?';
-    // print(m);
+    // ConfigLogger.log(Level.FINER,m);
     throw UnimplementedError(m);
     // return qTargetResolution.copyWith();
   }

@@ -47,10 +47,10 @@ class CfgForAreaAndNestedSlots {
       optSlotInArea,
     );
 
-    // print('\nappendAreaOrSlotRule got:  ${rQuest.questId}');
-    // print('\tArea:  ${rQuest.screenWidgetArea?.name}');
-    // print('\tSlot:  ${optSlotInArea?.name}');
-    // print(
+    // ConfigLogger.log(Level.FINER,'\nappendAreaOrSlotRule got:  ${rQuest.questId}');
+    // ConfigLogger.log(Level.FINER,'\tArea:  ${rQuest.screenWidgetArea?.name}');
+    // ConfigLogger.log(Level.FINER,'\tSlot:  ${optSlotInArea?.name}');
+    // ConfigLogger.log(Level.FINER,
     //   '\tfor a ${optSlotInArea == null ? "AREA" : "SLOT"} level rule on VRT: ${vrt.name}',
     // );
 
@@ -60,14 +60,14 @@ class CfgForAreaAndNestedSlots {
       cfgForSlotOrArea = visCfgForArea[vrt] ?? SlotOrAreaRuleCfg([]);
       cfgForSlotOrArea.appendQuestion(rQuest);
       visCfgForArea[vrt] = cfgForSlotOrArea;
-      // print('\t area rule count:  ${visCfgForArea.length} (post add)');
+      // ConfigLogger.log(Level.FINER,'\t area rule count:  ${visCfgForArea.length} (post add)');
     } else {
       // this is a slot level rule
       Map<ScreenAreaWidgetSlot, SlotOrAreaRuleCfg> slotCfgMap =
           _setAndGetMapForRuleAndSlot(vrt, optSlotInArea);
       slotCfgMap[optSlotInArea]!.appendQuestion(rQuest);
       visCfgForSlotsByRuleType[vrt] = slotCfgMap;
-      print(
+    ConfigLogger.log(Level.INFO, 
         '\t slot rule count:  ${visCfgForSlotsByRuleType.length} (post add)',
       );
     }
@@ -143,9 +143,9 @@ class CfgForAreaAndNestedSlots {
     SlotOrAreaRuleCfg? areaSortCfg = visCfgForArea[VisualRuleType.filterCfg];
     if (areaSortCfg == null || areaSortCfg.visRuleList.length < 1) {
       //
-      print('Warning: defgh');
-      print('*** areaSortCfg is null: ${areaSortCfg == null}');
-      print(
+     ConfigLogger.log(Level.WARNING, 'Warning: defgh');
+      ConfigLogger.log(Level.WARNING, '*** areaSortCfg is null: ${areaSortCfg == null}');
+    ConfigLogger.log(Level.INFO, 
         '*** areaSortCfg visRuleList: ${areaSortCfg?.visRuleList ?? " na"}',
       );
       return null;

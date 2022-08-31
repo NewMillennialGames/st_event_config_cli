@@ -34,7 +34,7 @@ class SlotOrAreaRuleCfg {
       visRuleList.map((e) => e.ruleType);
 
   void appendQuestion(VisualRuleDetailQuest rQuest) {
-    // print('adding QuestVisualRule abt ${rQuest.firstPrompt.userPrompt} to SlotOrAreaRuleCfg on ${rQuest.appScreen.name}');
+    // ConfigLogger.log(Level.FINER,'adding QuestVisualRule abt ${rQuest.firstPrompt.userPrompt} to SlotOrAreaRuleCfg on ${rQuest.appScreen.name}');
     this.visRuleList.add(rQuest.asVisRuleResponse);
   }
 
@@ -106,12 +106,12 @@ class SlotOrAreaRuleCfg {
         ? (slotOrArea as ScreenWidgetArea).name.toUpperCase()
         : (slotOrArea as ScreenAreaWidgetSlot).name.toUpperCase();
 
-    print(padding + '$targetName $targetScope RuleCfg:');
+   ConfigLogger.log(Level.INFO, padding + '$targetName $targetScope RuleCfg:');
     for (RuleResponseBase rrb in visRuleList) {
       //
       // String cfgRuleTypeName = rrb.runtimeType.toString();
-      // print('\t$cfgRuleTypeName has:');
-      print(padding + padding + '$rrb');
+      // ConfigLogger.log(Level.FINER,'\t$cfgRuleTypeName has:');
+     ConfigLogger.log(Level.INFO, padding + padding + '$rrb');
     }
   }
 

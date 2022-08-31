@@ -95,9 +95,9 @@ class DialogRunner {
       // try {
       //   questPresenter.askAndWaitForUserResponse(this, _quest);
       // } catch (e, _) {
-      //   print(
+      //   ConfigLogger.log(Level.FINER,
       //       'Err:  cliLoopUntilComplete running questPresenter.askAndWaitForUserResponse');
-      //   print('Err thrown was ${e.toString()}');
+      //   ConfigLogger.log(Level.FINER, 'Err thrown was ${e.toString()}');
       //   questPresenter.showErrorAndRePresentQuestion(
       //       e as String, _quest.helpMsgOnError ?? '');
       //   continue;
@@ -119,9 +119,9 @@ class DialogRunner {
 
   void _outputSpacerLines({bool forSection = false}) {
     if (forSection) {
-      print('\n' * this.linesBetweenSections);
+       ConfigLogger.log(Level.INFO, '\n' * this.linesBetweenSections);
     } else {
-      print('\n' * this.linesBetweenQuest2s);
+      ConfigLogger.log(Level.INFO, '\n' * this.linesBetweenQuest2s);
     }
   }
 }

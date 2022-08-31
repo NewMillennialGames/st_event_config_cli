@@ -41,9 +41,9 @@ final answerStreamProvier = StreamProvider<String>((ref) async* {
 //   var pc = ProviderContainer();
 //   var xx = pc.read(answerStreamProvier.stream);
 
-//   print(xx.isBroadcast);
+//   ConfigLogger.log(Level.FINER,xx.isBroadcast);
 
 //   var yy = xx.asBroadcastStream();
 
-//   print(yy.isBroadcast);
+//   ConfigLogger.log(Level.FINER,yy.isBroadcast);
 // }

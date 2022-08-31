@@ -1,6 +1,8 @@
 library EvCfgEnums;
 
 import 'package:json_annotation/json_annotation.dart';
+import 'package:logging/logging.dart';
+import 'package:st_ev_cfg/util/config_logger.dart';
 //
 import '../app_entity_enums/all.dart';
 import '../questions/all.dart';
