@@ -223,7 +223,7 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
     // empty list if no area or slot specified
     if (screenWidgetArea == null) {
       //
-      print(
+      ConfigLogger.log(Level.WARNING, 
         'warn: no rules possible at screen level (rule target must be area or slot)',
       );
       return [];
@@ -236,7 +236,7 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
     // component styles for a target area/slot
 
     if (!targetComplete) {
-      print(
+      ConfigLogger.log(Level.SEVERE, 
         'err:  possibleVisCompStylesForTarget called on incomplete QTargResolution (area or area/slot should be set)',
       );
       return [];

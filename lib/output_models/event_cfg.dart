@@ -120,7 +120,8 @@ class EventCfgTree {
           .firstWhere((q) => q.questId == QuestionIdStrings.globalRowStyle)
           .mainAnswer as bool;
     } catch (e) {
-      print(
+      ConfigLogger.log(
+        Level.WARNING,
         'Warnnig:  key Event level quests/fields missing.  Hope you are debugging testing',
       );
     }
@@ -168,7 +169,7 @@ class EventCfgTree {
         out the tree of configuration data
         that will customize the client UI
     */
-    // print(
+    // ConfigLogger.log(Level.FINER,
     //   'fillFromVisualRuleAnswers got ${answeredQuestions.length} answeredQuestions',
     // );
     for (VisualRuleDetailQuest vrQuest in answeredQuestions) {
@@ -192,9 +193,10 @@ class EventCfgTree {
     // try {
     String jsonData = json.encode(this);
     outFile.writeAsStringSync(jsonData, mode: FileMode.write, flush: true);
-    print('Config written (in JSON fmt) to ${outFile.path}');
+    ConfigLogger.log(
+        Level.INFO, 'Config written (in JSON fmt) to ${outFile.path}');
     // } catch (e) {
-    //   print(e.toString());
+    //   ConfigLogger.log(Level.FINER,e.toString());
     // }
     // outFile.close();
   }
@@ -212,18 +214,18 @@ class EventCfgTree {
   }
 
   void printSummary() {
-    print('EventCfgTree for: ${eventCfg.evTemplateName}');
+   ConfigLogger.log(Level.INFO, 'EventCfgTree for: ${eventCfg.evTemplateName}');
     for (MapEntry<AppScreen, ScreenCfgByArea> screenCfg
         in screenConfigMap.entries) {
       //
-      print('\n  Screen: ${screenCfg.key.name.toUpperCase()}:');
+     ConfigLogger.log(Level.INFO, '\n  Screen: ${screenCfg.key.name.toUpperCase()}:');
       for (MapEntry<ScreenWidgetArea, CfgForAreaAndNestedSlots> areaCfg
           in screenCfg.value.areaConfig.entries) {
         //
-        // print('\tArea: ${areaCfg.key.name}\n');
+        // ConfigLogger.log(Level.FINER,'\tArea: ${areaCfg.key.name}\n');
         for (MapEntry<VisualRuleType, SlotOrAreaRuleCfg> ruleCfg
             in areaCfg.value.visCfgForArea.entries) {
-          // print('\t\t\tVRT: ${ruleCfg.key.name}\n');
+          // ConfigLogger.log(Level.FINER,'\t\t\tVRT: ${ruleCfg.key.name}\n');
           ruleCfg.value.printSummary(areaCfg.key);
           // only print slots if rules exist there
           _printSlotsInAreaWithRuleCfg(areaCfg);
@@ -239,18 +241,18 @@ class EventCfgTree {
     // only print slots if rules exist there
     if (cfgMap.length < 1) return;
 
-    print('\t${areaCfg.key.name.toUpperCase()} AREA has:');
+   ConfigLogger.log(Level.INFO, '\t${areaCfg.key.name.toUpperCase()} AREA has:');
     for (MapEntry<VisualRuleType,
             Map<ScreenAreaWidgetSlot, SlotOrAreaRuleCfg>> vrtWithSlotCfg
         in cfgMap) {
-      // print('\n\t\t\tSlot VRT:  ${vrtWithSlotCfg.key.name}');
+      // ConfigLogger.log(Level.FINER,'\n\t\t\tSlot VRT:  ${vrtWithSlotCfg.key.name}');
       for (MapEntry<ScreenAreaWidgetSlot, SlotOrAreaRuleCfg> bySlotCfg
           in vrtWithSlotCfg.value.entries) {
-        print(
+       ConfigLogger.log(Level.INFO, 
           '\SLOT: ${bySlotCfg.key.name.toUpperCase()} with ${vrtWithSlotCfg.key.name.toUpperCase()} (VisRule)',
         );
         for (RuleResponseBase rrb in bySlotCfg.value.visRuleList) {
-          print('\t  ' + rrb.toString());
+         ConfigLogger.log(Level.INFO, '\t  ' + rrb.toString());
         }
       }
     }

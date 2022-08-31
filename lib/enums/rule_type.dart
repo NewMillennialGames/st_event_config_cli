@@ -255,7 +255,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
     assert(thisVisRT == newQTargRes.visRuleTypeForAreaOrSlot, 'wtf?');
 
     String ruleTypeName = thisVisRT.name;
-    print('ruleTypeName: $ruleTypeName');
+    ConfigLogger.log(Level.INFO, 'ruleTypeName: $ruleTypeName');
     // String newQuestNamePrefix = prevAnswQuest.questId;
 
     // visRequiredSubQuests should contain exactly 1 value
@@ -307,7 +307,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
         );
 
         String templ = thisVisRT.prepTemplate;
-        print(
+       ConfigLogger.log(Level.INFO, 
           'askCountOfSlotsToConfigure:  ${thisVisRT} uses $templ   ($ruleTypeName)',
         );
         perQuestPromptDetails.add(NewQuestPerPromptOpts<int>(
@@ -351,7 +351,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           requiredPromptInstances,
         );
         perQuestPromptDetails.addAll(qps);
-        print(
+        ConfigLogger.log(Level.INFO, 
           'requiredPromptInstances: $requiredPromptInstances  produced ${qps.length} NewQuestPerPromptOpts for vrt: ${thisVisRT.name}',
         );
         break;

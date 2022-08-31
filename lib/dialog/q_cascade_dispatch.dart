@@ -64,14 +64,14 @@ class QCascadeDispatcher {
 
     */
     // if (questJustAnswered.generatesNoNewQuestions) {
-    //   print(
+    //   ConfigLogger.log(Level.FINER,
     //     'Info  QID: ' +
     //         questJustAnswered.questId +
     //         ' generates no new questions',
     //   );
     //   return;
     // } else {
-    //   print(
+    //   ConfigLogger.log(Level.FINER,
     //     'appendNewQuestsOrInsertImplicitAnswers received QID:  ${questJustAnswered.questId}',
     //   );
     // }
@@ -92,7 +92,7 @@ class QCascadeDispatcher {
       String topTargets = (questJustAnswered.mainAnswer as List<AppScreen>)
           .fold<String>(
               '', (String allNames, AppScreen as) => allNames + as.name + '; ');
-      // print(
+      // ConfigLogger.log(Level.FINER,
       //   '\tUser has specified ${topTargets} screens for configuration',
       // );
       QMatchCollection _qMatchCollToGenTarget =
@@ -109,7 +109,7 @@ class QCascadeDispatcher {
       // target AREA questions created above (by isTopLevelEventConfigQuestion)
       // and passed here to generate questions about which slots to target
       // and ask which rules for previously selected area
-      // print(
+      // ConfigLogger.log(Level.FINER,
       //   '\tUser has specified Region target (area at least);  Now ask which slots in area, or rules for selected areas',
       // );
 
@@ -125,7 +125,7 @@ class QCascadeDispatcher {
       );
     } else if (questJustAnswered.isRuleSelectionQuestion) {
       // user has selected rule for area or slot
-      // print(
+      // ConfigLogger.log(Level.FINER,
       //   '\tUser has selected rule(s) for area or slot ${questJustAnswered.questId} (now gen rule-prep or rule-detail)',
       // );
 
@@ -140,7 +140,7 @@ class QCascadeDispatcher {
       );
       //
     } else if (questJustAnswered.isRulePrepQuestion) {
-      // print(
+      //ConfigLogger.log(Level.FINER,
       //   '\tUser has answered rule prep quest (normally # of pos to configure)',
       // );
       var _qMatchCollToGenRuleDetail =
@@ -151,12 +151,12 @@ class QCascadeDispatcher {
       );
     } else if (questJustAnswered.isVisRuleDetailQuestion) {
       // user has provided details for visual rule
-      print(
+     ConfigLogger.log(Level.INFO, 
         '\tvisual rule detail quest has been answered; no derived questions here',
       );
     } else if (questJustAnswered.isBehRuleDetailQuestion) {
       // user has provided details for behavioral rule
-      print(
+     ConfigLogger.log(Level.INFO, 
         '\tbehavior rule detail quest has been answered; no derived questions here',
       );
     }
@@ -484,7 +484,7 @@ FIXME:
                     .where((vrt) => vrt.needsVisRulePrepQuestion)
                     .toList();
             VisualRuleType vrt = selectedScreenAreas[newQuestIdx];
-            // print('VisualRuleType.name:  ${vrt.name}');
+            // ConfigLogger.log(Level.FINER, 'VisualRuleType.name:  ${vrt.name}');
             // bail out so question not created
             if (!vrt.needsVisRulePrepQuestion) return [];
             return ['0', '1', '2', '3'];
@@ -566,17 +566,17 @@ FIXME:
           Iterable<VisualRuleType> selRulesNoPrep =
               answr.where((vrt) => !vrt.needsVisRulePrepQuestion);
           bool atLeastOneHasNoPrep = selRulesNoPrep.length > 0;
-          // print('atLeastOneHasNoPrep: $atLeastOneHasNoPrep');
+          // ConfigLogger.log(Level.FINER,'atLeastOneHasNoPrep: $atLeastOneHasNoPrep');
           if (!atLeastOneHasNoPrep) return false;
 
-          // print('validateUserAnswerAfterPatternMatchIsTrueCallback:');
-          // print('\tAnswLen: ${selRulesNoPrep.length} (1 in example)');
-          // print(
+          // ConfigLogger.log(Level.FINER,'validateUserAnswerAfterPatternMatchIsTrueCallback:');
+          // ConfigLogger.log(Level.FINER, '\tAnswLen: ${selRulesNoPrep.length} (1 in example)');
+          // ConfigLogger.log(Level.FINER,
           //     '\tisRuleSelectionQuestion: ${priorAnsweredQuest.isRuleSelectionQuestion}');
-          // print(
+          //ConfigLogger.log(Level.FINER,
           //     '\ttargetPathIsComplete: ${priorAnsweredQuest.targetPathIsComplete}');
-          // print('\ttargetPath: ${priorAnsweredQuest.targetPath}');
-          // print('\tatLeastOneHasNoPrep: ${atLeastOneHasNoPrep}');
+          // ConfigLogger.log(Level.FINER,'\ttargetPath: ${priorAnsweredQuest.targetPath}');
+          // ConfigLogger.log(Level.FINER,'\tatLeastOneHasNoPrep: ${atLeastOneHasNoPrep}');
           return priorAnsweredQuest.isRuleSelectionQuestion &&
               priorAnsweredQuest.targetPathIsComplete;
         },
@@ -614,10 +614,10 @@ FIXME:
             qid.startsWith(QuestionIdStrings.prepQuestForVisRule),
         validateUserAnswerAfterPatternMatchIsTrueCallback:
             (QuestBase priorAnsweredQuest) {
-          // print(
+          // ConfigLogger.log(Level.FINER,
           //   'rulePrep:  priorAnsweredQuest.mainAnswer: ${priorAnsweredQuest.mainAnswer as int}',
           // );
-          // print(
+          // ConfigLogger.log(Level.FINER,
           //   '\tpriorAnsweredQuest.targetPathIsComplete: ${priorAnsweredQuest.targetPathIsComplete}',
           // );
 
@@ -702,7 +702,7 @@ List<QuestMatcher> _matchTargetCompleteAndGenRuleSelectQuests = [
         var screenAreasWithRules = selectedScreenAreas.where(
             (swa) => swa.isConfigureableOnScreen(priorAnsweredQuest.appScreen));
 
-        // print(
+        // ConfigLogger.log(Level.FINER,
         //   '(((((( screenAreasWithRules.len ${screenAreasWithRules.length}  (${qtr2.possibleRulesForAreaInScreen.length})',
         // );
         return screenAreasWithRules.length;
