@@ -13,7 +13,7 @@ RuleResponseBase _$RuleResponseBaseFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$RuleResponseBaseToJson(RuleResponseBase instance) =>
     <String, dynamic>{
-      'ruleType': _$VisualRuleTypeEnumMap[instance.ruleType]!,
+      'ruleType': _$VisualRuleTypeEnumMap[instance.ruleType],
     };
 
 const _$VisualRuleTypeEnumMap = {
@@ -34,8 +34,8 @@ TvRowStyleCfg _$TvRowStyleCfgFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$TvRowStyleCfgToJson(TvRowStyleCfg instance) =>
     <String, dynamic>{
-      'ruleType': _$VisualRuleTypeEnumMap[instance.ruleType]!,
-      'selectedRowStyle': _$TvAreaRowStyleEnumMap[instance.selectedRowStyle]!,
+      'ruleType': _$VisualRuleTypeEnumMap[instance.ruleType],
+      'selectedRowStyle': _$TvAreaRowStyleEnumMap[instance.selectedRowStyle],
     };
 
 const _$TvAreaRowStyleEnumMap = {
@@ -50,6 +50,7 @@ const _$TvAreaRowStyleEnumMap = {
   TvAreaRowStyle.playerVsFieldRanked: 'playerVsFieldRanked',
   TvAreaRowStyle.playerDraft: 'playerDraft',
   TvAreaRowStyle.driverVsField: 'driverVsField',
+  TvAreaRowStyle.distressedAssetRanked: 'distressedAssetRanked',
 };
 
 SortGroupFilterEntry _$SortGroupFilterEntryFromJson(
@@ -62,7 +63,7 @@ SortGroupFilterEntry _$SortGroupFilterEntryFromJson(
 Map<String, dynamic> _$SortGroupFilterEntryToJson(
         SortGroupFilterEntry instance) =>
     <String, dynamic>{
-      'colName': _$DbTableFieldNameEnumMap[instance.colName]!,
+      'colName': _$DbTableFieldNameEnumMap[instance.colName],
       'asc': instance.asc,
     };
 
@@ -89,7 +90,7 @@ TvSortCfg _$TvSortCfgFromJson(Map<String, dynamic> json) => TvSortCfg()
       .toList();
 
 Map<String, dynamic> _$TvSortCfgToJson(TvSortCfg instance) => <String, dynamic>{
-      'ruleType': _$VisualRuleTypeEnumMap[instance.ruleType]!,
+      'ruleType': _$VisualRuleTypeEnumMap[instance.ruleType],
       'fieldList': instance.fieldList.map((e) => e.toJson()).toList(),
     };
 
@@ -101,7 +102,7 @@ TvGroupCfg _$TvGroupCfgFromJson(Map<String, dynamic> json) => TvGroupCfg()
 
 Map<String, dynamic> _$TvGroupCfgToJson(TvGroupCfg instance) =>
     <String, dynamic>{
-      'ruleType': _$VisualRuleTypeEnumMap[instance.ruleType]!,
+      'ruleType': _$VisualRuleTypeEnumMap[instance.ruleType],
       'fieldList': instance.fieldList.map((e) => e.toJson()).toList(),
     };
 
@@ -113,7 +114,7 @@ TvFilterCfg _$TvFilterCfgFromJson(Map<String, dynamic> json) => TvFilterCfg()
 
 Map<String, dynamic> _$TvFilterCfgToJson(TvFilterCfg instance) =>
     <String, dynamic>{
-      'ruleType': _$VisualRuleTypeEnumMap[instance.ruleType]!,
+      'ruleType': _$VisualRuleTypeEnumMap[instance.ruleType],
       'fieldList': instance.fieldList.map((e) => e.toJson()).toList(),
     };
 
@@ -123,6 +124,6 @@ ShowHideCfg _$ShowHideCfgFromJson(Map<String, dynamic> json) => ShowHideCfg()
 
 Map<String, dynamic> _$ShowHideCfgToJson(ShowHideCfg instance) =>
     <String, dynamic>{
-      'ruleType': _$VisualRuleTypeEnumMap[instance.ruleType]!,
+      'ruleType': _$VisualRuleTypeEnumMap[instance.ruleType],
       'shouldShow': instance.shouldShow,
     };
