@@ -21,6 +21,8 @@ class StUiBuilderFactory {
   bool get marketViewRowsAreSingleAssetOnly =>
       !marketViewIsGameCentricAndTwoPerRow;
 
+  TopEventCfg get eventCfg => _eConfig!.eventCfg;
+
   void setConfigForCurrentEvent(Map<String, dynamic> eCfgJsonMap) {
     /* call this every time user switches events
       send api payload (upon event switching) here

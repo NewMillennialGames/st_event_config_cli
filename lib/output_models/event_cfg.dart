@@ -31,6 +31,8 @@ class TopEventCfg {
     this.applySameRowStyleToAllScreens = true,
   });
 
+  bool get isFantasy => evType == EvType.fantasy;
+
   bool skipGroupingOnScreen(AppScreen screen) {
     assert(
       screen == AppScreen.marketView,
