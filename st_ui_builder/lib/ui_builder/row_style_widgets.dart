@@ -209,9 +209,15 @@ class PlayerVsFieldRankedPortfolioView extends AssetVsAssetRowPortfolioView {
     Key? key,
   }) : super(assets, key: key);
 }
-
 class PlayerVsFieldRowPortfolioView extends AssetVsAssetRowPortfolioView {
   const PlayerVsFieldRowPortfolioView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+}
+
+class AssetVsAssetRankedRowMktResearchView extends AssetVsAssetRowMktResearchView {
+  const AssetVsAssetRankedRowMktResearchView(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
@@ -756,26 +762,6 @@ class TeamPlayerVsFieldRowMktView extends TeamVsFieldRowMktView {
     Key? key,
   }) : super(assets, key: key);
 }
-
-class PlayerVsFieldRow extends StBaseTvRow with ShowsOneAsset {
-  const PlayerVsFieldRow(
-    TableviewDataRowTuple assets, {
-    Key? key,
-  }) : super(assets, key: key);
-
-  @override
-  Widget rowBody(
-    BuildContext ctx,
-    ActiveGameDetails agd,
-  ) {
-    // paste row widget code here
-    return Container(
-      child: const Text('Awaiting UX specs for <PlayerVsFieldRow>'),
-      decoration: kRowBoxDecor,
-    );
-  }
-}
-
 class PlayerVsFieldRankedRowMktView extends TeamVsFieldRowMktView {
   @override
   bool get isPlayerVsFieldRanked => true;
@@ -793,25 +779,6 @@ class PlayerVsFieldRowMktView extends TeamVsFieldRowMktView {
   }) : super(assets, key: key);
 }
 
-class PlayerDraftRow extends StBaseTvRow with ShowsOneAsset {
-  const PlayerDraftRow(
-    TableviewDataRowTuple assets, {
-    Key? key,
-  }) : super(assets, key: key);
-
-  @override
-  Widget rowBody(
-    BuildContext ctx,
-    ActiveGameDetails agd,
-  ) {
-    // paste row widget code here
-    return Container(
-      child: const Text('Awaiting UX specs for <PlayerDraftRow>'),
-      decoration: kRowBoxDecor,
-    );
-  }
-}
-
 class DriverVsFieldRowMktView extends TeamVsFieldRowMktView {
   @override
   bool get isDriverVsField => true;
@@ -826,81 +793,6 @@ class DriverVsFieldRowMktView extends TeamVsFieldRowMktView {
 }
 
 // test classes only below
-class TeamVsFieldRowTest extends StBaseTvRow with ShowsOneAsset {
-  const TeamVsFieldRowTest(
-    TableviewDataRowTuple assets, {
-    Key? key,
-  }) : super(assets, key: key);
-
-  @override
-  Widget rowBody(
-    BuildContext ctx,
-    ActiveGameDetails agd,
-  ) {
-    return Container(
-        height: 40,
-        color: Colors.blue[100],
-        decoration: kRowBoxDecor,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(comp1.topName),
-            Text('Round: ' + agd.roundName),
-            Text(comp1.regionOrConference),
-            Text(agd.scheduledStartDateOnly.asShortDtStr),
-          ],
-        ));
-  }
-}
-
-class TeamVsFieldRankedRowTest extends StBaseTvRow with ShowsOneAsset {
-  const TeamVsFieldRankedRowTest(
-    TableviewDataRowTuple assets, {
-    Key? key,
-  }) : super(assets, key: key);
-
-  @override
-  Widget rowBody(
-    BuildContext ctx,
-    ActiveGameDetails agd,
-  ) {
-    return Container(
-      height: 80.h,
-      decoration: kRowBoxDecor,
-      child: Row(
-        // crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            children: [
-              const Text('Rank:'),
-              Container(
-                height: 26.h,
-                width: 26.h,
-                color: Colors.amber,
-                child: Text(
-                  comp1.rankStr,
-                  style: TextStyle(
-                    fontSize: 28.sp,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Column(
-            children: [
-              Text(comp1.topName),
-              Text(comp1.subName),
-            ],
-          ),
-          Text(comp1.regionOrConference),
-        ],
-      ),
-    );
-  }
-}
-
 class DistressedAssetRanked extends StBaseTvRow {
   // TODO for Chrysalis
 
