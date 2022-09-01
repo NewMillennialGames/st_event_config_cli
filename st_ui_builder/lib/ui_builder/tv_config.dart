@@ -92,7 +92,7 @@ class TableviewConfigPayload {
           case TvAreaRowStyle.assetVsAsset:
             return AssetVsAssetRowMktResearchView.new;
           case TvAreaRowStyle.assetVsAssetRanked:
-            return AssetVsAssetRowMktResearchView.new;
+            return AssetVsAssetRankedRowMktResearchView.new;
           case TvAreaRowStyle.teamVsField:
             return TeamVsFieldRowMktResearchView.new;
           case TvAreaRowStyle.playerVsField:
