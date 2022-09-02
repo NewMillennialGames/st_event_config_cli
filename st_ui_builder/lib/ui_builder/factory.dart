@@ -128,10 +128,14 @@ class StUiBuilderFactory {
       ScreenWidgetArea.tableview,
     );
 
-    CfgForAreaAndNestedSlots filterAreaCfg = _eConfig!.screenAreaCfg(
-      screen,
-      ScreenWidgetArea.filterBar,
-    );
+    CfgForAreaAndNestedSlots? filterAreaCfg;
+
+    try {
+      filterAreaCfg = _eConfig!.screenAreaCfg(
+        screen,
+        ScreenWidgetArea.filterBar,
+      );
+    } catch (e) {}
 
     return TableRowDataMgr(
       screen,
