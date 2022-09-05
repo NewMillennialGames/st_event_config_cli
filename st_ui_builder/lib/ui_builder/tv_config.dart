@@ -76,6 +76,8 @@ class TableviewConfigPayload {
             return AssetVsAssetRowRankedMktView.new;
           case TvAreaRowStyle.teamVsField:
             return TeamVsFieldRowMktView.new;
+          case TvAreaRowStyle.teamVsFieldRanked:
+            return TeamVsFieldRowRankedMktView.new;
           case TvAreaRowStyle.playerVsField:
             return PlayerVsFieldRowMktView.new;
           case TvAreaRowStyle.playerVsFieldRanked:
@@ -95,6 +97,8 @@ class TableviewConfigPayload {
             return AssetVsAssetRankedRowMktResearchView.new;
           case TvAreaRowStyle.teamVsField:
             return TeamVsFieldRowMktResearchView.new;
+          case TvAreaRowStyle.teamVsFieldRanked:
+            return TeamVsFieldRankedRowMktResearchView.new;
           case TvAreaRowStyle.playerVsField:
             return PlayerVsFieldRowMktResearchView.new;
           case TvAreaRowStyle.playerVsFieldRanked:
@@ -114,6 +118,8 @@ class TableviewConfigPayload {
             return AssetVsAssetRowRankedPortfolioView.new;
           case TvAreaRowStyle.teamVsField:
             return TeamVsFieldRowPortfolioView.new;
+          case TvAreaRowStyle.teamVsFieldRanked:
+            return TeamVsFieldRankedRowPortfolioView.new;
           case TvAreaRowStyle.playerVsField:
             return PlayerVsFieldRowPortfolioView.new;
           case TvAreaRowStyle.playerVsFieldRanked:

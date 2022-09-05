@@ -142,6 +142,14 @@ class TeamVsFieldRowMktResearchView extends TeamVsFieldRowMktView {
   }) : super(assets, key: key);
 }
 
+class TeamVsFieldRankedRowMktResearchView extends TeamVsFieldRowMktView {
+  const TeamVsFieldRankedRowMktResearchView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+}
+
+
 class PlayerVsFieldRankedMktResearchView extends TeamVsFieldRowMktView {
   const PlayerVsFieldRankedMktResearchView(
     TableviewDataRowTuple assets, {
@@ -179,6 +187,13 @@ class AssetVsAssetRowRankedPortfolioView extends AssetVsAssetRowPortfolioView {
 
 class TeamVsFieldRowPortfolioView extends AssetVsAssetRowPortfolioView {
   const TeamVsFieldRowPortfolioView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+}
+
+class TeamVsFieldRankedRowPortfolioView extends AssetVsAssetRowPortfolioView {
+  const TeamVsFieldRankedRowPortfolioView(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
