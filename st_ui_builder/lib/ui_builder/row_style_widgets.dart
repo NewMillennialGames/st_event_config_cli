@@ -696,78 +696,6 @@ class TeamVsFieldRowRankedMktView extends TeamVsFieldRowMktView {
     Key? key,
   }) : super(assets, key: key);
 }
-
-class TeamDraftRow extends StBaseTvRow with ShowsOneAsset {
-  const TeamDraftRow(
-    TableviewDataRowTuple assets, {
-    Key? key,
-  }) : super(assets, key: key);
-
-  @override
-  Widget rowBody(
-    BuildContext ctx,
-    ActiveGameDetails agd,
-  ) {
-    // paste row widget code here
-    return const SizedBox(
-      child: Text(
-        'Awaiting UX specs for <TeamDraftRow>',
-      ),
-    );
-  }
-}
-
-class TeamLineRow extends StBaseTvRow with ShowsOneAsset {
-  const TeamLineRow(
-    TableviewDataRowTuple assets, {
-    Key? key,
-  }) : super(assets, key: key);
-
-  @override
-  Widget rowBody(
-    BuildContext ctx,
-    ActiveGameDetails agd,
-  ) {
-    // paste row widget code here
-    const double _sizeHeightCont = 60;
-    const double _rowMargin = 8;
-    return Container(
-      height: _sizeHeightCont,
-      decoration: kRowBoxDecor,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          ObjectRankRow(
-            comp1,
-            agd,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-              right: _rowMargin,
-            ),
-            child: Row(
-              children: [
-                if (comp1.rank > 3)
-                  Text(
-                    '＠',
-                    style: StTextStyles.h4.copyWith(
-                      color: StColors.coolGray,
-                    ),
-                  ),
-                Text(
-                  comp1.currPriceStr,
-                  style: StTextStyles.h3.copyWith(),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class TeamPlayerVsFieldRowMktView extends TeamVsFieldRowMktView {
   @override
   bool get isTeamPlayerVsField => true;
@@ -805,6 +733,184 @@ class DriverVsFieldRowMktView extends TeamVsFieldRowMktView {
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
+}
+
+
+class DraftPlayerRowMktView extends StBaseTvRow with ShowsOneAsset {
+  const DraftPlayerRowMktView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+
+  @override
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
+    // paste row widget code here
+    return const SizedBox(
+      child: Text(
+        'Awaiting UX specs for <DraftPlayerRow>',
+      ),
+    );
+  }
+}
+
+class DraftTeamRowMktView extends StBaseTvRow with ShowsOneAsset {
+  const DraftTeamRowMktView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+
+  @override
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
+    // paste row widget code here
+    return const SizedBox(
+      child: Text(
+        'Awaiting UX specs for <DraftTeamRow>',
+      ),
+    );
+  }
+}
+
+class TeamLineRowMktView extends StBaseTvRow with ShowsOneAsset {
+  const TeamLineRowMktView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+
+  @override
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
+    return const SizedBox(
+      child: Text(
+        'Awaiting UX specs for <TeamLineRow>',
+      ),
+    );
+  }
+}
+
+
+class DraftPlayerRowMktResearchView extends StBaseTvRow with ShowsOneAsset {
+  const DraftPlayerRowMktResearchView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+
+  @override
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
+    // paste row widget code here
+    return const SizedBox(
+      child: Text(
+        'Awaiting UX specs for <DraftPlayerRow>',
+      ),
+    );
+  }
+}
+
+class DraftTeamRowMktResearchView extends StBaseTvRow with ShowsOneAsset {
+  const DraftTeamRowMktResearchView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+
+  @override
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
+    // paste row widget code here
+    return const SizedBox(
+      child: Text(
+        'Awaiting UX specs for <DraftTeamRow>',
+      ),
+    );
+  }
+}
+
+class TeamLineRowMktResearchView extends StBaseTvRow with ShowsOneAsset {
+  const TeamLineRowMktResearchView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+
+  @override
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
+    return const SizedBox(
+      child: Text(
+        'Awaiting UX specs for <TeamLineRow>',
+      ),
+    );
+  }
+}
+class DraftPlayerRowPortfolioView extends StBaseTvRow with ShowsOneAsset {
+  const DraftPlayerRowPortfolioView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+
+  @override
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
+    // paste row widget code here
+    return const SizedBox(
+      child: Text(
+        'Awaiting UX specs for <DraftPlayerRow>',
+      ),
+    );
+  }
+}
+
+class DraftTeamRowPortfolioView extends StBaseTvRow with ShowsOneAsset {
+  const DraftTeamRowPortfolioView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+
+  @override
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
+    // paste row widget code here
+    return const SizedBox(
+      child: Text(
+        'Awaiting UX specs for <DraftTeamRow>',
+      ),
+    );
+  }
+}
+
+class TeamLineRowPortfolioView extends StBaseTvRow with ShowsOneAsset {
+  const TeamLineRowPortfolioView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+
+  @override
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
+    return const SizedBox(
+      child: Text(
+        'Awaiting UX specs for <TeamLineRow>',
+      ),
+    );
+  }
 }
 
 // test classes only below
