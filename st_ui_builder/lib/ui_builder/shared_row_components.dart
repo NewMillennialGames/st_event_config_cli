@@ -22,7 +22,7 @@ class WatchButton extends ConsumerWidget {
 }
 
 var kSpacerSm = SizedBox(
-  width: 10.w,
+  width: 8.w,
 );
 var kVerticalSpacerSm = SizedBox(
   height: 3.h,

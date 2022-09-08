@@ -32,7 +32,11 @@ dependencies:
   st_ev_cfg:
     git:
       url: git@github.com:NewMillennialGames/st_event_config_cli.git
+<<<<<<< HEAD
       ref: prod
+=======
+      ref: fix/filter-config-and-row-size
+>>>>>>> 8d4fa7d3676b7192c14315ba5f3b86c4d9007c88
     #  path: ../../st_event_config_cli/
   stclient:
     git:
