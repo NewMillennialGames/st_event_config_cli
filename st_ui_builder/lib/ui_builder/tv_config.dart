@@ -78,6 +78,8 @@ class TableviewConfigPayload {
             return AssetVsAssetRowRankedMktView.new;
           case TvAreaRowStyle.teamVsField:
             return TeamVsFieldRowMktView.new;
+          case TvAreaRowStyle.teamVsFieldRanked:
+            return TeamVsFieldRowRankedMktView.new;
           case TvAreaRowStyle.playerVsField:
             return PlayerVsFieldRowMktView.new;
           case TvAreaRowStyle.playerVsFieldRanked:
@@ -86,6 +88,12 @@ class TableviewConfigPayload {
             return DriverVsFieldRowMktView.new;
           case TvAreaRowStyle.teamPlayerVsField:
             return TeamPlayerVsFieldRowMktView.new;
+          case TvAreaRowStyle.teamLine:
+            return TeamLineRowMktView.new;
+          case TvAreaRowStyle.teamDraft:
+            return DraftTeamRowMktView.new;
+          case TvAreaRowStyle.playerDraft:
+            return DraftPlayerRowMktView.new;
           default:
             return AssetVsAssetRowMktView.new;
         }
@@ -94,9 +102,11 @@ class TableviewConfigPayload {
           case TvAreaRowStyle.assetVsAsset:
             return AssetVsAssetRowMktResearchView.new;
           case TvAreaRowStyle.assetVsAssetRanked:
-            return AssetVsAssetRowMktResearchView.new;
+            return AssetVsAssetRankedRowMktResearchView.new;
           case TvAreaRowStyle.teamVsField:
             return TeamVsFieldRowMktResearchView.new;
+          case TvAreaRowStyle.teamVsFieldRanked:
+            return TeamVsFieldRankedRowMktResearchView.new;
           case TvAreaRowStyle.playerVsField:
             return PlayerVsFieldRowMktResearchView.new;
           case TvAreaRowStyle.playerVsFieldRanked:
@@ -105,6 +115,12 @@ class TableviewConfigPayload {
             return DriverVsFieldRowMktResearchView.new;
           case TvAreaRowStyle.teamPlayerVsField:
             return TeamPlayerVsFieldRowMktResearchView.new;
+          case TvAreaRowStyle.teamLine:
+            return TeamLineRowMktResearchView.new;
+          case TvAreaRowStyle.teamDraft:
+            return DraftTeamRowMktResearchView.new;
+          case TvAreaRowStyle.playerDraft:
+            return DraftPlayerRowMktResearchView.new;
           default:
             return AssetVsAssetRowMktResearchView.new;
         }
@@ -116,6 +132,8 @@ class TableviewConfigPayload {
             return AssetVsAssetRowRankedPortfolioView.new;
           case TvAreaRowStyle.teamVsField:
             return TeamVsFieldRowPortfolioView.new;
+          case TvAreaRowStyle.teamVsFieldRanked:
+            return TeamVsFieldRankedRowPortfolioView.new;
           case TvAreaRowStyle.playerVsField:
             return PlayerVsFieldRowPortfolioView.new;
           case TvAreaRowStyle.playerVsFieldRanked:
@@ -124,15 +142,44 @@ class TableviewConfigPayload {
             return DriverVsFieldRowPortfolio.new;
           case TvAreaRowStyle.teamPlayerVsField:
             return TeamPlayerVsFieldRowPortfolio.new;
+          case TvAreaRowStyle.teamLine:
+            return TeamLineRowPortfolioView.new;
+          case TvAreaRowStyle.teamDraft:
+            return DraftTeamRowPortfolioView.new;
+          case TvAreaRowStyle.playerDraft:
+            return DraftPlayerRowPortfolioView.new;
           default:
             return AssetVsAssetRowPortfolioView.new;
         }
-
+            case AppScreen.portfolioHistory:
+        switch (rowStyle) {
+          case TvAreaRowStyle.assetVsAsset:
+            return AssetVsAssetRowPortfolioHistory.new;
+          case TvAreaRowStyle.assetVsAssetRanked:
+            return AssetVsAssetRankedRowPortfolioHistory.new;
+          case TvAreaRowStyle.teamVsField:
+            return TeamVsFieldRowPortfolioHistoryView.new;
+          case TvAreaRowStyle.teamVsFieldRanked:
+            return TeamVsFieldRankedRowPortfolioHistoryView.new;
+          case TvAreaRowStyle.playerVsField:
+            return PlayerVsFieldRowPortfolioHistoryView.new;
+          case TvAreaRowStyle.playerVsFieldRanked:
+            return PlayerVsFieldRankedPortfolioHistoryView.new;
+          case TvAreaRowStyle.driverVsField:
+            return DriverVsFieldRowPortfolioHistory.new;
+          case TvAreaRowStyle.teamPlayerVsField:
+            return TeamPlayerVsFieldRowPortfolioHistory.new;
+          case TvAreaRowStyle.teamLine:
+            return TeamLineRowPortfolioHistoryView.new;
+          case TvAreaRowStyle.teamDraft:
+            return DraftTeamRowPortfolioHistoryView.new;
+          case TvAreaRowStyle.playerDraft:
+            return DraftPlayerRowPortfolioHistoryView.new;
+          default:
+            return AssetVsAssetRowPortfolioHistory.new;
+        }
       default:
         return AssetVsAssetRowMktView.new;
-      // case AppScreen.portfolioHistory:
-
-      //   return TeamVsTeamRow.new;
     }
   }
 }

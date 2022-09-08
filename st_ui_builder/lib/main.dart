@@ -204,32 +204,48 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
             row: AssetVsAssetRowRankedMktView(assetRows.first),
           ),
           DemoRow(
-            label: "DriverVsField Row Market View",
-            row: DriverVsFieldRowMktView(assetRows.first),
-          ),
-          DemoRow(
             label: "TeamVsField Row Market View",
             row: TeamVsFieldRowMktView(assetRows.first),
           ),
           DemoRow(
-            label: "TeamVsField Ranked Row Market View",
+            label: "TeamVsField Row Ranked Market View",
             row: TeamVsFieldRowRankedMktView(assetRows.first),
           ),
           DemoRow(
-            label: "TeamplayerVsField Row Market View",
-            row: TeamPlayerVsFieldRowMktView(assetRows.first),
+            label: "PlayerVsField Row Market View",
+            row: PlayerVsFieldRowMktView(assetRows.first),
           ),
           DemoRow(
             label: "PlayerVsField Ranked Row Market View",
             row: PlayerVsFieldRankedRowMktView(assetRows.first),
           ),
           DemoRow(
+            label: "DriverVsField Row Market View",
+            row: DriverVsFieldRowMktView(assetRows.first),
+          ),
+          DemoRow(
+            label: "TeamplayerVsField Row Market View",
+            row: TeamPlayerVsFieldRowMktView(assetRows.first),
+          ),
+          DemoRow(
             label: "AssetVsAsset Row Market Research View",
             row: AssetVsAssetRowMktResearchView(assetRows.first),
           ),
           DemoRow(
+            label: "AssetVsAssetRanked Row Market Research View",
+            row: AssetVsAssetRankedRowMktResearchView(assetRows.first),
+          ),
+          DemoRow(
             label: "TeamVsField Row Market Reasearch View",
             row: TeamVsFieldRowMktResearchView(assetRows.first),
+          ),
+          DemoRow(
+            label: "PlayerVsField Row Market Reasearch View",
+            row: PlayerVsFieldRowMktResearchView(assetRows.first),
+          ),
+          DemoRow(
+            label: "PlayerVsField Ranked Row Market Reasearch View",
+            row: PlayerVsFieldRankedMktResearchView(assetRows.first),
           ),
           DemoRow(
             label: "AssetVsAsset Row Portfolio View",
