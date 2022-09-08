@@ -151,11 +151,35 @@ class TableviewConfigPayload {
           default:
             return AssetVsAssetRowPortfolioView.new;
         }
+            case AppScreen.portfolioHistory:
+        switch (rowStyle) {
+          case TvAreaRowStyle.assetVsAsset:
+            return AssetVsAssetRowPortfolioHistory.new;
+          case TvAreaRowStyle.assetVsAssetRanked:
+            return AssetVsAssetRankedRowPortfolioHistory.new;
+          case TvAreaRowStyle.teamVsField:
+            return TeamVsFieldRowPortfolioHistoryView.new;
+          case TvAreaRowStyle.teamVsFieldRanked:
+            return TeamVsFieldRankedRowPortfolioHistoryView.new;
+          case TvAreaRowStyle.playerVsField:
+            return PlayerVsFieldRowPortfolioHistoryView.new;
+          case TvAreaRowStyle.playerVsFieldRanked:
+            return PlayerVsFieldRankedPortfolioHistoryView.new;
+          case TvAreaRowStyle.driverVsField:
+            return DriverVsFieldRowPortfolioHistory.new;
+          case TvAreaRowStyle.teamPlayerVsField:
+            return TeamPlayerVsFieldRowPortfolioHistory.new;
+          case TvAreaRowStyle.teamLine:
+            return TeamLineRowPortfolioHistoryView.new;
+          case TvAreaRowStyle.teamDraft:
+            return DraftTeamRowPortfolioHistoryView.new;
+          case TvAreaRowStyle.playerDraft:
+            return DraftPlayerRowPortfolioHistoryView.new;
+          default:
+            return AssetVsAssetRowPortfolioHistory.new;
+        }
       default:
         return AssetVsAssetRowMktView.new;
-      // case AppScreen.portfolioHistory:
-
-      //   return TeamVsTeamRow.new;
     }
   }
 }

@@ -532,6 +532,43 @@ class AssetVsAssetRowPortfolioHistory extends AssetVsAssetRowPortfolioView {
   bool get showProceeds => true;
 }
 
+class AssetVsAssetRankedRowPortfolioHistory extends AssetVsAssetRowPortfolioHistory {
+  //
+  const AssetVsAssetRankedRowPortfolioHistory(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+}
+
+class TeamVsFieldRowPortfolioHistoryView extends AssetVsAssetRowPortfolioHistory {
+  //
+  const TeamVsFieldRowPortfolioHistoryView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+}
+
+class TeamVsFieldRankedRowPortfolioHistoryView extends AssetVsAssetRowPortfolioHistory {
+  //
+  const TeamVsFieldRankedRowPortfolioHistoryView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+}
+class PlayerVsFieldRowPortfolioHistoryView extends AssetVsAssetRowPortfolioHistory {
+  //
+  const PlayerVsFieldRowPortfolioHistoryView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+}
+class PlayerVsFieldRankedPortfolioHistoryView extends AssetVsAssetRowPortfolioHistory {
+  //
+  const PlayerVsFieldRankedPortfolioHistoryView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+}
 //
 class DriverVsFieldRowPortfolioHistory extends AssetVsAssetRowPortfolioView {
   //
@@ -874,6 +911,14 @@ class DraftPlayerRowPortfolioView extends StBaseTvRow with ShowsOneAsset {
   }
 }
 
+class TeamLineRowPortfolioHistoryView extends TeamLineRowPortfolioView {
+  //
+  const TeamLineRowPortfolioHistoryView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+}
+
 class DraftTeamRowPortfolioView extends StBaseTvRow with ShowsOneAsset {
   const DraftTeamRowPortfolioView(
     TableviewDataRowTuple assets, {
@@ -894,6 +939,7 @@ class DraftTeamRowPortfolioView extends StBaseTvRow with ShowsOneAsset {
   }
 }
 
+// test classes only below
 class TeamLineRowPortfolioView extends StBaseTvRow with ShowsOneAsset {
   const TeamLineRowPortfolioView(
     TableviewDataRowTuple assets, {
@@ -913,7 +959,22 @@ class TeamLineRowPortfolioView extends StBaseTvRow with ShowsOneAsset {
   }
 }
 
-// test classes only below
+class DraftTeamRowPortfolioHistoryView extends DraftTeamRowPortfolioView {
+  //
+  const DraftTeamRowPortfolioHistoryView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+}
+
+class DraftPlayerRowPortfolioHistoryView extends DraftPlayerRowPortfolioView {
+  //
+  const DraftPlayerRowPortfolioHistoryView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+}
+
 class DistressedAssetRanked extends StBaseTvRow {
   // TODO for Chrysalis
 
