@@ -83,7 +83,7 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
   }
 
   Map<String, dynamic> toJson() {
-    // print('######  RuleResponseBaseToJson:  did run this');
+    // ConfigLogger.log(Level.FINER,'######  RuleResponseBaseToJson:  did run this');
     // return _$RuleResponseBaseToJson(this);
     throw UnimplementedError('should only run on subclass');
   }
@@ -166,7 +166,7 @@ class TvSortGroupFilterBase extends RuleResponseBase {
     */
     // empty fieldList
     // this.fieldList = [];
-    // print(
+    // ConfigLogger.log(Level.FINER,
     //   'TvSortGroupFilter.castToRealTypes got ${userResponses.length} userResponses',
     // );
     for (int i = 0; i < userResponses.length - 1; i += 2) {
@@ -189,12 +189,13 @@ class TvSortGroupFilterBase extends RuleResponseBase {
 
       fieldList.add(SortGroupFilterEntry(_curSelField, sortAsc));
     }
-    // print(
+    // ConfigLogger.log(Level.FINER,
     //   '${fieldList.length} entries (contains 2 vals) added to TvSortGroupFilterBase!  (${this.runtimeType})',
     // );
   }
 
-  SortGroupFilterEntry get item1 => fieldList.first;
+  SortGroupFilterEntry get item1 =>
+      fieldList.length > 0 ? fieldList.first : SortGroupFilterEntry.noop();
   SortGroupFilterEntry? get item2 => fieldList.length > 1 ? fieldList[1] : null;
   SortGroupFilterEntry? get item3 => fieldList.length > 2 ? fieldList[2] : null;
 

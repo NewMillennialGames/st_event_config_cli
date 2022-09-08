@@ -15,6 +15,7 @@ dependencies:
   tuple: ^2.0.0
   riverpod: ^1.0.3
   freezed: ^2.0.3+1
+  logging: ^1.0.2
   # dotted_border: ^2.0.0+2
   # intl:
 

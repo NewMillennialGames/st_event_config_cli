@@ -16,8 +16,6 @@ import 'package:st_ev_cfg/st_ev_cfg.dart';
 
 //
 import 'mock_data.dart';
-import 'config/colors.dart';
-import './ui_builder/all.dart';
 /*
 this is a Flutter project
 but it's built as a dependency for 
@@ -31,11 +29,12 @@ const String cfgEmpl1 = 'assetVsAsset.json';
 // cfgEmpl2 seems to be invalid json; replace it to continue testing
 const String cfgEmpl2 = 'teamVsFieldRanked.json';
 const String cfgEmpl3 = 'driverVsField.json';
+const String cfgEmpl4 = 'demo.json';
 
 // evCfgDataFromServer contains the JSON payload produced by the CLI configurator
 Map<String, dynamic> evCfgDataFromServer = {};
 
-Future<void> readExampleEventConfig({String filename = cfgEmpl3}) async {
+Future<void> readExampleEventConfig({String filename = cfgEmpl4}) async {
   final String response = await rootBundle.loadString('assets/$filename');
   evCfgDataFromServer = json.decode(response);
 }
@@ -174,10 +173,25 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
       ),
       body: ListView(
         children: [
-          if (hasColumnFilters)
+          if (hasColumnFilters) ...{
             tvMgr.columnFilterBarWidget(
+              totAvailWidth: MediaQuery.of(context).size.width,
               backColor: StColors.primaryDarkGray,
             ),
+            SizedBox(
+              height: 520.h,
+              child: GroupedListView<TableviewDataRowTuple, GroupHeaderData>(
+                elements: tvMgr.listData,
+                groupBy: tvMgr.groupBy,
+                groupHeaderBuilder: tvMgr.groupHeaderBuilder,
+                indexedItemBuilder: tvMgr.indexedItemBuilder,
+                sort: true,
+                useStickyGroupSeparators: true,
+                // next line should not be needed??
+                groupComparator: tvMgr.groupComparator,
+              ),
+            ),
+          },
           Container(
             height: 30,
           ),
@@ -190,34 +204,49 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
             row: AssetVsAssetRowRankedMktView(assetRows.first),
           ),
           DemoRow(
-            label: "DriverVsField Row Market View",
-            row: DriverVsFieldRowMktView(assetRows.first),
-          ),
-          DemoRow(
             label: "TeamVsField Row Market View",
             row: TeamVsFieldRowMktView(assetRows.first),
           ),
           DemoRow(
-            label: "TeamVsField Ranked Row Market View",
+            label: "TeamVsField Row Ranked Market View",
             row: TeamVsFieldRowRankedMktView(assetRows.first),
           ),
           DemoRow(
-            label: "TeamplayerVsField Row Market View",
-            row: TeamPlayerVsFieldRowMktView(assetRows.first),
+            label: "PlayerVsField Row Market View",
+            row: PlayerVsFieldRowMktView(assetRows.first),
           ),
           DemoRow(
             label: "PlayerVsField Ranked Row Market View",
             row: PlayerVsFieldRankedRowMktView(assetRows.first),
           ),
           DemoRow(
+            label: "DriverVsField Row Market View",
+            row: DriverVsFieldRowMktView(assetRows.first),
+          ),
+          DemoRow(
+            label: "TeamplayerVsField Row Market View",
+            row: TeamPlayerVsFieldRowMktView(assetRows.first),
+          ),
+          DemoRow(
             label: "AssetVsAsset Row Market Research View",
             row: AssetVsAssetRowMktResearchView(assetRows.first),
+          ),
+          DemoRow(
+            label: "AssetVsAssetRanked Row Market Research View",
+            row: AssetVsAssetRankedRowMktResearchView(assetRows.first),
           ),
           DemoRow(
             label: "TeamVsField Row Market Reasearch View",
             row: TeamVsFieldRowMktResearchView(assetRows.first),
           ),
-
+          DemoRow(
+            label: "PlayerVsField Row Market Reasearch View",
+            row: PlayerVsFieldRowMktResearchView(assetRows.first),
+          ),
+          DemoRow(
+            label: "PlayerVsField Ranked Row Market Reasearch View",
+            row: PlayerVsFieldRankedMktResearchView(assetRows.first),
+          ),
           DemoRow(
             label: "AssetVsAsset Row Portfolio View",
             row: AssetVsAssetRowPortfolioView(assetRows.first),
@@ -254,20 +283,6 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
             label: "TeamplayerVsField Row Leaderboard View",
             row: TeamPlayerVsFieldLeaderBoardView(assetRows.first),
           ),
-          // Container(
-          //   height: hasColumnFilters ? 500.h : 740.h,
-          //   padding: EdgeInsets.fromLTRB(20.w, 0, 20.w, 10.h),
-          //   child: GroupedListView<TableviewDataRowTuple, GroupHeaderData>(
-          //     elements: tvMgr.listData,
-          //     groupBy: tvMgr.groupBy,
-          //     groupHeaderBuilder: tvMgr.groupHeaderBuilder,
-          //     indexedItemBuilder: tvMgr.indexedItemBuilder,
-          //     sort: true,
-          //     useStickyGroupSeparators: true,
-          // next line should not be needed??
-          // groupComparator: tvMgr.groupComparator,
-          //   ),
-          // ),
         ],
       ),
       // floatingActionButton: FloatingActionButton(onPressed: _updateGameStatus),
