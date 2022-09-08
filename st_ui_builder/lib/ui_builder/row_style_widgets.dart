@@ -601,6 +601,9 @@ class PlayerVsFieldRankedPortfolioHistoryView
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
+
+  @override
+  bool get isPlayerVsFieldRanked => true;
 }
 
 //
