@@ -312,6 +312,12 @@ class StStrings {
   static const String proceeds = 'Proceeds';
   static const String gainLossAbbrev = 'G/L';
 
+
+  // Portfolio History source of trade
+  static const String proceedsOnGameOver = 'Proceeds on Game Over';
+  static const String liquidatedOnGameOver = 'Liquidated on Game Over';
+  static const String sharesSold = 'Shares Solds';
+  
   // Portfolio Positions Screen
   static const String positionsUc = 'POSITIONS';
   static const String historyUc = 'HISTORY';
