@@ -10,11 +10,9 @@ enum ScreenAreaWidgetSlot {
   // ui-sub-area of the UI component
   header,
   footer,
-  // fixme:  slots on tableview should be sort or group
-  // below should only apply to parts of filter bar
-  menuSortPosOrSlot1,
-  menuSortPosOrSlot2,
-  menuSortPosOrSlot3,
+  slot1, // aka menu position 1 on filter-bar
+  slot2,
+  slot3,
 
   // data property of the component
   title,
@@ -29,9 +27,15 @@ enum ScreenAreaWidgetSlot {
 extension ScreenAreaWidgetSlotExt1 on ScreenAreaWidgetSlot {
   //
 
-  bool get isConfigurable => true; //this.possibleConfigRules.length > 0;
-
+  // getters
+  // none currently require prep
+  // bool get requiresPrepQuestion => [].contains(this);
   String get choiceName => this.name;
+
+  // methods
+  // all currently configurable
+  bool isConfigurableOn(ScreenWidgetArea forArea) =>
+      this.possibleConfigRules(forArea).length > 0;
 
   List<VisualRuleType> possibleConfigRules(ScreenWidgetArea forArea) {
     switch (this) {
@@ -43,17 +47,17 @@ extension ScreenAreaWidgetSlotExt1 on ScreenAreaWidgetSlot {
         return [
           VisualRuleType.showOrHide,
         ];
-      case ScreenAreaWidgetSlot.menuSortPosOrSlot1:
+      case ScreenAreaWidgetSlot.slot1:
         return [
           if (forArea == ScreenWidgetArea.filterBar) VisualRuleType.filterCfg,
           if (forArea == ScreenWidgetArea.tableview) VisualRuleType.sortCfg,
         ];
-      case ScreenAreaWidgetSlot.menuSortPosOrSlot2:
+      case ScreenAreaWidgetSlot.slot2:
         return [
           if (forArea == ScreenWidgetArea.filterBar) VisualRuleType.filterCfg,
           if (forArea == ScreenWidgetArea.tableview) VisualRuleType.sortCfg,
         ];
-      case ScreenAreaWidgetSlot.menuSortPosOrSlot3:
+      case ScreenAreaWidgetSlot.slot3:
         return [
           if (forArea == ScreenWidgetArea.filterBar) VisualRuleType.filterCfg,
           if (forArea == ScreenWidgetArea.tableview) VisualRuleType.sortCfg,
@@ -71,5 +75,60 @@ extension ScreenAreaWidgetSlotExt1 on ScreenAreaWidgetSlot {
           VisualRuleType.showOrHide,
         ];
     }
+  }
+
+  List<Enum> possibleVisualStyles(
+    AppScreen appScreen,
+    ScreenWidgetArea screenWidgetArea,
+  ) {
+    switch (this) {
+      case ScreenAreaWidgetSlot.header:
+        return TvAreaRowStyle.values;
+      case ScreenAreaWidgetSlot.footer:
+        return [];
+      case ScreenAreaWidgetSlot.slot1:
+        return [];
+      case ScreenAreaWidgetSlot.slot2:
+        return [];
+      case ScreenAreaWidgetSlot.slot3:
+        return [];
+      case ScreenAreaWidgetSlot.title:
+        return [];
+      case ScreenAreaWidgetSlot.subtitle:
+        return [];
+      case ScreenAreaWidgetSlot.bannerUrl:
+        return [];
+    }
+  }
+
+  List<VisualRuleType> convertIdxsToRuleList(
+    AppScreen screen,
+    ScreenWidgetArea area,
+    String commaLstOfInts,
+  ) {
+    /* this == a ScreenAreaWidgetSlot
+    
+      since we dont show EVERY RuleType, 
+      eg we skip VisualRuleType.generalDialogFlow  (zero)
+      the choice indexes are offset by -1
+      in other words Vrt.xxx.index of 1 is SHOWN in the zero position
+      or its ACTUAL index is +1 from what the user user entered
+      this code adjusts for that by using:    ++tempIdx
+    */
+    Set<int> providedIdxs = castStrOfIdxsToIterOfInts(commaLstOfInts).toSet();
+    //
+    int tempIdx = 0;
+    Map<int, VisualRuleType> idxToModifiableRuleTyps = {};
+    possibleConfigRules(area)
+        .forEach((rt) => idxToModifiableRuleTyps[++tempIdx] = rt);
+    //
+    idxToModifiableRuleTyps.removeWhere(
+      (
+        int idx,
+        VisualRuleType uic,
+      ) =>
+          !providedIdxs.contains(idx),
+    );
+    return idxToModifiableRuleTyps.values.toList();
   }
 }

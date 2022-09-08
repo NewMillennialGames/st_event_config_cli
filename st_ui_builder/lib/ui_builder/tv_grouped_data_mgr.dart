@@ -47,9 +47,9 @@ class GroupedTableDataMgr {
         _filteredAssetRows = _allAssetRows.toList();
 
   List<TableviewDataRowTuple> get listData => _filteredAssetRows;
-  // GroupingRules get groupRules => _tableViewCfg.groupByRules;
-  SortingRules get sortingRules => _tableViewCfg.sortRules;
-  FilterRules? get filterRules => _tableViewCfg.filterRules;
+  TvGroupCfg? get groupRules => _tableViewCfg.groupByRules;
+  TvSortCfg get sortingRules => _tableViewCfg.sortRules;
+  TvFilterCfg? get filterRules => _tableViewCfg.filterRules;
 
   GetGroupHeaderLblsFromCompetitionRow get groupBy {
     return GroupHeaderData.groupHeaderPayloadConstructor(
@@ -130,12 +130,13 @@ class GroupedTableDataMgr {
     Color backColor = Colors.transparent,
   }) {
     // dont call this method without first checking this.hasColumnFilters
-    if (filterRules == null || disableAllGrouping)
+    if (filterRules == null || disableAllGrouping) {
       return const SizedBox.shrink();
+    }
 
-    TvFilterCfg i1 = filterRules!.item1;
-    TvFilterCfg? i2 = filterRules!.item2;
-    TvFilterCfg? i3 = filterRules!.item3;
+    SortGroupFilterEntry i1 = filterRules!.item1;
+    SortGroupFilterEntry? i2 = filterRules!.item2;
+    SortGroupFilterEntry? i3 = filterRules!.item3;
 
     Set<String> listItems1 = _getListItemsByCfgField(i1);
     Set<String> listItems2 = i2 == null ? {} : _getListItemsByCfgField(i2);
@@ -150,7 +151,7 @@ class GroupedTableDataMgr {
 
     int dropLstCount = 1 + (has2ndList ? 1 : 0) + (has3rdList ? 1 : 0);
     // allocate dropdown button width
-    double allocBtnWidth = (totAvailWidth / dropLstCount) - 2;
+    double allocBtnWidth = (totAvailWidth / dropLstCount) * .96;
     // one list can take 86% of space
     allocBtnWidth = dropLstCount < 2 ? totAvailWidth * 0.86 : allocBtnWidth;
 
@@ -205,43 +206,37 @@ class GroupedTableDataMgr {
     return Container(
       width: width,
       decoration: BoxDecoration(
-        // color: StColors.gray,
         color: Colors.transparent,
         border: Border.all(
           color: StColors.lightGray,
           width: 0.8,
         ),
-        borderRadius: const BorderRadius.all(
-          Radius.circular(8),
+        borderRadius: BorderRadius.all(
+          Radius.circular(6.w),
         ),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 4),
+      padding: EdgeInsets.symmetric(horizontal: 4.w),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
           value: curSelection ?? listItems.first,
           items: listItems
               .map(
                 (String val) => DropdownMenuItem<String>(
-                  child: Container(
-                      color: curSelection == val
-                          ? StColors.primaryDarkGray
-                          : StColors.black,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            Text(val.toUpperCase()),
-                          ],
-                        ),
-                      )),
                   value: val,
                   alignment: AlignmentDirectional.centerStart,
+                  child: Container(
+                    color: curSelection == val
+                        ? StColors.primaryDarkGray
+                        : StColors.black,
+                    child: Text(val.toUpperCase()),
+                  ),
                 ),
               )
               .toList(),
           selectedItemBuilder: (BuildContext context) {
             return listItems.map((String value) {
-              return Center(
+              return ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: width * .75),
                 child: Text(
                   value.toUpperCase(),
                 ),
@@ -261,11 +256,10 @@ class GroupedTableDataMgr {
           },
           dropdownColor: StColors.black,
           iconEnabledColor: StColors.gray,
-          style:  TextStyle(
+          style: TextStyle(
             color: StColors.lightGray,
             fontSize: 16.sp,
           ),
-          underline: null,
         ),
       ),
     );
@@ -284,17 +278,17 @@ class GroupedTableDataMgr {
     }
   }
 
-  Set<String> _getListItemsByCfgField(TvFilterCfg fCfg) {
+  Set<String> _getListItemsByCfgField(SortGroupFilterEntry filterItem) {
     // build list of unique values from selected field
     // elim dups and sort
     var l = _allAssetRows
         .map(
-          (e) => e.item1.labelExtractor(fCfg.colName),
+          (e) => e.item1.labelExtractor(filterItem.colName),
         )
         .toSet()
         .toList()
       ..sort((v1, v2) => v1.compareTo(v2));
-    l.insert(0, fCfg.colName.labelName); // CLEAR_FILTER_LABEL + ' ' +
+    l.insert(0, filterItem.colName.labelName); // CLEAR_FILTER_LABEL + ' ' +
     return l.toSet();
   }
 

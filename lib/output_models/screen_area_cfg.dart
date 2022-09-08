@@ -31,18 +31,13 @@ class CfgForAreaAndNestedSlots {
 
   bool isMissingRuleTyp(VisualRuleType typ) => visCfgForArea[typ] == null;
 
-  // void copyStyleFromCfg(TvRowStyleCfg rowCfg) {
-  //   //
-  //   visCfgForArea[VisualRuleType.styleOrFormat] = SlotOrAreaRuleCfg([]);
-  // }
-
   //add rules to this object
-  void appendAreaOrSlotRule(VisRuleStyleQuest rQuest) {
+  void appendAreaOrSlotRule(VisualRuleDetailQuest rQuest) {
     //
     VisualRuleType? vrt = rQuest.visRuleTypeForAreaOrSlot;
     assert(
       vrt != null,
-      'cant add question that has no attached rule',
+      'VisualRuleType is required at this level',
     );
     //
     ScreenAreaWidgetSlot? optSlotInArea = rQuest.slotInArea;
@@ -52,18 +47,29 @@ class CfgForAreaAndNestedSlots {
       optSlotInArea,
     );
 
+    // ConfigLogger.log(Level.FINER,'\nappendAreaOrSlotRule got:  ${rQuest.questId}');
+    // ConfigLogger.log(Level.FINER,'\tArea:  ${rQuest.screenWidgetArea?.name}');
+    // ConfigLogger.log(Level.FINER,'\tSlot:  ${optSlotInArea?.name}');
+    // ConfigLogger.log(Level.FINER,
+    //   '\tfor a ${optSlotInArea == null ? "AREA" : "SLOT"} level rule on VRT: ${vrt.name}',
+    // );
+
     SlotOrAreaRuleCfg cfgForSlotOrArea;
     if (optSlotInArea == null) {
       // this is an area level rule by specific type
       cfgForSlotOrArea = visCfgForArea[vrt] ?? SlotOrAreaRuleCfg([]);
       cfgForSlotOrArea.appendQuestion(rQuest);
       visCfgForArea[vrt] = cfgForSlotOrArea;
+      // ConfigLogger.log(Level.FINER,'\t area rule count:  ${visCfgForArea.length} (post add)');
     } else {
       // this is a slot level rule
       Map<ScreenAreaWidgetSlot, SlotOrAreaRuleCfg> slotCfgMap =
           _setAndGetMapForRuleAndSlot(vrt, optSlotInArea);
       slotCfgMap[optSlotInArea]!.appendQuestion(rQuest);
       visCfgForSlotsByRuleType[vrt] = slotCfgMap;
+    ConfigLogger.log(Level.INFO, 
+        '\t slot rule count:  ${visCfgForSlotsByRuleType.length} (post add)',
+      );
     }
   }
 
@@ -76,42 +82,75 @@ class CfgForAreaAndNestedSlots {
     SlotOrAreaRuleCfg tableAreaRules =
         this.areaRulesByRuleType(VisualRuleType.styleOrFormat);
     List<RuleResponseBase> lstRules =
-        tableAreaRules.rulesOfType(VisualRuleType.styleOrFormat);
+        tableAreaRules.rulesOfVRType(VisualRuleType.styleOrFormat);
     return lstRules.first as TvRowStyleCfg;
   }
 
-  SortingRules? get sortingRules {
+  TvGroupCfg? get groupingRules {
+    // what grouping Rules to apply to the TableView
+    assert(
+      screenArea == ScreenWidgetArea.tableview,
+      'method only works for TableVw areas',
+    );
+
+    // List<TvGroupCfg> definedGroupRules =
+    //     _loadRulesInOrder<TvGroupCfg>(VisualRuleType.groupCfg);
+    // int ruleCnt = definedGroupRules.length;
+    // if (ruleCnt < 1) return null;
+
+    // TvGroupCfg? gr2 = ruleCnt > 1 ? definedGroupRules[1] : null;
+    // TvGroupCfg? gr3 = ruleCnt > 2 ? definedGroupRules[2] : null;
+    // return GroupingRules(definedGroupRules.first, gr2, gr3);
+
+    SlotOrAreaRuleCfg? areaSortCfg = visCfgForArea[VisualRuleType.groupCfg];
+    if (areaSortCfg == null || areaSortCfg.visRuleList.length < 1) return null;
+    return areaSortCfg.ruleForObjType(TvGroupCfg) as TvGroupCfg;
+  }
+
+  TvSortCfg? get sortingRules {
     // what sorting Rules to apply to the TableView
     assert(
       screenArea == ScreenWidgetArea.tableview,
       'method only works for TableVw areas',
     );
 
-    List<TvSortCfg> definedSortRules =
-        _loadRulesInOrder<TvSortCfg>(VisualRuleType.sortCfg);
-    int sortRuleCnt = definedSortRules.length;
-    if (sortRuleCnt < 1) return null;
+    SlotOrAreaRuleCfg? areaSortCfg = visCfgForArea[VisualRuleType.sortCfg];
+    if (areaSortCfg == null || areaSortCfg.visRuleList.length < 1) return null;
 
-    TvSortCfg? gr2 = sortRuleCnt > 1 ? definedSortRules[1] : null;
-    TvSortCfg? gr3 = sortRuleCnt > 2 ? definedSortRules[2] : null;
-    return SortingRules(definedSortRules.first, gr2, gr3);
+    TvSortCfg? definedSortRules =
+        areaSortCfg.ruleForObjType(TvSortCfg) as TvSortCfg;
+    // int sortRuleCnt = definedSortRules.fieldList.length;
+    // TvSortCfg? gr2 = sortRuleCnt > 1 ? areaSortCfg[1] : null;
+    // TvSortCfg? gr3 = sortRuleCnt > 2 ? areaSortCfg[2] : null;
+    return definedSortRules;
   }
 
-  FilterRules? get filterRules {
+  TvFilterCfg? get filterRules {
     // what filter Rules to apply to the TableView
     assert(
       screenArea == ScreenWidgetArea.filterBar,
-      'method only works for filterBar areas',
+      'method only works within cfg for tableview areas  ${screenArea.name}',
     );
 
-    var definedFilterRules =
-        _loadRulesInOrder<TvFilterCfg>(VisualRuleType.filterCfg);
-    int len = definedFilterRules.length;
-    if (len < 1) return null;
+    // var definedFilterRules =
+    //     _loadRulesInOrder<TvFilterCfg>(VisualRuleType.filterCfg);
+    // int len = definedFilterRules.length;
+    // if (len < 1) return null;
 
-    TvFilterCfg? gr2 = len > 1 ? definedFilterRules[1] : null;
-    TvFilterCfg? gr3 = len > 2 ? definedFilterRules[2] : null;
-    return FilterRules(definedFilterRules.first, gr2, gr3);
+    // TvFilterCfg? gr2 = len > 1 ? definedFilterRules[1] : null;
+    // TvFilterCfg? gr3 = len > 2 ? definedFilterRules[2] : null;
+
+    SlotOrAreaRuleCfg? areaSortCfg = visCfgForArea[VisualRuleType.filterCfg];
+    if (areaSortCfg == null || areaSortCfg.visRuleList.length < 1) {
+      //
+     ConfigLogger.log(Level.WARNING, 'Warning: defgh');
+      ConfigLogger.log(Level.WARNING, '*** areaSortCfg is null: ${areaSortCfg == null}');
+    ConfigLogger.log(Level.INFO, 
+        '*** areaSortCfg visRuleList: ${areaSortCfg?.visRuleList ?? " na"}',
+      );
+      return null;
+    }
+    return areaSortCfg.ruleForObjType(TvFilterCfg) as TvFilterCfg;
   }
 
   // ********
@@ -151,9 +190,9 @@ class CfgForAreaAndNestedSlots {
     List<SlotOrAreaRuleCfg> ruleByPos = _slotRuleCollectionInOrder(
       ruleType,
       [
-        ScreenAreaWidgetSlot.menuSortPosOrSlot1,
-        ScreenAreaWidgetSlot.menuSortPosOrSlot2,
-        ScreenAreaWidgetSlot.menuSortPosOrSlot3,
+        ScreenAreaWidgetSlot.slot1,
+        ScreenAreaWidgetSlot.slot2,
+        ScreenAreaWidgetSlot.slot3,
       ],
     );
 

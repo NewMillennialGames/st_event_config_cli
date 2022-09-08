@@ -33,32 +33,20 @@ class ScreenCfgByArea {
     return areaConfig[area]!;
   }
 
-  void appendRule(
-    VisRuleStyleQuest rQuest,
+  void appendVisRule(
+    VisualRuleDetailQuest rQuest,
   ) {
     //
-    var swa = rQuest.screenWidgetArea;
-    assert(swa != null, 'area is required at this level');
+    ScreenWidgetArea? swa = rQuest.screenWidgetArea;
+    assert(swa != null, 'area target is min required at this level');
     _confirmAreaIsApplicableToThisScreen(swa!, false);
     //
-    RuleResponseBase? answer = rQuest.response?.answers;
-    if (answer == null) {
-      var msg =
-          'Err: ${rQuest.questionId} ${rQuest.questDef.questStr} was missing key data';
-      print(
-        msg,
-      );
-      throw UnimplementedError(msg);
-    }
 
-    if (answer is Iterable) {
-      throw UnimplementedError('todo');
-    } else {
-      var areaCfg =
-          this.areaConfig[swa] ?? CfgForAreaAndNestedSlots(swa, {}, {});
-      areaCfg.appendAreaOrSlotRule(rQuest);
-      areaConfig[swa] = areaCfg;
-    }
+    var areaCfg = this.areaConfig[swa] ?? CfgForAreaAndNestedSlots(swa, {}, {});
+    areaCfg.appendAreaOrSlotRule(rQuest);
+    // store when newly created above
+    areaConfig[swa] = areaCfg;
+    // }
   }
 
   void fillMissingWithDefaults() {

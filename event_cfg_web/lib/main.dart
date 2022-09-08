@@ -32,7 +32,7 @@ class _EvCfgAppState extends ConsumerState<EvCfgApp> {
 
   @override
   void initState() {
-    StreamController<Question> questDispatcher = ref.read(
+    StreamController<RegionTargetQuest> questDispatcher = ref.read(
       questDispatcherProvider,
     );
     Stream<String> answerStream = ref.read(answerStreamProvier.stream);
@@ -40,16 +40,16 @@ class _EvCfgAppState extends ConsumerState<EvCfgApp> {
     this.dRunner = DialogRunner(wqp);
     super.initState();
     //
-    _startServingQuestions();
+    _startServingQuest2s();
   }
 
-  void _startServingQuestions() {
-    // DIEGO  this starts the question stream
+  void _startServingQuest2s() {
+    // DIEGO  this starts the Quest2 stream
     // need to delay it??
     // Future.delayed(
     //   Duration(milliseconds: 100),
     //   () {
-    //     dRunner.serveNextQuestionToGui();
+    //     dRunner.serveNextQuest2ToGui();
     //   },
     // );
 
@@ -74,23 +74,23 @@ class ConfigDialog extends ConsumerWidget {
         title: Text('ST Event Configurator'),
         centerTitle: true,
       ),
-      body: StreamBuilder<Question>(
-        stream: ref.watch(questionStreamProvier.stream),
+      body: StreamBuilder<RegionTargetQuest>(
+        stream: ref.watch(Quest2StreamProvier.stream),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            // no more questions
+            // no more Quest2s
             // call logic to generate JSON file
             // and either exit or start over on a new event
             return Text('all done ... good work');
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Text('waiting for first question');
+            return Text('waiting for first Quest2');
           } else if (snapshot.connectionState == ConnectionState.active) {
             if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else if (snapshot.hasData) {
-              return QuestionUi(
+              return Quest2Ui(
                 ref.read(answerDispatcherProvider),
                 snapshot.data!,
               );
@@ -106,17 +106,17 @@ class ConfigDialog extends ConsumerWidget {
   }
 }
 
-class QuestionUi extends StatelessWidget {
-  /*  show the question here
-    this widget will rebuild every time the question changes
+class Quest2Ui extends StatelessWidget {
+  /*  show the Quest2 here
+    this widget will rebuild every time the Quest2 changes
     I've added a button to send answer back to the dialog runner
 
   this is where Deigo should start working
   */
   final StreamController<String> answerDispatcher;
-  final Question quest;
+  final RegionTargetQuest quest;
   //
-  const QuestionUi(
+  const Quest2Ui(
     this.answerDispatcher,
     this.quest, {
     Key? key,
@@ -128,7 +128,7 @@ class QuestionUi extends StatelessWidget {
       children: [
         Container(
           child: Center(
-            child: Text('Render question here!'),
+            child: Text('Render Quest2 here!'),
           ),
           color: Colors.lightBlue[300],
           height: 500,
@@ -140,7 +140,7 @@ class QuestionUi extends StatelessWidget {
                 'Submit answer as string',
               ),
               onPressed: () {
-                answerDispatcher.add('this is user answer to question');
+                answerDispatcher.add('this is user answer to Quest2');
               },
             ),
           ),

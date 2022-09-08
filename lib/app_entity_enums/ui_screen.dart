@@ -30,8 +30,10 @@ enum AppScreen {
   marketView,
   socialPools,
   news,
-  leaderboard,
-  portfolio,
+  leaderboardTraders, // pools
+  leaderboardAssets, // football & Fantasy
+  portfolioPositions,
+  portfolioHistory,
   trading,
   marketResearch,
 }
@@ -49,7 +51,7 @@ extension AppScreenExt1 on AppScreen {
       this.configurableScreenAreas.length > 0 ||
       this == AppScreen.eventConfiguration;
 
-  List<AppScreen> get topConfigurableScreens => AppScreen.values
+  List<AppScreen> get configurableAppScreens => AppScreen.values
       .where(
         (as) => as.isConfigurable && !_notCurrentlyConfigurable.contains(as),
       )
@@ -94,12 +96,23 @@ extension AppScreenExt1 on AppScreen {
           ScreenWidgetArea.header,
           ScreenWidgetArea.banner,
         ];
-      case AppScreen.leaderboard:
+      case AppScreen.leaderboardTraders:
         return [
           ScreenWidgetArea.header,
           ScreenWidgetArea.banner,
         ];
-      case AppScreen.portfolio:
+      case AppScreen.leaderboardAssets:
+        return [
+          ScreenWidgetArea.header,
+          ScreenWidgetArea.banner,
+        ];
+      case AppScreen.portfolioPositions:
+        return [
+          ScreenWidgetArea.header,
+          ScreenWidgetArea.banner,
+          ScreenWidgetArea.tableview,
+        ];
+      case AppScreen.portfolioHistory:
         return [
           ScreenWidgetArea.header,
           ScreenWidgetArea.banner,

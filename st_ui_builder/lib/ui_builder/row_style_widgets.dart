@@ -7,7 +7,26 @@ part of StUiController;
     Portfolio
     MarketResearch
 we have one style for each value of:
-    enum TvAreaRowStyle
+    enum TvAreaRowStyle with values of:
+
+        assetVsAsset, // aka teamVsTeam & playerVsPlayer
+        assetVsAssetRanked, // aka teamVsTeamRanked & playerVsPlayerRanked
+        teamVsField,
+        teamVsFieldRanked,
+        teamDraft,
+        teamLine,
+        teamPlayerVsField,
+        playerVsField,
+        playerVsFieldRanked,
+        playerDraft,
+        driverVsField,
+        distressedAssetRanked,
+
+    and there can be up-to one of each of the above style-classes
+    for each screen in the app
+    class names below should append the intended
+    screen-name so it's clear where the row should
+    be rendered
   */
 
 final _redrawAssetRowProvider = StateProvider<bool>((ref) => false);
@@ -149,7 +168,6 @@ class TeamVsFieldRankedRowMktResearchView extends TeamVsFieldRowMktView {
   }) : super(assets, key: key);
 }
 
-
 class PlayerVsFieldRankedMktResearchView extends TeamVsFieldRowMktView {
   const PlayerVsFieldRankedMktResearchView(
     TableviewDataRowTuple assets, {
@@ -205,6 +223,7 @@ class PlayerVsFieldRankedPortfolioView extends AssetVsAssetRowPortfolioView {
     Key? key,
   }) : super(assets, key: key);
 }
+
 class PlayerVsFieldRowPortfolioView extends AssetVsAssetRowPortfolioView {
   const PlayerVsFieldRowPortfolioView(
     TableviewDataRowTuple assets, {
@@ -212,7 +231,8 @@ class PlayerVsFieldRowPortfolioView extends AssetVsAssetRowPortfolioView {
   }) : super(assets, key: key);
 }
 
-class AssetVsAssetRankedRowMktResearchView extends AssetVsAssetRowMktResearchView {
+class AssetVsAssetRankedRowMktResearchView
+    extends AssetVsAssetRowMktResearchView {
   const AssetVsAssetRankedRowMktResearchView(
     TableviewDataRowTuple assets, {
     Key? key,
@@ -322,6 +342,8 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
 
   bool get isTeamPlayerVsField => false;
 
+  bool get isPlayerVsFieldRanked => false;
+
   // proceeds apply to a SALE
   bool get showProceeds => false;
 
@@ -338,141 +360,164 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
     BuildContext ctx,
     ActiveGameDetails agd,
   ) {
-    //
-    bool hasIncreased = comp1.recentPriceDelta >= Decimal.zero;
-    String sharePrice = comp1.currPriceStr;
-    String sharePriceChange = comp1.recentDeltaStr;
-    TextStyle gainLossTxtStyle = hasIncreased
-        ? StTextStyles.moneyDeltaPositive
-        : StTextStyles.moneyDeltaPositive.copyWith(
-            color: StColors.errorText,
-          );
-    // FIXME:  get position
-    // TODO:  mixin "RequiresUserPositionProps" will give these values
-    String sharesOwned = assetHoldingsSummary.sharesOwnedStr;
-    String positionValue = assetHoldingsSummary.positionEstValueStr;
-    String positionGainLoss = assetHoldingsSummary.positionGainLossStr;
-    bool isGainLossPositive =
-        assetHoldingsSummary.positionGainLoss >= Decimal.zero;
-    Color gainLossColor =
-        isGainLossPositive ? StColors.green : StColors.errorText;
+    late String sharePrice;
+    late String sharePriceChange;
+    late String sharesOwned;
+    late String positionValue;
+    late String tradeSource;
+    late Decimal positionGainLoss;
+    if (showProceeds) {
+      final order = comp1.assetHoldingsSummary.order ?? Order.getDefault();
+      tradeSource = order.tradeSource;
+      final price =
+          (Decimal.fromInt(order.pricePer.toInt()) / Decimal.fromInt(100))
+              .toDecimal();
+      sharePrice = price.toStringAsFixed(2);
+      sharePriceChange = '';
+      sharesOwned = order.shares.toString();
+      positionValue =
+          (price * Decimal.fromInt(order.shares.toInt())).toStringAsFixed(2);
+      positionGainLoss =
+          (Decimal.fromInt(order.gainLoss.toInt()) / Decimal.fromInt(100))
+              .toDecimal();
+      tradeSource = order.tradeSource;
+    } else {
+      final holdings = comp1.assetHoldingsSummary;
+      tradeSource = '';
+      sharePrice = comp1.currPriceStr;
+      sharePriceChange = comp1.recentDeltaStr;
+      sharesOwned = holdings.sharesOwnedStr;
+      positionValue = holdings.positionEstValueStr;
+      positionGainLoss =
+          (holdings.positionGainLoss / Decimal.fromInt(100)).toDecimal();
+    }
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      width: MediaQuery.of(ctx).size.width,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          CompetitorImage(
-            comp1.imgUrl,
-            false,
-            isTwoAssetRow: this is ShowsTwoAssets,
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CheckAssetType(
-                      competitor: comp1,
-                      isDriverVsField: isDriverVsField,
-                      isTeamPlayerVsField: isTeamPlayerVsField,
-                    ),
-                    if (showHoldingsValue)
-                      // this is a portfolio positions row; show trade
-                      TradeButton(comp1.assetStateUpdates, comp1.gameStatus),
-                  ],
-                ),
-                kVerticalSpacerSm,
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.only(top: 5, left: 10, right: 10),
-                    color: StColors.veryDarkGray,
-                    child: Row(
+    String positionGainLossStr = positionGainLoss.toStringAsFixed(2);
+    bool isPositiveGainLoss = positionGainLoss > Decimal.zero;
+    Color priceFluxColor = isPositiveGainLoss ? StColors.green : StColors.red;
+
+    //
+    return IntrinsicHeight(
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 8.h),
+        width: MediaQuery.of(ctx).size.width,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            CompetitorImage(comp1.imgUrl, false),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '$sharesOwned shares',
-                              style: StTextStyles.p1
-                                  .copyWith(color: StColors.coolGray),
-                            ),
-                            kVerticalSpacerSm,
-                            RichText(
-                              text: TextSpan(
-                                  text: '@ ',
-                                  style: StTextStyles.p1
-                                      .copyWith(color: StColors.coolGray),
-                                  children: [
-                                    TextSpan(
-                                      text: sharePrice.replaceAllMapped(
-                                          RegexFunctions()
-                                              .formatNumberStringsWithCommas,
-                                          RegexFunctions().mathFunc),
-                                      style: StTextStyles.p1,
-                                    ),
-                                    TextSpan(
-                                      text:
-                                          " ${sharePriceChange.replaceAllMapped(RegexFunctions().formatNumberStringsWithCommas, RegexFunctions().mathFunc)}",
-                                      style: gainLossTxtStyle,
-                                    )
-                                  ]),
-                            ),
-                          ],
+                        CheckAssetType(
+                          competitor: comp1,
+                          isDriverVsField: isDriverVsField,
+                          isPlayerVsFieldRanked: isPlayerVsFieldRanked,
+                          isTeamPlayerVsField: isTeamPlayerVsField,
+                          tradeSource: tradeSource,
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              showProceeds
-                                  ? StStrings.proceeds
-                                  : StStrings.value,
-                              style: StTextStyles.p1.copyWith(
-                                color: StColors.coolGray,
+                        if (showHoldingsValue)
+                          // this is a portfolio positions row; show trade
+                          TradeButton(
+                              comp1.assetStateUpdates, comp1.gameStatus),
+                      ]),
+                  kVerticalSpacerSm,
+                  Expanded(
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
+                      color: StColors.veryDarkGray,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '$sharesOwned shares',
+                                style: StTextStyles.p1.copyWith(
+                                  color: StColors.coolGray,
+                                ),
                               ),
-                            ),
-                            kVerticalSpacerSm,
-                            Text(
-                              positionValue.replaceAllMapped(
-                                  RegexFunctions()
-                                      .formatNumberStringsWithCommas,
-                                  RegexFunctions().mathFunc),
-                              style: StTextStyles.p1,
-                            ),
-                          ],
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(StStrings.gainLossAbbrev,
-                                style: StTextStyles.p1
-                                    .copyWith(color: StColors.coolGray)),
-                            kVerticalSpacerSm,
-                            Text(
-                              (isGainLossPositive ? "+" : "") +
-                                  positionGainLoss.replaceAllMapped(
-                                      RegexFunctions()
-                                          .formatNumberStringsWithCommas,
-                                      RegexFunctions().mathFunc),
-                              style: StTextStyles.p1
-                                  .copyWith(color: gainLossColor),
-                            ),
-                          ],
-                        ),
-                      ],
+                              kVerticalSpacerSm,
+                              RichText(
+                                text: TextSpan(
+                                    text: '@ ',
+                                    style: StTextStyles.p1
+                                        .copyWith(color: StColors.coolGray),
+                                    children: [
+                                      TextSpan(
+                                        text: sharePrice.replaceAllMapped(
+                                            RegexFunctions()
+                                                .formatNumberStringsWithCommas,
+                                            RegexFunctions().mathFunc),
+                                        style: StTextStyles.p1,
+                                      ),
+                                      TextSpan(
+                                          text:
+                                              " ${sharePriceChange.replaceAllMapped(RegexFunctions().formatNumberStringsWithCommas, RegexFunctions().mathFunc)}",
+                                          style: StTextStyles.moneyDeltaPositive
+                                              .copyWith(
+                                            color: comp1.priceFluxColor,
+                                          ))
+                                    ]),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                showProceeds
+                                    ? StStrings.proceeds
+                                    : StStrings.value,
+                                style: StTextStyles.p1.copyWith(
+                                  color: StColors.coolGray,
+                                ),
+                              ),
+                              kVerticalSpacerSm,
+                              Text(
+                                positionValue.replaceAllMapped(
+                                    RegexFunctions()
+                                        .formatNumberStringsWithCommas,
+                                    RegexFunctions().mathFunc),
+                                style: StTextStyles.p1,
+                              ),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(StStrings.gainLossAbbrev,
+                                  style: StTextStyles.p1
+                                      .copyWith(color: StColors.coolGray)),
+                              kVerticalSpacerSm,
+                              Text(
+                                (isPositiveGainLoss ? "+" : "") +
+                                    positionGainLossStr.replaceAllMapped(
+                                        RegexFunctions()
+                                            .formatNumberStringsWithCommas,
+                                        RegexFunctions().mathFunc),
+                                style: StTextStyles.moneyDeltaPositive.copyWith(
+                                  color: priceFluxColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          )
-        ],
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -511,6 +556,54 @@ class AssetVsAssetRowPortfolioHistory extends AssetVsAssetRowPortfolioView {
 
   @override
   bool get showProceeds => true;
+}
+
+class AssetVsAssetRankedRowPortfolioHistory
+    extends AssetVsAssetRowPortfolioHistory {
+  //
+  const AssetVsAssetRankedRowPortfolioHistory(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+}
+
+class TeamVsFieldRowPortfolioHistoryView
+    extends AssetVsAssetRowPortfolioHistory {
+  //
+  const TeamVsFieldRowPortfolioHistoryView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+}
+
+class TeamVsFieldRankedRowPortfolioHistoryView
+    extends AssetVsAssetRowPortfolioHistory {
+  //
+  const TeamVsFieldRankedRowPortfolioHistoryView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+}
+
+class PlayerVsFieldRowPortfolioHistoryView
+    extends AssetVsAssetRowPortfolioHistory {
+  //
+  const PlayerVsFieldRowPortfolioHistoryView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+}
+
+class PlayerVsFieldRankedPortfolioHistoryView
+    extends AssetVsAssetRowPortfolioHistory {
+  //
+  const PlayerVsFieldRankedPortfolioHistoryView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+
+  @override
+  bool get isPlayerVsFieldRanked => true;
 }
 
 //
@@ -589,7 +682,7 @@ class TeamVsFieldRowMktView extends StBaseTvRow
         ),
         kSpacerSm,
         SizedBox(
-          width: size.width * .52,
+          width: size.width * .5,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -670,13 +763,14 @@ class TeamVsFieldRowMktView extends StBaseTvRow
 class TeamVsFieldRowRankedMktView extends TeamVsFieldRowMktView {
   //
   @override
-  bool get showRanked => true;
+  bool get isPlayerVsFieldRanked => true;
 
   const TeamVsFieldRowRankedMktView(
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
 }
+
 class TeamPlayerVsFieldRowMktView extends TeamVsFieldRowMktView {
   @override
   bool get isTeamPlayerVsField => true;
@@ -686,6 +780,7 @@ class TeamPlayerVsFieldRowMktView extends TeamVsFieldRowMktView {
     Key? key,
   }) : super(assets, key: key);
 }
+
 class PlayerVsFieldRankedRowMktView extends TeamVsFieldRowMktView {
   @override
   bool get isPlayerVsFieldRanked => true;
@@ -715,7 +810,6 @@ class DriverVsFieldRowMktView extends TeamVsFieldRowMktView {
     Key? key,
   }) : super(assets, key: key);
 }
-
 
 class DraftPlayerRowMktView extends StBaseTvRow with ShowsOneAsset {
   const DraftPlayerRowMktView(
@@ -776,7 +870,6 @@ class TeamLineRowMktView extends StBaseTvRow with ShowsOneAsset {
   }
 }
 
-
 class DraftPlayerRowMktResearchView extends StBaseTvRow with ShowsOneAsset {
   const DraftPlayerRowMktResearchView(
     TableviewDataRowTuple assets, {
@@ -835,6 +928,7 @@ class TeamLineRowMktResearchView extends StBaseTvRow with ShowsOneAsset {
     );
   }
 }
+
 class DraftPlayerRowPortfolioView extends StBaseTvRow with ShowsOneAsset {
   const DraftPlayerRowPortfolioView(
     TableviewDataRowTuple assets, {
@@ -893,6 +987,218 @@ class TeamLineRowPortfolioView extends StBaseTvRow with ShowsOneAsset {
     );
   }
 }
+
+class NIU_DraftTeamRowMktView extends StBaseTvRow with ShowsOneAsset {
+  const NIU_DraftTeamRowMktView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+
+  @override
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
+    // paste row widget code here
+    return const SizedBox(
+      child: Text(
+        'Awaiting UX specs for <DraftTeamRow>',
+      ),
+    );
+  }
+}
+
+class NIU_TeamLineRowMktView extends StBaseTvRow with ShowsOneAsset {
+  const NIU_TeamLineRowMktView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+
+  @override
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
+    return const SizedBox(
+      child: Text(
+        'Awaiting UX specs for <TeamLineRow>',
+      ),
+    );
+  }
+}
+
+class NIU_DraftPlayerRowMktResearchView extends StBaseTvRow with ShowsOneAsset {
+  const NIU_DraftPlayerRowMktResearchView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+
+  @override
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
+    // paste row widget code here
+    return const SizedBox(
+      child: Text(
+        'Awaiting UX specs for <DraftPlayerRow>',
+      ),
+    );
+  }
+}
+
+class NIU_DraftTeamRowMktResearchView extends StBaseTvRow with ShowsOneAsset {
+  const NIU_DraftTeamRowMktResearchView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+
+  @override
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
+    // paste row widget code here
+    return const SizedBox(
+      child: Text(
+        'Awaiting UX specs for <DraftTeamRow>',
+      ),
+    );
+  }
+}
+
+class NIU_TeamLineRowMktResearchView extends StBaseTvRow with ShowsOneAsset {
+  const NIU_TeamLineRowMktResearchView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+
+  @override
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
+    return const SizedBox(
+      child: Text(
+        'Awaiting UX specs for <TeamLineRow>',
+      ),
+    );
+  }
+}
+
+class NIU_DraftPlayerRowPortfolioView extends StBaseTvRow with ShowsOneAsset {
+  const NIU_DraftPlayerRowPortfolioView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+
+  @override
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
+    // paste row widget code here
+    return const SizedBox(
+      child: Text(
+        'Awaiting UX specs for <DraftPlayerRow>',
+      ),
+    );
+  }
+}
+
+class TeamLineRowPortfolioHistoryView extends TeamLineRowPortfolioView {
+  //
+  const TeamLineRowPortfolioHistoryView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+}
+
+class NIU_DraftTeamRowPortfolioView extends StBaseTvRow with ShowsOneAsset {
+  const NIU_DraftTeamRowPortfolioView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+
+  @override
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
+    // paste row widget code here
+    return const SizedBox(
+      child: Text(
+        'Awaiting UX specs for <DraftTeamRow>',
+      ),
+    );
+  }
+}
+
+// test classes only below
+class NIU_TeamLineRowPortfolioView extends StBaseTvRow with ShowsOneAsset {
+  const NIU_TeamLineRowPortfolioView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+
+  @override
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
+    return const SizedBox(
+      child: Text(
+        'Awaiting UX specs for <TeamLineRow>',
+      ),
+    );
+  }
+}
+
+class DraftTeamRowPortfolioHistoryView extends DraftTeamRowPortfolioView {
+  //
+  const DraftTeamRowPortfolioHistoryView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+}
+
+class DraftPlayerRowPortfolioHistoryView extends DraftPlayerRowPortfolioView {
+  //
+  const DraftPlayerRowPortfolioHistoryView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+}
+
+class DistressedAssetRanked extends StBaseTvRow {
+  // TODO for Chrysalis
+
+  bool get showRank => false;
+
+  const DistressedAssetRanked(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
+
+  @override
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
+    // print('AssetVsAssetRow_MktView is rebuilding');
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        // AssetVsAssetHalfRow(comp1, agd, showRank, comp1.assetHoldingsSummary),
+        SizedBox(height: UiSizes.spaceBtwnRows),
+        // AssetVsAssetHalfRow(comp2, agd, showRank, comp2.assetHoldingsSummary)
+      ],
+    );
+  }
+}
+
+
 
 // @override
 //   Widget rowBody(BuildContext context) {

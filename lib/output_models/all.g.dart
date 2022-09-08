@@ -22,8 +22,12 @@ TopEventCfg _$TopEventCfgFromJson(Map<String, dynamic> json) => TopEventCfg(
       evEliminationType: $enumDecodeNullable(
               _$EvEliminationStrategyEnumMap, json['evEliminationType']) ??
           EvEliminationStrategy.roundRobin,
-    )..applySameRowStyleToAllScreens =
-        json['applySameRowStyleToAllScreens'] as bool;
+      evGameAgeOffRule: $enumDecodeNullable(
+              _$EvGameAgeOffRuleEnumMap, json['evGameAgeOffRule']) ??
+          EvGameAgeOffRule.byEvEliminationStrategy,
+      applySameRowStyleToAllScreens:
+          json['applySameRowStyleToAllScreens'] as bool? ?? true,
+    );
 
 Map<String, dynamic> _$TopEventCfgToJson(TopEventCfg instance) =>
     <String, dynamic>{
@@ -35,6 +39,7 @@ Map<String, dynamic> _$TopEventCfgToJson(TopEventCfg instance) =>
       'evDuration': _$EvDurationEnumMap[instance.evDuration],
       'evEliminationType':
           _$EvEliminationStrategyEnumMap[instance.evEliminationType],
+      'evGameAgeOffRule': _$EvGameAgeOffRuleEnumMap[instance.evGameAgeOffRule],
       'applySameRowStyleToAllScreens': instance.applySameRowStyleToAllScreens,
     };
 
@@ -72,6 +77,13 @@ const _$EvEliminationStrategyEnumMap = {
   EvEliminationStrategy.audienceVote: 'audienceVote',
 };
 
+const _$EvGameAgeOffRuleEnumMap = {
+  EvGameAgeOffRule.whenRoundChanges: 'whenRoundChanges',
+  EvGameAgeOffRule.everyWeek: 'everyWeek',
+  EvGameAgeOffRule.oneDayAfterEnds: 'oneDayAfterEnds',
+  EvGameAgeOffRule.byEvEliminationStrategy: 'byEvEliminationStrategy',
+};
+
 EventCfgTree _$EventCfgTreeFromJson(Map<String, dynamic> json) => EventCfgTree(
       TopEventCfg.fromJson(json['eventCfg'] as Map<String, dynamic>),
       (json['screenConfigMap'] as Map<String, dynamic>).map(
@@ -94,8 +106,10 @@ const _$AppScreenEnumMap = {
   AppScreen.marketView: 'marketView',
   AppScreen.socialPools: 'socialPools',
   AppScreen.news: 'news',
-  AppScreen.leaderboard: 'leaderboard',
-  AppScreen.portfolio: 'portfolio',
+  AppScreen.leaderboardTraders: 'leaderboardTraders',
+  AppScreen.leaderboardAssets: 'leaderboardAssets',
+  AppScreen.portfolioPositions: 'portfolioPositions',
+  AppScreen.portfolioHistory: 'portfolioHistory',
   AppScreen.trading: 'trading',
   AppScreen.marketResearch: 'marketResearch',
 };
@@ -157,18 +171,21 @@ Map<String, dynamic> _$CfgForAreaAndNestedSlotsToJson(
     };
 
 const _$VisualRuleTypeEnumMap = {
+  VisualRuleType.generalDialogFlow: 'generalDialogFlow',
   VisualRuleType.sortCfg: 'sortCfg',
+  VisualRuleType.groupCfg: 'groupCfg',
   VisualRuleType.filterCfg: 'filterCfg',
   VisualRuleType.styleOrFormat: 'styleOrFormat',
   VisualRuleType.showOrHide: 'showOrHide',
+  VisualRuleType.themePreference: 'themePreference',
 };
 
 const _$ScreenAreaWidgetSlotEnumMap = {
   ScreenAreaWidgetSlot.header: 'header',
   ScreenAreaWidgetSlot.footer: 'footer',
-  ScreenAreaWidgetSlot.menuSortPosOrSlot1: 'menuSortPosOrSlot1',
-  ScreenAreaWidgetSlot.menuSortPosOrSlot2: 'menuSortPosOrSlot2',
-  ScreenAreaWidgetSlot.menuSortPosOrSlot3: 'menuSortPosOrSlot3',
+  ScreenAreaWidgetSlot.slot1: 'slot1',
+  ScreenAreaWidgetSlot.slot2: 'slot2',
+  ScreenAreaWidgetSlot.slot3: 'slot3',
   ScreenAreaWidgetSlot.title: 'title',
   ScreenAreaWidgetSlot.subtitle: 'subtitle',
   ScreenAreaWidgetSlot.bannerUrl: 'bannerUrl',

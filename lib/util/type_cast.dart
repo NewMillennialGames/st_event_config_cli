@@ -1,13 +1,30 @@
-Type typeOf<T>() => T;
+part of StUtil;
+
+// Type typeOf<T>() => T;
+
+bool isSubtype<S, T>() => <S>[] is List<T>;
 
 Iterable<int> castStrOfIdxsToIterOfInts(
   String componentIdxsStr, {
   String sep = ',',
+  int dflt = -1,
 }) {
   return componentIdxsStr
       .split(sep)
-      .map((idxStr) => int.tryParse(idxStr) ?? -1)
+      .map((idxStr) => int.tryParse(idxStr) ?? dflt)
       .where((idx) => idx >= 0)
       // remove dups by conversion to set
       .toSet();
 }
+
+// Iterable<int> castListOfStrIdxsToIterOfInts(
+//   Iterable<String> userRespStrList, {
+//   String sep = ',',
+//   int dflt = -1,
+// }) {
+//   return userRespStrList
+//       .map((idxStr) => int.tryParse(idxStr) ?? dflt)
+//       .where((idx) => idx >= 0)
+//       // remove dups by conversion to set
+//       .toSet();
+// }

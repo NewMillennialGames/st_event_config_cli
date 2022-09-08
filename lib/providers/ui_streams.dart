@@ -1,19 +1,19 @@
 part of EvCfgProviders;
 
-final questDispatcherProvider = Provider<StreamController<Question>>(
-  // this is used to send questions to the UI
-  (ref) => StreamController<Question>(),
+final questDispatcherProvider = Provider<StreamController<RegionTargetQuest>>(
+  // this is used to send Quest2s to the UI
+  (ref) => StreamController<RegionTargetQuest>(),
 );
 
-final questionStreamProvier = StreamProvider<Question>((ref) async* {
+final Quest2StreamProvier = StreamProvider<RegionTargetQuest>((ref) async* {
   // the UI listends to this stream and renders
-  // new questions when they are received
+  // new Quest2s when they are received
   final sc = ref.watch(questDispatcherProvider);
 
   ref.onDispose(() {
     sc.close();
   });
-  await for (final Question quest in sc.stream) {
+  await for (final RegionTargetQuest quest in sc.stream) {
     yield quest;
   }
 });
@@ -25,8 +25,8 @@ final answerDispatcherProvider = Provider<StreamController<String>>(
 
 final answerStreamProvier = StreamProvider<String>((ref) async* {
   // the DialogRunner listends to this stream and stores the
-  // answers on the respective question
-  // and then sends the UI a new question on the stream above
+  // answers on the respective Quest2
+  // and then sends the UI a new Quest2 on the stream above
   final sc = ref.watch(answerDispatcherProvider);
 
   ref.onDispose(() {
@@ -41,9 +41,9 @@ final answerStreamProvier = StreamProvider<String>((ref) async* {
 //   var pc = ProviderContainer();
 //   var xx = pc.read(answerStreamProvier.stream);
 
-//   print(xx.isBroadcast);
+//   ConfigLogger.log(Level.FINER,xx.isBroadcast);
 
 //   var yy = xx.asBroadcastStream();
 
-//   print(yy.isBroadcast);
+//   ConfigLogger.log(Level.FINER,yy.isBroadcast);
 // }

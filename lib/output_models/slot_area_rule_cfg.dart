@@ -17,15 +17,25 @@ class SlotOrAreaRuleCfg {
     this.visRuleList,
   );
 
-  List<RuleResponseBase> rulesOfType(VisualRuleType rt) =>
+  List<RuleResponseBase> rulesOfVRType(VisualRuleType rt) =>
       visRuleList.where((rr) => rr.ruleType == rt).toList();
+
+  RuleResponseBase? ruleForObjType(Type objTyp) {
+    // not tested
+    // bool isTp = isSubtype<objTyp.runtimeType, RuleResponseBase>();
+    // assert(objTyp is RuleResponseBase, 'invalid arg');
+
+    Iterable<RuleResponseBase> matchLst =
+        visRuleList.where((rr) => rr.runtimeType == objTyp);
+    return matchLst.length < 1 ? null : matchLst.first;
+  }
 
   Iterable<VisualRuleType> get existingAnsweredRuleTypes =>
       visRuleList.map((e) => e.ruleType);
 
-  void appendQuestion(VisRuleStyleQuest rQuest) {
-    print('adding VisRuleStyleQuest ${rQuest.questionId} in');
-    this.visRuleList.add(rQuest.response!.answers);
+  void appendQuestion(VisualRuleDetailQuest rQuest) {
+    // ConfigLogger.log(Level.FINER,'adding QuestVisualRule abt ${rQuest.firstPrompt.userPrompt} to SlotOrAreaRuleCfg on ${rQuest.appScreen.name}');
+    this.visRuleList.add(rQuest.asVisRuleResponse);
   }
 
   void fillMissingWithDefaults(
@@ -49,13 +59,13 @@ class SlotOrAreaRuleCfg {
     }
     List<VisRuleQuestType> _questsForWhichWeWantAnswers = [];
     for (VisualRuleType rt in _rulesForWhichWeWantAnswers) {
-      _questsForWhichWeWantAnswers.addAll(rt.requiredQuestions);
+      _questsForWhichWeWantAnswers.addAll(rt.requRuleDetailCfgQuests);
     }
 
     var expectedResponses = Set<VisRuleQuestType>();
     existingAnsweredRuleTypes.forEach((e) {
       // get list of all needed VisRuleQuestType
-      expectedResponses.addAll(e.requiredQuestions);
+      expectedResponses.addAll(e.requRuleDetailCfgQuests);
     });
 
     Iterable<List<VisRuleQuestType>> answerTypesSoFar =
@@ -86,6 +96,23 @@ class SlotOrAreaRuleCfg {
       missingResponses,
     );
     visRuleList.addAll(answerBuilder.defaultAnswers);
+  }
+
+  void printSummary(dynamic slotOrArea, {String padding = '  '}) {
+    //
+    bool isAreaRule = slotOrArea is ScreenWidgetArea;
+    String targetScope = isAreaRule ? 'AREA' : 'SLOT';
+    String targetName = isAreaRule
+        ? (slotOrArea as ScreenWidgetArea).name.toUpperCase()
+        : (slotOrArea as ScreenAreaWidgetSlot).name.toUpperCase();
+
+   ConfigLogger.log(Level.INFO, padding + '$targetName $targetScope RuleCfg:');
+    for (RuleResponseBase rrb in visRuleList) {
+      //
+      // String cfgRuleTypeName = rrb.runtimeType.toString();
+      // ConfigLogger.log(Level.FINER,'\t$cfgRuleTypeName has:');
+     ConfigLogger.log(Level.INFO, padding + padding + '$rrb');
+    }
   }
 
   // JsonSerializable

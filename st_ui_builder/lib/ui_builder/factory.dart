@@ -11,7 +11,7 @@ class StUiBuilderFactory {
     when each screen inits, they will request
     the configuration objs they need from the methods below
   */
-  EventCfgTree? _eConfig;
+  late EventCfgTree? _eConfig;
   //
   StUiBuilderFactory();
 
@@ -21,12 +21,14 @@ class StUiBuilderFactory {
   bool get marketViewRowsAreSingleAssetOnly =>
       !marketViewIsGameCentricAndTwoPerRow;
 
+  TopEventCfg get eventCfg => _eConfig!.eventCfg;
+
   void setConfigForCurrentEvent(Map<String, dynamic> eCfgJsonMap) {
     /* call this every time user switches events
       send api payload (upon event switching) here
       to reconfigure the factory
 
-      TODO:  add versioning
+      TODO:  add versioning to json so we can improve it over time
     */
     try {
       _eConfig = EventCfgTree.fromJson(eCfgJsonMap);
@@ -43,18 +45,20 @@ class StUiBuilderFactory {
   }
 
   void _readRowStyleFromMarketViewAndClone() {
-    //
+    // apply row style from market-view to all screens
     CfgForAreaAndNestedSlots mktViewTableAreaAndSlotCfg =
         _eConfig!.screenAreaCfg(
       AppScreen.marketView,
       ScreenWidgetArea.tableview,
     );
-    TvAreaRowStyle rowStyle =
+    TvAreaRowStyle appWideRowStyle =
         mktViewTableAreaAndSlotCfg.rowStyleCfg.selectedRowStyle;
-    for (AppScreen scr in AppScreen.values) {
-      if (scr == AppScreen.marketView) continue;
 
-      _eConfig?.setConfigFor(scr, ScreenWidgetArea.tableview, rowStyle);
+    for (AppScreen appScreen in AppScreen.marketView.configurableAppScreens) {
+      if (appScreen == AppScreen.marketView) continue;
+
+      _eConfig?.setConfigFor(
+          appScreen, ScreenWidgetArea.tableview, appWideRowStyle);
     }
   }
 
@@ -71,20 +75,44 @@ class StUiBuilderFactory {
   ) {
     /* build object that wraps all data and display rules
     */
-    CfgForAreaAndNestedSlots tableAreaAndSlotCfg =
-        _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.tableview);
-
-    CfgForAreaAndNestedSlots filterBarAndSlotCfg =
-        _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.filterBar);
 
     // hack for Nascar b4 configurator is updated
     bool disableAllGrouping = _eConfig!.eventCfg.skipGroupingOnScreen(screen) ||
         _eConfig!.eventCfg.skipGroupingForName('nascar');
 
+    CfgForAreaAndNestedSlots tableAreaAndSlotCfg =
+        _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.tableview);
+
+    // old method
+    // CfgForAreaAndNestedSlots filterBarAndSlotCfg =
+    //     _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.filterBar);
+
+    // return GroupedTableDataMgr(
+    //   screen,
+    //   rows,
+    //   TableviewConfigPayload.orig(
+    //       screen, tableAreaAndSlotCfg, filterBarAndSlotCfg),
+    //   redrawCallback: redrawTvCallback,
+    //   disableAllGrouping: disableAllGrouping,
+    // );
+
+    // new updated method!
+    TvSortCfg sortCfg = _eConfig!.tvSortingRules(screen) ?? TvSortCfg.noop();
+    TvGroupCfg? group = _eConfig!.tvGroupingRules(screen);
+    TvFilterCfg? filter = _eConfig!.tvFilteringRules(screen);
+
+    TableviewConfigPayload tvcp = TableviewConfigPayload(
+      screen,
+      tableAreaAndSlotCfg.rowStyleCfg.selectedRowStyle,
+      sortCfg,
+      filter,
+      group,
+    );
+
     return GroupedTableDataMgr(
       screen,
       rows,
-      TableviewConfigPayload(screen, tableAreaAndSlotCfg, filterBarAndSlotCfg),
+      tvcp,
       redrawCallback: redrawTvCallback,
       disableAllGrouping: disableAllGrouping,
     );
@@ -100,27 +128,29 @@ class StUiBuilderFactory {
       ScreenWidgetArea.tableview,
     );
 
-    // cloning row-style
-    // if ((_eConfig?.eventCfg.applySameRowStyleToAllScreens ?? false) &&
-    //     tableAreaAndSlotCfg.isMissingRuleTyp(VisualRuleType.styleOrFormat)) {
-    //   //
-    //   CfgForAreaAndNestedSlots mktViewTableAreaAndSlotCfg = _eConfig!.screenAreaCfg(
-    //   AppScreen.marketView,
-    //   ScreenWidgetArea.tableview,
-    // );
-    //   tableAreaAndSlotCfg.copyStyleFromCfg(mktViewTableAreaAndSlotCfg.rowStyleCfg);
-    // }
+    CfgForAreaAndNestedSlots? filterAreaCfg;
+
+    try {
+      filterAreaCfg = _eConfig!.screenAreaCfg(
+        screen,
+        ScreenWidgetArea.filterBar,
+      );
+    } catch (e) {}
 
     return TableRowDataMgr(
       screen,
       rows,
-      TableviewConfigPayload(
+      TableviewConfigPayload.orig(
         screen,
         tableAreaAndSlotCfg,
-        null,
+        filterAreaCfg,
       ),
       redrawCallback: redrawTvCallback,
     );
+  }
+
+  void printSummary() {
+    _eConfig?.printSummary();
   }
 
   // FilterRules filterBarConfigForScreen(AppScreen screen) {

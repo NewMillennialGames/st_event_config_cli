@@ -25,7 +25,7 @@ class GroupHeaderData
   }) : _sortKey = sortKey.toLowerCase();
 
   static GetGroupHeaderLblsFromCompetitionRow groupHeaderPayloadConstructor(
-    SortingRules sortAndGroupRules,
+    TvSortCfg sortAndGroupRules,
   ) {
     // returns a func that creates a GroupHeaderData
     // NOT the sort values (comparables) used in sortComparator below
@@ -34,14 +34,14 @@ class GroupHeaderData
       return row.labelExtractor(sortAndGroupRules.item1.colName);
     }
 
-    TvSortCfg? col2Rule = sortAndGroupRules.item2;
+    SortGroupFilterEntry? col2Rule = sortAndGroupRules.item2;
     // CastRowToSortVal
     secondLabelFn(AssetRowPropertyIfc row) {
       if (col2Rule == null) return '';
       return row.labelExtractor(col2Rule.colName);
     }
 
-    TvSortCfg? col3Rule = sortAndGroupRules.item3;
+    SortGroupFilterEntry? col3Rule = sortAndGroupRules.item3;
     // CastRowToSortVal
     thirdLabelFn(AssetRowPropertyIfc row) {
       if (col3Rule == null) return '';
@@ -119,7 +119,7 @@ class GroupHeaderData
   }
 
   static SectionSortComparator sortComparator(
-    SortingRules sr, [
+    TvSortCfg sr, [
     bool sortAsc = false,
   ]) {
     // return the function that performs the sorting logic
@@ -129,14 +129,14 @@ class GroupHeaderData
       return row.sortValueExtractor(sr.item1.colName);
     }
 
-    TvSortCfg? col2Rule = sr.item2;
+    SortGroupFilterEntry? col2Rule = sr.item2;
     // CastRowToSortVal
     secondValFn(AssetRowPropertyIfc row) {
       if (col2Rule == null) return '';
       return row.sortValueExtractor(col2Rule.colName);
     }
 
-    TvSortCfg? col3Rule = sr.item3;
+    SortGroupFilterEntry? col3Rule = sr.item3;
     // CastRowToSortVal
     thirdValFn(AssetRowPropertyIfc row) {
       if (col3Rule == null) return '';
