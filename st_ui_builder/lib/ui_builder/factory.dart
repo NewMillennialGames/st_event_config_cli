@@ -39,13 +39,22 @@ class StUiBuilderFactory {
       );
     }
     //
-    if (_eConfig!.eventCfg.applySameRowStyleToAllScreens) {
+    if (_eConfig!.eventCfg.applyMktViewRowStyleToAllScreens) {
       _readRowStyleFromMarketViewAndClone();
     }
   }
 
   void _readRowStyleFromMarketViewAndClone() {
-    // apply row style from market-view to all screens
+    // apply row style from market-view (first selected row-style)
+    // to all screens, based on config this pref setting:
+    bool applyMktViewRowStyleToAllScreens =
+        _eConfig?.eventCfg.applyMktViewRowStyleToAllScreens ?? false;
+
+    assert(
+      applyMktViewRowStyleToAllScreens,
+      'err: _readRowStyleFromMarketViewAndClone called when pref not set?',
+    );
+
     CfgForAreaAndNestedSlots mktViewTableAreaAndSlotCfg =
         _eConfig!.screenAreaCfg(
       AppScreen.marketView,
@@ -58,7 +67,10 @@ class StUiBuilderFactory {
       if (appScreen == AppScreen.marketView) continue;
 
       _eConfig?.setConfigFor(
-          appScreen, ScreenWidgetArea.tableview, appWideRowStyle);
+        appScreen,
+        ScreenWidgetArea.tableview,
+        appWideRowStyle,
+      );
     }
   }
 

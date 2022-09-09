@@ -25,7 +25,7 @@ TopEventCfg _$TopEventCfgFromJson(Map<String, dynamic> json) => TopEventCfg(
       evGameAgeOffRule: $enumDecodeNullable(
               _$EvGameAgeOffRuleEnumMap, json['evGameAgeOffRule']) ??
           EvGameAgeOffRule.byEvEliminationStrategy,
-      applySameRowStyleToAllScreens:
+      applyMktViewRowStyleToAllScreens:
           json['applySameRowStyleToAllScreens'] as bool? ?? true,
     );
 
@@ -40,7 +40,8 @@ Map<String, dynamic> _$TopEventCfgToJson(TopEventCfg instance) =>
       'evEliminationType':
           _$EvEliminationStrategyEnumMap[instance.evEliminationType]!,
       'evGameAgeOffRule': _$EvGameAgeOffRuleEnumMap[instance.evGameAgeOffRule]!,
-      'applySameRowStyleToAllScreens': instance.applySameRowStyleToAllScreens,
+      'applySameRowStyleToAllScreens':
+          instance.applyMktViewRowStyleToAllScreens,
     };
 
 const _$EvTypeEnumMap = {

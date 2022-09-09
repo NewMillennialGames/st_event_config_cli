@@ -17,7 +17,7 @@ class TopEventCfg {
   EvDuration evDuration;
   EvEliminationStrategy evEliminationType;
   EvGameAgeOffRule evGameAgeOffRule;
-  bool applySameRowStyleToAllScreens = true;
+  bool applyMktViewRowStyleToAllScreens = true;
   bool cancelAllRowGroupingLogic = false;
 
   TopEventCfg(
@@ -29,7 +29,7 @@ class TopEventCfg {
     this.evDuration = EvDuration.oneGame,
     this.evEliminationType = EvEliminationStrategy.roundRobin,
     this.evGameAgeOffRule = EvGameAgeOffRule.byEvEliminationStrategy,
-    this.applySameRowStyleToAllScreens = true,
+    this.applyMktViewRowStyleToAllScreens = true,
   });
 
   bool get isFantasy => evType == EvType.fantasy;
@@ -154,7 +154,7 @@ class EventCfgTree {
       evDuration: evDuration,
       evEliminationType: evEliminationType,
       evGameAgeOffRule: evGameAgeOffRule,
-      applySameRowStyleToAllScreens: applySameRowStyleToAllScreens,
+      applyMktViewRowStyleToAllScreens: applySameRowStyleToAllScreens,
     );
 
     return EventCfgTree(eventCfg, {});
