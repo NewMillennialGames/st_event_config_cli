@@ -25,11 +25,10 @@ enum TvAreaRowStyle {
   playerVsFieldRanked,
   playerDraft,
   driverVsField,
-  distressedAssetRanked,
+  digitalAssetScored,
 }
 
 //
-
 extension TvAreaRowStyleExt1 on TvAreaRowStyle {
   //
   bool get twoPerRowOnMarketViewScreen => [

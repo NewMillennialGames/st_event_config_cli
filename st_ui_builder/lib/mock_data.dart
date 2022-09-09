@@ -31,6 +31,8 @@ class MockAsset {
 
   String get key => id;
 
+  String get extAtts => '';
+
   MockAsset(
     this.name,
     this.region,
@@ -139,6 +141,10 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
 
   @override
   int get displayNumber => int.tryParse(asset.displayNumber) ?? 5;
+
+  @override
+  // extra properties
+  String get extAtts => asset.extAtts;
 }
 
 List<MockAsset> _fakeData = [
