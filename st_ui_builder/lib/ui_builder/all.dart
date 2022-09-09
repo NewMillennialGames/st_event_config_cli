@@ -1,5 +1,7 @@
 library StUiController;
 
+import 'dart:convert';
+// dont remove the following two lines -- they are actually in use in other files
 import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:decimal/decimal.dart';

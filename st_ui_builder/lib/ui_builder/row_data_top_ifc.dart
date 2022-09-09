@@ -14,11 +14,11 @@ abstract class AssetRowPropertyIfc {
   // must have a value for each name on:
   // enum DbTableFieldName()
   AssetKey get assetKey; // for unique comparison
-  String get topName;
+  String get topName; // aka longName
 
-  String get subName;
+  String get subName; // aka orgName or shortName
 
-  String get ticker;
+  String get ticker; // symbol or shortName
 
   String get marketResearchUrl;
 
@@ -63,6 +63,9 @@ abstract class AssetRowPropertyIfc {
   CompetitionStatus get gameStatus;
 
   CompetitionType get gameType;
+
+  // extra asset fields that don't fit within the DB-model
+  String get extAtts; // extended attributes as JSON
 
   void updateDynamicState(ActiveGameDetails agd);
 }
@@ -119,12 +122,21 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
 
   CompetitionType get gameType => CompetitionType.game;
 
+  Map<String, dynamic>? get extAttsAsMap {
+    // extended attributes as dict
+    return extAtts.isNotEmpty
+        ? jsonDecode(extAtts) as Map<String, dynamic>?
+        : null;
+  }
+
   String labelExtractor(DbTableFieldName fldName) {
     /* header labels in list groups
     */
     switch (fldName) {
       case DbTableFieldName.assetName:
         return topName;
+      case DbTableFieldName.assetShortName:
+        return subName;
       case DbTableFieldName.assetOrgName:
         return subName;
       case DbTableFieldName.conference:
@@ -135,8 +147,9 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
         return gameDateDtwStr;
       case DbTableFieldName.gameTime:
         return gameDate.timeOnly.asTimeOnlyStr;
-      case DbTableFieldName.eventName:
-        return topName;
+      // case DbTableFieldName.eventName:
+      // // this is an error;  we dont have event name on assets
+      //   return topName;
       case DbTableFieldName.gameLocation:
         return location;
       case DbTableFieldName.imageUrl:
@@ -145,7 +158,7 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
         return openPriceStr;
       case DbTableFieldName.assetCurrentPrice:
         return recentDeltaStr;
-      case DbTableFieldName.assetRank:
+      case DbTableFieldName.assetRankOrScore:
         return rankStr;
       case DbTableFieldName.assetPosition:
         return position;
@@ -160,6 +173,8 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
     switch (fldName) {
       case DbTableFieldName.assetName:
         return topName;
+      case DbTableFieldName.assetShortName:
+        return subName;
       case DbTableFieldName.assetOrgName:
         return subName;
       case DbTableFieldName.conference:
@@ -170,8 +185,9 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
         return gameDate.truncateTime;
       case DbTableFieldName.gameTime:
         return gameDate.timeOnly;
-      case DbTableFieldName.eventName:
-        return topName;
+      // case DbTableFieldName.eventName:
+      //   // this is an error;  we dont have event name on assets
+      //   return topName;
       case DbTableFieldName.gameLocation:
         return location;
       case DbTableFieldName.imageUrl:
@@ -180,7 +196,7 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
         return openPrice;
       case DbTableFieldName.assetCurrentPrice:
         return currPrice;
-      case DbTableFieldName.assetRank:
+      case DbTableFieldName.assetRankOrScore:
         return rank;
       case DbTableFieldName.assetPosition:
         return position;

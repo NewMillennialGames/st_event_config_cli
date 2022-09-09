@@ -18,10 +18,11 @@ import 'package:st_ev_cfg/st_ev_cfg.dart';
 import 'mock_data.dart';
 /*
 this is a Flutter project
-but it's built as a dependency for 
-Scoretrader
-It only renders UI of it's own for testing
-the UI factory   (Filter Bar and TableView)
+but it's built as a dependency (ui builder factory) 
+for Scoretrader & Chrysalis
+It only renders UI of it's own (main.dart) for testing & validation
+of the UI factory which renders builder functions for:
+    Filter Bar and TableView (sorting, grouping & rowstyles)
 */
 
 // demo example config data
@@ -41,7 +42,7 @@ Future<void> readExampleEventConfig({String filename = cfgEmpl4}) async {
 
 final _dynGameStateFamProv =
     StateProviderFamily<ActiveGameDetails, StKey>((ref, gameKey) {
-  // doesnt work;  just mock to get packages building
+  // doesnt really propogate state changes;  just a mock to get packages building
   return ActiveGameDetails(gameKey.value, DateTime.now());
 });
 
