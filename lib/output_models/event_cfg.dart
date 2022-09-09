@@ -18,6 +18,7 @@ class TopEventCfg {
   EvEliminationStrategy evEliminationType;
   EvGameAgeOffRule evGameAgeOffRule;
   bool applySameRowStyleToAllScreens = true;
+  bool cancelAllRowGroupingLogic = false;
 
   TopEventCfg(
     this.evTemplateName,
@@ -34,14 +35,30 @@ class TopEventCfg {
   bool get isFantasy => evType == EvType.fantasy;
 
   bool skipGroupingOnScreen(AppScreen screen) {
+    /* at some point, a tournament in which competitors
+      WERE grouped by region / conference / area
+      begins to have teams/players competing ACROSS & BETWEEN regions
+      so it no longer makes sense to apply row grouping logic
+      to the market-view assets list
+
+      TODO:  it's probably best to expose an EXTERNAL property
+      and the game-state-updater (ie Luckys code) can set
+      this bool as soon as the tournament reaches this phase
+
+      see:  this.cancelAllRowGroupingLogic above
+    */
     assert(
       screen == AppScreen.marketView,
-      'currently only works for marketview',
+      'currently only applies to marketview',
     );
-    return evCompetitorType.skipGroupingOnMarketView;
+    return cancelAllRowGroupingLogic ||
+        evCompetitorType.skipGroupingOnMarketView;
   }
 
   bool skipGroupingForName(String evNameSubStr) {
+    // convenient hack for emergencies;  allows code to pass in specific event names
+    // that should not group rows on market view
+    // allow manual override to skipGroupingOnScreen logic above
     return evTemplateName.toLowerCase().contains(evNameSubStr.toLowerCase()) ||
         evTemplateDescription
             .toLowerCase()
@@ -216,11 +233,13 @@ class EventCfgTree {
   }
 
   void printSummary() {
-   ConfigLogger.log(Level.INFO, 'EventCfgTree for: ${eventCfg.evTemplateName}');
+    ConfigLogger.log(
+        Level.INFO, 'EventCfgTree for: ${eventCfg.evTemplateName}');
     for (MapEntry<AppScreen, ScreenCfgByArea> screenCfg
         in screenConfigMap.entries) {
       //
-     ConfigLogger.log(Level.INFO, '\n  Screen: ${screenCfg.key.name.toUpperCase()}:');
+      ConfigLogger.log(
+          Level.INFO, '\n  Screen: ${screenCfg.key.name.toUpperCase()}:');
       for (MapEntry<ScreenWidgetArea, CfgForAreaAndNestedSlots> areaCfg
           in screenCfg.value.areaConfig.entries) {
         //
@@ -243,18 +262,20 @@ class EventCfgTree {
     // only print slots if rules exist there
     if (cfgMap.length < 1) return;
 
-   ConfigLogger.log(Level.INFO, '\t${areaCfg.key.name.toUpperCase()} AREA has:');
+    ConfigLogger.log(
+        Level.INFO, '\t${areaCfg.key.name.toUpperCase()} AREA has:');
     for (MapEntry<VisualRuleType,
             Map<ScreenAreaWidgetSlot, SlotOrAreaRuleCfg>> vrtWithSlotCfg
         in cfgMap) {
       // ConfigLogger.log(Level.FINER,'\n\t\t\tSlot VRT:  ${vrtWithSlotCfg.key.name}');
       for (MapEntry<ScreenAreaWidgetSlot, SlotOrAreaRuleCfg> bySlotCfg
           in vrtWithSlotCfg.value.entries) {
-       ConfigLogger.log(Level.INFO, 
+        ConfigLogger.log(
+          Level.INFO,
           '\SLOT: ${bySlotCfg.key.name.toUpperCase()} with ${vrtWithSlotCfg.key.name.toUpperCase()} (VisRule)',
         );
         for (RuleResponseBase rrb in bySlotCfg.value.visRuleList) {
-         ConfigLogger.log(Level.INFO, '\t  ' + rrb.toString());
+          ConfigLogger.log(Level.INFO, '\t  ' + rrb.toString());
         }
       }
     }

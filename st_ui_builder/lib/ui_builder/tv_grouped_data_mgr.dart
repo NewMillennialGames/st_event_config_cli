@@ -93,17 +93,6 @@ class GroupedTableDataMgr {
         return _tableViewCfg.rowConstructor(assets);
       };
 
-  // IndexedItemRowBuilder wrappedIndexedItemBuilder(
-  //   IndexedItemRowBuilder wrapper,
-  // ) =>
-  //     (
-  //       BuildContext ctx,
-  //       TableviewDataRowTuple assets,
-  //       int i,
-  //     ) {
-  //       return wrapper(ctx, assets, i);
-  //     };
-
   // for sorting recs into order WITHIN groups/sections
   SectionSortComparator get itemComparator => GroupHeaderData.sortComparator(
       sortingRules, sortOrder == GroupedListOrder.ASC);

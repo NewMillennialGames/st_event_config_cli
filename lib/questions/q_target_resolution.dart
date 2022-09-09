@@ -1,22 +1,20 @@
 part of QuestionsLib;
 
-// typedef IntRange = Tuple2<int, int>;
-
 enum TargetPrecision {
   /*
   describes the INTENT of a QTargetResolution instance
   QTargetResolution instance is embedded in a
-  QuestBase instance; so this describes the query intent
+  QuestBase instance; so this describes the intent of Question
   of that enclosing question; i.e. what info is
   THIS QUESTION asking of app user
   */
-  eventLevel,
-  screenLevel,
-  targetLevel,
-  ruleSelect,
-  rulePrep,
-  ruleDetailVisual,
-  ruleDetailBehavior,
+  eventLevel, // capture top level config settings
+  screenLevel, // ask which screens to configure with rules
+  targetLevel, // ask which area or slot in a given screen
+  ruleSelect, // pick rule(s) for target
+  rulePrep, // capture details for this rule (eg how many sort fields)
+  ruleDetailVisual, // actual config for a visual rule
+  ruleDetailBehavior, // actual config for a behavioral rule
 }
 
 extension TargetPrecisionExt1 on TargetPrecision {
@@ -223,7 +221,8 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
     // empty list if no area or slot specified
     if (screenWidgetArea == null) {
       //
-      ConfigLogger.log(Level.WARNING, 
+      ConfigLogger.log(
+        Level.WARNING,
         'warn: no rules possible at screen level (rule target must be area or slot)',
       );
       return [];
@@ -236,7 +235,8 @@ class QTargetResolution extends Equatable with _$QTargetResolution {
     // component styles for a target area/slot
 
     if (!targetComplete) {
-      ConfigLogger.log(Level.SEVERE, 
+      ConfigLogger.log(
+        Level.SEVERE,
         'err:  possibleVisCompStylesForTarget called on incomplete QTargResolution (area or area/slot should be set)',
       );
       return [];

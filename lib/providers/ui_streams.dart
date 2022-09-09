@@ -1,5 +1,10 @@
 part of EvCfgProviders;
 
+/* these providers are not really needed by CLI code
+
+  but will prove useful once we add other (Web / App) UI's on this configurator
+*/
+
 final questDispatcherProvider = Provider<StreamController<RegionTargetQuest>>(
   // this is used to send Quest2s to the UI
   (ref) => StreamController<RegionTargetQuest>(),
