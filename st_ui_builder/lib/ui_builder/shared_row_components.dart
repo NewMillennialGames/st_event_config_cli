@@ -40,23 +40,11 @@ class ChrysalisAssetRiskGuage extends StatelessWidget {
   }) : super(key: key);
 
   double get _needleAngle {
-    switch (rank) {
-      case 0:
-      case 1:
-      case 2:
-        return 15;
-      case 3:
-      case 4:
-        return 45;
-      case 5:
-      case 6:
-        return 75;
-      case 7:
-      case 8:
-        return 105;
-      default:
-        return 135;
-    }
+    if (rank <= 20) return 15;
+    if (rank <= 40) return 45;
+    if (rank <= 60) return 75;
+    if (rank <= 80) return 105;
+    return 135;
   }
 
   @override
@@ -150,7 +138,7 @@ class CompetitorImage extends StatelessWidget {
       imgUrl,
       height: imgSize * 1.2,
       width: hasBorder ? imgSize * .9 : imgSize,
-      fit: BoxFit.cover,
+      fit: BoxFit.fitWidth,
       errorBuilder: (context, error, stackTrace) => const Icon(
         Icons.egg_rounded,
         color: StColors.blue,

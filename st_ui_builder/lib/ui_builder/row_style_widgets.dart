@@ -694,9 +694,7 @@ class ChysalisAssetRowPortfolioView extends StBaseTvRow
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    height: 4.h,
-                  ),
+                  SizedBox(height: 4.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -708,7 +706,7 @@ class ChysalisAssetRowPortfolioView extends StBaseTvRow
                             constraints:
                                 BoxConstraints(maxWidth: size.width * 0.42),
                             child: Text(
-                              "${comp1.position}: ${comp1.assetStateUpdates.name}",
+                              "${comp1.position}: ${comp1.assetStateUpdates.name.substring(0, 6)}...",
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: StTextStyles.h5,
@@ -865,7 +863,7 @@ class ChysalisAssetRowPortfolioView extends StBaseTvRow
                     assetDetails.custodyType,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: StTextStyles.h5,
+                    style: StTextStyles.p2.copyWith(color: StColors.blue),
                   ),
                 ),
                 SizedBox(
@@ -877,7 +875,7 @@ class ChysalisAssetRowPortfolioView extends StBaseTvRow
                     "${assetDetails.walletType} wallet",
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: StTextStyles.h5,
+                    style: StTextStyles.p2.copyWith(color: StColors.blue),
                   ),
                 ),
                 SizedBox(
@@ -889,7 +887,7 @@ class ChysalisAssetRowPortfolioView extends StBaseTvRow
                     "Provider: ${assetDetails.walletProvider}",
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: StTextStyles.h5,
+                    style: StTextStyles.p2.copyWith(color: StColors.blue),
                   ),
                 ),
               ],
@@ -980,7 +978,7 @@ class ChysalisAssetRowMktView extends StBaseTvRow
                                 maxWidth: size.width *
                                     (assetDetails.isDistressed ? 0.42 : 0.72)),
                             child: Text(
-                              "${comp1.position}: ${comp1.assetStateUpdates.name}",
+                              "${comp1.position}: ${comp1.assetStateUpdates.name.substring(0, 6)}...",
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: StTextStyles.h5,
@@ -1072,7 +1070,7 @@ class ChysalisAssetRowMktView extends StBaseTvRow
                     assetDetails.custodyType,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: StTextStyles.h5,
+                    style: StTextStyles.p2.copyWith(color: StColors.blue),
                   ),
                 ),
                 SizedBox(
@@ -1084,7 +1082,7 @@ class ChysalisAssetRowMktView extends StBaseTvRow
                     "${assetDetails.walletType} wallet",
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: StTextStyles.h5,
+                    style: StTextStyles.p2.copyWith(color: StColors.blue),
                   ),
                 ),
                 SizedBox(
@@ -1096,7 +1094,7 @@ class ChysalisAssetRowMktView extends StBaseTvRow
                     "Provider: ${assetDetails.walletProvider}",
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: StTextStyles.h5,
+                    style: StTextStyles.p2.copyWith(color: StColors.blue),
                   ),
                 ),
               ],

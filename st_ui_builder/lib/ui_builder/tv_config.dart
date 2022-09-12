@@ -99,32 +99,33 @@ class TableviewConfigPayload {
       //     return AssetVsAssetRowMktView.new;
       // }
       case AppScreen.marketResearch:
-        switch (rowStyle) {
-          case TvAreaRowStyle.assetVsAsset:
-            return AssetVsAssetRowMktResearchView.new;
-          case TvAreaRowStyle.assetVsAssetRanked:
-            return AssetVsAssetRankedRowMktResearchView.new;
-          case TvAreaRowStyle.teamVsField:
-            return TeamVsFieldRowMktResearchView.new;
-          case TvAreaRowStyle.teamVsFieldRanked:
-            return TeamVsFieldRankedRowMktResearchView.new;
-          case TvAreaRowStyle.playerVsField:
-            return PlayerVsFieldRowMktResearchView.new;
-          case TvAreaRowStyle.playerVsFieldRanked:
-            return PlayerVsFieldRankedMktResearchView.new;
-          case TvAreaRowStyle.driverVsField:
-            return DriverVsFieldRowMktResearchView.new;
-          case TvAreaRowStyle.teamPlayerVsField:
-            return TeamPlayerVsFieldRowMktResearchView.new;
-          case TvAreaRowStyle.teamLine:
-            return TeamLineRowMktResearchView.new;
-          case TvAreaRowStyle.teamDraft:
-            return DraftTeamRowMktResearchView.new;
-          case TvAreaRowStyle.playerDraft:
-            return DraftPlayerRowMktResearchView.new;
-          default:
-            return AssetVsAssetRowMktResearchView.new;
-        }
+        return ChysalisAssetRowMktView.new;
+      // switch (rowStyle) {
+      //   case TvAreaRowStyle.assetVsAsset:
+      //     return AssetVsAssetRowMktResearchView.new;
+      //   case TvAreaRowStyle.assetVsAssetRanked:
+      //     return AssetVsAssetRankedRowMktResearchView.new;
+      //   case TvAreaRowStyle.teamVsField:
+      //     return TeamVsFieldRowMktResearchView.new;
+      //   case TvAreaRowStyle.teamVsFieldRanked:
+      //     return TeamVsFieldRankedRowMktResearchView.new;
+      //   case TvAreaRowStyle.playerVsField:
+      //     return PlayerVsFieldRowMktResearchView.new;
+      //   case TvAreaRowStyle.playerVsFieldRanked:
+      //     return PlayerVsFieldRankedMktResearchView.new;
+      //   case TvAreaRowStyle.driverVsField:
+      //     return DriverVsFieldRowMktResearchView.new;
+      //   case TvAreaRowStyle.teamPlayerVsField:
+      //     return TeamPlayerVsFieldRowMktResearchView.new;
+      //   case TvAreaRowStyle.teamLine:
+      //     return TeamLineRowMktResearchView.new;
+      //   case TvAreaRowStyle.teamDraft:
+      //     return DraftTeamRowMktResearchView.new;
+      //   case TvAreaRowStyle.playerDraft:
+      //     return DraftPlayerRowMktResearchView.new;
+      //   default:
+      //     return AssetVsAssetRowMktResearchView.new;
+      // }
       case AppScreen.portfolioPositions:
         return ChysalisAssetRowPortfolioView.new;
       // switch (rowStyle) {
