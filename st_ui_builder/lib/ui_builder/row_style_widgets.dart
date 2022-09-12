@@ -703,8 +703,10 @@ class ChysalisAssetRowPortfolioView extends StBaseTvRow
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           ConstrainedBox(
-                            constraints:
-                                BoxConstraints(maxWidth: size.width * 0.42),
+                            constraints: BoxConstraints(
+                              minWidth: size.width * 0.4,
+                              maxWidth: size.width * 0.4,
+                            ),
                             child: Text(
                               "${comp1.position}: ${comp1.assetStateUpdates.name.substring(0, 6)}...",
                               maxLines: 2,
@@ -712,12 +714,12 @@ class ChysalisAssetRowPortfolioView extends StBaseTvRow
                               style: StTextStyles.h5,
                             ),
                           ),
-                          SizedBox(
-                            height: 2.h,
-                          ),
+                          SizedBox(height: 2.h),
                           ConstrainedBox(
-                            constraints:
-                                BoxConstraints(maxWidth: size.width * 0.42),
+                            constraints: BoxConstraints(
+                              minWidth: size.width * 0.4,
+                              maxWidth: size.width * 0.4,
+                            ),
                             child: Text(
                               "Issue: ${assetDetails.accessibilityIssue}",
                               maxLines: 1,
@@ -727,33 +729,30 @@ class ChysalisAssetRowPortfolioView extends StBaseTvRow
                           ),
                         ],
                       ),
-                      SizedBox(
-                        width: 6.w,
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Column(
-                            children: [
-                              Text(
-                                comp1.currPriceStr,
-                                style: StTextStyles.h5,
-                              ),
-                              Text(
-                                comp1.recentDeltaStr,
-                                style: StTextStyles.h5
-                                    .copyWith(color: comp1.priceFluxColor),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            width: 4.w,
-                          ),
-                          TradeButton(
-                            comp1.assetStateUpdates,
-                            comp1.gameStatus,
-                          ),
-                        ],
+                      Expanded(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Column(
+                              children: [
+                                Text(
+                                  comp1.currPriceStr,
+                                  style: StTextStyles.h5,
+                                ),
+                                Text(
+                                  comp1.recentDeltaStr,
+                                  style: StTextStyles.h5
+                                      .copyWith(color: comp1.priceFluxColor),
+                                ),
+                              ],
+                            ),
+                            const Spacer(),
+                            TradeButton(
+                              comp1.assetStateUpdates,
+                              comp1.gameStatus,
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -975,8 +974,11 @@ class ChysalisAssetRowMktView extends StBaseTvRow
                         children: [
                           ConstrainedBox(
                             constraints: BoxConstraints(
-                                maxWidth: size.width *
-                                    (assetDetails.isDistressed ? 0.42 : 0.72)),
+                              minWidth: size.width *
+                                  (assetDetails.isDistressed ? 0.4 : 0.72),
+                              maxWidth: size.width *
+                                  (assetDetails.isDistressed ? 0.4 : 0.72),
+                            ),
                             child: Text(
                               "${comp1.position}: ${comp1.assetStateUpdates.name.substring(0, 6)}...",
                               maxLines: 2,
@@ -989,8 +991,11 @@ class ChysalisAssetRowMktView extends StBaseTvRow
                           ),
                           ConstrainedBox(
                             constraints: BoxConstraints(
-                                maxWidth: size.width *
-                                    (assetDetails.isDistressed ? 0.42 : 0.72)),
+                              minWidth: size.width *
+                                  (assetDetails.isDistressed ? 0.4 : 0.72),
+                              maxWidth: size.width *
+                                  (assetDetails.isDistressed ? 0.4 : 0.72),
+                            ),
                             child: Text(
                               "Shares: ${assetDetails.units}",
                               maxLines: 1,
@@ -1003,8 +1008,10 @@ class ChysalisAssetRowMktView extends StBaseTvRow
                           ),
                           ConstrainedBox(
                             constraints: BoxConstraints(
+                                minWidth: size.width *
+                                    (assetDetails.isDistressed ? 0.4 : 0.72),
                                 maxWidth: size.width *
-                                    (assetDetails.isDistressed ? 0.42 : 0.72)),
+                                    (assetDetails.isDistressed ? 0.4 : 0.72)),
                             child: Text(
                               "Issue: ${assetDetails.accessibilityIssue}",
                               maxLines: 1,
@@ -1015,33 +1022,30 @@ class ChysalisAssetRowMktView extends StBaseTvRow
                         ],
                       ),
                       if (assetDetails.isDistressed) ...{
-                        SizedBox(
-                          width: 6.w,
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Column(
-                              children: [
-                                Text(
-                                  comp1.currPriceStr,
-                                  style: StTextStyles.h5,
-                                ),
-                                Text(
-                                  comp1.recentDeltaStr,
-                                  style: StTextStyles.h5
-                                      .copyWith(color: comp1.priceFluxColor),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              width: 4.w,
-                            ),
-                            TradeButton(
-                              comp1.assetStateUpdates,
-                              comp1.gameStatus,
-                            ),
-                          ],
+                        Expanded(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Column(
+                                children: [
+                                  Text(
+                                    comp1.currPriceStr,
+                                    style: StTextStyles.h5,
+                                  ),
+                                  Text(
+                                    comp1.recentDeltaStr,
+                                    style: StTextStyles.h5
+                                        .copyWith(color: comp1.priceFluxColor),
+                                  ),
+                                ],
+                              ),
+                              const Spacer(),
+                              TradeButton(
+                                comp1.assetStateUpdates,
+                                comp1.gameStatus,
+                              ),
+                            ],
+                          ),
                         ),
                       },
                     ],
