@@ -140,7 +140,7 @@ class GroupedTableDataMgr {
 
     int dropLstCount = 1 + (has2ndList ? 1 : 0) + (has3rdList ? 1 : 0);
     // allocate dropdown button width
-    double allocBtnWidth = (totAvailWidth / dropLstCount) * .96;
+    double allocBtnWidth = totAvailWidth / dropLstCount;
     // one list can take 86% of space
     allocBtnWidth = dropLstCount < 2 ? totAvailWidth * 0.86 : allocBtnWidth;
 
@@ -151,7 +151,6 @@ class GroupedTableDataMgr {
       padding: const EdgeInsets.symmetric(vertical: 3),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        // mainAxisSize: MainAxisSize.min,
         children: [
           _dropMenuList(
             listItems1,
@@ -195,11 +194,15 @@ class GroupedTableDataMgr {
     return Container(
       width: width,
       decoration: BoxDecoration(
-        color: Colors.transparent,
-        border: Border.all(
-          color: StColors.lightGray,
-          width: 0.8,
-        ),
+        color: curSelection == null
+            ? Colors.transparent
+            : StColors.primaryDarkGray,
+        border: curSelection == null
+            ? Border.all(
+                color: StColors.lightGray,
+                width: 0.8,
+              )
+            : null,
         borderRadius: BorderRadius.all(
           Radius.circular(6.w),
         ),
@@ -226,8 +229,10 @@ class GroupedTableDataMgr {
             return listItems.map((String value) {
               return ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: width * .75),
-                child: Text(
-                  value.toUpperCase(),
+                child: Center(
+                  child: Text(
+                    value.toUpperCase(),
+                  ),
                 ),
               );
             }).toList();
@@ -244,7 +249,8 @@ class GroupedTableDataMgr {
             _doFilteringFor(colName, selectedVal);
           },
           dropdownColor: StColors.black,
-          iconEnabledColor: StColors.gray,
+          iconEnabledColor:
+              curSelection == null ? StColors.gray : StColors.white,
           style: TextStyle(
             color: StColors.lightGray,
             fontSize: 16.sp,
