@@ -31,16 +31,110 @@ var kSpacerLarge = SizedBox(
   width: 20.w,
 );
 
+class ChrysalisAssetRiskGuage extends StatelessWidget {
+  final int rank;
+
+  const ChrysalisAssetRiskGuage({
+    Key? key,
+    required this.rank,
+  }) : super(key: key);
+
+  double get _needleAngle {
+    switch (rank) {
+      case 0:
+      case 1:
+      case 2:
+        return 15;
+      case 3:
+      case 4:
+        return 45;
+      case 5:
+      case 6:
+        return 75;
+      case 7:
+      case 8:
+        return 105;
+      default:
+        return 135;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 60.h,
+      width: 90.w,
+      child: SfRadialGauge(
+        axes: [
+          RadialAxis(
+            startAngle: 180,
+            endAngle: 0,
+            minimum: 0,
+            maximum: 150,
+            ranges: [
+              GaugeRange(
+                startValue: 0,
+                endValue: 30,
+                color: Colors.red,
+                startWidth: 10,
+                endWidth: 10,
+              ),
+              GaugeRange(
+                startValue: 30,
+                endValue: 60,
+                color: Colors.orange,
+                startWidth: 10,
+                endWidth: 10,
+              ),
+              GaugeRange(
+                startValue: 60,
+                endValue: 90,
+                color: Colors.yellow,
+                startWidth: 10,
+                endWidth: 10,
+              ),
+              GaugeRange(
+                startValue: 90,
+                endValue: 120,
+                color: Colors.greenAccent,
+                startWidth: 10,
+                endWidth: 10,
+              ),
+              GaugeRange(
+                startValue: 120,
+                endValue: 150,
+                color: Colors.green,
+                startWidth: 10,
+                endWidth: 10,
+              ),
+            ],
+            pointers: [
+              NeedlePointer(
+                needleEndWidth: 4,
+                needleLength: 0.8,
+                value: _needleAngle,
+                needleColor: Colors.white,
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class CompetitorImage extends StatelessWidget {
   // just the image or placeholder
   final String imgUrl;
   final bool shrinkForRank;
   final bool isTwoAssetRow;
+  final bool hasBorder;
 
   const CompetitorImage(
     this.imgUrl,
     this.shrinkForRank, {
     this.isTwoAssetRow = false,
+    this.hasBorder = false,
     Key? key,
   }) : super(key: key);
 
@@ -52,16 +146,26 @@ class CompetitorImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.network(
+    final image = Image.network(
       imgUrl,
       height: imgSize * 1.2,
-      width: imgSize,
+      width: hasBorder ? imgSize * .9 : imgSize,
       fit: BoxFit.cover,
       errorBuilder: (context, error, stackTrace) => const Icon(
         Icons.egg_rounded,
         color: StColors.blue,
       ),
     );
+    if (hasBorder) {
+      return Container(
+        padding: EdgeInsets.all(2.5.w),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.red),
+        ),
+        child: image,
+      );
+    }
+    return image;
   }
 }
 
