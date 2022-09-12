@@ -200,8 +200,7 @@ class TradeButton extends ConsumerWidget {
     // (optCurEvent?.state ?? EventState.unpublished) == EventState.inProgress;
     return Container(
       height: UiSizes.tradeBtnHeight,
-      width: 80.w,
-      // width: UiSizes.tradeBtnWidthPctScreen * size.width,
+      width: 68.w,
       alignment: Alignment.center,
       child: (assetState.isTradable)
           ? TextButton(
@@ -209,18 +208,21 @@ class TradeButton extends ConsumerWidget {
               style: StButtonStyles.tradeButtonCanTrade,
               child: Text(
                 StStrings.tradeUc,
-                // tf.labelForState(status),
                 style: StTextStyles.h6.copyWith(color: StColors.lightGreen),
                 textAlign: TextAlign.center,
               ),
             )
-          : Text(
-              tf.labelForGameState(competitionStatus),
-              style: StTextStyles.h5.copyWith(
-                fontSize: 14.sp,
-                color: tf.colorForGameState(competitionStatus),
+          : ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 68.w),
+              child: Text(
+                tf.labelForGameState(competitionStatus),
+                style: StTextStyles.h5.copyWith(
+                  fontSize: 14.sp,
+                  color: tf.colorForGameState(competitionStatus),
+                ),
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
             ),
     );
   }

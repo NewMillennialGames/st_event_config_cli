@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:st_ev_cfg/st_ev_cfg.dart';
+import 'package:st_ui_builder/config/sizes.dart';
 import 'colors.dart';
 
 class StTextStyles {
@@ -257,12 +258,13 @@ class StButtonStyles {
   //
   // keep
   static ButtonStyle tradeButtonCanTrade = TextButton.styleFrom(
-    backgroundColor: StColors.darkGreen,
-    // padding: const EdgeInsets.symmetric(
-    //   vertical: 20,
-    //   horizontal: 15,
-    // ),
-  );
+      backgroundColor: StColors.darkGreen,
+      fixedSize: Size(68.w, UiSizes.tradeBtnHeight)
+      // padding: const EdgeInsets.symmetric(
+      //   vertical: 20,
+      //   horizontal: 15,
+      // ),
+      );
 
   // replace
   static ButtonStyle getTokens = ElevatedButton.styleFrom(
