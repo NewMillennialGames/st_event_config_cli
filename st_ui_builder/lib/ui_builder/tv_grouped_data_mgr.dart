@@ -276,15 +276,27 @@ class GroupedTableDataMgr {
   Set<String> _getListItemsByCfgField(SortGroupFilterEntry filterItem) {
     // build list of unique values from selected field
     // elim dups and sort
-    var l = _allAssetRows
-        .map(
-          (e) => e.item1.labelExtractor(filterItem.colName),
-        )
-        .toSet()
-        .toList()
-      ..sort((v1, v2) => v1.compareTo(v2));
-    l.insert(0, filterItem.colName.labelName); // CLEAR_FILTER_LABEL + ' ' +
-    return l.toSet();
+    var firsRowAssets = _allAssetRows.map(
+      (e) => e.item1.labelExtractor(filterItem.colName),
+    );
+
+    List<String> secondRowAssets = [];
+
+    for (var row in _allAssetRows) {
+      if (row.item2 != null) {
+        secondRowAssets.add(row.item2!.labelExtractor(filterItem.colName));
+      }
+    }
+
+    List<String> assets = [
+      ...firsRowAssets,
+      ...secondRowAssets,
+    ];
+
+    assets.sort((v1, v2) => v1.compareTo(v2));
+    assets.insert(0, filterItem.colName.labelName);
+
+    return <String>{...assets};
   }
 
   void _doFilteringFor(DbTableFieldName colName, String selectedVal) {

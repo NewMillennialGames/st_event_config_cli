@@ -18,6 +18,7 @@ class TopEventCfg {
   EvEliminationStrategy evEliminationType;
   EvGameAgeOffRule evGameAgeOffRule;
   bool applyMktViewRowStyleToAllScreens = true;
+  @JsonKey(defaultValue: false)
   bool cancelAllRowGroupingLogic = false;
 
   TopEventCfg(

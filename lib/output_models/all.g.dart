@@ -27,7 +27,8 @@ TopEventCfg _$TopEventCfgFromJson(Map<String, dynamic> json) => TopEventCfg(
           EvGameAgeOffRule.byEvEliminationStrategy,
       applyMktViewRowStyleToAllScreens:
           json['applyMktViewRowStyleToAllScreens'] as bool? ?? true,
-    )..cancelAllRowGroupingLogic = json['cancelAllRowGroupingLogic'] as bool;
+    )..cancelAllRowGroupingLogic =
+        json['cancelAllRowGroupingLogic'] as bool? ?? false;
 
 Map<String, dynamic> _$TopEventCfgToJson(TopEventCfg instance) =>
     <String, dynamic>{
