@@ -38,15 +38,9 @@ extension TvAreaRowStyleExt1 on TvAreaRowStyle {
       ].contains(this);
 
   bool get participantBasedListview => ![
-        // these are the game based row styles, hence the negation
         TvAreaRowStyle.assetVsAsset,
         TvAreaRowStyle.assetVsAssetRanked,
-        TvAreaRowStyle.teamVsField,
-        TvAreaRowStyle.teamVsFieldRanked,
-        TvAreaRowStyle.teamDraft,
-        TvAreaRowStyle.teamLine,
       ].contains(this);
-
   bool get gameBasedListview => !participantBasedListview;
 
   TvBasisForRow get rowFormatStyle => participantBasedListview

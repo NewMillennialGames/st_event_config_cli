@@ -87,9 +87,19 @@ class StUiBuilderFactory {
   ) {
     /* build object that wraps all data and display rules
     */
-
+    final area = _eConfig!.screenConfigMap[AppScreen.marketView];
+    final tableViewConfig = area?.areaConfig[ScreenWidgetArea.tableview];
+    final visualRule =
+        tableViewConfig?.visCfgForArea[VisualRuleType.styleOrFormat];
+    final rules = visualRule?.visRuleList ?? [];
+    bool disableForTeamVsField = false;
+    if (rules.isNotEmpty) {
+      disableForTeamVsField = (rules.first as TvRowStyleCfg).selectedRowStyle ==
+          TvAreaRowStyle.teamVsField;
+    }
     // hack for Nascar b4 configurator is updated
-    bool disableAllGrouping = _eConfig!.eventCfg.skipGroupingOnScreen(screen) ||
+    bool disableAllGrouping = disableForTeamVsField ||
+        _eConfig!.eventCfg.skipGroupingOnScreen(screen) ||
         _eConfig!.eventCfg.skipGroupingForName('nascar');
 
     CfgForAreaAndNestedSlots tableAreaAndSlotCfg =
