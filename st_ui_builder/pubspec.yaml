@@ -32,7 +32,7 @@ dependencies:
   st_ev_cfg:
     git:
       url: git@github.com:NewMillennialGames/st_event_config_cli.git
-      ref: fix/filter-bar-dropdown
+      ref: master
     #  path: ../../st_event_config_cli/
   stclient:
     git:
