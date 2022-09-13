@@ -4,6 +4,8 @@ part of AppEntities;
 enum DbTableFieldName {
   assetName,
   assetShortName,
+  teamName,
+  teamShortName,
   assetOrgName,
   conference,
   region,
@@ -24,9 +26,13 @@ extension DbTableFieldNameExt1 on DbTableFieldName {
   String get labelName {
     switch (this) {
       case DbTableFieldName.assetName:
-        return 'Team/Player';
+        return 'Player';
       case DbTableFieldName.assetShortName:
-        return 'Team/Player';
+        return 'Player';
+      case DbTableFieldName.teamName:
+        return 'Team';
+      case DbTableFieldName.teamShortName:
+        return 'Team';
       case DbTableFieldName.assetOrgName:
         return 'Org';
       case DbTableFieldName.conference:
