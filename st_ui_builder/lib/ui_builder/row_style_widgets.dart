@@ -774,7 +774,7 @@ class ChysalisAssetRowPortfolioView extends StBaseTvRow
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '$sharesOwned shares',
+                      '$sharesOwned units',
                       style: StTextStyles.p1.copyWith(
                         color: StColors.coolGray,
                       ),
@@ -997,7 +997,7 @@ class ChysalisAssetRowMktView extends StBaseTvRow
                                   (assetDetails.isDistressed ? 0.4 : 0.72),
                             ),
                             child: Text(
-                              "Shares: ${assetDetails.units}",
+                              "Units: ${assetDetails.units}",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: StTextStyles.h5,
@@ -1511,33 +1511,33 @@ class DraftPlayerRowPortfolioHistoryView extends DraftPlayerRowPortfolioView {
   }) : super(assets, key: key);
 }
 
-class DistressedAssetRanked extends StBaseTvRow {
-  // TODO for Chrysalis
+// class DistressedAssetRanked extends StBaseTvRow {
+//   // TODO for Chrysalis
 
-  bool get showRank => false;
+//   bool get showRank => false;
 
-  const DistressedAssetRanked(
-    TableviewDataRowTuple assets, {
-    Key? key,
-  }) : super(assets, key: key);
+//   const DistressedAssetRanked(
+//     TableviewDataRowTuple assets, {
+//     Key? key,
+//   }) : super(assets, key: key);
 
-  @override
-  Widget rowBody(
-    BuildContext ctx,
-    ActiveGameDetails agd,
-  ) {
-    // print('AssetVsAssetRow_MktView is rebuilding');
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        // AssetVsAssetHalfRow(comp1, agd, showRank, comp1.assetHoldingsSummary),
-        SizedBox(height: UiSizes.spaceBtwnRows),
-        // AssetVsAssetHalfRow(comp2, agd, showRank, comp2.assetHoldingsSummary)
-      ],
-    );
-  }
-}
+//   @override
+//   Widget rowBody(
+//     BuildContext ctx,
+//     ActiveGameDetails agd,
+//   ) {
+//     // print('AssetVsAssetRow_MktView is rebuilding');
+//     return Column(
+//       mainAxisSize: MainAxisSize.max,
+//       mainAxisAlignment: MainAxisAlignment.center,
+//       children: [
+//         // AssetVsAssetHalfRow(comp1, agd, showRank, comp1.assetHoldingsSummary),
+//         SizedBox(height: UiSizes.spaceBtwnRows),
+//         // AssetVsAssetHalfRow(comp2, agd, showRank, comp2.assetHoldingsSummary)
+//       ],
+//     );
+//   }
+// }
 
 
 
