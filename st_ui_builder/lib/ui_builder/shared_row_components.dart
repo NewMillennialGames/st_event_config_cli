@@ -36,11 +36,13 @@ class CompetitorImage extends StatelessWidget {
   final String imgUrl;
   final bool shrinkForRank;
   final bool isTwoAssetRow;
+  final double shrinkRatio;
 
   const CompetitorImage(
     this.imgUrl,
     this.shrinkForRank, {
     this.isTwoAssetRow = false,
+    this.shrinkRatio = 1,
     Key? key,
   }) : super(key: key);
 
@@ -48,7 +50,7 @@ class CompetitorImage extends StatelessWidget {
       ? (isTwoAssetRow ? 0.44 : 0.70)
       : (isTwoAssetRow ? 0.66 : 0.88);
 
-  double get imgSize => UiSizes.teamImgSide * _shrinkSize;
+  double get imgSize => UiSizes.teamImgSide * _shrinkSize * shrinkRatio;
 
   @override
   Widget build(BuildContext context) {
@@ -343,7 +345,11 @@ class AssetVsAssetHalfRow extends StatelessWidget {
                 isWatched: gameDetails.isWatched(competitor.assetKey),
               ),
         kSpacerSm,
-        CompetitorImage(competitor.imgUrl, showRank),
+        CompetitorImage(
+          competitor.imgUrl,
+          showRank,
+          shrinkRatio: 0.75,
+        ),
         kSpacerSm,
         if (showRank) ...[
           Text(

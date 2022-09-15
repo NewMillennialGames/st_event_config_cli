@@ -43,18 +43,20 @@ class AssetVsAssetRowMktView extends StBaseTvRow
   }) : super(assets, key: key);
 
   @override
+  double get bottomMargin => 12.h;
+
+  @override
   Widget rowBody(
     BuildContext ctx,
     ActiveGameDetails agd,
   ) {
-    // print('AssetVsAssetRow_MktView is rebuilding');
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         AssetVsAssetHalfRow(comp1, agd, showRank, comp1.assetHoldingsSummary),
         SizedBox(height: UiSizes.spaceBtwnRows),
-        AssetVsAssetHalfRow(comp2, agd, showRank, comp2.assetHoldingsSummary)
+        AssetVsAssetHalfRow(comp2, agd, showRank, comp2.assetHoldingsSummary),
       ],
     );
   }
@@ -983,7 +985,9 @@ class TeamLineRowPortfolioView extends StBaseTvRow with ShowsOneAsset {
       ),
     );
   }
-}class TeamLineRowPortfolioHistoryView extends TeamLineRowPortfolioView {
+}
+
+class TeamLineRowPortfolioHistoryView extends TeamLineRowPortfolioView {
   //
   const TeamLineRowPortfolioHistoryView(
     TableviewDataRowTuple assets, {
