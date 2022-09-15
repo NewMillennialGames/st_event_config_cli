@@ -137,10 +137,6 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
         return topName;
       case DbTableFieldName.assetShortName:
         return subName;
-      case DbTableFieldName.teamName:
-        return topName;
-      case DbTableFieldName.teamShortName:
-        return subName;
       case DbTableFieldName.assetOrgName:
         return subName;
       case DbTableFieldName.conference:
@@ -178,10 +174,6 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
       case DbTableFieldName.assetName:
         return topName;
       case DbTableFieldName.assetShortName:
-        return subName;
-      case DbTableFieldName.teamName:
-        return topName;
-      case DbTableFieldName.teamShortName:
         return subName;
       case DbTableFieldName.assetOrgName:
         return subName;

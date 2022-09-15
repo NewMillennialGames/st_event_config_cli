@@ -70,8 +70,6 @@ Map<String, dynamic> _$SortGroupFilterEntryToJson(
 const _$DbTableFieldNameEnumMap = {
   DbTableFieldName.assetName: 'assetName',
   DbTableFieldName.assetShortName: 'assetShortName',
-  DbTableFieldName.teamName: 'teamName',
-  DbTableFieldName.teamShortName: 'teamShortName',
   DbTableFieldName.assetOrgName: 'assetOrgName',
   DbTableFieldName.conference: 'conference',
   DbTableFieldName.region: 'region',

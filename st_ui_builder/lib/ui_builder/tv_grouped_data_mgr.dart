@@ -188,9 +188,7 @@ class GroupedTableDataMgr {
     double width,
   ) {
     // return DropdownButton menu for filter bar slot
-    // Set<String> listItems = _getListItemsByCfgField(fCfg);
-    // print('Filter items for ${fCfg.colName.labelName}');
-    // print(listItems);
+
     return Container(
       width: width,
       decoration: BoxDecoration(
@@ -241,7 +239,7 @@ class GroupedTableDataMgr {
             // store selected value for state mgmt
             valSetter(selectedVal);
             if (selectedVal == null ||
-                selectedVal == colName.labelName.toUpperCase() ||
+                selectedVal == _filterTitleExtractor(colName).toUpperCase() ||
                 selectedVal.startsWith(CLEAR_FILTER_LABEL)) {
               clearFilters();
               return;
@@ -261,54 +259,117 @@ class GroupedTableDataMgr {
   }
 
   void setFilteredData(
-    Iterable<TableviewDataRowTuple> _assetRows, {
+    Iterable<TableviewDataRowTuple> assetRows, {
     bool redraw = false,
   }) {
     /* external filtering
     used by search (watched or owned) feature
     */
-    _filteredAssetRows = _assetRows.toList();
+    _filteredAssetRows = assetRows.toList();
     if (redraw && redrawCallback != null) {
       redrawCallback!();
     }
   }
 
-  Set<String> _getListItemsByCfgField(SortGroupFilterEntry filterItem) {
-    // build list of unique values from selected field
-    // elim dups and sort
-    var firsRowAssets = _allAssetRows.map(
-      (e) => e.item1.labelExtractor(filterItem.colName),
-    );
+  String _filterTitleExtractor(DbTableFieldName fieldName) {
+    bool isTeam = false;
+    if (_allAssetRows.isNotEmpty) {
+      isTeam = _allAssetRows.first.item1.isTeam;
+    }
+    switch (fieldName) {
+      case DbTableFieldName.assetName:
+      case DbTableFieldName.assetShortName:
+        return isTeam ? 'Team' : 'Player';
+      case DbTableFieldName.assetOrgName:
+        return 'Org';
+      case DbTableFieldName.conference:
+        return 'Conference';
+      case DbTableFieldName.region:
+        return 'All Regions';
+      case DbTableFieldName.gameDate:
+        return 'All Dates';
+      case DbTableFieldName.gameTime:
+        return 'Game Time';
+      case DbTableFieldName.gameLocation:
+        return 'Location';
+      case DbTableFieldName.imageUrl:
+        return 'Avatar (select this to hide filter bar)';
+      case DbTableFieldName.assetOpenPrice:
+        return 'Open Price';
+      case DbTableFieldName.assetCurrentPrice:
+        return 'Current Price';
+      case DbTableFieldName.assetRankOrScore:
+        return 'Rank';
+      case DbTableFieldName.assetPosition:
+        return 'Position';
+    }
+  }
 
-    List<String> secondRowAssets = [];
+  List<AssetRowPropertyIfc> _getSortedAssetRows(DbTableFieldName colName) {
+    List<AssetRowPropertyIfc> rows = [];
 
     for (var row in _allAssetRows) {
+      rows.add(row.item1);
       if (row.item2 != null) {
-        secondRowAssets.add(row.item2!.labelExtractor(filterItem.colName));
+        rows.add(row.item2!);
       }
     }
 
-    List<String> assets = [
-      ...firsRowAssets,
-      ...secondRowAssets,
+    //perform sorting based on actual value types
+    //for non String values rather than on labels
+    switch (colName) {
+      case DbTableFieldName.gameDate:
+      case DbTableFieldName.gameTime:
+        rows.sort((a, b) => a.gameDate.compareTo(b.gameDate));
+        break;
+
+      case DbTableFieldName.assetOpenPrice:
+      case DbTableFieldName.assetCurrentPrice:
+      case DbTableFieldName.assetRankOrScore:
+      case DbTableFieldName.assetPosition:
+        rows.sort((a, b) {
+          final item1Value = num.parse(a.labelExtractor(colName));
+          final item2Value = num.parse(b.labelExtractor(colName));
+          return item1Value.compareTo(item2Value);
+        });
+        break;
+      default:
+        rows.sort((a, b) => a.labelExtractor(colName).compareTo(
+              b.labelExtractor(colName),
+            ));
+    }
+
+    return rows;
+  }
+
+  Set<String> _getListItemsByCfgField(SortGroupFilterEntry filterItem) {
+    List<AssetRowPropertyIfc> sortedAssetRows =
+        _getSortedAssetRows(filterItem.colName);
+
+    List<String> labels = [
+      _filterTitleExtractor(filterItem.colName),
+      ...sortedAssetRows.map((e) => e.labelExtractor(filterItem.colName)),
     ];
 
-    assets.sort((v1, v2) => v1.compareTo(v2));
-    assets.insert(0, filterItem.colName.labelName);
-
-    return <String>{...assets};
+    return <String>{...labels};
   }
 
   void _doFilteringFor(DbTableFieldName colName, String selectedVal) {
     //
-    if (selectedVal.toUpperCase() == colName.labelName.toUpperCase()) {
+    if (selectedVal.toUpperCase() ==
+        _filterTitleExtractor(colName).toUpperCase()) {
       clearFilters();
       return;
     }
-    _filteredAssetRows = _allAssetRows
-        .where((TableviewDataRowTuple dr) =>
-            dr.item1.labelExtractor(colName) == selectedVal)
-        .toList();
+    List<TableviewDataRowTuple> filterResults = [];
+
+    for (var asset in _allAssetRows) {
+      if (asset.item1.labelExtractor(colName) == selectedVal ||
+          asset.item2?.labelExtractor(colName) == selectedVal) {
+        filterResults.add(asset);
+      }
+    }
+    _filteredAssetRows = filterResults;
 
     // print('you must reload your list after calling this');
     if (redrawCallback != null) redrawCallback!();
