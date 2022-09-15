@@ -397,127 +397,124 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
     Color priceFluxColor = isPositiveGainLoss ? StColors.green : StColors.red;
 
     //
-    return IntrinsicHeight(
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 8.h),
-        width: MediaQuery.of(ctx).size.width,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            CompetitorImage(comp1.imgUrl, false),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 8.h),
+      width: MediaQuery.of(ctx).size.width,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          CompetitorImage(comp1.imgUrl, false),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CheckAssetType(
+                        competitor: comp1,
+                        isDriverVsField: isDriverVsField,
+                        isPlayerVsFieldRanked: isPlayerVsFieldRanked,
+                        isTeamPlayerVsField: isTeamPlayerVsField,
+                        tradeSource: tradeSource,
+                      ),
+                      if (showHoldingsValue)
+                        // this is a portfolio positions row; show trade
+                        TradeButton(comp1.assetStateUpdates, comp1.gameStatus),
+                    ]),
+                kVerticalSpacerSm,
+                Expanded(
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
+                    color: StColors.veryDarkGray,
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        CheckAssetType(
-                          competitor: comp1,
-                          isDriverVsField: isDriverVsField,
-                          isPlayerVsFieldRanked: isPlayerVsFieldRanked,
-                          isTeamPlayerVsField: isTeamPlayerVsField,
-                          tradeSource: tradeSource,
-                        ),
-                        if (showHoldingsValue)
-                          // this is a portfolio positions row; show trade
-                          TradeButton(
-                              comp1.assetStateUpdates, comp1.gameStatus),
-                      ]),
-                  kVerticalSpacerSm,
-                  Expanded(
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
-                      color: StColors.veryDarkGray,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '$sharesOwned shares',
-                                style: StTextStyles.p1.copyWith(
-                                  color: StColors.coolGray,
-                                ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '$sharesOwned shares',
+                              style: StTextStyles.p1.copyWith(
+                                color: StColors.coolGray,
                               ),
-                              kVerticalSpacerSm,
-                              RichText(
-                                text: TextSpan(
-                                    text: '@ ',
-                                    style: StTextStyles.p1
-                                        .copyWith(color: StColors.coolGray),
-                                    children: [
-                                      TextSpan(
-                                        text: sharePrice.replaceAllMapped(
-                                            RegexFunctions()
-                                                .formatNumberStringsWithCommas,
-                                            RegexFunctions().mathFunc),
-                                        style: StTextStyles.p1,
-                                      ),
-                                      TextSpan(
-                                          text:
-                                              " ${sharePriceChange.replaceAllMapped(RegexFunctions().formatNumberStringsWithCommas, RegexFunctions().mathFunc)}",
-                                          style: StTextStyles.moneyDeltaPositive
-                                              .copyWith(
-                                            color: comp1.priceFluxColor,
-                                          ))
-                                    ]),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                showProceeds
-                                    ? StStrings.proceeds
-                                    : StStrings.value,
-                                style: StTextStyles.p1.copyWith(
-                                  color: StColors.coolGray,
-                                ),
-                              ),
-                              kVerticalSpacerSm,
-                              Text(
-                                positionValue.replaceAllMapped(
-                                    RegexFunctions()
-                                        .formatNumberStringsWithCommas,
-                                    RegexFunctions().mathFunc),
-                                style: StTextStyles.p1,
-                              ),
-                            ],
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(StStrings.gainLossAbbrev,
+                            ),
+                            kVerticalSpacerSm,
+                            RichText(
+                              text: TextSpan(
+                                  text: '@ ',
                                   style: StTextStyles.p1
-                                      .copyWith(color: StColors.coolGray)),
-                              kVerticalSpacerSm,
-                              Text(
-                                (isPositiveGainLoss ? "+" : "") +
-                                    positionGainLossStr.replaceAllMapped(
-                                        RegexFunctions()
-                                            .formatNumberStringsWithCommas,
-                                        RegexFunctions().mathFunc),
-                                style: StTextStyles.moneyDeltaPositive.copyWith(
-                                  color: priceFluxColor,
-                                ),
+                                      .copyWith(color: StColors.coolGray),
+                                  children: [
+                                    TextSpan(
+                                      text: sharePrice.replaceAllMapped(
+                                          RegexFunctions()
+                                              .formatNumberStringsWithCommas,
+                                          RegexFunctions().mathFunc),
+                                      style: StTextStyles.p1,
+                                    ),
+                                    TextSpan(
+                                        text:
+                                            " ${sharePriceChange.replaceAllMapped(RegexFunctions().formatNumberStringsWithCommas, RegexFunctions().mathFunc)}",
+                                        style: StTextStyles.moneyDeltaPositive
+                                            .copyWith(
+                                          color: comp1.priceFluxColor,
+                                        ))
+                                  ]),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              showProceeds
+                                  ? StStrings.proceeds
+                                  : StStrings.value,
+                              style: StTextStyles.p1.copyWith(
+                                color: StColors.coolGray,
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
+                            ),
+                            kVerticalSpacerSm,
+                            Text(
+                              positionValue.replaceAllMapped(
+                                  RegexFunctions()
+                                      .formatNumberStringsWithCommas,
+                                  RegexFunctions().mathFunc),
+                              style: StTextStyles.p1,
+                            ),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(StStrings.gainLossAbbrev,
+                                style: StTextStyles.p1
+                                    .copyWith(color: StColors.coolGray)),
+                            kVerticalSpacerSm,
+                            Text(
+                              (isPositiveGainLoss ? "+" : "") +
+                                  positionGainLossStr.replaceAllMapped(
+                                      RegexFunctions()
+                                          .formatNumberStringsWithCommas,
+                                      RegexFunctions().mathFunc),
+                              style: StTextStyles.moneyDeltaPositive.copyWith(
+                                color: priceFluxColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            )
-          ],
-        ),
+                ),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
