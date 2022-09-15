@@ -181,7 +181,8 @@ class CheckAssetType extends StatelessWidget {
             ),
           ),
           if (tradeSource != null) ...[
-            const Spacer(),
+            // const Spacer(),
+            kSpacerLarge,
             Text(
               tradeSource!,
               style: StTextStyles.p2,
@@ -230,7 +231,8 @@ class CheckAssetType extends StatelessWidget {
             ],
           ),
           if (tradeSource != null) ...[
-            const Spacer(),
+            // const Spacer(),
+            kSpacerLarge,
             Text(
               tradeSource!,
               style: StTextStyles.p2,
@@ -251,7 +253,8 @@ class CheckAssetType extends StatelessWidget {
           ),
         ),
         if (tradeSource != null) ...[
-          const Spacer(),
+          // const Spacer(),
+          kSpacerLarge,
           Text(
             tradeSource!,
             style: StTextStyles.p2,
