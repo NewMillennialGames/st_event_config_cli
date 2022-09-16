@@ -152,108 +152,42 @@ class GroupedTableDataMgr {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _dropMenuList(
-            listItems1,
-            i1.colName,
-            _filter1Selection,
-            (s) => _filter1Selection = s,
-            allocBtnWidth,
+          _DropDownMenuList(
+            listItems: listItems1,
+            colName: i1.colName,
+            curSelection: _filter1Selection,
+            valSetter: (s) => _filter1Selection = s,
+            width: allocBtnWidth,
+            clearFilters: clearFilters,
+            doFilteringFor: (colName, selectedValue) =>
+                _doFilteringFor(colName, selectedValue),
+            filterTitleExtractor: (colName) => _filterTitleExtractor(colName),
           ),
           if (has2ndList)
-            _dropMenuList(
-              listItems2,
-              i2.colName,
-              _filter2Selection,
-              (s) => _filter2Selection = s,
-              allocBtnWidth,
+            _DropDownMenuList(
+              listItems: listItems2,
+              colName: i2.colName,
+              curSelection: _filter2Selection,
+              valSetter: (s) => _filter2Selection = s,
+              width: allocBtnWidth,
+              clearFilters: clearFilters,
+              doFilteringFor: (colName, selectedValue) =>
+                  _doFilteringFor(colName, selectedValue),
+              filterTitleExtractor: (colName) => _filterTitleExtractor(colName),
             ),
           if (has3rdList)
-            _dropMenuList(
-              listItems3,
-              i3.colName,
-              _filter3Selection,
-              (s) => _filter3Selection = s,
-              allocBtnWidth,
+            _DropDownMenuList(
+              listItems: listItems3,
+              colName: i3.colName,
+              curSelection: _filter3Selection,
+              valSetter: (s) => _filter3Selection = s,
+              width: allocBtnWidth,
+              clearFilters: clearFilters,
+              doFilteringFor: (colName, selectedValue) =>
+                  _doFilteringFor(colName, selectedValue),
+              filterTitleExtractor: (colName) => _filterTitleExtractor(colName),
             ),
         ],
-      ),
-    );
-  }
-
-  Widget _dropMenuList(
-    Set<String> listItems,
-    DbTableFieldName colName,
-    String? curSelection,
-    SelectedFilterSetter valSetter,
-    double width,
-  ) {
-    // return DropdownButton menu for filter bar slot
-
-    return Container(
-      width: width,
-      decoration: BoxDecoration(
-        color: curSelection == null
-            ? Colors.transparent
-            : StColors.primaryDarkGray,
-        border: curSelection == null
-            ? Border.all(
-                color: StColors.lightGray,
-                width: 0.8,
-              )
-            : null,
-        borderRadius: BorderRadius.all(
-          Radius.circular(6.w),
-        ),
-      ),
-      padding: EdgeInsets.symmetric(horizontal: 4.w),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: curSelection ?? listItems.first,
-          items: listItems
-              .map(
-                (String val) => DropdownMenuItem<String>(
-                  value: val,
-                  alignment: AlignmentDirectional.centerStart,
-                  child: Container(
-                    color: curSelection == val
-                        ? StColors.primaryDarkGray
-                        : StColors.black,
-                    child: Text(val.toUpperCase()),
-                  ),
-                ),
-              )
-              .toList(),
-          selectedItemBuilder: (BuildContext context) {
-            return listItems.map((String value) {
-              return ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: width * .75),
-                child: Center(
-                  child: Text(
-                    value.toUpperCase(),
-                  ),
-                ),
-              );
-            }).toList();
-          },
-          onChanged: (String? selectedVal) {
-            // store selected value for state mgmt
-            valSetter(selectedVal);
-            if (selectedVal == null ||
-                selectedVal == _filterTitleExtractor(colName).toUpperCase() ||
-                selectedVal.startsWith(CLEAR_FILTER_LABEL)) {
-              clearFilters();
-              return;
-            }
-            _doFilteringFor(colName, selectedVal);
-          },
-          dropdownColor: StColors.black,
-          iconEnabledColor:
-              curSelection == null ? StColors.gray : StColors.white,
-          style: TextStyle(
-            color: StColors.lightGray,
-            fontSize: 16.sp,
-          ),
-        ),
       ),
     );
   }
@@ -394,5 +328,109 @@ class GroupedTableDataMgr {
 
     // _allAssetRows[2] = TableviewDataRowTuple(drt.item1, drt.item2, agd);
     print('ActiveGameDetails replaced on 2 with $round  (did row repaint?)');
+  }
+}
+
+class _DropDownMenuList extends StatefulWidget {
+  final Set<String> listItems;
+  final DbTableFieldName colName;
+  final String? curSelection;
+  final SelectedFilterSetter valSetter;
+  final double width;
+  final VoidCallback clearFilters;
+  final void Function(DbTableFieldName, String) doFilteringFor;
+  final String Function(DbTableFieldName) filterTitleExtractor;
+
+  _DropDownMenuList({
+    Key? key,
+    required this.listItems,
+    required this.colName,
+    required this.curSelection,
+    required this.valSetter,
+    required this.width,
+    required this.clearFilters,
+    required this.doFilteringFor,
+    required this.filterTitleExtractor,
+  }) : super(key: key);
+
+  @override
+  State<_DropDownMenuList> createState() => _DropDownMenuListState();
+}
+
+class _DropDownMenuListState extends State<_DropDownMenuList> {
+  bool _useDefaultState = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: widget.width,
+      decoration: BoxDecoration(
+        color: _useDefaultState ? Colors.transparent : StColors.primaryDarkGray,
+        border: _useDefaultState
+            ? Border.all(
+                color: StColors.lightGray,
+                width: 0.8,
+              )
+            : null,
+        borderRadius: BorderRadius.all(
+          Radius.circular(6.w),
+        ),
+      ),
+      padding: EdgeInsets.symmetric(horizontal: 4.w),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: widget.curSelection ?? widget.listItems.first,
+          items: widget.listItems
+              .map(
+                (String val) => DropdownMenuItem<String>(
+                  value: val,
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Container(
+                    color: widget.curSelection == val
+                        ? StColors.primaryDarkGray
+                        : StColors.black,
+                    child: Text(val.toUpperCase()),
+                  ),
+                ),
+              )
+              .toList(),
+          selectedItemBuilder: (BuildContext context) {
+            return widget.listItems.map((String value) {
+              return ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: widget.width * .75),
+                child: Center(
+                  child: Text(
+                    value.toUpperCase(),
+                  ),
+                ),
+              );
+            }).toList();
+          },
+          onChanged: (String? selectedVal) {
+            // store selected value for state mgmt
+            widget.valSetter(selectedVal);
+            if (selectedVal == null ||
+                selectedVal == widget.filterTitleExtractor(widget.colName) ||
+                selectedVal.startsWith(CLEAR_FILTER_LABEL)) {
+              setState(() {
+                _useDefaultState = true;
+              });
+              widget.clearFilters();
+              return;
+            }
+            setState(() {
+              _useDefaultState = false;
+            });
+            widget.doFilteringFor(widget.colName, selectedVal);
+          },
+          dropdownColor: StColors.black,
+          iconEnabledColor: _useDefaultState ? StColors.gray : StColors.white,
+          style: TextStyle(
+            color: StColors.lightGray,
+            fontSize: 16.sp,
+          ),
+        ),
+      ),
+    );
   }
 }
