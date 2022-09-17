@@ -31,7 +31,8 @@ class GroupHeaderData
     // NOT the sort values (comparables) used in sortComparator below
 
     firstLabelFn(AssetRowPropertyIfc row) {
-      return row.labelExtractor(sortAndGroupRules.item1.colName);
+      if (sortAndGroupRules.item1 == null) return '';
+      return row.labelExtractor(sortAndGroupRules.item1!.colName);
     }
 
     SortGroupFilterEntry? col2Rule = sortAndGroupRules.item2;
@@ -50,7 +51,8 @@ class GroupHeaderData
 
     // sorting functions
     firstValFn(AssetRowPropertyIfc row) {
-      return row.sortValueExtractor(sortAndGroupRules.item1.colName);
+      if (sortAndGroupRules.item1 == null) return '';
+      return row.sortValueExtractor(sortAndGroupRules.item1!.colName);
     }
 
     // CastRowToSortVal
@@ -126,7 +128,8 @@ class GroupHeaderData
     // WITHIN groups;  this does NOT sort-order the groups
     // GroupHeaderData (comparable._sortKey) controls groups
     firstValFn(AssetRowPropertyIfc row) {
-      return row.sortValueExtractor(sr.item1.colName);
+      if (sr.item1 == null) return '';
+      return row.sortValueExtractor(sr.item1!.colName);
     }
 
     SortGroupFilterEntry? col2Rule = sr.item2;

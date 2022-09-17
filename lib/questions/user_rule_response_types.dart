@@ -132,10 +132,6 @@ class SortGroupFilterEntry {
 
   SortGroupFilterEntry(this.colName, this.asc);
 
-  factory SortGroupFilterEntry.noop() {
-    return SortGroupFilterEntry(DbTableFieldName.imageUrl, false);
-  }
-
   bool get sortingDisabled => colName == DbTableFieldName.imageUrl;
 
   @override
@@ -194,12 +190,12 @@ class TvSortGroupFilterBase extends RuleResponseBase {
     // );
   }
 
-  SortGroupFilterEntry get item1 =>
-      fieldList.length > 0 ? fieldList.first : SortGroupFilterEntry.noop();
+  SortGroupFilterEntry? get item1 =>
+      fieldList.length > 0 ? fieldList.first : null;
   SortGroupFilterEntry? get item2 => fieldList.length > 1 ? fieldList[1] : null;
   SortGroupFilterEntry? get item3 => fieldList.length > 2 ? fieldList[2] : null;
 
-  DbTableFieldName get firstColName => item1.colName;
+  DbTableFieldName? get firstColName => item1?.colName;
 
   @override
   String toString() {
@@ -231,7 +227,8 @@ class TvSortCfg extends TvSortGroupFilterBase {
 
   bool get disableSorting => fieldList.length < 1;
 
-  SortGroupFilterEntry get first => fieldList.first;
+  SortGroupFilterEntry? get first =>
+      fieldList.length < 1 ? null : fieldList.first;
   SortGroupFilterEntry? get second =>
       fieldList.length < 2 ? null : fieldList[1];
   SortGroupFilterEntry? get third => fieldList.length < 3 ? null : fieldList[2];

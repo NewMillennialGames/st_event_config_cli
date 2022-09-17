@@ -98,9 +98,7 @@ class GroupedTableDataMgr {
       sortingRules, sortOrder == GroupedListOrder.ASC);
 
   bool get hasColumnFilters {
-    // set imageUrl as first filter field to hide/disable the whole filter bar
-    return filterRules?.item1.colName != DbTableFieldName.imageUrl &&
-        !disableAllGrouping;
+    return filterRules?.item1 != null && !disableAllGrouping;
   }
 
   void endGeographicGrouping() {
@@ -123,18 +121,18 @@ class GroupedTableDataMgr {
       return const SizedBox.shrink();
     }
 
-    SortGroupFilterEntry i1 = filterRules!.item1;
+    SortGroupFilterEntry? i1 = filterRules!.item1;
     SortGroupFilterEntry? i2 = filterRules!.item2;
     SortGroupFilterEntry? i3 = filterRules!.item3;
 
-    Set<String> listItems1 = _getListItemsByCfgField(i1);
+    Set<String> listItems1 = i1 == null ? {} : _getListItemsByCfgField(i1);
     Set<String> listItems2 = i2 == null ? {} : _getListItemsByCfgField(i2);
     Set<String> listItems3 = i3 == null ? {} : _getListItemsByCfgField(i3);
 
     const _kLstMin = 2;
 
     bool has2ndList =
-        i2 != null && listItems2.length > _kLstMin && i2.colName != i1.colName;
+        i2 != null && listItems2.length > _kLstMin && i2.colName != i1?.colName;
     bool has3rdList =
         i3 != null && listItems3.length > _kLstMin && i3.colName != i2!.colName;
 
@@ -143,6 +141,8 @@ class GroupedTableDataMgr {
     double allocBtnWidth = totAvailWidth / dropLstCount;
     // one list can take 86% of space
     allocBtnWidth = dropLstCount < 2 ? totAvailWidth * 0.86 : allocBtnWidth;
+
+    if (i1 == null) return const SizedBox.shrink();
 
     return Container(
       height: barHeight,
