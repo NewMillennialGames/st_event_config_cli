@@ -94,6 +94,8 @@ class TableviewConfigPayload {
             return DraftTeamRowMktView.new;
           case TvAreaRowStyle.playerDraft:
             return DraftPlayerRowMktView.new;
+          case TvAreaRowStyle.digitalAssetScored:
+            return ChysalisAssetRowMktView.new;
           default:
             return AssetVsAssetRowMktView.new;
         }
@@ -121,6 +123,8 @@ class TableviewConfigPayload {
             return DraftTeamRowMktResearchView.new;
           case TvAreaRowStyle.playerDraft:
             return DraftPlayerRowMktResearchView.new;
+          case TvAreaRowStyle.digitalAssetScored:
+            return ChysalisAssetRowMktView.new;
           default:
             return AssetVsAssetRowMktResearchView.new;
         }
@@ -148,6 +152,8 @@ class TableviewConfigPayload {
             return DraftTeamRowPortfolioView.new;
           case TvAreaRowStyle.playerDraft:
             return DraftPlayerRowPortfolioView.new;
+          case TvAreaRowStyle.digitalAssetScored:
+            return ChysalisAssetRowPortfolioView.new;
           default:
             return AssetVsAssetRowPortfolioView.new;
         }
@@ -175,6 +181,8 @@ class TableviewConfigPayload {
             return DraftTeamRowPortfolioHistoryView.new;
           case TvAreaRowStyle.playerDraft:
             return DraftPlayerRowPortfolioHistoryView.new;
+          case TvAreaRowStyle.digitalAssetScored:
+            return ChysalisAssetRowPortfolioView.new;
           default:
             return AssetVsAssetRowPortfolioHistory.new;
         }

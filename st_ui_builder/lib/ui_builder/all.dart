@@ -9,6 +9,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:st_ui_builder/ui_builder/chrysalis_asset_details.dart';
+import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:tuple/tuple.dart';
 import 'package:grouped_list/grouped_list.dart';
 //
