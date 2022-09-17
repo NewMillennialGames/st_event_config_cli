@@ -1,4 +1,3 @@
-import 'package:grouped_list/sliver_grouped_list.dart';
 import 'package:st_ev_cfg/st_ev_cfg.dart';
 import 'package:test/test.dart';
 
@@ -40,12 +39,12 @@ void main() {
         reason: 'json HAS filtering rules',
       );
       expect(
-        trdm.filterRules?.item1.colName,
+        trdm.filterRules?.item1?.colName,
         DbTableFieldName.assetName,
         reason: 'json specifies 1 filter menu on assetName',
       );
       expect(
-        trdm.groupingRules?.item1.colName,
+        trdm.groupingRules?.item1?.colName,
         DbTableFieldName.assetOrgName,
         reason: 'json specifies grouping on 2 fields; first is assetOrgName',
       );

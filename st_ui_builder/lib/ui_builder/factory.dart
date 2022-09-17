@@ -88,9 +88,7 @@ class StUiBuilderFactory {
     /* build object that wraps all data and display rules
     */
 
-    // hack for Nascar b4 configurator is updated
-    bool disableAllGrouping = _eConfig!.eventCfg.skipGroupingOnScreen(screen) ||
-        _eConfig!.eventCfg.skipGroupingForName('nascar');
+    bool disableAllGrouping = _eConfig!.eventCfg.skipGroupingOnScreen(screen);
 
     CfgForAreaAndNestedSlots tableAreaAndSlotCfg =
         _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.tableview);
