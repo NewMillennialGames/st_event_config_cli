@@ -1312,7 +1312,7 @@ class ChysalisAssetRowPortfolioView extends StBaseTvRow
                   Positioned(
                     bottom: 0,
                     left: 30.w,
-                    child: Text("RISK", style: StTextStyles.h6),
+                    child: Text("ACCESSIBILITY", style: StTextStyles.h6),
                   ),
                 ],
               ),
@@ -1524,7 +1524,7 @@ class ChysalisAssetRowMktView extends StBaseTvRow
                   Positioned(
                     bottom: 0,
                     left: 30.w,
-                    child: Text("RISK", style: StTextStyles.h6),
+                    child: Text("ACCESSIBILITY", style: StTextStyles.h6),
                   ),
                 ],
               ),
