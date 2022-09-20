@@ -1091,6 +1091,7 @@ class ChysalisAssetRowPortfolioView extends StBaseTvRow
               comp1.imgUrl,
               true,
               isTwoAssetRow: false,
+              fit: BoxFit.fitWidth,
             ),
             kSpacerSm,
             SizedBox(
@@ -1311,8 +1312,8 @@ class ChysalisAssetRowPortfolioView extends StBaseTvRow
                   ),
                   Positioned(
                     bottom: 0,
-                    left: 30.w,
-                    child: Text("ACCESSIBILITY", style: StTextStyles.h6),
+                    left: 8.w,
+                    child: Text("Accessibility", style: StTextStyles.h6),
                   ),
                 ],
               ),
@@ -1359,6 +1360,7 @@ class ChysalisAssetRowMktView extends StBaseTvRow
               true,
               isTwoAssetRow: false,
               hasBorder: assetDetails.isDistressed,
+              fit: BoxFit.fitWidth,
             ),
             kSpacerSm,
             SizedBox(
@@ -1523,8 +1525,8 @@ class ChysalisAssetRowMktView extends StBaseTvRow
                   ),
                   Positioned(
                     bottom: 0,
-                    left: 30.w,
-                    child: Text("ACCESSIBILITY", style: StTextStyles.h6),
+                    left: 8.w,
+                    child: Text("Accessibility", style: StTextStyles.h6),
                   ),
                 ],
               ),

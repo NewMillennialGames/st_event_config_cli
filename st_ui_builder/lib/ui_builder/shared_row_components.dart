@@ -118,6 +118,7 @@ class CompetitorImage extends StatelessWidget {
   final bool isTwoAssetRow;
   final double shrinkRatio;
   final bool hasBorder;
+  final BoxFit fit;
 
   const CompetitorImage(
     this.imgUrl,
@@ -125,6 +126,7 @@ class CompetitorImage extends StatelessWidget {
     this.isTwoAssetRow = false,
     this.hasBorder = false,
     this.shrinkRatio = 1,
+    this.fit = BoxFit.cover,
     Key? key,
   }) : super(key: key);
 
@@ -140,7 +142,7 @@ class CompetitorImage extends StatelessWidget {
       imgUrl,
       height: imgSize * 1.2,
       width: hasBorder ? imgSize * .9 : imgSize,
-      fit: BoxFit.cover,
+      fit: fit,
       errorBuilder: (context, error, stackTrace) => const Icon(
         Icons.egg_rounded,
         color: StColors.blue,
