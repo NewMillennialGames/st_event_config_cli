@@ -316,7 +316,7 @@ class StStrings {
   // Portfolio History source of trade
   static const String proceedsOnGameOver = 'Proceeds on Game Over';
   static const String liquidatedOnGameOver = 'Liquidated on Game Over';
-  static const String sharesSold = 'Shares Solds';
+  static const String sharesSold = 'Shares Sold';
   
   // Portfolio Positions Screen
   static const String positionsUc = 'POSITIONS';

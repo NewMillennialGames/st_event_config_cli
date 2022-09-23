@@ -91,6 +91,7 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
       assetHoldingsSummary.positionGainLoss; // ?? 0;
   String get sharesOwnedStr => assetHoldingsSummary.sharesOwnedStr; // ?? '0';
   int get sharesOwnedInt => assetHoldingsSummary.sharesOwned;
+  bool get isOwned => sharesOwnedInt > 0;
 
   String get positionCostStr =>
       assetHoldingsSummary.positionCostStr; // ?? kMissingPrice;
