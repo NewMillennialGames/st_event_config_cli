@@ -254,8 +254,11 @@ class AssetVsAssetRowMktResearchView extends StBaseTvRow with ShowsTwoAssets {
     ActiveGameDetails agd,
   ) {
     const Radius radius = Radius.circular(20);
-    return Consumer(
-        builder: (BuildContext context, WidgetRef ref, Widget? child) {
+    return Consumer(builder: (
+      BuildContext context,
+      WidgetRef ref,
+      Widget? child,
+    ) {
       void _assetTapHandler(
         bool showFirst,
       ) {
@@ -284,24 +287,30 @@ class AssetVsAssetRowMktResearchView extends StBaseTvRow with ShowsTwoAssets {
                     children: [
                       GestureDetector(
                         child: MktRschAsset(
-                            comp1,
-                            show2ndAsset
-                                ? StColors.veryDarkGray
-                                : StColors.primaryDarkGray,
-                            agd,
-                            const BorderRadius.only(
-                                topLeft: radius, bottomLeft: radius)),
+                          comp1,
+                          show2ndAsset
+                              ? StColors.veryDarkGray
+                              : StColors.primaryDarkGray,
+                          agd,
+                          const BorderRadius.only(
+                            topLeft: radius,
+                            bottomLeft: radius,
+                          ),
+                        ),
                         onTap: () => _assetTapHandler(false),
                       ),
                       GestureDetector(
                         child: MktRschAsset(
-                            comp2,
-                            show2ndAsset
-                                ? StColors.primaryDarkGray
-                                : StColors.veryDarkGray,
-                            agd,
-                            const BorderRadius.only(
-                                topRight: radius, bottomRight: radius)),
+                          comp2,
+                          show2ndAsset
+                              ? StColors.primaryDarkGray
+                              : StColors.veryDarkGray,
+                          agd,
+                          const BorderRadius.only(
+                            topRight: radius,
+                            bottomRight: radius,
+                          ),
+                        ),
                         onTap: () => _assetTapHandler(true),
                       ),
                     ],
@@ -312,9 +321,10 @@ class AssetVsAssetRowMktResearchView extends StBaseTvRow with ShowsTwoAssets {
                       height: 40,
                       width: 40,
                       decoration: BoxDecoration(
-                          border: Border.all(color: StColors.black, width: 3),
-                          shape: BoxShape.circle,
-                          color: StColors.darkGreen),
+                        border: Border.all(color: StColors.black, width: 3),
+                        shape: BoxShape.circle,
+                        color: StColors.darkGreen,
+                      ),
                       child: Center(
                           child: Text(
                         StStrings.versus,
@@ -883,7 +893,8 @@ class DraftPlayerRowMktResearchView extends StBaseTvRow with ShowsOneAsset {
     // paste row widget code here
     return const SizedBox(
       child: Text(
-        'Awaiting UX specs for <DraftPlayerRow>',
+        'Awaiting UX specs for <DraftPlayerRowMktResearchView>',
+        textAlign: TextAlign.center,
       ),
     );
   }
@@ -903,7 +914,8 @@ class DraftTeamRowMktResearchView extends StBaseTvRow with ShowsOneAsset {
     // paste row widget code here
     return const SizedBox(
       child: Text(
-        'Awaiting UX specs for <DraftTeamRow>',
+        'Awaiting UX specs for <DraftTeamRowMktResearchView>',
+        textAlign: TextAlign.center,
       ),
     );
   }
@@ -922,7 +934,8 @@ class TeamLineRowMktResearchView extends StBaseTvRow with ShowsOneAsset {
   ) {
     return const SizedBox(
       child: Text(
-        'Awaiting UX specs for <TeamLineRow>',
+        'Awaiting UX specs for <TeamLineRowMktResearchView>',
+        textAlign: TextAlign.center,
       ),
     );
   }
@@ -1391,6 +1404,7 @@ class ChysalisAssetRowMktView extends StBaseTvRow
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: StTextStyles.h5,
+                              // textAlign: TextAlign.center,
                             ),
                           ),
                           SizedBox(

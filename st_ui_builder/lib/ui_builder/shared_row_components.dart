@@ -266,14 +266,20 @@ class CheckAssetType extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(firstName.toUpperCase(),
-                    overflow: TextOverflow.ellipsis,
-                    style: StTextStyles.p2.copyWith(
-                        fontWeight: FontWeight.w500, fontSize: 12.sp)),
-                Text(lastName.toUpperCase(),
-                    overflow: TextOverflow.ellipsis,
-                    style: StTextStyles.h3
-                        .copyWith(fontWeight: FontWeight.w800, fontSize: 18.sp))
+                Text(
+                  firstName.toUpperCase(),
+                  overflow: TextOverflow.ellipsis,
+                  style: StTextStyles.p2
+                      .copyWith(fontWeight: FontWeight.w500, fontSize: 12.sp),
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  lastName.toUpperCase(),
+                  overflow: TextOverflow.ellipsis,
+                  style: StTextStyles.h3
+                      .copyWith(fontWeight: FontWeight.w800, fontSize: 18.sp),
+                  textAlign: TextAlign.center,
+                )
               ],
             ),
           ),
@@ -483,6 +489,7 @@ class MktRschAsset extends ConsumerWidget {
   final ActiveGameDetails gameDetails;
   final Color color;
   final BorderRadiusGeometry borderRadius;
+  final double _sizeHeightImage = 150;
 
   //
   const MktRschAsset(
@@ -497,7 +504,6 @@ class MktRschAsset extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     //
     final size = MediaQuery.of(context).size;
-    const double _sizeHeightImage = 150;
 
     bool isTradable = gameDetails.assetId1 == competitor.assetKey
         ? gameDetails.isTradableAsset1
@@ -510,12 +516,14 @@ class MktRschAsset extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Container(
-              height: _sizeHeightImage * .28,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: NetworkImage(competitor.imgUrl),
-                    fit: BoxFit.fitHeight),
-              )),
+            height: _sizeHeightImage * .28,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(competitor.imgUrl),
+                fit: BoxFit.fitHeight,
+              ),
+            ),
+          ),
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -525,6 +533,7 @@ class MktRschAsset extends ConsumerWidget {
                   fontSize: 18.sp,
                   color: isTradable ? StColors.coolGray : StTextStyles.h4.color,
                 ),
+                textAlign: TextAlign.center,
               ),
               Text(
                 competitor.subName,
@@ -533,6 +542,7 @@ class MktRschAsset extends ConsumerWidget {
                       ? StColors.coolGray
                       : StTextStyles.textFormField.color,
                 ),
+                textAlign: TextAlign.center,
               ),
             ],
           ),
