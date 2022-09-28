@@ -236,6 +236,8 @@ class GroupedTableDataMgr {
         return 'Rank';
       case DbTableFieldName.assetPosition:
         return 'Position';
+      default:
+        return '_naLabel';
     }
   }
 

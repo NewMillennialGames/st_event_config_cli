@@ -163,8 +163,8 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
         return rankStr;
       case DbTableFieldName.assetPosition:
         return position;
-      // default:
-      //   return '_dfltProp';
+      default:
+        return '_dfltProp';
     }
   }
 
@@ -201,8 +201,8 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
         return rank;
       case DbTableFieldName.assetPosition:
         return position;
-      // default:
-      //   return '_dfltProp';
+      default:
+        return '_dfltProp';
     }
   }
 }
