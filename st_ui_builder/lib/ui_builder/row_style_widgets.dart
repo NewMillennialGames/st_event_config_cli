@@ -43,18 +43,20 @@ class AssetVsAssetRowMktView extends StBaseTvRow
   }) : super(assets, key: key);
 
   @override
+  double get bottomMargin => 12.h;
+
+  @override
   Widget rowBody(
     BuildContext ctx,
     ActiveGameDetails agd,
   ) {
-    // print('AssetVsAssetRow_MktView is rebuilding');
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         AssetVsAssetHalfRow(comp1, agd, showRank, comp1.assetHoldingsSummary),
         SizedBox(height: UiSizes.spaceBtwnRows),
-        AssetVsAssetHalfRow(comp2, agd, showRank, comp2.assetHoldingsSummary)
+        AssetVsAssetHalfRow(comp2, agd, showRank, comp2.assetHoldingsSummary),
       ],
     );
   }
@@ -252,8 +254,11 @@ class AssetVsAssetRowMktResearchView extends StBaseTvRow with ShowsTwoAssets {
     ActiveGameDetails agd,
   ) {
     const Radius radius = Radius.circular(20);
-    return Consumer(
-        builder: (BuildContext context, WidgetRef ref, Widget? child) {
+    return Consumer(builder: (
+      BuildContext context,
+      WidgetRef ref,
+      Widget? child,
+    ) {
       void _assetTapHandler(
         bool showFirst,
       ) {
@@ -282,24 +287,30 @@ class AssetVsAssetRowMktResearchView extends StBaseTvRow with ShowsTwoAssets {
                     children: [
                       GestureDetector(
                         child: MktRschAsset(
-                            comp1,
-                            show2ndAsset
-                                ? StColors.veryDarkGray
-                                : StColors.primaryDarkGray,
-                            agd,
-                            const BorderRadius.only(
-                                topLeft: radius, bottomLeft: radius)),
+                          comp1,
+                          show2ndAsset
+                              ? StColors.veryDarkGray
+                              : StColors.primaryDarkGray,
+                          agd,
+                          const BorderRadius.only(
+                            topLeft: radius,
+                            bottomLeft: radius,
+                          ),
+                        ),
                         onTap: () => _assetTapHandler(false),
                       ),
                       GestureDetector(
                         child: MktRschAsset(
-                            comp2,
-                            show2ndAsset
-                                ? StColors.primaryDarkGray
-                                : StColors.veryDarkGray,
-                            agd,
-                            const BorderRadius.only(
-                                topRight: radius, bottomRight: radius)),
+                          comp2,
+                          show2ndAsset
+                              ? StColors.primaryDarkGray
+                              : StColors.veryDarkGray,
+                          agd,
+                          const BorderRadius.only(
+                            topRight: radius,
+                            bottomRight: radius,
+                          ),
+                        ),
                         onTap: () => _assetTapHandler(true),
                       ),
                     ],
@@ -310,9 +321,10 @@ class AssetVsAssetRowMktResearchView extends StBaseTvRow with ShowsTwoAssets {
                       height: 40,
                       width: 40,
                       decoration: BoxDecoration(
-                          border: Border.all(color: StColors.black, width: 3),
-                          shape: BoxShape.circle,
-                          color: StColors.darkGreen),
+                        border: Border.all(color: StColors.black, width: 3),
+                        shape: BoxShape.circle,
+                        color: StColors.darkGreen,
+                      ),
                       child: Center(
                           child: Text(
                         StStrings.versus,
@@ -397,127 +409,124 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
     Color priceFluxColor = isPositiveGainLoss ? StColors.green : StColors.red;
 
     //
-    return IntrinsicHeight(
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 8.h),
-        width: MediaQuery.of(ctx).size.width,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            CompetitorImage(comp1.imgUrl, false),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 8.h),
+      width: MediaQuery.of(ctx).size.width,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          CompetitorImage(comp1.imgUrl, false),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CheckAssetType(
+                        competitor: comp1,
+                        isDriverVsField: isDriverVsField,
+                        isPlayerVsFieldRanked: isPlayerVsFieldRanked,
+                        isTeamPlayerVsField: isTeamPlayerVsField,
+                        tradeSource: tradeSource,
+                      ),
+                      if (showHoldingsValue)
+                        // this is a portfolio positions row; show trade
+                        TradeButton(comp1.assetStateUpdates, comp1.gameStatus),
+                    ]),
+                kVerticalSpacerSm,
+                Expanded(
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
+                    color: StColors.veryDarkGray,
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        CheckAssetType(
-                          competitor: comp1,
-                          isDriverVsField: isDriverVsField,
-                          isPlayerVsFieldRanked: isPlayerVsFieldRanked,
-                          isTeamPlayerVsField: isTeamPlayerVsField,
-                          tradeSource: tradeSource,
-                        ),
-                        if (showHoldingsValue)
-                          // this is a portfolio positions row; show trade
-                          TradeButton(
-                              comp1.assetStateUpdates, comp1.gameStatus),
-                      ]),
-                  kVerticalSpacerSm,
-                  Expanded(
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
-                      color: StColors.veryDarkGray,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '$sharesOwned shares',
-                                style: StTextStyles.p1.copyWith(
-                                  color: StColors.coolGray,
-                                ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '$sharesOwned shares',
+                              style: StTextStyles.p1.copyWith(
+                                color: StColors.coolGray,
                               ),
-                              kVerticalSpacerSm,
-                              RichText(
-                                text: TextSpan(
-                                    text: '@ ',
-                                    style: StTextStyles.p1
-                                        .copyWith(color: StColors.coolGray),
-                                    children: [
-                                      TextSpan(
-                                        text: sharePrice.replaceAllMapped(
-                                            RegexFunctions()
-                                                .formatNumberStringsWithCommas,
-                                            RegexFunctions().mathFunc),
-                                        style: StTextStyles.p1,
-                                      ),
-                                      TextSpan(
-                                          text:
-                                              " ${sharePriceChange.replaceAllMapped(RegexFunctions().formatNumberStringsWithCommas, RegexFunctions().mathFunc)}",
-                                          style: StTextStyles.moneyDeltaPositive
-                                              .copyWith(
-                                            color: comp1.priceFluxColor,
-                                          ))
-                                    ]),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                showProceeds
-                                    ? StStrings.proceeds
-                                    : StStrings.value,
-                                style: StTextStyles.p1.copyWith(
-                                  color: StColors.coolGray,
-                                ),
-                              ),
-                              kVerticalSpacerSm,
-                              Text(
-                                positionValue.replaceAllMapped(
-                                    RegexFunctions()
-                                        .formatNumberStringsWithCommas,
-                                    RegexFunctions().mathFunc),
-                                style: StTextStyles.p1,
-                              ),
-                            ],
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(StStrings.gainLossAbbrev,
+                            ),
+                            kVerticalSpacerSm,
+                            RichText(
+                              text: TextSpan(
+                                  text: '@ ',
                                   style: StTextStyles.p1
-                                      .copyWith(color: StColors.coolGray)),
-                              kVerticalSpacerSm,
-                              Text(
-                                (isPositiveGainLoss ? "+" : "") +
-                                    positionGainLossStr.replaceAllMapped(
-                                        RegexFunctions()
-                                            .formatNumberStringsWithCommas,
-                                        RegexFunctions().mathFunc),
-                                style: StTextStyles.moneyDeltaPositive.copyWith(
-                                  color: priceFluxColor,
-                                ),
+                                      .copyWith(color: StColors.coolGray),
+                                  children: [
+                                    TextSpan(
+                                      text: sharePrice.replaceAllMapped(
+                                          RegexFunctions()
+                                              .formatNumberStringsWithCommas,
+                                          RegexFunctions().mathFunc),
+                                      style: StTextStyles.p1,
+                                    ),
+                                    TextSpan(
+                                        text:
+                                            " ${sharePriceChange.replaceAllMapped(RegexFunctions().formatNumberStringsWithCommas, RegexFunctions().mathFunc)}",
+                                        style: StTextStyles.moneyDeltaPositive
+                                            .copyWith(
+                                          color: comp1.priceFluxColor,
+                                        ))
+                                  ]),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              showProceeds
+                                  ? StStrings.proceeds
+                                  : StStrings.value,
+                              style: StTextStyles.p1.copyWith(
+                                color: StColors.coolGray,
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
+                            ),
+                            kVerticalSpacerSm,
+                            Text(
+                              positionValue.replaceAllMapped(
+                                  RegexFunctions()
+                                      .formatNumberStringsWithCommas,
+                                  RegexFunctions().mathFunc),
+                              style: StTextStyles.p1,
+                            ),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(StStrings.gainLossAbbrev,
+                                style: StTextStyles.p1
+                                    .copyWith(color: StColors.coolGray)),
+                            kVerticalSpacerSm,
+                            Text(
+                              (isPositiveGainLoss ? "+" : "") +
+                                  positionGainLossStr.replaceAllMapped(
+                                      RegexFunctions()
+                                          .formatNumberStringsWithCommas,
+                                      RegexFunctions().mathFunc),
+                              style: StTextStyles.moneyDeltaPositive.copyWith(
+                                color: priceFluxColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            )
-          ],
-        ),
+                ),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
@@ -884,7 +893,8 @@ class DraftPlayerRowMktResearchView extends StBaseTvRow with ShowsOneAsset {
     // paste row widget code here
     return const SizedBox(
       child: Text(
-        'Awaiting UX specs for <DraftPlayerRow>',
+        'Awaiting UX specs for <DraftPlayerRowMktResearchView>',
+        textAlign: TextAlign.center,
       ),
     );
   }
@@ -904,7 +914,8 @@ class DraftTeamRowMktResearchView extends StBaseTvRow with ShowsOneAsset {
     // paste row widget code here
     return const SizedBox(
       child: Text(
-        'Awaiting UX specs for <DraftTeamRow>',
+        'Awaiting UX specs for <DraftTeamRowMktResearchView>',
+        textAlign: TextAlign.center,
       ),
     );
   }
@@ -923,7 +934,8 @@ class TeamLineRowMktResearchView extends StBaseTvRow with ShowsOneAsset {
   ) {
     return const SizedBox(
       child: Text(
-        'Awaiting UX specs for <TeamLineRow>',
+        'Awaiting UX specs for <TeamLineRowMktResearchView>',
+        textAlign: TextAlign.center,
       ),
     );
   }
@@ -986,7 +998,9 @@ class TeamLineRowPortfolioView extends StBaseTvRow with ShowsOneAsset {
       ),
     );
   }
-}class TeamLineRowPortfolioHistoryView extends TeamLineRowPortfolioView {
+}
+
+class TeamLineRowPortfolioHistoryView extends TeamLineRowPortfolioView {
   //
   const TeamLineRowPortfolioHistoryView(
     TableviewDataRowTuple assets, {
@@ -1039,269 +1053,501 @@ class DistressedAssetRanked extends StBaseTvRow {
   }
 }
 
+class ChysalisAssetRowPortfolioView extends StBaseTvRow
+    with ShowsOneAsset, RequiresGameStatus, RequiresUserPositionProps {
+  const ChysalisAssetRowPortfolioView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
 
+  @override
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
+    late String sharePrice;
+    late String sharePriceChange;
+    late String sharesOwned;
+    late String positionValue;
+    late Decimal positionGainLoss;
 
-// @override
-//   Widget rowBody(BuildContext context) {
-//     // paste row widget code here
-//     final size = MediaQuery.of(context).size;
-//     const double _stdRowHeight = 110;
-//     return Container(
-//       height: _stdRowHeight,
-//       width: size.width,
-//       decoration: const BoxDecoration(
-//         color: StColors.black,
-//         border: Border(
-//           bottom: BorderSide(
-//             color: StColors.borderTextField,
-//           ),
-//         ),
-//       ),
-//       child: Row(
-//         mainAxisSize: MainAxisSize.max,
-//         mainAxisAlignment: MainAxisAlignment.start,
-//         crossAxisAlignment: CrossAxisAlignment.center,
-//         children: [
-//           Expanded(
-//             flex: 1,
-//             child: Image.network(
-//               comp1.imgUrl,
-//               fit: BoxFit.cover,
-//             ),
-//           ),
-//           Expanded(
-//             flex: 5,
-//             child: Column(
-//               // full height column to right of player image
-//               mainAxisSize: MainAxisSize.min,
-//               crossAxisAlignment: CrossAxisAlignment.start,
+    final holdings = comp1.assetHoldingsSummary;
+    sharePrice = comp1.currPriceStr;
+    sharePriceChange = comp1.recentDeltaStr;
+    sharesOwned = holdings.sharesOwnedStr;
+    positionValue = holdings.positionEstValueStr;
+    positionGainLoss =
+        (holdings.positionGainLoss / Decimal.fromInt(100)).toDecimal();
 
-//               children: [
-//                 AssetTopRow(asset: comp1),
-//                 HoldingsAndValueRow(asset: comp1),
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
+    String positionGainLossStr = positionGainLoss.toStringAsFixed(2);
+    bool isPositiveGainLoss = positionGainLoss > Decimal.zero;
+    Color priceFluxColor = isPositiveGainLoss ? StColors.green : StColors.red;
+    final assetDetails = ChrysalisAssetDetails.fromJson(
+      jsonDecode(comp1.extAtts),
+    );
+    final size = MediaQuery.of(ctx).size;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            assetHoldingsSummary.sharesOwned > 0
+                ? const Icon(Icons.work, color: StColors.green)
+                : WatchButton(
+                    assetKey: comp1.assetKey,
+                    isWatched: comp1.assetStateUpdates.isWatched,
+                  ),
+            kSpacerSm,
+            CompetitorImage(
+              comp1.imgUrl,
+              true,
+              isTwoAssetRow: false,
+              fit: BoxFit.fitWidth,
+            ),
+            kSpacerSm,
+            SizedBox(
+              width: size.width * .75,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: 4.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minWidth: size.width * 0.4,
+                              maxWidth: size.width * 0.4,
+                            ),
+                            child: Text(
+                              "${comp1.position}: ${comp1.assetStateUpdates.name.substring(0, 6)}...",
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: StTextStyles.h5,
+                            ),
+                          ),
+                          SizedBox(height: 2.h),
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minWidth: size.width * 0.4,
+                              maxWidth: size.width * 0.4,
+                            ),
+                            child: Text(
+                              "Issue: ${assetDetails.accessibilityIssue}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: StTextStyles.h5,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Expanded(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Column(
+                              children: [
+                                Text(
+                                  comp1.currPriceStr,
+                                  style: StTextStyles.h5,
+                                ),
+                                Text(
+                                  comp1.recentDeltaStr,
+                                  style: StTextStyles.h5
+                                      .copyWith(color: comp1.priceFluxColor),
+                                ),
+                              ],
+                            ),
+                            const Spacer(),
+                            TradeButton(
+                              comp1.assetStateUpdates,
+                              comp1.gameStatus,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        kVerticalSpacerSm,
+        Expanded(
+          child: Container(
+            margin: EdgeInsets.only(left: 92.w),
+            padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
+            color: StColors.veryDarkGray,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '$sharesOwned units',
+                      style: StTextStyles.p1.copyWith(
+                        color: StColors.coolGray,
+                      ),
+                    ),
+                    kVerticalSpacerSm,
+                    RichText(
+                      text: TextSpan(
+                          text: '@ ',
+                          style: StTextStyles.p1
+                              .copyWith(color: StColors.coolGray),
+                          children: [
+                            TextSpan(
+                              text: sharePrice.replaceAllMapped(
+                                  RegexFunctions()
+                                      .formatNumberStringsWithCommas,
+                                  RegexFunctions().mathFunc),
+                              style: StTextStyles.p1,
+                            ),
+                            TextSpan(
+                                text:
+                                    " ${sharePriceChange.replaceAllMapped(RegexFunctions().formatNumberStringsWithCommas, RegexFunctions().mathFunc)}",
+                                style: StTextStyles.moneyDeltaPositive.copyWith(
+                                  color: comp1.priceFluxColor,
+                                ))
+                          ]),
+                    ),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      StStrings.proceeds,
+                      style: StTextStyles.p1.copyWith(
+                        color: StColors.coolGray,
+                      ),
+                    ),
+                    kVerticalSpacerSm,
+                    Text(
+                      positionValue.replaceAllMapped(
+                          RegexFunctions().formatNumberStringsWithCommas,
+                          RegexFunctions().mathFunc),
+                      style: StTextStyles.p1,
+                    ),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(StStrings.gainLossAbbrev,
+                        style:
+                            StTextStyles.p1.copyWith(color: StColors.coolGray)),
+                    kVerticalSpacerSm,
+                    Text(
+                      (isPositiveGainLoss ? "+" : "") +
+                          positionGainLossStr.replaceAllMapped(
+                              RegexFunctions().formatNumberStringsWithCommas,
+                              RegexFunctions().mathFunc),
+                      style: StTextStyles.moneyDeltaPositive.copyWith(
+                        color: priceFluxColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        SizedBox(height: 12.h),
+        Row(
+          children: [
+            SizedBox(width: 32.w),
+            Image.asset(
+              "assets/digital-wallet.png",
+              height: UiSizes.teamImgSide * 0.70,
+              width: UiSizes.teamImgSide * 0.70,
+            ),
+            kSpacerSm,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: size.width * .42),
+                  child: Text(
+                    assetDetails.custodyType,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: StTextStyles.p2.copyWith(color: StColors.blue),
+                  ),
+                ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: size.width * .42),
+                  child: Text(
+                    "${assetDetails.walletType} wallet",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: StTextStyles.p2.copyWith(color: StColors.blue),
+                  ),
+                ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: size.width * .42),
+                  child: Text(
+                    "Provider: ${assetDetails.walletProvider}",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: StTextStyles.p2.copyWith(color: StColors.blue),
+                  ),
+                ),
+              ],
+            ),
+            const Spacer(),
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: 60.h,
+                maxHeight: 60.h,
+                maxWidth: 90.w,
+              ),
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: 5.h,
+                    child: ChrysalisAssetRiskGuage(rank: comp1.rank),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    left: 8.w,
+                    child: Text("Accessibility", style: StTextStyles.h6),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
 
-// class AssetVsAssetRankedRow extends StBaseTvRow with ShowsTwoAssets {
-//   const AssetVsAssetRankedRow(
-//     TableviewDataRowTuple assets, {
-//     Key? key,
-//   }) : super(assets, key: key);
+class ChysalisAssetRowMktView extends StBaseTvRow
+    with ShowsOneAsset, RequiresGameStatus, RequiresUserPositionProps {
+  const ChysalisAssetRowMktView(
+    TableviewDataRowTuple assets, {
+    Key? key,
+  }) : super(assets, key: key);
 
-//   @override
-//   Widget rowBody(BuildContext context) {
-//     // paste row widget code here
-//     const double _sizeHeightCont = 60;
-//     const double _rowMargin = 8;
-//     return Container(
-//       height: (110 / 1.4) * 0.89,
-//       padding: const EdgeInsets.only(
-//         top: (110 / 2) * 0.08,
-//         left: (110 / 1) * 0.08,
-//       ),
-//       decoration: BoxDecoration(
-//         color: StColors.veryDarkGray,
-//         boxShadow: [
-//           BoxShadow(
-//             color: Colors.black.withOpacity(0.5),
-//             spreadRadius: 0,
-//             blurRadius: 1,
-//             offset: Offset(0, 1),
-//           ),
-//         ],
-//       ),
-//       child: Row(
-//         mainAxisSize: MainAxisSize.max,
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         crossAxisAlignment: CrossAxisAlignment.center,
-//         children: [
-//           Flexible(
-//             child: Column(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               mainAxisSize: MainAxisSize.min,
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 Text(
-//                   comp1.topName + '  ' + '20 shares',
-//                   style: StTextStyles.textTeamNameMarketView.copyWith(
-//                     color: StColors.white,
-//                   ),
-//                 ),
-//                 Text(
-//                   '+' + 'first.shares' + ' ' + '(' + 'first.percentage' + '%)',
-//                   style: StTextStyles.tradeButton,
-//                   textAlign: TextAlign.left,
-//                 ),
-//               ],
-//             ),
-//           ),
-//           Padding(
-//             padding: const EdgeInsets.only(right: 16),
-//             child: TextButton(
-//               child: Text(
-//                 StStrings.trade,
-//                 style: StTextStyles.tradeButton,
-//               ),
-//               onPressed: () {},
-//               style: StButtonStyles.tradeButtonCanTrade,
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-// return Container(
-//   padding: const EdgeInsets.symmetric(horizontal: 5),
-//   decoration: const BoxDecoration(
-//     color: StColors.black,
-//     border: Border.symmetric(
-//       horizontal: BorderSide(
-//         color: StColors.borderTextField,
-//       ),
-//     ),
-//   ),
-//   child: Column(
-//     mainAxisSize: MainAxisSize.min,
-//     children: [
-//       Stack(
-//         children: [
-//           Row(
-//             mainAxisSize: MainAxisSize.max,
-//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//             children: [
-//               Row(
-//                 children: [
-//                   Image.network(comp1.imgUrl),
-//                   Padding(
-//                     padding: const EdgeInsets.only(
-//                       top: 10,
-//                       left: 3,
-//                       right: 3,
-//                     ),
-//                     child: Image.network(
-//                       comp1.imgUrl,
-//                       height: 60,
-//                       width: size.height <= 568 ? 40 : 50,
-//                       color: Colors.yellow,
-//                       colorBlendMode: BlendMode.color,
-//                     ),
-//                   ),
-//                   Padding(
-//                     padding: size.height <= 568
-//                         ? const EdgeInsets.only(bottom: 20)
-//                         : const EdgeInsets.only(bottom: 30),
-//                     child: Text(
-//                       assets.item1.topName,
-//                       style: StTextStyles.textTeamNameMarketView.copyWith(
-//                         color: Colors.yellow,
-//                       ),
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.start,
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   Column(
-//                     crossAxisAlignment: CrossAxisAlignment.end,
-//                     children: [
-//                       Row(
-//                         mainAxisSize: MainAxisSize.min,
-//                         children: [
-//                           Image.asset(
-//                             kTokensIcon,
-//                             height: 15,
-//                             width: 15,
-//                           ),
-//                           Text(
-//                             'first.tokens',
-//                             style:
-//                                 StTextStyles.textNameMarketTicker.copyWith(
-//                               fontSize: 14.sp,
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                       Text(
-//                         '${comp1.priceDelta.isNegative ? comp1.priceDeltaStr : '+' + 'first.gain'}',
-//                         style: StTextStyles.moneyDeltaPositive,
-//                       ),
-//                     ],
-//                   ),
-//                   const SizedBox(
-//                     width: 10,
-//                   ),
-//                   TextButton(
-//                     style: size.height <= 568
-//                         ? StButtonStyles.tradeTeamMarketLessWidthView
-//                         : StButtonStyles.tradeTeamMarketView,
-//                     onPressed: () {},
-//                     child: Text(
-//                       StStrings.tradeUc,
-//                       style: StTextStyles.tradeButton,
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             ],
-//           ),
-//           Align(
-//             alignment: Alignment.bottomCenter,
-//             heightFactor: 5,
-//             child: Wrap(
-//               spacing: 2,
-//               children: [
-//                 Text(
-//                   StStrings.open,
-//                   style: StTextStyles.textOpenHighLowTeamMarketView,
-//                 ),
-//                 Text(
-//                   comp1.priceStr,
-//                   style: StTextStyles.textValueMarketTicker.copyWith(
-//                     color: StColors.white,
-//                   ),
-//                 ),
-//                 const SizedBox(
-//                   width: 10,
-//                 ),
-//                 Text(
-//                   StStrings.high,
-//                   style: StTextStyles.textOpenHighLowTeamMarketView,
-//                 ),
-//                 Text(
-//                   'first.high',
-//                   style: StTextStyles.textValueMarketTicker.copyWith(
-//                     color: StColors.white,
-//                   ),
-//                 ),
-//                 const SizedBox(
-//                   width: 10,
-//                 ),
-//                 Text(
-//                   StStrings.low,
-//                   style: StTextStyles.textValueMarketTicker.copyWith(
-//                     color: StColors.white,
-//                   ),
-//                 ),
-//                 Text(
-//                   'first.low',
-//                   style: StTextStyles.textValueMarketTicker.copyWith(
-//                     color: StColors.white,
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           )
-//         ],
-//       ),
-//     ],
-//   ),
-// );
+  @override
+  Widget rowBody(
+    BuildContext ctx,
+    ActiveGameDetails agd,
+  ) {
+    final assetDetails = ChrysalisAssetDetails.fromJson(
+      jsonDecode(comp1.extAtts),
+    );
+    final size = MediaQuery.of(ctx).size;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            assetHoldingsSummary.sharesOwned > 0
+                ? const Icon(Icons.work, color: StColors.green)
+                : WatchButton(
+                    assetKey: comp1.assetKey,
+                    isWatched: comp1.assetStateUpdates.isWatched,
+                  ),
+            kSpacerSm,
+            CompetitorImage(
+              comp1.imgUrl,
+              true,
+              isTwoAssetRow: false,
+              hasBorder: assetDetails.isDistressed,
+              fit: BoxFit.fitWidth,
+            ),
+            kSpacerSm,
+            SizedBox(
+              width: size.width * .75,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 4.h,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minWidth: size.width *
+                                  (assetDetails.isDistressed ? 0.4 : 0.72),
+                              maxWidth: size.width *
+                                  (assetDetails.isDistressed ? 0.4 : 0.72),
+                            ),
+                            child: Text(
+                              "${comp1.position}: ${comp1.assetStateUpdates.name.substring(0, 6)}...",
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: StTextStyles.h5,
+                              // textAlign: TextAlign.center,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 2.h,
+                          ),
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minWidth: size.width *
+                                  (assetDetails.isDistressed ? 0.4 : 0.72),
+                              maxWidth: size.width *
+                                  (assetDetails.isDistressed ? 0.4 : 0.72),
+                            ),
+                            child: Text(
+                              "Units: ${assetDetails.units}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: StTextStyles.h5,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 2.h,
+                          ),
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                                minWidth: size.width *
+                                    (assetDetails.isDistressed ? 0.4 : 0.72),
+                                maxWidth: size.width *
+                                    (assetDetails.isDistressed ? 0.4 : 0.72)),
+                            child: Text(
+                              "Issue: ${assetDetails.accessibilityIssue}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: StTextStyles.h5,
+                            ),
+                          ),
+                        ],
+                      ),
+                      if (assetDetails.isDistressed) ...{
+                        Expanded(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Column(
+                                children: [
+                                  Text(
+                                    comp1.currPriceStr,
+                                    style: StTextStyles.h5,
+                                  ),
+                                  Text(
+                                    comp1.recentDeltaStr,
+                                    style: StTextStyles.h5
+                                        .copyWith(color: comp1.priceFluxColor),
+                                  ),
+                                ],
+                              ),
+                              const Spacer(),
+                              TradeButton(
+                                comp1.assetStateUpdates,
+                                comp1.gameStatus,
+                              ),
+                            ],
+                          ),
+                        ),
+                      },
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 12.h),
+        Row(
+          children: [
+            SizedBox(width: 32.w),
+            Image.asset(
+              "assets/digital-wallet.png",
+              height: UiSizes.teamImgSide * 0.70,
+              width: UiSizes.teamImgSide * 0.70,
+            ),
+            kSpacerSm,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: size.width * .42),
+                  child: Text(
+                    assetDetails.custodyType,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: StTextStyles.p2.copyWith(color: StColors.blue),
+                  ),
+                ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: size.width * .42),
+                  child: Text(
+                    "${assetDetails.walletType} wallet",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: StTextStyles.p2.copyWith(color: StColors.blue),
+                  ),
+                ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: size.width * .42),
+                  child: Text(
+                    "Provider: ${assetDetails.walletProvider}",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: StTextStyles.p2.copyWith(color: StColors.blue),
+                  ),
+                ),
+              ],
+            ),
+            const Spacer(),
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: 60.h,
+                maxHeight: 60.h,
+                maxWidth: 90.w,
+              ),
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: 5.h,
+                    child: ChrysalisAssetRiskGuage(rank: comp1.rank),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    left: 8.w,
+                    child: Text("Accessibility", style: StTextStyles.h6),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}

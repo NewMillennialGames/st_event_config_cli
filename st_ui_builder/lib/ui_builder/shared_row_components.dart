@@ -31,16 +31,102 @@ var kSpacerLarge = SizedBox(
   width: 20.w,
 );
 
+class ChrysalisAssetRiskGuage extends StatelessWidget {
+  final int rank;
+
+  const ChrysalisAssetRiskGuage({
+    Key? key,
+    required this.rank,
+  }) : super(key: key);
+
+  double get _needleAngle {
+    if (rank <= 20) return 15;
+    if (rank <= 40) return 45;
+    if (rank <= 60) return 75;
+    if (rank <= 80) return 105;
+    return 135;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 60.h,
+      width: 90.w,
+      child: SfRadialGauge(
+        axes: [
+          RadialAxis(
+            startAngle: 180,
+            endAngle: 0,
+            minimum: 0,
+            maximum: 150,
+            ranges: [
+              GaugeRange(
+                startValue: 0,
+                endValue: 30,
+                color: Colors.red,
+                startWidth: 10,
+                endWidth: 10,
+              ),
+              GaugeRange(
+                startValue: 30,
+                endValue: 60,
+                color: Colors.orange,
+                startWidth: 10,
+                endWidth: 10,
+              ),
+              GaugeRange(
+                startValue: 60,
+                endValue: 90,
+                color: Colors.yellow,
+                startWidth: 10,
+                endWidth: 10,
+              ),
+              GaugeRange(
+                startValue: 90,
+                endValue: 120,
+                color: Colors.greenAccent,
+                startWidth: 10,
+                endWidth: 10,
+              ),
+              GaugeRange(
+                startValue: 120,
+                endValue: 150,
+                color: Colors.green,
+                startWidth: 10,
+                endWidth: 10,
+              ),
+            ],
+            pointers: [
+              NeedlePointer(
+                needleEndWidth: 4,
+                needleLength: 0.8,
+                value: _needleAngle,
+                needleColor: Colors.white,
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class CompetitorImage extends StatelessWidget {
   // just the image or placeholder
   final String imgUrl;
   final bool shrinkForRank;
   final bool isTwoAssetRow;
+  final double shrinkRatio;
+  final bool hasBorder;
+  final BoxFit fit;
 
   const CompetitorImage(
     this.imgUrl,
     this.shrinkForRank, {
     this.isTwoAssetRow = false,
+    this.hasBorder = false,
+    this.shrinkRatio = 1,
+    this.fit = BoxFit.cover,
     Key? key,
   }) : super(key: key);
 
@@ -48,20 +134,31 @@ class CompetitorImage extends StatelessWidget {
       ? (isTwoAssetRow ? 0.44 : 0.70)
       : (isTwoAssetRow ? 0.66 : 0.88);
 
-  double get imgSize => UiSizes.teamImgSide * _shrinkSize;
+  double get imgSize => UiSizes.teamImgSide * _shrinkSize * shrinkRatio;
 
   @override
   Widget build(BuildContext context) {
-    return Image.network(
+    final image = Image.network(
       imgUrl,
       height: imgSize * 1.2,
-      width: imgSize,
-      fit: BoxFit.cover,
+      width: hasBorder ? imgSize * .9 : imgSize,
+      fit: fit,
       errorBuilder: (context, error, stackTrace) => const Icon(
         Icons.egg_rounded,
         color: StColors.blue,
       ),
     );
+
+    if (hasBorder) {
+      return Container(
+        padding: EdgeInsets.all(2.5.w),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.red),
+        ),
+        child: image,
+      );
+    }
+    return image;
   }
 }
 
@@ -169,19 +266,26 @@ class CheckAssetType extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(firstName.toUpperCase(),
-                    overflow: TextOverflow.ellipsis,
-                    style: StTextStyles.p2.copyWith(
-                        fontWeight: FontWeight.w500, fontSize: 12.sp)),
-                Text(lastName.toUpperCase(),
-                    overflow: TextOverflow.ellipsis,
-                    style: StTextStyles.h3
-                        .copyWith(fontWeight: FontWeight.w800, fontSize: 18.sp))
+                Text(
+                  firstName.toUpperCase(),
+                  overflow: TextOverflow.ellipsis,
+                  style: StTextStyles.p2
+                      .copyWith(fontWeight: FontWeight.w500, fontSize: 12.sp),
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  lastName.toUpperCase(),
+                  overflow: TextOverflow.ellipsis,
+                  style: StTextStyles.h3
+                      .copyWith(fontWeight: FontWeight.w800, fontSize: 18.sp),
+                  textAlign: TextAlign.center,
+                )
               ],
             ),
           ),
           if (tradeSource != null) ...[
-            const Spacer(),
+            // const Spacer(),
+            kSpacerLarge,
             Text(
               tradeSource!,
               style: StTextStyles.p2,
@@ -230,7 +334,8 @@ class CheckAssetType extends StatelessWidget {
             ],
           ),
           if (tradeSource != null) ...[
-            const Spacer(),
+            // const Spacer(),
+            kSpacerLarge,
             Text(
               tradeSource!,
               style: StTextStyles.p2,
@@ -251,7 +356,8 @@ class CheckAssetType extends StatelessWidget {
           ),
         ),
         if (tradeSource != null) ...[
-          const Spacer(),
+          // const Spacer(),
+          kSpacerLarge,
           Text(
             tradeSource!,
             style: StTextStyles.p2,
@@ -340,7 +446,11 @@ class AssetVsAssetHalfRow extends StatelessWidget {
                 isWatched: gameDetails.isWatched(competitor.assetKey),
               ),
         kSpacerSm,
-        CompetitorImage(competitor.imgUrl, showRank),
+        CompetitorImage(
+          competitor.imgUrl,
+          showRank,
+          shrinkRatio: 0.75,
+        ),
         kSpacerSm,
         if (showRank) ...[
           Text(
@@ -379,6 +489,7 @@ class MktRschAsset extends ConsumerWidget {
   final ActiveGameDetails gameDetails;
   final Color color;
   final BorderRadiusGeometry borderRadius;
+  final double _sizeHeightImage = 150;
 
   //
   const MktRschAsset(
@@ -393,7 +504,6 @@ class MktRschAsset extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     //
     final size = MediaQuery.of(context).size;
-    const double _sizeHeightImage = 150;
 
     bool isTradable = gameDetails.assetId1 == competitor.assetKey
         ? gameDetails.isTradableAsset1
@@ -406,12 +516,14 @@ class MktRschAsset extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Container(
-              height: _sizeHeightImage * .28,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: NetworkImage(competitor.imgUrl),
-                    fit: BoxFit.fitHeight),
-              )),
+            height: _sizeHeightImage * .28,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(competitor.imgUrl),
+                fit: BoxFit.fitHeight,
+              ),
+            ),
+          ),
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -421,6 +533,7 @@ class MktRschAsset extends ConsumerWidget {
                   fontSize: 18.sp,
                   color: isTradable ? StColors.coolGray : StTextStyles.h4.color,
                 ),
+                textAlign: TextAlign.center,
               ),
               Text(
                 competitor.subName,
@@ -429,6 +542,7 @@ class MktRschAsset extends ConsumerWidget {
                       ? StColors.coolGray
                       : StTextStyles.textFormField.color,
                 ),
+                textAlign: TextAlign.center,
               ),
             ],
           ),
@@ -509,85 +623,6 @@ class RowControl extends StatelessWidget {
     );
   }
 }
-// class MktRschAsset extends StatelessWidget {
-//   //
-//   final AssetRowPropertyIfc competitor;
-//   final ActiveGameDetails gameStatus;
-
-//   //
-//   const MktRschAsset(
-//     this.competitor,
-//     this.gameStatus, {
-//     Key? key,
-//   }) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     // paste row widget code here
-//     final size = MediaQuery.of(context).size;
-//     const double _sizeHeightImage = 150;
-//     return Stack(
-//       children: [
-//         ClipRRect(
-//           borderRadius: BorderRadius.circular(15),
-//           child: Image.asset(
-//             competitor.rank > 3 ? kImageVsBgRightOn : kImageVsBgLeftOn,
-//             height: _sizeHeightImage,
-//             width: size.width * 0.47,
-//             fit: BoxFit.fill,
-//           ),
-//         ),
-//         SizedBox(
-//           height: _sizeHeightImage,
-//           width: size.width * 0.47,
-//           child: Column(
-//             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//             children: [
-//               DottedBorder(
-//                 color: StColors.white,
-//                 child: const Padding(
-//                   padding: EdgeInsets.all(10),
-//                   child: Text(
-//                     StStrings.mktRschAssetVsAssetTeamImgText,
-//                     style: StTextStyles.textFormField,
-//                     textAlign: TextAlign.center,
-//                   ),
-//                 ),
-//               ),
-//               Column(
-//                 mainAxisSize: MainAxisSize.min,
-//                 children: [
-//                   Text(
-//                     competitor.topName,
-//                     style: StTextStyles.h4.copyWith(
-//                       fontSize: 18.sp,
-//                       color: gameStatus._isTradableGame
-//                           ? StColors.coolGray
-//                           : StTextStyles.h4.color,
-//                     ),
-//                   ),
-//                   Text(
-//                     competitor.subName,
-//                     style: StTextStyles.textFormField.copyWith(
-//                       color: gameStatus._isTradableGame
-//                           ? StColors.coolGray
-//                           : StTextStyles.textFormField.color,
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//               Icon(
-//                 Icons.star_border,
-//                 color:
-//                     gameStatus._isTradableGame ? StColors.gray : StColors.blue,
-//               ),
-//             ],
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }
 
 class ObjectRankRow extends StatelessWidget {
   //
@@ -915,15 +950,3 @@ class HoldingsAndValueRow extends StatelessWidget {
     );
   }
 }
-
-// return Container(
-//   height: UiSizes.tradeBtnHeight,
-//   alignment: Alignment.center,
-//   child: Text(
-//     tf.labelForGameState(status),
-//     style: StTextStyles.h5.copyWith(
-//       color: tf.colorForGameState(status),
-//     ),
-//   ),
-// );
-// }

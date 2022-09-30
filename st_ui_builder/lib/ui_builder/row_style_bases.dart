@@ -12,10 +12,6 @@ const kRowBoxDecor = BoxDecoration(
   border: kRowBorder,
 );
 
-// final _gameStatusProvider = Provider<ActiveGameDetails>(
-//   ((ref) => throw UnimplementedError('')),
-// );
-
 abstract class StBaseTvRowIfc extends StatelessWidget {
   //
   final TableviewDataRowTuple assets;
@@ -44,6 +40,8 @@ class StBaseTvRow extends StBaseTvRowIfc {
   StateProvider<ActiveGameDetails> get dynStateProv =>
       assets.item4(assets.item3);
 
+  double get bottomMargin => 0;
+
   @override
   Widget build(BuildContext context) {
     /*
@@ -54,11 +52,9 @@ class StBaseTvRow extends StBaseTvRowIfc {
     I'm watching the overridden value
     to force row-rebuild when game-status changes
     */
-    double rowHeight =
-        this is ShowsTwoAssets ? UiSizes.dblRowHeight : UiSizes.singleRowHeight;
 
     return Container(
-      // height: rowHeight,
+      margin: EdgeInsets.only(bottom: bottomMargin),
       padding: const EdgeInsets.all(2),
       decoration: kRowBoxDecor,
       child: Consumer(

@@ -19,10 +19,19 @@ class TvGroupHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // standard group header widget
-    // print('building a TvGroupHeader first: ${headerData.first}');
+    if (headerData.h1Displ.isEmpty && headerData.h2Displ.isEmpty) {
+      return const SizedBox.shrink();
+    }
+    double height = 0;
+    if (headerData.h1Displ.isNotEmpty) {
+      height += 39;
+    }
+    if (headerData.h2Displ.isNotEmpty) {
+      height += 39;
+    }
     return Container(
-      height: 58,
-      padding: const EdgeInsets.only(top: 4),
+      height: height.h,
+      padding: EdgeInsets.only(top: 4.h, bottom: 8.h),
       color: StColors.black,
       child: _rowStyleToHeaderStyle(),
     );
@@ -38,13 +47,14 @@ class TvGroupHeader extends StatelessWidget {
           headerData.h1Displ,
           style: StTextStyles.h4,
         ),
-        // Spacer(),
-        Text(
-          headerData.h2Displ,
-          style: StTextStyles.h6.copyWith(
-            color: Colors.grey,
+
+        if (headerData.h2Displ.isNotEmpty)
+          Text(
+            headerData.h2Displ,
+            style: StTextStyles.h6.copyWith(
+              color: Colors.grey,
+            ),
           ),
-        ),
         // Spacer(),
         // Text(headerData.third),
       ],

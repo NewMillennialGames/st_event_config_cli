@@ -98,9 +98,7 @@ class GroupedTableDataMgr {
       sortingRules, sortOrder == GroupedListOrder.ASC);
 
   bool get hasColumnFilters {
-    // set imageUrl as first filter field to hide/disable the whole filter bar
-    return filterRules?.item1.colName != DbTableFieldName.imageUrl &&
-        !disableAllGrouping;
+    return filterRules?.item1 != null && !disableAllGrouping;
   }
 
   void endGeographicGrouping() {
@@ -123,26 +121,28 @@ class GroupedTableDataMgr {
       return const SizedBox.shrink();
     }
 
-    SortGroupFilterEntry i1 = filterRules!.item1;
+    SortGroupFilterEntry? i1 = filterRules!.item1;
     SortGroupFilterEntry? i2 = filterRules!.item2;
     SortGroupFilterEntry? i3 = filterRules!.item3;
 
-    Set<String> listItems1 = _getListItemsByCfgField(i1);
+    Set<String> listItems1 = i1 == null ? {} : _getListItemsByCfgField(i1);
     Set<String> listItems2 = i2 == null ? {} : _getListItemsByCfgField(i2);
     Set<String> listItems3 = i3 == null ? {} : _getListItemsByCfgField(i3);
 
     const _kLstMin = 2;
 
     bool has2ndList =
-        i2 != null && listItems2.length > _kLstMin && i2.colName != i1.colName;
+        i2 != null && listItems2.length > _kLstMin && i2.colName != i1?.colName;
     bool has3rdList =
         i3 != null && listItems3.length > _kLstMin && i3.colName != i2!.colName;
 
     int dropLstCount = 1 + (has2ndList ? 1 : 0) + (has3rdList ? 1 : 0);
     // allocate dropdown button width
-    double allocBtnWidth = (totAvailWidth / dropLstCount) * .96;
+    double allocBtnWidth = totAvailWidth / dropLstCount;
     // one list can take 86% of space
     allocBtnWidth = dropLstCount < 2 ? totAvailWidth * 0.86 : allocBtnWidth;
+
+    if (i1 == null) return const SizedBox.shrink();
 
     return Container(
       height: barHeight,
@@ -151,146 +151,161 @@ class GroupedTableDataMgr {
       padding: const EdgeInsets.symmetric(vertical: 3),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        // mainAxisSize: MainAxisSize.min,
         children: [
-          _dropMenuList(
-            listItems1,
-            i1.colName,
-            _filter1Selection,
-            (s) => _filter1Selection = s,
-            allocBtnWidth,
+          _DropDownMenuList(
+            listItems: listItems1,
+            colName: i1.colName,
+            curSelection: _filter1Selection,
+            valSetter: (s) => _filter1Selection = s,
+            width: allocBtnWidth,
+            clearFilters: clearFilters,
+            doFilteringFor: (colName, selectedValue) =>
+                _doFilteringFor(colName, selectedValue),
+            filterTitleExtractor: (colName) => _filterTitleExtractor(colName),
           ),
           if (has2ndList)
-            _dropMenuList(
-              listItems2,
-              i2.colName,
-              _filter2Selection,
-              (s) => _filter2Selection = s,
-              allocBtnWidth,
+            _DropDownMenuList(
+              listItems: listItems2,
+              colName: i2.colName,
+              curSelection: _filter2Selection,
+              valSetter: (s) => _filter2Selection = s,
+              width: allocBtnWidth,
+              clearFilters: clearFilters,
+              doFilteringFor: (colName, selectedValue) =>
+                  _doFilteringFor(colName, selectedValue),
+              filterTitleExtractor: (colName) => _filterTitleExtractor(colName),
             ),
           if (has3rdList)
-            _dropMenuList(
-              listItems3,
-              i3.colName,
-              _filter3Selection,
-              (s) => _filter3Selection = s,
-              allocBtnWidth,
+            _DropDownMenuList(
+              listItems: listItems3,
+              colName: i3.colName,
+              curSelection: _filter3Selection,
+              valSetter: (s) => _filter3Selection = s,
+              width: allocBtnWidth,
+              clearFilters: clearFilters,
+              doFilteringFor: (colName, selectedValue) =>
+                  _doFilteringFor(colName, selectedValue),
+              filterTitleExtractor: (colName) => _filterTitleExtractor(colName),
             ),
         ],
       ),
     );
   }
 
-  Widget _dropMenuList(
-    Set<String> listItems,
-    DbTableFieldName colName,
-    String? curSelection,
-    SelectedFilterSetter valSetter,
-    double width,
-  ) {
-    // return DropdownButton menu for filter bar slot
-    // Set<String> listItems = _getListItemsByCfgField(fCfg);
-    // print('Filter items for ${fCfg.colName.labelName}');
-    // print(listItems);
-    return Container(
-      width: width,
-      decoration: BoxDecoration(
-        color: Colors.transparent,
-        border: Border.all(
-          color: StColors.lightGray,
-          width: 0.8,
-        ),
-        borderRadius: BorderRadius.all(
-          Radius.circular(6.w),
-        ),
-      ),
-      padding: EdgeInsets.symmetric(horizontal: 4.w),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: curSelection ?? listItems.first,
-          items: listItems
-              .map(
-                (String val) => DropdownMenuItem<String>(
-                  value: val,
-                  alignment: AlignmentDirectional.centerStart,
-                  child: Container(
-                    color: curSelection == val
-                        ? StColors.primaryDarkGray
-                        : StColors.black,
-                    child: Text(val.toUpperCase()),
-                  ),
-                ),
-              )
-              .toList(),
-          selectedItemBuilder: (BuildContext context) {
-            return listItems.map((String value) {
-              return ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: width * .75),
-                child: Text(
-                  value.toUpperCase(),
-                ),
-              );
-            }).toList();
-          },
-          onChanged: (String? selectedVal) {
-            // store selected value for state mgmt
-            valSetter(selectedVal);
-            if (selectedVal == null ||
-                selectedVal == colName.labelName.toUpperCase() ||
-                selectedVal.startsWith(CLEAR_FILTER_LABEL)) {
-              clearFilters();
-              return;
-            }
-            _doFilteringFor(colName, selectedVal);
-          },
-          dropdownColor: StColors.black,
-          iconEnabledColor: StColors.gray,
-          style: TextStyle(
-            color: StColors.lightGray,
-            fontSize: 16.sp,
-          ),
-        ),
-      ),
-    );
-  }
-
   void setFilteredData(
-    Iterable<TableviewDataRowTuple> _assetRows, {
+    Iterable<TableviewDataRowTuple> assetRows, {
     bool redraw = false,
   }) {
     /* external filtering
     used by search (watched or owned) feature
     */
-    _filteredAssetRows = _assetRows.toList();
+    _filteredAssetRows = assetRows.toList();
     if (redraw && redrawCallback != null) {
       redrawCallback!();
     }
   }
 
+  String _filterTitleExtractor(DbTableFieldName fieldName) {
+    bool isTeam = false;
+    if (_allAssetRows.isNotEmpty) {
+      isTeam = _allAssetRows.first.item1.isTeam;
+    }
+    switch (fieldName) {
+      case DbTableFieldName.assetName:
+      case DbTableFieldName.assetShortName:
+        return isTeam ? 'Team' : 'Player';
+      case DbTableFieldName.assetOrgName:
+        return 'Org';
+      case DbTableFieldName.conference:
+        return 'Conference';
+      case DbTableFieldName.region:
+        return 'All Regions';
+      case DbTableFieldName.gameDate:
+        return 'All Dates';
+      case DbTableFieldName.gameTime:
+        return 'Game Time';
+      case DbTableFieldName.gameLocation:
+        return 'Location';
+      case DbTableFieldName.imageUrl:
+        return 'Avatar (select this to hide filter bar)';
+      case DbTableFieldName.assetOpenPrice:
+        return 'Open Price';
+      case DbTableFieldName.assetCurrentPrice:
+        return 'Current Price';
+      case DbTableFieldName.assetRankOrScore:
+        return 'Rank';
+      case DbTableFieldName.assetPosition:
+        return 'Position';
+      default:
+        return '_naLabel';
+    }
+  }
+
+  List<AssetRowPropertyIfc> _getSortedAssetRows(DbTableFieldName colName) {
+    List<AssetRowPropertyIfc> rows = [];
+
+    for (var row in _allAssetRows) {
+      rows.add(row.item1);
+      if (row.item2 != null) {
+        rows.add(row.item2!);
+      }
+    }
+
+    //perform sorting based on actual value types
+    //for non String values rather than on labels
+    switch (colName) {
+      case DbTableFieldName.gameDate:
+      case DbTableFieldName.gameTime:
+        rows.sort((a, b) => a.gameDate.compareTo(b.gameDate));
+        break;
+
+      case DbTableFieldName.assetOpenPrice:
+      case DbTableFieldName.assetCurrentPrice:
+      case DbTableFieldName.assetRankOrScore:
+      case DbTableFieldName.assetPosition:
+        rows.sort((a, b) {
+          final item1Value = num.parse(a.labelExtractor(colName));
+          final item2Value = num.parse(b.labelExtractor(colName));
+          return item1Value.compareTo(item2Value);
+        });
+        break;
+      default:
+        rows.sort((a, b) => a.labelExtractor(colName).compareTo(
+              b.labelExtractor(colName),
+            ));
+    }
+
+    return rows;
+  }
+
   Set<String> _getListItemsByCfgField(SortGroupFilterEntry filterItem) {
-    // build list of unique values from selected field
-    // elim dups and sort
-    var l = _allAssetRows
-        .map(
-          (e) => e.item1.labelExtractor(filterItem.colName),
-        )
-        .toSet()
-        .toList()
-      ..sort((v1, v2) => v1.compareTo(v2));
-    l.insert(0, filterItem.colName.labelName); // CLEAR_FILTER_LABEL + ' ' +
-    return l.toSet();
+    List<AssetRowPropertyIfc> sortedAssetRows =
+        _getSortedAssetRows(filterItem.colName);
+
+    List<String> labels = [
+      _filterTitleExtractor(filterItem.colName),
+      ...sortedAssetRows.map((e) => e.labelExtractor(filterItem.colName)),
+    ];
+
+    return <String>{...labels};
   }
 
   void _doFilteringFor(DbTableFieldName colName, String selectedVal) {
     //
-    if (selectedVal.toUpperCase() == colName.labelName.toUpperCase()) {
+    if (selectedVal.toUpperCase() ==
+        _filterTitleExtractor(colName).toUpperCase()) {
       clearFilters();
       return;
     }
-    _filteredAssetRows = _allAssetRows
-        .where((TableviewDataRowTuple dr) =>
-            dr.item1.labelExtractor(colName) == selectedVal)
-        .toList();
+    List<TableviewDataRowTuple> filterResults = [];
+
+    for (var asset in _allAssetRows) {
+      if (asset.item1.labelExtractor(colName) == selectedVal ||
+          asset.item2?.labelExtractor(colName) == selectedVal) {
+        filterResults.add(asset);
+      }
+    }
+    _filteredAssetRows = filterResults;
 
     // print('you must reload your list after calling this');
     if (redrawCallback != null) redrawCallback!();
@@ -315,5 +330,109 @@ class GroupedTableDataMgr {
 
     // _allAssetRows[2] = TableviewDataRowTuple(drt.item1, drt.item2, agd);
     print('ActiveGameDetails replaced on 2 with $round  (did row repaint?)');
+  }
+}
+
+class _DropDownMenuList extends StatefulWidget {
+  final Set<String> listItems;
+  final DbTableFieldName colName;
+  final String? curSelection;
+  final SelectedFilterSetter valSetter;
+  final double width;
+  final VoidCallback clearFilters;
+  final void Function(DbTableFieldName, String) doFilteringFor;
+  final String Function(DbTableFieldName) filterTitleExtractor;
+
+  _DropDownMenuList({
+    Key? key,
+    required this.listItems,
+    required this.colName,
+    required this.curSelection,
+    required this.valSetter,
+    required this.width,
+    required this.clearFilters,
+    required this.doFilteringFor,
+    required this.filterTitleExtractor,
+  }) : super(key: key);
+
+  @override
+  State<_DropDownMenuList> createState() => _DropDownMenuListState();
+}
+
+class _DropDownMenuListState extends State<_DropDownMenuList> {
+  bool _useDefaultState = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: widget.width,
+      decoration: BoxDecoration(
+        color: _useDefaultState ? Colors.transparent : StColors.primaryDarkGray,
+        border: _useDefaultState
+            ? Border.all(
+                color: StColors.lightGray,
+                width: 0.8,
+              )
+            : null,
+        borderRadius: BorderRadius.all(
+          Radius.circular(6.w),
+        ),
+      ),
+      padding: EdgeInsets.symmetric(horizontal: 4.w),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: widget.curSelection ?? widget.listItems.first,
+          items: widget.listItems
+              .map(
+                (String val) => DropdownMenuItem<String>(
+                  value: val,
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Container(
+                    color: widget.curSelection == val
+                        ? StColors.primaryDarkGray
+                        : StColors.black,
+                    child: Text(val.toUpperCase()),
+                  ),
+                ),
+              )
+              .toList(),
+          selectedItemBuilder: (BuildContext context) {
+            return widget.listItems.map((String value) {
+              return ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: widget.width * .75),
+                child: Center(
+                  child: Text(
+                    value.toUpperCase(),
+                  ),
+                ),
+              );
+            }).toList();
+          },
+          onChanged: (String? selectedVal) {
+            // store selected value for state mgmt
+            widget.valSetter(selectedVal);
+            if (selectedVal == null ||
+                selectedVal == widget.filterTitleExtractor(widget.colName) ||
+                selectedVal.startsWith(CLEAR_FILTER_LABEL)) {
+              setState(() {
+                _useDefaultState = true;
+              });
+              widget.clearFilters();
+              return;
+            }
+            setState(() {
+              _useDefaultState = false;
+            });
+            widget.doFilteringFor(widget.colName, selectedVal);
+          },
+          dropdownColor: StColors.black,
+          iconEnabledColor: _useDefaultState ? StColors.gray : StColors.white,
+          style: TextStyle(
+            color: StColors.lightGray,
+            fontSize: 16.sp,
+          ),
+        ),
+      ),
+    );
   }
 }
