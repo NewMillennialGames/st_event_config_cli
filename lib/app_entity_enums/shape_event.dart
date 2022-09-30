@@ -26,6 +26,7 @@ enum EvEliminationStrategy {
   singleElim,
   doubeElim,
   audienceVote,
+  never,
 }
 
 // define assets
@@ -61,5 +62,6 @@ enum EvGameAgeOffRule {
   whenRoundChanges, // via the competition stream
   everyWeek, // via the clock compared to game-end-dttm
   oneDayAfterEnds, // via the clock
+  neverAgeOff,
   byEvEliminationStrategy, // see EvEliminationStrategy above
 }
