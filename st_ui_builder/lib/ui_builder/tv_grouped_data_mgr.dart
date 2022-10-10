@@ -46,7 +46,7 @@ class GroupedTableDataMgr {
   })  : sortOrder = ascending ? GroupedListOrder.ASC : GroupedListOrder.DESC,
         _filteredAssetRows = _allAssetRows.toList();
 
-  List<TableviewDataRowTuple> get listData => _filteredAssetRows;
+  List<TableviewDataRowTuple> get listData => _sortRows(_filteredAssetRows);
   TvGroupCfg? get groupRules => _tableViewCfg.groupByRules;
   TvSortCfg get sortingRules => _tableViewCfg.sortRules;
   TvFilterCfg? get filterRules => _tableViewCfg.filterRules;
@@ -290,6 +290,25 @@ class GroupedTableDataMgr {
     return <String>{...labels};
   }
 
+  List<TableviewDataRowTuple> _sortRows(List<TableviewDataRowTuple> rows) {
+    List<TableviewDataRowTuple> nonTradeableRows = [];
+    List<TableviewDataRowTuple> tradeableRows = [];
+
+    for (var row in rows) {
+      if ([
+        CompetitionStatus.compFinal,
+        CompetitionStatus.compFinished,
+        CompetitionStatus.compCanceled,
+      ].contains(row.item1.gameStatus)) {
+        nonTradeableRows.add(row);
+      } else {
+        tradeableRows.add(row);
+      }
+    }
+
+    return [...tradeableRows, ...nonTradeableRows];
+  }
+
   void _doFilteringFor(DbTableFieldName colName, String selectedVal) {
     //
     if (selectedVal.toUpperCase() ==
@@ -306,7 +325,6 @@ class GroupedTableDataMgr {
       }
     }
     _filteredAssetRows = filterResults;
-
     // print('you must reload your list after calling this');
     if (redrawCallback != null) redrawCallback!();
   }
@@ -343,7 +361,7 @@ class _DropDownMenuList extends StatefulWidget {
   final void Function(DbTableFieldName, String) doFilteringFor;
   final String Function(DbTableFieldName) filterTitleExtractor;
 
-  _DropDownMenuList({
+  const _DropDownMenuList({
     Key? key,
     required this.listItems,
     required this.colName,
