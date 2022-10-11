@@ -180,6 +180,9 @@ class MockAssetHoldings implements AssetHoldingsSummaryIfc {
 
   @override
   Order? get order => null;
+
+  @override
+  Decimal get currentAssetPrice => Decimal.fromInt(30);
 }
 
 class MockEventSummary implements UserEventSummaryIfc {
