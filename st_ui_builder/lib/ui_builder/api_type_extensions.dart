@@ -20,18 +20,16 @@ extension AssetStateExt1 on AssetState {
 extension OrderExt1 on Order {
   String get tradeSource {
     switch (execMode) {
-      case ExecutionMode.executionBuy:
-        return '';
       case ExecutionMode.executionLiquidate:
-        if (gainLoss > 0) {
-          return StStrings.proceedsOnGameOver;
-        }
-        return StStrings.liquidatedOnGameOver;
+        return "Liquidated";
+      // if (gainLoss > 0) {
+      //   return StStrings.proceedsOnGameOver;
+      // }
+      // return StStrings.liquidatedOnGameOver;
       case ExecutionMode.executionSell:
         return StStrings.sharesSold;
+      default:
+        return '';
     }
-
-    // Unreachable
-    return '';
   }
 }
