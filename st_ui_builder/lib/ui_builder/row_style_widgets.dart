@@ -411,7 +411,7 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
     bool isPositiveGainLoss = positionGainLoss > Decimal.zero;
     Color priceFluxColor = isPositiveGainLoss ? StColors.green : StColors.red;
     Color sharePriceChangeColor =
-        (comp1.currPrice - shareCostBasis) >= Decimal.zero
+        (comp1.currPrice - shareCostBasis) > Decimal.zero
             ? StColors.green
             : StColors.red;
 
