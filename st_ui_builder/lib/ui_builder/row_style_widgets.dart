@@ -378,6 +378,7 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
     late String positionValue;
     late String tradeSource;
     late Decimal positionGainLoss;
+    Decimal shareCostBasis = Decimal.zero;
     if (showProceeds) {
       final order = comp1.assetHoldingsSummary.order ?? Order.getDefault();
       tradeSource = order.tradeSource;
@@ -396,17 +397,23 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
     } else {
       final holdings = comp1.assetHoldingsSummary;
       tradeSource = '';
-      sharePrice = comp1.currPriceStr;
-      sharePriceChange = comp1.recentDeltaStr;
+      shareCostBasis =
+          (holdings.positionCost / Decimal.fromInt(holdings.sharesOwned))
+              .toDecimal(scaleOnInfinitePrecision: 2);
+      sharePrice = shareCostBasis.toStringAsFixed(2);
+      sharePriceChange = (comp1.currPrice - shareCostBasis).toStringAsFixed(2);
       sharesOwned = holdings.sharesOwnedStr;
       positionValue = holdings.positionEstValueStr;
-      positionGainLoss =
-          (holdings.positionGainLoss / Decimal.fromInt(100)).toDecimal();
+      positionGainLoss = holdings.positionGainLoss;
     }
 
     String positionGainLossStr = positionGainLoss.toStringAsFixed(2);
     bool isPositiveGainLoss = positionGainLoss > Decimal.zero;
     Color priceFluxColor = isPositiveGainLoss ? StColors.green : StColors.red;
+    Color sharePriceChangeColor =
+        (comp1.currPrice - shareCostBasis) >= Decimal.zero
+            ? StColors.green
+            : StColors.red;
 
     //
     return Container(
@@ -473,7 +480,7 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
                                             " ${sharePriceChange.replaceAllMapped(RegexFunctions().formatNumberStringsWithCommas, RegexFunctions().mathFunc)}",
                                         style: StTextStyles.moneyDeltaPositive
                                             .copyWith(
-                                          color: comp1.priceFluxColor,
+                                          color: sharePriceChangeColor,
                                         ))
                                   ]),
                             ),
