@@ -247,7 +247,6 @@ class AssetVsAssetRowMktResearchView extends StBaseTvRow with ShowsTwoAssets {
     TableviewDataRowTuple assets, {
     Key? key,
   }) : super(assets, key: key);
-
   @override
   Widget rowBody(
     BuildContext ctx,
@@ -266,82 +265,186 @@ class AssetVsAssetRowMktResearchView extends StBaseTvRow with ShowsTwoAssets {
         ref.read(_redrawAssetRowProvider.notifier).state = showFirst;
       }
 
+      bool hasTwoAssets = assets.item2 != null;
       bool show2ndAsset = ref.watch(_redrawAssetRowProvider)!;
       AssetRowPropertyIfc selectedCompetitor = show2ndAsset ? comp2 : comp1;
 
-      return Container(
-        margin: const EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          color: StColors.black,
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5.0),
-              child: Stack(
-                alignment: Alignment.center,
+      return hasTwoAssets
+          ? Container(
+              margin: const EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                color: StColors.black,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                        child: MktRschAsset(
-                          comp1,
-                          show2ndAsset
-                              ? StColors.veryDarkGray
-                              : StColors.primaryDarkGray,
-                          agd,
-                          const BorderRadius.only(
-                            topLeft: radius,
-                            bottomLeft: radius,
-                          ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5.0),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              child: MktRschAsset(
+                                comp1,
+                                show2ndAsset
+                                    ? StColors.veryDarkGray
+                                    : StColors.primaryDarkGray,
+                                agd,
+                                const BorderRadius.only(
+                                  topLeft: radius,
+                                  bottomLeft: radius,
+                                ),
+                              ),
+                              onTap: () => _assetTapHandler(false),
+                            ),
+                            GestureDetector(
+                              child: MktRschAsset(
+                                comp2,
+                                show2ndAsset
+                                    ? StColors.primaryDarkGray
+                                    : StColors.veryDarkGray,
+                                agd,
+                                const BorderRadius.only(
+                                  topRight: radius,
+                                  bottomRight: radius,
+                                ),
+                              ),
+                              onTap: () => _assetTapHandler(true),
+                            ),
+                          ],
                         ),
-                        onTap: () => _assetTapHandler(false),
-                      ),
-                      GestureDetector(
-                        child: MktRschAsset(
-                          comp2,
-                          show2ndAsset
-                              ? StColors.primaryDarkGray
-                              : StColors.veryDarkGray,
-                          agd,
-                          const BorderRadius.only(
-                            topRight: radius,
-                            bottomRight: radius,
+                        Align(
+                          alignment: Alignment.center,
+                          child: Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              border:
+                                  Border.all(color: StColors.black, width: 3),
+                              shape: BoxShape.circle,
+                              color: StColors.darkGreen,
+                            ),
+                            child: Center(
+                                child: Text(
+                              StStrings.versus,
+                              style: StTextStyles.p2,
+                            )),
                           ),
-                        ),
-                        onTap: () => _assetTapHandler(true),
-                      ),
-                    ],
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: StColors.black, width: 3),
-                        shape: BoxShape.circle,
-                        color: StColors.darkGreen,
-                      ),
-                      child: Center(
-                          child: Text(
-                        StStrings.versus,
-                        style: StTextStyles.p2,
-                      )),
+                        )
+                      ],
                     ),
-                  )
+                  ),
+                  RowControl(
+                    competitor: selectedCompetitor,
+                    gameDetails: agd,
+                  ),
                 ],
               ),
-            ),
-            RowControl(
-              competitor: selectedCompetitor,
-              gameDetails: agd,
-            ),
-          ],
-        ),
-      );
+            )
+          : Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.h),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  WatchButton(
+                    assetKey: comp1.assetKey,
+                    isWatched: comp1.assetStateUpdates.isWatched,
+                  ),
+                  kSpacerSm,
+                  CompetitorImage(comp1.imgUrl, false),
+                  SizedBox(
+                    width: 10.w,
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * .52,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(height: 4.w),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CheckAssetType(
+                              competitor: comp1,
+                              isDriverVsField: true,
+                              isTeamPlayerVsField: false,
+                              isPlayerVsFieldRanked: false,
+                            ),
+                            Column(
+                              children: [
+                                Text(
+                                  comp1.currPriceStr,
+                                  style: StTextStyles.h5,
+                                ),
+                                Text(
+                                  comp1.recentDeltaStr,
+                                  style: StTextStyles.h5.copyWith(
+                                    color: comp1.priceFluxColor,
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: 4.w,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              StStrings.open,
+                              style: StTextStyles.p3
+                                  .copyWith(color: StColors.coolGray),
+                            ),
+                            kSpacerSm,
+                            Text(
+                              comp1.openPriceStr,
+                              style: StTextStyles.p3,
+                            ),
+                            const Spacer(),
+                            Text(
+                              StStrings.high,
+                              style: StTextStyles.p3
+                                  .copyWith(color: StColors.coolGray),
+                            ),
+                            kSpacerSm,
+                            Text(
+                              comp1.hiPriceStr,
+                              style: StTextStyles.p3,
+                            ),
+                            const Spacer(),
+                            Text(
+                              StStrings.low,
+                              style: StTextStyles.p3
+                                  .copyWith(color: StColors.coolGray),
+                            ),
+                            kSpacerSm,
+                            Text(
+                              comp1.lowPriceStr,
+                              style: StTextStyles.p3,
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  Consumer(builder: (
+                    BuildContext context,
+                    WidgetRef ref,
+                    Widget? child,
+                  ) {
+                    return TradeButton(
+                        comp1.assetStateUpdates, comp1.gameStatus);
+                  }),
+                ],
+              ),
+            );
     });
   }
 }
