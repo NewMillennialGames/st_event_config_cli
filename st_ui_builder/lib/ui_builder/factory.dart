@@ -80,6 +80,35 @@ class StUiBuilderFactory {
     return tableAreaAndSlotCfg.rowStyleCfg.selectedRowStyle.rowFormatStyle;
   }
 
+  DynamicRowBuilder rowBuilderForScreen(
+    AppScreen scr, {
+    bool forSingleAssetOnly = true,
+  }) {
+    // return a function that gives you the right row style
+    // constructor for a given screen
+
+    CfgForAreaAndNestedSlots tableAreaAndSlotCfg;
+    if (_eConfig?.eventCfg.applyMktViewRowStyleToAllScreens ?? false) {
+      tableAreaAndSlotCfg = _eConfig!
+          .screenAreaCfg(AppScreen.marketView, ScreenWidgetArea.tableview);
+    } else {
+      tableAreaAndSlotCfg =
+          _eConfig!.screenAreaCfg(scr, ScreenWidgetArea.tableview);
+    }
+    TableviewConfigPayload tableViewCfg =
+        TableviewConfigPayload.orig(scr, tableAreaAndSlotCfg, null);
+
+    // this is important to force substitute row-style
+    // when only showing one tradable
+    tableViewCfg.alwaysReturnSingleTradableRowBuilder = forSingleAssetOnly;
+    return (
+      BuildContext ctx,
+      TableviewDataRowTuple assets,
+    ) {
+      return tableViewCfg.rowConstructor(assets);
+    };
+  }
+
   GroupedTableDataMgr groupedTvConfigForScreen(
     AppScreen screen,
     List<TableviewDataRowTuple> rows,

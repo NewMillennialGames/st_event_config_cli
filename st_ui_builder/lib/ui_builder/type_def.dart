@@ -15,6 +15,11 @@ typedef IndexedItemRowBuilder = Widget Function(
   int,
 );
 
+typedef DynamicRowBuilder = Widget Function(
+  BuildContext,
+  TableviewDataRowTuple,
+);
+
 // function to return provider
 typedef DynRowStateFamProvBuilder = StateProvider<ActiveGameDetails> Function(
     GameKey);
