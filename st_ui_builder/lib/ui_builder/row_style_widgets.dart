@@ -34,8 +34,6 @@ we have one style for each value of:
     be rendered
   */
 
-final _redrawAssetRowProvider = StateProvider<bool>((ref) => false);
-
 class AssetVsAssetRowMktView extends StBaseTvRow
     with ShowsTwoAssets, RequiresGameStatus {
   //
@@ -248,10 +246,11 @@ class AssetVsAssetRowMktResearchView extends StBaseTvRow with ShowsTwoAssets {
         bool showFirst,
       ) {
         //
-        ref.read(_redrawAssetRowProvider.notifier).state = showFirst;
+        ref.read(showMarketResearchSecondAssetProvider.notifier).state =
+            showFirst;
       }
 
-      bool show2ndAsset = ref.watch(_redrawAssetRowProvider)!;
+      bool show2ndAsset = ref.watch(showMarketResearchSecondAssetProvider)!;
       AssetRowPropertyIfc selectedCompetitor = show2ndAsset ? comp2 : comp1;
 
       return Container(
