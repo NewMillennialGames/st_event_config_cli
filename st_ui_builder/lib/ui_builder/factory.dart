@@ -103,9 +103,10 @@ class StUiBuilderFactory {
     tableViewCfg.alwaysReturnSingleTradableRowBuilder = forSingleAssetOnly;
     return (
       BuildContext ctx,
-      TableviewDataRowTuple assets,
-    ) {
-      return tableViewCfg.rowConstructor(assets);
+      TableviewDataRowTuple assets, {
+      Function(TableviewDataRowTuple)? onTap,
+    }) {
+      return tableViewCfg.rowConstructor(assets, onTap: onTap);
     };
   }
 
