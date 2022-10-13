@@ -34,12 +34,13 @@ class TableRowDataMgr {
   TvFilterCfg? get filterRules => _tableViewCfg.filterRules;
 
   // rowBuilder is function to return a Tv-Row for this screen
-  IndexedWidgetBuilder get rowBuilder => (
+  NoAssetsIndexedItemRowBuilder get rowBuilder => (
         BuildContext ctx,
-        int idx,
-      ) {
+        int idx, {
+        Function(TableviewDataRowTuple)? onTap,
+      }) {
         var asset = _allAssetRows[idx];
-        return _tableViewCfg.rowConstructor(asset);
+        return _tableViewCfg.rowConstructor(asset, onTap: onTap);
       };
 
   TvAreaRowStyle get rowStyle => _tableViewCfg.rowStyle;
