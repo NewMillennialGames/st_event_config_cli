@@ -577,6 +577,9 @@ class RowControl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Decimal percentageChange =
+        ((competitor.currPrice - competitor.openPrice) / competitor.openPrice)
+            .toDecimal(scaleOnInfinitePrecision: 2);
     return Container(
       height: (110 / 1.4) * 0.89,
       padding: const EdgeInsets.only(
@@ -590,7 +593,7 @@ class RowControl extends StatelessWidget {
             color: Colors.black.withOpacity(0.5),
             spreadRadius: 0,
             blurRadius: 1,
-            offset: Offset(0, 1),
+            offset: const Offset(0, 1),
           ),
         ],
       ),
@@ -606,26 +609,24 @@ class RowControl extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  competitor.topName + '  ' + competitor.sharesOwnedStr,
+                  "${competitor.topName} ${competitor.currPriceStr}",
                   style: StTextStyles.h4,
                 ),
                 Text(
-                  '+' +
-                      competitor.sharesOwnedStr +
-                      ' ' +
-                      '(' +
-                      competitor.positionGainLossStr.toString() +
-                      '%)',
-                  style: StTextStyles.p2,
+                  '${competitor.recentDeltaStr} (${percentageChange.toStringAsFixed(2)}%)',
+                  style: StTextStyles.p2
+                      .copyWith(color: competitor.priceFluxColor),
                   textAlign: TextAlign.left,
                 ),
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(right: 16),
+            padding: EdgeInsets.only(right: 16.w),
             child: TradeButton(
-                competitor.assetStateUpdates, competitor.gameStatus),
+              competitor.assetStateUpdates,
+              gameDetails.gameStatus,
+            ),
           ),
         ],
       ),

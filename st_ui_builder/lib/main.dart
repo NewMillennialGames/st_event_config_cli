@@ -234,19 +234,19 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
           ),
           DemoRow(
             label: "AssetVsAssetRanked Row Market Research View",
-            row: AssetVsAssetRankedRowMktResearchView(assetRows.first),
+            row: AssetVsAssetRowMktResearchView(assetRows.first),
           ),
           DemoRow(
             label: "TeamVsField Row Market Reasearch View",
-            row: TeamVsFieldRowMktResearchView(assetRows.first),
+            row: TeamVsFieldRowMktView(assetRows.first),
           ),
           DemoRow(
             label: "PlayerVsField Row Market Reasearch View",
-            row: PlayerVsFieldRowMktResearchView(assetRows.first),
+            row: TeamVsFieldRowMktView(assetRows.first),
           ),
           DemoRow(
             label: "PlayerVsField Ranked Row Market Reasearch View",
-            row: PlayerVsFieldRankedMktResearchView(assetRows.first),
+            row: TeamVsFieldRowMktView(assetRows.first),
           ),
           DemoRow(
             label: "AssetVsAsset Row Portfolio View",

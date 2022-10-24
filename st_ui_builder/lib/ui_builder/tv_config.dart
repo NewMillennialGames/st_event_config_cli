@@ -19,6 +19,8 @@ class TableviewConfigPayload {
   final TvFilterCfg? filterRules;
   final TvGroupCfg? groupByRules;
 
+  bool alwaysReturnSingleTradableRowBuilder = false;
+
   TableviewConfigPayload(
     // private constructor
     this.appScreen,
@@ -26,7 +28,11 @@ class TableviewConfigPayload {
     this.sortRules,
     this.filterRules,
     this.groupByRules,
-  );
+  ) {
+    // if (appScreen == AppScreen.marketResearch) {
+    //   alwaysReturnSingleTradableRowBuilder = true;
+    // }
+  }
 
   factory TableviewConfigPayload.orig(
     AppScreen appScreen,
@@ -102,21 +108,27 @@ class TableviewConfigPayload {
       case AppScreen.marketResearch:
         switch (rowStyle) {
           case TvAreaRowStyle.assetVsAsset:
-            return AssetVsAssetRowMktResearchView.new;
+            return alwaysReturnSingleTradableRowBuilder
+                ? TeamVsFieldRowMktView.new
+                : AssetVsAssetRowMktResearchView.new;
           case TvAreaRowStyle.assetVsAssetRanked:
-            return AssetVsAssetRankedRowMktResearchView.new;
+            return alwaysReturnSingleTradableRowBuilder
+                ? TeamVsFieldRowMktView.new
+                : AssetVsAssetRowMktResearchView.new;
+
+          // all below should show only show one asset at a time
           case TvAreaRowStyle.teamVsField:
-            return TeamVsFieldRowMktResearchView.new;
+            return TeamVsFieldRowMktView.new;
           case TvAreaRowStyle.teamVsFieldRanked:
-            return TeamVsFieldRankedRowMktResearchView.new;
+            return TeamVsFieldRowMktView.new;
           case TvAreaRowStyle.playerVsField:
-            return PlayerVsFieldRowMktResearchView.new;
+            return TeamVsFieldRowMktView.new;
           case TvAreaRowStyle.playerVsFieldRanked:
-            return PlayerVsFieldRankedMktResearchView.new;
+            return TeamVsFieldRowMktView.new;
           case TvAreaRowStyle.driverVsField:
-            return DriverVsFieldRowMktResearchView.new;
+            return DriverVsFieldRowMktView.new;
           case TvAreaRowStyle.teamPlayerVsField:
-            return TeamPlayerVsFieldRowMktResearchView.new;
+            return TeamPlayerVsFieldRowMktView.new;
           case TvAreaRowStyle.teamLine:
             return TeamLineRowMktResearchView.new;
           case TvAreaRowStyle.teamDraft:

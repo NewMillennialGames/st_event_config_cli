@@ -88,9 +88,10 @@ class GroupedTableDataMgr {
   IndexedItemRowBuilder get indexedItemBuilder => (
         BuildContext ctx,
         TableviewDataRowTuple assets,
-        int i,
-      ) {
-        return _tableViewCfg.rowConstructor(assets);
+        int i, {
+        Function(TableviewDataRowTuple)? onTap,
+      }) {
+        return _tableViewCfg.rowConstructor(assets, onTap: onTap);
       };
 
   // for sorting recs into order WITHIN groups/sections
