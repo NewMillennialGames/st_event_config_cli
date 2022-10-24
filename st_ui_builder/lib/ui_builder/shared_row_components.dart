@@ -24,6 +24,9 @@ class WatchButton extends ConsumerWidget {
 var kSpacerSm = SizedBox(
   width: 8.w,
 );
+var kSpacerTiny = SizedBox(
+  width: 4.w,
+);
 var kVerticalSpacerSm = SizedBox(
   height: 3.h,
 );
@@ -193,7 +196,7 @@ class TradeButton extends ConsumerWidget {
     // (optCurEvent?.state ?? EventState.unpublished) == EventState.inProgress;
     return Container(
       height: UiSizes.tradeBtnHeight,
-      width: 80.w,
+      width: 75.w,
       // width: UiSizes.tradeBtnWidthPctScreen * size.width,
       alignment: Alignment.center,
       child: (assetState.isTradable)
@@ -241,57 +244,59 @@ class CheckAssetType extends StatelessWidget {
     String firstName = lst[0];
     String lastName = lst.length >= 2 ? lst[1] : '';
     if (isDriverVsField) {
-      return Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            height: 40.h,
-            width: MediaQuery.of(context).size.width * .1,
-            margin: const EdgeInsets.only(right: 8),
-            child: FittedBox(
-              fit: BoxFit.fitHeight,
-              child: Text(
-                competitor.displayNumberStr,
-                style: StTextStyles.h3.copyWith(fontWeight: FontWeight.w700),
+      return Expanded(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              height: 40.h,
+              width: MediaQuery.of(context).size.width * .1,
+              margin: const EdgeInsets.only(right: 8),
+              child: FittedBox(
+                fit: BoxFit.fitHeight,
+                child: Text(
+                  competitor.displayNumberStr,
+                  style: StTextStyles.h3.copyWith(fontWeight: FontWeight.w700),
+                ),
               ),
             ),
-          ),
-          ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width * .26,
-              minHeight: 50.h,
-              maxHeight: 50.h,
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width * .26,
+                minHeight: 50.h,
+                maxHeight: 50.h,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    firstName.toUpperCase(),
+                    overflow: TextOverflow.ellipsis,
+                    style: StTextStyles.p2
+                        .copyWith(fontWeight: FontWeight.w500, fontSize: 12.sp),
+                    textAlign: TextAlign.center,
+                  ),
+                  Text(
+                    lastName.toUpperCase(),
+                    overflow: TextOverflow.ellipsis,
+                    style: StTextStyles.h3
+                        .copyWith(fontWeight: FontWeight.w800, fontSize: 18.sp),
+                    textAlign: TextAlign.center,
+                  )
+                ],
+              ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  firstName.toUpperCase(),
-                  overflow: TextOverflow.ellipsis,
-                  style: StTextStyles.p2
-                      .copyWith(fontWeight: FontWeight.w500, fontSize: 12.sp),
-                  textAlign: TextAlign.center,
-                ),
-                Text(
-                  lastName.toUpperCase(),
-                  overflow: TextOverflow.ellipsis,
-                  style: StTextStyles.h3
-                      .copyWith(fontWeight: FontWeight.w800, fontSize: 18.sp),
-                  textAlign: TextAlign.center,
-                )
-              ],
-            ),
-          ),
-          if (tradeSource != null) ...[
-            // const Spacer(),
-            kSpacerLarge,
-            Text(
-              tradeSource!,
-              style: StTextStyles.p2,
-            ),
+            if (tradeSource != null) ...[
+              const Spacer(),
+              kSpacerLarge,
+              Text(
+                tradeSource!,
+                style: StTextStyles.p2,
+              ),
+            ],
           ],
-        ],
+        ),
       );
     }
     if (isTeamPlayerVsField) {
@@ -321,20 +326,45 @@ class CheckAssetType extends StatelessWidget {
       );
     }
     if (isPlayerVsFieldRanked) {
-      return Row(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(competitor.topName, style: StTextStyles.h4),
+      return Expanded(
+        child: Row(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(competitor.topName, style: StTextStyles.h4),
+                Text(
+                  competitor.rankStr,
+                  style: StTextStyles.p2.copyWith(color: StColors.coolGray),
+                ),
+              ],
+            ),
+            if (tradeSource != null) ...[
+              const Spacer(),
+              kSpacerLarge,
               Text(
-                competitor.rankStr,
-                style: StTextStyles.p2.copyWith(color: StColors.coolGray),
+                tradeSource!,
+                style: StTextStyles.p2,
               ),
             ],
+          ],
+        ),
+      );
+    }
+    return Expanded(
+      child: Row(
+        children: [
+          ConstrainedBox(
+            constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width * .4),
+            child: Text(
+              competitor.topName,
+              overflow: TextOverflow.ellipsis,
+              style: StTextStyles.h4,
+            ),
           ),
           if (tradeSource != null) ...[
-            // const Spacer(),
+            const Spacer(),
             kSpacerLarge,
             Text(
               tradeSource!,
@@ -342,28 +372,7 @@ class CheckAssetType extends StatelessWidget {
             ),
           ],
         ],
-      );
-    }
-    return Row(
-      children: [
-        ConstrainedBox(
-          constraints:
-              BoxConstraints(maxWidth: MediaQuery.of(context).size.width * .3),
-          child: Text(
-            competitor.topName,
-            overflow: TextOverflow.ellipsis,
-            style: StTextStyles.h4,
-          ),
-        ),
-        if (tradeSource != null) ...[
-          // const Spacer(),
-          kSpacerLarge,
-          Text(
-            tradeSource!,
-            style: StTextStyles.p2,
-          ),
-        ],
-      ],
+      ),
     );
   }
 }

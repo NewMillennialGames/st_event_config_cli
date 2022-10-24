@@ -801,7 +801,7 @@ class TeamVsFieldRowMktView extends StBaseTvRow
         ),
         kSpacerSm,
         SizedBox(
-          width: size.width * .5,
+          width: size.width * .53,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -843,7 +843,7 @@ class TeamVsFieldRowMktView extends StBaseTvRow
                     StStrings.open,
                     style: StTextStyles.p3.copyWith(color: StColors.coolGray),
                   ),
-                  kSpacerSm,
+                  kSpacerTiny,
                   Text(
                     comp1.openPriceStr,
                     style: StTextStyles.p3,
@@ -853,7 +853,7 @@ class TeamVsFieldRowMktView extends StBaseTvRow
                     StStrings.high,
                     style: StTextStyles.p3.copyWith(color: StColors.coolGray),
                   ),
-                  kSpacerSm,
+                  kSpacerTiny,
                   Text(
                     comp1.hiPriceStr,
                     style: StTextStyles.p3,
@@ -863,7 +863,7 @@ class TeamVsFieldRowMktView extends StBaseTvRow
                     StStrings.low,
                     style: StTextStyles.p3.copyWith(color: StColors.coolGray),
                   ),
-                  kSpacerSm,
+                  kSpacerTiny,
                   Text(
                     comp1.lowPriceStr,
                     style: StTextStyles.p3,
