@@ -145,6 +145,9 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
   @override
   // extra properties
   String get extAtts => asset.extAtts;
+
+  @override
+  String? get groupName => null;
 }
 
 List<MockAsset> _fakeData = [
