@@ -103,9 +103,7 @@ class GroupHeaderData
           (cd3 is DateTime) ? cd3.truncateTime.microsecondsSinceEpoch : cd3;
 
       String sortKey = '${v1}_${v2}_$v3';
-      if (r.item1.groupName != null) {
-        sortKey += '_${r.item1.groupName}';
-      }
+
       // print(
       //   '${cd1.runtimeType} ${cd1 is DateTime}  ${cd1 is Comparable<DateTime>}',
       // );

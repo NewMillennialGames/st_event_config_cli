@@ -68,11 +68,8 @@ class GroupedTableDataMgr {
     // copy groupBy getter to save a lookup
     final TvAreaRowStyle rowStyle = _tableViewCfg.rowStyle;
     final GetGroupHeaderLblsFromCompetitionRow gbFunc = groupBy;
-    return (TableviewDataRowTuple rowData) => TvGroupHeader(
-          rowStyle,
-          appScreen,
-          gbFunc(rowData),
-        );
+    return (TableviewDataRowTuple rowData) =>
+        TvGroupHeader(rowStyle, appScreen, gbFunc(rowData));
   }
 
   // natural sorting will use my Comparator; dont need this
@@ -581,12 +578,8 @@ class _AssetRowsListView extends StatelessWidget {
         onRefresh: onRefresh,
         child: GroupedListView<TableviewDataRowTuple, GroupHeaderData>(
           controller: scrollController,
-          key: scrollable
-              ? const PageStorageKey<String>('market-view-list')
-              : null,
-          physics: scrollable
-              ? const AlwaysScrollableScrollPhysics()
-              : const NeverScrollableScrollPhysics(),
+          key: const PageStorageKey<String>('market-view-list'),
+          physics: const AlwaysScrollableScrollPhysics(),
           elements: assets,
           groupBy: groupBy,
           groupHeaderBuilder: groupHeaderBuilder,
