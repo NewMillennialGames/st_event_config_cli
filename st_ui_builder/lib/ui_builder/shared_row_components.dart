@@ -300,23 +300,31 @@ class CheckAssetType extends StatelessWidget {
       );
     }
     if (isTeamPlayerVsField) {
-      return ConstrainedBox(
-        constraints:
-            BoxConstraints(maxWidth: MediaQuery.of(context).size.width * .3),
+      return Expanded(
+        // constraints:
+        //     BoxConstraints(maxWidth: MediaQuery.of(context).size.width * .3),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (tradeSource == null)
-              Text(competitor.topName, style: StTextStyles.h4)
+              Text(competitor.topName,
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
+                  style: StTextStyles.h4)
             else
-              Text(tradeSource!, style: StTextStyles.h4),
-            Row(
+              Text(tradeSource!,
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
+                  style: StTextStyles.h4),
+            Wrap(
               children: [
                 Text(competitor.teamNameWhenTradingPlayers,
+                    softWrap: true,
                     overflow: TextOverflow.ellipsis,
                     style: StTextStyles.p2.copyWith(color: StColors.coolGray)),
-                kSpacerSm,
+                kSpacerTiny,
                 Text(competitor.position,
+                    softWrap: true,
                     overflow: TextOverflow.ellipsis,
                     style: StTextStyles.p2.copyWith(color: StColors.coolGray))
               ],
