@@ -2,7 +2,10 @@ part of StUiController;
 
 // factory function that takes in TableviewDataRowTuple
 // and returns the TvRowWidget
-typedef TvRowBuilder = Widget Function(TableviewDataRowTuple);
+typedef TvRowBuilder = Widget Function(
+  TableviewDataRowTuple, {
+  Function(TableviewDataRowTuple)? onTap,
+});
 typedef GroupHeaderBuilder = Widget Function(TableviewDataRowTuple);
 typedef GroupSepRowBuilder = Widget Function(GroupHeaderData);
 
@@ -12,8 +15,21 @@ typedef SelectedFilterSetter = void Function(String?);
 typedef IndexedItemRowBuilder = Widget Function(
   BuildContext,
   TableviewDataRowTuple,
-  int,
-);
+  int, {
+  Function(TableviewDataRowTuple)? onTap,
+});
+
+typedef NoAssetsIndexedItemRowBuilder = Widget Function(
+  BuildContext,
+  int, {
+  Function(TableviewDataRowTuple)? onTap,
+});
+
+typedef DynamicRowBuilder = Widget Function(
+  BuildContext,
+  TableviewDataRowTuple, {
+  Function(TableviewDataRowTuple)? onTap,
+});
 
 // function to return provider
 typedef DynRowStateFamProvBuilder = StateProvider<ActiveGameDetails> Function(

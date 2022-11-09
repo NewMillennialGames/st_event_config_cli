@@ -29,6 +29,7 @@ class TvGroupHeader extends StatelessWidget {
     if (headerData.h2Displ.isNotEmpty) {
       height += 39;
     }
+
     return Container(
       height: height.h,
       padding: EdgeInsets.only(top: 4.h, bottom: 8.h),

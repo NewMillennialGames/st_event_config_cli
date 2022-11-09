@@ -22,7 +22,7 @@ class QuestPromptPayload<T> {
 
 abstract class QuestBase with EquatableMixin {
   /*
-    largely a wrapper around QTargetIntent && QDefCollection
+    largely a wrapper around QTargetResolution && QPromptCollection
     base class for all our 5 specific question types:
 
       1. event level config & behavior
@@ -133,7 +133,8 @@ abstract class QuestBase with EquatableMixin {
         questId: questId,
       );
     }
-   ConfigLogger.log(Level.WARNING, 'Error:  QuestBase.rulePrepQuest hit impossible condition');
+    ConfigLogger.log(Level.WARNING,
+        'Error:  QuestBase.rulePrepQuest hit impossible condition');
     return RulePrepQuest(completeTarg, qDefCollection, questId: questId);
   }
 
@@ -766,7 +767,8 @@ class RulePrepQuest extends SelectAndPrepQBase {
       'target must be complete in a rule prep question!',
     );
 
- ConfigLogger.log(Level.INFO, 
+    ConfigLogger.log(
+      Level.INFO,
       'derivedQuestTargetAtAnswerIdx.visRule: ${qTargetResolution.visRuleTypeForAreaOrSlot!.name}',
     );
     return qTargetResolution.copyWith(

@@ -46,6 +46,9 @@ class GroupedTableDataMgr {
   })  : sortOrder = ascending ? GroupedListOrder.ASC : GroupedListOrder.DESC,
         _filteredAssetRows = _allAssetRows.toList();
 
+  Map<String, List<TableviewDataRowTuple>>? get rowsGroupedByTitles =>
+      _groupRowsByTitle(_filteredAssetRows);
+
   List<TableviewDataRowTuple> get listData => _sortRows(_filteredAssetRows);
   TvGroupCfg? get groupRules => _tableViewCfg.groupByRules;
   TvSortCfg get sortingRules => _tableViewCfg.sortRules;
@@ -88,9 +91,10 @@ class GroupedTableDataMgr {
   IndexedItemRowBuilder get indexedItemBuilder => (
         BuildContext ctx,
         TableviewDataRowTuple assets,
-        int i,
-      ) {
-        return _tableViewCfg.rowConstructor(assets);
+        int i, {
+        Function(TableviewDataRowTuple)? onTap,
+      }) {
+        return _tableViewCfg.rowConstructor(assets, onTap: onTap);
       };
 
   // for sorting recs into order WITHIN groups/sections
@@ -290,6 +294,32 @@ class GroupedTableDataMgr {
     return <String>{...labels};
   }
 
+  ///If groupings exist, this will arrange rows into groups
+  ///and return a map of `groupTitle -> rows`
+  Map<String, List<TableviewDataRowTuple>>? _groupRowsByTitle(
+    List<TableviewDataRowTuple> rows,
+  ) {
+    if (rows.isEmpty ||
+        (rows.isNotEmpty && rows.first.item1.groupName == null)) {
+      return null;
+    }
+
+    rows = _sortRows(rows);
+
+    Map<String, List<TableviewDataRowTuple>> rowsMap = {};
+
+    for (var row in rows) {
+      if (rowsMap[row.item1.groupName] == null) {
+        rowsMap[row.item1.groupName!] = [row];
+      } else {
+        final tempRows = rowsMap[row.item1.groupName!]!;
+        rowsMap[row.item1.groupName!] = [...tempRows, row];
+      }
+    }
+
+    return rowsMap;
+  }
+
   List<TableviewDataRowTuple> _sortRows(List<TableviewDataRowTuple> rows) {
     List<TableviewDataRowTuple> nonTradeableRows = [];
     List<TableviewDataRowTuple> tradeableRows = [];
@@ -348,6 +378,251 @@ class GroupedTableDataMgr {
 
     // _allAssetRows[2] = TableviewDataRowTuple(drt.item1, drt.item2, agd);
     print('ActiveGameDetails replaced on 2 with $round  (did row repaint?)');
+  }
+
+  ///ListView of rows typically displayed in MarketView.
+  ///This is implemented internally as opposed to just exposing
+  ///the row builder in order to implement the nested grouping structure
+  ///for some rows.
+  Widget assetRowsListView({
+    required Future<void> Function() onRefresh,
+    ScrollController? scrollController,
+    Function(TableviewDataRowTuple)? onRowTapped,
+  }) {
+    List<TableviewDataRowTuple>? assets;
+    Map<String, List<TableviewDataRowTuple>>? groupedAssets =
+        rowsGroupedByTitles;
+
+    if (groupedAssets == null) {
+      assets = listData;
+    }
+
+    return _GroupedAssetsListView(
+      onRefresh: onRefresh,
+      scrollController: scrollController,
+      onRowTapped: onRowTapped,
+      groupBy: groupBy,
+      groupHeaderBuilder: groupHeaderBuilder,
+      rowBuilder: indexedItemBuilder,
+      groupComparator: groupComparator,
+      groupedAssets: groupedAssets,
+      assets: assets,
+    );
+  }
+}
+
+class _GroupedAssetsListView extends StatelessWidget {
+  final Future<void> Function() onRefresh;
+  final ScrollController? scrollController;
+  final GetGroupHeaderLblsFromCompetitionRow groupBy;
+  final GroupComparatorCallback? groupComparator;
+  final GroupHeaderBuilder groupHeaderBuilder;
+  final IndexedItemRowBuilder rowBuilder;
+  final Function(TableviewDataRowTuple)? onRowTapped;
+  final Map<String, List<TableviewDataRowTuple>>? groupedAssets;
+  final List<TableviewDataRowTuple>? assets;
+
+  const _GroupedAssetsListView({
+    Key? key,
+    required this.onRefresh,
+    required this.groupBy,
+    required this.groupHeaderBuilder,
+    required this.rowBuilder,
+    this.groupedAssets,
+    this.assets,
+    this.onRowTapped,
+    this.scrollController,
+    this.groupComparator,
+  })  : assert(
+          groupedAssets != null || assets != null,
+          "groupedAssets and assets cannot both be null",
+        ),
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (groupedAssets != null) {
+      return _ExpandableGroupedAssetRowsListView(
+        onRefresh: onRefresh,
+        groupBy: groupBy,
+        groupHeaderBuilder: groupHeaderBuilder,
+        rowBuilder: rowBuilder,
+        groupedAssets: groupedAssets!,
+        onRowTapped: onRowTapped,
+        scrollController: scrollController,
+        groupComparator: groupComparator,
+      );
+    }
+    return _AssetRowsListView(
+      onRefresh: onRefresh,
+      assets: assets!,
+      groupBy: groupBy,
+      groupHeaderBuilder: groupHeaderBuilder,
+      rowBuilder: rowBuilder,
+      onRowTapped: onRowTapped,
+      scrollController: scrollController,
+      groupComparator: groupComparator,
+    );
+  }
+}
+
+class _ExpandableGroupedAssetRowsListView extends StatefulWidget {
+  final Future<void> Function() onRefresh;
+  final ScrollController? scrollController;
+  final GetGroupHeaderLblsFromCompetitionRow groupBy;
+  final GroupComparatorCallback? groupComparator;
+  final GroupHeaderBuilder groupHeaderBuilder;
+  final IndexedItemRowBuilder rowBuilder;
+  final Function(TableviewDataRowTuple)? onRowTapped;
+  final Map<String, List<TableviewDataRowTuple>> groupedAssets;
+
+  const _ExpandableGroupedAssetRowsListView({
+    Key? key,
+    required this.onRefresh,
+    required this.groupBy,
+    required this.groupHeaderBuilder,
+    required this.rowBuilder,
+    required this.groupedAssets,
+    this.onRowTapped,
+    this.scrollController,
+    this.groupComparator,
+  }) : super(key: key);
+
+  @override
+  State<_ExpandableGroupedAssetRowsListView> createState() =>
+      _ExpandableGroupedAssetRowsListViewState();
+}
+
+class _ExpandableGroupedAssetRowsListViewState
+    extends State<_ExpandableGroupedAssetRowsListView> {
+  late List<String> _groupTitles = widget.groupedAssets.keys.toList();
+
+  @override
+  void didUpdateWidget(_ExpandableGroupedAssetRowsListView oldWidget) {
+    if (oldWidget.groupedAssets != widget.groupedAssets) {
+      setState(() {
+        _groupTitles = widget.groupedAssets.keys.toList();
+      });
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return RefreshIndicator(
+      onRefresh: widget.onRefresh,
+      child: SingleChildScrollView(
+        controller: widget.scrollController,
+        padding: EdgeInsets.only(bottom: 90.h),
+        child: Column(
+          children: [
+            for (int i = 0; i < widget.groupedAssets.keys.length; i++) ...{
+              ExpansionTile(
+                initiallyExpanded: true,
+                iconColor: Colors.white,
+                collapsedIconColor: Colors.white,
+                textColor: Colors.white,
+                title: Text(
+                  _groupTitles[i],
+                  style: StTextStyles.h4,
+                ),
+                children: [
+                  _AssetRowsListView(
+                    scrollable: false,
+                    onRefresh: widget.onRefresh,
+                    assets: widget.groupedAssets[_groupTitles[i]] ?? [],
+                    groupBy: widget.groupBy,
+                    groupComparator: widget.groupComparator,
+                    groupHeaderBuilder: widget.groupHeaderBuilder,
+                    rowBuilder: widget.rowBuilder,
+                    onRowTapped: widget.onRowTapped,
+                  ),
+                ],
+              ),
+            }
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AssetRowsListView extends StatelessWidget {
+  final Future<void> Function() onRefresh;
+  final ScrollController? scrollController;
+  final List<TableviewDataRowTuple> assets;
+  final GetGroupHeaderLblsFromCompetitionRow groupBy;
+  final GroupComparatorCallback? groupComparator;
+  final GroupHeaderBuilder groupHeaderBuilder;
+  final IndexedItemRowBuilder rowBuilder;
+  final Function(TableviewDataRowTuple)? onRowTapped;
+  final bool scrollable;
+
+  const _AssetRowsListView({
+    Key? key,
+    required this.onRefresh,
+    required this.assets,
+    required this.groupBy,
+    required this.groupHeaderBuilder,
+    required this.rowBuilder,
+    this.scrollable = true,
+    this.onRowTapped,
+    this.scrollController,
+    this.groupComparator,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (scrollable) {
+      return RefreshIndicator(
+        onRefresh: onRefresh,
+        child: GroupedListView<TableviewDataRowTuple, GroupHeaderData>(
+          controller: scrollController,
+          key: const PageStorageKey<String>('market-view-list'),
+          physics: const AlwaysScrollableScrollPhysics(),
+          elements: assets,
+          groupBy: groupBy,
+          groupHeaderBuilder: groupHeaderBuilder,
+          indexedItemBuilder: (
+            BuildContext ctx,
+            TableviewDataRowTuple assets,
+            int i,
+          ) {
+            return rowBuilder(
+              ctx,
+              assets,
+              i,
+              onTap: onRowTapped,
+            );
+          },
+          sort: false,
+          useStickyGroupSeparators: true,
+          padding: EdgeInsets.only(bottom: 90.h),
+          // next line should not be needed??
+          groupComparator: groupComparator,
+        ),
+      );
+    }
+
+    return Column(
+      children: [
+        for (int i = 0; i < assets.length; i++) ...{
+          //logic to display one header for grouped assets
+          if (i == 0 ||
+              (i + 1 < assets.length &&
+                  groupBy(assets[i])._sortKey !=
+                      groupBy(assets[i + 1])._sortKey)) ...{
+            groupHeaderBuilder(assets[i]),
+          },
+          rowBuilder(
+            context,
+            assets[i],
+            i,
+            onTap: onRowTapped,
+          )
+        }
+      ],
+    );
   }
 }
 

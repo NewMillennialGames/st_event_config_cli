@@ -145,6 +145,9 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
   @override
   // extra properties
   String get extAtts => asset.extAtts;
+
+  @override
+  String? get groupName => null;
 }
 
 List<MockAsset> _fakeData = [
@@ -180,6 +183,9 @@ class MockAssetHoldings implements AssetHoldingsSummaryIfc {
 
   @override
   Order? get order => null;
+
+  @override
+  Decimal get currentAssetPrice => Decimal.fromInt(30);
 }
 
 class MockEventSummary implements UserEventSummaryIfc {

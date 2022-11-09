@@ -68,6 +68,8 @@ abstract class AssetRowPropertyIfc {
   String get extAtts; // extended attributes as JSON
 
   void updateDynamicState(ActiveGameDetails agd);
+
+  String? get groupName;
 }
 
 extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
