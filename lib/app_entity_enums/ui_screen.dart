@@ -98,35 +98,37 @@ extension AppScreenExt1 on AppScreen {
         ];
       case AppScreen.leaderboardTraders:
         return [
-          ScreenWidgetArea.header,
-          ScreenWidgetArea.banner,
+          // ScreenWidgetArea.header,
+          // ScreenWidgetArea.banner,
+          ScreenWidgetArea.tableview,
         ];
       case AppScreen.leaderboardAssets:
         return [
-          ScreenWidgetArea.header,
-          ScreenWidgetArea.banner,
+          // ScreenWidgetArea.header,
+          // ScreenWidgetArea.banner,
+          ScreenWidgetArea.tableview,
         ];
       case AppScreen.portfolioPositions:
         return [
           ScreenWidgetArea.header,
-          ScreenWidgetArea.banner,
+          // ScreenWidgetArea.banner,
           ScreenWidgetArea.tableview,
         ];
       case AppScreen.portfolioHistory:
         return [
           ScreenWidgetArea.header,
-          ScreenWidgetArea.banner,
+          // ScreenWidgetArea.banner,
           ScreenWidgetArea.tableview,
         ];
       case AppScreen.trading:
         return [
           ScreenWidgetArea.header,
-          ScreenWidgetArea.banner,
+          // ScreenWidgetArea.banner,
         ];
       case AppScreen.marketResearch:
         return [
           ScreenWidgetArea.header,
-          ScreenWidgetArea.banner,
+          // ScreenWidgetArea.banner,
         ];
     }
   }

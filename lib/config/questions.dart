@@ -32,8 +32,8 @@ final List<QuestBase> _initQuestionLst = [
     CaptureAndCast<String>((qb, s) => s),
     questId: QuestionIdStrings.eventName,
   ),
-  // set true false to shorten manual testing
-  if (false) ...[
+  // should be true;  set false to shorten manual testing
+  if (true) ...[
     QuestBase.initialEventConfigRule(
       QTargetResolution.forEvent(),
       DlgStr.eventDescrip,
