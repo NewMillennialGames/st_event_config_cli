@@ -847,8 +847,8 @@ class TeamVsFieldRowMktView extends StBaseTvRow
             isTwoAssetRow: this is ShowsTwoAssets,
           ),
           kSpacerSm,
-          SizedBox(
-            width: size.width * .53,
+          Expanded(
+            // width: size.width * .53,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,

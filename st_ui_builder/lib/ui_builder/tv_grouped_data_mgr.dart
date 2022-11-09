@@ -266,7 +266,6 @@ class GroupedTableDataMgr {
       case DbTableFieldName.assetOpenPrice:
       case DbTableFieldName.assetCurrentPrice:
       case DbTableFieldName.assetRankOrScore:
-      case DbTableFieldName.assetPosition:
         rows.sort((a, b) {
           final item1Value = num.parse(a.labelExtractor(colName));
           final item2Value = num.parse(b.labelExtractor(colName));
