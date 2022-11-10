@@ -141,7 +141,7 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
       case DbTableFieldName.assetShortName:
         return subName;
       case DbTableFieldName.assetOrgName:
-        return subName;
+        return teamNameWhenTradingPlayers;
       case DbTableFieldName.conference:
         return regionOrConference;
       case DbTableFieldName.region:
@@ -179,7 +179,7 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
       case DbTableFieldName.assetShortName:
         return subName;
       case DbTableFieldName.assetOrgName:
-        return subName;
+        return teamNameWhenTradingPlayers;
       case DbTableFieldName.conference:
         return regionOrConference;
       case DbTableFieldName.region:
