@@ -607,11 +607,10 @@ class _AssetRowsListView extends StatelessWidget {
     return Column(
       children: [
         for (int i = 0; i < assets.length; i++) ...{
-          //logic to display one header for grouped assets
+          //logic to display date header for grouped assets
           if (i == 0 ||
-              (i + 1 < assets.length &&
-                  groupBy(assets[i])._sortKey !=
-                      groupBy(assets[i + 1])._sortKey)) ...{
+              groupBy(assets[i])._sortKey !=
+                  groupBy(assets[i - 1])._sortKey) ...{
             groupHeaderBuilder(assets[i]),
           },
           rowBuilder(
