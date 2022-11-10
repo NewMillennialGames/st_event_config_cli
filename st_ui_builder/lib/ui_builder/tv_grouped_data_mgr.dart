@@ -289,6 +289,7 @@ class GroupedTableDataMgr {
       _filterTitleExtractor(filterItem.colName),
       ...sortedAssetRows.map((e) => e.labelExtractor(filterItem.colName)),
     ];
+    labels.removeWhere((label) => label.isEmpty);
 
     return <String>{...labels};
   }
