@@ -219,7 +219,7 @@ class GroupedTableDataMgr {
       case DbTableFieldName.assetShortName:
         return isTeam ? 'Team' : 'Player';
       case DbTableFieldName.assetOrgName:
-        return 'Org';
+        return 'Team';
       case DbTableFieldName.conference:
         return 'Conference';
       case DbTableFieldName.region:
