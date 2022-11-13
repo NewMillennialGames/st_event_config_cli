@@ -162,10 +162,8 @@ class GroupedTableDataMgr {
             curSelection: _filter1Selection,
             valSetter: (s) => _filter1Selection = s,
             width: allocBtnWidth,
-            clearFilters: clearFilters,
-            doFilteringFor: (colName, selectedValue) =>
-                _doFilteringFor(colName, selectedValue),
-            filterTitleExtractor: (colName) => _filterTitleExtractor(colName),
+            doFilteringFor: _doFilteringFor,
+            filterTitleExtractor: _filterTitleExtractor,
           ),
           if (has2ndList)
             _DropDownMenuList(
@@ -174,10 +172,8 @@ class GroupedTableDataMgr {
               curSelection: _filter2Selection,
               valSetter: (s) => _filter2Selection = s,
               width: allocBtnWidth,
-              clearFilters: clearFilters,
-              doFilteringFor: (colName, selectedValue) =>
-                  _doFilteringFor(colName, selectedValue),
-              filterTitleExtractor: (colName) => _filterTitleExtractor(colName),
+              doFilteringFor: _doFilteringFor,
+              filterTitleExtractor: _filterTitleExtractor,
             ),
           if (has3rdList)
             _DropDownMenuList(
@@ -186,10 +182,8 @@ class GroupedTableDataMgr {
               curSelection: _filter3Selection,
               valSetter: (s) => _filter3Selection = s,
               width: allocBtnWidth,
-              clearFilters: clearFilters,
-              doFilteringFor: (colName, selectedValue) =>
-                  _doFilteringFor(colName, selectedValue),
-              filterTitleExtractor: (colName) => _filterTitleExtractor(colName),
+              doFilteringFor: _doFilteringFor,
+              filterTitleExtractor: _filterTitleExtractor,
             ),
         ],
       ),
@@ -231,7 +225,7 @@ class GroupedTableDataMgr {
       case DbTableFieldName.gameLocation:
         return 'Location';
       case DbTableFieldName.imageUrl:
-        return 'Avatar (select this to hide filter bar)';
+        return 'Avatar';
       case DbTableFieldName.assetOpenPrice:
         return 'Open Price';
       case DbTableFieldName.assetCurrentPrice:
@@ -339,19 +333,47 @@ class GroupedTableDataMgr {
     return [...tradeableRows, ...nonTradeableRows];
   }
 
+  final Set<FilterSelection> _currentFilters = {};
+
   void _doFilteringFor(DbTableFieldName colName, String selectedVal) {
     //
+    final filterSelection = FilterSelection(
+      filterColumn: colName,
+      selectedValue: selectedVal,
+    );
+    _currentFilters
+        .removeWhere((selection) => selection.filterColumn == colName);
+    _currentFilters.add(filterSelection);
+
     if (selectedVal.toUpperCase() ==
         _filterTitleExtractor(colName).toUpperCase()) {
-      clearFilters();
-      return;
+      _currentFilters
+          .removeWhere((selection) => selection.filterColumn == colName);
+
+      if (_currentFilters.isEmpty) {
+        clearFilters();
+        return;
+      }
     }
+
     List<TableviewDataRowTuple> filterResults = [];
 
     for (var asset in _allAssetRows) {
-      if (asset.item1.labelExtractor(colName) == selectedVal ||
-          asset.item2?.labelExtractor(colName) == selectedVal) {
-        filterResults.add(asset);
+      bool added = false;
+      for (var filter in _currentFilters) {
+        if (asset.item1.labelExtractor(filter.filterColumn) ==
+                filter.selectedValue ||
+            asset.item2?.labelExtractor(filter.filterColumn) ==
+                filter.selectedValue) {
+          if (!added) {
+            filterResults.add(asset);
+            added = true;
+          }
+        } else {
+          filterResults.remove(asset);
+          added = false;
+          break;
+        }
       }
     }
     _filteredAssetRows = filterResults;
@@ -631,7 +653,6 @@ class _DropDownMenuList extends StatefulWidget {
   final String? curSelection;
   final SelectedFilterSetter valSetter;
   final double width;
-  final VoidCallback clearFilters;
   final void Function(DbTableFieldName, String) doFilteringFor;
   final String Function(DbTableFieldName) filterTitleExtractor;
 
@@ -642,7 +663,6 @@ class _DropDownMenuList extends StatefulWidget {
     required this.curSelection,
     required this.valSetter,
     required this.width,
-    required this.clearFilters,
     required this.doFilteringFor,
     required this.filterTitleExtractor,
   }) : super(key: key);
@@ -709,7 +729,7 @@ class _DropDownMenuListState extends State<_DropDownMenuList> {
               setState(() {
                 _useDefaultState = true;
               });
-              widget.clearFilters();
+              widget.doFilteringFor(widget.colName, selectedVal ?? "");
               return;
             }
             setState(() {
