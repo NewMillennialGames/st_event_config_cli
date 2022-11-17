@@ -824,7 +824,6 @@ class TeamVsFieldRowMktView extends StBaseTvRow
     ActiveGameDetails agd,
   ) {
     //
-    final size = MediaQuery.of(ctx).size;
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
@@ -947,7 +946,7 @@ class TeamPlayerVsFieldRowMktView extends TeamVsFieldRowMktView {
     TableviewDataRowTuple assets, {
     Function(TableviewDataRowTuple)? onTap,
     Key? key,
-  }) : super(assets, key: key);
+  }) : super(assets, key: key, onTap: onTap);
 }
 
 class PlayerVsFieldRankedRowMktView extends TeamVsFieldRowMktView {
