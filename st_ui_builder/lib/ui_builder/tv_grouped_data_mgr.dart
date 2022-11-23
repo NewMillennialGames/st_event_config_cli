@@ -303,6 +303,8 @@ class GroupedTableDataMgr {
     Map<String, List<TableviewDataRowTuple>> rowsMap = {};
 
     for (var row in rows) {
+      if(row.item1.groupName == null) continue;
+
       if (rowsMap[row.item1.groupName] == null) {
         rowsMap[row.item1.groupName!] = [row];
       } else {
