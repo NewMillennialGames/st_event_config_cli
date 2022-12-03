@@ -5,6 +5,8 @@ part of AppEntities;
 enum EvType {
   fantasy,
   standard,
+  future,
+  future_repriced,
 }
 
 @JsonEnum()
