@@ -27,6 +27,12 @@ TopEventCfg _$TopEventCfgFromJson(Map<String, dynamic> json) => TopEventCfg(
           EvGameAgeOffRule.byEvEliminationStrategy,
       applyMktViewRowStyleToAllScreens:
           json['applyMktViewRowStyleToAllScreens'] as bool? ?? true,
+      useAssetShortNameInFilters:
+          json['useAssetShortNameInFilters'] as bool? ?? true,
+      assetNameDisplayStyle: $enumDecodeNullable(
+              _$EvAssetNameDisplayStyleEnumMap,
+              json['assetNameDisplayStyle']) ??
+          EvAssetNameDisplayStyle.showShortName,
     )..cancelAllRowGroupingLogic =
         json['cancelAllRowGroupingLogic'] as bool? ?? false;
 
@@ -44,6 +50,9 @@ Map<String, dynamic> _$TopEventCfgToJson(TopEventCfg instance) =>
       'applyMktViewRowStyleToAllScreens':
           instance.applyMktViewRowStyleToAllScreens,
       'cancelAllRowGroupingLogic': instance.cancelAllRowGroupingLogic,
+      'useAssetShortNameInFilters': instance.useAssetShortNameInFilters,
+      'assetNameDisplayStyle':
+          _$EvAssetNameDisplayStyleEnumMap[instance.assetNameDisplayStyle]!,
     };
 
 const _$EvTypeEnumMap = {
@@ -70,7 +79,7 @@ const _$EvDurationEnumMap = {
   EvDuration.oneGame: 'oneGame',
   EvDuration.tournament: 'tournament',
   EvDuration.season: 'season',
-  EvDuration.ongoing: 'ongoing',
+  EvDuration.calendarScoped: 'calendarScoped',
 };
 
 const _$EvEliminationStrategyEnumMap = {
@@ -86,9 +95,16 @@ const _$EvEliminationStrategyEnumMap = {
 const _$EvGameAgeOffRuleEnumMap = {
   EvGameAgeOffRule.whenRoundChanges: 'whenRoundChanges',
   EvGameAgeOffRule.everyWeek: 'everyWeek',
-  EvGameAgeOffRule.oneDayAfterEnds: 'oneDayAfterEnds',
+  EvGameAgeOffRule.timeAfterGameEnds: 'timeAfterGameEnds',
   EvGameAgeOffRule.neverAgeOff: 'neverAgeOff',
   EvGameAgeOffRule.byEvEliminationStrategy: 'byEvEliminationStrategy',
+  EvGameAgeOffRule.startOfNextGame: 'startOfNextGame',
+};
+
+const _$EvAssetNameDisplayStyleEnumMap = {
+  EvAssetNameDisplayStyle.showShortName: 'showShortName',
+  EvAssetNameDisplayStyle.showLongName: 'showLongName',
+  EvAssetNameDisplayStyle.showBothStacked: 'showBothStacked',
 };
 
 EventCfgTree _$EventCfgTreeFromJson(Map<String, dynamic> json) => EventCfgTree(

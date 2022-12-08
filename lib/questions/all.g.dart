@@ -58,6 +58,7 @@ SortGroupFilterEntry _$SortGroupFilterEntryFromJson(
     SortGroupFilterEntry(
       $enumDecode(_$DbTableFieldNameEnumMap, json['colName']),
       json['asc'] as bool,
+      menuTitleIfFilter: json['menuTitleIfFilter'] as String?,
     );
 
 Map<String, dynamic> _$SortGroupFilterEntryToJson(
@@ -65,6 +66,7 @@ Map<String, dynamic> _$SortGroupFilterEntryToJson(
     <String, dynamic>{
       'colName': _$DbTableFieldNameEnumMap[instance.colName]!,
       'asc': instance.asc,
+      'menuTitleIfFilter': instance.menuTitleIfFilter,
     };
 
 const _$DbTableFieldNameEnumMap = {

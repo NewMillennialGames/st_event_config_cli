@@ -15,7 +15,7 @@ enum EvDuration {
   oneGame, // aka once
   tournament, // short period
   season, // long period
-  ongoing, // unending
+  calendarScoped, // eg weekly
 }
 
 // type of gameplay
@@ -63,7 +63,7 @@ enum EvGameAgeOffRule {
   */
   whenRoundChanges, // via the competition stream
   everyWeek, // via the clock compared to game-end-dttm
-  oneDayAfterEnds, // via the clock
+  timeAfterGameEnds, // via the clock
   neverAgeOff,
   byEvEliminationStrategy, // see EvEliminationStrategy above
   startOfNextGame,

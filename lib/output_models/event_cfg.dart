@@ -93,7 +93,8 @@ class EventCfgTree {
   );
 
   factory EventCfgTree.fromEventLevelConfig(
-      Iterable<EventLevelCfgQuest> evCfgResponses) {
+    Iterable<EventLevelCfgQuest> evCfgResponses,
+  ) {
     //
     EventLevelCfgQuest evTemplateQuest = evCfgResponses
         .firstWhere((q) => q.questId == QuestionIdStrings.eventName);
@@ -233,7 +234,9 @@ class EventCfgTree {
     String jsonData = json.encode(this);
     outFile.writeAsStringSync(jsonData, mode: FileMode.write, flush: true);
     ConfigLogger.log(
-        Level.INFO, 'Config written (in JSON fmt) to ${outFile.path}');
+      Level.INFO,
+      'Config written (in JSON fmt) to ${outFile.path}',
+    );
     // } catch (e) {
     //   ConfigLogger.log(Level.FINER,e.toString());
     // }
