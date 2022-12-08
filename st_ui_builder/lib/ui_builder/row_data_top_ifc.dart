@@ -41,6 +41,8 @@ abstract class AssetRowPropertyIfc {
 
   String get teamImgUrlWhenTradingPlayers;
 
+  EvAssetNameDisplayStyle get assetNameDisplayStyle;
+
   // holds asset price history
   AssetStateUpdates get assetStateUpdates;
 
@@ -122,6 +124,9 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
   bool get stockIsUp => assetStateUpdates.stockIsUp;
 
   Color get priceFluxColor => assetStateUpdates.priceFluxColor;
+
+  EvAssetNameDisplayStyle get assetNameDisplayStyle =>
+      EvAssetNameDisplayStyle.showShortName;
 
   CompetitionType get gameType => CompetitionType.game;
 

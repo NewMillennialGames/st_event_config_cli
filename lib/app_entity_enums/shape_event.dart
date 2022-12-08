@@ -66,11 +66,12 @@ enum EvGameAgeOffRule {
   oneDayAfterEnds, // via the clock
   neverAgeOff,
   byEvEliminationStrategy, // see EvEliminationStrategy above
+  startOfNextGame,
 }
 
 @JsonEnum()
 enum EvAssetNameDisplayStyle {
-  // in all app rows
+  // in all app rows which respect this property
   showShortName,
   showLongName,
   showBothStacked,

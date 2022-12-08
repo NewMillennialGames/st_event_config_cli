@@ -4,8 +4,9 @@ import 'dart:convert';
 // dont remove the following two lines -- they are actually in use in other files
 import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:decimal/decimal.dart';
 import 'package:flutter/foundation.dart';
+
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

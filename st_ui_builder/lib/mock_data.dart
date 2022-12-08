@@ -1,5 +1,6 @@
 import 'package:decimal/decimal.dart';
 import 'package:intl/intl.dart';
+import 'package:st_ev_cfg/st_ev_cfg.dart';
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
 //
 import 'package:stclient/stclient.dart';
@@ -132,6 +133,10 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
 
   @override
   String get teamNameWhenTradingPlayers => '';
+
+  @override
+  EvAssetNameDisplayStyle get assetNameDisplayStyle =>
+      EvAssetNameDisplayStyle.showShortName;
 
   @override
   String get ticker => 'ticker';
