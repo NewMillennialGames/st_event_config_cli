@@ -5,10 +5,7 @@ enum DbTableFieldName {
   assetName,
   assetShortName,
   assetOrgName,
-  conference,
-  region,
-  // this is an error;  we dont have event name on assets
-  // eventName,
+  leagueGrouping,
   gameDate,
   gameTime,
   gameLocation,

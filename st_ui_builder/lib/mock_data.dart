@@ -82,7 +82,7 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
   String get rankStr => '$rank';
 
   @override
-  String get regionOrConference => asset.region;
+  String get leagueGrouping => asset.region;
 
   @override
   String get subName => asset.teamName;

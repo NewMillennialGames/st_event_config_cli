@@ -214,10 +214,10 @@ class GroupedTableDataMgr {
         return isTeam ? 'Team' : 'Player';
       case DbTableFieldName.assetOrgName:
         return 'Team';
-      case DbTableFieldName.conference:
+      case DbTableFieldName.leagueGrouping:
         return 'Conference';
-      case DbTableFieldName.region:
-        return 'All Regions';
+      // case DbTableFieldName.region:
+      //   return 'All Regions';
       case DbTableFieldName.gameDate:
         return 'All Dates';
       case DbTableFieldName.gameTime:
@@ -303,7 +303,7 @@ class GroupedTableDataMgr {
     Map<String, List<TableviewDataRowTuple>> rowsMap = {};
 
     for (var row in rows) {
-      if(row.item1.groupName == null) continue;
+      if (row.item1.groupName == null) continue;
 
       if (rowsMap[row.item1.groupName] == null) {
         rowsMap[row.item1.groupName!] = [row];

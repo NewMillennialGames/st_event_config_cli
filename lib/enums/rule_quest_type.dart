@@ -16,6 +16,7 @@ enum VisRuleQuestType {
   specifySortAscending,
   selectVisualComponentOrStyle,
   controlsVisibilityOfAreaOrSlot,
+  askMenuName,
 }
 
 extension VisRuleQuestTypeExt1 on VisRuleQuestType {
@@ -62,6 +63,8 @@ extension VisRuleQuestTypeExt1 on VisRuleQuestType {
         return resp;
       case VisRuleQuestType.controlsVisibilityOfAreaOrSlot:
         return 'Show this region within {0} (area or slot)?';
+      case VisRuleQuestType.askMenuName:
+        return 'Specify name for filter menu?';
     }
   }
 
@@ -88,6 +91,8 @@ extension VisRuleQuestTypeExt1 on VisRuleQuestType {
           'no',
           'yes',
         ];
+      case VisRuleQuestType.askMenuName:
+        return [];
     }
   }
 

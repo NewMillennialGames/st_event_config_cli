@@ -52,7 +52,7 @@ abstract class AssetRowPropertyIfc {
   // next 3 properties are game props but needed for sorting and grouping
   // shows values off the game record
   DateTime get gameDate; // rounded to midnight for row grouping
-  String get regionOrConference;
+  String get leagueGrouping;
 
   String get roundName;
 
@@ -142,10 +142,10 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
         return subName;
       case DbTableFieldName.assetOrgName:
         return teamNameWhenTradingPlayers;
-      case DbTableFieldName.conference:
-        return regionOrConference;
-      case DbTableFieldName.region:
-        return regionOrConference;
+      case DbTableFieldName.leagueGrouping:
+        return leagueGrouping;
+      // case DbTableFieldName.leagueGrouping:
+      //   return leagueGrouping;
       case DbTableFieldName.gameDate:
         return gameDateDtwStr;
       case DbTableFieldName.gameTime:
@@ -180,10 +180,10 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
         return subName;
       case DbTableFieldName.assetOrgName:
         return teamNameWhenTradingPlayers;
-      case DbTableFieldName.conference:
-        return regionOrConference;
-      case DbTableFieldName.region:
-        return regionOrConference;
+      case DbTableFieldName.leagueGrouping:
+        return leagueGrouping;
+      // case DbTableFieldName.region:
+      //   return leagueGrouping;
       case DbTableFieldName.gameDate:
         return gameDate.truncateTime;
       case DbTableFieldName.gameTime:

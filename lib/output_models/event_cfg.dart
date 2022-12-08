@@ -20,6 +20,9 @@ class TopEventCfg {
   bool applyMktViewRowStyleToAllScreens = true;
   @JsonKey(defaultValue: false)
   bool cancelAllRowGroupingLogic = false;
+  bool useAssetShortNameInFilters = true;
+  EvAssetNameDisplayStyle assetNameDisplayStyle =
+      EvAssetNameDisplayStyle.showShortName;
 
   TopEventCfg(
     this.evTemplateName,
@@ -31,6 +34,8 @@ class TopEventCfg {
     this.evEliminationType = EvEliminationStrategy.roundRobin,
     this.evGameAgeOffRule = EvGameAgeOffRule.byEvEliminationStrategy,
     this.applyMktViewRowStyleToAllScreens = true,
+    this.useAssetShortNameInFilters = true,
+    this.assetNameDisplayStyle = EvAssetNameDisplayStyle.showShortName,
   });
 
   bool get isFantasy => evType == EvType.fantasy;
@@ -109,6 +114,9 @@ class EventCfgTree {
     EvGameAgeOffRule evGameAgeOffRule =
         EvGameAgeOffRule.byEvEliminationStrategy;
     bool applySameRowStyleToAllScreens = true;
+    bool useAssetShortNameInFilters = false;
+    EvAssetNameDisplayStyle assetNameDisplayStyle =
+        EvAssetNameDisplayStyle.showShortName;
     // use try to catch errs and allow easy debugging
     try {
       evTemplateDescription = (evCfgResponses
@@ -139,6 +147,15 @@ class EventCfgTree {
       applySameRowStyleToAllScreens = evCfgResponses
           .firstWhere((q) => q.questId == QuestionIdStrings.globalRowStyle)
           .mainAnswer as bool;
+      useAssetShortNameInFilters = evCfgResponses
+          .firstWhere(
+              (q) => q.questId == QuestionIdStrings.useAssetShortNameInFilters)
+          .mainAnswer as bool;
+
+      assetNameDisplayStyle = evCfgResponses
+          .firstWhere(
+              (q) => q.questId == QuestionIdStrings.selectAssetNameDisplayStyle)
+          .mainAnswer as EvAssetNameDisplayStyle;
     } catch (e) {
       ConfigLogger.log(
         Level.WARNING,
@@ -156,6 +173,8 @@ class EventCfgTree {
       evEliminationType: evEliminationType,
       evGameAgeOffRule: evGameAgeOffRule,
       applyMktViewRowStyleToAllScreens: applySameRowStyleToAllScreens,
+      useAssetShortNameInFilters: useAssetShortNameInFilters,
+      assetNameDisplayStyle: assetNameDisplayStyle,
     );
 
     return EventCfgTree(eventCfg, {});

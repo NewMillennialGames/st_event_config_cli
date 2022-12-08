@@ -221,8 +221,7 @@ class __$$_AssetStateUpdatesCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_AssetStateUpdates extends _AssetStateUpdates
-    with DiagnosticableTreeMixin {
+class _$_AssetStateUpdates extends _AssetStateUpdates {
   const _$_AssetStateUpdates(this.assetKey, this.name, this.ticker,
       {this.assetState = AssetState.assetNew,
       this.tradeMode = TradeMode.tradeMarket,
@@ -262,26 +261,8 @@ class _$_AssetStateUpdates extends _AssetStateUpdates
   final Decimal openPrice;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'AssetStateUpdates(assetKey: $assetKey, name: $name, ticker: $ticker, assetState: $assetState, tradeMode: $tradeMode, isWatched: $isWatched, isOwned: $isOwned, curPrice: $curPrice, hiPrice: $hiPrice, lowPrice: $lowPrice, openPrice: $openPrice)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'AssetStateUpdates'))
-      ..add(DiagnosticsProperty('assetKey', assetKey))
-      ..add(DiagnosticsProperty('name', name))
-      ..add(DiagnosticsProperty('ticker', ticker))
-      ..add(DiagnosticsProperty('assetState', assetState))
-      ..add(DiagnosticsProperty('tradeMode', tradeMode))
-      ..add(DiagnosticsProperty('isWatched', isWatched))
-      ..add(DiagnosticsProperty('isOwned', isOwned))
-      ..add(DiagnosticsProperty('curPrice', curPrice))
-      ..add(DiagnosticsProperty('hiPrice', hiPrice))
-      ..add(DiagnosticsProperty('lowPrice', lowPrice))
-      ..add(DiagnosticsProperty('openPrice', openPrice));
   }
 
   @override
@@ -523,8 +504,7 @@ class __$$_ActiveGameDetailsCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_ActiveGameDetails extends _ActiveGameDetails
-    with DiagnosticableTreeMixin {
+class _$_ActiveGameDetails extends _ActiveGameDetails {
   const _$_ActiveGameDetails(this.competitionKey, this.scheduledStartDtTm,
       {this.gameStatus = CompetitionStatus.compUninitialized,
       this.roundName = '',
@@ -560,22 +540,8 @@ class _$_ActiveGameDetails extends _ActiveGameDetails
   }
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'ActiveGameDetails(competitionKey: $competitionKey, scheduledStartDtTm: $scheduledStartDtTm, gameStatus: $gameStatus, roundName: $roundName, regionOrConference: $regionOrConference, location: $location, participantAssetInfo: $participantAssetInfo)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'ActiveGameDetails'))
-      ..add(DiagnosticsProperty('competitionKey', competitionKey))
-      ..add(DiagnosticsProperty('scheduledStartDtTm', scheduledStartDtTm))
-      ..add(DiagnosticsProperty('gameStatus', gameStatus))
-      ..add(DiagnosticsProperty('roundName', roundName))
-      ..add(DiagnosticsProperty('regionOrConference', regionOrConference))
-      ..add(DiagnosticsProperty('location', location))
-      ..add(DiagnosticsProperty('participantAssetInfo', participantAssetInfo));
   }
 
   @override

@@ -67,3 +67,11 @@ enum EvGameAgeOffRule {
   neverAgeOff,
   byEvEliminationStrategy, // see EvEliminationStrategy above
 }
+
+@JsonEnum()
+enum EvAssetNameDisplayStyle {
+  // in all app rows
+  showShortName,
+  showLongName,
+  showBothStacked,
+}

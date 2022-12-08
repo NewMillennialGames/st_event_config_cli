@@ -129,8 +129,9 @@ class SortGroupFilterEntry {
   // describes field & order to sort/group/filter with
   DbTableFieldName colName;
   bool asc = false;
+  String? menuTitleIfFilter;
 
-  SortGroupFilterEntry(this.colName, this.asc);
+  SortGroupFilterEntry(this.colName, this.asc, {this.menuTitleIfFilter});
 
   bool get sortingDisabled => colName == DbTableFieldName.imageUrl;
 

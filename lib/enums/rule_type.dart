@@ -200,6 +200,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
       case VisualRuleType.filterCfg:
         return [
           Vrq.selectDataFieldName,
+          Vrq.askMenuName,
           // Vrq.specifySortAscending // leave this out here
         ];
       case VisualRuleType.styleOrFormat:
@@ -307,7 +308,8 @@ extension VisualRuleTypeExt1 on VisualRuleType {
         );
 
         String templ = thisVisRT.prepTemplate;
-       ConfigLogger.log(Level.INFO, 
+        ConfigLogger.log(
+          Level.INFO,
           'askCountOfSlotsToConfigure:  ${thisVisRT} uses $templ   ($ruleTypeName)',
         );
         perQuestPromptDetails.add(NewQuestPerPromptOpts<int>(
@@ -351,7 +353,8 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           requiredPromptInstances,
         );
         perQuestPromptDetails.addAll(qps);
-        ConfigLogger.log(Level.INFO, 
+        ConfigLogger.log(
+          Level.INFO,
           'requiredPromptInstances: $requiredPromptInstances  produced ${qps.length} NewQuestPerPromptOpts for vrt: ${thisVisRT.name}',
         );
         break;
@@ -378,6 +381,10 @@ extension VisualRuleTypeExt1 on VisualRuleType {
         break;
       //
       case VisRuleQuestType.specifySortAscending:
+        throw UnimplementedError(
+          'err: not a real rule; hidden under selectDataFieldName',
+        );
+      case VisRuleQuestType.askMenuName:
         throw UnimplementedError(
           'err: not a real rule; hidden under selectDataFieldName',
         );
@@ -456,7 +463,8 @@ List<NewQuestPerPromptOpts> _getQuestPromptOptsForDataFieldName(
     String lstAreaIdxs,
   ) {
     List<int> l = castStrOfIdxsToIterOfInts(lstAreaIdxs).toList();
-    assert(l.length == 1, 'exactly 1 response required');
+    assert(l.length == 1,
+        'exactly 1 fldName required per slot in sort/group/filter');
     return DbTableFieldName.values[l.first];
   }
 
@@ -491,6 +499,25 @@ List<NewQuestPerPromptOpts> _getQuestPromptOptsForDataFieldName(
           int promptIdx,
         ) {
           return ['no', 'yes'];
+        },
+        instanceIdx: fieldIdx,
+      ),
+      NewQuestPerPromptOpts<String>(
+        'Specify filter menu display name:',
+        visRuleQuestType: VisRuleQuestType.askMenuName,
+        promptTemplArgGen: (_, __, int pi) => [],
+        newRespCastFunc: (
+          QuestBase newQuest,
+          String menuName,
+        ) {
+          return menuName;
+        },
+        answerChoiceGenerator: (
+          QuestBase priorAnsweredQuest,
+          int newQuestIdx,
+          int promptIdx,
+        ) {
+          return [];
         },
         instanceIdx: fieldIdx,
       ),

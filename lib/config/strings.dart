@@ -16,6 +16,11 @@ class DlgStr {
   static String selectAppScreens =
       'Select the app screens you`d like to configure?';
   static String eventGameAgeOffPolicy = 'Select rule for hiding finished games';
+  static String useAssetShortNameInFilters =
+      "Use asset short-name in all filter menus";
+
+  static String selectAssetNameDisplayStyle =
+      "Select asset name display style in list rows";
   // static String eventName = 'Enter Event Template Name';
   // static String eventName = 'Enter Event Template Name';
   // static String eventName = 'Enter Event Template Name';
@@ -56,6 +61,8 @@ class QuestionIdStrings {
   //
   static String globalRowStyle = 'globalRowStyle';
   static String selectAppScreens = 'selectAppScreens';
+  static String useAssetShortNameInFilters = 'useAssetShortNameInFilters';
+  static String selectAssetNameDisplayStyle = "selectAssetNameDisplayStyle";
 
   static String specAreasToConfigOnScreen = 'specAreasToConfigOnScreen';
   static String specRulesForAreaOnScreen = 'specRulesForAreaOnScreen';
