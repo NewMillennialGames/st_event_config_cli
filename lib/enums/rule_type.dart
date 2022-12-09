@@ -318,7 +318,8 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           answerChoiceGenerator: (prevQuest, newQuestIdx, int promptIdx) =>
               ['0', '1', '2', '3'],
           newRespCastFunc: (QuestBase qb, String ans) {
-            return ans as int;
+            return int.tryParse(ans) ?? 0;
+            // return ans as int;
           },
           visRuleType: thisVisRT,
           visRuleQuestType: VisRuleQuestType.askCountOfSlotsToConfigure,
@@ -517,7 +518,8 @@ List<NewQuestPerPromptOpts> _getQuestPromptOptsForDataFieldName(
           int newQuestIdx,
           int promptIdx,
         ) {
-          return [];
+          // will be skipped without some answer choices avail
+          return ['type menu name below ...', ''];
         },
         instanceIdx: fieldIdx,
       ),

@@ -159,31 +159,37 @@ class GroupedTableDataMgr {
           _DropDownMenuList(
             listItems: listItems1,
             colName: i1.colName,
+            titleName:
+                i1.menuTitleIfFilter ?? _filterTitleExtractor(i1.colName, null),
             curSelection: _filter1Selection,
             valSetter: (s) => _filter1Selection = s,
             width: allocBtnWidth,
             doFilteringFor: _doFilteringFor,
-            filterTitleExtractor: _filterTitleExtractor,
+            // filterTitleExtractor: _filterTitleExtractor,
           ),
           if (has2ndList)
             _DropDownMenuList(
               listItems: listItems2,
               colName: i2.colName,
+              titleName: i2.menuTitleIfFilter ??
+                  _filterTitleExtractor(i2.colName, null),
               curSelection: _filter2Selection,
               valSetter: (s) => _filter2Selection = s,
               width: allocBtnWidth,
               doFilteringFor: _doFilteringFor,
-              filterTitleExtractor: _filterTitleExtractor,
+              // filterTitleExtractor: _filterTitleExtractor,
             ),
           if (has3rdList)
             _DropDownMenuList(
               listItems: listItems3,
               colName: i3.colName,
+              titleName: i3.menuTitleIfFilter ??
+                  _filterTitleExtractor(i3.colName, null),
               curSelection: _filter3Selection,
               valSetter: (s) => _filter3Selection = s,
               width: allocBtnWidth,
               doFilteringFor: _doFilteringFor,
-              filterTitleExtractor: _filterTitleExtractor,
+              // filterTitleExtractor: _filterTitleExtractor,
             ),
         ],
       ),
@@ -203,11 +209,16 @@ class GroupedTableDataMgr {
     }
   }
 
-  String _filterTitleExtractor(DbTableFieldName fieldName) {
+  String _filterTitleExtractor(
+    DbTableFieldName fieldName,
+    String? titleName,
+  ) {
     bool isTeam = false;
     if (_allAssetRows.isNotEmpty) {
       isTeam = _allAssetRows.first.item1.isTeam;
     }
+    if (titleName != null) return titleName;
+
     switch (fieldName) {
       case DbTableFieldName.assetName:
       case DbTableFieldName.assetShortName:
@@ -280,7 +291,7 @@ class GroupedTableDataMgr {
         _getSortedAssetRows(filterItem.colName);
 
     List<String> labels = [
-      _filterTitleExtractor(filterItem.colName),
+      _filterTitleExtractor(filterItem.colName, filterItem.menuTitleIfFilter),
       ...sortedAssetRows.map((e) => e.labelExtractor(filterItem.colName)),
     ];
     labels.removeWhere((label) => label.isEmpty);
@@ -347,8 +358,7 @@ class GroupedTableDataMgr {
         .removeWhere((selection) => selection.filterColumn == colName);
     _currentFilters.add(filterSelection);
 
-    if (selectedVal.toUpperCase() ==
-        _filterTitleExtractor(colName).toUpperCase()) {
+    if (selectedVal.toUpperCase() == colName.name.toUpperCase()) {
       _currentFilters
           .removeWhere((selection) => selection.filterColumn == colName);
 
@@ -652,21 +662,23 @@ class _AssetRowsListView extends StatelessWidget {
 class _DropDownMenuList extends StatefulWidget {
   final Set<String> listItems;
   final DbTableFieldName colName;
+  final String titleName;
   final String? curSelection;
   final SelectedFilterSetter valSetter;
   final double width;
   final void Function(DbTableFieldName, String) doFilteringFor;
-  final String Function(DbTableFieldName) filterTitleExtractor;
+  // final String Function(DbTableFieldName) filterTitleExtractor;
 
   const _DropDownMenuList({
     Key? key,
     required this.listItems,
     required this.colName,
+    required this.titleName,
     required this.curSelection,
     required this.valSetter,
     required this.width,
     required this.doFilteringFor,
-    required this.filterTitleExtractor,
+    // required this.filterTitleExtractor,
   }) : super(key: key);
 
   @override
@@ -726,7 +738,7 @@ class _DropDownMenuListState extends State<_DropDownMenuList> {
             // store selected value for state mgmt
             widget.valSetter(selectedVal);
             if (selectedVal == null ||
-                selectedVal == widget.filterTitleExtractor(widget.colName) ||
+                selectedVal == widget.titleName ||
                 selectedVal.startsWith(CLEAR_FILTER_LABEL)) {
               setState(() {
                 _useDefaultState = true;

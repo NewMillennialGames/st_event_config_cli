@@ -160,13 +160,15 @@ class TvSortGroupFilterBase extends RuleResponseBase {
     /* for these answers:
         Vrq.selectDataFieldName,
         Vrq.specifySortAscending
+        Vrq.askMenuName (only on filter menu config)
     */
     // empty fieldList
     // this.fieldList = [];
     // ConfigLogger.log(Level.FINER,
     //   'TvSortGroupFilter.castToRealTypes got ${userResponses.length} userResponses',
     // );
-    for (int i = 0; i < userResponses.length - 1; i += 2) {
+    int questCount = this is TvFilterCfg ? 3 : 2;
+    for (int i = 0; i < userResponses.length - 1; i += questCount) {
       PairedQuestAndResp fldNameEntry = userResponses[i];
       assert(
         fldNameEntry.type == VisRuleQuestType.selectDataFieldName,
@@ -184,7 +186,19 @@ class TvSortGroupFilterBase extends RuleResponseBase {
       String ascBool = ascendEntry.userAnswer;
       bool sortAsc = (int.tryParse(ascBool) ?? 0) > 0;
 
-      fieldList.add(SortGroupFilterEntry(_curSelField, sortAsc));
+      String? filterMenuTitle; // only applies if this is TvFilterCfg
+      if (this is TvFilterCfg) {
+        PairedQuestAndResp menuTitleEntry = userResponses[i + 2];
+        filterMenuTitle = menuTitleEntry.userAnswer as String;
+      }
+
+      fieldList.add(
+        SortGroupFilterEntry(
+          _curSelField,
+          sortAsc,
+          menuTitleIfFilter: filterMenuTitle,
+        ),
+      );
     }
     // ConfigLogger.log(Level.FINER,
     //   '${fieldList.length} entries (contains 2 vals) added to TvSortGroupFilterBase!  (${this.runtimeType})',
