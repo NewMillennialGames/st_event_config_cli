@@ -115,26 +115,13 @@ class StUiBuilderFactory {
     List<TableviewDataRowTuple> rows,
     RedrawTvCallback redrawTvCallback,
   ) {
-    /* build object that wraps all data and display rules
+    /* build object that wraps all data & ui factory display rules
     */
 
     bool disableAllGrouping = _eConfig!.eventCfg.skipGroupingOnScreen(screen);
 
     CfgForAreaAndNestedSlots tableAreaAndSlotCfg =
         _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.tableview);
-
-    // old method
-    // CfgForAreaAndNestedSlots filterBarAndSlotCfg =
-    //     _eConfig!.screenAreaCfg(screen, ScreenWidgetArea.filterBar);
-
-    // return GroupedTableDataMgr(
-    //   screen,
-    //   rows,
-    //   TableviewConfigPayload.orig(
-    //       screen, tableAreaAndSlotCfg, filterBarAndSlotCfg),
-    //   redrawCallback: redrawTvCallback,
-    //   disableAllGrouping: disableAllGrouping,
-    // );
 
     // new updated method!
     TvSortCfg sortCfg = _eConfig!.tvSortingRules(screen) ?? TvSortCfg.noop();
@@ -146,7 +133,7 @@ class StUiBuilderFactory {
       tableAreaAndSlotCfg.rowStyleCfg.selectedRowStyle,
       sortCfg,
       filter,
-      group,
+      disableAllGrouping ? null : group,
     );
 
     return GroupedTableDataMgr(

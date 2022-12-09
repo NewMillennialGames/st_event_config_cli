@@ -24,25 +24,25 @@ class GroupHeaderData
     this.isAscending = true,
   }) : _sortKey = sortKey.toLowerCase();
 
-  static GetGroupHeaderLblsFromCompetitionRow groupHeaderPayloadConstructor(
-    TvSortCfg sortAndGroupRules,
+  static GetGroupHeaderLblsFromAssetGameData groupHeaderPayloadConstructor(
+    TvGroupCfg groupingRules,
   ) {
     // returns a func that creates a GroupHeaderData
     // NOT the sort values (comparables) used in sortComparator below
 
     firstLabelFn(AssetRowPropertyIfc row) {
-      if (sortAndGroupRules.item1 == null) return '';
-      return row.valueExtractor(sortAndGroupRules.item1!.colName);
+      if (groupingRules.item1 == null) return '';
+      return row.valueExtractor(groupingRules.item1!.colName);
     }
 
-    SortGroupFilterEntry? col2Rule = sortAndGroupRules.item2;
+    SortGroupFilterEntry? col2Rule = groupingRules.item2;
     // CastRowToSortVal
     secondLabelFn(AssetRowPropertyIfc row) {
       if (col2Rule == null) return '';
       return row.valueExtractor(col2Rule.colName);
     }
 
-    SortGroupFilterEntry? col3Rule = sortAndGroupRules.item3;
+    SortGroupFilterEntry? col3Rule = groupingRules.item3;
     // CastRowToSortVal
     thirdLabelFn(AssetRowPropertyIfc row) {
       if (col3Rule == null) return '';
@@ -51,8 +51,8 @@ class GroupHeaderData
 
     // sorting functions
     firstValFn(AssetRowPropertyIfc row) {
-      if (sortAndGroupRules.item1 == null) return '';
-      return row.sortValueExtractor(sortAndGroupRules.item1!.colName);
+      if (groupingRules.item1 == null) return '';
+      return row.sortValueExtractor(groupingRules.item1!.colName);
     }
 
     // CastRowToSortVal
@@ -67,19 +67,21 @@ class GroupHeaderData
       return row.sortValueExtractor(col3Rule.colName);
     }
 
-    // sorting happens from vals on Game or first asset (2nd asset ignored)
+    // sorting happens from vals on Game or first asset (2nd asset ignored when 2)
     SortKeyBuilderFunc sortKeyFunction = _sortKeyBuilderFnc(
       firstValFn,
       secondValFn,
       thirdValFn,
     );
 
-    return (TableviewDataRowTuple row) {
+    return (TableviewDataRowTuple assetDataRow) {
+      // build data payload to use in group header sorting & display
+      // ui builder supports up to 3 levels of grouping
       return GroupHeaderData(
-        firstLabelFn(row.item1),
-        col2Rule == null ? '' : secondLabelFn(row.item1),
-        col3Rule == null ? '' : thirdLabelFn(row.item1),
-        sortKeyFunction(row),
+        firstLabelFn(assetDataRow.item1),
+        col2Rule == null ? '' : secondLabelFn(assetDataRow.item1),
+        col3Rule == null ? '' : thirdLabelFn(assetDataRow.item1),
+        sortKeyFunction(assetDataRow),
       );
     };
   }

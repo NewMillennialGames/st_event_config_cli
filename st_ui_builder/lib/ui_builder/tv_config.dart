@@ -62,6 +62,8 @@ class TableviewConfigPayload {
     print('called endGeographicGrouping;  not yet implemented');
     // sortRules.removeByField(DbTableFieldName.gameLocation);
     // groupByRules.removeByField(DbTableFieldName.gameLocation);
+
+    // groupByRules.item1.colName = null;
   }
 
   TvRowBuilder get rowConstructor {

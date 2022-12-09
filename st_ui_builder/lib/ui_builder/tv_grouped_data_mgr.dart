@@ -54,20 +54,21 @@ class GroupedTableDataMgr {
   TvSortCfg get sortingRules => _tableViewCfg.sortRules;
   TvFilterCfg? get filterRules => _tableViewCfg.filterRules;
 
-  GetGroupHeaderLblsFromCompetitionRow get groupBy {
+  GetGroupHeaderLblsFromAssetGameData? get groupBy {
     return GroupHeaderData.groupHeaderPayloadConstructor(
-      _tableViewCfg.sortRules,
+      _tableViewCfg.groupByRules!,
     );
   }
 
   // groupHeaderBuilder is function to return header widget
   // defining groupHeaderBuilder will cause groupSeparatorBuilder to be ignored
   GroupHeaderBuilder get groupHeaderBuilder {
-    if (disableAllGrouping) return (_) => const SizedBox.shrink();
+    if (disableAllGrouping || groupBy == null)
+      return (_) => const SizedBox.shrink();
 
     // copy groupBy getter to save a lookup
     final TvAreaRowStyle rowStyle = _tableViewCfg.rowStyle;
-    final GetGroupHeaderLblsFromCompetitionRow gbFunc = groupBy;
+    final GetGroupHeaderLblsFromAssetGameData gbFunc = groupBy!;
     return (TableviewDataRowTuple rowData) =>
         TvGroupHeader(rowStyle, appScreen, gbFunc(rowData));
   }
@@ -76,7 +77,7 @@ class GroupedTableDataMgr {
   // GroupComparatorCallback? get groupComparator => null;
   GroupComparatorCallback? get groupComparator {
     // GroupHeaderData implements comparable
-    if (disableAllGrouping) return null;
+    if (disableAllGrouping || groupBy == null) return null;
 
     if (sortOrder == GroupedListOrder.DESC) {
       return (GroupHeaderData hd1Val, GroupHeaderData hd2Val) =>
@@ -436,7 +437,7 @@ class GroupedTableDataMgr {
       onRefresh: onRefresh,
       scrollController: scrollController,
       onRowTapped: onRowTapped,
-      groupBy: groupBy,
+      groupBy: groupBy!,
       groupHeaderBuilder: groupHeaderBuilder,
       rowBuilder: indexedItemBuilder,
       groupComparator: groupComparator,
@@ -449,7 +450,7 @@ class GroupedTableDataMgr {
 class _GroupedAssetsListView extends StatelessWidget {
   final Future<void> Function() onRefresh;
   final ScrollController? scrollController;
-  final GetGroupHeaderLblsFromCompetitionRow groupBy;
+  final GetGroupHeaderLblsFromAssetGameData groupBy;
   final GroupComparatorCallback? groupComparator;
   final GroupHeaderBuilder groupHeaderBuilder;
   final IndexedItemRowBuilder rowBuilder;
@@ -504,7 +505,7 @@ class _GroupedAssetsListView extends StatelessWidget {
 class _ExpandableGroupedAssetRowsListView extends StatefulWidget {
   final Future<void> Function() onRefresh;
   final ScrollController? scrollController;
-  final GetGroupHeaderLblsFromCompetitionRow groupBy;
+  final GetGroupHeaderLblsFromAssetGameData groupBy;
   final GroupComparatorCallback? groupComparator;
   final GroupHeaderBuilder groupHeaderBuilder;
   final IndexedItemRowBuilder rowBuilder;
@@ -586,7 +587,7 @@ class _AssetRowsListView extends StatelessWidget {
   final Future<void> Function() onRefresh;
   final ScrollController? scrollController;
   final List<TableviewDataRowTuple> assets;
-  final GetGroupHeaderLblsFromCompetitionRow groupBy;
+  final GetGroupHeaderLblsFromAssetGameData groupBy;
   final GroupComparatorCallback? groupComparator;
   final GroupHeaderBuilder groupHeaderBuilder;
   final IndexedItemRowBuilder rowBuilder;
