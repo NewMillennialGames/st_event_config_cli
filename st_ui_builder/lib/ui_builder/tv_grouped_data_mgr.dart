@@ -757,12 +757,13 @@ class _DropDownMenuListState extends State<_DropDownMenuList> {
           onChanged: (String? selectedVal) {
             // store selected value for state mgmt
             widget.valSetter(selectedVal);
+            // print('changed: $selectedVal  ${widget.titleName}');
             if (selectedVal == null || selectedVal == widget.titleName) {
               // || selectedVal.startsWith(CLEAR_FILTER_LABEL)
               setState(() {
                 _useDefaultState = true;
               });
-              widget.doFilteringFor(widget.colName, selectedVal ?? "");
+              widget.doFilteringFor(widget.colName, "");
               return;
             }
             setState(() {
