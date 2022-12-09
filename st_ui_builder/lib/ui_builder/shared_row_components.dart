@@ -318,7 +318,7 @@ class CheckAssetType extends StatelessWidget {
                   style: StTextStyles.h4),
             Wrap(
               children: [
-                Text(competitor.teamNameWhenTradingPlayers,
+                Text(competitor.orgNameWhenTradingPlayers,
                     softWrap: true,
                     overflow: TextOverflow.ellipsis,
                     style: StTextStyles.p2.copyWith(color: StColors.coolGray)),

@@ -37,9 +37,9 @@ abstract class AssetRowPropertyIfc {
   Decimal get openPrice;
 
   //
-  String get teamNameWhenTradingPlayers;
+  String get orgNameWhenTradingPlayers;
 
-  String get teamImgUrlWhenTradingPlayers;
+  String get orgImgUrlWhenTradingPlayers;
 
   EvAssetNameDisplayStyle get assetNameDisplayStyle;
 
@@ -77,8 +77,7 @@ abstract class AssetRowPropertyIfc {
 extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
   // sensible defaults if not overridden
   String get searchText =>
-      (topName + '-' + subName + '-' + teamNameWhenTradingPlayers)
-          .toUpperCase();
+      (topName + '-' + subName + '-' + orgNameWhenTradingPlayers).toUpperCase();
 
   String get rankStr => '$rank';
 
@@ -146,7 +145,7 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
       case DbTableFieldName.assetShortName:
         return subName;
       case DbTableFieldName.assetOrgName:
-        return teamNameWhenTradingPlayers;
+        return orgNameWhenTradingPlayers;
       case DbTableFieldName.leagueGrouping:
         return leagueGrouping;
       // case DbTableFieldName.leagueGrouping:
@@ -184,7 +183,7 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
       case DbTableFieldName.assetShortName:
         return subName;
       case DbTableFieldName.assetOrgName:
-        return teamNameWhenTradingPlayers;
+        return orgNameWhenTradingPlayers;
       case DbTableFieldName.leagueGrouping:
         return leagueGrouping;
       // case DbTableFieldName.region:

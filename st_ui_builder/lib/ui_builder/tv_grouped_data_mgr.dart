@@ -54,6 +54,19 @@ class GroupedTableDataMgr {
   TvSortCfg get sortingRules => _tableViewCfg.sortRules;
   TvFilterCfg? get filterRules => _tableViewCfg.filterRules;
 
+  String get fm1Title =>
+      filterRules?.item1?.menuTitleIfFilter ??
+      filterRules?.item1?.colName.name ??
+      '';
+  String get fm2Title =>
+      filterRules?.item2?.menuTitleIfFilter ??
+      filterRules?.item2?.colName.name ??
+      '';
+  String get fm3Title =>
+      filterRules?.item3?.menuTitleIfFilter ??
+      filterRules?.item3?.colName.name ??
+      '';
+
   GetGroupHeaderLblsFromAssetGameData? get groupBy {
     return GroupHeaderData.groupHeaderPayloadConstructor(
       _tableViewCfg.groupByRules!,
@@ -350,7 +363,10 @@ class GroupedTableDataMgr {
 
   final Set<FilterSelection> _currentFilters = {};
 
-  void _doFilteringFor(DbTableFieldName colName, String selectedVal) {
+  void _doFilteringFor(
+    DbTableFieldName colName,
+    String selectedVal,
+  ) {
     //
     final filterSelection = FilterSelection(
       filterColumn: colName,
@@ -360,7 +376,9 @@ class GroupedTableDataMgr {
         .removeWhere((selection) => selection.filterColumn == colName);
     _currentFilters.add(filterSelection);
 
-    if (selectedVal.toUpperCase() == colName.name.toUpperCase()) {
+    if ([fm1Title, fm2Title, fm3Title].contains(selectedVal)) {
+      // sloppy test above;  prob creates a bug
+      // .toUpperCase() == colName.name.toUpperCase()
       _currentFilters
           .removeWhere((selection) => selection.filterColumn == colName);
 
@@ -739,9 +757,8 @@ class _DropDownMenuListState extends State<_DropDownMenuList> {
           onChanged: (String? selectedVal) {
             // store selected value for state mgmt
             widget.valSetter(selectedVal);
-            if (selectedVal == null ||
-                selectedVal == widget.titleName ||
-                selectedVal.startsWith(CLEAR_FILTER_LABEL)) {
+            if (selectedVal == null || selectedVal == widget.titleName) {
+              // || selectedVal.startsWith(CLEAR_FILTER_LABEL)
               setState(() {
                 _useDefaultState = true;
               });

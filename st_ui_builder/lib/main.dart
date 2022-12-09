@@ -194,7 +194,7 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
                 ),
               ),
             if (tvMgr.disableAllGrouping || tvMgr.groupBy == null)
-              // TODO:  should return a normal listView
+              // TODO:  should return a normal listView;  not GroupedListView
               SizedBox(
                 height: 520.h,
                 child: null,

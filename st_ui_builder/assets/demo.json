@@ -1,1 +1,216 @@
-{"eventCfg":{"evTemplateName":"demo","evTemplateDescription":"","evType":"standard","evCompetitorType":"team","evOpponentType":"sameAsCompetitorType","evDuration":"oneGame","evEliminationType":"singleGame","evGameAgeOffRule":"byEvEliminationStrategy","applySameRowStyleToAllScreens":true},"screenConfigMap":{"marketView":{"appScreen":"marketView","areaConfig":{"filterBar":{"screenArea":"filterBar","visCfgForArea":{"filterCfg":{"visRuleList":[{"ruleType":"filterCfg","fieldList":[{"colName":"region","asc":true},{"colName":"imageUrl","asc":true}]}]}},"visCfgForSlotsByRuleType":{}},"tableview":{"screenArea":"tableview","visCfgForArea":{"styleOrFormat":{"visRuleList":[{"ruleType":"styleOrFormat","selectedRowStyle":"driverVsField"}]}},"visCfgForSlotsByRuleType":{}}}},"leaderboardTraders":{"appScreen":"leaderboardTraders","areaConfig":{"header":{"screenArea":"header","visCfgForArea":{"showOrHide":{"visRuleList":[]}},"visCfgForSlotsByRuleType":{"styleOrFormat":{"title":{"visRuleList":[]}},"showOrHide":{"subtitle":{"visRuleList":[]}}}},"banner":{"screenArea":"banner","visCfgForArea":{"showOrHide":{"visRuleList":[]}},"visCfgForSlotsByRuleType":{"showOrHide":{"bannerUrl":{"visRuleList":[]}}}}}},"leaderboardAssets":{"appScreen":"leaderboardAssets","areaConfig":{"header":{"screenArea":"header","visCfgForArea":{"showOrHide":{"visRuleList":[]}},"visCfgForSlotsByRuleType":{"styleOrFormat":{"title":{"visRuleList":[]}},"showOrHide":{"subtitle":{"visRuleList":[]}}}},"banner":{"screenArea":"banner","visCfgForArea":{"showOrHide":{"visRuleList":[]}},"visCfgForSlotsByRuleType":{"showOrHide":{"bannerUrl":{"visRuleList":[]}}}}}},"portfolioPositions":{"appScreen":"portfolioPositions","areaConfig":{"header":{"screenArea":"header","visCfgForArea":{"showOrHide":{"visRuleList":[]}},"visCfgForSlotsByRuleType":{"styleOrFormat":{"title":{"visRuleList":[]}},"showOrHide":{"subtitle":{"visRuleList":[]}}}},"banner":{"screenArea":"banner","visCfgForArea":{"showOrHide":{"visRuleList":[]}},"visCfgForSlotsByRuleType":{"showOrHide":{"bannerUrl":{"visRuleList":[]}}}},"tableview":{"screenArea":"tableview","visCfgForArea":{"styleOrFormat":{"visRuleList":[]},"sortCfg":{"visRuleList":[]},"groupCfg":{"visRuleList":[]}},"visCfgForSlotsByRuleType":{}}}},"portfolioHistory":{"appScreen":"portfolioHistory","areaConfig":{"header":{"screenArea":"header","visCfgForArea":{"showOrHide":{"visRuleList":[]}},"visCfgForSlotsByRuleType":{"styleOrFormat":{"title":{"visRuleList":[]}},"showOrHide":{"subtitle":{"visRuleList":[]}}}},"banner":{"screenArea":"banner","visCfgForArea":{"showOrHide":{"visRuleList":[]}},"visCfgForSlotsByRuleType":{"showOrHide":{"bannerUrl":{"visRuleList":[]}}}},"tableview":{"screenArea":"tableview","visCfgForArea":{"styleOrFormat":{"visRuleList":[]},"sortCfg":{"visRuleList":[]},"groupCfg":{"visRuleList":[]}},"visCfgForSlotsByRuleType":{}}}},"marketResearch":{"appScreen":"marketResearch","areaConfig":{"header":{"screenArea":"header","visCfgForArea":{"showOrHide":{"visRuleList":[]}},"visCfgForSlotsByRuleType":{"styleOrFormat":{"title":{"visRuleList":[]}},"showOrHide":{"subtitle":{"visRuleList":[]}}}},"banner":{"screenArea":"banner","visCfgForArea":{"showOrHide":{"visRuleList":[]}},"visCfgForSlotsByRuleType":{"showOrHide":{"bannerUrl":{"visRuleList":[]}}}}}}}}
+{
+    "eventCfg": {
+        "evTemplateName": "NBA Weekly V2",
+        "evTemplateDescription": "Trying to get date seperator in MarketView",
+        "evType": "standard",
+        "evCompetitorType": "team",
+        "evOpponentType": "sameAsCompetitorType",
+        "evDuration": "calendarScoped",
+        "evEliminationType": null,
+        "evGameAgeOffRule": "timeAfterGameEnds",
+        "applyMktViewRowStyleToAllScreens": true,
+        "cancelAllRowGroupingLogic": false
+    },
+    "screenConfigMap": {
+        "marketView": {
+            "appScreen": "marketView",
+            "areaConfig": {
+                "filterBar": {
+                    "screenArea": "filterBar",
+                    "visCfgForArea": {
+                        "filterCfg": {
+                            "visRuleList": [
+                                {
+                                    "ruleType": "filterCfg",
+                                    "fieldList": [
+                                        {
+                                            "colName": "assetOrgName",
+                                            "asc": true
+                                        },
+                                        {
+                                            "colName": "gameDate",
+                                            "asc": true
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    "visCfgForSlotsByRuleType": {}
+                },
+                "tableview": {
+                    "screenArea": "tableview",
+                    "visCfgForArea": {
+                        "groupCfg": {
+                            "visRuleList": [
+                                {
+                                    "ruleType": "groupCfg",
+                                    "fieldList": [
+                                        {
+                                            "colName": "gameDate",
+                                            "asc": true
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        "styleOrFormat": {
+                            "visRuleList": [
+                                {
+                                    "ruleType": "styleOrFormat",
+                                    "selectedRowStyle": "assetVsAsset"
+                                }
+                            ]
+                        }
+                    },
+                    "visCfgForSlotsByRuleType": {}
+                }
+            }
+        },
+        "leaderboardTraders": {
+            "appScreen": "leaderboardTraders",
+            "areaConfig": {
+                "tableview": {
+                    "screenArea": "tableview",
+                    "visCfgForArea": {
+                        "styleOrFormat": {
+                            "visRuleList": []
+                        },
+                        "sortCfg": {
+                            "visRuleList": []
+                        },
+                        "groupCfg": {
+                            "visRuleList": []
+                        }
+                    },
+                    "visCfgForSlotsByRuleType": {}
+                }
+            }
+        },
+        "leaderboardAssets": {
+            "appScreen": "leaderboardAssets",
+            "areaConfig": {
+                "tableview": {
+                    "screenArea": "tableview",
+                    "visCfgForArea": {
+                        "styleOrFormat": {
+                            "visRuleList": []
+                        },
+                        "sortCfg": {
+                            "visRuleList": []
+                        },
+                        "groupCfg": {
+                            "visRuleList": []
+                        }
+                    },
+                    "visCfgForSlotsByRuleType": {}
+                }
+            }
+        },
+        "portfolioPositions": {
+            "appScreen": "portfolioPositions",
+            "areaConfig": {
+                "header": {
+                    "screenArea": "header",
+                    "visCfgForArea": {
+                        "showOrHide": {
+                            "visRuleList": []
+                        }
+                    },
+                    "visCfgForSlotsByRuleType": {
+                        "styleOrFormat": {
+                            "title": {
+                                "visRuleList": []
+                            }
+                        },
+                        "showOrHide": {
+                            "subtitle": {
+                                "visRuleList": []
+                            }
+                        }
+                    }
+                },
+                "tableview": {
+                    "screenArea": "tableview",
+                    "visCfgForArea": {
+                        "styleOrFormat": {
+                            "visRuleList": []
+                        },
+                        "sortCfg": {
+                            "visRuleList": []
+                        },
+                        "groupCfg": {
+                            "visRuleList": []
+                        }
+                    },
+                    "visCfgForSlotsByRuleType": {}
+                }
+            }
+        },
+        "portfolioHistory": {
+            "appScreen": "portfolioHistory",
+            "areaConfig": {
+                "header": {
+                    "screenArea": "header",
+                    "visCfgForArea": {
+                        "showOrHide": {
+                            "visRuleList": []
+                        }
+                    },
+                    "visCfgForSlotsByRuleType": {
+                        "styleOrFormat": {
+                            "title": {
+                                "visRuleList": []
+                            }
+                        },
+                        "showOrHide": {
+                            "subtitle": {
+                                "visRuleList": []
+                            }
+                        }
+                    }
+                },
+                "tableview": {
+                    "screenArea": "tableview",
+                    "visCfgForArea": {
+                        "styleOrFormat": {
+                            "visRuleList": []
+                        },
+                        "sortCfg": {
+                            "visRuleList": []
+                        },
+                        "groupCfg": {
+                            "visRuleList": []
+                        }
+                    },
+                    "visCfgForSlotsByRuleType": {}
+                }
+            }
+        },
+        "marketResearch": {
+            "appScreen": "marketResearch",
+            "areaConfig": {
+                "header": {
+                    "screenArea": "header",
+                    "visCfgForArea": {
+                        "showOrHide": {
+                            "visRuleList": []
+                        }
+                    },
+                    "visCfgForSlotsByRuleType": {
+                        "styleOrFormat": {
+                            "title": {
+                                "visRuleList": []
+                            }
+                        },
+                        "showOrHide": {
+                            "subtitle": {
+                                "visRuleList": []
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

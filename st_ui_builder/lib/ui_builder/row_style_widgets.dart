@@ -81,7 +81,11 @@ class AssetVsAssetRowMktView extends StBaseTvRow
             onTap?.call(assets);
           },
           child: AssetVsAssetHalfRow(
-              comp2, agd, showRank, comp2.assetHoldingsSummary),
+            comp2,
+            agd,
+            showRank,
+            comp2.assetHoldingsSummary,
+          ),
         ),
       ],
     );
