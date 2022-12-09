@@ -133,7 +133,7 @@ class GroupedTableDataMgr {
     Set<String> listItems2 = i2 == null ? {} : _getListItemsByCfgField(i2);
     Set<String> listItems3 = i3 == null ? {} : _getListItemsByCfgField(i3);
 
-    const _kLstMin = 2;
+    const int _kLstMin = 2;
 
     bool has2ndList =
         i2 != null && listItems2.length > _kLstMin && i2.colName != i1?.colName;
@@ -159,8 +159,8 @@ class GroupedTableDataMgr {
           _DropDownMenuList(
             listItems: listItems1,
             colName: i1.colName,
-            titleName:
-                i1.menuTitleIfFilter ?? _filterTitleExtractor(i1.colName, null),
+            titleName: i1.menuTitleIfFilter ??
+                _filterTitleExtractor(i1.colName, i1.menuTitleIfFilter),
             curSelection: _filter1Selection,
             valSetter: (s) => _filter1Selection = s,
             width: allocBtnWidth,
@@ -172,7 +172,7 @@ class GroupedTableDataMgr {
               listItems: listItems2,
               colName: i2.colName,
               titleName: i2.menuTitleIfFilter ??
-                  _filterTitleExtractor(i2.colName, null),
+                  _filterTitleExtractor(i2.colName, i2.menuTitleIfFilter),
               curSelection: _filter2Selection,
               valSetter: (s) => _filter2Selection = s,
               width: allocBtnWidth,
@@ -184,7 +184,7 @@ class GroupedTableDataMgr {
               listItems: listItems3,
               colName: i3.colName,
               titleName: i3.menuTitleIfFilter ??
-                  _filterTitleExtractor(i3.colName, null),
+                  _filterTitleExtractor(i3.colName, i3.menuTitleIfFilter),
               curSelection: _filter3Selection,
               valSetter: (s) => _filter3Selection = s,
               width: allocBtnWidth,
@@ -227,8 +227,6 @@ class GroupedTableDataMgr {
         return 'Team';
       case DbTableFieldName.leagueGrouping:
         return 'Conference';
-      // case DbTableFieldName.region:
-      //   return 'All Regions';
       case DbTableFieldName.gameDate:
         return 'All Dates';
       case DbTableFieldName.gameTime:
@@ -272,14 +270,14 @@ class GroupedTableDataMgr {
       case DbTableFieldName.assetCurrentPrice:
       case DbTableFieldName.assetRankOrScore:
         rows.sort((a, b) {
-          final item1Value = num.parse(a.labelExtractor(colName));
-          final item2Value = num.parse(b.labelExtractor(colName));
+          num item1Value = num.parse(a.valueExtractor(colName));
+          num item2Value = num.parse(b.valueExtractor(colName));
           return item1Value.compareTo(item2Value);
         });
         break;
       default:
-        rows.sort((a, b) => a.labelExtractor(colName).compareTo(
-              b.labelExtractor(colName),
+        rows.sort((a, b) => a.valueExtractor(colName).compareTo(
+              b.valueExtractor(colName),
             ));
     }
 
@@ -287,12 +285,15 @@ class GroupedTableDataMgr {
   }
 
   Set<String> _getListItemsByCfgField(SortGroupFilterEntry filterItem) {
+    /* build title and values for filter menu dropdown list
+
+    */
     List<AssetRowPropertyIfc> sortedAssetRows =
         _getSortedAssetRows(filterItem.colName);
 
     List<String> labels = [
       _filterTitleExtractor(filterItem.colName, filterItem.menuTitleIfFilter),
-      ...sortedAssetRows.map((e) => e.labelExtractor(filterItem.colName)),
+      ...sortedAssetRows.map((e) => e.valueExtractor(filterItem.colName)),
     ];
     labels.removeWhere((label) => label.isEmpty);
 
@@ -373,9 +374,9 @@ class GroupedTableDataMgr {
     for (var asset in _allAssetRows) {
       bool added = false;
       for (var filter in _currentFilters) {
-        if (asset.item1.labelExtractor(filter.filterColumn) ==
+        if (asset.item1.valueExtractor(filter.filterColumn) ==
                 filter.selectedValue ||
-            asset.item2?.labelExtractor(filter.filterColumn) ==
+            asset.item2?.valueExtractor(filter.filterColumn) ==
                 filter.selectedValue) {
           if (!added) {
             filterResults.add(asset);

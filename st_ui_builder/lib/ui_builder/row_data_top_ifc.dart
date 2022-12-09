@@ -137,7 +137,7 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
         : null;
   }
 
-  String labelExtractor(DbTableFieldName fldName) {
+  String valueExtractor(DbTableFieldName fldName) {
     /* header labels in list groups
     */
     switch (fldName) {

@@ -32,21 +32,21 @@ class GroupHeaderData
 
     firstLabelFn(AssetRowPropertyIfc row) {
       if (sortAndGroupRules.item1 == null) return '';
-      return row.labelExtractor(sortAndGroupRules.item1!.colName);
+      return row.valueExtractor(sortAndGroupRules.item1!.colName);
     }
 
     SortGroupFilterEntry? col2Rule = sortAndGroupRules.item2;
     // CastRowToSortVal
     secondLabelFn(AssetRowPropertyIfc row) {
       if (col2Rule == null) return '';
-      return row.labelExtractor(col2Rule.colName);
+      return row.valueExtractor(col2Rule.colName);
     }
 
     SortGroupFilterEntry? col3Rule = sortAndGroupRules.item3;
     // CastRowToSortVal
     thirdLabelFn(AssetRowPropertyIfc row) {
       if (col3Rule == null) return '';
-      return row.labelExtractor(col3Rule.colName);
+      return row.valueExtractor(col3Rule.colName);
     }
 
     // sorting functions
