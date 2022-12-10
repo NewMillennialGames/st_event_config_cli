@@ -6,9 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:st_ui_builder/st_ui_builder.dart';
-
 //
+import 'package:st_ui_builder/st_ui_builder.dart';
 import 'package:stclient/stclient.dart';
 
 //
@@ -30,7 +29,7 @@ const String cfgEmpl1 = 'assetVsAsset.json';
 // cfgEmpl2 seems to be invalid json; replace it to continue testing
 const String cfgEmpl2 = 'teamVsFieldRanked.json';
 const String cfgEmpl3 = 'driverVsField.json';
-const String cfgEmpl4 = 'demo.json';
+const String cfgEmpl4 = 'demo2.json';
 
 // evCfgDataFromServer contains the JSON payload produced by the CLI configurator
 Map<String, dynamic> evCfgDataFromServer = {};
