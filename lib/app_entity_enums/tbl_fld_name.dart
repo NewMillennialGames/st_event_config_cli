@@ -14,4 +14,5 @@ enum DbTableFieldName {
   assetCurrentPrice,
   assetRankOrScore,
   assetPosition,
+  basedOnEventDelimiters, // aka tournament style (only for groupings)
 }

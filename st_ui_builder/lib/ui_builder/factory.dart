@@ -44,6 +44,17 @@ class StUiBuilderFactory {
     }
   }
 
+  void updateEventTournamentDelimiters(Map<String, dynamic> delims) {
+    // TODO:  @lucky
+    /* 
+
+    this data is received from the server periodically on the root competitions
+
+      needed so that row-groupings on marketview screen can change
+      dynamically (and also be collapsible) as the tournament progresses
+    */
+  }
+
   void _readRowStyleFromMarketViewAndClone() {
     // apply row style from market-view (first selected row-style)
     // to all screens, based on config this pref setting:

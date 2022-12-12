@@ -9,14 +9,17 @@ enum VisRuleQuestType {
     in other words, HOW MANY pieces of data needs to be
     collected to properly build a complete rule
 
+  answer type in comment below
   */
-  dialogStruct, // noop
-  askCountOfSlotsToConfigure, // possibly niu
-  selectDataFieldName,
-  specifySortAscending,
-  selectVisualComponentOrStyle,
-  controlsVisibilityOfAreaOrSlot,
-  askMenuName,
+  dialogStruct, // noop placeholder
+  askCountOfSlotsToConfigure, // prep quest for sort, filter, group
+  selectDataFieldName, // DbTableFieldName
+  specifySortAscending, // bool
+  selectVisualComponentOrStyle, // TvAreaRowStyle
+  controlsVisibilityOfAreaOrSlot, // bool
+  askMenuName, // String
+  askJustification, // DisplayJustification
+  isCollapsible, // bool
 }
 
 extension VisRuleQuestTypeExt1 on VisRuleQuestType {
@@ -64,7 +67,11 @@ extension VisRuleQuestTypeExt1 on VisRuleQuestType {
       case VisRuleQuestType.controlsVisibilityOfAreaOrSlot:
         return 'Show this region within {0} (area or slot)?';
       case VisRuleQuestType.askMenuName:
-        return 'Specify name for filter menu?';
+        return 'Specify filter menu display name?';
+      case VisRuleQuestType.askJustification:
+        return 'Select label justification?';
+      case VisRuleQuestType.isCollapsible:
+        return 'Should group header be collapsible??';
     }
   }
 
@@ -93,6 +100,13 @@ extension VisRuleQuestTypeExt1 on VisRuleQuestType {
         ];
       case VisRuleQuestType.askMenuName:
         return [];
+      case VisRuleQuestType.askJustification:
+        return DisplayJustification.values.map((e) => e.name).toList();
+      case VisRuleQuestType.isCollapsible:
+        return [
+          'no',
+          'yes',
+        ];
     }
   }
 

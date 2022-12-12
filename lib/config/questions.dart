@@ -103,13 +103,14 @@ final List<QuestBase> _initQuestionLst = [
       ),
       questId: QuestionIdStrings.eventAgeOffGameRule,
     ),
-    QuestBase.initialEventConfigRule(
-      QTargetResolution.forEvent(),
-      DlgStr.useAssetShortNameInFilters,
-      ['no', 'yes'],
-      CaptureAndCast<bool>((qb, ls) => ls == '1'),
-      questId: QuestionIdStrings.useAssetShortNameInFilters,
-    ),
+    // below not needed;  each filter menu lets you set field to use
+    // QuestBase.initialEventConfigRule(
+    //   QTargetResolution.forEvent(),
+    //   DlgStr.useAssetShortNameInFilters,
+    //   ['no', 'yes'],
+    //   CaptureAndCast<bool>((qb, ls) => ls == '1'),
+    //   questId: QuestionIdStrings.useAssetShortNameInFilters,
+    // ),
     QuestBase.initialEventConfigRule(
       QTargetResolution.forEvent(),
       DlgStr.selectAssetNameDisplayStyle,

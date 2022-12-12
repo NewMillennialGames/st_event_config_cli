@@ -16,6 +16,7 @@ dependencies:
   riverpod: ^1.0.3
   freezed: ^2.0.3+1
   logging: ^1.0.2
+  sprintf: "^7.0.0"
   # dotted_border: ^2.0.0+2
   # intl:
 

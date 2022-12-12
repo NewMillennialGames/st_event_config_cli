@@ -10,6 +10,9 @@ part of EvCfgEnums;
 // question-prompt-index (adjusted for prompt-count) will select one of these values
 const Map<int, String> _fldPosLookupMap = {0: '1st', 1: '2nd', 2: '3rd'};
 
+const String _questGenErrorTemplate =
+    "Err: %s is not a top-lvl VisRuleQuestType; its subsummed under %s when VRT is %s";
+
 @JsonEnum()
 enum VisualRuleType {
   /*  generalDialogFlow is a placeholder value
@@ -37,6 +40,12 @@ extension VisualRuleTypeExt1 on VisualRuleType {
         VisualRuleType.groupCfg,
         VisualRuleType.filterCfg
       ].contains(this);
+
+  bool get appliesToFilterCfg => [VisualRuleType.filterCfg].contains(this);
+
+  bool get appliesToGroupCfg => [VisualRuleType.groupCfg].contains(this);
+
+  bool get appliesToSortCfg => [VisualRuleType.sortCfg].contains(this);
 
   // List<VisualRuleType> get activeValues =>
   //     VisualRuleType.values.where((e) => e.isConfigurable).toList();
@@ -182,8 +191,18 @@ extension VisualRuleTypeExt1 on VisualRuleType {
   }
 
   List<VisRuleQuestType> get requRuleDetailCfgQuests {
-    // its helpful that only one config type is returned
-    // DerivedQuestGenerator could have problems if this changes
+    /*
+        its helpful that only one (first) config type is returned
+    DerivedQuestGenerator could have problems if this changes
+
+    in short, sort, group and filter require multiple
+    varying questions and its easier to decide which from within
+      _getQuestPromptOptsForDataFieldName (below)
+    than it is to return multiple values here
+
+    we may study and revise this at a later point
+    */
+
     switch (this) {
       case VisualRuleType.generalDialogFlow:
         return [];
@@ -195,13 +214,23 @@ extension VisualRuleTypeExt1 on VisualRuleType {
       case VisualRuleType.groupCfg:
         return [
           Vrq.selectDataFieldName,
-          // Vrq.specifySortAscending // leave this out here
+          /* questions below are part of the rule config
+            but this logic is handled in the derived question
+            constructor, 
+            DerivedQuestGenerator makeQuestGenForRuleType  (below)
+            and not guided by this property
+
+            TODO: see notes above & study why the above is best approach??
+          */
+          // Vrq.specifySortAscending
+          // Vrq.askJustification,
+          // Vrq.isCollapsible,
         ];
       case VisualRuleType.filterCfg:
         return [
           Vrq.selectDataFieldName,
-          Vrq.askMenuName,
           // Vrq.specifySortAscending // leave this out here
+          // Vrq.askMenuName,
         ];
       case VisualRuleType.styleOrFormat:
         return [
@@ -380,15 +409,17 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           ),
         );
         break;
-      //
+      // error conditions below
       case VisRuleQuestType.specifySortAscending:
-        throw UnimplementedError(
-          'err: not a real rule; hidden under selectDataFieldName',
-        );
       case VisRuleQuestType.askMenuName:
-        throw UnimplementedError(
-          'err: not a real rule; hidden under selectDataFieldName',
-        );
+      case VisRuleQuestType.askJustification:
+      case VisRuleQuestType.isCollapsible:
+        String m = sprintf(_questGenErrorTemplate, [
+          ruleSubtypeNewQuest.name,
+          VisRuleQuestType.selectDataFieldName.name,
+          thisVisRT.name
+        ]);
+        throw UnimplementedError(m);
     }
 
     assert(perQuestPromptDetails.length > 0, 'err: no prompts in question');
@@ -416,7 +447,7 @@ extension VisualRuleTypeExt1 on VisualRuleType {
 }
 
 List<NewQuestPerPromptOpts> _getQuestPromptOptsForDataFieldName(
-  VisualRuleType ruleType,
+  VisualRuleType topVisRuleType,
   int numOfFieldsToSpecify,
 ) {
   //
@@ -426,7 +457,7 @@ List<NewQuestPerPromptOpts> _getQuestPromptOptsForDataFieldName(
   );
   // create upvals for constructors below
   var questTempl =
-      VisRuleQuestType.selectDataFieldName.questTemplByRuleType(ruleType);
+      VisRuleQuestType.selectDataFieldName.questTemplByRuleType(topVisRuleType);
 
   List<String> _promptTemplArgGenFunc(
     QuestBase priorAnsweredQuest,
@@ -484,7 +515,9 @@ List<NewQuestPerPromptOpts> _getQuestPromptOptsForDataFieldName(
         instanceIdx: fieldIdx,
       ),
       NewQuestPerPromptOpts<bool>(
-        'Sort Ascending?',
+        // 'Sort Ascending?',
+        VisRuleQuestType.specifySortAscending
+            .questTemplByRuleType(topVisRuleType),
         visRuleQuestType: VisRuleQuestType.specifySortAscending,
         promptTemplArgGen: (_, __, pi) => [],
         newRespCastFunc: (
@@ -503,26 +536,69 @@ List<NewQuestPerPromptOpts> _getQuestPromptOptsForDataFieldName(
         },
         instanceIdx: fieldIdx,
       ),
-      NewQuestPerPromptOpts<String>(
-        'Specify filter menu display name:',
-        visRuleQuestType: VisRuleQuestType.askMenuName,
-        promptTemplArgGen: (_, __, int pi) => [],
-        newRespCastFunc: (
-          QuestBase newQuest,
-          String menuName,
-        ) {
-          return menuName;
-        },
-        answerChoiceGenerator: (
-          QuestBase priorAnsweredQuest,
-          int newQuestIdx,
-          int promptIdx,
-        ) {
-          // will be skipped without some answer choices avail
-          return ['type menu name below ...', ''];
-        },
-        instanceIdx: fieldIdx,
-      ),
+      if (topVisRuleType.appliesToFilterCfg) ...[
+        NewQuestPerPromptOpts<String>(
+          VisRuleQuestType.askMenuName.questTemplByRuleType(topVisRuleType),
+          visRuleQuestType: VisRuleQuestType.askMenuName,
+          promptTemplArgGen: (_, __, int pi) => [],
+          newRespCastFunc: (
+            QuestBase newQuest,
+            String menuName,
+          ) {
+            return menuName;
+          },
+          answerChoiceGenerator: (
+            QuestBase priorAnsweredQuest,
+            int newQuestIdx,
+            int promptIdx,
+          ) {
+            // will be skipped without some answer choices avail
+            return ['type menu name below ...', ''];
+          },
+          instanceIdx: fieldIdx,
+        ),
+      ],
+      if (topVisRuleType.appliesToGroupCfg) ...[
+        NewQuestPerPromptOpts<DisplayJustification>(
+          VisRuleQuestType.askJustification
+              .questTemplByRuleType(topVisRuleType),
+          visRuleQuestType: VisRuleQuestType.askJustification,
+          promptTemplArgGen: (_, __, int pi) => [],
+          newRespCastFunc: (
+            QuestBase newQuest,
+            String ansIdx,
+          ) {
+            return DisplayJustification.values[int.tryParse(ansIdx) ?? 0];
+          },
+          answerChoiceGenerator: (
+            QuestBase priorAnsweredQuest,
+            int newQuestIdx,
+            int promptIdx,
+          ) {
+            return DisplayJustification.values.map((e) => e.name).toList();
+          },
+          instanceIdx: fieldIdx,
+        ),
+        NewQuestPerPromptOpts<bool>(
+          VisRuleQuestType.isCollapsible.questTemplByRuleType(topVisRuleType),
+          visRuleQuestType: VisRuleQuestType.isCollapsible,
+          promptTemplArgGen: (_, __, int pi) => [],
+          newRespCastFunc: (
+            QuestBase newQuest,
+            String ansIdx,
+          ) {
+            return ansIdx == '1';
+          },
+          answerChoiceGenerator: (
+            QuestBase priorAnsweredQuest,
+            int newQuestIdx,
+            int promptIdx,
+          ) {
+            return ['no', 'yes'];
+          },
+          instanceIdx: fieldIdx,
+        ),
+      ],
     ]);
   }
   return perPromptDetails;
