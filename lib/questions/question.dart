@@ -8,7 +8,8 @@ part of QuestionsLib;
 */
 
 Set<String> _eventQuestIdsWithDerivedSubQuests = {
-  /* 
+  /* top level event questions that DO generate derived questions
+  
     set question IDs in:
       _eventQuestIdsWithDerivedSubQuests
     for any event level questions
@@ -17,6 +18,7 @@ Set<String> _eventQuestIdsWithDerivedSubQuests = {
     eventAgeOffGameRule needs to know HOW LONG after game ends
     before it is aged off
   */
+  QuestionIdStrings.selectAppScreens,
   QuestionIdStrings.eventAgeOffGameRule
 };
 

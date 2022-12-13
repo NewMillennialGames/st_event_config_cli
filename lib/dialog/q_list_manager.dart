@@ -171,6 +171,9 @@ class QuestListMgr {
     _moveCurrentQuestToAnswered();
     //
     if (_currQuestionIdx + 1 >= _pendingQuestions.length) {
+      print(
+        '*******  no more questions:  ${_currQuestionIdx + 1}  ${_pendingQuestions.length}',
+      );
       return null;
     }
     ++_currQuestionIdx;

@@ -71,7 +71,7 @@ extension VisRuleQuestTypeExt1 on VisRuleQuestType {
       case VisRuleQuestType.askJustification:
         return 'Select label justification?';
       case VisRuleQuestType.isCollapsible:
-        return 'Should group header be collapsible??';
+        return 'Should group header be collapsible?? (applies to 1st only)';
     }
   }
 
