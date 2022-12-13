@@ -17,6 +17,7 @@ class TopEventCfg {
   EvDuration evDuration;
   EvEliminationStrategy evEliminationType;
   EvGameAgeOffRule evGameAgeOffRule;
+  double hoursToWaitAfterGameEnds;
   bool applyMktViewRowStyleToAllScreens = true;
   @JsonKey(defaultValue: false)
   bool cancelAllRowGroupingLogic = false;
@@ -33,6 +34,7 @@ class TopEventCfg {
     this.evDuration = EvDuration.oneGame,
     this.evEliminationType = EvEliminationStrategy.roundRobin,
     this.evGameAgeOffRule = EvGameAgeOffRule.byEvEliminationStrategy,
+    this.hoursToWaitAfterGameEnds = 0,
     this.applyMktViewRowStyleToAllScreens = true,
     this.useAssetShortNameInFilters = true,
     this.assetNameDisplayStyle = EvAssetNameDisplayStyle.showShortName,
@@ -114,8 +116,8 @@ class EventCfgTree {
     EvEliminationStrategy evEliminationType = EvEliminationStrategy.singleGame;
     EvGameAgeOffRule evGameAgeOffRule =
         EvGameAgeOffRule.byEvEliminationStrategy;
+    double hoursToWaitAfterGameEnds = 0;
     bool applySameRowStyleToAllScreens = true;
-    bool useAssetShortNameInFilters = false;
     EvAssetNameDisplayStyle assetNameDisplayStyle =
         EvAssetNameDisplayStyle.showShortName;
     // use try to catch errs and allow easy debugging
@@ -148,15 +150,17 @@ class EventCfgTree {
       applySameRowStyleToAllScreens = evCfgResponses
           .firstWhere((q) => q.questId == QuestionIdStrings.globalRowStyle)
           .mainAnswer as bool;
-      useAssetShortNameInFilters = evCfgResponses
-          .firstWhere(
-              (q) => q.questId == QuestionIdStrings.useAssetShortNameInFilters)
-          .mainAnswer as bool;
-
       assetNameDisplayStyle = evCfgResponses
           .firstWhere(
               (q) => q.questId == QuestionIdStrings.selectAssetNameDisplayStyle)
           .mainAnswer as EvAssetNameDisplayStyle;
+
+      if (evGameAgeOffRule == EvGameAgeOffRule.timeAfterGameEnds) {
+        hoursToWaitAfterGameEnds = evCfgResponses
+            .firstWhere((q) =>
+                q.questId == QuestionIdStrings.eventAgeOffGameRuleHoursAfter)
+            .mainAnswer as double;
+      }
     } catch (e) {
       ConfigLogger.log(
         Level.WARNING,
@@ -173,8 +177,8 @@ class EventCfgTree {
       evDuration: evDuration,
       evEliminationType: evEliminationType,
       evGameAgeOffRule: evGameAgeOffRule,
+      hoursToWaitAfterGameEnds: hoursToWaitAfterGameEnds,
       applyMktViewRowStyleToAllScreens: applySameRowStyleToAllScreens,
-      useAssetShortNameInFilters: useAssetShortNameInFilters,
       assetNameDisplayStyle: assetNameDisplayStyle,
     );
 

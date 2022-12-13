@@ -1,5 +1,6 @@
 import "dart:io";
 import 'package:collection/collection.dart';
+import 'package:st_ev_cfg/config/all.dart';
 //
 import '../interfaces/q_presenter.dart';
 import '../questions/all.dart';
@@ -39,8 +40,14 @@ class CliQuestionPresenter implements QuestionPresenterIfc {
       promptInst = quest.getNextUserPromptIfExists();
     }
     // user answer might generate new questions
-    if (!quest.isRuleDetailQuestion) {
-      dialoger.generateNewQuestionsFromUserResponse(quest);
+    if (!quest.isRuleDetailQuestion && !quest.isEventConfigQuest) {
+      dialoger.generateNewQuestionsFromUserRuleCfgResponse(quest);
+      //
+    } else if (quest.isEventConfigQuest &&
+        quest.questId == QuestionIdStrings.eventAgeOffGameRule) {
+      // TODO:  make if test above more generic
+      //
+      dialoger.generateNewQuestionsFromEventLevelAnswer(quest);
     }
   }
 

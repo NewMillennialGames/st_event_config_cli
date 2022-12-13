@@ -429,11 +429,17 @@ class EventLevelCfgQuest extends QuestBase {
       !forRuleSelection,
       'Event lvl cfg ??s are not precise enough for a complete area-target',
     );
-    List<AppScreen> screensToConfig = mainAnswer as List<AppScreen>;
-    return qTargetResolution.copyWith(
-      appScreen: screensToConfig[newQuestIdx],
-      precision: TargetPrecision.screenLevel,
-    );
+    if (mainAnswer is List<AppScreen>) {
+      List<AppScreen> screensToConfig = mainAnswer as List<AppScreen>;
+      return qTargetResolution.copyWith(
+        appScreen: screensToConfig[newQuestIdx],
+        precision: TargetPrecision.screenLevel,
+      );
+    } else if (questId == QuestionIdStrings.eventAgeOffGameRule) {
+      //
+      return qTargetResolution.copyWith();
+    }
+    return qTargetResolution.copyWith();
   }
 }
 

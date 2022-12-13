@@ -89,7 +89,7 @@ class TestQuestRespGen implements QuestionPresenterIfc {
       // quest.convertAndStoreUserResponse('0');
       // dialoger.advanceToNextQuestionFromGui();
       print('no response generators found for ${quest.questId}; exiting!');
-      dialoger.generateNewQuestionsFromUserResponse(quest);
+      dialoger.generateNewQuestionsFromUserRuleCfgResponse(quest);
       return;
     }
 
@@ -107,7 +107,7 @@ class TestQuestRespGen implements QuestionPresenterIfc {
     }
     // all prompts answered;  ready to advance to next quest
     // now check if user answer will generate new questions
-    dialoger.generateNewQuestionsFromUserResponse(quest);
+    dialoger.generateNewQuestionsFromUserRuleCfgResponse(quest);
     // cli test;  not gui
     // dialoger.advanceToNextQuestionFromGui();
   }

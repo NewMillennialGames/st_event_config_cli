@@ -58,6 +58,7 @@ class QuestionIdStrings {
   static String eventDuration = 'eventDuration';
   static String eventEliminationStrategy = 'eventEliminationStrategy';
   static String eventAgeOffGameRule = 'eventAgeOffGameRule';
+  static String eventAgeOffGameRuleHoursAfter = 'eventAgeOffGameRuleHoursAfter';
   //
   static String globalRowStyle = 'globalRowStyle';
   static String selectAppScreens = 'selectAppScreens';

@@ -76,3 +76,15 @@ enum EvAssetNameDisplayStyle {
   showLongName,
   showBothStacked,
 }
+
+extension EvGameAgeOffRuleExt1 on EvGameAgeOffRule {
+  //
+  String get prompt {
+    switch (this) {
+      case EvGameAgeOffRule.timeAfterGameEnds:
+        return 'Enter hours after game ends to hide it?';
+      default:
+        return '';
+    }
+  }
+}

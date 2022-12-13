@@ -27,6 +27,7 @@ part of ConfigDialogRunner;
 const List<QuestMatcher> _EMPTY_LST = const [];
 
 class QCascadeDispatcher {
+  List<QuestMatcher> matchersToGenEventDetailQuests;
   List<QuestMatcher> matchersToGenTargetingQuests;
   List<QuestMatcher> matchersToGenRuleSelectQuests;
   List<QuestMatcher> matchersToGenRulePrepQuests;
@@ -35,6 +36,7 @@ class QCascadeDispatcher {
   final bool testMode;
 
   QCascadeDispatcher({
+    this.matchersToGenEventDetailQuests = _EMPTY_LST,
     this.matchersToGenTargetingQuests = _EMPTY_LST,
     this.matchersToGenRuleSelectQuests = _EMPTY_LST,
     this.matchersToGenRulePrepQuests = _EMPTY_LST,
@@ -42,6 +44,9 @@ class QCascadeDispatcher {
     this.testMode = false,
   }) {
     // will use scoretrader defaults unless args passed to constructor
+    if (matchersToGenEventDetailQuests.length < 1) {
+      matchersToGenEventDetailQuests = _getEventLevelMatchers();
+    }
     if (matchersToGenTargetingQuests.length < 1) {
       matchersToGenTargetingQuests = _getMatchersToGenTargetingQuests();
     }
@@ -87,11 +92,31 @@ class QCascadeDispatcher {
       // it carries a list of app-screens and generator below
       // will create one question to select area-list for each screen
 
-      if (!(questJustAnswered.mainAnswer is List<AppScreen>)) return;
+      // TODO: make below more generic based on target property
+      if (!(questJustAnswered.mainAnswer is List<AppScreen>) &&
+          questJustAnswered.questId != QuestionIdStrings.eventAgeOffGameRule) {
+        print('bailing on ${questJustAnswered.questId}');
+        return;
+      }
 
-      String topTargets = (questJustAnswered.mainAnswer as List<AppScreen>)
-          .fold<String>(
-              '', (String allNames, AppScreen as) => allNames + as.name + '; ');
+      if (questJustAnswered.questId == QuestionIdStrings.eventAgeOffGameRule) {
+        EvGameAgeOffRule gameAgeOffRule =
+            questJustAnswered.mainAnswer as EvGameAgeOffRule;
+        if (gameAgeOffRule != EvGameAgeOffRule.timeAfterGameEnds) return;
+
+        QMatchCollection _qMatchCollToGenEventDetail =
+            QMatchCollection(matchersToGenEventDetailQuests);
+
+        List<QuestBase> newQuests =
+            _qMatchCollToGenEventDetail.getGendQuestions(questJustAnswered);
+        questListMgr.appendEventLvlQuests(newQuests, addAfterCurrent: true);
+        print('just ran on:  ${questJustAnswered.questId}');
+        return;
+      }
+
+      // String screenCfgTargets = (questJustAnswered.mainAnswer as List<AppScreen>)
+      //     .fold<String>(
+      //         '', (String allNames, AppScreen as) => allNames + as.name + '; ');
       // ConfigLogger.log(Level.FINER,
       //   '\tUser has specified ${topTargets} screens for configuration',
       // );
@@ -151,12 +176,14 @@ class QCascadeDispatcher {
       );
     } else if (questJustAnswered.isVisRuleDetailQuestion) {
       // user has provided details for visual rule
-     ConfigLogger.log(Level.INFO, 
+      ConfigLogger.log(
+        Level.INFO,
         '\tvisual rule detail quest has been answered; no derived questions here',
       );
     } else if (questJustAnswered.isBehRuleDetailQuestion) {
       // user has provided details for behavioral rule
-     ConfigLogger.log(Level.INFO, 
+      ConfigLogger.log(
+        Level.INFO,
         '\tbehavior rule detail quest has been answered; no derived questions here',
       );
     }
@@ -872,3 +899,73 @@ List<QuestMatcher> _matchTargetCompleteAndGenRuleSelectQuests = [
     ),
   ),
 ];
+
+List<QuestMatcher> _getEventLevelMatchers() {
+  //
+  return [
+    QuestMatcher<EvGameAgeOffRule, double>(
+      '''builds quests in response to answers at event level''',
+      EventLevelCfgQuest,
+      questIdPatternMatchTest: (qid) =>
+          qid == QuestionIdStrings.eventAgeOffGameRule,
+      validateUserAnswerAfterPatternMatchIsTrueCallback:
+          (QuestBase priorAnsweredQuest) {
+        EvGameAgeOffRule ageRule =
+            priorAnsweredQuest.mainAnswer as EvGameAgeOffRule;
+
+        return EvGameAgeOffRule.timeAfterGameEnds == ageRule;
+      },
+      //
+      derivedQuestGen: DerivedQuestGenerator.singlePrompt(
+        '{0}', //  event config
+        newQuestConstructor: QuestBase.eventLevelCfgQuest,
+        newQuestPromptArgGen: (
+          QuestBase priorAnsweredQuest,
+          int newQuestIdx,
+          int promptIdx,
+        ) {
+          return [EvGameAgeOffRule.timeAfterGameEnds.prompt];
+        },
+        newQuestCountCalculator: (QuestBase priorAnsweredQuest) {
+          // how many questions to generate
+          return 1;
+        },
+        newQuestIdGenFromPriorQuest: (
+          QuestBase priorAnsweredQuest,
+          int newQuIdx,
+        ) {
+          return QuestionIdStrings.eventAgeOffGameRuleHoursAfter;
+        },
+        answerChoiceGenerator: (
+          QuestBase priorAnsweredQuest,
+          int newQuestIdx,
+          int promptIdx,
+        ) {
+          return [
+            'Type hours to wait (decimals allowed) below & press return',
+            ''
+          ];
+        },
+        deriveTargetFromPriorRespCallbk: (
+          QuestBase priorAnsweredQuest,
+          int newQuestIdx,
+        ) {
+          /* */
+          return (priorAnsweredQuest as EventLevelCfgQuest)
+              .derivedQuestTargetAtAnswerIdx(
+            newQuestIdx,
+            1,
+            forRuleSelection: false,
+          );
+        },
+        newRespCastFunc: (
+          QuestBase newQuest,
+          String hoursToWaitAsStr,
+        ) {
+          return double.tryParse(hoursToWaitAsStr) ?? 2.0;
+        },
+        acceptsMultiResponses: false,
+      ),
+    )
+  ];
+}
