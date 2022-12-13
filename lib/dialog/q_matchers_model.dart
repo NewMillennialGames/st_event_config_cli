@@ -74,8 +74,7 @@ class QMatchCollection {
         );
       }
     }
-    questListMgr.appendGeneratedQuestsAndAnswers(newGendPendingQuests,
-        addAfterCurrent: addAfterCurrent);
+    questListMgr.appendGeneratedQuestsAndAnswers(newGendPendingQuests);
 
     if (_foundQmatchers.length > 0) {
       // _foundQmatchers.forEach((QuestMatcher qm) {

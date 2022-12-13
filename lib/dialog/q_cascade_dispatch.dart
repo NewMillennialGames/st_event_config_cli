@@ -68,36 +68,24 @@ class QCascadeDispatcher {
     /*
 
     */
-    // if (questJustAnswered.generatesNoNewQuestions) {
-    //   ConfigLogger.log(Level.FINER,
-    //     'Info  QID: ' +
-    //         questJustAnswered.questId +
-    //         ' generates no new questions',
-    //   );
-    //   return;
-    // } else {
-    //   ConfigLogger.log(Level.FINER,
-    //     'appendNewQuestsOrInsertImplicitAnswers received QID:  ${questJustAnswered.questId}',
-    //   );
-    // }
 
     // collect q-gen stats
     if (testMode) {
       statsCollector.startCounting(questListMgr, questJustAnswered);
     }
 
-    // generate questions based on type of just answered
-    if (questJustAnswered.isEventConfigQuest) {
+    // generate questions based on type of quest just answered
+    if (questJustAnswered.eventLevelAndProducesDerivedQuests) {
       // matching question is about: which screens to config?
       // it carries a list of app-screens and generator below
       // will create one question to select area-list for each screen
 
-      // TODO: make below more generic based on target property
-      if (!(questJustAnswered.mainAnswer is List<AppScreen>) &&
-          questJustAnswered.questId != QuestionIdStrings.eventAgeOffGameRule) {
-        print('bailing on ${questJustAnswered.questId}');
-        return;
-      }
+      // TODO: make below more generic based on quest property
+      // if (!(questJustAnswered.mainAnswer is List<AppScreen>) &&
+      //     questJustAnswered.questId != QuestionIdStrings.eventAgeOffGameRule) {
+      //   print('bailing on ${questJustAnswered.questId}');
+      //   return;
+      // }
 
       if (questJustAnswered.questId == QuestionIdStrings.eventAgeOffGameRule) {
         EvGameAgeOffRule gameAgeOffRule =
@@ -109,9 +97,13 @@ class QCascadeDispatcher {
 
         List<QuestBase> newQuests =
             _qMatchCollToGenEventDetail.getGendQuestions(questJustAnswered);
-        questListMgr.appendEventLvlQuests(newQuests, addAfterCurrent: true);
-        print('just ran on:  ${questJustAnswered.questId}');
-        return;
+        if (newQuests.length > 0) {
+          questListMgr
+              .appendEventLvlQuests(newQuests); // , addAfterCurrent: true
+          print(
+            'just added ${newQuests.length} new questions for:  ${questJustAnswered.questId}',
+          );
+        }
       }
 
       // String screenCfgTargets = (questJustAnswered.mainAnswer as List<AppScreen>)
