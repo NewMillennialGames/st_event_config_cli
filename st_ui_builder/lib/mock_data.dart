@@ -77,6 +77,11 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
   }
 
   @override
+  set setAssetNameDisplayStyle(EvAssetNameDisplayStyle ads) {
+    //
+  }
+
+  @override
   DateTime get gameDate => asset.gameDt!;
 
   @override
