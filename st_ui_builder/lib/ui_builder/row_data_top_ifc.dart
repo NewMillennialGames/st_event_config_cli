@@ -41,7 +41,7 @@ abstract class AssetRowPropertyIfc {
 
   String get orgImgUrlWhenTradingPlayers;
 
-  set setAssetNameDisplayStyle(EvAssetNameDisplayStyle ads);
+  void setAssetNameDisplayStyle(EvAssetNameDisplayStyle ads);
   EvAssetNameDisplayStyle get assetNameDisplayStyle;
 
   // holds asset price history

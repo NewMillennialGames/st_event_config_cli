@@ -77,7 +77,7 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
   }
 
   @override
-  set setAssetNameDisplayStyle(EvAssetNameDisplayStyle ads) {
+  void setAssetNameDisplayStyle(EvAssetNameDisplayStyle ads) {
     //
   }
 
