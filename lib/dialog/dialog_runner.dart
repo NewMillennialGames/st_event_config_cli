@@ -104,12 +104,25 @@ class DialogRunner {
       // }
 
       _quest = _qListMgr.nextQuestionToAnswer();
-      if (_quest != null) _outputSpacerLines();
+      if (_quest != null) {
+        _outputSpacerLines();
+        // print('no more questions found!!');
+      }
     }
     return true;
   }
 
-  void generateNewQuestionsFromUserResponse(QuestBase questJustAnswered) {
+  void generateNewQuestionsFromEventLevelAnswer(QuestBase questJustAnswered) {
+    // logic to add new Questions based on user response
+    questCascadeDispatcher.appendNewQuestsOrInsertImplicitAnswers(
+      _qListMgr,
+      questJustAnswered,
+    );
+  }
+
+  void generateNewQuestionsFromUserRuleCfgResponse(
+    QuestBase questJustAnswered,
+  ) {
     // logic to add new Questions based on user response
     questCascadeDispatcher.appendNewQuestsOrInsertImplicitAnswers(
       _qListMgr,
@@ -119,7 +132,7 @@ class DialogRunner {
 
   void _outputSpacerLines({bool forSection = false}) {
     if (forSection) {
-       ConfigLogger.log(Level.INFO, '\n' * this.linesBetweenSections);
+      ConfigLogger.log(Level.INFO, '\n' * this.linesBetweenSections);
     } else {
       ConfigLogger.log(Level.INFO, '\n' * this.linesBetweenQuest2s);
     }

@@ -6,9 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:st_ui_builder/st_ui_builder.dart';
-
 //
+import 'package:st_ui_builder/st_ui_builder.dart';
 import 'package:stclient/stclient.dart';
 
 //
@@ -30,7 +29,7 @@ const String cfgEmpl1 = 'assetVsAsset.json';
 // cfgEmpl2 seems to be invalid json; replace it to continue testing
 const String cfgEmpl2 = 'teamVsFieldRanked.json';
 const String cfgEmpl3 = 'driverVsField.json';
-const String cfgEmpl4 = 'demo.json';
+const String cfgEmpl4 = 'demo2.json';
 
 // evCfgDataFromServer contains the JSON payload produced by the CLI configurator
 Map<String, dynamic> evCfgDataFromServer = {};
@@ -179,19 +178,26 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
               totAvailWidth: MediaQuery.of(context).size.width,
               backColor: StColors.primaryDarkGray,
             ),
-            SizedBox(
-              height: 520.h,
-              child: GroupedListView<TableviewDataRowTuple, GroupHeaderData>(
-                elements: tvMgr.listData,
-                groupBy: tvMgr.groupBy,
-                groupHeaderBuilder: tvMgr.groupHeaderBuilder,
-                indexedItemBuilder: tvMgr.indexedItemBuilder,
-                sort: true,
-                useStickyGroupSeparators: true,
-                // next line should not be needed??
-                groupComparator: tvMgr.groupComparator,
+            if (!tvMgr.disableAllGrouping && tvMgr.groupBy != null)
+              SizedBox(
+                height: 520.h,
+                child: GroupedListView<TableviewDataRowTuple, GroupHeaderData>(
+                  elements: tvMgr.listData,
+                  groupBy: tvMgr.groupBy!,
+                  groupHeaderBuilder: tvMgr.groupHeaderBuilder,
+                  indexedItemBuilder: tvMgr.indexedItemBuilder,
+                  sort: true,
+                  useStickyGroupSeparators: true,
+                  // next line should not be needed??
+                  groupComparator: tvMgr.groupComparator,
+                ),
               ),
-            ),
+            if (tvMgr.disableAllGrouping || tvMgr.groupBy == null)
+              // TODO:  should return a normal listView;  not GroupedListView
+              SizedBox(
+                height: 520.h,
+                child: null,
+              )
           },
           Container(
             height: 30,

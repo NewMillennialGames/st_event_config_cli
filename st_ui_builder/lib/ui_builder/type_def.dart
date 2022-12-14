@@ -42,7 +42,7 @@ typedef TableviewDataRowTuple = Tuple4<AssetRowPropertyIfc,
 // TODO:  consider passing TableviewDataRowTuple to group functions
 // instead of first item in TableviewDataRowTuple.item1
 // typedef CastRowToSortVal = String Function(AssetRowPropertyIfc);
-typedef GetGroupHeaderLblsFromCompetitionRow = GroupHeaderData Function(
+typedef GetGroupHeaderLblsFromAssetGameData = GroupHeaderData Function(
     TableviewDataRowTuple);
 
 typedef SectionSortComparator = int Function(

@@ -37,9 +37,11 @@ abstract class AssetRowPropertyIfc {
   Decimal get openPrice;
 
   //
-  String get teamNameWhenTradingPlayers;
+  String get orgNameWhenTradingPlayers;
 
-  String get teamImgUrlWhenTradingPlayers;
+  String get orgImgUrlWhenTradingPlayers;
+
+  EvAssetNameDisplayStyle get assetNameDisplayStyle;
 
   // holds asset price history
   AssetStateUpdates get assetStateUpdates;
@@ -52,7 +54,7 @@ abstract class AssetRowPropertyIfc {
   // next 3 properties are game props but needed for sorting and grouping
   // shows values off the game record
   DateTime get gameDate; // rounded to midnight for row grouping
-  String get regionOrConference;
+  String get leagueGrouping;
 
   String get roundName;
 
@@ -75,8 +77,7 @@ abstract class AssetRowPropertyIfc {
 extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
   // sensible defaults if not overridden
   String get searchText =>
-      (topName + '-' + subName + '-' + teamNameWhenTradingPlayers)
-          .toUpperCase();
+      (topName + '-' + subName + '-' + orgNameWhenTradingPlayers).toUpperCase();
 
   String get rankStr => '$rank';
 
@@ -123,6 +124,9 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
 
   Color get priceFluxColor => assetStateUpdates.priceFluxColor;
 
+  EvAssetNameDisplayStyle get assetNameDisplayStyle =>
+      EvAssetNameDisplayStyle.showShortName;
+
   CompetitionType get gameType => CompetitionType.game;
 
   Map<String, dynamic>? get extAttsAsMap {
@@ -132,7 +136,7 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
         : null;
   }
 
-  String labelExtractor(DbTableFieldName fldName) {
+  String valueExtractor(DbTableFieldName fldName) {
     /* header labels in list groups
     */
     switch (fldName) {
@@ -141,11 +145,11 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
       case DbTableFieldName.assetShortName:
         return subName;
       case DbTableFieldName.assetOrgName:
-        return teamNameWhenTradingPlayers;
-      case DbTableFieldName.conference:
-        return regionOrConference;
-      case DbTableFieldName.region:
-        return regionOrConference;
+        return orgNameWhenTradingPlayers;
+      case DbTableFieldName.leagueGrouping:
+        return leagueGrouping;
+      // case DbTableFieldName.leagueGrouping:
+      //   return leagueGrouping;
       case DbTableFieldName.gameDate:
         return gameDateDtwStr;
       case DbTableFieldName.gameTime:
@@ -179,11 +183,11 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
       case DbTableFieldName.assetShortName:
         return subName;
       case DbTableFieldName.assetOrgName:
-        return teamNameWhenTradingPlayers;
-      case DbTableFieldName.conference:
-        return regionOrConference;
-      case DbTableFieldName.region:
-        return regionOrConference;
+        return orgNameWhenTradingPlayers;
+      case DbTableFieldName.leagueGrouping:
+        return leagueGrouping;
+      // case DbTableFieldName.region:
+      //   return leagueGrouping;
       case DbTableFieldName.gameDate:
         return gameDate.truncateTime;
       case DbTableFieldName.gameTime:

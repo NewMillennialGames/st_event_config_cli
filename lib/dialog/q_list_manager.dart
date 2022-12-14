@@ -30,7 +30,8 @@ class QuestListMgr {
   // constructor
   QuestListMgr([List<QuestBase>? pendingQuestions = null]) {
     if ((pendingQuestions ?? <QuestBase>[]).length < 1)
-      ConfigLogger.log(Level.WARNING, 
+      ConfigLogger.log(
+        Level.WARNING,
         'warn: QuestListMgr may not behave well without min 1 seed question!!',
       );
     _pendingQuestions.addAll(pendingQuestions ?? []);
@@ -170,6 +171,9 @@ class QuestListMgr {
     _moveCurrentQuestToAnswered();
     //
     if (_currQuestionIdx + 1 >= _pendingQuestions.length) {
+      print(
+        '*******  no more questions:  ${_currQuestionIdx + 1}  ${_pendingQuestions.length}',
+      );
       return null;
     }
     ++_currQuestionIdx;
@@ -203,7 +207,8 @@ class QuestListMgr {
         mostRecentSaved.questId == currentOrLastQuestion.questId &&
         _notYetAtEnd) {
       //
-     ConfigLogger.log(Level.SEVERE, 
+      ConfigLogger.log(
+        Level.SEVERE,
         'Error: QID: ${mostRecentSaved.questId} seemd to be duplicate & wasnt moved into _answeredQuestsBySection',
       );
       return;
@@ -226,8 +231,22 @@ class QuestListMgr {
     // });
   }
 
+  void appendEventLvlQuests(
+    List<QuestBase> newQuests,
+  ) {
+    // add new quests right after current question for sensible order
+    // do not sort
+    _pendingQuestions = _pendingQuestions.sublist(0, _currQuestionIdx + 1) +
+        newQuests +
+        _pendingQuestions.sublist(
+          _currQuestionIdx + 1,
+        );
+    // _currQuestionIdx = _currQuestionIdx - 1;
+  }
+
   void appendGeneratedQuestsAndAnswers(
     List<QuestBase> newQuests, {
+    // bool addAfterCurrent = false,
     String dbgNam = 'apndNewQs', // debug-name
   }) {
     /*

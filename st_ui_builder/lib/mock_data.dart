@@ -1,9 +1,9 @@
+import 'dart:math';
 import 'package:decimal/decimal.dart';
 import 'package:intl/intl.dart';
-// import 'package:flutter_riverpod/flutter_riverpod.dart';
 //
+import 'package:st_ev_cfg/st_ev_cfg.dart';
 import 'package:stclient/stclient.dart';
-
 //
 import 'ui_builder/all.dart';
 
@@ -11,7 +11,19 @@ import 'ui_builder/all.dart';
   creating fake data for testing
 */
 
-final _today = DateTime.now();
+// var d = DateTime.now();
+DateTime _today = DateTime.now();
+
+final days = <DateTime>[
+  _today.subtract(Duration(days: 8)),
+  _today.subtract(Duration(days: 5)),
+  _today.subtract(Duration(days: 3))
+];
+
+DateTime getRandDate() {
+  int idx = Random().nextInt(2);
+  return days[idx];
+}
 
 final DateFormat dtFmtr = DateFormat('yyyy-MM-dd');
 
@@ -22,12 +34,13 @@ class MockAsset {
   String region;
   String teamName;
   String imgUrl = 'https://ui-avatars.com/api/?name=John+Doe';
+  DateTime? gameDt;
 
   // reall assets DO NOT have game key
   String gameKey;
   String displayNumber;
 
-  DateTime get gameDt => _today;
+  // DateTime get gameDt => getRandDate(); // _today;
 
   String get key => id;
 
@@ -39,7 +52,9 @@ class MockAsset {
     this.teamName,
     this.gameKey,
     this.displayNumber,
+    // {this.gameDt = _today}
   ) {
+    gameDt = getRandDate();
     imgUrl = 'https://ui-avatars.com/api/?$name';
   }
 
@@ -62,7 +77,7 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
   }
 
   @override
-  DateTime get gameDate => asset.gameDt;
+  DateTime get gameDate => asset.gameDt!;
 
   @override
   AssetKey get assetKey => AssetKey(asset.id);
@@ -82,7 +97,7 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
   String get rankStr => '$rank';
 
   @override
-  String get regionOrConference => asset.region;
+  String get leagueGrouping => asset.region;
 
   @override
   String get subName => asset.teamName;
@@ -100,7 +115,7 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
   String get groupKey => 'niu';
 
   @override
-  bool get isTeam => throw UnimplementedError();
+  bool get isTeam => true;
 
   @override
   AssetStateUpdates get assetStateUpdates =>
@@ -124,14 +139,17 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
 
   @override
   String get searchText =>
-      (topName + '-' + subName + '-' + teamNameWhenTradingPlayers)
-          .toUpperCase();
+      (topName + '-' + subName + '-' + orgNameWhenTradingPlayers).toUpperCase();
 
   @override
-  String get teamImgUrlWhenTradingPlayers => '';
+  String get orgImgUrlWhenTradingPlayers => '';
 
   @override
-  String get teamNameWhenTradingPlayers => '';
+  String get orgNameWhenTradingPlayers => asset.teamName;
+
+  @override
+  EvAssetNameDisplayStyle get assetNameDisplayStyle =>
+      EvAssetNameDisplayStyle.showShortName;
 
   @override
   String get ticker => 'ticker';
@@ -154,12 +172,12 @@ List<MockAsset> _fakeData = [
   MockAsset('Frankf Collin', 'Reg3', 'Dukes', '1', '4'),
   MockAsset('Gil', 'Reg2', 'Dukes', '2', '3'),
   MockAsset('Abe', 'Reg1', 'Cowboys', '3', '2'),
-  MockAsset('David', 'Reg1', 'N. England', '4', '1'),
+  MockAsset('David', 'Reg1', 'Cowboys', '4', '1'),
   MockAsset('Ed', 'Reg2', 'Redskins', '5', '5'),
   MockAsset('Frank', 'Reg2', 'Redskins', '6', '7'),
-  // MockAsset('Gil', 'Reg2', 'Redskins', '7'),
-  // MockAsset('Bob', 'Reg1', 'Cowboys', '8'),
-  // MockAsset('Hank', 'Reg2', 'Saints', '9'),
+  MockAsset('Gil', 'Reg2', 'Redskins', '7', '2'),
+  MockAsset('Bob', 'Reg1', 'Cowboys', '8', '2'),
+  MockAsset('Hank', 'Reg2', 'Saints', '9', '2'),
   // MockAsset('Charlie', 'Reg1', 'Cowboys', '10'),
   // MockAsset('Ive', 'Reg2', 'Saints', '11'),
   // MockAsset('Hank', 'Reg3', 'Jeeps', '12'),

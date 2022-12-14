@@ -8,7 +8,16 @@ part of EvCfgEnums;
 // ];
 
 // question-prompt-index (adjusted for prompt-count) will select one of these values
-const Map<int, String> _fldPosLookupMap = {0: '1st', 1: '2nd', 2: '3rd'};
+const Map<int, String> _fldPosLookupMap = {
+  0: '1st',
+  1: '2nd',
+  2: '3rd',
+  3: '4th',
+  4: '5th'
+};
+
+const String _questGenErrorTemplate =
+    "Err: %s is not a top-lvl VisRuleQuestType; its subsummed under %s when VRT is %s";
 
 @JsonEnum()
 enum VisualRuleType {
@@ -37,6 +46,12 @@ extension VisualRuleTypeExt1 on VisualRuleType {
         VisualRuleType.groupCfg,
         VisualRuleType.filterCfg
       ].contains(this);
+
+  bool get appliesToFilterCfg => [VisualRuleType.filterCfg].contains(this);
+
+  bool get appliesToGroupCfg => [VisualRuleType.groupCfg].contains(this);
+
+  bool get appliesToSortCfg => [VisualRuleType.sortCfg].contains(this);
 
   // List<VisualRuleType> get activeValues =>
   //     VisualRuleType.values.where((e) => e.isConfigurable).toList();
@@ -181,9 +196,44 @@ extension VisualRuleTypeExt1 on VisualRuleType {
     }
   }
 
+  int get subPromptCount {
+    /* inform the makeQuestGenForRuleType()
+    how many sub-prompts exist, so it can correctly
+    create the question indexes (id) in sequential order
+    */
+    switch (this) {
+      case VisualRuleType.generalDialogFlow:
+        return 0;
+      case VisualRuleType.sortCfg:
+        return 2;
+      case VisualRuleType.groupCfg:
+        return 4;
+      case VisualRuleType.filterCfg:
+        return 3;
+      case VisualRuleType.styleOrFormat:
+        return 1;
+      case VisualRuleType.showOrHide:
+        return 1;
+      case VisualRuleType.themePreference:
+        return 1;
+    }
+  }
+
   List<VisRuleQuestType> get requRuleDetailCfgQuests {
-    // its helpful that only one config type is returned
-    // DerivedQuestGenerator could have problems if this changes
+    /*  IMPORTANT:
+      if you adjust the list below, you must also fix "subPromptCount" above
+
+    its helpful that only one (first) config type is returned
+    DerivedQuestGenerator could have problems if this changes
+
+    in short, sort, group and filter require multiple
+    varying questions and its easier to decide which from within
+      _getQuestPromptOptsForDataFieldName (below)
+    than it is to return multiple values here
+
+    we may study and revise this at a later point
+    */
+
     switch (this) {
       case VisualRuleType.generalDialogFlow:
         return [];
@@ -195,12 +245,23 @@ extension VisualRuleTypeExt1 on VisualRuleType {
       case VisualRuleType.groupCfg:
         return [
           Vrq.selectDataFieldName,
-          // Vrq.specifySortAscending // leave this out here
+          /* questions below are part of the rule config
+            but this logic is handled in the derived question
+            constructor, 
+            DerivedQuestGenerator makeQuestGenForRuleType  (below)
+            and not guided by this property
+
+            TODO: see notes above & study why the above is best approach??
+          */
+          // Vrq.specifySortAscending
+          // Vrq.askJustification,
+          // Vrq.isCollapsible,
         ];
       case VisualRuleType.filterCfg:
         return [
           Vrq.selectDataFieldName,
           // Vrq.specifySortAscending // leave this out here
+          // Vrq.askMenuName,
         ];
       case VisualRuleType.styleOrFormat:
         return [
@@ -307,7 +368,8 @@ extension VisualRuleTypeExt1 on VisualRuleType {
         );
 
         String templ = thisVisRT.prepTemplate;
-       ConfigLogger.log(Level.INFO, 
+        ConfigLogger.log(
+          Level.INFO,
           'askCountOfSlotsToConfigure:  ${thisVisRT} uses $templ   ($ruleTypeName)',
         );
         perQuestPromptDetails.add(NewQuestPerPromptOpts<int>(
@@ -316,7 +378,8 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           answerChoiceGenerator: (prevQuest, newQuestIdx, int promptIdx) =>
               ['0', '1', '2', '3'],
           newRespCastFunc: (QuestBase qb, String ans) {
-            return ans as int;
+            return int.tryParse(ans) ?? 0;
+            // return ans as int;
           },
           visRuleType: thisVisRT,
           visRuleQuestType: VisRuleQuestType.askCountOfSlotsToConfigure,
@@ -351,7 +414,8 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           requiredPromptInstances,
         );
         perQuestPromptDetails.addAll(qps);
-        ConfigLogger.log(Level.INFO, 
+        ConfigLogger.log(
+          Level.INFO,
           'requiredPromptInstances: $requiredPromptInstances  produced ${qps.length} NewQuestPerPromptOpts for vrt: ${thisVisRT.name}',
         );
         break;
@@ -376,11 +440,17 @@ extension VisualRuleTypeExt1 on VisualRuleType {
           ),
         );
         break;
-      //
+      // error conditions below
       case VisRuleQuestType.specifySortAscending:
-        throw UnimplementedError(
-          'err: not a real rule; hidden under selectDataFieldName',
-        );
+      case VisRuleQuestType.askMenuName:
+      case VisRuleQuestType.askJustification:
+      case VisRuleQuestType.isCollapsible:
+        String m = sprintf(_questGenErrorTemplate, [
+          ruleSubtypeNewQuest.name,
+          VisRuleQuestType.selectDataFieldName.name,
+          thisVisRT.name
+        ]);
+        throw UnimplementedError(m);
     }
 
     assert(perQuestPromptDetails.length > 0, 'err: no prompts in question');
@@ -408,47 +478,40 @@ extension VisualRuleTypeExt1 on VisualRuleType {
 }
 
 List<NewQuestPerPromptOpts> _getQuestPromptOptsForDataFieldName(
-  VisualRuleType ruleType,
+  VisualRuleType topVisRuleType,
   int numOfFieldsToSpecify,
 ) {
-  //
+  // applies to sort, filter and group-by ruels
   assert(
     numOfFieldsToSpecify > 0 && numOfFieldsToSpecify < 4,
     'min 1; max 3 options (sort, group, filter)',
   );
-  // create upvals for constructors below
-  var questTempl =
-      VisRuleQuestType.selectDataFieldName.questTemplByRuleType(ruleType);
 
+  // enclosed functions (_promptTemplArgGenFunc & _newRespCastFunc)
   List<String> _promptTemplArgGenFunc(
     QuestBase priorAnsweredQuest,
     int questIdx,
     int promptIdx,
   ) {
+    //
     // assert(questIdx == 1, 'should have 1 quest with multi (up to 6) prompts; is failing ... consider why?');
     assert(
       0 <= promptIdx && promptIdx <= 5,
       'between 2 to 6 total prompts (2 prompts per field)',
     );
-    // data field prompts have 2 questions so adjust promptIdx accordingly
-    // divide by 2 and round down (other than zero)
-    // to get a value in set (0,1,2)
-    int fldPos = (promptIdx > 1) ? promptIdx ~/ 2 : 0;
 
-    String pos = _fldPosLookupMap[fldPos] ?? '-$promptIdx-';
+    int promptCountByType = topVisRuleType.subPromptCount;
+    // data field prompts have between 2-4 questions so adjust promptIdx accordingly
+    // divide by promptCountByType and round down (other than zero)
+    // to get a value in set (0,1,2,3,4,5)
+
+    int fldPos = (promptIdx > 1) ? promptIdx ~/ promptCountByType : 0;
+
+    String subQuestOrderIdx = _fldPosLookupMap[fldPos] ?? '-$promptIdx-';
     return [
-      pos,
+      subQuestOrderIdx,
       priorAnsweredQuest.targetPath,
     ];
-  }
-
-  List<String> _answerChoiceGeneratorFunc(
-    QuestBase priorAnsweredQuest,
-    int newQuestIdx,
-    int promptIdx,
-  ) {
-    // in future it might be nice to filter out fields user has already selected
-    return DbTableFieldName.values.map((e) => e.name).toList();
   }
 
   DbTableFieldName _newRespCastFunc(
@@ -456,7 +519,8 @@ List<NewQuestPerPromptOpts> _getQuestPromptOptsForDataFieldName(
     String lstAreaIdxs,
   ) {
     List<int> l = castStrOfIdxsToIterOfInts(lstAreaIdxs).toList();
-    assert(l.length == 1, 'exactly 1 response required');
+    assert(l.length == 1,
+        'exactly 1 fldName required per slot in sort/group/filter');
     return DbTableFieldName.values[l.first];
   }
 
@@ -467,15 +531,19 @@ List<NewQuestPerPromptOpts> _getQuestPromptOptsForDataFieldName(
     // int fieldOrder =
     perPromptDetails.addAll([
       NewQuestPerPromptOpts<DbTableFieldName>(
-        questTempl,
+        VisRuleQuestType.selectDataFieldName
+            .questTemplByRuleType(topVisRuleType),
         visRuleQuestType: VisRuleQuestType.selectDataFieldName,
         promptTemplArgGen: _promptTemplArgGenFunc,
-        answerChoiceGenerator: _answerChoiceGeneratorFunc,
+        answerChoiceGenerator: (_, __, ___) =>
+            DbTableFieldName.values.map((e) => e.name).toList(),
         newRespCastFunc: _newRespCastFunc,
         instanceIdx: fieldIdx,
       ),
       NewQuestPerPromptOpts<bool>(
-        'Sort Ascending?',
+        // 'Sort Ascending?',
+        VisRuleQuestType.specifySortAscending
+            .questTemplByRuleType(topVisRuleType),
         visRuleQuestType: VisRuleQuestType.specifySortAscending,
         promptTemplArgGen: (_, __, pi) => [],
         newRespCastFunc: (
@@ -494,6 +562,69 @@ List<NewQuestPerPromptOpts> _getQuestPromptOptsForDataFieldName(
         },
         instanceIdx: fieldIdx,
       ),
+      if (topVisRuleType.appliesToFilterCfg) ...[
+        NewQuestPerPromptOpts<String>(
+          VisRuleQuestType.askMenuName.questTemplByRuleType(topVisRuleType),
+          visRuleQuestType: VisRuleQuestType.askMenuName,
+          promptTemplArgGen: (_, __, int pi) => [],
+          newRespCastFunc: (
+            QuestBase newQuest,
+            String menuName,
+          ) {
+            return menuName;
+          },
+          answerChoiceGenerator: (
+            QuestBase priorAnsweredQuest,
+            int newQuestIdx,
+            int promptIdx,
+          ) {
+            // will be skipped without some answer choices avail
+            return ['type menu name below ...', ''];
+          },
+          instanceIdx: fieldIdx,
+        ),
+      ],
+      if (topVisRuleType.appliesToGroupCfg) ...[
+        NewQuestPerPromptOpts<DisplayJustification>(
+          VisRuleQuestType.askJustification
+              .questTemplByRuleType(topVisRuleType),
+          visRuleQuestType: VisRuleQuestType.askJustification,
+          promptTemplArgGen: (_, __, int pi) => [],
+          newRespCastFunc: (
+            QuestBase newQuest,
+            String ansIdx,
+          ) {
+            return DisplayJustification.values[int.tryParse(ansIdx) ?? 0];
+          },
+          answerChoiceGenerator: (
+            QuestBase priorAnsweredQuest,
+            int newQuestIdx,
+            int promptIdx,
+          ) {
+            return DisplayJustification.values.map((e) => e.name).toList();
+          },
+          instanceIdx: fieldIdx,
+        ),
+        NewQuestPerPromptOpts<bool>(
+          VisRuleQuestType.isCollapsible.questTemplByRuleType(topVisRuleType),
+          visRuleQuestType: VisRuleQuestType.isCollapsible,
+          promptTemplArgGen: (_, __, int pi) => [],
+          newRespCastFunc: (
+            QuestBase newQuest,
+            String ansIdx,
+          ) {
+            return ansIdx == '1';
+          },
+          answerChoiceGenerator: (
+            QuestBase priorAnsweredQuest,
+            int newQuestIdx,
+            int promptIdx,
+          ) {
+            return ['no', 'yes'];
+          },
+          instanceIdx: fieldIdx,
+        ),
+      ],
     ]);
   }
   return perPromptDetails;
@@ -522,3 +653,12 @@ enum RuleSelectionOffsetBehavior {
 // extension RuleSelectionOffsetBehaviorExt1 on RuleSelectionOffsetBehavior {
 //   // return properties needed on RuleSelectQuest instance
 // }
+
+  // List<String> _answerChoiceGeneratorFunc(
+  //   QuestBase priorAnsweredQuest,
+  //   int newQuestIdx,
+  //   int promptIdx,
+  // ) {
+  //   // in future it might be nice to filter out fields user has already selected
+  //   return DbTableFieldName.values.map((e) => e.name).toList();
+  // }

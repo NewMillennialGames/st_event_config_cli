@@ -98,9 +98,28 @@ final List<QuestBase> _initQuestionLst = [
       DlgStr.eventGameAgeOffPolicy,
       EvGameAgeOffRule.values.map((e) => e.name),
       CaptureAndCast<EvGameAgeOffRule>(
-        (qb, s) => EvGameAgeOffRule.values[int.tryParse(s) ?? 0],
+        (QuestBase qb, String s) =>
+            EvGameAgeOffRule.values[int.tryParse(s) ?? 0],
       ),
       questId: QuestionIdStrings.eventAgeOffGameRule,
+    ),
+    // below not needed;  each filter menu lets you set field to use
+    // QuestBase.initialEventConfigRule(
+    //   QTargetResolution.forEvent(),
+    //   DlgStr.useAssetShortNameInFilters,
+    //   ['no', 'yes'],
+    //   CaptureAndCast<bool>((qb, ls) => ls == '1'),
+    //   questId: QuestionIdStrings.useAssetShortNameInFilters,
+    // ),
+    QuestBase.initialEventConfigRule(
+      QTargetResolution.forEvent(),
+      DlgStr.selectAssetNameDisplayStyle,
+      EvAssetNameDisplayStyle.values.map((e) => e.name),
+      CaptureAndCast<EvAssetNameDisplayStyle>(
+        (QuestBase qb, String s) =>
+            EvAssetNameDisplayStyle.values[int.tryParse(s) ?? 0],
+      ),
+      questId: QuestionIdStrings.selectAssetNameDisplayStyle,
     ),
   ],
   // ask which screens to configure

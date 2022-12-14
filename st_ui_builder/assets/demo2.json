@@ -1,13 +1,13 @@
 {
     "eventCfg": {
-        "evTemplateName": "NBA Weekly V2",
-        "evTemplateDescription": "Trying to get date seperator in MarketView",
+        "evTemplateName": "NFL Playoffs V2",
+        "evTemplateDescription": "Version 2 - Test Date seperator",
         "evType": "standard",
         "evCompetitorType": "team",
         "evOpponentType": "sameAsCompetitorType",
-        "evDuration": "calendarScoped",
-        "evEliminationType": null,
-        "evGameAgeOffRule": "timeAfterGameEnds",
+        "evDuration": "tournament",
+        "evEliminationType": "singleElim",
+        "evGameAgeOffRule": "whenRoundChanges",
         "applyMktViewRowStyleToAllScreens": true,
         "cancelAllRowGroupingLogic": false
     },
@@ -47,6 +47,10 @@
                                     "ruleType": "groupCfg",
                                     "fieldList": [
                                         {
+                                            "colName": "leagueGrouping",
+                                            "asc": true
+                                        },
+                                        {
                                             "colName": "gameDate",
                                             "asc": true
                                         }
@@ -58,7 +62,7 @@
                             "visRuleList": [
                                 {
                                     "ruleType": "styleOrFormat",
-                                    "selectedRowStyle": "assetVsAsset"
+                                    "selectedRowStyle": "assetVsAssetRanked"
                                 }
                             ]
                         }

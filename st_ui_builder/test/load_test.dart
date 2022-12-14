@@ -50,7 +50,7 @@ void main() {
       );
       expect(
         trdm.groupingRules?.item2?.colName,
-        DbTableFieldName.conference,
+        DbTableFieldName.leagueGrouping,
         reason: 'json specifies grouping on 2 fields; 2nd is conference',
       );
     });

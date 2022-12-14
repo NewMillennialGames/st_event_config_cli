@@ -1,5 +1,6 @@
 // top level package export for web UI
 
+export 'app_entity_enums/all.dart' show EvAssetNameDisplayStyle;
 export 'dialog/all.dart';
 export 'providers/all.dart';
 export 'services/web_quest_presenter.dart';

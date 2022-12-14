@@ -17,9 +17,13 @@ class TopEventCfg {
   EvDuration evDuration;
   EvEliminationStrategy evEliminationType;
   EvGameAgeOffRule evGameAgeOffRule;
+  double hoursToWaitAfterGameEnds;
   bool applyMktViewRowStyleToAllScreens = true;
   @JsonKey(defaultValue: false)
   bool cancelAllRowGroupingLogic = false;
+  bool useAssetShortNameInFilters = true;
+  EvAssetNameDisplayStyle assetNameDisplayStyle =
+      EvAssetNameDisplayStyle.showShortName;
 
   TopEventCfg(
     this.evTemplateName,
@@ -30,7 +34,10 @@ class TopEventCfg {
     this.evDuration = EvDuration.oneGame,
     this.evEliminationType = EvEliminationStrategy.roundRobin,
     this.evGameAgeOffRule = EvGameAgeOffRule.byEvEliminationStrategy,
+    this.hoursToWaitAfterGameEnds = 0,
     this.applyMktViewRowStyleToAllScreens = true,
+    this.useAssetShortNameInFilters = true,
+    this.assetNameDisplayStyle = EvAssetNameDisplayStyle.showShortName,
   });
 
   bool get isFantasy => evType == EvType.fantasy;
@@ -88,7 +95,8 @@ class EventCfgTree {
   );
 
   factory EventCfgTree.fromEventLevelConfig(
-      Iterable<EventLevelCfgQuest> evCfgResponses) {
+    Iterable<EventLevelCfgQuest> evCfgResponses,
+  ) {
     //
     EventLevelCfgQuest evTemplateQuest = evCfgResponses
         .firstWhere((q) => q.questId == QuestionIdStrings.eventName);
@@ -108,7 +116,10 @@ class EventCfgTree {
     EvEliminationStrategy evEliminationType = EvEliminationStrategy.singleGame;
     EvGameAgeOffRule evGameAgeOffRule =
         EvGameAgeOffRule.byEvEliminationStrategy;
+    double hoursToWaitAfterGameEnds = 0;
     bool applySameRowStyleToAllScreens = true;
+    EvAssetNameDisplayStyle assetNameDisplayStyle =
+        EvAssetNameDisplayStyle.showShortName;
     // use try to catch errs and allow easy debugging
     try {
       evTemplateDescription = (evCfgResponses
@@ -139,6 +150,17 @@ class EventCfgTree {
       applySameRowStyleToAllScreens = evCfgResponses
           .firstWhere((q) => q.questId == QuestionIdStrings.globalRowStyle)
           .mainAnswer as bool;
+      assetNameDisplayStyle = evCfgResponses
+          .firstWhere(
+              (q) => q.questId == QuestionIdStrings.selectAssetNameDisplayStyle)
+          .mainAnswer as EvAssetNameDisplayStyle;
+
+      if (evGameAgeOffRule == EvGameAgeOffRule.timeAfterGameEnds) {
+        hoursToWaitAfterGameEnds = evCfgResponses
+            .firstWhere((q) =>
+                q.questId == QuestionIdStrings.eventAgeOffGameRuleHoursAfter)
+            .mainAnswer as double;
+      }
     } catch (e) {
       ConfigLogger.log(
         Level.WARNING,
@@ -155,7 +177,9 @@ class EventCfgTree {
       evDuration: evDuration,
       evEliminationType: evEliminationType,
       evGameAgeOffRule: evGameAgeOffRule,
+      hoursToWaitAfterGameEnds: hoursToWaitAfterGameEnds,
       applyMktViewRowStyleToAllScreens: applySameRowStyleToAllScreens,
+      assetNameDisplayStyle: assetNameDisplayStyle,
     );
 
     return EventCfgTree(eventCfg, {});
@@ -214,7 +238,9 @@ class EventCfgTree {
     String jsonData = json.encode(this);
     outFile.writeAsStringSync(jsonData, mode: FileMode.write, flush: true);
     ConfigLogger.log(
-        Level.INFO, 'Config written (in JSON fmt) to ${outFile.path}');
+      Level.INFO,
+      'Config written (in JSON fmt) to ${outFile.path}',
+    );
     // } catch (e) {
     //   ConfigLogger.log(Level.FINER,e.toString());
     // }

@@ -1,5 +1,6 @@
 import "dart:io";
 import 'package:collection/collection.dart';
+import 'package:st_ev_cfg/config/all.dart';
 //
 import '../interfaces/q_presenter.dart';
 import '../questions/all.dart';
@@ -12,9 +13,9 @@ class CliQuestionPresenter implements QuestionPresenterIfc {
   @override
   void askAndWaitForUserResponse(
     DialogRunner dialoger,
-    QuestBase quest,
+    QuestBase pendingQuest,
   ) {
-    QuestPromptInstance? promptInst = quest.getNextUserPromptIfExists();
+    QuestPromptInstance? promptInst = pendingQuest.getNextUserPromptIfExists();
     // ConfigLogger.log(Level.FINER,
     //   'beginning askAndWaitForUserResponse with ${promptInst?.userPrompt ?? '-na'}',
     // );
@@ -31,16 +32,21 @@ class CliQuestionPresenter implements QuestionPresenterIfc {
         //   'askAndWaitForUserResponse answered ${promptInst.userPrompt} with ${promptInst.autoAnswerIfAppropriate}',
         // );
       } else {
-        _askAndStoreAnswer(dialoger, quest, promptInst);
+        _askAndStoreAnswer(dialoger, pendingQuest, promptInst);
         // ConfigLogger.log(Level.FINER,
         //   'cont askAndWaitForUserResponse with ${promptInst.userPrompt}',
         // );
       }
-      promptInst = quest.getNextUserPromptIfExists();
+      promptInst = pendingQuest.getNextUserPromptIfExists();
     }
     // user answer might generate new questions
-    if (!quest.isRuleDetailQuestion) {
-      dialoger.generateNewQuestionsFromUserResponse(quest);
+    if (!pendingQuest.isRuleDetailQuestion &&
+        !pendingQuest.isEventConfigQuest) {
+      dialoger.generateNewQuestionsFromUserRuleCfgResponse(pendingQuest);
+      //
+    } else if (pendingQuest.eventLevelAndProducesDerivedQuests) {
+      //
+      dialoger.generateNewQuestionsFromEventLevelAnswer(pendingQuest);
     }
   }
 

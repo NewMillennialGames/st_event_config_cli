@@ -140,7 +140,7 @@ to rebuild Freezed models in CLI:
 
 
 to rebuild JSON models:  
-    cd projectRoot (above lib/)
+    cd projRoot/st_ui_builder (above uib lib/)
     flutter pub run build_runner build --delete-conflicting-outputs
 
 ###### Examples:

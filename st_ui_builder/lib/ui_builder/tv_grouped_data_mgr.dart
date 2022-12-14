@@ -54,20 +54,34 @@ class GroupedTableDataMgr {
   TvSortCfg get sortingRules => _tableViewCfg.sortRules;
   TvFilterCfg? get filterRules => _tableViewCfg.filterRules;
 
-  GetGroupHeaderLblsFromCompetitionRow get groupBy {
+  String get fm1Title =>
+      filterRules?.item1?.menuTitleIfFilter ??
+      filterRules?.item1?.colName.name ??
+      '';
+  String get fm2Title =>
+      filterRules?.item2?.menuTitleIfFilter ??
+      filterRules?.item2?.colName.name ??
+      '';
+  String get fm3Title =>
+      filterRules?.item3?.menuTitleIfFilter ??
+      filterRules?.item3?.colName.name ??
+      '';
+
+  GetGroupHeaderLblsFromAssetGameData? get groupBy {
     return GroupHeaderData.groupHeaderPayloadConstructor(
-      _tableViewCfg.sortRules,
+      _tableViewCfg.groupByRules!,
     );
   }
 
   // groupHeaderBuilder is function to return header widget
   // defining groupHeaderBuilder will cause groupSeparatorBuilder to be ignored
   GroupHeaderBuilder get groupHeaderBuilder {
-    if (disableAllGrouping) return (_) => const SizedBox.shrink();
+    if (disableAllGrouping || groupBy == null)
+      return (_) => const SizedBox.shrink();
 
     // copy groupBy getter to save a lookup
     final TvAreaRowStyle rowStyle = _tableViewCfg.rowStyle;
-    final GetGroupHeaderLblsFromCompetitionRow gbFunc = groupBy;
+    final GetGroupHeaderLblsFromAssetGameData gbFunc = groupBy!;
     return (TableviewDataRowTuple rowData) =>
         TvGroupHeader(rowStyle, appScreen, gbFunc(rowData));
   }
@@ -76,7 +90,7 @@ class GroupedTableDataMgr {
   // GroupComparatorCallback? get groupComparator => null;
   GroupComparatorCallback? get groupComparator {
     // GroupHeaderData implements comparable
-    if (disableAllGrouping) return null;
+    if (disableAllGrouping || groupBy == null) return null;
 
     if (sortOrder == GroupedListOrder.DESC) {
       return (GroupHeaderData hd1Val, GroupHeaderData hd2Val) =>
@@ -133,7 +147,7 @@ class GroupedTableDataMgr {
     Set<String> listItems2 = i2 == null ? {} : _getListItemsByCfgField(i2);
     Set<String> listItems3 = i3 == null ? {} : _getListItemsByCfgField(i3);
 
-    const _kLstMin = 2;
+    const int _kLstMin = 2;
 
     bool has2ndList =
         i2 != null && listItems2.length > _kLstMin && i2.colName != i1?.colName;
@@ -159,31 +173,37 @@ class GroupedTableDataMgr {
           _DropDownMenuList(
             listItems: listItems1,
             colName: i1.colName,
+            titleName: i1.menuTitleIfFilter ??
+                _filterTitleExtractor(i1.colName, i1.menuTitleIfFilter),
             curSelection: _filter1Selection,
             valSetter: (s) => _filter1Selection = s,
             width: allocBtnWidth,
             doFilteringFor: _doFilteringFor,
-            filterTitleExtractor: _filterTitleExtractor,
+            // filterTitleExtractor: _filterTitleExtractor,
           ),
           if (has2ndList)
             _DropDownMenuList(
               listItems: listItems2,
               colName: i2.colName,
+              titleName: i2.menuTitleIfFilter ??
+                  _filterTitleExtractor(i2.colName, i2.menuTitleIfFilter),
               curSelection: _filter2Selection,
               valSetter: (s) => _filter2Selection = s,
               width: allocBtnWidth,
               doFilteringFor: _doFilteringFor,
-              filterTitleExtractor: _filterTitleExtractor,
+              // filterTitleExtractor: _filterTitleExtractor,
             ),
           if (has3rdList)
             _DropDownMenuList(
               listItems: listItems3,
               colName: i3.colName,
+              titleName: i3.menuTitleIfFilter ??
+                  _filterTitleExtractor(i3.colName, i3.menuTitleIfFilter),
               curSelection: _filter3Selection,
               valSetter: (s) => _filter3Selection = s,
               width: allocBtnWidth,
               doFilteringFor: _doFilteringFor,
-              filterTitleExtractor: _filterTitleExtractor,
+              // filterTitleExtractor: _filterTitleExtractor,
             ),
         ],
       ),
@@ -203,21 +223,24 @@ class GroupedTableDataMgr {
     }
   }
 
-  String _filterTitleExtractor(DbTableFieldName fieldName) {
+  String _filterTitleExtractor(
+    DbTableFieldName fieldName,
+    String? titleName,
+  ) {
     bool isTeam = false;
     if (_allAssetRows.isNotEmpty) {
       isTeam = _allAssetRows.first.item1.isTeam;
     }
+    if (titleName != null) return titleName;
+
     switch (fieldName) {
       case DbTableFieldName.assetName:
       case DbTableFieldName.assetShortName:
         return isTeam ? 'Team' : 'Player';
       case DbTableFieldName.assetOrgName:
         return 'Team';
-      case DbTableFieldName.conference:
+      case DbTableFieldName.leagueGrouping:
         return 'Conference';
-      case DbTableFieldName.region:
-        return 'All Regions';
       case DbTableFieldName.gameDate:
         return 'All Dates';
       case DbTableFieldName.gameTime:
@@ -261,14 +284,14 @@ class GroupedTableDataMgr {
       case DbTableFieldName.assetCurrentPrice:
       case DbTableFieldName.assetRankOrScore:
         rows.sort((a, b) {
-          final item1Value = num.parse(a.labelExtractor(colName));
-          final item2Value = num.parse(b.labelExtractor(colName));
+          num item1Value = num.parse(a.valueExtractor(colName));
+          num item2Value = num.parse(b.valueExtractor(colName));
           return item1Value.compareTo(item2Value);
         });
         break;
       default:
-        rows.sort((a, b) => a.labelExtractor(colName).compareTo(
-              b.labelExtractor(colName),
+        rows.sort((a, b) => a.valueExtractor(colName).compareTo(
+              b.valueExtractor(colName),
             ));
     }
 
@@ -276,12 +299,15 @@ class GroupedTableDataMgr {
   }
 
   Set<String> _getListItemsByCfgField(SortGroupFilterEntry filterItem) {
+    /* build title and values for filter menu dropdown list
+
+    */
     List<AssetRowPropertyIfc> sortedAssetRows =
         _getSortedAssetRows(filterItem.colName);
 
     List<String> labels = [
-      _filterTitleExtractor(filterItem.colName),
-      ...sortedAssetRows.map((e) => e.labelExtractor(filterItem.colName)),
+      _filterTitleExtractor(filterItem.colName, filterItem.menuTitleIfFilter),
+      ...sortedAssetRows.map((e) => e.valueExtractor(filterItem.colName)),
     ];
     labels.removeWhere((label) => label.isEmpty);
 
@@ -303,7 +329,7 @@ class GroupedTableDataMgr {
     Map<String, List<TableviewDataRowTuple>> rowsMap = {};
 
     for (var row in rows) {
-      if(row.item1.groupName == null) continue;
+      if (row.item1.groupName == null) continue;
 
       if (rowsMap[row.item1.groupName] == null) {
         rowsMap[row.item1.groupName!] = [row];
@@ -337,7 +363,10 @@ class GroupedTableDataMgr {
 
   final Set<FilterSelection> _currentFilters = {};
 
-  void _doFilteringFor(DbTableFieldName colName, String selectedVal) {
+  void _doFilteringFor(
+    DbTableFieldName colName,
+    String selectedVal,
+  ) {
     //
     final filterSelection = FilterSelection(
       filterColumn: colName,
@@ -347,8 +376,9 @@ class GroupedTableDataMgr {
         .removeWhere((selection) => selection.filterColumn == colName);
     _currentFilters.add(filterSelection);
 
-    if (selectedVal.toUpperCase() ==
-        _filterTitleExtractor(colName).toUpperCase()) {
+    if ([fm1Title, fm2Title, fm3Title].contains(selectedVal)) {
+      // sloppy test above;  prob creates a bug
+      // .toUpperCase() == colName.name.toUpperCase()
       _currentFilters
           .removeWhere((selection) => selection.filterColumn == colName);
 
@@ -363,9 +393,9 @@ class GroupedTableDataMgr {
     for (var asset in _allAssetRows) {
       bool added = false;
       for (var filter in _currentFilters) {
-        if (asset.item1.labelExtractor(filter.filterColumn) ==
+        if (asset.item1.valueExtractor(filter.filterColumn) ==
                 filter.selectedValue ||
-            asset.item2?.labelExtractor(filter.filterColumn) ==
+            asset.item2?.valueExtractor(filter.filterColumn) ==
                 filter.selectedValue) {
           if (!added) {
             filterResults.add(asset);
@@ -425,7 +455,7 @@ class GroupedTableDataMgr {
       onRefresh: onRefresh,
       scrollController: scrollController,
       onRowTapped: onRowTapped,
-      groupBy: groupBy,
+      groupBy: groupBy!,
       groupHeaderBuilder: groupHeaderBuilder,
       rowBuilder: indexedItemBuilder,
       groupComparator: groupComparator,
@@ -438,7 +468,7 @@ class GroupedTableDataMgr {
 class _GroupedAssetsListView extends StatelessWidget {
   final Future<void> Function() onRefresh;
   final ScrollController? scrollController;
-  final GetGroupHeaderLblsFromCompetitionRow groupBy;
+  final GetGroupHeaderLblsFromAssetGameData groupBy;
   final GroupComparatorCallback? groupComparator;
   final GroupHeaderBuilder groupHeaderBuilder;
   final IndexedItemRowBuilder rowBuilder;
@@ -493,7 +523,7 @@ class _GroupedAssetsListView extends StatelessWidget {
 class _ExpandableGroupedAssetRowsListView extends StatefulWidget {
   final Future<void> Function() onRefresh;
   final ScrollController? scrollController;
-  final GetGroupHeaderLblsFromCompetitionRow groupBy;
+  final GetGroupHeaderLblsFromAssetGameData groupBy;
   final GroupComparatorCallback? groupComparator;
   final GroupHeaderBuilder groupHeaderBuilder;
   final IndexedItemRowBuilder rowBuilder;
@@ -575,7 +605,7 @@ class _AssetRowsListView extends StatelessWidget {
   final Future<void> Function() onRefresh;
   final ScrollController? scrollController;
   final List<TableviewDataRowTuple> assets;
-  final GetGroupHeaderLblsFromCompetitionRow groupBy;
+  final GetGroupHeaderLblsFromAssetGameData groupBy;
   final GroupComparatorCallback? groupComparator;
   final GroupHeaderBuilder groupHeaderBuilder;
   final IndexedItemRowBuilder rowBuilder;
@@ -652,21 +682,23 @@ class _AssetRowsListView extends StatelessWidget {
 class _DropDownMenuList extends StatefulWidget {
   final Set<String> listItems;
   final DbTableFieldName colName;
+  final String titleName;
   final String? curSelection;
   final SelectedFilterSetter valSetter;
   final double width;
   final void Function(DbTableFieldName, String) doFilteringFor;
-  final String Function(DbTableFieldName) filterTitleExtractor;
+  // final String Function(DbTableFieldName) filterTitleExtractor;
 
   const _DropDownMenuList({
     Key? key,
     required this.listItems,
     required this.colName,
+    required this.titleName,
     required this.curSelection,
     required this.valSetter,
     required this.width,
     required this.doFilteringFor,
-    required this.filterTitleExtractor,
+    // required this.filterTitleExtractor,
   }) : super(key: key);
 
   @override
@@ -725,13 +757,13 @@ class _DropDownMenuListState extends State<_DropDownMenuList> {
           onChanged: (String? selectedVal) {
             // store selected value for state mgmt
             widget.valSetter(selectedVal);
-            if (selectedVal == null ||
-                selectedVal == widget.filterTitleExtractor(widget.colName) ||
-                selectedVal.startsWith(CLEAR_FILTER_LABEL)) {
+            // print('changed: $selectedVal  ${widget.titleName}');
+            if (selectedVal == null || selectedVal == widget.titleName) {
+              // || selectedVal.startsWith(CLEAR_FILTER_LABEL)
               setState(() {
                 _useDefaultState = true;
               });
-              widget.doFilteringFor(widget.colName, selectedVal ?? "");
+              widget.doFilteringFor(widget.colName, "");
               return;
             }
             setState(() {

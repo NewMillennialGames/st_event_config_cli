@@ -9,7 +9,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 //
 import '../app_entity_enums/all.dart';
 import '../enums/all.dart';
-// import '../dialog/all.dart';
+import '../config/all.dart';
 import '../util/all.dart';
 import '../interfaces/q_prompt_instance.dart';
 //

@@ -5,10 +5,7 @@ enum DbTableFieldName {
   assetName,
   assetShortName,
   assetOrgName,
-  conference,
-  region,
-  // this is an error;  we dont have event name on assets
-  // eventName,
+  leagueGrouping,
   gameDate,
   gameTime,
   gameLocation,
@@ -17,4 +14,5 @@ enum DbTableFieldName {
   assetCurrentPrice,
   assetRankOrScore,
   assetPosition,
+  basedOnEventDelimiters, // aka tournament style (only for groupings)
 }

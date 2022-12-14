@@ -27,6 +27,12 @@ TopEventCfg _$TopEventCfgFromJson(Map<String, dynamic> json) => TopEventCfg(
           EvGameAgeOffRule.byEvEliminationStrategy,
       applyMktViewRowStyleToAllScreens:
           json['applyMktViewRowStyleToAllScreens'] as bool? ?? true,
+      useAssetShortNameInFilters:
+          json['useAssetShortNameInFilters'] as bool? ?? true,
+      assetNameDisplayStyle: $enumDecodeNullable(
+              _$EvAssetNameDisplayStyleEnumMap,
+              json['assetNameDisplayStyle']) ??
+          EvAssetNameDisplayStyle.showShortName,
     )..cancelAllRowGroupingLogic =
         json['cancelAllRowGroupingLogic'] as bool? ?? false;
 
@@ -34,21 +40,26 @@ Map<String, dynamic> _$TopEventCfgToJson(TopEventCfg instance) =>
     <String, dynamic>{
       'evTemplateName': instance.evTemplateName,
       'evTemplateDescription': instance.evTemplateDescription,
-      'evType': _$EvTypeEnumMap[instance.evType],
-      'evCompetitorType': _$EvCompetitorTypeEnumMap[instance.evCompetitorType],
-      'evOpponentType': _$EvOpponentTypeEnumMap[instance.evOpponentType],
-      'evDuration': _$EvDurationEnumMap[instance.evDuration],
+      'evType': _$EvTypeEnumMap[instance.evType]!,
+      'evCompetitorType': _$EvCompetitorTypeEnumMap[instance.evCompetitorType]!,
+      'evOpponentType': _$EvOpponentTypeEnumMap[instance.evOpponentType]!,
+      'evDuration': _$EvDurationEnumMap[instance.evDuration]!,
       'evEliminationType':
-          _$EvEliminationStrategyEnumMap[instance.evEliminationType],
-      'evGameAgeOffRule': _$EvGameAgeOffRuleEnumMap[instance.evGameAgeOffRule],
+          _$EvEliminationStrategyEnumMap[instance.evEliminationType]!,
+      'evGameAgeOffRule': _$EvGameAgeOffRuleEnumMap[instance.evGameAgeOffRule]!,
       'applyMktViewRowStyleToAllScreens':
           instance.applyMktViewRowStyleToAllScreens,
       'cancelAllRowGroupingLogic': instance.cancelAllRowGroupingLogic,
+      'useAssetShortNameInFilters': instance.useAssetShortNameInFilters,
+      'assetNameDisplayStyle':
+          _$EvAssetNameDisplayStyleEnumMap[instance.assetNameDisplayStyle]!,
     };
 
 const _$EvTypeEnumMap = {
   EvType.fantasy: 'fantasy',
   EvType.standard: 'standard',
+  EvType.future: 'future',
+  EvType.future_repriced: 'future_repriced',
 };
 
 const _$EvCompetitorTypeEnumMap = {
@@ -68,7 +79,7 @@ const _$EvDurationEnumMap = {
   EvDuration.oneGame: 'oneGame',
   EvDuration.tournament: 'tournament',
   EvDuration.season: 'season',
-  EvDuration.ongoing: 'ongoing',
+  EvDuration.calendarScoped: 'calendarScoped',
 };
 
 const _$EvEliminationStrategyEnumMap = {
@@ -78,13 +89,22 @@ const _$EvEliminationStrategyEnumMap = {
   EvEliminationStrategy.singleElim: 'singleElim',
   EvEliminationStrategy.doubeElim: 'doubeElim',
   EvEliminationStrategy.audienceVote: 'audienceVote',
+  EvEliminationStrategy.never: 'never',
 };
 
 const _$EvGameAgeOffRuleEnumMap = {
   EvGameAgeOffRule.whenRoundChanges: 'whenRoundChanges',
   EvGameAgeOffRule.everyWeek: 'everyWeek',
-  EvGameAgeOffRule.oneDayAfterEnds: 'oneDayAfterEnds',
+  EvGameAgeOffRule.timeAfterGameEnds: 'timeAfterGameEnds',
+  EvGameAgeOffRule.neverAgeOff: 'neverAgeOff',
   EvGameAgeOffRule.byEvEliminationStrategy: 'byEvEliminationStrategy',
+  EvGameAgeOffRule.startOfNextGame: 'startOfNextGame',
+};
+
+const _$EvAssetNameDisplayStyleEnumMap = {
+  EvAssetNameDisplayStyle.showShortName: 'showShortName',
+  EvAssetNameDisplayStyle.showLongName: 'showLongName',
+  EvAssetNameDisplayStyle.showBothStacked: 'showBothStacked',
 };
 
 EventCfgTree _$EventCfgTreeFromJson(Map<String, dynamic> json) => EventCfgTree(
@@ -99,7 +119,7 @@ Map<String, dynamic> _$EventCfgTreeToJson(EventCfgTree instance) =>
     <String, dynamic>{
       'eventCfg': instance.eventCfg.toJson(),
       'screenConfigMap': instance.screenConfigMap
-          .map((k, e) => MapEntry(_$AppScreenEnumMap[k], e.toJson())),
+          .map((k, e) => MapEntry(_$AppScreenEnumMap[k]!, e.toJson())),
     };
 
 const _$AppScreenEnumMap = {
@@ -128,9 +148,9 @@ ScreenCfgByArea _$ScreenCfgByAreaFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$ScreenCfgByAreaToJson(ScreenCfgByArea instance) =>
     <String, dynamic>{
-      'appScreen': _$AppScreenEnumMap[instance.appScreen],
+      'appScreen': _$AppScreenEnumMap[instance.appScreen]!,
       'areaConfig': instance.areaConfig
-          .map((k, e) => MapEntry(_$ScreenWidgetAreaEnumMap[k], e.toJson())),
+          .map((k, e) => MapEntry(_$ScreenWidgetAreaEnumMap[k]!, e.toJson())),
     };
 
 const _$ScreenWidgetAreaEnumMap = {
@@ -163,14 +183,14 @@ CfgForAreaAndNestedSlots _$CfgForAreaAndNestedSlotsFromJson(
 Map<String, dynamic> _$CfgForAreaAndNestedSlotsToJson(
         CfgForAreaAndNestedSlots instance) =>
     <String, dynamic>{
-      'screenArea': _$ScreenWidgetAreaEnumMap[instance.screenArea],
+      'screenArea': _$ScreenWidgetAreaEnumMap[instance.screenArea]!,
       'visCfgForArea': instance.visCfgForArea
-          .map((k, e) => MapEntry(_$VisualRuleTypeEnumMap[k], e.toJson())),
+          .map((k, e) => MapEntry(_$VisualRuleTypeEnumMap[k]!, e.toJson())),
       'visCfgForSlotsByRuleType': instance.visCfgForSlotsByRuleType.map(
           (k, e) => MapEntry(
-              _$VisualRuleTypeEnumMap[k],
+              _$VisualRuleTypeEnumMap[k]!,
               e.map((k, e) =>
-                  MapEntry(_$ScreenAreaWidgetSlotEnumMap[k], e.toJson())))),
+                  MapEntry(_$ScreenAreaWidgetSlotEnumMap[k]!, e.toJson())))),
     };
 
 const _$VisualRuleTypeEnumMap = {

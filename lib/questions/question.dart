@@ -3,7 +3,24 @@ part of QuestionsLib;
 /* classes below with "rule" in the name
     are those to be exported to the ui_factory
     as they contain app ui config rules
+
+
 */
+
+Set<String> _eventQuestIdsWithDerivedSubQuests = {
+  /* top level event questions that DO generate derived questions
+  
+    set question IDs in:
+      _eventQuestIdsWithDerivedSubQuests
+    for any event level questions
+    that should auto-gen new questions from prior answers
+
+    eventAgeOffGameRule needs to know HOW LONG after game ends
+    before it is aged off
+  */
+  QuestionIdStrings.selectAppScreens,
+  QuestionIdStrings.eventAgeOffGameRule
+};
 
 class QuestPromptPayload<T> {
   // data container for constructing new questions
@@ -68,9 +85,10 @@ abstract class QuestBase with EquatableMixin {
     // applies to ui-factory config rules
     var qDefCollection = QPromptCollection.fromList(prompts);
     return EventLevelCfgQuest(
-        targIntent.copyWith(precision: TargetPrecision.eventLevel),
-        qDefCollection,
-        questId: questId);
+      targIntent.copyWith(precision: TargetPrecision.eventLevel),
+      qDefCollection,
+      questId: questId,
+    );
   }
 
   factory QuestBase.regionTargetQuest(
@@ -82,9 +100,10 @@ abstract class QuestBase with EquatableMixin {
     // this style quest DOES NOT apply to ui-factory config
     var qDefCollection = QPromptCollection.fromList(prompts);
     return RegionTargetQuest(
-        targIntent.copyWith(precision: TargetPrecision.targetLevel),
-        qDefCollection,
-        questId: questId);
+      targIntent.copyWith(precision: TargetPrecision.targetLevel),
+      qDefCollection,
+      questId: questId,
+    );
   }
 
   factory QuestBase.ruleSelectQuest(
@@ -290,6 +309,11 @@ abstract class QuestBase with EquatableMixin {
     return rrb;
   }
 
+  bool get eventLevelAndProducesDerivedQuests {
+    return qTargetResolution.isEventConfigQuest &&
+        _eventQuestIdsWithDerivedSubQuests.contains(this.questId);
+  }
+
   bool get producesDerivedQuestsFromUserAnswers =>
       qTargetResolution.producesDerivedQuestsFromUserAnswers;
 
@@ -429,11 +453,17 @@ class EventLevelCfgQuest extends QuestBase {
       !forRuleSelection,
       'Event lvl cfg ??s are not precise enough for a complete area-target',
     );
-    List<AppScreen> screensToConfig = mainAnswer as List<AppScreen>;
-    return qTargetResolution.copyWith(
-      appScreen: screensToConfig[newQuestIdx],
-      precision: TargetPrecision.screenLevel,
-    );
+    if (mainAnswer is List<AppScreen>) {
+      List<AppScreen> screensToConfig = mainAnswer as List<AppScreen>;
+      return qTargetResolution.copyWith(
+        appScreen: screensToConfig[newQuestIdx],
+        precision: TargetPrecision.screenLevel,
+      );
+    } else if (questId == QuestionIdStrings.eventAgeOffGameRule) {
+      //
+      return qTargetResolution.copyWith();
+    }
+    return qTargetResolution.copyWith();
   }
 }
 
