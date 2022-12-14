@@ -30,7 +30,6 @@ dependencies:
   flutter:
     sdk: flutter
   st_ev_cfg:
-<<<<<<< HEAD
     git:
       url: git@github.com:NewMillennialGames/st_event_config_cli.git
       ref: prod
@@ -39,12 +38,6 @@ dependencies:
     #   url: git@github.com:NewMillennialGames/st_event_config_cli.git
     #   ref: prod
 
-=======
-    # git:
-    #   url: git@github.com:NewMillennialGames/st_event_config_cli.git
-    #   ref: master
-     path: ../../st_event_config_cli/
->>>>>>> master
   stclient:
     git:
       url: git@github.com:NewMillennialGames/st-client-api.git
