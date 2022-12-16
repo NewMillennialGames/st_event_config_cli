@@ -82,6 +82,7 @@ const _$DbTableFieldNameEnumMap = {
   DbTableFieldName.assetCurrentPrice: 'assetCurrentPrice',
   DbTableFieldName.assetRankOrScore: 'assetRankOrScore',
   DbTableFieldName.assetPosition: 'assetPosition',
+  DbTableFieldName.basedOnEventDelimiters: 'basedOnEventDelimiters',
 };
 
 TvSortCfg _$TvSortCfgFromJson(Map<String, dynamic> json) => TvSortCfg()

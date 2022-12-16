@@ -25,6 +25,8 @@ TopEventCfg _$TopEventCfgFromJson(Map<String, dynamic> json) => TopEventCfg(
       evGameAgeOffRule: $enumDecodeNullable(
               _$EvGameAgeOffRuleEnumMap, json['evGameAgeOffRule']) ??
           EvGameAgeOffRule.byEvEliminationStrategy,
+      hoursToWaitAfterGameEnds:
+          (json['hoursToWaitAfterGameEnds'] as num?)?.toDouble() ?? 0,
       applyMktViewRowStyleToAllScreens:
           json['applyMktViewRowStyleToAllScreens'] as bool? ?? true,
       useAssetShortNameInFilters:
@@ -47,6 +49,7 @@ Map<String, dynamic> _$TopEventCfgToJson(TopEventCfg instance) =>
       'evEliminationType':
           _$EvEliminationStrategyEnumMap[instance.evEliminationType]!,
       'evGameAgeOffRule': _$EvGameAgeOffRuleEnumMap[instance.evGameAgeOffRule]!,
+      'hoursToWaitAfterGameEnds': instance.hoursToWaitAfterGameEnds,
       'applyMktViewRowStyleToAllScreens':
           instance.applyMktViewRowStyleToAllScreens,
       'cancelAllRowGroupingLogic': instance.cancelAllRowGroupingLogic,

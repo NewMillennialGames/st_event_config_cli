@@ -131,11 +131,10 @@ class StUiBuilderFactory {
 
     // copy row config value onto all
     EvAssetNameDisplayStyle ads = eventCfg.assetNameDisplayStyle;
-    // FIXME:  uncomment after import problem resolved
-    // rows.forEach((TableviewDataRowTuple drt) {
-    //   drt.item1.setAssetNameDisplayStyle(ads);
-    //   drt.item2?.setAssetNameDisplayStyle(ads);
-    // });
+    rows.forEach((TableviewDataRowTuple drt) {
+      drt.item1.setAssetNameDisplayStyle(ads);
+      drt.item2?.setAssetNameDisplayStyle(ads);
+    });
 
     bool disableAllGrouping = _eConfig!.eventCfg.skipGroupingOnScreen(screen);
 
