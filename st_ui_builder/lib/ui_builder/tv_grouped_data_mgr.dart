@@ -241,11 +241,11 @@ class GroupedTableDataMgr {
         return 'Team';
       case DbTableFieldName.leagueGrouping:
         return 'Conference';
-      case DbTableFieldName.gameDate:
+      case DbTableFieldName.competitionDate:
         return 'All Dates';
-      case DbTableFieldName.gameTime:
+      case DbTableFieldName.competitionTime:
         return 'Game Time';
-      case DbTableFieldName.gameLocation:
+      case DbTableFieldName.competitionLocation:
         return 'Location';
       case DbTableFieldName.imageUrl:
         return 'Avatar';
@@ -275,8 +275,8 @@ class GroupedTableDataMgr {
     //perform sorting based on actual value types
     //for non String values rather than on labels
     switch (colName) {
-      case DbTableFieldName.gameDate:
-      case DbTableFieldName.gameTime:
+      case DbTableFieldName.competitionDate:
+      case DbTableFieldName.competitionTime:
         rows.sort((a, b) => a.gameDate.compareTo(b.gameDate));
         break;
 

@@ -151,14 +151,14 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
         return leagueGrouping;
       // case DbTableFieldName.leagueGrouping:
       //   return leagueGrouping;
-      case DbTableFieldName.gameDate:
+      case DbTableFieldName.competitionDate:
         return gameDateDtwStr;
-      case DbTableFieldName.gameTime:
+      case DbTableFieldName.competitionTime:
         return gameDate.timeOnly.asTimeOnlyStr;
       // case DbTableFieldName.eventName:
       // // this is an error;  we dont have event name on assets
       //   return topName;
-      case DbTableFieldName.gameLocation:
+      case DbTableFieldName.competitionLocation:
         return location;
       case DbTableFieldName.imageUrl:
         return imgUrl;
@@ -189,14 +189,14 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
         return leagueGrouping;
       // case DbTableFieldName.region:
       //   return leagueGrouping;
-      case DbTableFieldName.gameDate:
+      case DbTableFieldName.competitionDate:
         return gameDate.truncateTime;
-      case DbTableFieldName.gameTime:
+      case DbTableFieldName.competitionTime:
         return gameDate.timeOnly;
       // case DbTableFieldName.eventName:
       //   // this is an error;  we dont have event name on assets
       //   return topName;
-      case DbTableFieldName.gameLocation:
+      case DbTableFieldName.competitionLocation:
         return location;
       case DbTableFieldName.imageUrl:
         return imgUrl;
