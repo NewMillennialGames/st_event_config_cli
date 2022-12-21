@@ -58,16 +58,23 @@ class CfgForAreaAndNestedSlots {
     if (optSlotInArea == null) {
       // this is an area level rule by specific type
       cfgForSlotOrArea = visCfgForArea[vrt] ?? SlotOrAreaRuleCfg([]);
-      cfgForSlotOrArea.appendQuestion(rQuest);
+      if (rQuest.screenWidgetArea == this.screenArea) {
+        // IF stmt is new above
+        cfgForSlotOrArea.appendQuestion(rQuest);
+      }
       visCfgForArea[vrt] = cfgForSlotOrArea;
       // ConfigLogger.log(Level.FINER,'\t area rule count:  ${visCfgForArea.length} (post add)');
     } else {
       // this is a slot level rule
       Map<ScreenAreaWidgetSlot, SlotOrAreaRuleCfg> slotCfgMap =
           _setAndGetMapForRuleAndSlot(vrt, optSlotInArea);
-      slotCfgMap[optSlotInArea]!.appendQuestion(rQuest);
+      if (rQuest.slotInArea == optSlotInArea) {
+        // IF stmt is new above
+        slotCfgMap[optSlotInArea]!.appendQuestion(rQuest);
+      }
       visCfgForSlotsByRuleType[vrt] = slotCfgMap;
-    ConfigLogger.log(Level.INFO, 
+      ConfigLogger.log(
+        Level.INFO,
         '\t slot rule count:  ${visCfgForSlotsByRuleType.length} (post add)',
       );
     }
@@ -143,9 +150,11 @@ class CfgForAreaAndNestedSlots {
     SlotOrAreaRuleCfg? areaSortCfg = visCfgForArea[VisualRuleType.filterCfg];
     if (areaSortCfg == null || areaSortCfg.visRuleList.length < 1) {
       //
-     ConfigLogger.log(Level.WARNING, 'Warning: defgh');
-      ConfigLogger.log(Level.WARNING, '*** areaSortCfg is null: ${areaSortCfg == null}');
-    ConfigLogger.log(Level.INFO, 
+      ConfigLogger.log(Level.WARNING, 'Warning: defgh');
+      ConfigLogger.log(
+          Level.WARNING, '*** areaSortCfg is null: ${areaSortCfg == null}');
+      ConfigLogger.log(
+        Level.INFO,
         '*** areaSortCfg visRuleList: ${areaSortCfg?.visRuleList ?? " na"}',
       );
       return null;

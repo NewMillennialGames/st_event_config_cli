@@ -31,7 +31,7 @@ Future<void> main(List<String> cliArgs) async {
   // final paths = argResults.rest;
 
   // add empy lines befor starting dialog
-  ConfigLogger.log(Level.INFO, '\n' * 0);
+  ConfigLogger.log(Level.WARNING, '\n' * 0);
 
   // assert(false, 'should fail instantly');
 
