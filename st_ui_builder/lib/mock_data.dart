@@ -34,7 +34,7 @@ class MockAsset {
   String region;
   String teamName;
   String imgUrl = 'https://ui-avatars.com/api/?name=John+Doe';
-  DateTime? gameDt;
+  DateTime? competitionDate;
 
   // reall assets DO NOT have game key
   String gameKey;
@@ -54,7 +54,7 @@ class MockAsset {
     this.displayNumber,
     // {this.gameDt = _today}
   ) {
-    gameDt = getRandDate();
+    competitionDate = getRandDate();
     imgUrl = 'https://ui-avatars.com/api/?$name';
   }
 
@@ -82,7 +82,7 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
   }
 
   @override
-  DateTime get gameDate => asset.gameDt!;
+  DateTime get competitionDate => asset.competitionDate!;
 
   @override
   AssetKey get assetKey => AssetKey(asset.id);
@@ -137,10 +137,11 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
   String get roundName => throw UnimplementedError();
 
   @override
-  CompetitionStatus get gameStatus => CompetitionStatus.compUninitialized;
+  CompetitionStatus get competitionStatus =>
+      CompetitionStatus.compUninitialized;
 
   @override
-  CompetitionType get gameType => CompetitionType.game;
+  CompetitionType get competitionType => CompetitionType.game;
 
   @override
   String get searchText =>

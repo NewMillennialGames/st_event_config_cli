@@ -35,6 +35,11 @@ class SlotOrAreaRuleCfg {
 
   void appendQuestion(VisualRuleDetailQuest rQuest) {
     // ConfigLogger.log(Level.FINER,'adding QuestVisualRule abt ${rQuest.firstPrompt.userPrompt} to SlotOrAreaRuleCfg on ${rQuest.appScreen.name}');
+    if (visRuleList.length > 0) {
+      // assert(
+      //     rQuest.screenWidgetArea == visRuleList.first.requiredQuestions.first.,
+      //     '');
+    }
     this.visRuleList.add(rQuest.asVisRuleResponse);
   }
 
@@ -106,12 +111,12 @@ class SlotOrAreaRuleCfg {
         ? (slotOrArea as ScreenWidgetArea).name.toUpperCase()
         : (slotOrArea as ScreenAreaWidgetSlot).name.toUpperCase();
 
-   ConfigLogger.log(Level.INFO, padding + '$targetName $targetScope RuleCfg:');
+    ConfigLogger.log(Level.INFO, padding + '$targetName $targetScope RuleCfg:');
     for (RuleResponseBase rrb in visRuleList) {
       //
       // String cfgRuleTypeName = rrb.runtimeType.toString();
       // ConfigLogger.log(Level.FINER,'\t$cfgRuleTypeName has:');
-     ConfigLogger.log(Level.INFO, padding + padding + '$rrb');
+      ConfigLogger.log(Level.INFO, padding + padding + '$rrb');
     }
   }
 

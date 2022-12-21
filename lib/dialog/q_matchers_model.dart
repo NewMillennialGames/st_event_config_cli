@@ -211,7 +211,7 @@ class QuestMatcher<AnsTypOfMatched, AnsTypOfGend> {
 
       ConfigLogger.log(
         Level.INFO,
-        '\n\tMatcher Hit -- QID: ${prevAnsweredQuest.questId}\n\t\thit -> "$shortDesc"\n\t\t(using: ${isNoopGenerator ? "CALLBACK" : "STATIC"} as source for DQG)',
+        '\tMatcher Hit -- QID: ${prevAnsweredQuest.questId}\n\t\thit -> "$shortDesc"\n\t\t(using: ${isNoopGenerator ? "CALLBACK" : "STATIC"} as source for DQG)',
       );
     }
     return isAPatternMatch;

@@ -54,7 +54,7 @@ abstract class AssetRowPropertyIfc {
 
   // next 3 properties are game props but needed for sorting and grouping
   // shows values off the game record
-  DateTime get gameDate; // rounded to midnight for row grouping
+  DateTime get competitionDate; // rounded to midnight for row grouping
   String get leagueGrouping;
 
   String get roundName;
@@ -63,9 +63,9 @@ abstract class AssetRowPropertyIfc {
 
   int get displayNumber;
 
-  CompetitionStatus get gameStatus;
+  CompetitionStatus get competitionStatus;
 
-  CompetitionType get gameType;
+  CompetitionType get competitionType;
 
   // extra asset fields that don't fit within the DB-model
   String get extAtts; // extended attributes as JSON
@@ -84,11 +84,11 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
 
   String get displayNumberStr => '$displayNumber';
 
-  String get gameDateDtwStr => gameDate.asDtwMmDyStr;
+  String get gameDateDtwStr => competitionDate.asDtwMmDyStr;
 
-  String get gameDateAppStr => gameDate.asShortDtStr;
+  String get gameDateAppStr => competitionDate.asShortDtStr;
 
-  String get gameTimeStr => gameDate.asTimeOnlyStr;
+  String get gameTimeStr => competitionDate.asTimeOnlyStr;
 
   // from assetHoldingsSummary
   Decimal get positionGainLoss =>
@@ -128,7 +128,7 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
   EvAssetNameDisplayStyle get assetNameDisplayStyle =>
       EvAssetNameDisplayStyle.showShortName;
 
-  CompetitionType get gameType => CompetitionType.game;
+  CompetitionType get competitionType => CompetitionType.game;
 
   Map<String, dynamic>? get extAttsAsMap {
     // extended attributes as dict
@@ -151,14 +151,14 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
         return leagueGrouping;
       // case DbTableFieldName.leagueGrouping:
       //   return leagueGrouping;
-      case DbTableFieldName.gameDate:
+      case DbTableFieldName.competitionDate:
         return gameDateDtwStr;
-      case DbTableFieldName.gameTime:
-        return gameDate.timeOnly.asTimeOnlyStr;
+      case DbTableFieldName.competitionTime:
+        return competitionDate.timeOnly.asTimeOnlyStr;
       // case DbTableFieldName.eventName:
       // // this is an error;  we dont have event name on assets
       //   return topName;
-      case DbTableFieldName.gameLocation:
+      case DbTableFieldName.competitionLocation:
         return location;
       case DbTableFieldName.imageUrl:
         return imgUrl;
@@ -189,14 +189,14 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
         return leagueGrouping;
       // case DbTableFieldName.region:
       //   return leagueGrouping;
-      case DbTableFieldName.gameDate:
-        return gameDate.truncateTime;
-      case DbTableFieldName.gameTime:
-        return gameDate.timeOnly;
+      case DbTableFieldName.competitionDate:
+        return competitionDate.truncateTime;
+      case DbTableFieldName.competitionTime:
+        return competitionDate.timeOnly;
       // case DbTableFieldName.eventName:
       //   // this is an error;  we dont have event name on assets
       //   return topName;
-      case DbTableFieldName.gameLocation:
+      case DbTableFieldName.competitionLocation:
         return location;
       case DbTableFieldName.imageUrl:
         return imgUrl;

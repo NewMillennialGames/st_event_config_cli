@@ -29,12 +29,13 @@ const String cfgEmpl1 = 'assetVsAsset.json';
 // cfgEmpl2 seems to be invalid json; replace it to continue testing
 const String cfgEmpl2 = 'teamVsFieldRanked.json';
 const String cfgEmpl3 = 'driverVsField.json';
-const String cfgEmpl4 = 'demo2.json';
+const String cfgEmpl4 = 'NCAA March Madness SET C122122.json';
 
 // evCfgDataFromServer contains the JSON payload produced by the CLI configurator
 Map<String, dynamic> evCfgDataFromServer = {};
 
 Future<void> readExampleEventConfig({String filename = cfgEmpl4}) async {
+  print('loading $filename');
   final String response = await rootBundle.loadString('assets/$filename');
   evCfgDataFromServer = json.decode(response);
 }

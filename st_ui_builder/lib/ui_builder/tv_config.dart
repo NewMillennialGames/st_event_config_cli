@@ -60,8 +60,8 @@ class TableviewConfigPayload {
     // games now happening between/across regions
     // so it not longer makes sense to group or sort geographically
     print('called endGeographicGrouping;  not yet implemented');
-    // sortRules.removeByField(DbTableFieldName.gameLocation);
-    // groupByRules.removeByField(DbTableFieldName.gameLocation);
+    // sortRules.removeByField(DbTableFieldName.competitionLocation);
+    // groupByRules.removeByField(DbTableFieldName.competitionLocation);
 
     // groupByRules.item1.colName = null;
   }
