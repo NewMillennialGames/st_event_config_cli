@@ -19,7 +19,7 @@ const String DEBUG_DUMP_ANSWERS = 'dumpAnswers';
 late ArgResults argResults;
 
 Future<void> main(List<String> cliArgs) async {
-  Logger.root.level = Level.ALL; // defaults to Level.INFO
+  Logger.root.level = Level.WARNING; // defaults to Level.INFO
   Logger.root.onRecord.listen((record) {
     print('${record.level.name}: ${record.message}');
   });
