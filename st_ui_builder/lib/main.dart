@@ -35,6 +35,7 @@ const String cfgEmpl4 = 'NCAA March Madness SET C122122.json';
 Map<String, dynamic> evCfgDataFromServer = {};
 
 Future<void> readExampleEventConfig({String filename = cfgEmpl4}) async {
+  print('loading $filename');
   final String response = await rootBundle.loadString('assets/$filename');
   evCfgDataFromServer = json.decode(response);
 }
