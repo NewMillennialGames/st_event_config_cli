@@ -277,7 +277,7 @@ class GroupedTableDataMgr {
     switch (colName) {
       case DbTableFieldName.competitionDate:
       case DbTableFieldName.competitionTime:
-        rows.sort((a, b) => a.gameDate.compareTo(b.gameDate));
+        rows.sort((a, b) => a.competitionDate.compareTo(b.competitionDate));
         break;
 
       case DbTableFieldName.assetOpenPrice:
@@ -351,7 +351,7 @@ class GroupedTableDataMgr {
         CompetitionStatus.compFinal,
         CompetitionStatus.compFinished,
         CompetitionStatus.compCanceled,
-      ].contains(row.item1.gameStatus)) {
+      ].contains(row.item1.competitionStatus)) {
         nonTradeableRows.add(row);
       } else {
         tradeableRows.add(row);
