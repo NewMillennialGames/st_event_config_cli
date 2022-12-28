@@ -1,5 +1,9 @@
 import 'package:decimal/decimal.dart';
+import 'package:fixnum/fixnum.dart';
 import 'package:intl/intl.dart';
+import 'package:protobuf/src/protobuf/type_registry.dart';
+import 'package:protobuf/protobuf.dart';
+import 'package:stclient/google/protobuf/wrappers.pb.dart';
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
 //
 import 'package:stclient/stclient.dart';
@@ -207,3 +211,50 @@ class MockEventSummary implements UserEventSummaryIfc {
   @override
   String get userID => '';
 }
+
+class MockRankedTradable implements RankedTradable {
+  Int64 rank;
+  Int64 mockScore;
+  MockRankedTradable({
+    required this.rank,
+    required this.mockScore,
+  });
+  @override
+  String get assetKey => 'AssetKey';
+
+  @override
+  String get avatarURI => 'https://ui-avatars.com/api/?name=John+Doe';
+
+  @override
+  String get competitorKey => 'compKey';
+
+  @override
+  String get name => 'John Doe';
+
+  @override
+  String get position => 'QB';
+
+  @override
+  Int64 get rankInPosition => rank;
+
+  @override
+  Int64 get score => mockScore;
+
+  @override
+  String get teamOrCity => 'Team';
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+
+  static List<MockRankedTradable> get mockRankedTradablesList =>
+      _mockRankedTradablesList;
+}
+
+List<MockRankedTradable> _mockRankedTradablesList = [
+  MockRankedTradable(rank: Int64(1), mockScore: Int64(50)),
+  MockRankedTradable(rank: Int64(2), mockScore: Int64(50)),
+  MockRankedTradable(rank: Int64(3), mockScore: Int64(50)),
+  MockRankedTradable(rank: Int64(4), mockScore: Int64(50)),
+  MockRankedTradable(rank: Int64(5), mockScore: Int64(50)),
+  MockRankedTradable(rank: Int64(6), mockScore: Int64(50))
+];

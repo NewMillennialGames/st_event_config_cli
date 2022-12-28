@@ -108,11 +108,13 @@ class AssetVsAssetRowLeaderBoardView extends StBaseTvRow with ShowsTwoAssets {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         LeaderboardHalfRow(
-          competitor: comp1,
+          competitor: MockRankedTradable(rank: Int64(1), mockScore: Int64(50)),
           showLeaderBoardIcon: true,
         ),
         SizedBox(height: UiSizes.spaceBtwnRows),
-        LeaderboardHalfRow(competitor: comp2)
+        LeaderboardHalfRow(
+            competitor:
+                MockRankedTradable(rank: Int64(2), mockScore: Int64(50)))
       ],
     );
   }
@@ -138,12 +140,15 @@ class DriverVsFieldRowLeaderBoardView extends StBaseTvRow with ShowsTwoAssets {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         LeaderboardHalfRow(
-          competitor: comp1,
+          competitor: MockRankedTradable(rank: Int64(1), mockScore: Int64(50)),
           showLeaderBoardIcon: true,
           isDriverVsField: true,
         ),
         SizedBox(height: UiSizes.spaceBtwnRows),
-        LeaderboardHalfRow(competitor: comp2, isDriverVsField: true)
+        LeaderboardHalfRow(
+            competitor:
+                MockRankedTradable(rank: Int64(2), mockScore: Int64(50)),
+            isDriverVsField: true)
       ],
     );
   }
@@ -169,12 +174,15 @@ class TeamPlayerVsFieldLeaderBoardView extends StBaseTvRow with ShowsTwoAssets {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         LeaderboardHalfRow(
-          competitor: comp1,
+          competitor: MockRankedTradable(rank: Int64(1), mockScore: Int64(50)),
           showLeaderBoardIcon: true,
           isTeamPlayerVsField: true,
         ),
         SizedBox(height: UiSizes.spaceBtwnRows),
-        LeaderboardHalfRow(competitor: comp2, isTeamPlayerVsField: true)
+        LeaderboardHalfRow(
+            competitor:
+                MockRankedTradable(rank: Int64(2), mockScore: Int64(50)),
+            isTeamPlayerVsField: true)
       ],
     );
   }

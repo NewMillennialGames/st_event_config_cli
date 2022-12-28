@@ -198,6 +198,35 @@ class TableviewConfigPayload {
           default:
             return AssetVsAssetRowPortfolioHistory.new;
         }
+            case AppScreen.leaderboardAssets:
+        switch (rowStyle) {
+          case TvAreaRowStyle.assetVsAsset:
+            return AssetVsAssetRowLeaderBoardView.new;
+          case TvAreaRowStyle.assetVsAssetRanked:
+            return AssetVsAssetRowLeaderBoardView.new;
+          case TvAreaRowStyle.teamVsField:
+            return AssetVsAssetRowLeaderBoardView.new;
+          case TvAreaRowStyle.teamVsFieldRanked:
+            return AssetVsAssetRowLeaderBoardView.new;
+          case TvAreaRowStyle.playerVsField:
+            return AssetVsAssetRowLeaderBoardView.new;
+          case TvAreaRowStyle.playerVsFieldRanked:
+            return AssetVsAssetRowLeaderBoardView.new;
+          case TvAreaRowStyle.driverVsField:
+            return DriverVsFieldRowLeaderBoardView.new;
+          case TvAreaRowStyle.teamPlayerVsField:
+            return TeamPlayerVsFieldLeaderBoardView.new;
+          case TvAreaRowStyle.teamLine:
+            return AssetVsAssetRowLeaderBoardView.new;
+          case TvAreaRowStyle.teamDraft:
+            return AssetVsAssetRowLeaderBoardView.new;
+          case TvAreaRowStyle.playerDraft:
+            return AssetVsAssetRowLeaderBoardView.new;
+          case TvAreaRowStyle.digitalAssetScored:
+            return ChysalisAssetRowPortfolioView.new;
+          default:
+            return AssetVsAssetRowPortfolioHistory.new;
+        }
       default:
         return AssetVsAssetRowMktView.new;
     }

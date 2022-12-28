@@ -385,9 +385,136 @@ class CheckAssetType extends StatelessWidget {
   }
 }
 
+class CheckAssetTypeLeaderboard extends StatelessWidget {
+  final RankedTradable rankedTradable;
+  final bool isDriverVsField;
+  final bool isTeamPlayerVsField;
+  final bool isPlayerVsFieldRanked;
+  const CheckAssetTypeLeaderboard(
+      {Key? key,
+      required this.rankedTradable,
+      this.isDriverVsField = false,
+      this.isTeamPlayerVsField = false,
+      this.isPlayerVsFieldRanked = false})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var lst = rankedTradable.name.split(' ');
+    String firstName = lst[0];
+    String lastName = lst.length >= 2 ? lst[1] : '';
+    if (isDriverVsField) {
+      return Expanded(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              height: 40.h,
+              width: MediaQuery.of(context).size.width * .1,
+              margin: const EdgeInsets.only(right: 8),
+              child: FittedBox(
+                fit: BoxFit.fitHeight,
+                child: Text(
+                  rankedTradable.rankInPosition.toString(),
+                  style: StTextStyles.h3.copyWith(fontWeight: FontWeight.w700),
+                ),
+              ),
+            ),
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width * .26,
+                minHeight: 50.h,
+                maxHeight: 50.h,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    firstName.toUpperCase(),
+                    overflow: TextOverflow.ellipsis,
+                    style: StTextStyles.p2
+                        .copyWith(fontWeight: FontWeight.w500, fontSize: 12.sp),
+                    textAlign: TextAlign.center,
+                  ),
+                  Text(
+                    lastName.toUpperCase(),
+                    overflow: TextOverflow.ellipsis,
+                    style: StTextStyles.h3
+                        .copyWith(fontWeight: FontWeight.w800, fontSize: 18.sp),
+                    textAlign: TextAlign.center,
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    if (isTeamPlayerVsField) {
+      return Expanded(
+        // constraints:
+        //     BoxConstraints(maxWidth: MediaQuery.of(context).size.width * .3),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Wrap(
+              children: [
+                Text(rankedTradable.teamOrCity,
+                    softWrap: true,
+                    overflow: TextOverflow.ellipsis,
+                    style: StTextStyles.p2.copyWith(color: StColors.coolGray)),
+                kSpacerTiny,
+                Text(rankedTradable.position,
+                    softWrap: true,
+                    overflow: TextOverflow.ellipsis,
+                    style: StTextStyles.p2.copyWith(color: StColors.coolGray))
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+    if (isPlayerVsFieldRanked) {
+      return Expanded(
+        child: Row(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(rankedTradable.name, style: StTextStyles.h4),
+                Text(
+                  rankedTradable.teamOrCity.toString(),
+                  style: StTextStyles.p2.copyWith(color: StColors.coolGray),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+    return Expanded(
+      child: Row(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(rankedTradable.name, style: StTextStyles.h4),
+              Text(
+                rankedTradable.teamOrCity.toString(),
+                style: StTextStyles.p2.copyWith(color: StColors.coolGray),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class LeaderboardHalfRow extends StatelessWidget {
   //
-  final AssetRowPropertyIfc competitor;
+  final RankedTradable competitor;
   final bool? showLeaderBoardIcon;
   final bool? isDriverVsField;
   final bool? isTeamPlayerVsField;
@@ -415,18 +542,16 @@ class LeaderboardHalfRow extends StatelessWidget {
               : null,
         ),
         kSpacerLarge,
-        CompetitorImage(competitor.imgUrl, true),
-        kSpacerSm,
-        CompetitorImage(competitor.imgUrl, true),
+        CompetitorImage(competitor.avatarURI, true),
         kSpacerLarge,
-        CheckAssetType(
-          competitor: competitor,
+        CheckAssetTypeLeaderboard(
+          rankedTradable: competitor,
           isDriverVsField: isDriverVsField ?? false,
           isTeamPlayerVsField: isTeamPlayerVsField ?? false,
         ),
         const Spacer(),
         Text(
-          competitor.currPriceStr,
+          competitor.score.toString(),
           style: StTextStyles.h6,
         ),
         kSpacerSm

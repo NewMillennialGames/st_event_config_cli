@@ -4,6 +4,7 @@ import 'dart:convert';
 // dont remove the following two lines -- they are actually in use in other files
 import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:fixnum/fixnum.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,7 @@ import '../config/colors.dart';
 import '../config/sizes.dart';
 import '../config/strings.dart';
 import '../config/styles.dart';
+import '../mock_data.dart';
 import '../utils/regex_functions.dart';
 import '../utils/dates.dart';
 import '../utils/prices.dart';
