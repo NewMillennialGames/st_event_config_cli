@@ -68,6 +68,11 @@ class GroupedTableDataMgr {
       '';
 
   GetGroupHeaderLblsFromAssetGameData? get groupBy {
+    //
+    if (_tableViewCfg.groupByRules == Null) {
+      return null;
+    }
+
     return GroupHeaderData.groupHeaderPayloadConstructor(
       _tableViewCfg.groupByRules!,
     );
