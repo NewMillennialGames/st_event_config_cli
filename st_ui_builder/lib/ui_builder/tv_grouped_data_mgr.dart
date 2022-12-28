@@ -69,7 +69,7 @@ class GroupedTableDataMgr {
 
   GetGroupHeaderLblsFromAssetGameData? get groupBy {
     //
-    if (_tableViewCfg.groupByRules == Null) {
+    if (_tableViewCfg.groupByRules == null) {
       return null;
     }
 
@@ -460,7 +460,7 @@ class GroupedTableDataMgr {
       onRefresh: onRefresh,
       scrollController: scrollController,
       onRowTapped: onRowTapped,
-      groupBy: groupBy!,
+      groupBy: groupBy ?? (TableviewDataRowTuple _) => GroupHeaderData.noop(),
       groupHeaderBuilder: groupHeaderBuilder,
       rowBuilder: indexedItemBuilder,
       groupComparator: groupComparator,

@@ -24,6 +24,10 @@ class GroupHeaderData
     this.isAscending = true,
   }) : _sortKey = sortKey.toLowerCase();
 
+  static GroupHeaderData noop() {
+    return GroupHeaderData('', '', '', '', isAscending: false);
+  }
+
   static GetGroupHeaderLblsFromAssetGameData groupHeaderPayloadConstructor(
     TvGroupCfg groupingRules,
   ) {
