@@ -180,7 +180,9 @@ class StUiBuilderFactory {
         screen,
         ScreenWidgetArea.filterBar,
       );
-    } catch (e) {}
+    } catch (e) {
+      print('Error: ${e.toString()}');
+    }
 
     return TableRowDataMgr(
       screen,

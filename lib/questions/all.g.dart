@@ -133,7 +133,7 @@ Map<String, dynamic> _$TvFilterCfgToJson(TvFilterCfg instance) =>
 TvGroupCfg _$TvGroupCfgFromJson(Map<String, dynamic> json) => TvGroupCfg()
   ..ruleType = $enumDecode(_$VisualRuleTypeEnumMap, json['ruleType'])
   ..fieldList = (json['fieldList'] as List<dynamic>)
-      .map((e) => SortFilterEntry.fromJson(e as Map<String, dynamic>))
+      .map((e) => GroupCfgEntry.fromJson(e as Map<String, dynamic>))
       .toList();
 
 Map<String, dynamic> _$TvGroupCfgToJson(TvGroupCfg instance) =>

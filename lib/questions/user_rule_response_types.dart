@@ -176,9 +176,10 @@ class GroupCfgEntry extends SortFilterEntry {
 }
 
 // base for all rule classes that involve db fields & ordering
-class TvSortGroupFilterBase extends RuleResponseBase {
+class TvSortGroupFilterBase<T extends SortFilterEntry>
+    extends RuleResponseBase {
   // <T extends SortFilterEntry>
-  List<SortFilterEntry> fieldList = [];
+  List<T> fieldList = [];
 
   TvSortGroupFilterBase(
     VisualRuleType rt,
@@ -191,9 +192,9 @@ class TvSortGroupFilterBase extends RuleResponseBase {
         'implement in subclass for different answer counts');
   }
 
-  SortFilterEntry? get item1 => fieldList.length > 0 ? fieldList.first : null;
-  SortFilterEntry? get item2 => fieldList.length > 1 ? fieldList[1] : null;
-  SortFilterEntry? get item3 => fieldList.length > 2 ? fieldList[2] : null;
+  T? get item1 => fieldList.length > 0 ? fieldList.first : null;
+  T? get item2 => fieldList.length > 1 ? fieldList[1] : null;
+  T? get item3 => fieldList.length > 2 ? fieldList[2] : null;
 
   DbTableFieldName? get firstColName => item1?.colName;
 
@@ -204,8 +205,7 @@ class TvSortGroupFilterBase extends RuleResponseBase {
   }
 
   String get _answerSummary {
-    Iterable<String> xx =
-        fieldList.map((SortFilterEntry fldEntry) => fldEntry.toString());
+    Iterable<String> xx = fieldList.map((T fldEntry) => fldEntry.toString());
     String summary = '\t'; // this.runtimeType.toString() +
     for (String fieldCfg in xx) {
       summary += fieldCfg + ';  ';
@@ -215,7 +215,7 @@ class TvSortGroupFilterBase extends RuleResponseBase {
 }
 
 @JsonSerializable()
-class TvSortCfg extends TvSortGroupFilterBase {
+class TvSortCfg extends TvSortGroupFilterBase<SortFilterEntry> {
   //
   TvSortCfg._() : super(VisualRuleType.sortCfg);
   TvSortCfg() : super(VisualRuleType.sortCfg);
@@ -276,7 +276,7 @@ class TvSortCfg extends TvSortGroupFilterBase {
 }
 
 @JsonSerializable()
-class TvFilterCfg extends TvSortGroupFilterBase {
+class TvFilterCfg extends TvSortGroupFilterBase<SortFilterEntry> {
   /* constructed from answers to:
     fieldName, asc, menuName
     int get questCountForType => 3
@@ -336,7 +336,7 @@ class TvFilterCfg extends TvSortGroupFilterBase {
 }
 
 @JsonSerializable()
-class TvGroupCfg extends TvSortGroupFilterBase {
+class TvGroupCfg extends TvSortGroupFilterBase<GroupCfgEntry> {
   /* constructed from answers to:
     fieldName, sort-asc, askJustification, collapsible
   */
@@ -348,9 +348,9 @@ class TvGroupCfg extends TvSortGroupFilterBase {
 
   DisplayJustification get h1Justification => disableGrouping
       ? DisplayJustification.left
-      : (fieldList.first as GroupCfgEntry).justification;
+      : fieldList.first.justification;
   bool get isCollapsible =>
-      disableGrouping ? false : (fieldList.first as GroupCfgEntry).collapsible;
+      disableGrouping ? false : fieldList.first.collapsible;
 
   @override
   void _castToRealTypes(List<PairedQuestAndResp> userResponses) {
