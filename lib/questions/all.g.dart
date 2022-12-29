@@ -53,16 +53,14 @@ const _$TvAreaRowStyleEnumMap = {
   TvAreaRowStyle.digitalAssetScored: 'digitalAssetScored',
 };
 
-SortGroupFilterEntry _$SortGroupFilterEntryFromJson(
-        Map<String, dynamic> json) =>
-    SortGroupFilterEntry(
+SortFilterEntry _$SortFilterEntryFromJson(Map<String, dynamic> json) =>
+    SortFilterEntry(
       $enumDecode(_$DbTableFieldNameEnumMap, json['colName']),
       json['asc'] as bool,
       menuTitleIfFilter: json['menuTitleIfFilter'] as String?,
     );
 
-Map<String, dynamic> _$SortGroupFilterEntryToJson(
-        SortGroupFilterEntry instance) =>
+Map<String, dynamic> _$SortFilterEntryToJson(SortFilterEntry instance) =>
     <String, dynamic>{
       'colName': _$DbTableFieldNameEnumMap[instance.colName]!,
       'asc': instance.asc,
@@ -86,10 +84,33 @@ const _$DbTableFieldNameEnumMap = {
   DbTableFieldName.basedOnEventDelimiters: 'basedOnEventDelimiters',
 };
 
+GroupCfgEntry _$GroupCfgEntryFromJson(Map<String, dynamic> json) =>
+    GroupCfgEntry(
+      $enumDecode(_$DbTableFieldNameEnumMap, json['colName']),
+      json['asc'] as bool,
+      $enumDecode(_$DisplayJustificationEnumMap, json['justification']),
+      json['collapsible'] as bool,
+    )..menuTitleIfFilter = json['menuTitleIfFilter'] as String?;
+
+Map<String, dynamic> _$GroupCfgEntryToJson(GroupCfgEntry instance) =>
+    <String, dynamic>{
+      'colName': _$DbTableFieldNameEnumMap[instance.colName]!,
+      'asc': instance.asc,
+      'menuTitleIfFilter': instance.menuTitleIfFilter,
+      'justification': _$DisplayJustificationEnumMap[instance.justification]!,
+      'collapsible': instance.collapsible,
+    };
+
+const _$DisplayJustificationEnumMap = {
+  DisplayJustification.left: 'left',
+  DisplayJustification.center: 'center',
+  DisplayJustification.right: 'right',
+};
+
 TvSortCfg _$TvSortCfgFromJson(Map<String, dynamic> json) => TvSortCfg()
   ..ruleType = $enumDecode(_$VisualRuleTypeEnumMap, json['ruleType'])
   ..fieldList = (json['fieldList'] as List<dynamic>)
-      .map((e) => SortGroupFilterEntry.fromJson(e as Map<String, dynamic>))
+      .map((e) => SortFilterEntry.fromJson(e as Map<String, dynamic>))
       .toList();
 
 Map<String, dynamic> _$TvSortCfgToJson(TvSortCfg instance) => <String, dynamic>{
@@ -97,25 +118,25 @@ Map<String, dynamic> _$TvSortCfgToJson(TvSortCfg instance) => <String, dynamic>{
       'fieldList': instance.fieldList.map((e) => e.toJson()).toList(),
     };
 
-TvGroupCfg _$TvGroupCfgFromJson(Map<String, dynamic> json) => TvGroupCfg()
+TvFilterCfg _$TvFilterCfgFromJson(Map<String, dynamic> json) => TvFilterCfg()
   ..ruleType = $enumDecode(_$VisualRuleTypeEnumMap, json['ruleType'])
   ..fieldList = (json['fieldList'] as List<dynamic>)
-      .map((e) => SortGroupFilterEntry.fromJson(e as Map<String, dynamic>))
+      .map((e) => SortFilterEntry.fromJson(e as Map<String, dynamic>))
       .toList();
 
-Map<String, dynamic> _$TvGroupCfgToJson(TvGroupCfg instance) =>
+Map<String, dynamic> _$TvFilterCfgToJson(TvFilterCfg instance) =>
     <String, dynamic>{
       'ruleType': _$VisualRuleTypeEnumMap[instance.ruleType]!,
       'fieldList': instance.fieldList.map((e) => e.toJson()).toList(),
     };
 
-TvFilterCfg _$TvFilterCfgFromJson(Map<String, dynamic> json) => TvFilterCfg()
+TvGroupCfg _$TvGroupCfgFromJson(Map<String, dynamic> json) => TvGroupCfg()
   ..ruleType = $enumDecode(_$VisualRuleTypeEnumMap, json['ruleType'])
   ..fieldList = (json['fieldList'] as List<dynamic>)
-      .map((e) => SortGroupFilterEntry.fromJson(e as Map<String, dynamic>))
+      .map((e) => SortFilterEntry.fromJson(e as Map<String, dynamic>))
       .toList();
 
-Map<String, dynamic> _$TvFilterCfgToJson(TvFilterCfg instance) =>
+Map<String, dynamic> _$TvGroupCfgToJson(TvGroupCfg instance) =>
     <String, dynamic>{
       'ruleType': _$VisualRuleTypeEnumMap[instance.ruleType]!,
       'fieldList': instance.fieldList.map((e) => e.toJson()).toList(),

@@ -39,14 +39,14 @@ class GroupHeaderData
       return row.valueExtractor(groupingRules.item1!.colName);
     }
 
-    SortGroupFilterEntry? col2Rule = groupingRules.item2;
+    SortFilterEntry? col2Rule = groupingRules.item2 as GroupCfgEntry;
     // CastRowToSortVal
     secondLabelFn(AssetRowPropertyIfc row) {
       if (col2Rule == null) return '';
       return row.valueExtractor(col2Rule.colName);
     }
 
-    SortGroupFilterEntry? col3Rule = groupingRules.item3;
+    SortFilterEntry? col3Rule = groupingRules.item3;
     // CastRowToSortVal
     thirdLabelFn(AssetRowPropertyIfc row) {
       if (col3Rule == null) return '';
@@ -137,14 +137,14 @@ class GroupHeaderData
       return row.sortValueExtractor(sr.item1!.colName);
     }
 
-    SortGroupFilterEntry? col2Rule = sr.item2;
+    SortFilterEntry? col2Rule = sr.item2;
     // CastRowToSortVal
     secondValFn(AssetRowPropertyIfc row) {
       if (col2Rule == null) return '';
       return row.sortValueExtractor(col2Rule.colName);
     }
 
-    SortGroupFilterEntry? col3Rule = sr.item3;
+    SortFilterEntry? col3Rule = sr.item3;
     // CastRowToSortVal
     thirdValFn(AssetRowPropertyIfc row) {
       if (col3Rule == null) return '';

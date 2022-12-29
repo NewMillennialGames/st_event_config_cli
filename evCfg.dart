@@ -41,6 +41,7 @@ Future<void> main(List<String> cliArgs) async {
 
   bool inDebugMode = argResults.wasParsed(DEBUG_LOAD_OPT);
   if (inDebugMode) {
+    // dump a file to help debug
     String debugFileName = argResults[DEBUG_LOAD_OPT];
     dialoger.questionLstMgr.debugLoadFromFile(debugFileName);
   } else {

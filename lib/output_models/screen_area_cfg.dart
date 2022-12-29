@@ -61,6 +61,19 @@ class CfgForAreaAndNestedSlots {
       if (rQuest.screenWidgetArea == this.screenArea) {
         // IF stmt is new above
         cfgForSlotOrArea.appendQuestion(rQuest);
+
+        // debugging for how gameDate keeps getting added to group-cfg
+        final qtr = rQuest.qTargetResolution;
+        // final promptInst = rQuest.firstPrompt;
+        // if (rQuest.isRuleDetailQuestion &&
+        //     qtr.appScreen == AppScreen.marketView &&
+        //     qtr.screenWidgetArea == ScreenWidgetArea.tableview &&
+        //     qtr.visRuleTypeForAreaOrSlot == VisualRuleType.groupCfg &&
+        //     promptInst.visQuestType == VisRuleQuestType.selectDataFieldName) {
+        //   print('######### FYI:');
+        //   print(promptInst.userPrompt);
+        //   print(promptInst.userRespConverter.answer);
+        // }
       }
       visCfgForArea[vrt] = cfgForSlotOrArea;
       // ConfigLogger.log(Level.FINER,'\t area rule count:  ${visCfgForArea.length} (post add)');

@@ -90,18 +90,18 @@ class DialogRunner {
       // to create any derived Questions based on user answers
 
       // next line for testing
-      questPresenter.askAndWaitForUserResponse(this, _quest);
+      // questPresenter.askAndWaitForUserResponse(this, _quest);
       // TODO:  enable block below for production
-      // try {
-      //   questPresenter.askAndWaitForUserResponse(this, _quest);
-      // } catch (e, _) {
-      //   ConfigLogger.log(Level.FINER,
-      //       'Err:  cliLoopUntilComplete running questPresenter.askAndWaitForUserResponse');
-      //   ConfigLogger.log(Level.FINER, 'Err thrown was ${e.toString()}');
-      //   questPresenter.showErrorAndRePresentQuestion(
-      //       e as String, _quest.helpMsgOnError ?? '');
-      //   continue;
-      // }
+      try {
+        questPresenter.askAndWaitForUserResponse(this, _quest);
+      } catch (e, _) {
+        ConfigLogger.log(Level.FINER,
+            'Err:  cliLoopUntilComplete running questPresenter.askAndWaitForUserResponse');
+        ConfigLogger.log(Level.FINER, 'Err thrown was ${e.toString()}');
+        questPresenter.showErrorAndRePresentQuestion(
+            e as String, _quest.helpMsgOnError ?? '');
+        continue;
+      }
 
       _quest = _qListMgr.nextQuestionToAnswer();
       if (_quest != null) {
