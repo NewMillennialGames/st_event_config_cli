@@ -26,8 +26,9 @@ class CfgForAreaAndNestedSlots {
     this.visCfgForSlotsByRuleType,
   );
 
+  // TODO:  check ?? below for sanity
   SlotOrAreaRuleCfg areaRulesByRuleType(VisualRuleType typ) =>
-      visCfgForArea[typ]!;
+      visCfgForArea[typ] ?? SlotOrAreaRuleCfg([]);
 
   bool isMissingRuleTyp(VisualRuleType typ) => visCfgForArea[typ] == null;
 
@@ -103,7 +104,9 @@ class CfgForAreaAndNestedSlots {
         this.areaRulesByRuleType(VisualRuleType.styleOrFormat);
     List<RuleResponseBase> lstRules =
         tableAreaRules.rulesOfVRType(VisualRuleType.styleOrFormat);
-    return lstRules.first as TvRowStyleCfg;
+    return lstRules.length > 0
+        ? lstRules.first as TvRowStyleCfg
+        : TvRowStyleCfg.explicit(TvAreaRowStyle.assetVsAsset);
   }
 
   TvGroupCfg? get groupingRules {
