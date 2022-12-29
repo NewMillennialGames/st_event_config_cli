@@ -39,14 +39,14 @@ class GroupHeaderData
       return row.valueExtractor(groupingRules.item1!.colName);
     }
 
-    SortFilterEntry? col2Rule = groupingRules.item2 as GroupCfgEntry;
+    GroupCfgEntry? col2Rule = groupingRules.item2 as GroupCfgEntry?;
     // CastRowToSortVal
     secondLabelFn(AssetRowPropertyIfc row) {
       if (col2Rule == null) return '';
       return row.valueExtractor(col2Rule.colName);
     }
 
-    SortFilterEntry? col3Rule = groupingRules.item3;
+    GroupCfgEntry? col3Rule = groupingRules.item3 as GroupCfgEntry?;
     // CastRowToSortVal
     thirdLabelFn(AssetRowPropertyIfc row) {
       if (col3Rule == null) return '';

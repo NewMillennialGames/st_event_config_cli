@@ -346,6 +346,12 @@ class TvGroupCfg extends TvSortGroupFilterBase {
   //
   bool get disableGrouping => fieldList.length < 1;
 
+  DisplayJustification get h1Justification => disableGrouping
+      ? DisplayJustification.left
+      : (fieldList.first as GroupCfgEntry).justification;
+  bool get isCollapsible =>
+      disableGrouping ? false : (fieldList.first as GroupCfgEntry).collapsible;
+
   @override
   void _castToRealTypes(List<PairedQuestAndResp> userResponses) {
     /* for various answers depending on rule-type
