@@ -113,17 +113,16 @@ class CfgForAreaAndNestedSlots {
     // what grouping Rules to apply to the TableView
     assert(
       screenArea == ScreenWidgetArea.tableview,
-      'method only works for TableVw areas',
+      'this property only exists on TableView areas',
     );
 
     // List<TvGroupCfg> definedGroupRules =
     //     _loadRulesInOrder<TvGroupCfg>(VisualRuleType.groupCfg);
     // int ruleCnt = definedGroupRules.length;
     // if (ruleCnt < 1) return null;
-
-    // TvGroupCfg? gr2 = ruleCnt > 1 ? definedGroupRules[1] : null;
-    // TvGroupCfg? gr3 = ruleCnt > 2 ? definedGroupRules[2] : null;
-    // return GroupingRules(definedGroupRules.first, gr2, gr3);
+    // // TvGroupCfg? gr2 = ruleCnt > 1 ? definedGroupRules[1] : null;
+    // // TvGroupCfg? gr3 = ruleCnt > 2 ? definedGroupRules[2] : null;
+    // return definedGroupRules.first;
 
     SlotOrAreaRuleCfg? areaSortCfg = visCfgForArea[VisualRuleType.groupCfg];
     if (areaSortCfg == null || areaSortCfg.visRuleList.length < 1) return null;

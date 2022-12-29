@@ -692,7 +692,7 @@ List<QuestMatcher> _matchTargetCompleteAndGenRuleSelectQuests = [
     },
     //
     derivedQuestGen: DerivedQuestGenerator.singlePrompt(
-      'Select which rules to config within area {0} of screen {1}',
+      'Select which rules to config in area {0} of screen {1}  (style/Fmt required on Tables)',
       newQuestConstructor: QuestBase.ruleSelectQuest,
       newQuestPromptArgGen: (
         QuestBase priorAnsweredQuest,
