@@ -23,6 +23,7 @@ mixin _$AssetStateUpdates {
   TradeMode get tradeMode => throw _privateConstructorUsedError;
   bool get isWatched => throw _privateConstructorUsedError;
   bool get isOwned => throw _privateConstructorUsedError;
+  bool get isBeingRepriced => throw _privateConstructorUsedError;
   Decimal get curPrice => throw _privateConstructorUsedError;
   Decimal get hiPrice => throw _privateConstructorUsedError;
   Decimal get lowPrice => throw _privateConstructorUsedError;
@@ -47,6 +48,7 @@ abstract class $AssetStateUpdatesCopyWith<$Res> {
       TradeMode tradeMode,
       bool isWatched,
       bool isOwned,
+      bool isBeingRepriced,
       Decimal curPrice,
       Decimal hiPrice,
       Decimal lowPrice,
@@ -73,6 +75,7 @@ class _$AssetStateUpdatesCopyWithImpl<$Res, $Val extends AssetStateUpdates>
     Object? tradeMode = null,
     Object? isWatched = null,
     Object? isOwned = null,
+    Object? isBeingRepriced = null,
     Object? curPrice = null,
     Object? hiPrice = null,
     Object? lowPrice = null,
@@ -106,6 +109,10 @@ class _$AssetStateUpdatesCopyWithImpl<$Res, $Val extends AssetStateUpdates>
       isOwned: null == isOwned
           ? _value.isOwned
           : isOwned // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isBeingRepriced: null == isBeingRepriced
+          ? _value.isBeingRepriced
+          : isBeingRepriced // ignore: cast_nullable_to_non_nullable
               as bool,
       curPrice: null == curPrice
           ? _value.curPrice
@@ -143,6 +150,7 @@ abstract class _$$_AssetStateUpdatesCopyWith<$Res>
       TradeMode tradeMode,
       bool isWatched,
       bool isOwned,
+      bool isBeingRepriced,
       Decimal curPrice,
       Decimal hiPrice,
       Decimal lowPrice,
@@ -167,6 +175,7 @@ class __$$_AssetStateUpdatesCopyWithImpl<$Res>
     Object? tradeMode = null,
     Object? isWatched = null,
     Object? isOwned = null,
+    Object? isBeingRepriced = null,
     Object? curPrice = null,
     Object? hiPrice = null,
     Object? lowPrice = null,
@@ -201,6 +210,10 @@ class __$$_AssetStateUpdatesCopyWithImpl<$Res>
           ? _value.isOwned
           : isOwned // ignore: cast_nullable_to_non_nullable
               as bool,
+      isBeingRepriced: null == isBeingRepriced
+          ? _value.isBeingRepriced
+          : isBeingRepriced // ignore: cast_nullable_to_non_nullable
+              as bool,
       curPrice: null == curPrice
           ? _value.curPrice
           : curPrice // ignore: cast_nullable_to_non_nullable
@@ -230,6 +243,7 @@ class _$_AssetStateUpdates extends _AssetStateUpdates
       this.tradeMode = TradeMode.tradeMarket,
       this.isWatched = false,
       this.isOwned = false,
+      this.isBeingRepriced = false,
       required this.curPrice,
       required this.hiPrice,
       required this.lowPrice,
@@ -255,6 +269,9 @@ class _$_AssetStateUpdates extends _AssetStateUpdates
   @JsonKey()
   final bool isOwned;
   @override
+  @JsonKey()
+  final bool isBeingRepriced;
+  @override
   final Decimal curPrice;
   @override
   final Decimal hiPrice;
@@ -265,7 +282,7 @@ class _$_AssetStateUpdates extends _AssetStateUpdates
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'AssetStateUpdates(assetKey: $assetKey, name: $name, ticker: $ticker, assetState: $assetState, tradeMode: $tradeMode, isWatched: $isWatched, isOwned: $isOwned, curPrice: $curPrice, hiPrice: $hiPrice, lowPrice: $lowPrice, openPrice: $openPrice)';
+    return 'AssetStateUpdates(assetKey: $assetKey, name: $name, ticker: $ticker, assetState: $assetState, tradeMode: $tradeMode, isWatched: $isWatched, isOwned: $isOwned, isBeingRepriced: $isBeingRepriced, curPrice: $curPrice, hiPrice: $hiPrice, lowPrice: $lowPrice, openPrice: $openPrice)';
   }
 
   @override
@@ -280,6 +297,7 @@ class _$_AssetStateUpdates extends _AssetStateUpdates
       ..add(DiagnosticsProperty('tradeMode', tradeMode))
       ..add(DiagnosticsProperty('isWatched', isWatched))
       ..add(DiagnosticsProperty('isOwned', isOwned))
+      ..add(DiagnosticsProperty('isBeingRepriced', isBeingRepriced))
       ..add(DiagnosticsProperty('curPrice', curPrice))
       ..add(DiagnosticsProperty('hiPrice', hiPrice))
       ..add(DiagnosticsProperty('lowPrice', lowPrice))
@@ -302,6 +320,8 @@ class _$_AssetStateUpdates extends _AssetStateUpdates
             (identical(other.isWatched, isWatched) ||
                 other.isWatched == isWatched) &&
             (identical(other.isOwned, isOwned) || other.isOwned == isOwned) &&
+            (identical(other.isBeingRepriced, isBeingRepriced) ||
+                other.isBeingRepriced == isBeingRepriced) &&
             (identical(other.curPrice, curPrice) ||
                 other.curPrice == curPrice) &&
             (identical(other.hiPrice, hiPrice) || other.hiPrice == hiPrice) &&
@@ -321,6 +341,7 @@ class _$_AssetStateUpdates extends _AssetStateUpdates
       tradeMode,
       isWatched,
       isOwned,
+      isBeingRepriced,
       curPrice,
       hiPrice,
       lowPrice,
@@ -341,6 +362,7 @@ abstract class _AssetStateUpdates extends AssetStateUpdates {
       final TradeMode tradeMode,
       final bool isWatched,
       final bool isOwned,
+      final bool isBeingRepriced,
       required final Decimal curPrice,
       required final Decimal hiPrice,
       required final Decimal lowPrice,
@@ -361,6 +383,8 @@ abstract class _AssetStateUpdates extends AssetStateUpdates {
   bool get isWatched;
   @override
   bool get isOwned;
+  @override
+  bool get isBeingRepriced;
   @override
   Decimal get curPrice;
   @override

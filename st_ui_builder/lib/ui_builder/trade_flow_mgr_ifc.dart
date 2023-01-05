@@ -6,6 +6,7 @@ class TradeFlowBase {
   String labelForGameState(
     CompetitionStatus status, {
     bool eventIsStarted = false,
+    bool isBeingRepriced = false,
   }) =>
       throw UnimplementedError('should call subclass');
 
@@ -29,6 +30,7 @@ class TradeFlowForDemo extends TradeFlowBase {
   String labelForGameState(
     CompetitionStatus status, {
     bool eventIsStarted = false,
+    bool isBeingRepriced = false,
   }) =>
       'demo label';
 
