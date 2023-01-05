@@ -26,8 +26,9 @@ class CfgForAreaAndNestedSlots {
     this.visCfgForSlotsByRuleType,
   );
 
+  // TODO:  check ?? below for sanity
   SlotOrAreaRuleCfg areaRulesByRuleType(VisualRuleType typ) =>
-      visCfgForArea[typ]!;
+      visCfgForArea[typ] ?? SlotOrAreaRuleCfg([]);
 
   bool isMissingRuleTyp(VisualRuleType typ) => visCfgForArea[typ] == null;
 
@@ -61,6 +62,19 @@ class CfgForAreaAndNestedSlots {
       if (rQuest.screenWidgetArea == this.screenArea) {
         // IF stmt is new above
         cfgForSlotOrArea.appendQuestion(rQuest);
+
+        // debugging for how gameDate keeps getting added to group-cfg
+        final qtr = rQuest.qTargetResolution;
+        // final promptInst = rQuest.firstPrompt;
+        // if (rQuest.isRuleDetailQuestion &&
+        //     qtr.appScreen == AppScreen.marketView &&
+        //     qtr.screenWidgetArea == ScreenWidgetArea.tableview &&
+        //     qtr.visRuleTypeForAreaOrSlot == VisualRuleType.groupCfg &&
+        //     promptInst.visQuestType == VisRuleQuestType.selectDataFieldName) {
+        //   print('######### FYI:');
+        //   print(promptInst.userPrompt);
+        //   print(promptInst.userRespConverter.answer);
+        // }
       }
       visCfgForArea[vrt] = cfgForSlotOrArea;
       // ConfigLogger.log(Level.FINER,'\t area rule count:  ${visCfgForArea.length} (post add)');
@@ -90,24 +104,25 @@ class CfgForAreaAndNestedSlots {
         this.areaRulesByRuleType(VisualRuleType.styleOrFormat);
     List<RuleResponseBase> lstRules =
         tableAreaRules.rulesOfVRType(VisualRuleType.styleOrFormat);
-    return lstRules.first as TvRowStyleCfg;
+    return lstRules.length > 0
+        ? lstRules.first as TvRowStyleCfg
+        : TvRowStyleCfg.explicit(TvAreaRowStyle.assetVsAsset);
   }
 
   TvGroupCfg? get groupingRules {
     // what grouping Rules to apply to the TableView
     assert(
       screenArea == ScreenWidgetArea.tableview,
-      'method only works for TableVw areas',
+      'this property only exists on TableView areas',
     );
 
     // List<TvGroupCfg> definedGroupRules =
     //     _loadRulesInOrder<TvGroupCfg>(VisualRuleType.groupCfg);
     // int ruleCnt = definedGroupRules.length;
     // if (ruleCnt < 1) return null;
-
-    // TvGroupCfg? gr2 = ruleCnt > 1 ? definedGroupRules[1] : null;
-    // TvGroupCfg? gr3 = ruleCnt > 2 ? definedGroupRules[2] : null;
-    // return GroupingRules(definedGroupRules.first, gr2, gr3);
+    // // TvGroupCfg? gr2 = ruleCnt > 1 ? definedGroupRules[1] : null;
+    // // TvGroupCfg? gr3 = ruleCnt > 2 ? definedGroupRules[2] : null;
+    // return definedGroupRules.first;
 
     SlotOrAreaRuleCfg? areaSortCfg = visCfgForArea[VisualRuleType.groupCfg];
     if (areaSortCfg == null || areaSortCfg.visRuleList.length < 1) return null;

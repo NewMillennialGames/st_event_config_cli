@@ -68,6 +68,11 @@ class GroupedTableDataMgr {
       '';
 
   GetGroupHeaderLblsFromAssetGameData? get groupBy {
+    //
+    if (_tableViewCfg.groupByRules == null) {
+      return null;
+    }
+
     return GroupHeaderData.groupHeaderPayloadConstructor(
       _tableViewCfg.groupByRules!,
     );
@@ -139,9 +144,9 @@ class GroupedTableDataMgr {
       return const SizedBox.shrink();
     }
 
-    SortGroupFilterEntry? i1 = filterRules!.item1;
-    SortGroupFilterEntry? i2 = filterRules!.item2;
-    SortGroupFilterEntry? i3 = filterRules!.item3;
+    SortFilterEntry? i1 = filterRules!.item1;
+    SortFilterEntry? i2 = filterRules!.item2;
+    SortFilterEntry? i3 = filterRules!.item3;
 
     Set<String> listItems1 = i1 == null ? {} : _getListItemsByCfgField(i1);
     Set<String> listItems2 = i2 == null ? {} : _getListItemsByCfgField(i2);
@@ -298,7 +303,7 @@ class GroupedTableDataMgr {
     return rows;
   }
 
-  Set<String> _getListItemsByCfgField(SortGroupFilterEntry filterItem) {
+  Set<String> _getListItemsByCfgField(SortFilterEntry filterItem) {
     /* build title and values for filter menu dropdown list
 
     */
@@ -455,7 +460,7 @@ class GroupedTableDataMgr {
       onRefresh: onRefresh,
       scrollController: scrollController,
       onRowTapped: onRowTapped,
-      groupBy: groupBy!,
+      groupBy: groupBy ?? (TableviewDataRowTuple _) => GroupHeaderData.noop(),
       groupHeaderBuilder: groupHeaderBuilder,
       rowBuilder: indexedItemBuilder,
       groupComparator: groupComparator,

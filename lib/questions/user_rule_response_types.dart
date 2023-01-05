@@ -27,6 +27,10 @@ class RuleResponseBase implements RuleResponseWrapperIfc {
   List<VisRuleQuestType> get requiredQuestions =>
       ruleType.requRuleDetailCfgQuests;
 
+  // see VisualRuleType.questCountToIterByType
+  // to understand value below
+  int get questCountToIterByType => ruleType.questCountToIterByType;
+
   void _checkArgs(List<PairedQuestAndResp> responses) {
     assert(
       this.requiredQuestions.length == responses.length,
@@ -125,13 +129,13 @@ class TvRowStyleCfg extends RuleResponseBase {
 }
 
 @JsonSerializable()
-class SortGroupFilterEntry {
+class SortFilterEntry {
   // describes field & order to sort/group/filter with
   DbTableFieldName colName;
   bool asc = false;
   String? menuTitleIfFilter;
 
-  SortGroupFilterEntry(this.colName, this.asc, {this.menuTitleIfFilter});
+  SortFilterEntry(this.colName, this.asc, {this.menuTitleIfFilter});
 
   bool get sortingDisabled => colName == DbTableFieldName.imageUrl;
 
@@ -141,34 +145,94 @@ class SortGroupFilterEntry {
   }
 
   // JsonSerializable
-  factory SortGroupFilterEntry.fromJson(Map<String, dynamic> json) =>
-      _$SortGroupFilterEntryFromJson(json);
-  Map<String, dynamic> toJson() => _$SortGroupFilterEntryToJson(this);
+  factory SortFilterEntry.fromJson(Map<String, dynamic> json) =>
+      _$SortFilterEntryFromJson(json);
+  Map<String, dynamic> toJson() => _$SortFilterEntryToJson(this);
+}
+
+@JsonSerializable()
+class GroupCfgEntry extends SortFilterEntry {
+  /*
+
+  */
+  DisplayJustification justification;
+  bool collapsible;
+
+  GroupCfgEntry(
+    DbTableFieldName colName,
+    bool asc,
+    this.justification,
+    this.collapsible,
+  ) : super(
+          colName,
+          asc,
+          menuTitleIfFilter: null,
+        );
+
+  // JsonSerializable
+  factory GroupCfgEntry.fromJson(Map<String, dynamic> json) =>
+      _$GroupCfgEntryFromJson(json);
+  Map<String, dynamic> toJson() => _$GroupCfgEntryToJson(this);
 }
 
 // base for all rule classes that involve db fields & ordering
-class TvSortGroupFilterBase extends RuleResponseBase {
-  //
-  List<SortGroupFilterEntry> fieldList = [];
+class TvSortGroupFilterBase<T extends SortFilterEntry>
+    extends RuleResponseBase {
+  // <T extends SortFilterEntry>
+  List<T> fieldList = [];
 
   TvSortGroupFilterBase(
     VisualRuleType rt,
   ) : super(rt);
   //
+
   @override
   void _castToRealTypes(List<PairedQuestAndResp> userResponses) {
-    /* for these answers:
-        Vrq.selectDataFieldName,
-        Vrq.specifySortAscending
-        Vrq.askMenuName (only on filter menu config)
-    */
-    // empty fieldList
-    // this.fieldList = [];
+    throw UnimplementedError(
+        'implement in subclass for different answer counts');
+  }
+
+  T? get item1 => fieldList.length > 0 ? fieldList.first : null;
+  T? get item2 => fieldList.length > 1 ? fieldList[1] : null;
+  T? get item3 => fieldList.length > 2 ? fieldList[2] : null;
+
+  DbTableFieldName? get firstColName => item1?.colName;
+
+  @override
+  String toString() {
+    String className = this.runtimeType.toString();
+    return '$className (${ruleType.name}) w cfg:\n$_answerSummary';
+  }
+
+  String get _answerSummary {
+    Iterable<String> xx = fieldList.map((T fldEntry) => fldEntry.toString());
+    String summary = '\t'; // this.runtimeType.toString() +
+    for (String fieldCfg in xx) {
+      summary += fieldCfg + ';  ';
+    }
+    return summary;
+  }
+}
+
+@JsonSerializable()
+class TvSortCfg extends TvSortGroupFilterBase<SortFilterEntry> {
+  //
+  TvSortCfg._() : super(VisualRuleType.sortCfg);
+  TvSortCfg() : super(VisualRuleType.sortCfg);
+
+  factory TvSortCfg.noop() {
+    // cancels all sorting when this is the first sort-param
+    return TvSortCfg._();
+  }
+
+  @override
+  void _castToRealTypes(List<PairedQuestAndResp> userResponses) {
     // ConfigLogger.log(Level.FINER,
     //   'TvSortGroupFilter.castToRealTypes got ${userResponses.length} userResponses',
     // );
-    int questCount = this is TvFilterCfg ? 3 : 2;
-    for (int i = 0; i < userResponses.length - 1; i += questCount) {
+
+    print("#####   Got ${userResponses.length} answers ");
+    for (int i = 0; i < userResponses.length - 1; i += questCountToIterByType) {
       PairedQuestAndResp fldNameEntry = userResponses[i];
       assert(
         fldNameEntry.type == VisRuleQuestType.selectDataFieldName,
@@ -186,14 +250,74 @@ class TvSortGroupFilterBase extends RuleResponseBase {
       String ascBool = ascendEntry.userAnswer;
       bool sortAsc = (int.tryParse(ascBool) ?? 0) > 0;
 
-      String? filterMenuTitle; // only applies if this is TvFilterCfg
-      if (this is TvFilterCfg) {
-        PairedQuestAndResp menuTitleEntry = userResponses[i + 2];
-        filterMenuTitle = menuTitleEntry.userAnswer as String;
-      }
+      fieldList.add(
+        SortFilterEntry(
+          _curSelField,
+          sortAsc,
+          menuTitleIfFilter: null,
+        ),
+      );
+    }
+    // ConfigLogger.log(Level.FINER,
+    //   '${fieldList.length} entries (contains 2 vals) added to TvSortGroupFilterBase!  (${this.runtimeType})',
+    // );
+  }
+
+  bool get disableSorting => fieldList.length < 1;
+
+  SortFilterEntry? get first => fieldList.length < 1 ? null : fieldList.first;
+  SortFilterEntry? get second => fieldList.length < 2 ? null : fieldList[1];
+  SortFilterEntry? get third => fieldList.length < 3 ? null : fieldList[2];
+  //
+  // JsonSerializable
+  factory TvSortCfg.fromJson(Map<String, dynamic> json) =>
+      _$TvSortCfgFromJson(json);
+  Map<String, dynamic> toJson() => _$TvSortCfgToJson(this);
+}
+
+@JsonSerializable()
+class TvFilterCfg extends TvSortGroupFilterBase<SortFilterEntry> {
+  /* constructed from answers to:
+    fieldName, asc, menuName
+    int get questCountForType => 3
+  */
+  TvFilterCfg() : super(VisualRuleType.filterCfg);
+  //
+  bool get disableFiltering => fieldList.length < 1;
+
+  @override
+  void _castToRealTypes(List<PairedQuestAndResp> userResponses) {
+    /* for various answers depending on rule-type
+    */
+
+    // ConfigLogger.log(Level.FINER,
+    //   'TvSortGroupFilter.castToRealTypes got ${userResponses.length} userResponses',
+    // );
+
+    print("#####   Got ${userResponses.length} answers ");
+    for (int i = 0; i < userResponses.length - 1; i += questCountToIterByType) {
+      PairedQuestAndResp fldNameEntry = userResponses[i];
+      assert(
+        fldNameEntry.type == VisRuleQuestType.selectDataFieldName,
+        'list is in bad order',
+      );
+      String fldIdx = fldNameEntry.userAnswer;
+      int answIdx = int.tryParse(fldIdx) ?? 0;
+      DbTableFieldName _curSelField = DbTableFieldName.values[answIdx];
+
+      PairedQuestAndResp ascendEntry = userResponses[i + 1];
+      assert(
+        ascendEntry.type == VisRuleQuestType.specifySortAscending,
+        'list is in bad order',
+      );
+      String ascBool = ascendEntry.userAnswer;
+      bool sortAsc = (int.tryParse(ascBool) ?? 0) > 0;
+
+      PairedQuestAndResp menuTitleEntry = userResponses[i + 2];
+      String? filterMenuTitle = menuTitleEntry.userAnswer as String;
 
       fieldList.add(
-        SortGroupFilterEntry(
+        SortFilterEntry(
           _curSelField,
           sortAsc,
           menuTitleIfFilter: filterMenuTitle,
@@ -205,79 +329,84 @@ class TvSortGroupFilterBase extends RuleResponseBase {
     // );
   }
 
-  SortGroupFilterEntry? get item1 =>
-      fieldList.length > 0 ? fieldList.first : null;
-  SortGroupFilterEntry? get item2 => fieldList.length > 1 ? fieldList[1] : null;
-  SortGroupFilterEntry? get item3 => fieldList.length > 2 ? fieldList[2] : null;
-
-  DbTableFieldName? get firstColName => item1?.colName;
-
-  @override
-  String toString() {
-    String className = this.runtimeType.toString();
-    return '$className (${ruleType.name}) w cfg:\n$_answerSummary';
-  }
-
-  String get _answerSummary {
-    Iterable<String> xx =
-        fieldList.map((SortGroupFilterEntry fldEntry) => fldEntry.toString());
-    String summary = '\t'; // this.runtimeType.toString() +
-    for (String fieldCfg in xx) {
-      summary += fieldCfg + ';  ';
-    }
-    return summary;
-  }
-}
-
-@JsonSerializable()
-class TvSortCfg extends TvSortGroupFilterBase {
-  //
-  TvSortCfg._() : super(VisualRuleType.sortCfg);
-  TvSortCfg() : super(VisualRuleType.sortCfg);
-
-  factory TvSortCfg.noop() {
-    // cancels all sorting when this is the first sort-param
-    return TvSortCfg._();
-  }
-
-  bool get disableSorting => fieldList.length < 1;
-
-  SortGroupFilterEntry? get first =>
-      fieldList.length < 1 ? null : fieldList.first;
-  SortGroupFilterEntry? get second =>
-      fieldList.length < 2 ? null : fieldList[1];
-  SortGroupFilterEntry? get third => fieldList.length < 3 ? null : fieldList[2];
-  //
   // JsonSerializable
-  factory TvSortCfg.fromJson(Map<String, dynamic> json) =>
-      _$TvSortCfgFromJson(json);
-  Map<String, dynamic> toJson() => _$TvSortCfgToJson(this);
+  factory TvFilterCfg.fromJson(Map<String, dynamic> json) =>
+      _$TvFilterCfgFromJson(json);
+  Map<String, dynamic> toJson() => _$TvFilterCfgToJson(this);
 }
 
 @JsonSerializable()
-class TvGroupCfg extends TvSortGroupFilterBase {
-  //
-  TvGroupCfg() : super(VisualRuleType.groupCfg);
+class TvGroupCfg extends TvSortGroupFilterBase<GroupCfgEntry> {
+  /* constructed from answers to:
+    fieldName, sort-asc, askJustification, collapsible
+  */
+  TvGroupCfg() : super(VisualRuleType.groupCfg) {
+    // throw UnimplementedError('when constructed?');
+  }
   //
   bool get disableGrouping => fieldList.length < 1;
+
+  DisplayJustification get h1Justification => disableGrouping
+      ? DisplayJustification.left
+      : fieldList.first.justification;
+  bool get isCollapsible =>
+      disableGrouping ? false : fieldList.first.collapsible;
+
+  @override
+  void _castToRealTypes(List<PairedQuestAndResp> userResponses) {
+    /* for various answers depending on rule-type
+    */
+
+    // ConfigLogger.log(Level.FINER,
+    //   'TvSortGroupFilter.castToRealTypes got ${userResponses.length} userResponses',
+    // );
+
+    print("#####   Got ${userResponses.length} answers ");
+    for (int i = 0; i < userResponses.length - 1; i += questCountToIterByType) {
+      PairedQuestAndResp fldNameEntry = userResponses[i];
+      assert(
+        fldNameEntry.type == VisRuleQuestType.selectDataFieldName,
+        'list is in bad order',
+      );
+      String fldIdx = fldNameEntry.userAnswer;
+      int answIdx = int.tryParse(fldIdx) ?? 0;
+      DbTableFieldName _curSelField = DbTableFieldName.values[answIdx];
+
+      PairedQuestAndResp ascendEntry = userResponses[i + 1];
+      assert(
+        ascendEntry.type == VisRuleQuestType.specifySortAscending,
+        'list is in bad order',
+      );
+      String ascBool = ascendEntry.userAnswer;
+      bool sortAsc = (int.tryParse(ascBool) ?? 0) > 0;
+
+      PairedQuestAndResp justifyEntry = userResponses[i + 2];
+      String justificationStr = justifyEntry.userAnswer;
+      DisplayJustification justification =
+          DisplayJustification.values[int.tryParse(justificationStr) ?? 0];
+
+      PairedQuestAndResp collapsibleEntry = userResponses[i + 3];
+      String collapsibleStr = collapsibleEntry.userAnswer;
+      bool collapsible = (int.tryParse(collapsibleStr) ?? 0) > 0;
+
+      fieldList.add(
+        GroupCfgEntry(
+          _curSelField,
+          sortAsc,
+          justification,
+          collapsible,
+        ),
+      );
+    }
+    // ConfigLogger.log(Level.FINER,
+    //   '${fieldList.length} entries (contains 2 vals) added to TvSortGroupFilterBase!  (${this.runtimeType})',
+    // );
+  }
 
   // JsonSerializable
   factory TvGroupCfg.fromJson(Map<String, dynamic> json) =>
       _$TvGroupCfgFromJson(json);
   Map<String, dynamic> toJson() => _$TvGroupCfgToJson(this);
-}
-
-@JsonSerializable()
-class TvFilterCfg extends TvSortGroupFilterBase {
-  //
-  TvFilterCfg() : super(VisualRuleType.filterCfg);
-  //
-  bool get disableFiltering => fieldList.length < 1;
-
-  // JsonSerializable
-  factory TvFilterCfg.fromJson(Map<String, dynamic> json) =>
-      _$TvFilterCfgFromJson(json);
-  Map<String, dynamic> toJson() => _$TvFilterCfgToJson(this);
 }
 
 @JsonSerializable()

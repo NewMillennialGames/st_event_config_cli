@@ -25,16 +25,16 @@ of the UI factory which renders builder functions for:
 */
 
 // demo example config data
-const String cfgEmpl1 = 'assetVsAsset.json';
-// cfgEmpl2 seems to be invalid json; replace it to continue testing
-const String cfgEmpl2 = 'teamVsFieldRanked.json';
-const String cfgEmpl3 = 'driverVsField.json';
-const String cfgEmpl4 = 'NCAA March Madness SET C122122.json';
+const String cfgEmpl1 = 'one.json';
+// // cfgEmpl2 seems to be invalid json; replace it to continue testing
+const String cfgEmpl2 = 'two.json';
+// const String cfgEmpl3 = 'driverVsField.json';
+// const String cfgEmpl4 = 'two.json';
 
 // evCfgDataFromServer contains the JSON payload produced by the CLI configurator
 Map<String, dynamic> evCfgDataFromServer = {};
 
-Future<void> readExampleEventConfig({String filename = cfgEmpl4}) async {
+Future<void> readExampleEventConfig({String filename = cfgEmpl2}) async {
   print('loading $filename');
   final String response = await rootBundle.loadString('assets/$filename');
   evCfgDataFromServer = json.decode(response);

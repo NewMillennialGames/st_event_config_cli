@@ -219,6 +219,36 @@ extension VisualRuleTypeExt1 on VisualRuleType {
     }
   }
 
+  int get questCountToIterByType {
+    /*
+      how many quests are required to compose 
+      a complete rule-detail answer
+
+      see code in:
+        SortGroupFilterEntry._castToRealTypes
+        to understand how this value is used
+
+        when you see extra responses being added
+        this int is off
+    */
+    switch (this) {
+      case VisualRuleType.generalDialogFlow:
+        return 0;
+      case VisualRuleType.sortCfg:
+        return 2;
+      case VisualRuleType.groupCfg:
+        return 4;
+      case VisualRuleType.filterCfg:
+        return 3;
+      case VisualRuleType.styleOrFormat:
+        return 1;
+      case VisualRuleType.showOrHide:
+        return 1;
+      case VisualRuleType.themePreference:
+        return 1;
+    }
+  }
+
   List<VisRuleQuestType> get requRuleDetailCfgQuests {
     /*  IMPORTANT:
       if you adjust the list below, you must also fix "subPromptCount" above

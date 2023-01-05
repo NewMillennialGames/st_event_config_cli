@@ -143,15 +143,15 @@ class StUiBuilderFactory {
 
     // new updated method!
     TvSortCfg sortCfg = _eConfig!.tvSortingRules(screen) ?? TvSortCfg.noop();
-    TvGroupCfg? group = _eConfig!.tvGroupingRules(screen);
-    TvFilterCfg? filter = _eConfig!.tvFilteringRules(screen);
+    TvGroupCfg? groupCfg = _eConfig!.tvGroupingRules(screen);
+    TvFilterCfg? filterCfg = _eConfig!.tvFilteringRules(screen);
 
     TableviewConfigPayload tvcp = TableviewConfigPayload(
       screen,
       tableAreaAndSlotCfg.rowStyleCfg.selectedRowStyle,
       sortCfg,
-      filter,
-      disableAllGrouping ? null : group,
+      filterCfg,
+      disableAllGrouping ? null : groupCfg,
     );
 
     return GroupedTableDataMgr(
@@ -180,7 +180,9 @@ class StUiBuilderFactory {
         screen,
         ScreenWidgetArea.filterBar,
       );
-    } catch (e) {}
+    } catch (e) {
+      print('Error: ${e.toString()}');
+    }
 
     return TableRowDataMgr(
       screen,

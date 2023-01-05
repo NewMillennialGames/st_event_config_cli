@@ -29,11 +29,11 @@ class QuestListMgr {
 
   // constructor
   QuestListMgr([List<QuestBase>? pendingQuestions = null]) {
-    if ((pendingQuestions ?? <QuestBase>[]).length < 1)
-      ConfigLogger.log(
-        Level.WARNING,
-        'warn: QuestListMgr may not behave well without min 1 seed question!!',
-      );
+    // if ((pendingQuestions ?? <QuestBase>[]).length < 1)
+    //   ConfigLogger.log(
+    //     Level.WARNING,
+    //     'warn: QuestListMgr may not behave well without min 1 seed question!!',
+    //   );
     _pendingQuestions.addAll(pendingQuestions ?? []);
   }
 

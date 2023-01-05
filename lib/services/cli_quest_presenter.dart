@@ -1,10 +1,11 @@
 import "dart:io";
-import 'package:collection/collection.dart';
-import 'package:st_ev_cfg/config/all.dart';
+// import 'package:collection/collection.dart';
 //
+import '../config/all.dart';
+import '../st_ev_cfg.dart';
 import '../interfaces/q_presenter.dart';
-import '../questions/all.dart';
-import '../dialog/all.dart';
+// import '../questions/all.dart';
+// import '../dialog/all.dart';
 
 class CliQuestionPresenter implements QuestionPresenterIfc {
   // formatter for command-line IO
@@ -81,6 +82,7 @@ class CliQuestionPresenter implements QuestionPresenterIfc {
       // code that should always execute; irrespective of the exception
       if (!validAnswerProvided) {
         // config may be corrupt??
+        print('Err: invalid answer on ${promptInst.userPrompt}');
       }
     }
   }
@@ -93,6 +95,7 @@ class CliQuestionPresenter implements QuestionPresenterIfc {
     //
     String userResp = stdin.readLineSync() ?? '';
     // make the next command throw if response is invalid
+
     promptInst.collectResponse(userResp);
 
     // print('\nuser answered $userResp on ${quest.targetPath}');
