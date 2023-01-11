@@ -29,7 +29,6 @@ class GroupedTableDataMgr {
   final List<TableviewDataRowTuple> _allAssetRows;
   final TableviewConfigPayload _tableViewCfg;
   RedrawTvCallback? redrawCallback;
-  GroupedListOrder sortOrder = GroupedListOrder.ASC;
   // rows actually rendered from _filteredAssetRows
   List<TableviewDataRowTuple> _filteredAssetRows = [];
   bool _disableAllGrouping = false;
@@ -44,7 +43,7 @@ class GroupedTableDataMgr {
     bool disableAllGrouping = false,
     bool ascending = true,
   })  : _disableAllGrouping = disableAllGrouping,
-        sortOrder = ascending ? GroupedListOrder.ASC : GroupedListOrder.DESC,
+        // sortOrder = ascending ? GroupedListOrder.ASC : GroupedListOrder.DESC,
         _filteredAssetRows = _allAssetRows.toList();
 
   Map<String, List<TableviewDataRowTuple>>? get rowsGroupedByTitles =>
@@ -61,7 +60,10 @@ class GroupedTableDataMgr {
   TvSortCfg get sortingRules => _tableViewCfg.sortRules;
   TvFilterCfg? get filterRules => _tableViewCfg.filterRules;
 
-  bool get groupIsCollapsible => groupRules?.isCollapsible ?? false;
+  bool get topGroupIsCollapsible => groupRules?.isCollapsible ?? false;
+  GroupedListOrder get topSortOrder => (groupRules?.sortAscending ?? true)
+      ? GroupedListOrder.ASC
+      : GroupedListOrder.DESC;
 
   bool get disableAllGrouping => _disableAllGrouping
       ? _disableAllGrouping
@@ -85,13 +87,25 @@ class GroupedTableDataMgr {
       '';
 
   GetGroupHeaderLblsFromAssetGameData? get groupBy {
-    //
+    /* return function to build group header data payload
+      from each row of data (1 or 2 assets)
+
+    */
     if (_tableViewCfg.groupByRules == null) {
       return null;
     }
 
+    final metaCfg = GroupHeaderMetaCfg(
+      topGroupIsCollapsible,
+      topSortOrder,
+      h1DisplayJust: groupRules?.h1Justification ?? DisplayJustification.center,
+      h2DisplayJust: groupRules?.h2Justification,
+      h3DisplayJust: groupRules?.h3Justification,
+    );
+
     return GroupHeaderData.groupHeaderPayloadConstructor(
       _tableViewCfg.groupByRules!,
+      metaCfg,
     );
   }
 
@@ -116,7 +130,7 @@ class GroupedTableDataMgr {
     // GroupHeaderData implements comparable
     if (disableAllGrouping) return null;
 
-    if (sortOrder == GroupedListOrder.DESC) {
+    if (topSortOrder == GroupedListOrder.DESC) {
       return (GroupHeaderData hd1Val, GroupHeaderData hd2Val) =>
           hd2Val.compareTo(hd1Val);
     } else {
@@ -137,10 +151,7 @@ class GroupedTableDataMgr {
 
   // for sorting TableviewDataRowTuple rows into config defined sort order
   ConfigDefinedSortComparator get sortItemComparator =>
-      GroupHeaderData.rowSortComparatorFromCfg(
-        sortingRules,
-        sortOrder == GroupedListOrder.ASC,
-      );
+      GroupHeaderData.rowSortComparatorFromCfg(sortingRules);
 
   bool get hasColumnFilters {
     return filterRules?.item1 != null && !_disableAllGrouping;
@@ -486,7 +497,7 @@ class GroupedTableDataMgr {
         onRowTapped: onRowTapped,
         scrollController: scrollController,
       );
-    } else if (groupIsCollapsible) {
+    } else if (topGroupIsCollapsible) {
       // groups WITH collapsing headers
       return _ExpandableGroupedAssetRowsListView(
         onRefresh: onRefresh,

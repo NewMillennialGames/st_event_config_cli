@@ -349,8 +349,21 @@ class TvGroupCfg extends TvSortGroupFilterBase<GroupCfgEntry> {
   DisplayJustification get h1Justification => disableGrouping
       ? DisplayJustification.left
       : fieldList.first.justification;
+
+  DisplayJustification? get h2Justification =>
+      (disableGrouping || this.item2 == null)
+          ? null
+          : this.item2!.justification;
+
+  DisplayJustification? get h3Justification =>
+      (disableGrouping || this.item3 == null)
+          ? null
+          : this.item3!.justification;
+
   bool get isCollapsible =>
       disableGrouping ? false : fieldList.first.collapsible;
+
+  bool get sortAscending => disableGrouping ? false : fieldList.first.asc;
 
   @override
   void _castToRealTypes(List<PairedQuestAndResp> userResponses) {

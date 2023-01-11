@@ -6,30 +6,68 @@ part of StUiController;
     Sort those groups within the table-view
     provide data to build the header-row Widgets in the table-view
 */
+class GroupHeaderMetaCfg {
+  //
+  final int groupLevelCount;
+  final bool topIsCollapsible;
+  final GroupedListOrder topSortOrder;
+  final DisplayJustification h1DisplayJust;
+  final DisplayJustification? h2DisplayJust;
+  final DisplayJustification? h3DisplayJust;
+
+  GroupHeaderMetaCfg(
+    this.topIsCollapsible,
+    this.topSortOrder, {
+    this.h1DisplayJust = DisplayJustification.center,
+    this.h2DisplayJust,
+    this.h3DisplayJust,
+  }) : groupLevelCount = 1;
+
+  static GroupHeaderMetaCfg noop() {
+    return GroupHeaderMetaCfg(
+      false,
+      GroupedListOrder.ASC,
+      h1DisplayJust: DisplayJustification.center,
+    );
+  }
+}
 
 class GroupHeaderData
     with EquatableMixin
     implements Comparable<GroupHeaderData> {
+  //
+  final GroupHeaderMetaCfg metaCfg;
   final String h1Displ;
   final String h2Displ;
   final String h3Displ;
   final String _sortKey;
-  final bool isAscending;
+  final bool topSortAscending;
 
   GroupHeaderData(
+    this.metaCfg,
     this.h1Displ,
     this.h2Displ,
     this.h3Displ,
     String sortKey, {
-    this.isAscending = true,
+    this.topSortAscending = true,
   }) : _sortKey = sortKey.toLowerCase();
 
+  // metaCfg property getters
+  int get groupLevelCount => metaCfg.groupLevelCount;
+  bool get topIsCollapsible => metaCfg.topIsCollapsible;
+  GroupedListOrder get topSortOrder => metaCfg.topSortOrder;
+  DisplayJustification get h1DisplayJust => metaCfg.h1DisplayJust;
+  DisplayJustification? get h2DisplayJust => metaCfg.h2DisplayJust;
+  DisplayJustification? get h3DisplayJust => metaCfg.h3DisplayJust;
+
   static GroupHeaderData noop() {
-    return GroupHeaderData('', '', '', '', isAscending: false);
+    return GroupHeaderData(GroupHeaderMetaCfg.noop(), '', '', '', '',
+        topSortAscending: false);
   }
 
   static GetGroupHeaderLblsFromAssetGameData groupHeaderPayloadConstructor(
     TvGroupCfg groupingRules,
+    GroupHeaderMetaCfg metaCfg,
   ) {
     // returns a func that creates a GroupHeaderData
     // NOT the sort values (comparables) used in sortComparator below
@@ -82,6 +120,7 @@ class GroupHeaderData
       // build data payload to use in group header sorting & display
       // ui builder supports up to 3 levels of grouping
       return GroupHeaderData(
+        metaCfg,
         firstLabelFn(assetDataRow.item1),
         col2Rule == null ? '' : secondLabelFn(assetDataRow.item1),
         col3Rule == null ? '' : thirdLabelFn(assetDataRow.item1),
@@ -125,48 +164,53 @@ class GroupHeaderData
     };
   }
 
-  static ConfigDefinedSortComparator rowSortComparatorFromCfg(
-    TvSortCfg sr, [
-    bool sortAsc = false,
-  ]) {
+  static ConfigDefinedSortComparator rowSortComparatorFromCfg(TvSortCfg stCfg) {
     // return the function that performs the sorting logic
-    // WITHIN groups;  this does NOT sort-order the groups
+    // WITHIN groups;  even if only one (eg no grouping) group
+    // this does NOT sort-order the groups
     // GroupHeaderData (comparable._sortKey) controls groups
-    firstValFn(AssetRowPropertyIfc row) {
-      if (sr.item1 == null) return '';
-      return row.sortValueExtractor(sr.item1!.colName);
+
+    if (stCfg.disableSorting) return (rec1, rec2) => 0;
+
+    bool l1SortAsc = stCfg.item1?.asc ?? true;
+    Comparable firstValFn(AssetRowPropertyIfc row) {
+      if (stCfg.item1 == null) return '';
+      return row.sortValueExtractor(stCfg.item1!.colName);
     }
 
-    SortFilterEntry? col2Rule = sr.item2;
+    SortFilterEntry? col2Rule = stCfg.item2;
     // CastRowToSortVal
-    secondValFn(AssetRowPropertyIfc row) {
+    Comparable secondValFn(AssetRowPropertyIfc row) {
       if (col2Rule == null) return '';
       return row.sortValueExtractor(col2Rule.colName);
     }
 
-    SortFilterEntry? col3Rule = sr.item3;
+    SortFilterEntry? col3Rule = stCfg.item3;
     // CastRowToSortVal
-    thirdValFn(AssetRowPropertyIfc row) {
+    Comparable thirdValFn(AssetRowPropertyIfc row) {
       if (col3Rule == null) return '';
       return row.sortValueExtractor(col3Rule.colName);
     }
 
     return (TableviewDataRowTuple rec1, TableviewDataRowTuple rec2) {
-      // works off the 1st asset or game (2nd asset is ignored)
+      /* function to handle row sorting based on config rules
+      works off the 1st asset or game (2nd asset is ignored)
+
+      */
       Comparable row1SortVal1 = firstValFn(rec1.item1);
       var r2v1 = firstValFn(rec2.item1);
-      int comp1;
-      if (sortAsc) {
-        comp1 = row1SortVal1.compareTo(r2v1);
+      int compResultsLvl1;
+      if (l1SortAsc) {
+        compResultsLvl1 = row1SortVal1.compareTo(r2v1);
       } else {
-        comp1 = r2v1.compareTo(row1SortVal1);
+        compResultsLvl1 = r2v1.compareTo(row1SortVal1);
       }
-      if (comp1 != 0 || col2Rule == null) return comp1;
+      if (compResultsLvl1 != 0 || col2Rule == null) return compResultsLvl1;
 
       Comparable r1v2 = secondValFn(rec1.item1);
       Comparable r2v2 = secondValFn(rec2.item1);
       int comp2;
-      if (sortAsc) {
+      if (stCfg.item2?.asc ?? true) {
         comp2 = r1v2.compareTo(r2v2);
       } else {
         comp2 = r2v2.compareTo(r1v2);
@@ -175,7 +219,7 @@ class GroupHeaderData
 
       Comparable r1v3 = thirdValFn(rec1.item1);
       Comparable r2v3 = thirdValFn(rec2.item1);
-      if (sortAsc) {
+      if (stCfg.item3?.asc ?? true) {
         return r1v3.compareTo(r2v3);
       } else {
         return r2v3.compareTo(r1v3);
@@ -186,7 +230,7 @@ class GroupHeaderData
   @override
   int compareTo(GroupHeaderData other) {
     // add natural sort order to this class
-    if (isAscending) {
+    if (topSortAscending) {
       return _sortKey.compareTo(other._sortKey);
     } else {
       return other._sortKey.compareTo(_sortKey);
