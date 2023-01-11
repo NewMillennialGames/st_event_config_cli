@@ -45,7 +45,7 @@ typedef TableviewDataRowTuple = Tuple4<AssetRowPropertyIfc,
 typedef GetGroupHeaderLblsFromAssetGameData = GroupHeaderData Function(
     TableviewDataRowTuple);
 
-typedef SectionSortComparator = int Function(
+typedef ConfigDefinedSortComparator = int Function(
     TableviewDataRowTuple, TableviewDataRowTuple);
 
 typedef SortValFetcherFunc = Comparable<dynamic> Function(AssetRowPropertyIfc);

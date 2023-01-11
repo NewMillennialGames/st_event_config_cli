@@ -54,8 +54,7 @@ class GroupedTableDataMgr {
     if (sortingRules.disableSorting) {
       return _rowsAutoSortedByTradable(_filteredAssetRows);
     }
-    // TODO:  add config based sorting here
-    return _rowsAutoSortedByTradable(_filteredAssetRows);
+    return List.of(_filteredAssetRows)..sort(sortItemComparator);
   }
 
   TvGroupCfg? get groupRules => _tableViewCfg.groupByRules;
@@ -99,8 +98,7 @@ class GroupedTableDataMgr {
   // groupHeaderBuilder is function to return header widget
   // defining groupHeaderBuilder will cause groupSeparatorBuilder to be ignored
   GroupHeaderBuilder get groupHeaderBuilder {
-    if (_disableAllGrouping || groupBy == null)
-      return (_) => const SizedBox.shrink();
+    if (disableAllGrouping) return (_) => const SizedBox.shrink();
 
     // copy groupBy getter to save a lookup
     final TvAreaRowStyle rowStyle = _tableViewCfg.rowStyle;
@@ -134,9 +132,12 @@ class GroupedTableDataMgr {
         return _tableViewCfg.rowConstructor(assets, onTap: onTap);
       };
 
-  // for sorting recs into order WITHIN groups/sections
-  SectionSortComparator get itemComparator => GroupHeaderData.sortComparator(
-      sortingRules, sortOrder == GroupedListOrder.ASC);
+  // for sorting TableviewDataRowTuple rows into config defined sort order
+  ConfigDefinedSortComparator get sortItemComparator =>
+      GroupHeaderData.sortComparator(
+        sortingRules,
+        sortOrder == GroupedListOrder.ASC,
+      );
 
   bool get hasColumnFilters {
     return filterRules?.item1 != null && !_disableAllGrouping;
@@ -469,6 +470,7 @@ class GroupedTableDataMgr {
   }) {
     if (disableAllGrouping) {
       // normal sorted list
+      // List<TableviewDataRowTuple> sortedListData;
       return _AssetRowsSortedListView(
         onRefresh: onRefresh,
         assets: sortedListData,
@@ -498,7 +500,7 @@ class GroupedTableDataMgr {
         groupHeaderBuilder: groupHeaderBuilder,
         rowBuilder: indexedItemBuilder,
         groupComparator: groupComparator,
-        assets: sortedListData,
+        assets: _filteredAssetRows,
       );
     }
   }
