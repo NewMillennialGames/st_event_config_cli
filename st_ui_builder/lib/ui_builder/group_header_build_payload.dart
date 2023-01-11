@@ -7,7 +7,7 @@ part of StUiController;
     provide data to build the header-row Widgets in the table-view
 */
 class GroupHeaderMetaCfg {
-  //
+  // meta-data for ALL group header rows
   final int groupLevelCount;
   final bool topIsCollapsible;
   final GroupedListOrder topSortOrder;

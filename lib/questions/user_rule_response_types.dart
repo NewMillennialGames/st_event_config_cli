@@ -186,17 +186,24 @@ class TvSortGroupFilterBase<T extends SortFilterEntry>
   ) : super(rt);
   //
 
-  @override
-  void _castToRealTypes(List<PairedQuestAndResp> userResponses) {
-    throw UnimplementedError(
-        'implement in subclass for different answer counts');
-  }
+  bool get configEmpty => fieldList.length < 1;
+  DbTableFieldName get l1ColName =>
+      configEmpty ? DbTableFieldName.imageUrl : fieldList.first.colName;
+  DbTableFieldName? get l2ColName =>
+      fieldList.length < 2 ? null : item2!.colName;
+  DbTableFieldName? get l3ColName =>
+      fieldList.length < 3 ? null : item3!.colName;
 
   T? get item1 => fieldList.length > 0 ? fieldList.first : null;
   T? get item2 => fieldList.length > 1 ? fieldList[1] : null;
   T? get item3 => fieldList.length > 2 ? fieldList[2] : null;
 
-  DbTableFieldName? get firstColName => item1?.colName;
+  @override
+  void _castToRealTypes(List<PairedQuestAndResp> userResponses) {
+    throw UnimplementedError(
+      'implement in subclass for different answer counts',
+    );
+  }
 
   @override
   String toString() {
@@ -263,7 +270,7 @@ class TvSortCfg extends TvSortGroupFilterBase<SortFilterEntry> {
     // );
   }
 
-  bool get disableSorting => fieldList.length < 1;
+  bool get disableSorting => configEmpty;
 
   SortFilterEntry? get first => fieldList.length < 1 ? null : fieldList.first;
   SortFilterEntry? get second => fieldList.length < 2 ? null : fieldList[1];
@@ -283,7 +290,7 @@ class TvFilterCfg extends TvSortGroupFilterBase<SortFilterEntry> {
   */
   TvFilterCfg() : super(VisualRuleType.filterCfg);
   //
-  bool get disableFiltering => fieldList.length < 1;
+  bool get disableFiltering => configEmpty;
 
   @override
   void _castToRealTypes(List<PairedQuestAndResp> userResponses) {
@@ -344,10 +351,10 @@ class TvGroupCfg extends TvSortGroupFilterBase<GroupCfgEntry> {
     // throw UnimplementedError('when constructed?');
   }
   //
-  bool get disableGrouping => fieldList.length < 1;
+  bool get disableGrouping => configEmpty;
 
   DisplayJustification get h1Justification => disableGrouping
-      ? DisplayJustification.left
+      ? DisplayJustification.center
       : fieldList.first.justification;
 
   DisplayJustification? get h2Justification =>
@@ -364,6 +371,11 @@ class TvGroupCfg extends TvSortGroupFilterBase<GroupCfgEntry> {
       disableGrouping ? false : fieldList.first.collapsible;
 
   bool get sortAscending => disableGrouping ? false : fieldList.first.asc;
+
+  void removeColName(DbTableFieldName colName) {
+    // TODO:
+    // fieldList = fieldList.map((e) => e).toList();
+  }
 
   @override
   void _castToRealTypes(List<PairedQuestAndResp> userResponses) {

@@ -19,6 +19,7 @@ class TableviewConfigPayload {
   final TvFilterCfg? filterRules;
   final TvGroupCfg? groupByRules;
 
+  // this tableview only has one asset per row
   bool alwaysReturnSingleTradableRowBuilder = false;
 
   TableviewConfigPayload(
@@ -59,11 +60,10 @@ class TableviewConfigPayload {
   void endGeographicGrouping() {
     // games now happening between/across regions
     // so it not longer makes sense to group or sort geographically
-    print('called endGeographicGrouping;  not yet implemented');
-    // sortRules.removeByField(DbTableFieldName.competitionLocation);
-    // groupByRules.removeByField(DbTableFieldName.competitionLocation);
 
-    // groupByRules.item1.colName = null;
+    // print('called endGeographicGrouping;  not yet implemented');
+    // sortRules.removeByField(DbTableFieldName.competitionLocation);
+    groupByRules?.removeColName(DbTableFieldName.competitionLocation);
   }
 
   TvRowBuilder get rowConstructor {

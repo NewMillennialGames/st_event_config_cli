@@ -6,7 +6,7 @@ typedef TvRowBuilder = Widget Function(
   TableviewDataRowTuple, {
   Function(TableviewDataRowTuple)? onTap,
 });
-typedef GroupHeaderBuilder = Widget Function(TableviewDataRowTuple);
+typedef GroupHeaderWidgetBuilder = Widget Function(TableviewDataRowTuple);
 typedef GroupSepRowBuilder = Widget Function(GroupHeaderData);
 
 typedef RedrawTvCallback = void Function();

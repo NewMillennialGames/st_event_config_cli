@@ -46,8 +46,8 @@ class GroupedTableDataMgr {
         // sortOrder = ascending ? GroupedListOrder.ASC : GroupedListOrder.DESC,
         _filteredAssetRows = _allAssetRows.toList();
 
-  Map<String, List<TableviewDataRowTuple>>? get rowsGroupedByTitles =>
-      _groupRowsByTitle(_filteredAssetRows);
+  Map<String, List<TableviewDataRowTuple>>? get rowsGroupedByTopConfig =>
+      _groupRowsBasedOnCfgTopColName(_filteredAssetRows);
 
   List<TableviewDataRowTuple> get sortedListData {
     if (sortingRules.disableSorting) {
@@ -67,7 +67,7 @@ class GroupedTableDataMgr {
 
   bool get disableAllGrouping => _disableAllGrouping
       ? _disableAllGrouping
-      : (groupRules?.fieldList ?? []).isEmpty;
+      : (groupRules?.disableGrouping ?? true);
 
   set disableAllGrouping(bool groupsOff) {
     _disableAllGrouping = groupsOff;
@@ -86,16 +86,16 @@ class GroupedTableDataMgr {
       filterRules?.item3?.colName.name ??
       '';
 
-  GetGroupHeaderLblsFromAssetGameData? get groupBy {
+  GetGroupHeaderLblsFromAssetGameData? get groupHeaderPayloadBuilder {
     /* return function to build group header data payload
       from each row of data (1 or 2 assets)
-
+      includes GroupHeaderMetaCfg to drive UI layout
     */
-    if (_tableViewCfg.groupByRules == null) {
+    if (groupRules == null) {
       return null;
     }
 
-    final metaCfg = GroupHeaderMetaCfg(
+    final headerMetaCfg = GroupHeaderMetaCfg(
       topGroupIsCollapsible,
       topSortOrder,
       h1DisplayJust: groupRules?.h1Justification ?? DisplayJustification.center,
@@ -104,19 +104,20 @@ class GroupedTableDataMgr {
     );
 
     return GroupHeaderData.groupHeaderPayloadConstructor(
-      _tableViewCfg.groupByRules!,
-      metaCfg,
+      groupRules!,
+      headerMetaCfg,
     );
   }
 
   // groupHeaderBuilder is function to return header widget
   // defining groupHeaderBuilder will cause groupSeparatorBuilder to be ignored
-  GroupHeaderBuilder get groupHeaderBuilder {
+  GroupHeaderWidgetBuilder get groupHeaderWidgetBuilder {
     if (disableAllGrouping) return (_) => const SizedBox.shrink();
 
     // copy groupBy getter to save a lookup
     final TvAreaRowStyle rowStyle = _tableViewCfg.rowStyle;
-    final GetGroupHeaderLblsFromAssetGameData gbFunc = groupBy!;
+    final GetGroupHeaderLblsFromAssetGameData gbFunc =
+        groupHeaderPayloadBuilder!;
     return (TableviewDataRowTuple rowData) => TvGroupHeader(
           rowStyle,
           appScreen,
@@ -126,7 +127,7 @@ class GroupedTableDataMgr {
 
   // natural sorting will use my Comparator; dont need this
   // GroupComparatorCallback? get groupComparator => null;
-  GroupComparatorCallback? get groupComparator {
+  GroupComparatorCallback? get groupHeaderSortComparator {
     // GroupHeaderData implements comparable
     if (disableAllGrouping) return null;
 
@@ -144,7 +145,7 @@ class GroupedTableDataMgr {
         BuildContext ctx,
         TableviewDataRowTuple assets,
         int i, {
-        Function(TableviewDataRowTuple)? onTap,
+        void Function(TableviewDataRowTuple)? onTap,
       }) {
         return _tableViewCfg.rowConstructor(assets, onTap: onTap);
       };
@@ -265,6 +266,11 @@ class GroupedTableDataMgr {
     DbTableFieldName fieldName,
     String? titleName,
   ) {
+    /* configurator NOW allows setting
+      filter-menu title
+      so this func only applies as failover
+      if config value is empty or missing
+    */
     bool isTeam = false;
     if (_allAssetRows.isNotEmpty) {
       isTeam = _allAssetRows.first.item1.isTeam;
@@ -301,6 +307,9 @@ class GroupedTableDataMgr {
   }
 
   List<AssetRowPropertyIfc> _getSortedAssetRows(DbTableFieldName colName) {
+    /*
+
+    */
     List<AssetRowPropertyIfc> rows = [];
 
     for (var row in _allAssetRows) {
@@ -338,7 +347,7 @@ class GroupedTableDataMgr {
 
   Set<String> _getListItemsByCfgField(SortFilterEntry filterItem) {
     /* build title and values for filter menu dropdown list
-
+      return set of strings
     */
     List<AssetRowPropertyIfc> sortedAssetRows =
         _getSortedAssetRows(filterItem.colName);
@@ -354,39 +363,55 @@ class GroupedTableDataMgr {
 
   ///If groupings exist, this will arrange rows into groups
   ///and return a map of `groupTitle -> rows`
-  Map<String, List<TableviewDataRowTuple>>? _groupRowsByTitle(
+  Map<String, List<TableviewDataRowTuple>>? _groupRowsBasedOnCfgTopColName(
     List<TableviewDataRowTuple> rows,
   ) {
-    /*
+    /*  this method ONLY applies when using top-level groupings
+
       I think this is a mistake;  should use config to decide WHICH
       field causes the rows to group together ..
 
     */
+
+    if (groupRules?.disableGrouping ?? true) return null;
+
+    bool usingServerGroupings =
+        groupRules?.item1?.colName == DbTableFieldName.basedOnEventDelimiters;
+
     if (rows.isEmpty ||
-        (rows.isNotEmpty && rows.first.item1.groupName == null)) {
+        (usingServerGroupings && rows.first.item1.groupName == null)) {
       return null;
     }
 
-    rows = _rowsAutoSortedByTradable(rows);
+    // not sure why we need to sort here??
+    // if (groupRules?.disableGrouping ?? true) {
+    //   rows = _rowsAutoSortedByTradable(rows);
+    // } else {
+    //   rows = [];
+    // }
+
+    Set<String> l1GroupHeaders = {};
+    for (var drt in rows) {}
 
     Map<String, List<TableviewDataRowTuple>> rowsMap = {};
 
-    for (var row in rows) {
-      if (row.item1.groupName == null) continue;
+    // for (var row in rows) {
+    //   if (row.item1.groupName == null) continue;
 
-      if (rowsMap[row.item1.groupName] == null) {
-        rowsMap[row.item1.groupName!] = [row];
-      } else {
-        final tempRows = rowsMap[row.item1.groupName!]!;
-        rowsMap[row.item1.groupName!] = [...tempRows, row];
-      }
-    }
+    //   if (rowsMap[row.item1.groupName] == null) {
+    //     rowsMap[row.item1.groupName!] = [row];
+    //   } else {
+    //     final tempRows = rowsMap[row.item1.groupName!]!;
+    //     rowsMap[row.item1.groupName!] = [...tempRows, row];
+    //   }
+    // }
 
     return rowsMap;
   }
 
   List<TableviewDataRowTuple> _rowsAutoSortedByTradable(
-      List<TableviewDataRowTuple> rows) {
+    List<TableviewDataRowTuple> rows,
+  ) {
     List<TableviewDataRowTuple> nonTradeableRows = [];
     List<TableviewDataRowTuple> tradeableRows = [];
 
@@ -498,27 +523,29 @@ class GroupedTableDataMgr {
         scrollController: scrollController,
       );
     } else if (topGroupIsCollapsible) {
-      // groups WITH collapsing headers
+      // grouped list WITH collapsing headers
       return _ExpandableGroupedAssetRowsListView(
         onRefresh: onRefresh,
         scrollController: scrollController,
         onRowTapped: onRowTapped,
-        groupBy: groupBy ?? (TableviewDataRowTuple _) => GroupHeaderData.noop(),
-        groupHeaderBuilder: groupHeaderBuilder,
+        groupBy: groupHeaderPayloadBuilder ??
+            (TableviewDataRowTuple _) => GroupHeaderData.noop(),
+        groupHeaderBuilder: groupHeaderWidgetBuilder,
         rowBuilder: indexedItemBuilder,
-        groupComparator: groupComparator,
-        groupedAssets: rowsGroupedByTitles ?? {},
+        groupComparator: groupHeaderSortComparator,
+        groupedAssets: rowsGroupedByTopConfig ?? {},
       );
     } else {
-      // groups without collapsing headers
+      // grouped list without collapsing headers
       return _AssetRowsGroupedListView(
         onRefresh: onRefresh,
         scrollController: scrollController,
         onRowTapped: onRowTapped,
-        groupBy: groupBy ?? (TableviewDataRowTuple _) => GroupHeaderData.noop(),
-        groupHeaderBuilder: groupHeaderBuilder,
+        groupBy: groupHeaderPayloadBuilder ??
+            (TableviewDataRowTuple _) => GroupHeaderData.noop(),
+        groupHeaderBuilder: groupHeaderWidgetBuilder,
         rowBuilder: indexedItemBuilder,
-        groupComparator: groupComparator,
+        groupComparator: groupHeaderSortComparator,
         assets: _filteredAssetRows,
       );
     }
@@ -530,7 +557,7 @@ class _ExpandableGroupedAssetRowsListView extends StatefulWidget {
   final ScrollController? scrollController;
   final GetGroupHeaderLblsFromAssetGameData groupBy;
   final GroupComparatorCallback? groupComparator;
-  final GroupHeaderBuilder groupHeaderBuilder;
+  final GroupHeaderWidgetBuilder groupHeaderBuilder;
   final IndexedItemRowBuilder rowBuilder;
   final Function(TableviewDataRowTuple)? onRowTapped;
   final Map<String, List<TableviewDataRowTuple>> groupedAssets;
@@ -620,7 +647,7 @@ class _AssetRowsGroupedListView extends StatelessWidget {
   final List<TableviewDataRowTuple> assets;
   final GetGroupHeaderLblsFromAssetGameData groupBy;
   final GroupComparatorCallback? groupComparator;
-  final GroupHeaderBuilder groupHeaderBuilder;
+  final GroupHeaderWidgetBuilder groupHeaderBuilder;
   final IndexedItemRowBuilder rowBuilder;
   final Function(TableviewDataRowTuple)? onRowTapped;
   final bool scrollable;

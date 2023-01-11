@@ -179,21 +179,23 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
               totAvailWidth: MediaQuery.of(context).size.width,
               backColor: StColors.primaryDarkGray,
             ),
-            if (!tvMgr.disableAllGrouping && tvMgr.groupBy != null)
+            if (!tvMgr.disableAllGrouping &&
+                tvMgr.groupHeaderPayloadBuilder != null)
               SizedBox(
                 height: 520.h,
                 child: GroupedListView<TableviewDataRowTuple, GroupHeaderData>(
                   elements: tvMgr.sortedListData,
-                  groupBy: tvMgr.groupBy!,
-                  groupHeaderBuilder: tvMgr.groupHeaderBuilder,
+                  groupBy: tvMgr.groupHeaderPayloadBuilder!,
+                  groupHeaderBuilder: tvMgr.groupHeaderWidgetBuilder,
                   indexedItemBuilder: tvMgr.indexedItemBuilder,
                   sort: true,
                   useStickyGroupSeparators: true,
                   // next line should not be needed??
-                  groupComparator: tvMgr.groupComparator,
+                  groupComparator: tvMgr.groupHeaderSortComparator,
                 ),
               ),
-            if (tvMgr.disableAllGrouping || tvMgr.groupBy == null)
+            if (tvMgr.disableAllGrouping ||
+                tvMgr.groupHeaderPayloadBuilder == null)
               // TODO:  should return a normal listView;  not GroupedListView
               SizedBox(
                 height: 520.h,
