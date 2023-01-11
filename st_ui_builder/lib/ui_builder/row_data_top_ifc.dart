@@ -170,6 +170,8 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
         return rankStr;
       case DbTableFieldName.assetPosition:
         return position;
+      case DbTableFieldName.basedOnEventDelimiters:
+        return "";
       default:
         return '_dfltProp';
     }
@@ -208,6 +210,8 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
         return rank;
       case DbTableFieldName.assetPosition:
         return position;
+      case DbTableFieldName.basedOnEventDelimiters:
+        return "";
       default:
         return '_dfltProp';
     }
