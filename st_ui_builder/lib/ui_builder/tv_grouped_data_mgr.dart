@@ -32,7 +32,7 @@ class GroupedTableDataMgr {
   GroupedListOrder sortOrder = GroupedListOrder.ASC;
   // rows actually rendered from _filteredAssetRows
   List<TableviewDataRowTuple> _filteredAssetRows = [];
-  bool disableAllGrouping = false;
+  bool _disableAllGrouping = false;
   // disableGroupingBeyondDate: regions no longer matter when you get to final 4
   bool disableGroupingBeyondDate = false;
 
@@ -41,18 +41,36 @@ class GroupedTableDataMgr {
     this._allAssetRows,
     this._tableViewCfg, {
     this.redrawCallback,
-    this.disableAllGrouping = false,
+    bool disableAllGrouping = false,
     bool ascending = true,
-  })  : sortOrder = ascending ? GroupedListOrder.ASC : GroupedListOrder.DESC,
+  })  : _disableAllGrouping = disableAllGrouping,
+        sortOrder = ascending ? GroupedListOrder.ASC : GroupedListOrder.DESC,
         _filteredAssetRows = _allAssetRows.toList();
 
   Map<String, List<TableviewDataRowTuple>>? get rowsGroupedByTitles =>
       _groupRowsByTitle(_filteredAssetRows);
 
-  List<TableviewDataRowTuple> get listData => _sortRows(_filteredAssetRows);
+  List<TableviewDataRowTuple> get sortedListData {
+    if (sortingRules.disableSorting) {
+      return _rowsAutoSortedByTradable(_filteredAssetRows);
+    }
+    // TODO:  add config based sorting here
+    return _rowsAutoSortedByTradable(_filteredAssetRows);
+  }
+
   TvGroupCfg? get groupRules => _tableViewCfg.groupByRules;
   TvSortCfg get sortingRules => _tableViewCfg.sortRules;
   TvFilterCfg? get filterRules => _tableViewCfg.filterRules;
+
+  bool get groupIsCollapsible => groupRules?.isCollapsible ?? false;
+
+  bool get disableAllGrouping => _disableAllGrouping
+      ? _disableAllGrouping
+      : (groupRules?.fieldList ?? []).isEmpty;
+
+  set disableAllGrouping(bool groupsOff) {
+    _disableAllGrouping = groupsOff;
+  }
 
   String get fm1Title =>
       filterRules?.item1?.menuTitleIfFilter ??
@@ -81,7 +99,7 @@ class GroupedTableDataMgr {
   // groupHeaderBuilder is function to return header widget
   // defining groupHeaderBuilder will cause groupSeparatorBuilder to be ignored
   GroupHeaderBuilder get groupHeaderBuilder {
-    if (disableAllGrouping || groupBy == null)
+    if (_disableAllGrouping || groupBy == null)
       return (_) => const SizedBox.shrink();
 
     // copy groupBy getter to save a lookup
@@ -95,7 +113,7 @@ class GroupedTableDataMgr {
   // GroupComparatorCallback? get groupComparator => null;
   GroupComparatorCallback? get groupComparator {
     // GroupHeaderData implements comparable
-    if (disableAllGrouping || groupBy == null) return null;
+    if (disableAllGrouping) return null;
 
     if (sortOrder == GroupedListOrder.DESC) {
       return (GroupHeaderData hd1Val, GroupHeaderData hd2Val) =>
@@ -121,7 +139,7 @@ class GroupedTableDataMgr {
       sortingRules, sortOrder == GroupedListOrder.ASC);
 
   bool get hasColumnFilters {
-    return filterRules?.item1 != null && !disableAllGrouping;
+    return filterRules?.item1 != null && !_disableAllGrouping;
   }
 
   void endGeographicGrouping() {
@@ -140,7 +158,7 @@ class GroupedTableDataMgr {
     Color backColor = Colors.transparent,
   }) {
     // dont call this method without first checking this.hasColumnFilters
-    if (filterRules == null || disableAllGrouping) {
+    if (filterRules == null || _disableAllGrouping) {
       return const SizedBox.shrink();
     }
 
@@ -329,7 +347,7 @@ class GroupedTableDataMgr {
       return null;
     }
 
-    rows = _sortRows(rows);
+    rows = _rowsAutoSortedByTradable(rows);
 
     Map<String, List<TableviewDataRowTuple>> rowsMap = {};
 
@@ -347,7 +365,8 @@ class GroupedTableDataMgr {
     return rowsMap;
   }
 
-  List<TableviewDataRowTuple> _sortRows(List<TableviewDataRowTuple> rows) {
+  List<TableviewDataRowTuple> _rowsAutoSortedByTradable(
+      List<TableviewDataRowTuple> rows) {
     List<TableviewDataRowTuple> nonTradeableRows = [];
     List<TableviewDataRowTuple> tradeableRows = [];
 
@@ -441,87 +460,47 @@ class GroupedTableDataMgr {
 
   ///ListView of rows typically displayed in MarketView.
   ///This is implemented internally as opposed to just exposing
-  ///the row builder in order to implement the nested grouping structure
-  ///for some rows.
+  ///the row builder in order to implement the nested & collapsible
+  /// grouping structure for some rows.
   Widget assetRowsListView({
     required Future<void> Function() onRefresh,
     ScrollController? scrollController,
     Function(TableviewDataRowTuple)? onRowTapped,
   }) {
-    List<TableviewDataRowTuple>? assets;
-    Map<String, List<TableviewDataRowTuple>>? groupedAssets =
-        rowsGroupedByTitles;
-
-    if (groupedAssets == null) {
-      assets = listData;
-    }
-
-    return _GroupedAssetsListView(
-      onRefresh: onRefresh,
-      scrollController: scrollController,
-      onRowTapped: onRowTapped,
-      groupBy: groupBy ?? (TableviewDataRowTuple _) => GroupHeaderData.noop(),
-      groupHeaderBuilder: groupHeaderBuilder,
-      rowBuilder: indexedItemBuilder,
-      groupComparator: groupComparator,
-      groupedAssets: groupedAssets,
-      assets: assets,
-    );
-  }
-}
-
-class _GroupedAssetsListView extends StatelessWidget {
-  final Future<void> Function() onRefresh;
-  final ScrollController? scrollController;
-  final GetGroupHeaderLblsFromAssetGameData groupBy;
-  final GroupComparatorCallback? groupComparator;
-  final GroupHeaderBuilder groupHeaderBuilder;
-  final IndexedItemRowBuilder rowBuilder;
-  final Function(TableviewDataRowTuple)? onRowTapped;
-  final Map<String, List<TableviewDataRowTuple>>? groupedAssets;
-  final List<TableviewDataRowTuple>? assets;
-
-  const _GroupedAssetsListView({
-    Key? key,
-    required this.onRefresh,
-    required this.groupBy,
-    required this.groupHeaderBuilder,
-    required this.rowBuilder,
-    this.groupedAssets,
-    this.assets,
-    this.onRowTapped,
-    this.scrollController,
-    this.groupComparator,
-  })  : assert(
-          groupedAssets != null || assets != null,
-          "groupedAssets and assets cannot both be null",
-        ),
-        super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    if (groupedAssets != null) {
-      return _ExpandableGroupedAssetRowsListView(
+    if (disableAllGrouping) {
+      // normal sorted list
+      return _AssetRowsSortedListView(
         onRefresh: onRefresh,
-        groupBy: groupBy,
-        groupHeaderBuilder: groupHeaderBuilder,
-        rowBuilder: rowBuilder,
-        groupedAssets: groupedAssets!,
+        assets: sortedListData,
+        rowBuilder: indexedItemBuilder,
         onRowTapped: onRowTapped,
         scrollController: scrollController,
+      );
+    } else if (groupIsCollapsible) {
+      // groups WITH collapsing headers
+      return _ExpandableGroupedAssetRowsListView(
+        onRefresh: onRefresh,
+        scrollController: scrollController,
+        onRowTapped: onRowTapped,
+        groupBy: groupBy ?? (TableviewDataRowTuple _) => GroupHeaderData.noop(),
+        groupHeaderBuilder: groupHeaderBuilder,
+        rowBuilder: indexedItemBuilder,
         groupComparator: groupComparator,
+        groupedAssets: rowsGroupedByTitles ?? {},
+      );
+    } else {
+      // groups without collapsing headers
+      return _AssetRowsGroupedListView(
+        onRefresh: onRefresh,
+        scrollController: scrollController,
+        onRowTapped: onRowTapped,
+        groupBy: groupBy ?? (TableviewDataRowTuple _) => GroupHeaderData.noop(),
+        groupHeaderBuilder: groupHeaderBuilder,
+        rowBuilder: indexedItemBuilder,
+        groupComparator: groupComparator,
+        assets: sortedListData,
       );
     }
-    return _AssetRowsListView(
-      onRefresh: onRefresh,
-      assets: assets!,
-      groupBy: groupBy,
-      groupHeaderBuilder: groupHeaderBuilder,
-      rowBuilder: rowBuilder,
-      onRowTapped: onRowTapped,
-      scrollController: scrollController,
-      groupComparator: groupComparator,
-    );
   }
 }
 
@@ -586,7 +565,7 @@ class _ExpandableGroupedAssetRowsListViewState
                   style: StTextStyles.h4,
                 ),
                 children: [
-                  _AssetRowsListView(
+                  _AssetRowsGroupedListView(
                     scrollable: false,
                     onRefresh: widget.onRefresh,
                     assets: widget.groupedAssets[_groupTitles[i]] ?? [],
@@ -606,7 +585,7 @@ class _ExpandableGroupedAssetRowsListViewState
   }
 }
 
-class _AssetRowsListView extends StatelessWidget {
+class _AssetRowsGroupedListView extends StatelessWidget {
   final Future<void> Function() onRefresh;
   final ScrollController? scrollController;
   final List<TableviewDataRowTuple> assets;
@@ -617,7 +596,7 @@ class _AssetRowsListView extends StatelessWidget {
   final Function(TableviewDataRowTuple)? onRowTapped;
   final bool scrollable;
 
-  const _AssetRowsListView({
+  const _AssetRowsGroupedListView({
     Key? key,
     required this.onRefresh,
     required this.assets,
@@ -672,6 +651,62 @@ class _AssetRowsListView extends StatelessWidget {
                   groupBy(assets[i - 1])._sortKey) ...{
             groupHeaderBuilder(assets[i]),
           },
+          rowBuilder(
+            context,
+            assets[i],
+            i,
+            onTap: onRowTapped,
+          )
+        }
+      ],
+    );
+  }
+}
+
+class _AssetRowsSortedListView extends StatelessWidget {
+  final Future<void> Function() onRefresh;
+  final ScrollController? scrollController;
+  final List<TableviewDataRowTuple> assets;
+  final IndexedItemRowBuilder rowBuilder;
+  final Function(TableviewDataRowTuple)? onRowTapped;
+  final bool scrollable;
+
+  const _AssetRowsSortedListView({
+    Key? key,
+    required this.onRefresh,
+    required this.assets,
+    required this.rowBuilder,
+    this.scrollable = true,
+    this.onRowTapped,
+    this.scrollController,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (scrollable) {
+      return RefreshIndicator(
+        onRefresh: onRefresh,
+        child: ListView.builder(
+          controller: scrollController,
+          key: const PageStorageKey<String>('market-view-list'),
+          physics: const AlwaysScrollableScrollPhysics(),
+          itemCount: assets.length,
+          itemBuilder: (BuildContext ctx, int idx) {
+            return rowBuilder(
+              ctx,
+              assets[idx],
+              idx,
+              onTap: onRowTapped,
+            );
+          },
+          padding: EdgeInsets.only(bottom: 90.h),
+        ),
+      );
+    }
+
+    return Column(
+      children: [
+        for (int i = 0; i < assets.length; i++) ...{
           rowBuilder(
             context,
             assets[i],
@@ -787,3 +822,66 @@ class _DropDownMenuListState extends State<_DropDownMenuList> {
     );
   }
 }
+
+
+
+
+// class _GroupedAssetsListView extends StatelessWidget {
+//   /*  logic should use the:
+//       GroupedTableDataMgr.groupIsCollapsible property
+
+//     group should NOT be collapsible if false
+//   */
+//   final Future<void> Function() onRefresh;
+//   final ScrollController? scrollController;
+//   final GetGroupHeaderLblsFromAssetGameData groupBy;
+//   final GroupComparatorCallback? groupComparator;
+//   final GroupHeaderBuilder groupHeaderBuilder;
+//   final IndexedItemRowBuilder rowBuilder;
+//   final Function(TableviewDataRowTuple)? onRowTapped;
+//   final Map<String, List<TableviewDataRowTuple>>? groupedAssets;
+//   final List<TableviewDataRowTuple>? assets;
+
+//   const _GroupedAssetsListView({
+//     Key? key,
+//     required this.onRefresh,
+//     required this.groupBy,
+//     required this.groupHeaderBuilder,
+//     required this.rowBuilder,
+//     this.groupedAssets,
+//     this.assets,
+//     this.onRowTapped,
+//     this.scrollController,
+//     this.groupComparator,
+//   })  : assert(
+//           groupedAssets != null || assets != null,
+//           "groupedAssets and assets cannot both be null",
+//         ),
+//         super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     if (groupedAssets != null) {
+//       return _ExpandableGroupedAssetRowsListView(
+//         onRefresh: onRefresh,
+//         groupBy: groupBy,
+//         groupHeaderBuilder: groupHeaderBuilder,
+//         rowBuilder: rowBuilder,
+//         groupedAssets: groupedAssets!,
+//         onRowTapped: onRowTapped,
+//         scrollController: scrollController,
+//         groupComparator: groupComparator,
+//       );
+//     }
+//     return _AssetRowsGroupedListView(
+//       onRefresh: onRefresh,
+//       assets: assets!,
+//       groupBy: groupBy,
+//       groupHeaderBuilder: groupHeaderBuilder,
+//       rowBuilder: rowBuilder,
+//       onRowTapped: onRowTapped,
+//       scrollController: scrollController,
+//       groupComparator: groupComparator,
+//     );
+//   }
+// }

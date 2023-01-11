@@ -183,7 +183,7 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
               SizedBox(
                 height: 520.h,
                 child: GroupedListView<TableviewDataRowTuple, GroupHeaderData>(
-                  elements: tvMgr.listData,
+                  elements: tvMgr.sortedListData,
                   groupBy: tvMgr.groupBy!,
                   groupHeaderBuilder: tvMgr.groupHeaderBuilder,
                   indexedItemBuilder: tvMgr.indexedItemBuilder,
