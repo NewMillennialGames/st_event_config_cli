@@ -103,8 +103,11 @@ class GroupedTableDataMgr {
     // copy groupBy getter to save a lookup
     final TvAreaRowStyle rowStyle = _tableViewCfg.rowStyle;
     final GetGroupHeaderLblsFromAssetGameData gbFunc = groupBy!;
-    return (TableviewDataRowTuple rowData) =>
-        TvGroupHeader(rowStyle, appScreen, gbFunc(rowData));
+    return (TableviewDataRowTuple rowData) => TvGroupHeader(
+          rowStyle,
+          appScreen,
+          gbFunc(rowData),
+        );
   }
 
   // natural sorting will use my Comparator; dont need this
@@ -134,7 +137,7 @@ class GroupedTableDataMgr {
 
   // for sorting TableviewDataRowTuple rows into config defined sort order
   ConfigDefinedSortComparator get sortItemComparator =>
-      GroupHeaderData.sortComparator(
+      GroupHeaderData.rowSortComparatorFromCfg(
         sortingRules,
         sortOrder == GroupedListOrder.ASC,
       );
@@ -343,6 +346,11 @@ class GroupedTableDataMgr {
   Map<String, List<TableviewDataRowTuple>>? _groupRowsByTitle(
     List<TableviewDataRowTuple> rows,
   ) {
+    /*
+      I think this is a mistake;  should use config to decide WHICH
+      field causes the rows to group together ..
+
+    */
     if (rows.isEmpty ||
         (rows.isNotEmpty && rows.first.item1.groupName == null)) {
       return null;

@@ -125,7 +125,7 @@ class GroupHeaderData
     };
   }
 
-  static ConfigDefinedSortComparator sortComparator(
+  static ConfigDefinedSortComparator rowSortComparatorFromCfg(
     TvSortCfg sr, [
     bool sortAsc = false,
   ]) {
