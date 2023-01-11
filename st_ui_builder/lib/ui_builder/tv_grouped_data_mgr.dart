@@ -560,10 +560,18 @@ class _ExpandableGroupedAssetRowsListViewState
   void didUpdateWidget(_ExpandableGroupedAssetRowsListView oldWidget) {
     if (oldWidget.groupedAssets != widget.groupedAssets) {
       setState(() {
-        _groupTitles = widget.groupedAssets.keys.toList();
+        final titles = widget.groupedAssets.keys.toList();
+        titles.sort((a, b) => a.compareTo(b));
+        _groupTitles = titles;
       });
     }
     super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _groupTitles.sort((a, b) => a.compareTo(b));
   }
 
   @override
@@ -575,7 +583,7 @@ class _ExpandableGroupedAssetRowsListViewState
         padding: EdgeInsets.only(bottom: 90.h),
         child: Column(
           children: [
-            for (int i = 0; i < widget.groupedAssets.keys.length; i++) ...{
+            for (int i = 0; i < _groupTitles.length; i++) ...{
               ExpansionTile(
                 initiallyExpanded: true,
                 iconColor: Colors.white,
