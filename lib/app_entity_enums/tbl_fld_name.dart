@@ -17,3 +17,16 @@ enum DbTableFieldName {
   assetPosition,
   basedOnEventDelimiters, // aka tournament style (only for groupings)
 }
+
+// deprecated:  use _filterTitleExtractor(i1.colName, i1.menuTitleIfFilter) instead
+// extension DbTableFieldNameExt1 on DbTableFieldName {
+//   //
+//   String get displayName {
+//     switch (this) {
+//       case DbTableFieldName.assetName:
+//         return "Name";
+//       default:
+//         return "";
+//     }
+//   }
+// }

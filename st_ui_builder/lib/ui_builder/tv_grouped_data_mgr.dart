@@ -5,23 +5,22 @@ part of StUiController;
     and arguments needed to build the Widget UI
 
     todo: replace Tuple3 with a reall class
-*/
 
-// final _gameStateProvider = StreamProvider<ActiveGameDetails>(
-//   (ref) => throw UnimplementedError(''),
-// );
+    note to Lucky:
+    technically, the widgets below can server list-views for any screen
+    not just market view;  so is there any harm in naming 
+    the widget key:  "market-view-list"
+*/
 
 class GroupedTableDataMgr {
   /*
     this is the object returned when you want to build
-    a table-view with custom grouping, sorting and row-styles
+    a table-view with custom grouping, sorting, filtering and row-styles
 
-    produces the arguments needed to use the "GroupedListView" package
+   uses the "GroupedListView" package
 
   designed specifically to work with:
     GroupedListView<TableviewDataRowTuple, GroupHeaderData>
-
-  TODO:  all the getters below must be completed to return real methods
   */
 
   final AppScreen appScreen;
@@ -60,12 +59,6 @@ class GroupedTableDataMgr {
   TvSortCfg get sortingRules => _tableViewCfg.sortRules;
   TvFilterCfg? get filterRules => _tableViewCfg.filterRules;
 
-  bool get topGroupIsCollapsible =>
-      (groupRules?.isCollapsible ?? false) && !disableAllGrouping;
-  GroupedListOrder get topSortOrder => (groupRules?.sortAscending ?? true)
-      ? GroupedListOrder.ASC
-      : GroupedListOrder.DESC;
-
   bool get disableAllGrouping => _disableAllGrouping
       ? _disableAllGrouping
       : (groupRules?.disableGrouping ?? true);
@@ -74,18 +67,22 @@ class GroupedTableDataMgr {
     _disableAllGrouping = groupsOff;
   }
 
+  bool get topGroupIsCollapsible =>
+      (groupRules?.isCollapsible ?? false) && !disableAllGrouping;
+  GroupedListOrder get topSortOrder => (groupRules?.sortAscending ?? true)
+      ? GroupedListOrder.ASC
+      : GroupedListOrder.DESC;
+
+  bool get assetTypeIsTeam =>
+      _allAssetRows.isEmpty ? false : _allAssetRows.first.item1.isTeam;
+
+  // filter menu titles
   String get fm1Title =>
-      filterRules?.item1?.menuTitleIfFilter ??
-      filterRules?.item1?.colName.name ??
-      '';
+      filterRules?.item1?.colNameOrFilterMenuTitle(assetTypeIsTeam) ?? "Menu 1";
   String get fm2Title =>
-      filterRules?.item2?.menuTitleIfFilter ??
-      filterRules?.item2?.colName.name ??
-      '';
+      filterRules?.item2?.colNameOrFilterMenuTitle(assetTypeIsTeam) ?? "Menu 2";
   String get fm3Title =>
-      filterRules?.item3?.menuTitleIfFilter ??
-      filterRules?.item3?.colName.name ??
-      '';
+      filterRules?.item3?.colNameOrFilterMenuTitle(assetTypeIsTeam) ?? "Menu 3";
 
   GetGroupHeaderLblsFromAssetGameData? get groupHeaderPayloadBuilder {
     /* return function to build group header data payload
@@ -213,37 +210,31 @@ class GroupedTableDataMgr {
           _DropDownMenuList(
             listItems: listItems1,
             colName: i1.colName,
-            titleName: i1.menuTitleIfFilter ??
-                _filterTitleExtractor(i1.colName, i1.menuTitleIfFilter),
+            titleName: fm1Title,
             curSelection: _filter1Selection,
             valSetter: (s) => _filter1Selection = s,
             width: allocBtnWidth,
             doFilteringFor: _doFilteringFor,
-            // filterTitleExtractor: _filterTitleExtractor,
           ),
           if (has2ndList)
             _DropDownMenuList(
               listItems: listItems2,
               colName: i2.colName,
-              titleName: i2.menuTitleIfFilter ??
-                  _filterTitleExtractor(i2.colName, i2.menuTitleIfFilter),
+              titleName: fm2Title,
               curSelection: _filter2Selection,
               valSetter: (s) => _filter2Selection = s,
               width: allocBtnWidth,
               doFilteringFor: _doFilteringFor,
-              // filterTitleExtractor: _filterTitleExtractor,
             ),
           if (has3rdList)
             _DropDownMenuList(
               listItems: listItems3,
               colName: i3.colName,
-              titleName: i3.menuTitleIfFilter ??
-                  _filterTitleExtractor(i3.colName, i3.menuTitleIfFilter),
+              titleName: fm3Title,
               curSelection: _filter3Selection,
               valSetter: (s) => _filter3Selection = s,
               width: allocBtnWidth,
               doFilteringFor: _doFilteringFor,
-              // filterTitleExtractor: _filterTitleExtractor,
             ),
         ],
       ),
@@ -260,54 +251,6 @@ class GroupedTableDataMgr {
     _filteredAssetRows = assetRows.toList();
     if (redraw && redrawCallback != null) {
       redrawCallback!();
-    }
-  }
-
-  String _filterTitleExtractor(
-    DbTableFieldName fieldName,
-    String? titleName,
-  ) {
-    /* configurator NOW allows setting
-      filter-menu title
-      so this func only applies as failover
-      if config value is empty or missing
-    */
-    bool isTeam = false;
-    if (_allAssetRows.isNotEmpty) {
-      isTeam = _allAssetRows.first.item1.isTeam;
-    }
-    if (titleName != null) return titleName;
-
-    switch (fieldName) {
-      case DbTableFieldName.assetName:
-      case DbTableFieldName.assetShortName:
-        return isTeam ? 'Team' : 'Player';
-      case DbTableFieldName.assetOrgName:
-        return 'Team';
-      case DbTableFieldName.leagueGrouping:
-        return 'Conference';
-      case DbTableFieldName.competitionDate:
-        return 'All Dates';
-      case DbTableFieldName.competitionTime:
-        return 'Game Time';
-      case DbTableFieldName.competitionLocation:
-        return 'Location';
-      case DbTableFieldName.imageUrl:
-        return 'Avatar';
-      case DbTableFieldName.assetOpenPrice:
-        return 'Open Price';
-      case DbTableFieldName.assetCurrentPrice:
-        return 'Current Price';
-      case DbTableFieldName.assetRankOrScore:
-        return 'Rank';
-      case DbTableFieldName.assetPosition:
-        return 'Position';
-      case DbTableFieldName.competitionName:
-        return 'Game Name';
-      case DbTableFieldName.basedOnEventDelimiters:
-        return 'Grouping';
-      // default:
-      //   return '_naLabel';
     }
   }
 
@@ -358,13 +301,13 @@ class GroupedTableDataMgr {
     List<AssetRowPropertyIfc> sortedAssetRows =
         _filterDropDnGetSortedAssetRows(filterItem.colName);
 
-    List<String> labels = [
-      _filterTitleExtractor(filterItem.colName, filterItem.menuTitleIfFilter),
+    List<String> filterMenuItemLabels = [
+      filterItem.colNameOrFilterMenuTitle(assetTypeIsTeam),
       ...sortedAssetRows.map((e) => e.valueExtractor(filterItem.colName)),
     ];
-    labels.removeWhere((label) => label.isEmpty);
-
-    return <String>{...labels};
+    filterMenuItemLabels.removeWhere((label) => label.isEmpty);
+    // return set of strings
+    return <String>{...filterMenuItemLabels};
   }
 
   ///If groupings exist, this will arrange rows into groups
