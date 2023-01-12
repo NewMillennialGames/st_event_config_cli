@@ -60,7 +60,8 @@ class GroupedTableDataMgr {
   TvSortCfg get sortingRules => _tableViewCfg.sortRules;
   TvFilterCfg? get filterRules => _tableViewCfg.filterRules;
 
-  bool get topGroupIsCollapsible => groupRules?.isCollapsible ?? false;
+  bool get topGroupIsCollapsible =>
+      (groupRules?.isCollapsible ?? false) && !disableAllGrouping;
   GroupedListOrder get topSortOrder => (groupRules?.sortAscending ?? true)
       ? GroupedListOrder.ASC
       : GroupedListOrder.DESC;
@@ -306,7 +307,8 @@ class GroupedTableDataMgr {
     }
   }
 
-  List<AssetRowPropertyIfc> _getSortedAssetRows(DbTableFieldName colName) {
+  List<AssetRowPropertyIfc> _filterDropDnGetSortedAssetRows(
+      DbTableFieldName colName) {
     /*
 
     */
@@ -350,7 +352,7 @@ class GroupedTableDataMgr {
       return set of strings
     */
     List<AssetRowPropertyIfc> sortedAssetRows =
-        _getSortedAssetRows(filterItem.colName);
+        _filterDropDnGetSortedAssetRows(filterItem.colName);
 
     List<String> labels = [
       _filterTitleExtractor(filterItem.colName, filterItem.menuTitleIfFilter),
@@ -368,20 +370,30 @@ class GroupedTableDataMgr {
   ) {
     /*  this method ONLY applies when using top-level groupings
 
-      I think this is a mistake;  should use config to decide WHICH
+      use config to decide WHICH
       field causes the rows to group together ..
-
     */
 
     if (groupRules?.disableGrouping ?? true) return null;
 
+    DbTableFieldName topGroupColName =
+        groupRules?.item1?.colName ?? DbTableFieldName.competitionDate;
     bool usingServerGroupings =
-        groupRules?.item1?.colName == DbTableFieldName.basedOnEventDelimiters;
+        topGroupColName == DbTableFieldName.basedOnEventDelimiters;
 
     if (rows.isEmpty ||
         (usingServerGroupings && rows.first.item1.groupName == null)) {
       return null;
     }
+
+    Map<String, List<TableviewDataRowTuple>> rowsMap = {};
+    for (TableviewDataRowTuple drt in rows) {
+      String grpKeyVal = drt.item1.valueExtractor(topGroupColName);
+      List<TableviewDataRowTuple> rowListAtKey = rowsMap[grpKeyVal] ?? [];
+      rowListAtKey.add(drt);
+      rowsMap[grpKeyVal] = rowListAtKey;
+    }
+    return rowsMap;
 
     // not sure why we need to sort here??
     // if (groupRules?.disableGrouping ?? true) {
@@ -390,23 +402,10 @@ class GroupedTableDataMgr {
     //   rows = [];
     // }
 
-    Set<String> l1GroupHeaders = {};
-    for (var drt in rows) {}
-
-    Map<String, List<TableviewDataRowTuple>> rowsMap = {};
-
-    // for (var row in rows) {
-    //   if (row.item1.groupName == null) continue;
-
-    //   if (rowsMap[row.item1.groupName] == null) {
-    //     rowsMap[row.item1.groupName!] = [row];
-    //   } else {
-    //     final tempRows = rowsMap[row.item1.groupName!]!;
-    //     rowsMap[row.item1.groupName!] = [...tempRows, row];
-    //   }
+    // Set<String> l1GroupHeaders = {};
+    // for (TableviewDataRowTuple drt in rows) {
+    //   l1GroupHeaders.add(drt.item1.valueExtractor(topGroupColName));
     // }
-
-    return rowsMap;
   }
 
   List<TableviewDataRowTuple> _rowsAutoSortedByTradable(

@@ -47,6 +47,7 @@ class TvGroupHeader extends StatelessWidget {
         Text(
           headerData.h1Displ,
           style: StTextStyles.h4,
+          textAlign: headerData.h1DisplayJust.toTextAlign,
         ),
 
         if (headerData.h2Displ.isNotEmpty)
@@ -55,6 +56,7 @@ class TvGroupHeader extends StatelessWidget {
             style: StTextStyles.h6.copyWith(
               color: Colors.grey,
             ),
+            textAlign: headerData.h2DisplayJust?.toTextAlign,
           ),
         // Spacer(),
         // Text(headerData.third),

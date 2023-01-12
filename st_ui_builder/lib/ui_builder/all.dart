@@ -1,6 +1,7 @@
 library StUiController;
 
 import 'dart:convert';
+import 'dart:ui';
 // dont remove the following two lines -- they are actually in use in other files
 import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -69,3 +70,5 @@ part 'tv_header_widgets.dart';
 part 'tv_row_data_mgr.dart';
 
 part 'type_def.dart';
+
+part 'extensions.dart';

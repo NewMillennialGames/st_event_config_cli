@@ -149,15 +149,12 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
         return orgNameWhenTradingPlayers;
       case DbTableFieldName.leagueGrouping:
         return leagueGrouping;
-      // case DbTableFieldName.leagueGrouping:
-      //   return leagueGrouping;
+
       case DbTableFieldName.competitionDate:
         return gameDateDtwStr;
       case DbTableFieldName.competitionTime:
         return competitionDate.timeOnly.asTimeOnlyStr;
-      // case DbTableFieldName.eventName:
-      // // this is an error;  we dont have event name on assets
-      //   return topName;
+
       case DbTableFieldName.competitionLocation:
         return location;
       case DbTableFieldName.imageUrl:
@@ -171,9 +168,9 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
       case DbTableFieldName.assetPosition:
         return position;
       case DbTableFieldName.basedOnEventDelimiters:
-        return "";
-      default:
-        return '_dfltProp';
+        return "basedOnEventDelimiters";
+      case DbTableFieldName.competitionName:
+        return groupName ?? "competitionName";
     }
   }
 
@@ -189,15 +186,12 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
         return orgNameWhenTradingPlayers;
       case DbTableFieldName.leagueGrouping:
         return leagueGrouping;
-      // case DbTableFieldName.region:
-      //   return leagueGrouping;
+
       case DbTableFieldName.competitionDate:
         return competitionDate.truncateTime;
       case DbTableFieldName.competitionTime:
         return competitionDate.timeOnly;
-      // case DbTableFieldName.eventName:
-      //   // this is an error;  we dont have event name on assets
-      //   return topName;
+
       case DbTableFieldName.competitionLocation:
         return location;
       case DbTableFieldName.imageUrl:
@@ -211,9 +205,9 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
       case DbTableFieldName.assetPosition:
         return position;
       case DbTableFieldName.basedOnEventDelimiters:
-        return "";
-      default:
-        return '_dfltProp';
+        return "basedOnEventDelimiters";
+      case DbTableFieldName.competitionName:
+        return groupName ?? "competitionName";
     }
   }
 }
