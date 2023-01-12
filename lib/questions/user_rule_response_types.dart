@@ -137,6 +137,51 @@ class SortFilterEntry {
 
   SortFilterEntry(this.colName, this.asc, {this.menuTitleIfFilter});
 
+  String colNameOrFilterMenuTitle([bool isTeam = true]) {
+    /* configurator NOW allows setting
+      filter-menu title
+      so this func only applies as failover
+      if config value is empty or missing
+    */
+
+    if (menuTitleIfFilter != null && menuTitleIfFilter!.isNotEmpty)
+      return menuTitleIfFilter!;
+
+    // if (fieldName == null) return "_fld_title";
+
+    switch (this.colName) {
+      case DbTableFieldName.assetName:
+      case DbTableFieldName.assetShortName:
+        return isTeam ? 'Team' : 'Player';
+      case DbTableFieldName.assetOrgName:
+        return 'Team';
+      case DbTableFieldName.leagueGrouping:
+        return 'Conference';
+      case DbTableFieldName.competitionDate:
+        return 'All Dates';
+      case DbTableFieldName.competitionTime:
+        return 'Game Time';
+      case DbTableFieldName.competitionLocation:
+        return 'Location';
+      case DbTableFieldName.imageUrl:
+        return 'Avatar';
+      case DbTableFieldName.assetOpenPrice:
+        return 'Open Price';
+      case DbTableFieldName.assetCurrentPrice:
+        return 'Current Price';
+      case DbTableFieldName.assetRankOrScore:
+        return 'Rank';
+      case DbTableFieldName.assetPosition:
+        return 'Position';
+      case DbTableFieldName.competitionName:
+        return 'Game Name';
+      case DbTableFieldName.basedOnEventDelimiters:
+        return 'Grouping';
+      // default:
+      //   return '_naLabel';
+    }
+  }
+
   bool get sortingDisabled => colName == DbTableFieldName.imageUrl;
 
   @override
