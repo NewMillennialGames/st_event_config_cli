@@ -302,8 +302,12 @@ class GroupedTableDataMgr {
         return 'Rank';
       case DbTableFieldName.assetPosition:
         return 'Position';
-      default:
-        return '_naLabel';
+      case DbTableFieldName.competitionName:
+        return 'Game Name';
+      case DbTableFieldName.basedOnEventDelimiters:
+        return 'Grouping';
+      // default:
+      //   return '_naLabel';
     }
   }
 
