@@ -89,7 +89,7 @@ class GroupedTableDataMgr {
       from each row of data (1 or 2 assets)
       includes GroupHeaderMetaCfg to drive UI layout
     */
-    if (groupRules == null) {
+    if (groupRules == null || groupRules!.disableGrouping) {
       return null;
     }
 
@@ -104,6 +104,7 @@ class GroupedTableDataMgr {
     return GroupHeaderData.groupHeaderPayloadConstructor(
       groupRules!,
       headerMetaCfg,
+      assetTypeIsTeam,
     );
   }
 
@@ -125,7 +126,7 @@ class GroupedTableDataMgr {
 
   // natural sorting will use my Comparator; dont need this
   // GroupComparatorCallback? get groupComparator => null;
-  GroupComparatorCallback? get groupHeaderSortComparator {
+  GroupHeaderSortCompareCallback? get groupHeaderSortComparator {
     // GroupHeaderData implements comparable
     if (disableAllGrouping) return null;
 
@@ -254,44 +255,49 @@ class GroupedTableDataMgr {
     }
   }
 
-  List<AssetRowPropertyIfc> _filterDropDnGetSortedAssetRows(
-      DbTableFieldName colName) {
-    /*
-
+  List<AssetRowPropertyIfc> _filterDropDnGetDistinctAssets(
+    DbTableFieldName colName, {
+    bool sortList = false,
+  }) {
+    /*  called by a method that returns an UNORDERED set
+      so sorting would normally be a waste of time
     */
-    List<AssetRowPropertyIfc> rows = [];
+    List<AssetRowPropertyIfc> assetRows = [];
 
-    for (var row in _allAssetRows) {
-      rows.add(row.item1);
+    for (TableviewDataRowTuple row in _allAssetRows) {
+      assetRows.add(row.item1);
       if (row.item2 != null) {
-        rows.add(row.item2!);
+        assetRows.add(row.item2!);
       }
     }
 
-    //perform sorting based on actual value types
-    //for non String values rather than on labels
-    switch (colName) {
-      case DbTableFieldName.competitionDate:
-      case DbTableFieldName.competitionTime:
-        rows.sort((a, b) => a.competitionDate.compareTo(b.competitionDate));
-        break;
+    if (sortList) {
+      //perform sorting based on actual value types
+      //for non String values rather than on labels
+      switch (colName) {
+        case DbTableFieldName.competitionDate:
+        case DbTableFieldName.competitionTime:
+          assetRows
+              .sort((a, b) => a.competitionDate.compareTo(b.competitionDate));
+          break;
 
-      case DbTableFieldName.assetOpenPrice:
-      case DbTableFieldName.assetCurrentPrice:
-      case DbTableFieldName.assetRankOrScore:
-        rows.sort((a, b) {
-          num item1Value = num.parse(a.valueExtractor(colName));
-          num item2Value = num.parse(b.valueExtractor(colName));
-          return item1Value.compareTo(item2Value);
-        });
-        break;
-      default:
-        rows.sort((a, b) => a.valueExtractor(colName).compareTo(
-              b.valueExtractor(colName),
-            ));
+        case DbTableFieldName.assetOpenPrice:
+        case DbTableFieldName.assetCurrentPrice:
+        case DbTableFieldName.assetRankOrScore:
+          assetRows.sort((a, b) {
+            num item1Value = num.parse(a.valueExtractor(colName));
+            num item2Value = num.parse(b.valueExtractor(colName));
+            return item1Value.compareTo(item2Value);
+          });
+          break;
+        default:
+          assetRows.sort((a, b) => a.valueExtractor(colName).compareTo(
+                b.valueExtractor(colName),
+              ));
+      }
     }
 
-    return rows;
+    return assetRows;
   }
 
   Set<String> _getListItemsByCfgField(SortFilterEntry filterItem) {
@@ -299,7 +305,7 @@ class GroupedTableDataMgr {
       return set of strings
     */
     List<AssetRowPropertyIfc> sortedAssetRows =
-        _filterDropDnGetSortedAssetRows(filterItem.colName);
+        _filterDropDnGetDistinctAssets(filterItem.colName);
 
     List<String> filterMenuItemLabels = [
       filterItem.colNameOrFilterMenuTitle(assetTypeIsTeam),
@@ -333,14 +339,15 @@ class GroupedTableDataMgr {
       return null;
     }
 
-    Map<String, List<TableviewDataRowTuple>> rowsMap = {};
+    Map<String, List<TableviewDataRowTuple>> rowsGroupingMap = {};
     for (TableviewDataRowTuple drt in rows) {
       String grpKeyVal = drt.item1.valueExtractor(topGroupColName);
-      List<TableviewDataRowTuple> rowListAtKey = rowsMap[grpKeyVal] ?? [];
+      List<TableviewDataRowTuple> rowListAtKey =
+          rowsGroupingMap[grpKeyVal] ?? [];
       rowListAtKey.add(drt);
-      rowsMap[grpKeyVal] = rowListAtKey;
+      rowsGroupingMap[grpKeyVal] = rowListAtKey;
     }
-    return rowsMap;
+    return rowsGroupingMap;
 
     // not sure why we need to sort here??
     // if (groupRules?.disableGrouping ?? true) {
@@ -394,8 +401,9 @@ class GroupedTableDataMgr {
     if ([fm1Title, fm2Title, fm3Title].contains(selectedVal)) {
       // sloppy test above;  prob creates a bug
       // .toUpperCase() == colName.name.toUpperCase()
-      _currentFilters
-          .removeWhere((selection) => selection.filterColumn == colName);
+      _currentFilters.removeWhere(
+        (selection) => selection.filterColumn == colName,
+      );
 
       if (_currentFilters.isEmpty) {
         clearFilters();
@@ -405,7 +413,7 @@ class GroupedTableDataMgr {
 
     List<TableviewDataRowTuple> filterResults = [];
 
-    for (var asset in _allAssetRows) {
+    for (TableviewDataRowTuple asset in _allAssetRows) {
       bool added = false;
       for (var filter in _currentFilters) {
         if (asset.item1.valueExtractor(filter.filterColumn) ==
@@ -456,7 +464,7 @@ class GroupedTableDataMgr {
   Widget assetRowsListView({
     required Future<void> Function() onRefresh,
     ScrollController? scrollController,
-    Function(TableviewDataRowTuple)? onRowTapped,
+    void Function(TableviewDataRowTuple)? onRowTapped,
   }) {
     if (disableAllGrouping) {
       // normal sorted list
@@ -502,7 +510,7 @@ class _ExpandableGroupedAssetRowsListView extends StatefulWidget {
   final Future<void> Function() onRefresh;
   final ScrollController? scrollController;
   final GetGroupHeaderLblsFromAssetGameData groupBy;
-  final GroupComparatorCallback? groupComparator;
+  final GroupHeaderSortCompareCallback? groupComparator;
   final GroupHeaderWidgetBuilder groupHeaderBuilder;
   final IndexedItemRowBuilder rowBuilder;
   final Function(TableviewDataRowTuple)? onRowTapped;
@@ -592,7 +600,7 @@ class _AssetRowsGroupedListView extends StatelessWidget {
   final ScrollController? scrollController;
   final List<TableviewDataRowTuple> assets;
   final GetGroupHeaderLblsFromAssetGameData groupBy;
-  final GroupComparatorCallback? groupComparator;
+  final GroupHeaderSortCompareCallback? groupComparator;
   final GroupHeaderWidgetBuilder groupHeaderBuilder;
   final IndexedItemRowBuilder rowBuilder;
   final Function(TableviewDataRowTuple)? onRowTapped;

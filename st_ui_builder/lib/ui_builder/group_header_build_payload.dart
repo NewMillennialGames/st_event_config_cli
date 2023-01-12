@@ -7,7 +7,7 @@ part of StUiController;
     provide data to build the header-row Widgets in the table-view
 */
 class GroupHeaderMetaCfg {
-  // meta-data for ALL group header rows
+  // meta-data for ALL grouped header rows
   final int groupLevelCount;
   final bool topIsCollapsible;
   final GroupedListOrder topSortOrder;
@@ -43,7 +43,7 @@ class GroupHeaderData
   final String _sortKey;
   final bool topSortAscending;
 
-  GroupHeaderData(
+  GroupHeaderData._(
     this.metaCfg,
     this.h1Displ,
     this.h2Displ,
@@ -61,33 +61,35 @@ class GroupHeaderData
   DisplayJustification? get h3DisplayJust => metaCfg.h3DisplayJust;
 
   static GroupHeaderData noop() {
-    return GroupHeaderData(GroupHeaderMetaCfg.noop(), '', '', '', '',
+    return GroupHeaderData._(GroupHeaderMetaCfg.noop(), '', '', '', '',
         topSortAscending: false);
   }
 
   static GetGroupHeaderLblsFromAssetGameData groupHeaderPayloadConstructor(
-    TvGroupCfg groupingRules,
-    GroupHeaderMetaCfg metaCfg,
-  ) {
+      TvGroupCfg groupingRules,
+      GroupHeaderMetaCfg metaCfg,
+      bool assetTypeIsTeam) {
     // returns a func that creates a GroupHeaderData
     // NOT the sort values (comparables) used in sortComparator below
 
-    firstLabelFn(AssetRowPropertyIfc row) {
-      if (groupingRules.item1 == null) return '';
+    String firstHeaderLblFn(AssetRowPropertyIfc row) {
+      if (groupingRules.item1 == null) return 'H1';
       return row.valueExtractor(groupingRules.item1!.colName);
     }
 
     GroupCfgEntry? col2Rule = groupingRules.item2;
+    assert(col2Rule != null || metaCfg.groupLevelCount < 2, "oops");
     // CastRowToSortVal
-    secondLabelFn(AssetRowPropertyIfc row) {
-      if (col2Rule == null) return '';
+    String secondLabelFn(AssetRowPropertyIfc row) {
+      if (col2Rule == null) return 'H2';
       return row.valueExtractor(col2Rule.colName);
     }
 
     GroupCfgEntry? col3Rule = groupingRules.item3;
+    assert(col3Rule != null || metaCfg.groupLevelCount < 3, "oops");
     // CastRowToSortVal
-    thirdLabelFn(AssetRowPropertyIfc row) {
-      if (col3Rule == null) return '';
+    String thirdLabelFn(AssetRowPropertyIfc row) {
+      if (col3Rule == null) return 'H3';
       return row.valueExtractor(col3Rule.colName);
     }
 
@@ -110,7 +112,7 @@ class GroupHeaderData
     }
 
     // sorting happens from vals on Game or first asset (2nd asset ignored when 2)
-    SortKeyBuilderFunc sortKeyFunction = _sortKeyBuilderFnc(
+    SortKeyBuilderFunc sortKeyGenFunction = _sortKeyBuilderFnc(
       firstValFn,
       secondValFn,
       thirdValFn,
@@ -119,12 +121,12 @@ class GroupHeaderData
     return (TableviewDataRowTuple assetDataRow) {
       // build data payload to use in group header sorting & display
       // ui builder supports up to 3 levels of grouping
-      return GroupHeaderData(
+      return GroupHeaderData._(
         metaCfg,
-        firstLabelFn(assetDataRow.item1),
+        firstHeaderLblFn(assetDataRow.item1),
         col2Rule == null ? '' : secondLabelFn(assetDataRow.item1),
         col3Rule == null ? '' : thirdLabelFn(assetDataRow.item1),
-        sortKeyFunction(assetDataRow),
+        sortKeyGenFunction(assetDataRow),
       );
     };
   }
@@ -134,17 +136,18 @@ class GroupHeaderData
     SortValFetcherFunc sVal2,
     SortValFetcherFunc sVal3,
   ) {
+    // return function to generate sort-key for GroupHeaderData
     return (TableviewDataRowTuple r) {
       // temp debug code to see values
       Comparable<dynamic> cd1 = sVal1(r.item1);
-      var cd2 = sVal2(r.item1);
-      var cd3 = sVal3(r.item1);
+      Comparable<dynamic> cd2 = sVal2(r.item1);
+      Comparable<dynamic> cd3 = sVal3(r.item1);
 
       Comparable<dynamic> v1 =
           (cd1 is DateTime) ? cd1.truncateTime.microsecondsSinceEpoch : cd1;
-      var v2 =
+      Comparable<dynamic> v2 =
           (cd2 is DateTime) ? cd2.truncateTime.microsecondsSinceEpoch : cd2;
-      var v3 =
+      Comparable<dynamic> v3 =
           (cd3 is DateTime) ? cd3.truncateTime.microsecondsSinceEpoch : cd3;
 
       String sortKey = '${v1}_${v2}_$v3';
@@ -241,5 +244,5 @@ class GroupHeaderData
   List<Object?> get props => [_sortKey];
 
   // static GroupHeaderData get mockRow =>
-  //     GroupHeaderData('first', 'second', 'third');
+  //     GroupHeaderData._('first', 'second', 'third');
 }

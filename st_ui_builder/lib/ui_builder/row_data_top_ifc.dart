@@ -188,7 +188,8 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
         return leagueGrouping;
 
       case DbTableFieldName.competitionDate:
-        return competitionDate.truncateTime;
+        return (competitionDate.truncateTime.microsecondsSinceEpoch / 1000)
+            .round();
       case DbTableFieldName.competitionTime:
         return competitionDate.timeOnly;
 

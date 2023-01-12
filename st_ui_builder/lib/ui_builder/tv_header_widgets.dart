@@ -39,8 +39,7 @@ class TvGroupHeader extends StatelessWidget {
   }
 
   Widget _rowStyleToHeaderStyle() {
-    // TODO:  finish this below
-    // temp placeholder UI
+    // TODO:  finish this below;  not handling 3rd group level
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -56,26 +55,13 @@ class TvGroupHeader extends StatelessWidget {
             style: StTextStyles.h6.copyWith(
               color: Colors.grey,
             ),
-            textAlign: headerData.h2DisplayJust?.toTextAlign,
+            textAlign:
+                headerData.h2DisplayJust?.toTextAlign ?? TextAlign.center,
           ),
         // Spacer(),
         // Text(headerData.third),
       ],
     );
-
-    // TODO:  finish this
-    switch (rowStyle) {
-      case TvAreaRowStyle.assetVsAsset:
-      case TvAreaRowStyle.assetVsAssetRanked:
-        return Row(
-          children: [
-            Text(headerData.h1Displ),
-            Text(headerData.h2Displ),
-            Text(headerData.h3Displ),
-          ],
-        );
-    }
-    return Row();
   }
 }
 
