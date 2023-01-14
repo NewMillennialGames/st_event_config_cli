@@ -68,18 +68,25 @@ class GroupHeaderData
   DisplayJustification? get h2DisplayJust => metaCfg.h2DisplayJust;
   DisplayJustification? get h3DisplayJust => metaCfg.h3DisplayJust;
 
+  // adjust vals below to adjust header height depending upon which level is shown
+  // proportional font-size for each header level
+  double get _h1PropFontSize => h1Displ.isEmpty ? 0 : 2.8;
+  double get _h2PropFontSize => h2Displ.isEmpty ? 0 : 2.2;
+  double get _h3PropFontSize => h3Displ.isEmpty ? 0 : 1.6;
+  // below allows group header widget to adjust it's height based on which group level shown here
+  double get rowHeightAdjustmentForHidden =>
+      _h1PropFontSize + _h2PropFontSize + _h3PropFontSize;
+
   void patchFromPriorIfExists() {
     if (metaCfg.hasPrevRow) {
-      removeDupVals(metaCfg._previousHeadRow!);
+      hideDupVals(metaCfg._previousHeadRow!);
     }
     metaCfg.rememberPrevRowData(this);
   }
 
-  int get rowHeightBasedOnHiddenVals => 20;
-
-  void removeDupVals(GroupHeaderData prevGrpHeaderData) {
+  void hideDupVals(GroupHeaderData prevGrpHeaderData) {
     // remove dup vals from prior header rows
-    // TODO:  add some logic to change header size (eg rowHeightBasedOnHiddenVals)
+    // TODO:  add some logic to change header size (eg rowHeightAdjustmentForHidden)
     if (h1Displ == prevGrpHeaderData.h1Displ) {
       h1Displ = "";
     }

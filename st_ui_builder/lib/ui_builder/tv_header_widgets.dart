@@ -26,13 +26,9 @@ class TvGroupHeader extends StatelessWidget {
     if (headerData.h1Displ.isEmpty && headerData.h2Displ.isEmpty) {
       return const SizedBox.shrink();
     }
-    double height = 0;
-    if (headerData.h1Displ.isNotEmpty) {
-      height += 39;
-    }
-    if (headerData.h2Displ.isNotEmpty) {
-      height += 39;
-    }
+
+    // NOTE:  to adjust row-height, tweak the font-size ratios in rowHeightAdjustmentForHidden
+    double height = headerData.rowHeightAdjustmentForHidden * 14;
 
     return Container(
       height: height.h,
