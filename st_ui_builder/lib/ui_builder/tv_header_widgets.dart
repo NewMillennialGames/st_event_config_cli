@@ -4,17 +4,21 @@ part of StUiController;
 
 
 */
+
 class TvGroupHeader extends StatelessWidget {
   // standard group header widget
   final TvAreaRowStyle rowStyle;
   final AppScreen appScreen;
   final GroupHeaderData headerData;
-  const TvGroupHeader(
+  TvGroupHeader(
     this.rowStyle,
     this.appScreen,
     this.headerData, {
     Key? key,
-  }) : super(key: key);
+  }) : super(key: key) {
+    // hide values that are repeats from prior header rows
+    headerData.patchFromPriorIfExists();
+  }
 
   @override
   Widget build(BuildContext context) {

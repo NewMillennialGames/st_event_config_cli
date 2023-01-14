@@ -7,13 +7,15 @@ part of StUiController;
     provide data to build the header-row Widgets in the table-view
 */
 class GroupHeaderMetaCfg {
-  // meta-data for ALL grouped header rows
+  // meta-data shared across ALL grouped header rows
   final int groupLevelCount;
   final bool topIsCollapsible;
   final GroupedListOrder topSortOrder;
   final DisplayJustification h1DisplayJust;
   final DisplayJustification? h2DisplayJust;
   final DisplayJustification? h3DisplayJust;
+
+  GroupHeaderData? _previousHeadRow;
 
   GroupHeaderMetaCfg(
     this.topIsCollapsible,
@@ -23,12 +25,18 @@ class GroupHeaderMetaCfg {
     this.h3DisplayJust,
   }) : groupLevelCount = 1;
 
+  bool get hasPrevRow => _previousHeadRow != null;
+
   static GroupHeaderMetaCfg noop() {
     return GroupHeaderMetaCfg(
       false,
       GroupedListOrder.ASC,
       h1DisplayJust: DisplayJustification.center,
     );
+  }
+
+  void rememberPrevRowData(GroupHeaderData? previousHeadRow) {
+    _previousHeadRow = previousHeadRow;
   }
 }
 
@@ -37,9 +45,9 @@ class GroupHeaderData
     implements Comparable<GroupHeaderData> {
   //
   final GroupHeaderMetaCfg metaCfg;
-  final String h1Displ;
-  final String h2Displ;
-  final String h3Displ;
+  String h1Displ;
+  String h2Displ;
+  String h3Displ;
   final String _sortKey;
   final bool topSortAscending;
 
@@ -59,6 +67,29 @@ class GroupHeaderData
   DisplayJustification get h1DisplayJust => metaCfg.h1DisplayJust;
   DisplayJustification? get h2DisplayJust => metaCfg.h2DisplayJust;
   DisplayJustification? get h3DisplayJust => metaCfg.h3DisplayJust;
+
+  void patchFromPriorIfExists() {
+    if (metaCfg.hasPrevRow) {
+      removeDupVals(metaCfg._previousHeadRow!);
+    }
+    metaCfg.rememberPrevRowData(this);
+  }
+
+  int get rowHeightBasedOnHiddenVals => 20;
+
+  void removeDupVals(GroupHeaderData prevGrpHeaderData) {
+    // remove dup vals from prior header rows
+    // TODO:  add some logic to change header size (eg rowHeightBasedOnHiddenVals)
+    if (h1Displ == prevGrpHeaderData.h1Displ) {
+      h1Displ = "";
+    }
+    if (h2Displ == prevGrpHeaderData.h2Displ) {
+      h2Displ = "";
+    }
+    if (h3Displ == prevGrpHeaderData.h3Displ) {
+      h3Displ = "";
+    }
+  }
 
   static GroupHeaderData noop() {
     return GroupHeaderData._(GroupHeaderMetaCfg.noop(), '', '', '', '',

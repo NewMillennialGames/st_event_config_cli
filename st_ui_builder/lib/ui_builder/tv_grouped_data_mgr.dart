@@ -117,11 +117,15 @@ class GroupedTableDataMgr {
     final TvAreaRowStyle rowStyle = _tableViewCfg.rowStyle;
     final GetGroupHeaderLblsFromAssetGameData gbFunc =
         groupHeaderPayloadBuilder!;
-    return (TableviewDataRowTuple rowData) => TvGroupHeader(
-          rowStyle,
-          appScreen,
-          gbFunc(rowData),
-        );
+    return (TableviewDataRowTuple rowData) {
+      //
+
+      return TvGroupHeader(
+        rowStyle,
+        appScreen,
+        gbFunc(rowData),
+      );
+    };
   }
 
   // natural sorting will use my Comparator; dont need this
