@@ -128,8 +128,7 @@ class GroupedTableDataMgr {
     };
   }
 
-  // natural sorting will use my Comparator; dont need this
-  // GroupComparatorCallback? get groupComparator => null;
+  // natural sorting will use Comparator on GroupHeaderData
   GroupHeaderSortCompareCallback? get groupHeaderSortComparator {
     // GroupHeaderData implements comparable
     if (disableAllGrouping) return null;
@@ -486,7 +485,7 @@ class GroupedTableDataMgr {
         onRefresh: onRefresh,
         scrollController: scrollController,
         onRowTapped: onRowTapped,
-        groupBy: groupHeaderPayloadBuilder ??
+        groupByHeadDataCallback: groupHeaderPayloadBuilder ??
             (TableviewDataRowTuple _) => GroupHeaderData.noop(),
         groupHeaderBuilder: groupHeaderWidgetBuilder,
         rowBuilder: indexedItemBuilder,
@@ -513,7 +512,7 @@ class GroupedTableDataMgr {
 class _ExpandableGroupedAssetRowsListView extends StatefulWidget {
   final Future<void> Function() onRefresh;
   final ScrollController? scrollController;
-  final GetGroupHeaderLblsFromAssetGameData groupBy;
+  final GetGroupHeaderLblsFromAssetGameData groupByHeadDataCallback;
   final GroupHeaderSortCompareCallback? groupComparator;
   final GroupHeaderWidgetBuilder groupHeaderBuilder;
   final IndexedItemRowBuilder rowBuilder;
@@ -523,7 +522,7 @@ class _ExpandableGroupedAssetRowsListView extends StatefulWidget {
   const _ExpandableGroupedAssetRowsListView({
     Key? key,
     required this.onRefresh,
-    required this.groupBy,
+    required this.groupByHeadDataCallback,
     required this.groupHeaderBuilder,
     required this.rowBuilder,
     required this.groupedAssets,
@@ -539,6 +538,7 @@ class _ExpandableGroupedAssetRowsListView extends StatefulWidget {
 
 class _ExpandableGroupedAssetRowsListViewState
     extends State<_ExpandableGroupedAssetRowsListView> {
+  //
   late List<String> _groupTitles = widget.groupedAssets.keys.toList();
 
   @override
@@ -574,16 +574,21 @@ class _ExpandableGroupedAssetRowsListViewState
                 iconColor: Colors.white,
                 collapsedIconColor: Colors.white,
                 textColor: Colors.white,
+                // Justifiication here is automatically LEFT; ignores user-cfg
                 title: Text(
-                  _groupTitles[i],
+                  _groupTitles[i], // collapsible header value
                   style: StTextStyles.h4,
                 ),
                 children: [
+                  // because grp config-metadata shows "collapsible"
+                  // the header data rows created by groupByHeadDataCallback
+                  // will OFFSET label values so they are not duplicated
+                  // on the header row
                   _AssetRowsGroupedListView(
                     scrollable: false,
                     onRefresh: widget.onRefresh,
                     assets: widget.groupedAssets[_groupTitles[i]] ?? [],
-                    groupBy: widget.groupBy,
+                    groupBy: widget.groupByHeadDataCallback,
                     groupComparator: widget.groupComparator,
                     groupHeaderBuilder: widget.groupHeaderBuilder,
                     rowBuilder: widget.rowBuilder,
@@ -836,9 +841,6 @@ class _DropDownMenuListState extends State<_DropDownMenuList> {
     );
   }
 }
-
-
-
 
 // class _GroupedAssetsListView extends StatelessWidget {
 //   /*  logic should use the:

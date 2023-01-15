@@ -10,6 +10,7 @@ class TvGroupHeader extends StatelessWidget {
   final TvAreaRowStyle rowStyle;
   final AppScreen appScreen;
   final GroupHeaderData headerData;
+  //
   TvGroupHeader(
     this.rowStyle,
     this.appScreen,
@@ -23,7 +24,7 @@ class TvGroupHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // standard group header widget
-    if (headerData.h1Displ.isEmpty && headerData.h2Displ.isEmpty) {
+    if (headerData.allLabelsAreEmpty) {
       return const SizedBox.shrink();
     }
 
@@ -43,23 +44,30 @@ class TvGroupHeader extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Text(
-          headerData.h1Displ,
-          style: StTextStyles.h4,
-          textAlign: headerData.h1DisplayJust.toTextAlign,
-        ),
-
+        if (headerData.h1Displ.isNotEmpty)
+          Text(
+            headerData.h1Displ,
+            style: StTextStyles.h4,
+            textAlign: headerData.h1DisplayJust.toTextAlign,
+          ),
         if (headerData.h2Displ.isNotEmpty)
           Text(
             headerData.h2Displ,
-            style: StTextStyles.h6.copyWith(
+            style: StTextStyles.h4.copyWith(
               color: Colors.grey,
             ),
             textAlign:
                 headerData.h2DisplayJust?.toTextAlign ?? TextAlign.center,
           ),
-        // Spacer(),
-        // Text(headerData.third),
+        if (headerData.h3Displ.isNotEmpty)
+          Text(
+            headerData.h3Displ,
+            style: StTextStyles.h6.copyWith(
+              color: Colors.grey,
+            ),
+            textAlign:
+                headerData.h3DisplayJust?.toTextAlign ?? TextAlign.center,
+          ),
       ],
     );
   }

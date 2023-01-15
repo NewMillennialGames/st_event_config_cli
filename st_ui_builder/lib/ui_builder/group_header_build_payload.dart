@@ -45,56 +45,71 @@ class GroupHeaderData
     implements Comparable<GroupHeaderData> {
   //
   final GroupHeaderMetaCfg metaCfg;
-  String h1Displ;
-  String h2Displ;
-  String h3Displ;
+  String _h1Displ;
+  String _h2Displ;
+  String _h3Displ;
   final String _sortKey;
   final bool topSortAscending;
 
   GroupHeaderData._(
     this.metaCfg,
-    this.h1Displ,
-    this.h2Displ,
-    this.h3Displ,
+    this._h1Displ,
+    this._h2Displ,
+    this._h3Displ,
     String sortKey, {
     this.topSortAscending = true,
   }) : _sortKey = sortKey.toLowerCase();
 
+  // shift values for collapsible rows
+  String get h1Displ => topIsCollapsible ? _h2Displ : _h1Displ;
+  String get h2Displ => topIsCollapsible ? _h3Displ : _h2Displ;
+  String get h3Displ => topIsCollapsible ? "" : _h3Displ;
+  String get collapsibleAreaLabel => topIsCollapsible ? _h1Displ : "";
+
   // metaCfg property getters
   int get groupLevelCount => metaCfg.groupLevelCount;
   bool get topIsCollapsible => metaCfg.topIsCollapsible;
+
   GroupedListOrder get topSortOrder => metaCfg.topSortOrder;
-  DisplayJustification get h1DisplayJust => metaCfg.h1DisplayJust;
-  DisplayJustification? get h2DisplayJust => metaCfg.h2DisplayJust;
-  DisplayJustification? get h3DisplayJust => metaCfg.h3DisplayJust;
+  bool get allLabelsAreEmpty =>
+      _h1Displ.isEmpty && _h2Displ.isEmpty && _h3Displ.isEmpty;
+
+  DisplayJustification get h1DisplayJust => topIsCollapsible
+      ? (metaCfg.h2DisplayJust ?? DisplayJustification.center)
+      : metaCfg.h1DisplayJust;
+  DisplayJustification? get h2DisplayJust =>
+      topIsCollapsible ? metaCfg.h3DisplayJust : metaCfg.h2DisplayJust;
+  DisplayJustification? get h3DisplayJust =>
+      topIsCollapsible ? metaCfg.h3DisplayJust : metaCfg.h3DisplayJust;
 
   // adjust vals below to adjust header height depending upon which level is shown
-  // proportional font-size for each header level
+  // proportional font-size for each header level; dont use private vars here
   double get _h1PropFontSize => h1Displ.isEmpty ? 0 : 2.8;
-  double get _h2PropFontSize => h2Displ.isEmpty ? 0 : 2.2;
-  double get _h3PropFontSize => h3Displ.isEmpty ? 0 : 1.6;
+  double get _h2PropFontSize => h2Displ.isEmpty ? 0 : 2.4;
+  double get _h3PropFontSize => h3Displ.isEmpty ? 0 : 2.0;
   // below allows group header widget to adjust it's height based on which group level shown here
   double get rowHeightAdjustmentForHidden =>
       _h1PropFontSize + _h2PropFontSize + _h3PropFontSize;
 
   void patchFromPriorIfExists() {
+    // call AFTER list of this is SORTED
     if (metaCfg.hasPrevRow) {
-      hideDupVals(metaCfg._previousHeadRow!);
+      _hideDupVals(metaCfg._previousHeadRow!);
     }
     metaCfg.rememberPrevRowData(this);
   }
 
-  void hideDupVals(GroupHeaderData prevGrpHeaderData) {
+  void _hideDupVals(GroupHeaderData prevGrpHeaderData) {
     // remove dup vals from prior header rows
     // TODO:  add some logic to change header size (eg rowHeightAdjustmentForHidden)
-    if (h1Displ == prevGrpHeaderData.h1Displ) {
-      h1Displ = "";
+    if (_h1Displ == prevGrpHeaderData._h1Displ) {
+      _h1Displ = "";
     }
-    if (h2Displ == prevGrpHeaderData.h2Displ) {
-      h2Displ = "";
+    if (_h2Displ == prevGrpHeaderData._h2Displ) {
+      _h2Displ = "";
     }
-    if (h3Displ == prevGrpHeaderData.h3Displ) {
-      h3Displ = "";
+    if (_h3Displ == prevGrpHeaderData._h3Displ) {
+      _h3Displ = "";
     }
   }
 
