@@ -27,7 +27,7 @@ of the UI factory which renders builder functions for:
 // demo example config data
 const String cfgEmpl1 = 'one.json';
 // // cfgEmpl2 seems to be invalid json; replace it to continue testing
-const String cfgEmpl2 = 'two.json';
+const String cfgEmpl2 = 'MarchMadnessC010823.json';
 // const String cfgEmpl3 = 'driverVsField.json';
 // const String cfgEmpl4 = 'two.json';
 
