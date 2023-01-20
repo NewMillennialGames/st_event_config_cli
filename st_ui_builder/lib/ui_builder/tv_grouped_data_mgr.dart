@@ -407,11 +407,12 @@ class GroupedTableDataMgr {
     print("filter menu title #1:  $fm1Title");
     print("filter menu title #2:  $fm2Title");
     print("filter menu title #3:  $fm3Title");
-    if ([fm1Title, fm2Title, fm3Title].contains(selectedVal)) {
+    if (selectedVal.isEmpty ||
+        [fm1Title, fm2Title, fm3Title].contains(selectedVal)) {
       // sloppy test above;  prob creates a bug
       // .toUpperCase() == colName.name.toUpperCase()
       _currentFilters.removeWhere(
-        (selection) => selection.filterColumn == colName,
+        (selFilter) => selFilter.filterColumn == colName,
       );
 
       if (_currentFilters.isEmpty) {
