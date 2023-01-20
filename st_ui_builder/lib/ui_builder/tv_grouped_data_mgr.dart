@@ -388,6 +388,8 @@ class GroupedTableDataMgr {
 
   final Set<FilterSelection> _currentFilters = {};
 
+  // var xx = _tableViewCfg.filterRules?.item1?.menuTitleIfFilter;
+
   void _doFilteringFor(
     DbTableFieldName colName,
     String selectedVal,
@@ -398,9 +400,13 @@ class GroupedTableDataMgr {
       selectedValue: selectedVal,
     );
     _currentFilters
-        .removeWhere((selection) => selection.filterColumn == colName);
+        .removeWhere((selFilter) => selFilter.filterColumn == colName);
     _currentFilters.add(filterSelection);
 
+    print("selectedVal:  $selectedVal");
+    print("filter menu title #1:  $fm1Title");
+    print("filter menu title #2:  $fm2Title");
+    print("filter menu title #3:  $fm3Title");
     if ([fm1Title, fm2Title, fm3Title].contains(selectedVal)) {
       // sloppy test above;  prob creates a bug
       // .toUpperCase() == colName.name.toUpperCase()
@@ -418,7 +424,7 @@ class GroupedTableDataMgr {
 
     for (TableviewDataRowTuple asset in _allAssetRows) {
       bool added = false;
-      for (var filter in _currentFilters) {
+      for (FilterSelection filter in _currentFilters) {
         if (asset.item1.valueExtractor(filter.filterColumn) ==
                 filter.selectedValue ||
             asset.item2?.valueExtractor(filter.filterColumn) ==
