@@ -168,7 +168,7 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
       case DbTableFieldName.assetPosition:
         return position;
       case DbTableFieldName.basedOnEventDelimiters:
-        return "basedOnEventDelimiters";
+        return groupName ?? "basedOnEventDelimiters";
       case DbTableFieldName.competitionName:
         return groupName ?? "competitionName";
     }
