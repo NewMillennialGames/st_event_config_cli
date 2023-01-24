@@ -11,7 +11,7 @@ class TableRowDataMgr {
 
   final AppScreen appScreen;
   final TableviewConfigPayload _tableViewCfg;
-  List<TableviewDataRowTuple> _allAssetRows;
+  List<TvRowDataContainer> _allAssetRows;
   RedrawTvCallback? redrawCallback;
   GroupedListOrder sortOrder = GroupedListOrder.ASC;
 
@@ -37,7 +37,7 @@ class TableRowDataMgr {
   NoAssetsIndexedItemRowBuilder get rowBuilder => (
         BuildContext ctx,
         int idx, {
-        Function(TableviewDataRowTuple)? onTap,
+        Function(TvRowDataContainer)? onTap,
       }) {
         var asset = _allAssetRows[idx];
         return _tableViewCfg.rowConstructor(asset, onTap: onTap);
@@ -46,7 +46,7 @@ class TableRowDataMgr {
   TvAreaRowStyle get rowStyle => _tableViewCfg.rowStyle;
 
   void setLiveData(
-    Iterable<TableviewDataRowTuple> _assetRows, {
+    Iterable<TvRowDataContainer> _assetRows, {
     bool redraw = false,
   }) {
     /* 

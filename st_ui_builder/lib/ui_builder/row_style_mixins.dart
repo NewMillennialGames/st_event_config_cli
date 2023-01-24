@@ -2,16 +2,16 @@ part of StUiController;
 
 mixin ShowsOneAsset on StBaseTvRowIfc {
   // each row shows ONE competitor
-  AssetRowPropertyIfc get comp1 => assets.item1;
+  AssetRowPropertyIfc get comp1 => assets.team1;
 // StateProvider<ActiveGameDetails> get gameState => assets.item4(assets.item3);
 }
 
 mixin ShowsTwoAssets on StBaseTvRowIfc {
   // only happens on MarketView screen
   // for TeamVsTeam and PlayerVsPlayer
-  AssetRowPropertyIfc get comp1 => assets.item1;
+  AssetRowPropertyIfc get comp1 => assets.team1;
 
-  AssetRowPropertyIfc get comp2 => assets.item2!;
+  AssetRowPropertyIfc get comp2 => assets.team1!;
 
 // ActiveGameDetails get gameStatus => assets.item3;
 }
@@ -38,9 +38,9 @@ mixin RequiresUserPositionProps on StBaseTvRowIfc {
   // not every asset has this data
   // notice the force-unpack of optional below
   AssetHoldingsSummaryIfc get assetHoldingsSummary =>
-      assets.item1.assetHoldingsSummary;
+      assets.team1.assetHoldingsSummary;
 
-  UserEventSummaryIfc get userEventSummary => assets.item1.userEventSummary;
+  UserEventSummaryIfc get userEventSummary => assets.team1.userEventSummary;
 }
 
 // screen areas

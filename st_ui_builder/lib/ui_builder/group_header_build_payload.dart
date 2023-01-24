@@ -171,14 +171,14 @@ class GroupHeaderData
       thirdValFn,
     );
 
-    return (TableviewDataRowTuple assetDataRow) {
+    return (TvRowDataContainer assetDataRow) {
       // build data payload to use in group header sorting & display
       // ui builder supports up to 3 levels of grouping
       return GroupHeaderData._(
         metaCfg,
-        firstHeaderLblFn(assetDataRow.item1),
-        col2Rule == null ? '' : secondLabelFn(assetDataRow.item1),
-        col3Rule == null ? '' : thirdLabelFn(assetDataRow.item1),
+        firstHeaderLblFn(assetDataRow.team1),
+        col2Rule == null ? '' : secondLabelFn(assetDataRow.team1),
+        col3Rule == null ? '' : thirdLabelFn(assetDataRow.team1),
         sortKeyGenFunction(assetDataRow),
       );
     };
@@ -190,11 +190,11 @@ class GroupHeaderData
     SortValFetcherFunc sVal3,
   ) {
     // return function to generate sort-key for GroupHeaderData
-    return (TableviewDataRowTuple r) {
+    return (TvRowDataContainer r) {
       // temp debug code to see values
-      Comparable<dynamic> cd1 = sVal1(r.item1);
-      Comparable<dynamic> cd2 = sVal2(r.item1);
-      Comparable<dynamic> cd3 = sVal3(r.item1);
+      Comparable<dynamic> cd1 = sVal1(r.team1);
+      Comparable<dynamic> cd2 = sVal2(r.team1);
+      Comparable<dynamic> cd3 = sVal3(r.team1);
 
       Comparable<dynamic> v1 =
           (cd1 is DateTime) ? cd1.truncateTime.microsecondsSinceEpoch : cd1;
@@ -248,13 +248,13 @@ class GroupHeaderData
       return row.sortValueExtractor(col3Rule.colName);
     }
 
-    return (TableviewDataRowTuple rec1, TableviewDataRowTuple rec2) {
+    return (TvRowDataContainer rec1, TvRowDataContainer rec2) {
       /* function to handle row sorting based on config rules
       works off the 1st asset or game (2nd asset is ignored)
 
       */
-      Comparable row1SortVal1 = firstValFn(rec1.item1);
-      var r2v1 = firstValFn(rec2.item1);
+      Comparable row1SortVal1 = firstValFn(rec1.team1);
+      var r2v1 = firstValFn(rec2.team1);
       int compResultsLvl1;
       if (l1SortAsc) {
         compResultsLvl1 = row1SortVal1.compareTo(r2v1);
@@ -263,8 +263,8 @@ class GroupHeaderData
       }
       if (compResultsLvl1 != 0 || col2Rule == null) return compResultsLvl1;
 
-      Comparable r1v2 = secondValFn(rec1.item1);
-      Comparable r2v2 = secondValFn(rec2.item1);
+      Comparable r1v2 = secondValFn(rec1.team1);
+      Comparable r2v2 = secondValFn(rec2.team1);
       int comp2;
       if (stCfg.item2?.asc ?? true) {
         comp2 = r1v2.compareTo(r2v2);
@@ -273,8 +273,8 @@ class GroupHeaderData
       }
       if (comp2 != 0 || col3Rule == null) return comp2;
 
-      Comparable r1v3 = thirdValFn(rec1.item1);
-      Comparable r2v3 = thirdValFn(rec2.item1);
+      Comparable r1v3 = thirdValFn(rec1.team1);
+      Comparable r2v3 = thirdValFn(rec2.team1);
       if (stCfg.item3?.asc ?? true) {
         return r1v3.compareTo(r2v3);
       } else {

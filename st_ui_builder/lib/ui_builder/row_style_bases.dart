@@ -14,7 +14,7 @@ const kRowBoxDecor = BoxDecoration(
 
 abstract class StBaseTvRowIfc extends StatelessWidget {
   //
-  final TableviewDataRowTuple assets;
+  final TvRowDataContainer assets;
 
   // ActiveGameDetails get gameStatus; // => assets.item3;
   //
@@ -30,7 +30,7 @@ class StBaseTvRow extends StBaseTvRowIfc {
   // base class for EVERY tableview row
   // on 4 main screens of scoretrader
   const StBaseTvRow(
-    TableviewDataRowTuple assets, {
+    TvRowDataContainer assets, {
     Key? key,
   }) : super(
           assets,
@@ -38,7 +38,7 @@ class StBaseTvRow extends StBaseTvRowIfc {
         );
 
   StateProvider<ActiveGameDetails> get dynStateProv =>
-      assets.item4(assets.item3);
+      assets.rowStateProvBuilder(assets.gameKey);
 
   double get bottomMargin => 0;
 

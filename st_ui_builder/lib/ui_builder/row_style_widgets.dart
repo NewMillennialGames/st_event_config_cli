@@ -41,12 +41,12 @@ class AssetVsAssetRowMktView extends StBaseTvRow
 
   //
   const AssetVsAssetRowMktView(
-    TableviewDataRowTuple assets, {
+    TvRowDataContainer assets, {
     this.onTap,
     Key? key,
   }) : super(assets, key: key);
 
-  final Function(TableviewDataRowTuple)? onTap;
+  final Function(TvRowDataContainer)? onTap;
 
   @override
   double get bottomMargin => 12.h;
@@ -95,12 +95,12 @@ class AssetVsAssetRowMktView extends StBaseTvRow
 class AssetVsAssetRowLeaderBoardView extends StBaseTvRow with ShowsTwoAssets {
   //
   const AssetVsAssetRowLeaderBoardView(
-    TableviewDataRowTuple assets, {
+    TvRowDataContainer assets, {
     this.onTap,
     Key? key,
   }) : super(assets, key: key);
 
-  final Function(TableviewDataRowTuple)? onTap;
+  final Function(TvRowDataContainer)? onTap;
 
   @override
   Widget rowBody(
@@ -125,12 +125,12 @@ class AssetVsAssetRowLeaderBoardView extends StBaseTvRow with ShowsTwoAssets {
 class DriverVsFieldRowLeaderBoardView extends StBaseTvRow with ShowsTwoAssets {
   //
   const DriverVsFieldRowLeaderBoardView(
-    TableviewDataRowTuple assets, {
+    TvRowDataContainer assets, {
     this.onTap,
     Key? key,
   }) : super(assets, key: key);
 
-  final Function(TableviewDataRowTuple)? onTap;
+  final Function(TvRowDataContainer)? onTap;
 
   @override
   Widget rowBody(
@@ -156,12 +156,12 @@ class DriverVsFieldRowLeaderBoardView extends StBaseTvRow with ShowsTwoAssets {
 class TeamPlayerVsFieldLeaderBoardView extends StBaseTvRow with ShowsTwoAssets {
   //
   const TeamPlayerVsFieldLeaderBoardView(
-    TableviewDataRowTuple assets, {
+    TvRowDataContainer assets, {
     this.onTap,
     Key? key,
   }) : super(assets, key: key);
 
-  final Function(TableviewDataRowTuple)? onTap;
+  final Function(TvRowDataContainer)? onTap;
 
   @override
   Widget rowBody(
@@ -190,8 +190,8 @@ class AssetVsAssetRowRankedMktView extends AssetVsAssetRowMktView {
   bool get showRank => true;
 
   const AssetVsAssetRowRankedMktView(
-    TableviewDataRowTuple assets, {
-    Function(TableviewDataRowTuple)? onTap,
+    TvRowDataContainer assets, {
+    Function(TvRowDataContainer)? onTap,
     Key? key,
   }) : super(assets, key: key, onTap: onTap);
 }
@@ -201,12 +201,12 @@ class AssetVsAssetRowRankedMktView extends AssetVsAssetRowMktView {
 
 class DraftPlayerRowMktResearchView extends StBaseTvRow with ShowsOneAsset {
   const DraftPlayerRowMktResearchView(
-    TableviewDataRowTuple assets, {
+    TvRowDataContainer assets, {
     this.onTap,
     Key? key,
   }) : super(assets, key: key);
 
-  final Function(TableviewDataRowTuple)? onTap;
+  final Function(TvRowDataContainer)? onTap;
 
   @override
   Widget rowBody(
@@ -225,12 +225,12 @@ class DraftPlayerRowMktResearchView extends StBaseTvRow with ShowsOneAsset {
 
 class DraftTeamRowMktResearchView extends StBaseTvRow with ShowsOneAsset {
   const DraftTeamRowMktResearchView(
-    TableviewDataRowTuple assets, {
+    TvRowDataContainer assets, {
     this.onTap,
     Key? key,
   }) : super(assets, key: key);
 
-  final Function(TableviewDataRowTuple)? onTap;
+  final Function(TvRowDataContainer)? onTap;
 
   @override
   Widget rowBody(
@@ -249,12 +249,12 @@ class DraftTeamRowMktResearchView extends StBaseTvRow with ShowsOneAsset {
 
 class TeamLineRowMktResearchView extends StBaseTvRow with ShowsOneAsset {
   const TeamLineRowMktResearchView(
-    TableviewDataRowTuple assets, {
+    TvRowDataContainer assets, {
     this.onTap,
     Key? key,
   }) : super(assets, key: key);
 
-  final Function(TableviewDataRowTuple)? onTap;
+  final Function(TvRowDataContainer)? onTap;
 
   @override
   Widget rowBody(
@@ -273,12 +273,12 @@ class TeamLineRowMktResearchView extends StBaseTvRow with ShowsOneAsset {
 class AssetVsAssetRowMktResearchView extends StBaseTvRow with ShowsTwoAssets {
   //
   const AssetVsAssetRowMktResearchView(
-    TableviewDataRowTuple assets, {
+    TvRowDataContainer assets, {
     this.onTap,
     Key? key,
   }) : super(assets, key: key);
 
-  final Function(TableviewDataRowTuple)? onTap;
+  final Function(TvRowDataContainer)? onTap;
 
   @override
   Widget rowBody(
@@ -434,40 +434,40 @@ class AssetVsAssetRowMktResearchView extends StBaseTvRow with ShowsTwoAssets {
 
 class AssetVsAssetRowRankedPortfolioView extends AssetVsAssetRowPortfolioView {
   const AssetVsAssetRowRankedPortfolioView(
-    TableviewDataRowTuple assets, {
-    Function(TableviewDataRowTuple)? onTap,
+    TvRowDataContainer assets, {
+    Function(TvRowDataContainer)? onTap,
     Key? key,
   }) : super(assets, key: key, onTap: onTap);
 }
 
 class TeamVsFieldRowPortfolioView extends AssetVsAssetRowPortfolioView {
   const TeamVsFieldRowPortfolioView(
-    TableviewDataRowTuple assets, {
-    Function(TableviewDataRowTuple)? onTap,
+    TvRowDataContainer assets, {
+    Function(TvRowDataContainer)? onTap,
     Key? key,
   }) : super(assets, key: key, onTap: onTap);
 }
 
 class TeamVsFieldRankedRowPortfolioView extends AssetVsAssetRowPortfolioView {
   const TeamVsFieldRankedRowPortfolioView(
-    TableviewDataRowTuple assets, {
-    Function(TableviewDataRowTuple)? onTap,
+    TvRowDataContainer assets, {
+    Function(TvRowDataContainer)? onTap,
     Key? key,
   }) : super(assets, key: key, onTap: onTap);
 }
 
 class PlayerVsFieldRankedPortfolioView extends AssetVsAssetRowPortfolioView {
   const PlayerVsFieldRankedPortfolioView(
-    TableviewDataRowTuple assets, {
-    Function(TableviewDataRowTuple)? onTap,
+    TvRowDataContainer assets, {
+    Function(TvRowDataContainer)? onTap,
     Key? key,
   }) : super(assets, key: key, onTap: onTap);
 }
 
 class PlayerVsFieldRowPortfolioView extends AssetVsAssetRowPortfolioView {
   const PlayerVsFieldRowPortfolioView(
-    TableviewDataRowTuple assets, {
-    Function(TableviewDataRowTuple)? onTap,
+    TvRowDataContainer assets, {
+    Function(TvRowDataContainer)? onTap,
     Key? key,
   }) : super(assets, key: key, onTap: onTap);
 }
@@ -489,12 +489,12 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
   bool get showHoldingsValue => !showProceeds;
 
   const AssetVsAssetRowPortfolioView(
-    TableviewDataRowTuple assets, {
+    TvRowDataContainer assets, {
     this.onTap,
     Key? key,
   }) : super(assets, key: key);
 
-  final Function(TableviewDataRowTuple)? onTap;
+  final Function(TvRowDataContainer)? onTap;
 
   @override
   Widget rowBody(
@@ -678,8 +678,8 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
 class DriverVsFieldRowPortfolio extends AssetVsAssetRowPortfolioView {
   // this is portfolio POSITIONS
   const DriverVsFieldRowPortfolio(
-    TableviewDataRowTuple assets, {
-    Function(TableviewDataRowTuple)? onTap,
+    TvRowDataContainer assets, {
+    Function(TvRowDataContainer)? onTap,
     Key? key,
   }) : super(assets, key: key, onTap: onTap);
 
@@ -692,8 +692,8 @@ class DriverVsFieldRowPortfolio extends AssetVsAssetRowPortfolioView {
 
 class TeamPlayerVsFieldRowPortfolio extends AssetVsAssetRowPortfolioView {
   const TeamPlayerVsFieldRowPortfolio(
-    TableviewDataRowTuple assets, {
-    Function(TableviewDataRowTuple)? onTap,
+    TvRowDataContainer assets, {
+    Function(TvRowDataContainer)? onTap,
     Key? key,
   }) : super(assets, key: key, onTap: onTap);
 
@@ -704,8 +704,8 @@ class TeamPlayerVsFieldRowPortfolio extends AssetVsAssetRowPortfolioView {
 class AssetVsAssetRowPortfolioHistory extends AssetVsAssetRowPortfolioView {
   //
   const AssetVsAssetRowPortfolioHistory(
-    TableviewDataRowTuple assets, {
-    Function(TableviewDataRowTuple)? onTap,
+    TvRowDataContainer assets, {
+    Function(TvRowDataContainer)? onTap,
     Key? key,
   }) : super(assets, key: key, onTap: onTap);
 
@@ -717,8 +717,8 @@ class AssetVsAssetRankedRowPortfolioHistory
     extends AssetVsAssetRowPortfolioHistory {
   //
   const AssetVsAssetRankedRowPortfolioHistory(
-    TableviewDataRowTuple assets, {
-    Function(TableviewDataRowTuple)? onTap,
+    TvRowDataContainer assets, {
+    Function(TvRowDataContainer)? onTap,
     Key? key,
   }) : super(assets, key: key, onTap: onTap);
 }
@@ -727,8 +727,8 @@ class TeamVsFieldRowPortfolioHistoryView
     extends AssetVsAssetRowPortfolioHistory {
   //
   const TeamVsFieldRowPortfolioHistoryView(
-    TableviewDataRowTuple assets, {
-    Function(TableviewDataRowTuple)? onTap,
+    TvRowDataContainer assets, {
+    Function(TvRowDataContainer)? onTap,
     Key? key,
   }) : super(assets, key: key, onTap: onTap);
 }
@@ -737,8 +737,8 @@ class TeamVsFieldRankedRowPortfolioHistoryView
     extends AssetVsAssetRowPortfolioHistory {
   //
   const TeamVsFieldRankedRowPortfolioHistoryView(
-    TableviewDataRowTuple assets, {
-    Function(TableviewDataRowTuple)? onTap,
+    TvRowDataContainer assets, {
+    Function(TvRowDataContainer)? onTap,
     Key? key,
   }) : super(assets, key: key, onTap: onTap);
 }
@@ -747,8 +747,8 @@ class PlayerVsFieldRowPortfolioHistoryView
     extends AssetVsAssetRowPortfolioHistory {
   //
   const PlayerVsFieldRowPortfolioHistoryView(
-    TableviewDataRowTuple assets, {
-    Function(TableviewDataRowTuple)? onTap,
+    TvRowDataContainer assets, {
+    Function(TvRowDataContainer)? onTap,
     Key? key,
   }) : super(assets, key: key, onTap: onTap);
 }
@@ -757,8 +757,8 @@ class PlayerVsFieldRankedPortfolioHistoryView
     extends AssetVsAssetRowPortfolioHistory {
   //
   const PlayerVsFieldRankedPortfolioHistoryView(
-    TableviewDataRowTuple assets, {
-    Function(TableviewDataRowTuple)? onTap,
+    TvRowDataContainer assets, {
+    Function(TvRowDataContainer)? onTap,
     Key? key,
   }) : super(assets, key: key, onTap: onTap);
 
@@ -770,8 +770,8 @@ class PlayerVsFieldRankedPortfolioHistoryView
 class DriverVsFieldRowPortfolioHistory extends AssetVsAssetRowPortfolioView {
   //
   const DriverVsFieldRowPortfolioHistory(
-    TableviewDataRowTuple assets, {
-    Function(TableviewDataRowTuple)? onTap,
+    TvRowDataContainer assets, {
+    Function(TvRowDataContainer)? onTap,
     Key? key,
   }) : super(assets, key: key, onTap: onTap);
 
@@ -785,8 +785,8 @@ class DriverVsFieldRowPortfolioHistory extends AssetVsAssetRowPortfolioView {
 class TeamPlayerVsFieldRowPortfolioHistory
     extends AssetVsAssetRowPortfolioView {
   const TeamPlayerVsFieldRowPortfolioHistory(
-    TableviewDataRowTuple assets, {
-    Function(TableviewDataRowTuple)? onTap,
+    TvRowDataContainer assets, {
+    Function(TvRowDataContainer)? onTap,
     Key? key,
   }) : super(assets, key: key, onTap: onTap);
 
@@ -815,12 +815,12 @@ class TeamVsFieldRowMktView extends StBaseTvRow
   bool get shouldShrinkParticipantImage => showRanked || isDriverVsField;
 
   const TeamVsFieldRowMktView(
-    TableviewDataRowTuple assets, {
+    TvRowDataContainer assets, {
     this.onTap,
     Key? key,
   }) : super(assets, key: key);
 
-  final Function(TableviewDataRowTuple)? onTap;
+  final Function(TvRowDataContainer)? onTap;
 
   @override
   Widget rowBody(
@@ -936,8 +936,8 @@ class TeamVsFieldRowRankedMktView extends TeamVsFieldRowMktView {
   bool get isPlayerVsFieldRanked => true;
 
   const TeamVsFieldRowRankedMktView(
-    TableviewDataRowTuple assets, {
-    Function(TableviewDataRowTuple)? onTap,
+    TvRowDataContainer assets, {
+    Function(TvRowDataContainer)? onTap,
     Key? key,
   }) : super(assets, key: key, onTap: onTap);
 }
@@ -947,8 +947,8 @@ class TeamPlayerVsFieldRowMktView extends TeamVsFieldRowMktView {
   bool get isTeamPlayerVsField => true;
 
   const TeamPlayerVsFieldRowMktView(
-    TableviewDataRowTuple assets, {
-    Function(TableviewDataRowTuple)? onTap,
+    TvRowDataContainer assets, {
+    Function(TvRowDataContainer)? onTap,
     Key? key,
   }) : super(assets, key: key, onTap: onTap);
 }
@@ -958,16 +958,16 @@ class PlayerVsFieldRankedRowMktView extends TeamVsFieldRowMktView {
   bool get isPlayerVsFieldRanked => true;
 
   const PlayerVsFieldRankedRowMktView(
-    TableviewDataRowTuple assets, {
-    Function(TableviewDataRowTuple)? onTap,
+    TvRowDataContainer assets, {
+    Function(TvRowDataContainer)? onTap,
     Key? key,
   }) : super(assets, key: key, onTap: onTap);
 }
 
 class PlayerVsFieldRowMktView extends TeamVsFieldRowMktView {
   const PlayerVsFieldRowMktView(
-    TableviewDataRowTuple assets, {
-    Function(TableviewDataRowTuple)? onTap,
+    TvRowDataContainer assets, {
+    Function(TvRowDataContainer)? onTap,
     Key? key,
   }) : super(assets, key: key, onTap: onTap);
 }
@@ -980,20 +980,20 @@ class DriverVsFieldRowMktView extends TeamVsFieldRowMktView {
   bool get showRanked => true;
 
   const DriverVsFieldRowMktView(
-    TableviewDataRowTuple assets, {
-    Function(TableviewDataRowTuple)? onTap,
+    TvRowDataContainer assets, {
+    Function(TvRowDataContainer)? onTap,
     Key? key,
   }) : super(assets, key: key, onTap: onTap);
 }
 
 class DraftPlayerRowMktView extends StBaseTvRow with ShowsOneAsset {
   const DraftPlayerRowMktView(
-    TableviewDataRowTuple assets, {
+    TvRowDataContainer assets, {
     this.onTap,
     Key? key,
   }) : super(assets, key: key);
 
-  final Function(TableviewDataRowTuple)? onTap;
+  final Function(TvRowDataContainer)? onTap;
 
   @override
   Widget rowBody(
@@ -1011,12 +1011,12 @@ class DraftPlayerRowMktView extends StBaseTvRow with ShowsOneAsset {
 
 class DraftTeamRowMktView extends StBaseTvRow with ShowsOneAsset {
   const DraftTeamRowMktView(
-    TableviewDataRowTuple assets, {
+    TvRowDataContainer assets, {
     this.onTap,
     Key? key,
   }) : super(assets, key: key);
 
-  final Function(TableviewDataRowTuple)? onTap;
+  final Function(TvRowDataContainer)? onTap;
 
   @override
   Widget rowBody(
@@ -1034,12 +1034,12 @@ class DraftTeamRowMktView extends StBaseTvRow with ShowsOneAsset {
 
 class TeamLineRowMktView extends StBaseTvRow with ShowsOneAsset {
   const TeamLineRowMktView(
-    TableviewDataRowTuple assets, {
+    TvRowDataContainer assets, {
     this.onTap,
     Key? key,
   }) : super(assets, key: key);
 
-  final Function(TableviewDataRowTuple)? onTap;
+  final Function(TvRowDataContainer)? onTap;
 
   @override
   Widget rowBody(
@@ -1056,12 +1056,12 @@ class TeamLineRowMktView extends StBaseTvRow with ShowsOneAsset {
 
 class DraftPlayerRowPortfolioView extends StBaseTvRow with ShowsOneAsset {
   const DraftPlayerRowPortfolioView(
-    TableviewDataRowTuple assets, {
+    TvRowDataContainer assets, {
     this.onTap,
     Key? key,
   }) : super(assets, key: key);
 
-  final Function(TableviewDataRowTuple)? onTap;
+  final Function(TvRowDataContainer)? onTap;
 
   @override
   Widget rowBody(
@@ -1079,12 +1079,12 @@ class DraftPlayerRowPortfolioView extends StBaseTvRow with ShowsOneAsset {
 
 class DraftTeamRowPortfolioView extends StBaseTvRow with ShowsOneAsset {
   const DraftTeamRowPortfolioView(
-    TableviewDataRowTuple assets, {
+    TvRowDataContainer assets, {
     this.onTap,
     Key? key,
   }) : super(assets, key: key);
 
-  final Function(TableviewDataRowTuple)? onTap;
+  final Function(TvRowDataContainer)? onTap;
 
   @override
   Widget rowBody(
@@ -1102,12 +1102,12 @@ class DraftTeamRowPortfolioView extends StBaseTvRow with ShowsOneAsset {
 
 class TeamLineRowPortfolioView extends StBaseTvRow with ShowsOneAsset {
   const TeamLineRowPortfolioView(
-    TableviewDataRowTuple assets, {
+    TvRowDataContainer assets, {
     this.onTap,
     Key? key,
   }) : super(assets, key: key);
 
-  final Function(TableviewDataRowTuple)? onTap;
+  final Function(TvRowDataContainer)? onTap;
 
   @override
   Widget rowBody(
@@ -1125,8 +1125,8 @@ class TeamLineRowPortfolioView extends StBaseTvRow with ShowsOneAsset {
 class TeamLineRowPortfolioHistoryView extends TeamLineRowPortfolioView {
   //
   const TeamLineRowPortfolioHistoryView(
-    TableviewDataRowTuple assets, {
-    Function(TableviewDataRowTuple)? onTap,
+    TvRowDataContainer assets, {
+    Function(TvRowDataContainer)? onTap,
     Key? key,
   }) : super(assets, key: key, onTap: onTap);
 }
@@ -1135,8 +1135,8 @@ class TeamLineRowPortfolioHistoryView extends TeamLineRowPortfolioView {
 class DraftTeamRowPortfolioHistoryView extends DraftTeamRowPortfolioView {
   //
   const DraftTeamRowPortfolioHistoryView(
-    TableviewDataRowTuple assets, {
-    Function(TableviewDataRowTuple)? onTap,
+    TvRowDataContainer assets, {
+    Function(TvRowDataContainer)? onTap,
     Key? key,
   }) : super(assets, key: key, onTap: onTap);
 }
@@ -1144,8 +1144,8 @@ class DraftTeamRowPortfolioHistoryView extends DraftTeamRowPortfolioView {
 class DraftPlayerRowPortfolioHistoryView extends DraftPlayerRowPortfolioView {
   //
   const DraftPlayerRowPortfolioHistoryView(
-    TableviewDataRowTuple assets, {
-    Function(TableviewDataRowTuple)? onTap,
+    TvRowDataContainer assets, {
+    Function(TvRowDataContainer)? onTap,
     Key? key,
   }) : super(assets, key: key, onTap: onTap);
 }
@@ -1156,12 +1156,12 @@ class DistressedAssetRanked extends StBaseTvRow {
   bool get showRank => false;
 
   const DistressedAssetRanked(
-    TableviewDataRowTuple assets, {
+    TvRowDataContainer assets, {
     this.onTap,
     Key? key,
   }) : super(assets, key: key);
 
-  final Function(TableviewDataRowTuple)? onTap;
+  final Function(TvRowDataContainer)? onTap;
 
   @override
   Widget rowBody(
@@ -1183,12 +1183,12 @@ class DistressedAssetRanked extends StBaseTvRow {
 class ChysalisAssetRowPortfolioView extends StBaseTvRow
     with ShowsOneAsset, RequiresGameStatus, RequiresUserPositionProps {
   const ChysalisAssetRowPortfolioView(
-    TableviewDataRowTuple assets, {
+    TvRowDataContainer assets, {
     this.onTap,
     Key? key,
   }) : super(assets, key: key);
 
-  final Function(TableviewDataRowTuple)? onTap;
+  final Function(TvRowDataContainer)? onTap;
 
   @override
   Widget rowBody(
@@ -1478,12 +1478,12 @@ class ChysalisAssetRowPortfolioView extends StBaseTvRow
 class ChysalisAssetRowMktView extends StBaseTvRow
     with ShowsOneAsset, RequiresGameStatus, RequiresUserPositionProps {
   const ChysalisAssetRowMktView(
-    TableviewDataRowTuple assets, {
+    TvRowDataContainer assets, {
     this.onTap,
     Key? key,
   }) : super(assets, key: key);
 
-  final Function(TableviewDataRowTuple)? onTap;
+  final Function(TvRowDataContainer)? onTap;
 
   @override
   Widget rowBody(

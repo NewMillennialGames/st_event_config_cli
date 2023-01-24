@@ -151,9 +151,9 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
     super.initState();
   }
 
-  List<TableviewDataRowTuple> get assetRows => widget.assets
+  List<TvRowDataContainer> get assetRows => widget.assets
       .map(
-        (e) => TableviewDataRowTuple(
+        (e) => TvRowDataContainer(
           e,
           e,
           GameKey(e.asset.gameKey),
@@ -183,7 +183,7 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
                 tvMgr.groupHeaderPayloadBuilder != null)
               SizedBox(
                 height: 520.h,
-                child: GroupedListView<TableviewDataRowTuple, GroupHeaderData>(
+                child: GroupedListView<TvRowDataContainer, GroupHeaderData>(
                   elements: tvMgr.sortedListData,
                   groupBy: tvMgr.groupHeaderPayloadBuilder!,
                   groupHeaderBuilder: tvMgr.groupHeaderWidgetBuilder,

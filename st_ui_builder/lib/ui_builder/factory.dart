@@ -113,8 +113,8 @@ class StUiBuilderFactory {
     tableViewCfg.alwaysReturnSingleTradableRowBuilder = forSingleAssetOnly;
     return (
       BuildContext ctx,
-      TableviewDataRowTuple assets, {
-      Function(TableviewDataRowTuple)? onTap,
+      TvRowDataContainer assets, {
+      Function(TvRowDataContainer)? onTap,
     }) {
       return tableViewCfg.rowConstructor(assets, onTap: onTap);
     };
@@ -122,7 +122,7 @@ class StUiBuilderFactory {
 
   GroupedTableDataMgr groupedTvConfigForScreen(
     AppScreen screen,
-    List<TableviewDataRowTuple> rows,
+    List<TvRowDataContainer> rows,
     RedrawTvCallback redrawTvCallback,
   ) {
     /* build object that wraps all data & ui factory display rules
@@ -130,9 +130,9 @@ class StUiBuilderFactory {
 
     // copy row config value onto all
     EvAssetNameDisplayStyle ads = eventCfg.assetNameDisplayStyle;
-    rows.forEach((TableviewDataRowTuple drt) {
-      drt.item1.setAssetNameDisplayStyle(ads);
-      drt.item2?.setAssetNameDisplayStyle(ads);
+    rows.forEach((TvRowDataContainer drt) {
+      drt.team1.setAssetNameDisplayStyle(ads);
+      drt.team2?.setAssetNameDisplayStyle(ads);
     });
 
     bool disableAllGrouping = _eConfig!.eventCfg.skipGroupingOnScreen(screen);
@@ -164,7 +164,7 @@ class StUiBuilderFactory {
 
   TableRowDataMgr listTvConfigForScreen(
     AppScreen screen,
-    List<TableviewDataRowTuple> rows,
+    List<TvRowDataContainer> rows,
     RedrawTvCallback redrawTvCallback,
   ) {
     CfgForAreaAndNestedSlots tableAreaAndSlotCfg = _eConfig!.screenAreaCfg(

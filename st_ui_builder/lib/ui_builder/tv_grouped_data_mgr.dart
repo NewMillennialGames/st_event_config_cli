@@ -25,11 +25,11 @@ class GroupedTableDataMgr {
 
   final AppScreen appScreen;
   // _allAssetRows will need to be updated as Event-rounds change
-  final List<TableviewDataRowTuple> _allAssetRows;
+  final List<TvRowDataContainer> _allAssetRows;
   final TableviewConfigPayload _tableViewCfg;
   RedrawTvCallback? redrawCallback;
   // rows actually rendered from _filteredAssetRows
-  List<TableviewDataRowTuple> _filteredAssetRows = [];
+  List<TvRowDataContainer> _filteredAssetRows = [];
   bool _disableAllGrouping = false;
   // disableGroupingBeyondDate: regions no longer matter when you get to final 4
   bool disableGroupingBeyondDate = false;
@@ -45,10 +45,10 @@ class GroupedTableDataMgr {
         // sortOrder = ascending ? GroupedListOrder.ASC : GroupedListOrder.DESC,
         _filteredAssetRows = _allAssetRows.toList();
 
-  Map<String, List<TableviewDataRowTuple>>? get rowsGroupedByTopConfig =>
+  Map<String, List<TvRowDataContainer>>? get rowsGroupedByTopConfig =>
       _groupRowsBasedOnCfgTopColName(_filteredAssetRows);
 
-  List<TableviewDataRowTuple> get sortedListData {
+  List<TvRowDataContainer> get sortedListData {
     if (sortingRules.disableSorting) {
       return _rowsAutoSortedByTradable(_filteredAssetRows);
     }
@@ -74,7 +74,7 @@ class GroupedTableDataMgr {
       : GroupedListOrder.DESC;
 
   bool get assetTypeIsTeam =>
-      _allAssetRows.isEmpty ? false : _allAssetRows.first.item1.isTeam;
+      _allAssetRows.isEmpty ? false : _allAssetRows.first.team1.isTeam;
 
   // filter menu titles
   String get fm1Title =>
@@ -117,7 +117,7 @@ class GroupedTableDataMgr {
     final TvAreaRowStyle rowStyle = _tableViewCfg.rowStyle;
     final GetGroupHeaderLblsFromAssetGameData gbFunc =
         groupHeaderPayloadBuilder!;
-    return (TableviewDataRowTuple rowData) {
+    return (TvRowDataContainer rowData) {
       //
 
       return TvGroupHeader(
@@ -145,9 +145,9 @@ class GroupedTableDataMgr {
   // indexedItemBuilder is function to return a Tv-Row for this screen
   IndexedItemRowBuilder get indexedItemBuilder => (
         BuildContext ctx,
-        TableviewDataRowTuple assets,
+        TvRowDataContainer assets,
         int i, {
-        void Function(TableviewDataRowTuple)? onTap,
+        void Function(TvRowDataContainer)? onTap,
       }) {
         return _tableViewCfg.rowConstructor(assets, onTap: onTap);
       };
@@ -246,7 +246,7 @@ class GroupedTableDataMgr {
   }
 
   void setFilteredData(
-    Iterable<TableviewDataRowTuple> assetRows, {
+    Iterable<TvRowDataContainer> assetRows, {
     bool redraw = false,
   }) {
     /* external filtering
@@ -267,10 +267,10 @@ class GroupedTableDataMgr {
     */
     List<AssetRowPropertyIfc> assetRows = [];
 
-    for (TableviewDataRowTuple row in _allAssetRows) {
-      assetRows.add(row.item1);
-      if (row.item2 != null) {
-        assetRows.add(row.item2!);
+    for (TvRowDataContainer row in _allAssetRows) {
+      assetRows.add(row.team1);
+      if (row.team2 != null) {
+        assetRows.add(row.team2!);
       }
     }
 
@@ -321,8 +321,8 @@ class GroupedTableDataMgr {
 
   ///If groupings exist, this will arrange rows into groups
   ///and return a map of `groupTitle -> rows`
-  Map<String, List<TableviewDataRowTuple>>? _groupRowsBasedOnCfgTopColName(
-    List<TableviewDataRowTuple> rows,
+  Map<String, List<TvRowDataContainer>>? _groupRowsBasedOnCfgTopColName(
+    List<TvRowDataContainer> rows,
   ) {
     /*  this method ONLY applies when using top-level groupings
 
@@ -338,15 +338,14 @@ class GroupedTableDataMgr {
         topGroupColName == DbTableFieldName.basedOnEventDelimiters;
 
     if (rows.isEmpty ||
-        (usingServerGroupings && rows.first.item1.groupName == null)) {
+        (usingServerGroupings && rows.first.team1.groupName == null)) {
       return null;
     }
 
-    Map<String, List<TableviewDataRowTuple>> rowsGroupingMap = {};
-    for (TableviewDataRowTuple drt in rows) {
-      String grpKeyVal = drt.item1.valueExtractor(topGroupColName);
-      List<TableviewDataRowTuple> rowListAtKey =
-          rowsGroupingMap[grpKeyVal] ?? [];
+    Map<String, List<TvRowDataContainer>> rowsGroupingMap = {};
+    for (TvRowDataContainer drt in rows) {
+      String grpKeyVal = drt.team1.valueExtractor(topGroupColName);
+      List<TvRowDataContainer> rowListAtKey = rowsGroupingMap[grpKeyVal] ?? [];
       rowListAtKey.add(drt);
       rowsGroupingMap[grpKeyVal] = rowListAtKey;
     }
@@ -365,18 +364,18 @@ class GroupedTableDataMgr {
     // }
   }
 
-  List<TableviewDataRowTuple> _rowsAutoSortedByTradable(
-    List<TableviewDataRowTuple> rows,
+  List<TvRowDataContainer> _rowsAutoSortedByTradable(
+    List<TvRowDataContainer> rows,
   ) {
-    List<TableviewDataRowTuple> nonTradeableRows = [];
-    List<TableviewDataRowTuple> tradeableRows = [];
+    List<TvRowDataContainer> nonTradeableRows = [];
+    List<TvRowDataContainer> tradeableRows = [];
 
     for (var row in rows) {
       if ([
         CompetitionStatus.compFinal,
         CompetitionStatus.compFinished,
         CompetitionStatus.compCanceled,
-      ].contains(row.item1.competitionStatus)) {
+      ].contains(row.team1.competitionStatus)) {
         nonTradeableRows.add(row);
       } else {
         tradeableRows.add(row);
@@ -421,14 +420,14 @@ class GroupedTableDataMgr {
       }
     }
 
-    List<TableviewDataRowTuple> filterResults = [];
+    List<TvRowDataContainer> filterResults = [];
 
-    for (TableviewDataRowTuple asset in _allAssetRows) {
+    for (TvRowDataContainer asset in _allAssetRows) {
       bool added = false;
       for (FilterSelection filter in _currentFilters) {
-        if (asset.item1.valueExtractor(filter.filterColumn) ==
+        if (asset.team1.valueExtractor(filter.filterColumn) ==
                 filter.selectedValue ||
-            asset.item2?.valueExtractor(filter.filterColumn) ==
+            asset.team1?.valueExtractor(filter.filterColumn) ==
                 filter.selectedValue) {
           if (!added) {
             filterResults.add(asset);
@@ -474,7 +473,7 @@ class GroupedTableDataMgr {
   Widget assetRowsListView({
     required Future<void> Function() onRefresh,
     ScrollController? scrollController,
-    void Function(TableviewDataRowTuple)? onRowTapped,
+    void Function(TvRowDataContainer)? onRowTapped,
   }) {
     if (disableAllGrouping) {
       // normal sorted list
@@ -493,7 +492,7 @@ class GroupedTableDataMgr {
         scrollController: scrollController,
         onRowTapped: onRowTapped,
         groupByHeadDataCallback: groupHeaderPayloadBuilder ??
-            (TableviewDataRowTuple _) => GroupHeaderData.noop(),
+            (TvRowDataContainer _) => GroupHeaderData.noop(),
         groupHeaderBuilder: groupHeaderWidgetBuilder,
         rowBuilder: indexedItemBuilder,
         groupComparator: groupHeaderSortComparator,
@@ -506,7 +505,7 @@ class GroupedTableDataMgr {
         scrollController: scrollController,
         onRowTapped: onRowTapped,
         groupBy: groupHeaderPayloadBuilder ??
-            (TableviewDataRowTuple _) => GroupHeaderData.noop(),
+            (TvRowDataContainer _) => GroupHeaderData.noop(),
         groupHeaderBuilder: groupHeaderWidgetBuilder,
         rowBuilder: indexedItemBuilder,
         groupComparator: groupHeaderSortComparator,
@@ -523,8 +522,8 @@ class _ExpandableGroupedAssetRowsListView extends StatefulWidget {
   final GroupHeaderSortCompareCallback? groupComparator;
   final GroupHeaderWidgetBuilder groupHeaderBuilder;
   final IndexedItemRowBuilder rowBuilder;
-  final Function(TableviewDataRowTuple)? onRowTapped;
-  final Map<String, List<TableviewDataRowTuple>> groupedAssets;
+  final Function(TvRowDataContainer)? onRowTapped;
+  final Map<String, List<TvRowDataContainer>> groupedAssets;
 
   const _ExpandableGroupedAssetRowsListView({
     Key? key,
@@ -614,12 +613,12 @@ class _ExpandableGroupedAssetRowsListViewState
 class _AssetRowsGroupedListView extends StatelessWidget {
   final Future<void> Function() onRefresh;
   final ScrollController? scrollController;
-  final List<TableviewDataRowTuple> assets;
+  final List<TvRowDataContainer> assets;
   final GetGroupHeaderLblsFromAssetGameData groupBy;
   final GroupHeaderSortCompareCallback? groupComparator;
   final GroupHeaderWidgetBuilder groupHeaderBuilder;
   final IndexedItemRowBuilder rowBuilder;
-  final Function(TableviewDataRowTuple)? onRowTapped;
+  final Function(TvRowDataContainer)? onRowTapped;
   final bool scrollable;
 
   const _AssetRowsGroupedListView({
@@ -640,7 +639,7 @@ class _AssetRowsGroupedListView extends StatelessWidget {
     if (scrollable) {
       return RefreshIndicator(
         onRefresh: onRefresh,
-        child: GroupedListView<TableviewDataRowTuple, GroupHeaderData>(
+        child: GroupedListView<TvRowDataContainer, GroupHeaderData>(
           controller: scrollController,
           key: const PageStorageKey<String>('market-view-list'),
           physics: const AlwaysScrollableScrollPhysics(),
@@ -649,7 +648,7 @@ class _AssetRowsGroupedListView extends StatelessWidget {
           groupHeaderBuilder: groupHeaderBuilder,
           indexedItemBuilder: (
             BuildContext ctx,
-            TableviewDataRowTuple assets,
+            TvRowDataContainer assets,
             int i,
           ) {
             return rowBuilder(
@@ -692,9 +691,9 @@ class _AssetRowsGroupedListView extends StatelessWidget {
 class _AssetRowsSortedListView extends StatelessWidget {
   final Future<void> Function() onRefresh;
   final ScrollController? scrollController;
-  final List<TableviewDataRowTuple> assets;
+  final List<TvRowDataContainer> assets;
   final IndexedItemRowBuilder rowBuilder;
-  final Function(TableviewDataRowTuple)? onRowTapped;
+  final Function(TvRowDataContainer)? onRowTapped;
   final bool scrollable;
 
   const _AssetRowsSortedListView({
