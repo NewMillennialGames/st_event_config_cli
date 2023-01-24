@@ -139,7 +139,6 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
 
   String valueExtractor(
     DbTableFieldName fldName, {
-    String? groupingKey,
     String? compName,
   }) {
     /* header labels in list groups
@@ -172,7 +171,7 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
       case DbTableFieldName.assetPosition:
         return position;
       case DbTableFieldName.basedOnEventDelimiters:
-        return groupingKey ?? "";
+        return groupName ?? "";
       case DbTableFieldName.competitionName:
         return compName ?? "competitionName";
     }

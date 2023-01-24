@@ -344,10 +344,7 @@ class GroupedTableDataMgr {
 
     Map<String, List<TvRowDataContainer>> rowsGroupingMap = {};
     for (TvRowDataContainer drt in rows) {
-      String grpKeyVal = drt.team1.valueExtractor(
-        topGroupColName,
-        groupingKey: drt.team1.groupName,
-      );
+      String grpKeyVal = drt.team1.valueExtractor(topGroupColName);
       List<TvRowDataContainer> rowListAtKey = rowsGroupingMap[grpKeyVal] ?? [];
       rowListAtKey.add(drt);
       rowsGroupingMap[grpKeyVal] = rowListAtKey;
