@@ -344,7 +344,10 @@ class GroupedTableDataMgr {
 
     Map<String, List<TvRowDataContainer>> rowsGroupingMap = {};
     for (TvRowDataContainer drt in rows) {
-      String grpKeyVal = drt.team1.valueExtractor(topGroupColName);
+      String grpKeyVal = drt.team1.valueExtractor(
+        topGroupColName,
+        groupingKey: drt.team1.groupName,
+      );
       List<TvRowDataContainer> rowListAtKey = rowsGroupingMap[grpKeyVal] ?? [];
       rowListAtKey.add(drt);
       rowsGroupingMap[grpKeyVal] = rowListAtKey;
@@ -427,7 +430,7 @@ class GroupedTableDataMgr {
       for (FilterSelection filter in _currentFilters) {
         if (asset.team1.valueExtractor(filter.filterColumn) ==
                 filter.selectedValue ||
-            asset.team1?.valueExtractor(filter.filterColumn) ==
+            asset.team2?.valueExtractor(filter.filterColumn) ==
                 filter.selectedValue) {
           if (!added) {
             filterResults.add(asset);

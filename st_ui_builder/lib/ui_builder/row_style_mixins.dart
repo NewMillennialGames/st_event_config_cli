@@ -11,7 +11,7 @@ mixin ShowsTwoAssets on StBaseTvRowIfc {
   // for TeamVsTeam and PlayerVsPlayer
   AssetRowPropertyIfc get comp1 => assets.team1;
 
-  AssetRowPropertyIfc get comp2 => assets.team1!;
+  AssetRowPropertyIfc get comp2 => assets.team2!;
 
 // ActiveGameDetails get gameStatus => assets.item3;
 }
