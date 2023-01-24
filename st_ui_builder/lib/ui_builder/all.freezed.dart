@@ -239,7 +239,7 @@ class __$$_AssetStateUpdatesCopyWithImpl<$Res>
 class _$_AssetStateUpdates extends _AssetStateUpdates
     with DiagnosticableTreeMixin {
   const _$_AssetStateUpdates(this.assetKey, this.name, this.ticker,
-      {this.assetState = AssetState.assetNew,
+      {this.assetState = AssetState.assetPretrade,
       this.tradeMode = TradeMode.tradeMarket,
       this.isWatched = false,
       this.isOwned = false,

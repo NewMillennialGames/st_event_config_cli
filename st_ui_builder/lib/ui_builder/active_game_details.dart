@@ -23,7 +23,7 @@ class AssetStateUpdates with _$AssetStateUpdates {
     String assetKey,
     String name,
     String ticker, {
-    @Default(AssetState.assetNew) AssetState assetState,
+    @Default(AssetState.assetPretrade) AssetState assetState,
     @Default(TradeMode.tradeMarket) TradeMode tradeMode,
     @Default(false) bool isWatched,
     @Default(false) bool isOwned,

@@ -45,7 +45,6 @@ class StUiBuilderFactory {
   }
 
   void updateEventTournamentDelimiters(Map<String, dynamic> delims) {
-    // TODO:  @lucky
     /* 
 
     this data is received from the server periodically on the root competitions

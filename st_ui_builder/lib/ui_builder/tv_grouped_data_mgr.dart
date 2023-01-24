@@ -403,10 +403,10 @@ class GroupedTableDataMgr {
         .removeWhere((selFilter) => selFilter.filterColumn == colName);
     _currentFilters.add(filterSelection);
 
-    print("selectedVal:  $selectedVal");
-    print("filter menu title #1:  $fm1Title");
-    print("filter menu title #2:  $fm2Title");
-    print("filter menu title #3:  $fm3Title");
+    // print("selectedVal:  $selectedVal");
+    // print("filter menu title #1:  $fm1Title");
+    // print("filter menu title #2:  $fm2Title");
+    // print("filter menu title #3:  $fm3Title");
     if (selectedVal.isEmpty ||
         [fm1Title, fm2Title, fm3Title].contains(selectedVal)) {
       // sloppy test above;  prob creates a bug
