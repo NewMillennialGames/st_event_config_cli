@@ -11,7 +11,7 @@ class AssetStateUpdates with _$AssetStateUpdates {
     AssetState vals are:
       assetNew,
       assetPretrade,
-      assetOpen,
+      assetTrade,
       assetClosed,
       assetArchived,
       assetFinished,
