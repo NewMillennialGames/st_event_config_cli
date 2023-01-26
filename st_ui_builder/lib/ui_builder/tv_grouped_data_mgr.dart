@@ -524,7 +524,7 @@ extension AssetHeadTransExt1 on List<TvRowDataContainer> {
   ) {
     /* when we have multiple levels of grouping, the sortKey should be compared back that many levels
     */
-    // String prevSortKey = (rowIdx >= groupingLevels
+    // String priorRowSortKey = (rowIdx >= groupingLevels
     //     ? extractHeaderPayload(this[rowIdx - groupingLevels]).sortKey
     //     : extractHeaderPayload(this[rowIdx - 1]).sortKey);
     return rowIdx == 0 ||
