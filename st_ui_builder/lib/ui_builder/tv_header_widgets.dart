@@ -18,7 +18,7 @@ class TvGroupHeader extends StatelessWidget {
     Key? key,
   }) : super(key: key) {
     // hide values that are repeats from prior header rows
-    headerData.patchFromPriorIfExists();
+    // headerData.patchFromPriorIfExists();
   }
 
   @override
