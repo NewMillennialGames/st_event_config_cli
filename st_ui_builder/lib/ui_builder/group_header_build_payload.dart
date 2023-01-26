@@ -65,6 +65,7 @@ class GroupHeaderData
   String get h2Displ => topIsCollapsible ? _h3Displ : _h2Displ;
   String get h3Displ => topIsCollapsible ? "" : _h3Displ;
   String get collapsibleAreaLabel => topIsCollapsible ? _h1Displ : "";
+  String get sortKey => _sortKey;
 
   // metaCfg property getters
   int get groupLevelCount => metaCfg.groupLevelCount;
@@ -118,7 +119,7 @@ class GroupHeaderData
         topSortAscending: false);
   }
 
-  static GetGroupHeaderLblsFromAssetGameData groupHeaderPayloadConstructor(
+  static GetGroupHeaderDataFromAssetRow groupHeaderPayloadConstructor(
       TvGroupCfg groupingRules,
       GroupHeaderMetaCfg metaCfg,
       bool assetTypeIsTeam) {
@@ -169,6 +170,7 @@ class GroupHeaderData
       firstValFn,
       secondValFn,
       thirdValFn,
+      offsetForCollapsible: metaCfg.topIsCollapsible,
     );
 
     return (TvRowDataContainer assetDataRow) {
@@ -187,8 +189,9 @@ class GroupHeaderData
   static SortKeyBuilderFunc _sortKeyBuilderFnc(
     SortValFetcherFunc sVal1,
     SortValFetcherFunc sVal2,
-    SortValFetcherFunc sVal3,
-  ) {
+    SortValFetcherFunc sVal3, {
+    bool offsetForCollapsible = false,
+  }) {
     // return function to generate sort-key for GroupHeaderData
     return (TvRowDataContainer r) {
       // temp debug code to see values
@@ -203,7 +206,7 @@ class GroupHeaderData
       Comparable<dynamic> v3 =
           (cd3 is DateTime) ? cd3.truncateTime.microsecondsSinceEpoch : cd3;
 
-      String sortKey = '${v1}_${v2}_$v3';
+      String sortKey = offsetForCollapsible ? '$v2-$v3' : '$v1-$v2-$v3';
 
       // print(
       //   '${cd1.runtimeType} ${cd1 is DateTime}  ${cd1 is Comparable<DateTime>}',

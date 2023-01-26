@@ -64,7 +64,7 @@ class TvRowDataContainer {
 // TODO:  consider passing TableviewDataRowTuple to group functions
 // instead of first item in TableviewDataRowTuple.item1
 // typedef CastRowToSortVal = String Function(AssetRowPropertyIfc);
-typedef GetGroupHeaderLblsFromAssetGameData = GroupHeaderData Function(
+typedef GetGroupHeaderDataFromAssetRow = GroupHeaderData Function(
     TvRowDataContainer);
 
 typedef ConfigDefinedSortComparator = int Function(

@@ -84,7 +84,7 @@ class GroupedTableDataMgr {
   String get fm3Title =>
       filterRules?.item3?.colNameOrFilterMenuTitle(assetTypeIsTeam) ?? "Menu 3";
 
-  GetGroupHeaderLblsFromAssetGameData? get groupHeaderPayloadBuilder {
+  GetGroupHeaderDataFromAssetRow? get groupHeaderPayloadBuilder {
     /* return function to build group header data payload
       from each row of data (1 or 2 assets)
       includes GroupHeaderMetaCfg to drive UI layout
@@ -115,8 +115,7 @@ class GroupedTableDataMgr {
 
     // copy groupBy getter to save a lookup
     final TvAreaRowStyle rowStyle = _tableViewCfg.rowStyle;
-    final GetGroupHeaderLblsFromAssetGameData gbFunc =
-        groupHeaderPayloadBuilder!;
+    final GetGroupHeaderDataFromAssetRow gbFunc = groupHeaderPayloadBuilder!;
     return (TvRowDataContainer rowData) {
       //
 
@@ -497,6 +496,7 @@ class GroupedTableDataMgr {
         rowBuilder: indexedItemBuilder,
         groupComparator: groupHeaderSortComparator,
         groupedAssets: rowsGroupedByTopConfig ?? {},
+        groupingLevels: groupRules?.fieldList.length ?? 1,
       );
     } else {
       // grouped list without collapsing headers
@@ -504,7 +504,7 @@ class GroupedTableDataMgr {
         onRefresh: onRefresh,
         scrollController: scrollController,
         onRowTapped: onRowTapped,
-        groupBy: groupHeaderPayloadBuilder ??
+        extractHeaderPayload: groupHeaderPayloadBuilder ??
             (TvRowDataContainer _) => GroupHeaderData.noop(),
         groupHeaderBuilder: groupHeaderWidgetBuilder,
         rowBuilder: indexedItemBuilder,
@@ -515,15 +515,34 @@ class GroupedTableDataMgr {
   }
 }
 
+extension AssetHeadTransExt1 on List<TvRowDataContainer> {
+  //
+  bool sortKeyHasChangedFromPriorRow(
+    int rowIdx,
+    GetGroupHeaderDataFromAssetRow extractHeaderPayload,
+    int groupingLevels,
+  ) {
+    /* when we have multiple levels of grouping, the sortKey should be compared back that many levels
+    */
+    // String prevSortKey = (rowIdx >= groupingLevels
+    //     ? extractHeaderPayload(this[rowIdx - groupingLevels]).sortKey
+    //     : extractHeaderPayload(this[rowIdx - 1]).sortKey);
+    return rowIdx == 0 ||
+        extractHeaderPayload(this[rowIdx]).sortKey !=
+            extractHeaderPayload(this[rowIdx - 1]).sortKey;
+  }
+}
+
 class _ExpandableGroupedAssetRowsListView extends StatefulWidget {
   final Future<void> Function() onRefresh;
   final ScrollController? scrollController;
-  final GetGroupHeaderLblsFromAssetGameData groupByHeadDataCallback;
+  final GetGroupHeaderDataFromAssetRow groupByHeadDataCallback;
   final GroupHeaderSortCompareCallback? groupComparator;
   final GroupHeaderWidgetBuilder groupHeaderBuilder;
   final IndexedItemRowBuilder rowBuilder;
   final Function(TvRowDataContainer)? onRowTapped;
   final Map<String, List<TvRowDataContainer>> groupedAssets;
+  final int groupingLevels;
 
   const _ExpandableGroupedAssetRowsListView({
     Key? key,
@@ -535,6 +554,7 @@ class _ExpandableGroupedAssetRowsListView extends StatefulWidget {
     this.onRowTapped,
     this.scrollController,
     this.groupComparator,
+    this.groupingLevels = 1,
   }) : super(key: key);
 
   @override
@@ -594,11 +614,12 @@ class _ExpandableGroupedAssetRowsListViewState
                     scrollable: false,
                     onRefresh: widget.onRefresh,
                     assets: widget.groupedAssets[_groupTitles[i]] ?? [],
-                    groupBy: widget.groupByHeadDataCallback,
+                    extractHeaderPayload: widget.groupByHeadDataCallback,
                     groupComparator: widget.groupComparator,
                     groupHeaderBuilder: widget.groupHeaderBuilder,
                     rowBuilder: widget.rowBuilder,
                     onRowTapped: widget.onRowTapped,
+                    groupingLevels: widget.groupingLevels,
                   ),
                 ],
               ),
@@ -614,24 +635,26 @@ class _AssetRowsGroupedListView extends StatelessWidget {
   final Future<void> Function() onRefresh;
   final ScrollController? scrollController;
   final List<TvRowDataContainer> assets;
-  final GetGroupHeaderLblsFromAssetGameData groupBy;
+  final GetGroupHeaderDataFromAssetRow extractHeaderPayload;
   final GroupHeaderSortCompareCallback? groupComparator;
   final GroupHeaderWidgetBuilder groupHeaderBuilder;
   final IndexedItemRowBuilder rowBuilder;
   final Function(TvRowDataContainer)? onRowTapped;
   final bool scrollable;
+  final int groupingLevels;
 
   const _AssetRowsGroupedListView({
     Key? key,
     required this.onRefresh,
     required this.assets,
-    required this.groupBy,
+    required this.extractHeaderPayload,
     required this.groupHeaderBuilder,
     required this.rowBuilder,
     this.scrollable = true,
     this.onRowTapped,
     this.scrollController,
     this.groupComparator,
+    this.groupingLevels = 1,
   }) : super(key: key);
 
   @override
@@ -644,7 +667,7 @@ class _AssetRowsGroupedListView extends StatelessWidget {
           key: const PageStorageKey<String>('market-view-list'),
           physics: const AlwaysScrollableScrollPhysics(),
           elements: assets,
-          groupBy: groupBy,
+          groupBy: extractHeaderPayload,
           groupHeaderBuilder: groupHeaderBuilder,
           indexedItemBuilder: (
             BuildContext ctx,
@@ -670,10 +693,16 @@ class _AssetRowsGroupedListView extends StatelessWidget {
     return Column(
       children: [
         for (int i = 0; i < assets.length; i++) ...{
-          //logic to display date header for grouped assets
-          if (i == 0 ||
-              groupBy(assets[i])._sortKey !=
-                  groupBy(assets[i - 1])._sortKey) ...{
+          //logic to display 2nd tier (usually date) header for grouped assets
+          // if (i == 0 ||
+          //     extractHeaderPayload(assets[i]).sortKey !=
+          //         extractHeaderPayload(assets[i - 1]).sortKey)
+
+          if (assets.sortKeyHasChangedFromPriorRow(
+            i,
+            extractHeaderPayload,
+            groupingLevels,
+          )) ...{
             groupHeaderBuilder(assets[i]),
           },
           rowBuilder(
