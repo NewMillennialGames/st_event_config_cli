@@ -4,9 +4,10 @@ class TradeFlowBase {
   // cannot be abstract due to riverpod??
 
   String labelForGameState(
-    CompetitionStatus status, {
+    CompetitionStatus status,
+    AssetState assetState, {
     bool eventIsStarted = false,
-    bool isBeingRepriced = false,
+    // bool isBeingRepriced = false,
   }) =>
       throw UnimplementedError('should call subclass');
 
@@ -28,11 +29,12 @@ class TradeFlowForDemo extends TradeFlowBase {
   //
   @override
   String labelForGameState(
-    CompetitionStatus status, {
+    CompetitionStatus status,
+    AssetState assetState, {
     bool eventIsStarted = false,
-    bool isBeingRepriced = false,
+    // bool isBeingRepriced = false,
   }) =>
-      'demo label';
+      assetState.tradeButtonTitle;
 
   @override
   Color colorForGameState(

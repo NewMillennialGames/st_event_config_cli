@@ -15,6 +15,8 @@ extension CompetitionStatusExt5 on CompetitionStatus {
 extension AssetStateExt1 on AssetState {
   //
   bool get isTradable => AssetState.assetTrade == this;
+
+  String get tradeButtonTitle => "";
 }
 
 extension OrderExt1 on Order {

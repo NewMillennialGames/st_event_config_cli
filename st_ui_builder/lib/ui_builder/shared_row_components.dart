@@ -167,11 +167,11 @@ class CompetitorImage extends StatelessWidget {
 
 class TradeButton extends ConsumerWidget {
   //
-  final AssetStateUpdates assetState;
+  final AssetStateUpdates assetStateUpdts;
   final CompetitionStatus competitionStatus;
 
   const TradeButton(
-    this.assetState,
+    this.assetStateUpdts,
     this.competitionStatus, {
     Key? key,
   }) : super(key: key);
@@ -185,26 +185,19 @@ class TradeButton extends ConsumerWidget {
     // or simple text label if not tradable
     // final size = MediaQuery.of(context).size;
     TradeFlowBase tf = ref.read(tradeFlowProvider);
-    // Event? optCurEvent = ref.watch(currEventProvider);
-    // if (optCurEvent == null) {
-    //   print('No event loaded??');
-    // }
-    // print(
-    //   '********* event.state is: ${optCurEvent?.state.name ?? 'missing'}',
-    // );
-    // bool eventHasStarted = optCurEvent?.state == EventState.inProgress;
-    // (optCurEvent?.state ?? EventState.unpublished) == EventState.inProgress;
+
     return Container(
       height: UiSizes.tradeBtnHeight,
       width: 75.w,
       // width: UiSizes.tradeBtnWidthPctScreen * size.width,
       alignment: Alignment.center,
-      child: (assetState.isTradable)
+      child: (assetStateUpdts.isTradable)
           ? TextButton(
-              onPressed: () => tf.beginTradeFlow(AssetKey(assetState.assetKey)),
+              onPressed: () =>
+                  tf.beginTradeFlow(AssetKey(assetStateUpdts.assetKey)),
               style: StButtonStyles.tradeButtonCanTrade,
               child: Text(
-                StStrings.tradeUc,
+                assetStateUpdts.tradeButtonTitle,
                 // tf.labelForState(status),
                 style: StTextStyles.h6.copyWith(color: StColors.lightGreen),
                 textAlign: TextAlign.center,
@@ -213,7 +206,7 @@ class TradeButton extends ConsumerWidget {
           : Text(
               tf.labelForGameState(
                 competitionStatus,
-                isBeingRepriced: assetState.isBeingRepriced,
+                assetStateUpdts.assetState,
               ),
               style: StTextStyles.h5.copyWith(
                 fontSize: 14.sp,

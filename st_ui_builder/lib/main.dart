@@ -28,13 +28,13 @@ of the UI factory which renders builder functions for:
 const String cfgEmpl1 = 'one.json';
 // // cfgEmpl2 seems to be invalid json; replace it to continue testing
 const String cfgEmpl2 = 'MarchMadnessC010823.json';
-// const String cfgEmpl3 = 'driverVsField.json';
+const String cfgEmpl3 = 'three.json';
 // const String cfgEmpl4 = 'two.json';
 
 // evCfgDataFromServer contains the JSON payload produced by the CLI configurator
 Map<String, dynamic> evCfgDataFromServer = {};
 
-Future<void> readExampleEventConfig({String filename = cfgEmpl2}) async {
+Future<void> readExampleEventConfig({String filename = cfgEmpl3}) async {
   print('loading $filename');
   final String response = await rootBundle.loadString('assets/$filename');
   evCfgDataFromServer = json.decode(response);

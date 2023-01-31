@@ -62,6 +62,7 @@ class AssetStateUpdates with _$AssetStateUpdates {
   }
 
   bool get isTradable => assetState.isTradable && !isBeingRepriced;
+  String get tradeButtonTitle => assetState.tradeButtonTitle;
 
   bool get stockIsUp => curPrice >= openPrice;
 
