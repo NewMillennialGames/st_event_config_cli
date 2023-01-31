@@ -198,7 +198,6 @@ class TradeButton extends ConsumerWidget {
               style: StButtonStyles.tradeButtonCanTrade,
               child: Text(
                 assetStateUpdts.tradeButtonTitle,
-                // tf.labelForState(status),
                 style: StTextStyles.h6.copyWith(color: StColors.lightGreen),
                 textAlign: TextAlign.center,
               ),
@@ -209,7 +208,7 @@ class TradeButton extends ConsumerWidget {
                 assetStateUpdts.assetState,
               ),
               style: StTextStyles.h5.copyWith(
-                fontSize: 14.sp,
+                fontSize: 15.sp,
                 color: tf.colorForAssetState(competitionStatus),
               ),
               textAlign: TextAlign.center,
