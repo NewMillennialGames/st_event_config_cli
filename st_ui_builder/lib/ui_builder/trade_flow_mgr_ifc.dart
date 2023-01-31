@@ -3,15 +3,17 @@ part of StUiController;
 class TradeFlowBase {
   // cannot be abstract due to riverpod??
 
-  String labelForGameState(
+  String labelForAssetState(
     CompetitionStatus status,
     AssetState assetState, {
     bool eventIsStarted = false,
     // bool isBeingRepriced = false,
-  }) =>
-      throw UnimplementedError('should call subclass');
+  }) {
+    throw UnimplementedError('should call subclass');
+    return assetState.tradeButtonTitle;
+  }
 
-  Color colorForGameState(
+  Color colorForAssetState(
     CompetitionStatus status, {
     bool eventIsStarted = false,
   }) =>
@@ -28,16 +30,15 @@ class TradeFlowBase {
 class TradeFlowForDemo extends TradeFlowBase {
   //
   @override
-  String labelForGameState(
+  String labelForAssetState(
     CompetitionStatus status,
     AssetState assetState, {
     bool eventIsStarted = false,
-    // bool isBeingRepriced = false,
   }) =>
       assetState.tradeButtonTitle;
 
   @override
-  Color colorForGameState(
+  Color colorForAssetState(
     CompetitionStatus status, {
     bool eventIsStarted = false,
   }) =>

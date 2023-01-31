@@ -204,13 +204,13 @@ class TradeButton extends ConsumerWidget {
               ),
             )
           : Text(
-              tf.labelForGameState(
+              tf.labelForAssetState(
                 competitionStatus,
                 assetStateUpdts.assetState,
               ),
               style: StTextStyles.h5.copyWith(
                 fontSize: 14.sp,
-                color: tf.colorForGameState(competitionStatus),
+                color: tf.colorForAssetState(competitionStatus),
               ),
               textAlign: TextAlign.center,
             ),
