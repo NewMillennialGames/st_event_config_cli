@@ -465,6 +465,10 @@ class GroupedTableDataMgr {
     print('ActiveGameDetails replaced on 2 with $round  (did row repaint?)');
   }
 
+  bool get hasNoAsset => topGroupIsCollapsible
+      ? (rowsGroupedByTopConfig ?? {}).isEmpty
+      : sortedListData.isEmpty;
+
   ///ListView of rows typically displayed in MarketView.
   ///This is implemented internally as opposed to just exposing
   ///the row builder in order to implement the nested & collapsible
