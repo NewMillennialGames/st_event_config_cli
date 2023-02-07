@@ -244,6 +244,8 @@ class GroupedTableDataMgr {
     );
   }
 
+  bool _hasSetData = false;
+
   void setFilteredData(
     Iterable<TvRowDataContainer> assetRows, {
     bool redraw = false,
@@ -251,6 +253,7 @@ class GroupedTableDataMgr {
     /* external filtering
     used by search (watched or owned) feature
     */
+    _hasSetData = true;
     _filteredAssetRows = assetRows.toList();
     if (redraw && redrawCallback != null) {
       redrawCallback!();
@@ -478,6 +481,19 @@ class GroupedTableDataMgr {
     ScrollController? scrollController,
     void Function(TvRowDataContainer)? onRowTapped,
   }) {
+    if (!_hasSetData && hasNoAsset) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    if (_hasSetData && hasNoAsset) {
+      return Center(
+        child: Text(
+          "No Assets Available to Trade",
+          style: StTextStyles.h5,
+        ),
+      );
+    }
     if (disableAllGrouping) {
       // normal sorted list
       // List<TableviewDataRowTuple> sortedListData;
