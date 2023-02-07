@@ -59,8 +59,8 @@ class TopEventCfg {
       screen == AppScreen.marketView,
       'currently only applies to marketview',
     );
-    return cancelAllRowGroupingLogic ||
-        evCompetitorType.skipGroupingOnMarketView;
+    return cancelAllRowGroupingLogic;
+    // || evCompetitorType.skipGroupingOnMarketView
   }
 
   bool skipGroupingForName(String evNameSubStr) {
