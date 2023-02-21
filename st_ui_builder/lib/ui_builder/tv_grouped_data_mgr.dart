@@ -45,7 +45,7 @@ class GroupedTableDataMgr {
         // sortOrder = ascending ? GroupedListOrder.ASC : GroupedListOrder.DESC,
         _filteredAssetRows = _allAssetRows.toList();
 
-  Map<String, List<TvRowDataContainer>>? get rowsGroupedByTopConfig =>
+  List<RowGroup>? get rowsGroupedByTopConfig =>
       _groupRowsBasedOnCfgTopColName(_filteredAssetRows);
 
   List<TvRowDataContainer> get sortedListData {
@@ -323,7 +323,7 @@ class GroupedTableDataMgr {
 
   ///If groupings exist, this will arrange rows into groups
   ///and return a map of `groupTitle -> rows`
-  Map<String, List<TvRowDataContainer>>? _groupRowsBasedOnCfgTopColName(
+  List<RowGroup>? _groupRowsBasedOnCfgTopColName(
     List<TvRowDataContainer> rows,
   ) {
     /*  this method ONLY applies when using top-level groupings
@@ -344,14 +344,26 @@ class GroupedTableDataMgr {
       return null;
     }
 
-    Map<String, List<TvRowDataContainer>> rowsGroupingMap = {};
+    List<RowGroup> groups = [];
+
     for (TvRowDataContainer drt in rows) {
       String grpKeyVal = drt.team1.valueExtractor(topGroupColName);
-      List<TvRowDataContainer> rowListAtKey = rowsGroupingMap[grpKeyVal] ?? [];
-      rowListAtKey.add(drt);
-      rowsGroupingMap[grpKeyVal] = rowListAtKey;
+      final index = groups.indexWhere((e) => e.groupName == grpKeyVal);
+
+      if (index < 0) {
+        groups.add(
+          RowGroup(
+            items: [drt],
+            groupName: grpKeyVal,
+            sortingField: drt.team1.sortValueExtractor(topGroupColName),
+          ),
+        );
+      } else {
+        groups[index].appendRowItem(drt);
+      }
     }
-    return rowsGroupingMap;
+    groups.sort();
+    return groups;
 
     // not sure why we need to sort here??
     // if (groupRules?.disableGrouping ?? true) {
@@ -469,7 +481,7 @@ class GroupedTableDataMgr {
   }
 
   bool get hasNoAsset => topGroupIsCollapsible
-      ? (rowsGroupedByTopConfig ?? {}).isEmpty
+      ? (rowsGroupedByTopConfig ?? []).isEmpty
       : sortedListData.isEmpty;
 
   ///ListView of rows typically displayed in MarketView.
@@ -515,7 +527,7 @@ class GroupedTableDataMgr {
         groupHeaderBuilder: groupHeaderWidgetBuilder,
         rowBuilder: indexedItemBuilder,
         groupComparator: groupHeaderSortComparator,
-        groupedAssets: rowsGroupedByTopConfig ?? {},
+        groupedAssets: rowsGroupedByTopConfig ?? [],
         groupingLevels: groupRules?.fieldList.length ?? 1,
       );
     } else {
@@ -561,7 +573,7 @@ class _ExpandableGroupedAssetRowsListView extends StatefulWidget {
   final GroupHeaderWidgetBuilder groupHeaderBuilder;
   final IndexedItemRowBuilder rowBuilder;
   final Function(TvRowDataContainer)? onRowTapped;
-  final Map<String, List<TvRowDataContainer>> groupedAssets;
+  final List<RowGroup> groupedAssets;
   final int groupingLevels;
 
   const _ExpandableGroupedAssetRowsListView({
@@ -585,24 +597,30 @@ class _ExpandableGroupedAssetRowsListView extends StatefulWidget {
 class _ExpandableGroupedAssetRowsListViewState
     extends State<_ExpandableGroupedAssetRowsListView> {
   //
-  late List<String> _groupTitles = widget.groupedAssets.keys.toList();
+  late List<String> _groupTitles =
+      widget.groupedAssets.map((e) => e.groupName).toList();
 
   @override
   void didUpdateWidget(_ExpandableGroupedAssetRowsListView oldWidget) {
     if (oldWidget.groupedAssets != widget.groupedAssets) {
       setState(() {
-        final titles = widget.groupedAssets.keys.toList();
-        titles.sort((a, b) => a.compareTo(b));
-        _groupTitles = titles;
+        final assets = widget.groupedAssets;
+        assets.sort();
+        _groupTitles = assets.map((e) => e.groupName).toList();
       });
     }
     super.didUpdateWidget(oldWidget);
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _groupTitles.sort((a, b) => a.compareTo(b));
+  List<TvRowDataContainer> _getAssetsForGroup(String groupTitle) {
+    try {
+      return widget.groupedAssets
+          .where((e) => e.groupName == groupTitle)
+          .first
+          .items;
+    } catch (e) {
+      return [];
+    }
   }
 
   @override
@@ -633,7 +651,7 @@ class _ExpandableGroupedAssetRowsListViewState
                   _AssetRowsGroupedListView(
                     scrollable: false,
                     onRefresh: widget.onRefresh,
-                    assets: widget.groupedAssets[_groupTitles[i]] ?? [],
+                    assets: _getAssetsForGroup(_groupTitles[i]),
                     extractHeaderPayload: widget.groupByHeadDataCallback,
                     groupComparator: widget.groupComparator,
                     groupHeaderBuilder: widget.groupHeaderBuilder,

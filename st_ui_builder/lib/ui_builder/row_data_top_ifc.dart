@@ -177,7 +177,10 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
     }
   }
 
-  Comparable sortValueExtractor(DbTableFieldName fldName) {
+  Comparable sortValueExtractor(
+    DbTableFieldName fldName, {
+    String? compName,
+  }) {
     /* comparible values used for the actual sort
     */
     switch (fldName) {
@@ -191,8 +194,7 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
         return leagueGrouping;
 
       case DbTableFieldName.competitionDate:
-        return (competitionDate.truncateTime.microsecondsSinceEpoch / 1000)
-            .round();
+        return competitionDate.truncateTime;
       case DbTableFieldName.competitionTime:
         return competitionDate.timeOnly;
 
@@ -209,9 +211,9 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
       case DbTableFieldName.assetPosition:
         return position;
       case DbTableFieldName.basedOnEventDelimiters:
-        return "basedOnEventDelimiters";
+        return groupName ?? "basedOnEventDelimiters";
       case DbTableFieldName.competitionName:
-        return groupName ?? "competitionName";
+        return compName ?? "competitionName";
     }
   }
 }
