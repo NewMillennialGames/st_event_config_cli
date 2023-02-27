@@ -309,8 +309,10 @@ class GroupedTableDataMgr {
     /* build title and values for filter menu dropdown list
       return set of strings
     */
-    List<AssetRowPropertyIfc> sortedAssetRows =
-        _filterDropDnGetDistinctAssets(filterItem.colName);
+    List<AssetRowPropertyIfc> sortedAssetRows = _filterDropDnGetDistinctAssets(
+      filterItem.colName,
+      sortList: filterItem.asc,
+    );
 
     List<String> filterMenuItemLabels = [
       filterItem.colNameOrFilterMenuTitle(assetTypeIsTeam),
