@@ -581,12 +581,15 @@ class RowControl extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Decimal percentageChange;
+    //handle division by 0 error
     try {
       percentageChange =
           ((competitor.currPrice - competitor.openPrice) / competitor.openPrice)
               .toDecimal(scaleOnInfinitePrecision: 2);
     } catch (e) {
-      percentageChange = Decimal.zero;
+      percentageChange =
+          ((competitor.currPrice - competitor.openPrice) / Decimal.one)
+              .toDecimal(scaleOnInfinitePrecision: 2);
     }
     return Container(
       height: (110 / 1.4) * 0.89,
