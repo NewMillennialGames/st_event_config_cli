@@ -304,7 +304,7 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
   void _toggleLoadedConfigAndRedraw() {
     //
     bool redrawBool = ref.read(_redrawUiFlagProvider);
-    readExampleEventConfig(filename: cfgEmpl2).then(
+    readExampleEventConfig(filename: redrawBool ? cfgEmpl1 : cfgEmpl2).then(
       (_) {
         stBldr.setConfigForCurrentEvent(evCfgDataFromServer);
         tvMgr = stBldr.groupedTvConfigForScreen(

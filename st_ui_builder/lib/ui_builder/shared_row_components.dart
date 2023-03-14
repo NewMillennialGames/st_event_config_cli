@@ -261,26 +261,49 @@ class CheckAssetType extends StatelessWidget {
                 minHeight: 50.h,
                 maxHeight: 50.h,
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    firstName.toUpperCase(),
-                    overflow: TextOverflow.ellipsis,
-                    style: StTextStyles.p2
-                        .copyWith(fontWeight: FontWeight.w500, fontSize: 12.sp),
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    lastName.toUpperCase(),
-                    overflow: TextOverflow.ellipsis,
-                    style: StTextStyles.h3
-                        .copyWith(fontWeight: FontWeight.w800, fontSize: 18.sp),
-                    textAlign: TextAlign.center,
-                  )
-                ],
-              ),
+              child: competitor.assetNameDisplayStyle ==
+                      EvAssetNameDisplayStyle.showBothStacked
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          competitor.topName,
+                          style: StTextStyles.h5,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          // textScaleFactor: 0.96,
+                          // textWidthBasis: TextWidthBasis.longestLine,
+                        ),
+                        Text(
+                          competitor.subName,
+                          style: StTextStyles.p3,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          // textScaleFactor: 0.96,
+                          // textWidthBasis: TextWidthBasis.longestLine,
+                        ),
+                      ],
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          firstName.toUpperCase(),
+                          overflow: TextOverflow.ellipsis,
+                          style: StTextStyles.p2.copyWith(
+                              fontWeight: FontWeight.w500, fontSize: 12.sp),
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          lastName.toUpperCase(),
+                          overflow: TextOverflow.ellipsis,
+                          style: StTextStyles.h3.copyWith(
+                              fontWeight: FontWeight.w800, fontSize: 18.sp),
+                          textAlign: TextAlign.center,
+                        )
+                      ],
+                    ),
             ),
             if (tradeSource != null) ...[
               const Spacer(),
@@ -302,10 +325,33 @@ class CheckAssetType extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (tradeSource == null)
-              Text(competitor.topName,
-                  softWrap: true,
-                  overflow: TextOverflow.ellipsis,
-                  style: StTextStyles.h4)
+              competitor.assetNameDisplayStyle ==
+                      EvAssetNameDisplayStyle.showBothStacked
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          competitor.topName,
+                          style: StTextStyles.h5,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          // textScaleFactor: 0.96,
+                          // textWidthBasis: TextWidthBasis.longestLine,
+                        ),
+                        Text(
+                          competitor.subName,
+                          style: StTextStyles.p3,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          // textScaleFactor: 0.96,
+                          // textWidthBasis: TextWidthBasis.longestLine,
+                        ),
+                      ],
+                    )
+                  : Text(competitor.topName,
+                      softWrap: true,
+                      overflow: TextOverflow.ellipsis,
+                      style: StTextStyles.h4)
             else
               Text(tradeSource!,
                   softWrap: true,
@@ -332,16 +378,40 @@ class CheckAssetType extends StatelessWidget {
       return Expanded(
         child: Row(
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(competitor.topName, style: StTextStyles.h4),
-                Text(
-                  competitor.rankStr,
-                  style: StTextStyles.p2.copyWith(color: StColors.coolGray),
-                ),
-              ],
-            ),
+            competitor.assetNameDisplayStyle ==
+                    EvAssetNameDisplayStyle.showBothStacked
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        competitor.topName,
+                        style: StTextStyles.h5,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        // textScaleFactor: 0.96,
+                        // textWidthBasis: TextWidthBasis.longestLine,
+                      ),
+                      Text(
+                        competitor.subName,
+                        style: StTextStyles.p3,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        // textScaleFactor: 0.96,
+                        // textWidthBasis: TextWidthBasis.longestLine,
+                      ),
+                    ],
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(competitor.topName, style: StTextStyles.h4),
+                      Text(
+                        competitor.rankStr,
+                        style:
+                            StTextStyles.p2.copyWith(color: StColors.coolGray),
+                      ),
+                    ],
+                  ),
             if (tradeSource != null) ...[
               const Spacer(),
               kSpacerLarge,
@@ -357,15 +427,38 @@ class CheckAssetType extends StatelessWidget {
     return Expanded(
       child: Row(
         children: [
-          ConstrainedBox(
-            constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width * .4),
-            child: Text(
-              competitor.topName,
-              overflow: TextOverflow.ellipsis,
-              style: StTextStyles.h4,
-            ),
-          ),
+          competitor.assetNameDisplayStyle ==
+                  EvAssetNameDisplayStyle.showBothStacked
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      competitor.topName,
+                      style: StTextStyles.h5,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      // textScaleFactor: 0.96,
+                      // textWidthBasis: TextWidthBasis.longestLine,
+                    ),
+                    Text(
+                      competitor.subName,
+                      style: StTextStyles.p3,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      // textScaleFactor: 0.96,
+                      // textWidthBasis: TextWidthBasis.longestLine,
+                    ),
+                  ],
+                )
+              : ConstrainedBox(
+                  constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width * .4),
+                  child: Text(
+                    competitor.topName,
+                    overflow: TextOverflow.ellipsis,
+                    style: StTextStyles.h4,
+                  ),
+                ),
           if (tradeSource != null) ...[
             const Spacer(),
             kSpacerLarge,
@@ -471,16 +564,39 @@ class AssetVsAssetHalfRow extends StatelessWidget {
           ),
           kSpacerSm,
         ],
-        Expanded(
-          child: Text(
-            competitor.topName,
-            style: StTextStyles.h5,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            // textScaleFactor: 0.96,
-            // textWidthBasis: TextWidthBasis.longestLine,
-          ),
-        ),
+        competitor.assetNameDisplayStyle ==
+                EvAssetNameDisplayStyle.showBothStacked
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    competitor.topName,
+                    style: StTextStyles.h5,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    // textScaleFactor: 0.96,
+                    // textWidthBasis: TextWidthBasis.longestLine,
+                  ),
+                  Text(
+                    competitor.subName,
+                    style: StTextStyles.p3,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    // textScaleFactor: 0.96,
+                    // textWidthBasis: TextWidthBasis.longestLine,
+                  ),
+                ],
+              )
+            : Expanded(
+                child: Text(
+                  competitor.topName,
+                  style: StTextStyles.h5,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  // textScaleFactor: 0.96,
+                  // textWidthBasis: TextWidthBasis.longestLine,
+                ),
+              ),
         Text(
           competitor.currPriceStr,
           style: StTextStyles.h5,
