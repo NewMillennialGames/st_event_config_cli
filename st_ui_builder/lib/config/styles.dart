@@ -250,7 +250,6 @@ class StTextStyles {
   //   color: StColors.darkBlue,
   //   fontWeight: FontWeight.w500,
   // );
-
 }
 
 class StButtonStyles {
@@ -263,6 +262,15 @@ class StButtonStyles {
     //   horizontal: 15,
     // ),
   );
+
+  static ButtonStyle tradeButtonAlsoInProgress = TextButton.styleFrom(
+      backgroundColor: StColors.darkGreen,
+      textStyle: const TextStyle(color: StColors.darkBlue)
+      // padding: const EdgeInsets.symmetric(
+      //   vertical: 20,
+      //   horizontal: 15,
+      // ),
+      );
 
   // replace
   static ButtonStyle getTokens = ElevatedButton.styleFrom(

@@ -195,7 +195,13 @@ class TradeButton extends ConsumerWidget {
           ? TextButton(
               onPressed: () =>
                   tf.beginTradeFlow(AssetKey(assetStateUpdts.assetKey)),
-              style: StButtonStyles.tradeButtonCanTrade,
+              style: _useTradeAndGameOnButton(
+                competitionStatus,
+                assetStateUpdts.assetState,
+                assetStateUpdts.tradeMode,
+              )
+                  ? StButtonStyles.tradeButtonAlsoInProgress
+                  : StButtonStyles.tradeButtonCanTrade,
               child: Text(
                 assetStateUpdts.tradeButtonTitle,
                 style: StTextStyles.h6.copyWith(color: StColors.lightGreen),
@@ -214,6 +220,15 @@ class TradeButton extends ConsumerWidget {
               textAlign: TextAlign.center,
             ),
     );
+  }
+
+  bool _useTradeAndGameOnButton(
+    CompetitionStatus compStatus,
+    AssetState assetState,
+    TradeMode tradeMode,
+  ) {
+    return compStatus == CompetitionStatus.compInProgress &&
+        assetState == AssetState.assetTrade;
   }
 }
 
