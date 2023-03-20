@@ -263,9 +263,12 @@ class StButtonStyles {
     // ),
   );
 
+  // static ButtonStyle tradeButtonAlsoInProgress2 =
+  //     tradeButtonCanTrade.copyWith(textStyle: TextStyle(color: StColors.red));
+
   static ButtonStyle tradeButtonAlsoInProgress = TextButton.styleFrom(
       backgroundColor: StColors.darkGreen,
-      textStyle: const TextStyle(color: StColors.darkBlue)
+      textStyle: const TextStyle(color: StColors.red)
       // padding: const EdgeInsets.symmetric(
       //   vertical: 20,
       //   horizontal: 15,

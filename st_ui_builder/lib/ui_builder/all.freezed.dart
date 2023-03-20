@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of StUiController;
 
@@ -19,8 +19,8 @@ mixin _$AssetStateUpdates {
   String get assetKey => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get ticker => throw _privateConstructorUsedError;
-  AssetState get assetState => throw _privateConstructorUsedError;
-  TradeMode get tradeMode => throw _privateConstructorUsedError;
+  AssetState get assetState =>
+      throw _privateConstructorUsedError; // @Default(TradeMode.tradeMarket) TradeMode tradeMode,
   bool get isWatched => throw _privateConstructorUsedError;
   bool get isOwned => throw _privateConstructorUsedError;
   bool get isBeingRepriced => throw _privateConstructorUsedError;
@@ -45,7 +45,6 @@ abstract class $AssetStateUpdatesCopyWith<$Res> {
       String name,
       String ticker,
       AssetState assetState,
-      TradeMode tradeMode,
       bool isWatched,
       bool isOwned,
       bool isBeingRepriced,
@@ -72,7 +71,6 @@ class _$AssetStateUpdatesCopyWithImpl<$Res, $Val extends AssetStateUpdates>
     Object? name = null,
     Object? ticker = null,
     Object? assetState = null,
-    Object? tradeMode = null,
     Object? isWatched = null,
     Object? isOwned = null,
     Object? isBeingRepriced = null,
@@ -98,10 +96,6 @@ class _$AssetStateUpdatesCopyWithImpl<$Res, $Val extends AssetStateUpdates>
           ? _value.assetState
           : assetState // ignore: cast_nullable_to_non_nullable
               as AssetState,
-      tradeMode: null == tradeMode
-          ? _value.tradeMode
-          : tradeMode // ignore: cast_nullable_to_non_nullable
-              as TradeMode,
       isWatched: null == isWatched
           ? _value.isWatched
           : isWatched // ignore: cast_nullable_to_non_nullable
@@ -147,7 +141,6 @@ abstract class _$$_AssetStateUpdatesCopyWith<$Res>
       String name,
       String ticker,
       AssetState assetState,
-      TradeMode tradeMode,
       bool isWatched,
       bool isOwned,
       bool isBeingRepriced,
@@ -172,7 +165,6 @@ class __$$_AssetStateUpdatesCopyWithImpl<$Res>
     Object? name = null,
     Object? ticker = null,
     Object? assetState = null,
-    Object? tradeMode = null,
     Object? isWatched = null,
     Object? isOwned = null,
     Object? isBeingRepriced = null,
@@ -198,10 +190,6 @@ class __$$_AssetStateUpdatesCopyWithImpl<$Res>
           ? _value.assetState
           : assetState // ignore: cast_nullable_to_non_nullable
               as AssetState,
-      tradeMode: null == tradeMode
-          ? _value.tradeMode
-          : tradeMode // ignore: cast_nullable_to_non_nullable
-              as TradeMode,
       isWatched: null == isWatched
           ? _value.isWatched
           : isWatched // ignore: cast_nullable_to_non_nullable
@@ -240,7 +228,6 @@ class _$_AssetStateUpdates extends _AssetStateUpdates
     with DiagnosticableTreeMixin {
   const _$_AssetStateUpdates(this.assetKey, this.name, this.ticker,
       {this.assetState = AssetState.assetPretrade,
-      this.tradeMode = TradeMode.tradeMarket,
       this.isWatched = false,
       this.isOwned = false,
       this.isBeingRepriced = false,
@@ -259,9 +246,7 @@ class _$_AssetStateUpdates extends _AssetStateUpdates
   @override
   @JsonKey()
   final AssetState assetState;
-  @override
-  @JsonKey()
-  final TradeMode tradeMode;
+// @Default(TradeMode.tradeMarket) TradeMode tradeMode,
   @override
   @JsonKey()
   final bool isWatched;
@@ -282,7 +267,7 @@ class _$_AssetStateUpdates extends _AssetStateUpdates
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'AssetStateUpdates(assetKey: $assetKey, name: $name, ticker: $ticker, assetState: $assetState, tradeMode: $tradeMode, isWatched: $isWatched, isOwned: $isOwned, isBeingRepriced: $isBeingRepriced, curPrice: $curPrice, hiPrice: $hiPrice, lowPrice: $lowPrice, openPrice: $openPrice)';
+    return 'AssetStateUpdates(assetKey: $assetKey, name: $name, ticker: $ticker, assetState: $assetState, isWatched: $isWatched, isOwned: $isOwned, isBeingRepriced: $isBeingRepriced, curPrice: $curPrice, hiPrice: $hiPrice, lowPrice: $lowPrice, openPrice: $openPrice)';
   }
 
   @override
@@ -294,7 +279,6 @@ class _$_AssetStateUpdates extends _AssetStateUpdates
       ..add(DiagnosticsProperty('name', name))
       ..add(DiagnosticsProperty('ticker', ticker))
       ..add(DiagnosticsProperty('assetState', assetState))
-      ..add(DiagnosticsProperty('tradeMode', tradeMode))
       ..add(DiagnosticsProperty('isWatched', isWatched))
       ..add(DiagnosticsProperty('isOwned', isOwned))
       ..add(DiagnosticsProperty('isBeingRepriced', isBeingRepriced))
@@ -315,8 +299,6 @@ class _$_AssetStateUpdates extends _AssetStateUpdates
             (identical(other.ticker, ticker) || other.ticker == ticker) &&
             (identical(other.assetState, assetState) ||
                 other.assetState == assetState) &&
-            (identical(other.tradeMode, tradeMode) ||
-                other.tradeMode == tradeMode) &&
             (identical(other.isWatched, isWatched) ||
                 other.isWatched == isWatched) &&
             (identical(other.isOwned, isOwned) || other.isOwned == isOwned) &&
@@ -338,7 +320,6 @@ class _$_AssetStateUpdates extends _AssetStateUpdates
       name,
       ticker,
       assetState,
-      tradeMode,
       isWatched,
       isOwned,
       isBeingRepriced,
@@ -359,7 +340,6 @@ abstract class _AssetStateUpdates extends AssetStateUpdates {
   const factory _AssetStateUpdates(
       final String assetKey, final String name, final String ticker,
       {final AssetState assetState,
-      final TradeMode tradeMode,
       final bool isWatched,
       final bool isOwned,
       final bool isBeingRepriced,
@@ -377,9 +357,7 @@ abstract class _AssetStateUpdates extends AssetStateUpdates {
   String get ticker;
   @override
   AssetState get assetState;
-  @override
-  TradeMode get tradeMode;
-  @override
+  @override // @Default(TradeMode.tradeMarket) TradeMode tradeMode,
   bool get isWatched;
   @override
   bool get isOwned;
@@ -590,6 +568,8 @@ class _$_ActiveGameDetails extends _ActiveGameDetails
   @override
   @JsonKey()
   List<AssetStateUpdates> get participantAssetInfo {
+    if (_participantAssetInfo is EqualUnmodifiableListView)
+      return _participantAssetInfo;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_participantAssetInfo);
   }

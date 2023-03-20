@@ -2,9 +2,9 @@ part of StUiController;
 
 extension CompetitionStatusExt5 on CompetitionStatus {
   //
-  bool get isTradable => [
-        CompetitionStatus.compInFuture,
-      ].contains(this);
+  // bool get isTradable => [
+  //       CompetitionStatus.compInFuture,
+  //     ].contains(this);
 
   bool get hasEnded => [
         CompetitionStatus.compFinished,
@@ -14,7 +14,11 @@ extension CompetitionStatusExt5 on CompetitionStatus {
 
 extension AssetStateExt1 on AssetState {
   //
-  bool get isTradable => AssetState.assetTrade == this;
+  bool get isTradable => [
+        AssetState.assetTradeMarket,
+        AssetState.assetTradeMarketGameOn,
+        AssetState.assetTradeLiquidate,
+      ].contains(this);
 
   String get tradeButtonTitle {
     /*  overriden in ST codebase with:
@@ -32,10 +36,17 @@ extension AssetStateExt1 on AssetState {
       case AssetState.assetEliminated:
         label = "Out";
         break;
-      case AssetState.assetTrade:
+      case AssetState.assetTradeMarket:
+        label = StStrings.tradeUc;
+        break;
+      case AssetState.assetTradeLiquidate:
+        label = "Liquidate";
+        break;
+      case AssetState.assetTradeMarketGameOn:
         label = StStrings.tradeUc;
         break;
       case AssetState.assetGameOn:
+        // StStrings.gameOn
         label = "Game On";
         break;
       case AssetState.assetGameOver:

@@ -24,7 +24,7 @@ class AssetStateUpdates with _$AssetStateUpdates {
     String name,
     String ticker, {
     @Default(AssetState.assetPretrade) AssetState assetState,
-    @Default(TradeMode.tradeMarket) TradeMode tradeMode,
+    // @Default(TradeMode.tradeMarket) TradeMode tradeMode,
     @Default(false) bool isWatched,
     @Default(false) bool isOwned,
     @Default(false) bool isBeingRepriced,
@@ -40,7 +40,7 @@ class AssetStateUpdates with _$AssetStateUpdates {
       a.name,
       a.ticker,
       assetState: a.state,
-      tradeMode: a.tradeMode,
+      // tradeMode: a.tradeMode,
       openPrice: a.openingPrice.asPrice2d,
       hiPrice: a.highPrice.asPrice2d,
       lowPrice: a.lowPrice.asPrice2d,
@@ -57,7 +57,7 @@ class AssetStateUpdates with _$AssetStateUpdates {
       hiPrice: ai.highPrice.asPrice2d,
       lowPrice: ai.lowPrice.asPrice2d,
       assetState: ai.state,
-      tradeMode: ai.mode,
+      // tradeMode: ai.mode,
     );
   }
 
@@ -166,7 +166,7 @@ class ActiveGameDetails with _$ActiveGameDetails {
       curPrice: info.price.asPrice2d,
       hiPrice: info.highPrice.asPrice2d,
       lowPrice: info.lowPrice.asPrice2d,
-      tradeMode: info.mode,
+      // tradeMode: info.mode,
       assetState: info.state,
     );
     List<AssetStateUpdates> lstCopy = participantAssetInfo.toList();
@@ -207,14 +207,14 @@ class ActiveGameDetails with _$ActiveGameDetails {
       participantAssetInfo.length > 1 ? participantAssetInfo[1].assetKey : '_';
 
   bool get isTradableAsset1 => participantAssetInfo.isNotEmpty
-      ? participantAssetInfo.first.isTradable && _isTradableGame
+      ? participantAssetInfo.first.isTradable // && _isTradableGame
       : false;
 
   bool get isTradableAsset2 => participantAssetInfo.length > 1
-      ? participantAssetInfo[1].isTradable && _isTradableGame
+      ? participantAssetInfo[1].isTradable // && _isTradableGame
       : false;
 
-  bool get _isTradableGame => gameStatus.isTradable;
+  // bool get _isTradableGame => gameStatus.isTradable;
 
   //
   int get competitorCount => participantAssetInfo.length;

@@ -193,15 +193,13 @@ class TradeButton extends ConsumerWidget {
       alignment: Alignment.center,
       child: (assetStateUpdts.isTradable)
           ? TextButton(
-              onPressed: () =>
-                  tf.beginTradeFlow(AssetKey(assetStateUpdts.assetKey)),
-              style: _useTradeAndGameOnButton(
-                competitionStatus,
+              onPressed: () => tf.beginTradeFlow(
+                AssetKey(assetStateUpdts.assetKey),
+              ),
+              style: _styleForAssetState(
                 assetStateUpdts.assetState,
-                assetStateUpdts.tradeMode,
-              )
-                  ? StButtonStyles.tradeButtonAlsoInProgress
-                  : StButtonStyles.tradeButtonCanTrade,
+                competitionStatus,
+              ),
               child: Text(
                 assetStateUpdts.tradeButtonTitle,
                 style: StTextStyles.h6.copyWith(color: StColors.lightGreen),
@@ -222,14 +220,21 @@ class TradeButton extends ConsumerWidget {
     );
   }
 
-  bool _useTradeAndGameOnButton(
-    CompetitionStatus compStatus,
+  ButtonStyle _styleForAssetState(
     AssetState assetState,
-    TradeMode tradeMode,
+    CompetitionStatus compStatus,
   ) {
-    return compStatus == CompetitionStatus.compInProgress &&
-        assetState == AssetState.assetTrade;
+    return assetState == AssetState.assetTradeMarketGameOn
+        ? StButtonStyles.tradeButtonAlsoInProgress
+        : StButtonStyles.tradeButtonCanTrade;
   }
+
+  // bool _useTradeAndGameOnButton(
+  //   AssetState assetState,
+  //   CompetitionStatus compStatus,
+  // ) {
+  //   return assetState == AssetState.assetTradeMarketGameOn;
+  // }
 }
 
 class CheckAssetType extends StatelessWidget {
@@ -921,79 +926,79 @@ class _PositionRankRow extends StatelessWidget {
   }
 }
 
-class AssetTopRow extends StatelessWidget {
-  //
-  final AssetRowPropertyIfc asset;
-  final ActiveGameDetails gameStatus;
+// class AssetTopRowNIU extends StatelessWidget {
+//   //
+//   final AssetRowPropertyIfc asset;
+//   final ActiveGameDetails gameStatus;
 
-  const AssetTopRow(
-    this.asset,
-    this.gameStatus, {
-    Key? key,
-  }) : super(key: key);
+//   const AssetTopRowNIU(
+//     this.asset,
+//     this.gameStatus, {
+//     Key? key,
+//   }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    // final size = MediaQuery.of(context).size;
-    const double _rowLeftMargin = 8;
-    const double _rowRightMargin = 16;
-    return Expanded(
-      child: Row(
-        // top row
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Flexible(
-            fit: FlexFit.loose,
-            child: Padding(
-              padding: const EdgeInsets.only(left: _rowLeftMargin),
-              child: Column(
-                // player & team name
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    asset.topName,
-                    textAlign: TextAlign.left,
-                    style: asset.subName != ''
-                        ? StTextStyles.h2.copyWith(
-                            color: Colors.yellow,
-                          )
-                        : StTextStyles.h2.copyWith(
-                            color: Colors.pink,
-                          ),
-                  ),
-                  Text(
-                    asset.subName,
-                    style: StTextStyles.h5.copyWith(color: StColors.white),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          if (gameStatus._isTradableGame)
-            // trade button to right of player/team name
-            Padding(
-              padding: const EdgeInsets.only(right: _rowRightMargin),
-              child: TextButton(
-                child: Text(
-                  StStrings.tradeUc,
-                  style: StTextStyles.h5,
-                ),
-                onPressed: () {},
-                style: StButtonStyles.tradeButtonCanTrade,
-                // style: size.height <= 568
-                //     ? tradePlayerMarketLessWidthViewButtonStyle
-                //     : tradePlayerMarketViewButtonStyle,
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     // final size = MediaQuery.of(context).size;
+//     const double _rowLeftMargin = 8;
+//     const double _rowRightMargin = 16;
+//     return Expanded(
+//       child: Row(
+//         // top row
+//         mainAxisSize: MainAxisSize.max,
+//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//         crossAxisAlignment: CrossAxisAlignment.center,
+//         children: [
+//           Flexible(
+//             fit: FlexFit.loose,
+//             child: Padding(
+//               padding: const EdgeInsets.only(left: _rowLeftMargin),
+//               child: Column(
+//                 // player & team name
+//                 mainAxisAlignment: MainAxisAlignment.start,
+//                 mainAxisSize: MainAxisSize.min,
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   Text(
+//                     asset.topName,
+//                     textAlign: TextAlign.left,
+//                     style: asset.subName != ''
+//                         ? StTextStyles.h2.copyWith(
+//                             color: Colors.yellow,
+//                           )
+//                         : StTextStyles.h2.copyWith(
+//                             color: Colors.pink,
+//                           ),
+//                   ),
+//                   Text(
+//                     asset.subName,
+//                     style: StTextStyles.h5.copyWith(color: StColors.white),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//           if (asset.assetStateUpdates.isTradable)
+//             // trade button to right of player/team name
+//             Padding(
+//               padding: const EdgeInsets.only(right: _rowRightMargin),
+//               child: TextButton(
+//                 child: Text(
+//                   StStrings.tradeUc,
+//                   style: StTextStyles.h5,
+//                 ),
+//                 onPressed: () {},
+//                 style: StButtonStyles.tradeButtonCanTrade,
+//                 // style: size.height <= 568
+//                 //     ? tradePlayerMarketLessWidthViewButtonStyle
+//                 //     : tradePlayerMarketViewButtonStyle,
+//               ),
+//             ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 class HoldingsAndValueRow extends StatelessWidget {
   //
@@ -1036,7 +1041,7 @@ class HoldingsAndValueRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  _sharesHeld.toString() + ' ' + StStrings.shares,
+                  '${_sharesHeld.toString()} ${StStrings.shares}',
                   style: StTextStyles.h5,
                 ),
                 RichText(
@@ -1050,11 +1055,11 @@ class HoldingsAndValueRow extends StatelessWidget {
                         text: '${'asset.shares'} ',
                         style: StTextStyles.p2,
                       ),
-                      if (false)
-                        TextSpan(
-                          text: _formattedGainLoss,
-                          style: StTextStyles.moneyDeltaPositive,
-                        ),
+                      // if (false)
+                      //   TextSpan(
+                      //     text: _formattedGainLoss,
+                      //     style: StTextStyles.moneyDeltaPositive,
+                      //   ),
                     ],
                   ),
                 )
@@ -1064,7 +1069,7 @@ class HoldingsAndValueRow extends StatelessWidget {
           Column(
             children: [
               Text(
-                gameStatus._isTradableGame
+                asset.assetStateUpdates.isTradable
                     ? StStrings.value
                     : StStrings.proceeds,
                 style: StTextStyles.h5.copyWith(),
