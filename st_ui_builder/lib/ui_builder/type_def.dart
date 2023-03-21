@@ -85,6 +85,9 @@ abstract class StKey {
 
   String get value => _value;
 
+  bool get isAssetKey => this is AssetKey;
+  bool get isCompetitionKey => !isAssetKey;
+
   @override
   String toString() => value;
 
