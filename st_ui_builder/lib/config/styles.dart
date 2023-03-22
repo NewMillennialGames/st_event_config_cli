@@ -263,16 +263,15 @@ class StButtonStyles {
     // ),
   );
 
-  // static ButtonStyle tradeButtonAlsoInProgress = TextButton.styleFrom(
-  //   backgroundColor: StColors.darkGreen,
-  //   textStyle: const TextStyle(color: StColors.red),
-  //   foregroundColor: StColors.orange,
-  //   surfaceTintColor: StColors.white,
-  //   // padding: const EdgeInsets.symmetric(
-  //   //   vertical: 20,
-  //   //   horizontal: 15,
-  //   // ),
-  // );
+  static ButtonStyle tradeBtnWhileGameInProgress = TextButton.styleFrom(
+    backgroundColor: StColors.darkGreen,
+    shape: const BeveledRectangleBorder(
+      borderRadius: BorderRadius.all(
+        Radius.circular(4),
+      ),
+    ),
+    side: const BorderSide(color: StColors.red, width: 4),
+  );
 
   // replace
   static ButtonStyle getTokens = ElevatedButton.styleFrom(
