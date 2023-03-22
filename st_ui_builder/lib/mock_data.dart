@@ -123,8 +123,11 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
   bool get isTeam => true;
 
   @override
-  AssetStateUpdates get assetStateUpdates =>
-      AssetStateUpdates.fromAsset(Asset()); // throw UnimplementedError();
+  AssetStateUpdates get assetStateUpdates => AssetStateUpdates.fromAsset(
+        Asset(
+          state: AssetState.assetTradeMarketGameOn,
+        ),
+      ); // throw UnimplementedError();
 
   @override
   AssetHoldingsSummaryIfc get assetHoldingsSummary => MockAssetHoldings();

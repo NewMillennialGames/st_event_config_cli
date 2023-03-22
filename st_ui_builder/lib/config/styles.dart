@@ -265,12 +265,12 @@ class StButtonStyles {
 
   static ButtonStyle tradeBtnWhileGameInProgress = TextButton.styleFrom(
     backgroundColor: StColors.darkGreen,
-    shape: const BeveledRectangleBorder(
+    shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.all(
-        Radius.circular(4),
+        Radius.circular(3),
       ),
     ),
-    side: const BorderSide(color: StColors.red, width: 4),
+    side: const BorderSide(color: Colors.red, width: 4),
   );
 
   // replace
