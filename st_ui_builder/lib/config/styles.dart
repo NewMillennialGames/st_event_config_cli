@@ -263,17 +263,16 @@ class StButtonStyles {
     // ),
   );
 
-  // static ButtonStyle tradeButtonAlsoInProgress2 =
-  //     tradeButtonCanTrade.copyWith(textStyle: TextStyle(color: StColors.red));
-
-  static ButtonStyle tradeButtonAlsoInProgress = TextButton.styleFrom(
-      backgroundColor: StColors.darkGreen,
-      textStyle: const TextStyle(color: StColors.red)
-      // padding: const EdgeInsets.symmetric(
-      //   vertical: 20,
-      //   horizontal: 15,
-      // ),
-      );
+  // static ButtonStyle tradeButtonAlsoInProgress = TextButton.styleFrom(
+  //   backgroundColor: StColors.darkGreen,
+  //   textStyle: const TextStyle(color: StColors.red),
+  //   foregroundColor: StColors.orange,
+  //   surfaceTintColor: StColors.white,
+  //   // padding: const EdgeInsets.symmetric(
+  //   //   vertical: 20,
+  //   //   horizontal: 15,
+  //   // ),
+  // );
 
   // replace
   static ButtonStyle getTokens = ElevatedButton.styleFrom(

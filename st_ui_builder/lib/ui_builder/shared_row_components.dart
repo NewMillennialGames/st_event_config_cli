@@ -186,6 +186,10 @@ class TradeButton extends ConsumerWidget {
     // final size = MediaQuery.of(context).size;
     TradeFlowBase tf = ref.read(tradeFlowProvider);
 
+    print(
+      'Built trade btn for ${assetStateUpdts.assetKey} with state ${assetStateUpdts.assetState.name}',
+    );
+
     return Container(
       height: UiSizes.tradeBtnHeight,
       width: 75.w,
@@ -196,13 +200,13 @@ class TradeButton extends ConsumerWidget {
               onPressed: () => tf.beginTradeFlow(
                 AssetKey(assetStateUpdts.assetKey),
               ),
-              style: _styleForAssetState(
-                assetStateUpdts.assetState,
-                competitionStatus,
-              ),
+              style: StButtonStyles.tradeButtonCanTrade,
               child: Text(
                 assetStateUpdts.tradeButtonTitle,
-                style: StTextStyles.h6.copyWith(color: StColors.lightGreen),
+                style: _styleForAssetState(
+                  assetStateUpdts.assetState,
+                  competitionStatus,
+                ),
                 textAlign: TextAlign.center,
               ),
             )
@@ -220,13 +224,13 @@ class TradeButton extends ConsumerWidget {
     );
   }
 
-  ButtonStyle _styleForAssetState(
+  TextStyle _styleForAssetState(
     AssetState assetState,
     CompetitionStatus compStatus,
   ) {
     return assetState == AssetState.assetTradeMarketGameOn
-        ? StButtonStyles.tradeButtonAlsoInProgress
-        : StButtonStyles.tradeButtonCanTrade;
+        ? StTextStyles.h6.copyWith(color: StColors.red)
+        : StTextStyles.h6.copyWith(color: StColors.lightGreen);
   }
 
   // bool _useTradeAndGameOnButton(
@@ -719,9 +723,9 @@ class RowControl extends StatelessWidget {
     Decimal percentageChange;
     //handle division by 0 error
     try {
-      percentageChange =
-          ((competitor.currPrice - competitor.openPrice) / competitor.openPrice)
-              .toDecimal(scaleOnInfinitePrecision: 2);
+      percentageChange = competitor.percentageChange;
+      // ((competitor.currPrice - competitor.openPrice) / competitor.openPrice)
+      //     .toDecimal(scaleOnInfinitePrecision: 2);
     } catch (e) {
       percentageChange =
           ((competitor.currPrice - competitor.openPrice) / Decimal.one)

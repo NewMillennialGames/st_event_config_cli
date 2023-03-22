@@ -69,7 +69,11 @@ class AssetVsAssetRowMktView extends StBaseTvRow
             onTap?.call(assets);
           },
           child: AssetVsAssetHalfRow(
-              comp1, agd, showRank, comp1.assetHoldingsSummary),
+            comp1,
+            agd,
+            showRank,
+            comp1.assetHoldingsSummary,
+          ),
         ),
         SizedBox(height: UiSizes.spaceBtwnRows),
         GestureDetector(
@@ -564,20 +568,23 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CheckAssetType(
-                          competitor: comp1,
-                          isDriverVsField: isDriverVsField,
-                          isPlayerVsFieldRanked: isPlayerVsFieldRanked,
-                          isTeamPlayerVsField: isTeamPlayerVsField,
-                          tradeSource: tradeSource,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CheckAssetType(
+                        competitor: comp1,
+                        isDriverVsField: isDriverVsField,
+                        isPlayerVsFieldRanked: isPlayerVsFieldRanked,
+                        isTeamPlayerVsField: isTeamPlayerVsField,
+                        tradeSource: tradeSource,
+                      ),
+                      if (showHoldingsValue)
+                        // this is a portfolio positions row; show trade
+                        TradeButton(
+                          comp1.assetStateUpdates,
+                          comp1.competitionStatus,
                         ),
-                        if (showHoldingsValue)
-                          // this is a portfolio positions row; show trade
-                          TradeButton(
-                              comp1.assetStateUpdates, comp1.competitionStatus),
-                      ]),
+                    ],
+                  ),
                   kVerticalSpacerSm,
                   Expanded(
                     child: Container(
@@ -876,8 +883,9 @@ class TeamVsFieldRowMktView extends StBaseTvRow
                         ),
                         Text(
                           comp1.recentDeltaStr,
-                          style: StTextStyles.h5
-                              .copyWith(color: comp1.priceFluxColor),
+                          style: StTextStyles.h5.copyWith(
+                            color: comp1.priceFluxColor,
+                          ),
                         ),
                       ],
                     )
