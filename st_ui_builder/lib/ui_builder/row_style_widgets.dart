@@ -56,6 +56,16 @@ class AssetVsAssetRowMktView extends StBaseTvRow
     BuildContext ctx,
     ActiveGameDetails agd,
   ) {
+    AssetRowPropertyIfc firstAsset = comp1;
+    AssetRowPropertyIfc secondAsset = comp2;
+
+    if (showRank) {
+      if (secondAsset.rank < firstAsset.rank) {
+        firstAsset = comp2;
+        secondAsset = comp1;
+      }
+    }
+
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -69,10 +79,10 @@ class AssetVsAssetRowMktView extends StBaseTvRow
             onTap?.call(assets);
           },
           child: AssetVsAssetHalfRow(
-            comp1,
+            firstAsset,
             agd,
             showRank,
-            comp1.assetHoldingsSummary,
+            firstAsset.assetHoldingsSummary,
           ),
         ),
         SizedBox(height: UiSizes.spaceBtwnRows),
@@ -85,10 +95,10 @@ class AssetVsAssetRowMktView extends StBaseTvRow
             onTap?.call(assets);
           },
           child: AssetVsAssetHalfRow(
-            comp2,
+            secondAsset,
             agd,
             showRank,
-            comp2.assetHoldingsSummary,
+            secondAsset.assetHoldingsSummary,
           ),
         ),
       ],
