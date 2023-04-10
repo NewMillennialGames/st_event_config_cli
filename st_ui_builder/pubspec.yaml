@@ -45,7 +45,7 @@ dependencies:
   freezed: ^2.0.3+1
   tuple: ^2.0.0
   dotted_border: ^2.0.0+2
-  flutter_riverpod: ^1.0.4
+  flutter_riverpod: ^2.3.2
   decimal: ^2.2.0
   intl:
   # The following adds the Cupertino Icons font to your application.

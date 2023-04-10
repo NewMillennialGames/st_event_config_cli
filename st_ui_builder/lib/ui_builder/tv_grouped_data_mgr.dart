@@ -33,6 +33,7 @@ class GroupedTableDataMgr {
   bool _disableAllGrouping = false;
   // disableGroupingBeyondDate: regions no longer matter when you get to final 4
   bool disableGroupingBeyondDate = false;
+  final List<String?> defaultFilterSelections;
 
   GroupedTableDataMgr(
     this.appScreen,
@@ -40,10 +41,36 @@ class GroupedTableDataMgr {
     this._tableViewCfg, {
     this.redrawCallback,
     bool disableAllGrouping = false,
+    this.defaultFilterSelections = const [],
     bool ascending = true,
   })  : _disableAllGrouping = disableAllGrouping,
         // sortOrder = ascending ? GroupedListOrder.ASC : GroupedListOrder.DESC,
-        _filteredAssetRows = _allAssetRows.toList();
+        _filteredAssetRows = _allAssetRows.toList() {
+    // _populateFilters();
+  }
+
+  GroupedTableDataMgr copyWith({
+    List<TvRowDataContainer>? assetRows,
+    List<String?>? defaultFilterSelections,
+  }) {
+    final groupedTableDataMgr = GroupedTableDataMgr(
+      appScreen,
+      assetRows ?? _allAssetRows,
+      _tableViewCfg,
+      redrawCallback: redrawCallback,
+      disableAllGrouping: disableAllGrouping,
+      defaultFilterSelections:
+          defaultFilterSelections ?? this.defaultFilterSelections,
+    );
+
+    print("CURRENNT filters in copyWith -> $_currentFilters");
+    // _populateFilters();
+
+    groupedTableDataMgr.filterAssetRows();
+    return groupedTableDataMgr;
+  }
+
+  int get maxFilterCount => 3;
 
   List<RowGroup>? get rowsGroupedByTopConfig =>
       _groupRowsBasedOnCfgTopColName(_filteredAssetRows);
@@ -169,10 +196,22 @@ class GroupedTableDataMgr {
   String? _filter2Selection;
   String? _filter3Selection;
 
+  late SortFilterEntry? i1 = filterRules!.item1;
+  late SortFilterEntry? i2 = filterRules!.item2;
+  late SortFilterEntry? i3 = filterRules!.item3;
+
+  late Set<String> listItems1 = i1 == null ? {} : _getListItemsByCfgField(i1!);
+  late Set<String> listItems2 = i2 == null ? {} : _getListItemsByCfgField(i2!);
+  late Set<String> listItems3 = i3 == null ? {} : _getListItemsByCfgField(i3!);
+
   Widget columnFilterBarWidget({
     double totAvailWidth = 360,
     double barHeight = 46,
     Color backColor = Colors.transparent,
+    List<String?> currentFilterSelections = const [],
+    void Function(int, String?)? onFilterSelection,
+    void Function()? onLayout,
+    bool recomputeFiltering = false,
   }) {
     // dont call this method without first checking this.hasColumnFilters
     if (filterRules == null || _disableAllGrouping) {
@@ -187,12 +226,12 @@ class GroupedTableDataMgr {
     Set<String> listItems2 = i2 == null ? {} : _getListItemsByCfgField(i2);
     Set<String> listItems3 = i3 == null ? {} : _getListItemsByCfgField(i3);
 
-    const int _kLstMin = 2;
+    const int kLstMin = 2;
 
     bool has2ndList =
-        i2 != null && listItems2.length > _kLstMin && i2.colName != i1?.colName;
+        i2 != null && listItems2.length > kLstMin && i2.colName != i1?.colName;
     bool has3rdList =
-        i3 != null && listItems3.length > _kLstMin && i3.colName != i2!.colName;
+        i3 != null && listItems3.length > kLstMin && i3.colName != i2!.colName;
 
     int dropLstCount = 1 + (has2ndList ? 1 : 0) + (has3rdList ? 1 : 0);
     // allocate dropdown button width
@@ -201,6 +240,56 @@ class GroupedTableDataMgr {
     allocBtnWidth = dropLstCount < 2 ? totAvailWidth * 0.86 : allocBtnWidth;
 
     if (i1 == null) return const SizedBox.shrink();
+
+    List<String?> selections = [...currentFilterSelections];
+
+    int length = selections.length;
+    if (length < maxFilterCount) {
+      for (int i = 0; i < maxFilterCount - length; i++) {
+        selections.add(null);
+      }
+    }
+
+    _filter1Selection = selections[0];
+    _filter2Selection = selections[1];
+    _filter3Selection = selections[2];
+
+    if (recomputeFiltering) {
+      _currentFilters.clear();
+      print("CURRENNT recomputing filters");
+      //set filters and do filtering
+
+      if (_filter1Selection != null) {
+        _currentFilters.add(
+          FilterSelection(
+            filterColumn: i1.colName,
+            selectedValue: _filter1Selection!,
+          ),
+        );
+        _doFilteringFor(i1.colName, _filter1Selection!);
+      }
+
+      if (i2 != null && _filter2Selection != null) {
+        _currentFilters.add(
+          FilterSelection(
+            filterColumn: i2.colName,
+            selectedValue: _filter2Selection!,
+          ),
+        );
+        _doFilteringFor(i2.colName, _filter2Selection!);
+      }
+      if (i3 != null && _filter3Selection != null) {
+        _currentFilters.add(
+          FilterSelection(
+            filterColumn: i3.colName,
+            selectedValue: _filter3Selection!,
+          ),
+        );
+        _doFilteringFor(i3.colName, _filter3Selection!);
+      }
+    }
+
+    onLayout?.call();
 
     return Container(
       height: barHeight,
@@ -215,7 +304,10 @@ class GroupedTableDataMgr {
             colName: i1.colName,
             titleName: fm1Title,
             curSelection: _filter1Selection,
-            valSetter: (s) => _filter1Selection = s,
+            valSetter: (s) {
+              _filter1Selection = s;
+              onFilterSelection?.call(0, s);
+            },
             width: allocBtnWidth,
             doFilteringFor: _doFilteringFor,
           ),
@@ -225,7 +317,10 @@ class GroupedTableDataMgr {
               colName: i2.colName,
               titleName: fm2Title,
               curSelection: _filter2Selection,
-              valSetter: (s) => _filter2Selection = s,
+              valSetter: (s) {
+                _filter2Selection = s;
+                onFilterSelection?.call(1, s);
+              },
               width: allocBtnWidth,
               doFilteringFor: _doFilteringFor,
             ),
@@ -235,13 +330,57 @@ class GroupedTableDataMgr {
               colName: i3.colName,
               titleName: fm3Title,
               curSelection: _filter3Selection,
-              valSetter: (s) => _filter3Selection = s,
+              valSetter: (s) {
+                _filter3Selection = s;
+                onFilterSelection?.call(2, s);
+              },
               width: allocBtnWidth,
               doFilteringFor: _doFilteringFor,
             ),
         ],
       ),
     );
+  }
+
+  void _populateFilters() {
+    List<String?> filterSelections = [...defaultFilterSelections];
+
+    if (filterSelections.isEmpty) {
+      for (int i = 0; i < maxFilterCount; i++) {
+        filterSelections.add(null);
+      }
+    }
+    print("CURRENNT populating filters");
+    if (i1 != null && filterSelections[0] != null) {
+      _filter1Selection = filterSelections[0];
+      _currentFilters.add(
+        FilterSelection(
+          filterColumn: i1!.colName,
+          selectedValue: filterSelections[0]!,
+        ),
+      );
+    }
+
+    if (i2 != null && filterSelections[1] != null) {
+      _filter2Selection = filterSelections[1];
+      _currentFilters.add(
+        FilterSelection(
+          filterColumn: i2!.colName,
+          selectedValue: filterSelections[1]!,
+        ),
+      );
+    }
+    if (i3 != null && filterSelections[2] != null) {
+      _filter3Selection = filterSelections[2];
+      _currentFilters.add(
+        FilterSelection(
+          filterColumn: i3!.colName,
+          selectedValue: filterSelections[2]!,
+        ),
+      );
+    }
+
+    print("CURRENNT populated filters -> $_currentFilters");
   }
 
   bool _hasSetData = false;
@@ -253,11 +392,17 @@ class GroupedTableDataMgr {
     /* external filtering
     used by search (watched or owned) feature
     */
+    print("CURRENNT setting filtered data");
     _hasSetData = true;
     _filteredAssetRows = assetRows.toList();
+
     if (redraw && redrawCallback != null) {
       redrawCallback!();
     }
+
+    // if (redraw && redrawCallback != null) {
+    //   redrawCallback!();
+    // }
   }
 
   List<AssetRowPropertyIfc> _filterDropDnGetDistinctAssets(
@@ -405,10 +550,25 @@ class GroupedTableDataMgr {
 
   // var xx = _tableViewCfg.filterRules?.item1?.menuTitleIfFilter;
 
+  List<TvRowDataContainer> filterAssetRows({bool redraw = false}) {
+    // _allAssetRows = assetRows;
+    if (_currentFilters.isNotEmpty) {
+      final filter = _currentFilters.first;
+      _doFilteringFor(
+        filter.filterColumn,
+        filter.selectedValue,
+        redraw: redraw,
+      );
+    }
+
+    return sortedListData;
+  }
+
   void _doFilteringFor(
     DbTableFieldName colName,
-    String selectedVal,
-  ) {
+    String selectedVal, {
+    bool redraw = true,
+  }) {
     //
     final filterSelection = FilterSelection(
       filterColumn: colName,
@@ -430,11 +590,15 @@ class GroupedTableDataMgr {
         (selFilter) => selFilter.filterColumn == colName,
       );
 
+      print("CURRENNT filters -> $_currentFilters");
+
       if (_currentFilters.isEmpty) {
+        print("CURRENNT made it here");
         clearFilters();
         return;
       }
     }
+    print("CURRENNT filters ,, -> $_currentFilters");
 
     List<TvRowDataContainer> filterResults = [];
 
@@ -458,13 +622,14 @@ class GroupedTableDataMgr {
     }
     _filteredAssetRows = filterResults;
     // print('you must reload your list after calling this');
-    if (redrawCallback != null) redrawCallback!();
+    if (redraw) redrawCallback?.call();
   }
 
   void clearFilters() {
+    print("CURRENNT Cleared filters");
     _filteredAssetRows = _allAssetRows;
     // print('you must reload your list after calling this');
-    if (redrawCallback != null) redrawCallback!();
+    redrawCallback?.call();
   }
 
   void replaceGameStatusForRowRebuildTest(String round) {
