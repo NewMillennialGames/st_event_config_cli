@@ -25,7 +25,7 @@ class GroupedTableDataMgr {
 
   final AppScreen appScreen;
   // _allAssetRows will need to be updated as Event-rounds change
-  final List<TvRowDataContainer> _allAssetRows;
+  List<TvRowDataContainer> _allAssetRows;
   final TableviewConfigPayload _tableViewCfg;
   RedrawTvCallback? redrawCallback;
   // rows actually rendered from _filteredAssetRows
@@ -53,21 +53,26 @@ class GroupedTableDataMgr {
     List<TvRowDataContainer>? assetRows,
     List<String?>? defaultFilterSelections,
   }) {
-    final groupedTableDataMgr = GroupedTableDataMgr(
-      appScreen,
-      assetRows ?? _allAssetRows,
-      _tableViewCfg,
-      redrawCallback: redrawCallback,
-      disableAllGrouping: disableAllGrouping,
-      defaultFilterSelections:
-          defaultFilterSelections ?? this.defaultFilterSelections,
-    );
+    _allAssetRows = assetRows ?? _allAssetRows;
+    _populateFilters();
+    filterAssetRows();
 
-    print("CURRENNT filters in copyWith -> $_currentFilters");
+    return this;
+    // final groupedTableDataMgr = GroupedTableDataMgr(
+    //   appScreen,
+    //   assetRows ?? _allAssetRows,
+    //   _tableViewCfg,
+    //   redrawCallback: redrawCallback,
+    //   disableAllGrouping: disableAllGrouping,
+    //   defaultFilterSelections:
+    //       defaultFilterSelections ?? this.defaultFilterSelections,
+    // );
+
+    // print("CURRENNT filters in copyWith -> $_currentFilters");
     // _populateFilters();
 
-    groupedTableDataMgr.filterAssetRows();
-    return groupedTableDataMgr;
+    // groupedTableDataMgr.filterAssetRows();
+    // return groupedTableDataMgr;
   }
 
   int get maxFilterCount => 3;
@@ -395,6 +400,8 @@ class GroupedTableDataMgr {
     print("CURRENNT setting filtered data");
     _hasSetData = true;
     _filteredAssetRows = assetRows.toList();
+
+    filterAssetRows();
 
     if (redraw && redrawCallback != null) {
       redrawCallback!();
@@ -1006,6 +1013,16 @@ class _DropDownMenuList extends StatefulWidget {
 
 class _DropDownMenuListState extends State<_DropDownMenuList> {
   bool _useDefaultState = true;
+  String? _value;
+
+  @override
+  void initState() {
+    super.initState();
+    _value = widget.curSelection;
+    if (_value == null && widget.listItems.isNotEmpty) {
+      _value = widget.listItems.first;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1026,7 +1043,7 @@ class _DropDownMenuListState extends State<_DropDownMenuList> {
       padding: EdgeInsets.symmetric(horizontal: 4.w),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
-          value: widget.curSelection ?? widget.listItems.first,
+          value: _value,
           items: widget.listItems
               .map(
                 (String val) => DropdownMenuItem<String>(
@@ -1054,6 +1071,9 @@ class _DropDownMenuListState extends State<_DropDownMenuList> {
             }).toList();
           },
           onChanged: (String? selectedVal) {
+            setState(() {
+              _value = selectedVal;
+            });
             // store selected value for state mgmt
             widget.valSetter(selectedVal);
             // print('changed: $selectedVal  ${widget.titleName}');
