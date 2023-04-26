@@ -86,7 +86,7 @@ class _StCachedNetworkImageState extends State<StCachedNetworkImage> {
         child: widget.loadingWidget ??
             Shimmer.fromColors(
               baseColor: StColors.black.withOpacity(.7),
-              highlightColor: Colors.blueGrey.shade800,
+              highlightColor: Colors.blueGrey.shade900,
               child: Container(
                 width: widget.width,
                 height: widget.height,
@@ -113,9 +113,10 @@ class _StCachedNetworkImageState extends State<StCachedNetworkImage> {
       height: widget.height,
       width: widget.width,
       child: widget.errorWidget ??
-          const Icon(
-            Icons.egg_rounded,
-            color: StColors.blue,
+          Image.asset(
+            'assets/images/logo.png',
+            height: widget.height,
+            width: widget.width,
           ),
     );
   }
