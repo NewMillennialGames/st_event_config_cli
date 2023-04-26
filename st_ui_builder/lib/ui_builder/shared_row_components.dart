@@ -141,16 +141,22 @@ class CompetitorImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final image = Image.network(
-      imgUrl,
+    final image = StCachedNetworkImage(
+      imageUrl: imgUrl,
       height: imgSize * 1.2,
       width: hasBorder ? imgSize * .9 : imgSize,
       fit: fit,
-      errorBuilder: (context, error, stackTrace) => const Icon(
-        Icons.egg_rounded,
-        color: StColors.blue,
-      ),
     );
+    // final image = Image.network(
+    //   imgUrl,
+    //   height: imgSize * 1.2,
+    //   width: hasBorder ? imgSize * .9 : imgSize,
+    //   fit: fit,
+    //   errorBuilder: (context, error, stackTrace) => const Icon(
+    //     Icons.egg_rounded,
+    //     color: StColors.blue,
+    //   ),
+    // );
 
     if (hasBorder) {
       return Container(
@@ -665,15 +671,20 @@ class MktRschAsset extends ConsumerWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Container(
+          StCachedNetworkImage(
+            imageUrl: competitor.imgUrl,
             height: _sizeHeightImage * .28,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage(competitor.imgUrl),
-                fit: BoxFit.fitHeight,
-              ),
-            ),
+            fit: BoxFit.fitHeight,
           ),
+          // Container(
+          //   height: _sizeHeightImage * .28,
+          //   decoration: BoxDecoration(
+          //     image: DecorationImage(
+          //       image: NetworkImage(competitor.imgUrl),
+          //       fit: BoxFit.fitHeight,
+          //     ),
+          //   ),
+          // ),
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -812,19 +823,25 @@ class ObjectRankRow extends StatelessWidget {
         const SizedBox(
           width: _rowMargin,
         ),
-        Image.network(
-          asset.imgUrl,
+        StCachedNetworkImage(
+          imageUrl: asset.imgUrl,
           height: _sizeImageUrl,
           width: _sizeImageUrl - 10,
           fit: BoxFit.cover,
-          // loadingBuilder: (context, child, loadingProgress) {
-          //   if (loadingProgress == null) {
-          //     return child;
-          //   }
-          //   return kSignUpScreenLogoImage;
-          // },
-          // errorBuilder: (context, error, stackTrace) => _assetImagePlaceholder,
         ),
+        // Image.network(
+        //   asset.imgUrl,
+        //   height: _sizeImageUrl,
+        //   width: _sizeImageUrl - 10,
+        //   fit: BoxFit.cover,
+        //   // loadingBuilder: (context, child, loadingProgress) {
+        //   //   if (loadingProgress == null) {
+        //   //     return child;
+        //   //   }
+        //   //   return kSignUpScreenLogoImage;
+        //   // },
+        //   // errorBuilder: (context, error, stackTrace) => _assetImagePlaceholder,
+        // ),
         const SizedBox(
           width: _rowMargin,
         ),

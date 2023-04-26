@@ -10,6 +10,7 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:st_ui_builder/ui_builder/cached_network_image/st_cached_network_image.dart';
 import 'package:st_ui_builder/ui_builder/chrysalis_asset_details.dart';
 import 'package:st_ui_builder/ui_builder/filter_selection.dart';
 import 'package:st_ui_builder/ui_builder/row_group.dart';
