@@ -130,8 +130,9 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
 
   CompetitionType get competitionType => CompetitionType.game;
 
-  Decimal get percentageChange => ((currPrice - openPrice) / openPrice)
-      .toDecimal(scaleOnInfinitePrecision: 2);
+  Decimal get percentageChange => (((currPrice - openPrice) / openPrice)
+          .toDecimal(scaleOnInfinitePrecision: 2) *
+      Decimal.fromInt(100));
 
   Map<String, dynamic>? get extAttsAsMap {
     // extended attributes as dict
