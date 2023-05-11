@@ -8,6 +8,7 @@ class StCachedNetworkImage extends StatefulWidget {
   final String imageUrl;
   final double height;
   final double width;
+  final BoxShape shape;
   final BoxFit? fit;
   final Widget? errorWidget;
   final Widget? loadingWidget;
@@ -17,6 +18,7 @@ class StCachedNetworkImage extends StatefulWidget {
     required this.imageUrl,
     this.height = double.infinity,
     this.width = double.infinity,
+    this.shape = BoxShape.rectangle,
     this.fit,
     this.errorWidget,
     this.loadingWidget,
@@ -101,6 +103,7 @@ class _StCachedNetworkImageState extends State<StCachedNetworkImage> {
         height: widget.height,
         width: widget.width,
         decoration: BoxDecoration(
+          shape: widget.shape,
           image: DecorationImage(
             fit: widget.fit,
             image: FileImage(_image!),
