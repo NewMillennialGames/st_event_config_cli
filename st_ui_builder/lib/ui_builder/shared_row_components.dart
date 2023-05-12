@@ -299,16 +299,12 @@ class CheckAssetType extends StatelessWidget {
                           style: StTextStyles.h5,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          // textScaleFactor: 0.96,
-                          // textWidthBasis: TextWidthBasis.longestLine,
                         ),
                         Text(
                           competitor.subName,
                           style: StTextStyles.p3,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          // textScaleFactor: 0.96,
-                          // textWidthBasis: TextWidthBasis.longestLine,
                         ),
                       ],
                     )
@@ -347,55 +343,59 @@ class CheckAssetType extends StatelessWidget {
     }
     if (isTeamPlayerVsField) {
       return Expanded(
-        // constraints:
-        //     BoxConstraints(maxWidth: MediaQuery.of(context).size.width * .3),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (tradeSource == null)
-              competitor.assetNameDisplayStyle ==
-                      EvAssetNameDisplayStyle.showBothStacked
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          competitor.topName,
-                          style: StTextStyles.h5,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          // textScaleFactor: 0.96,
-                          // textWidthBasis: TextWidthBasis.longestLine,
-                        ),
-                        Text(
-                          competitor.subName,
-                          style: StTextStyles.p3,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          // textScaleFactor: 0.96,
-                          // textWidthBasis: TextWidthBasis.longestLine,
-                        ),
-                      ],
-                    )
-                  : Text(competitor.topName,
-                      softWrap: true,
-                      overflow: TextOverflow.ellipsis,
-                      style: StTextStyles.h4)
-            else
-              Text(tradeSource!,
-                  softWrap: true,
-                  overflow: TextOverflow.ellipsis,
-                  style: StTextStyles.h4),
+            competitor.assetNameDisplayStyle ==
+                    EvAssetNameDisplayStyle.showBothStacked
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        competitor.topName,
+                        style: StTextStyles.h5,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        competitor.subName,
+                        style: StTextStyles.p3,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  )
+                : Text(
+                    competitor.topName,
+                    softWrap: true,
+                    overflow: TextOverflow.ellipsis,
+                    style: StTextStyles.h4,
+                  ),
+            // Text(
+            //   tradeSource!,
+            //   softWrap: true,
+            //   overflow: TextOverflow.ellipsis,
+            //   style: StTextStyles.h4,
+            // ),
             Wrap(
               children: [
-                Text(competitor.orgNameWhenTradingPlayers,
+                if (competitor.orgNameWhenTradingPlayers.isNotEmpty) ...{
+                  Text(
+                    competitor.orgNameWhenTradingPlayers,
                     softWrap: true,
                     overflow: TextOverflow.ellipsis,
-                    style: StTextStyles.p2.copyWith(color: StColors.coolGray)),
-                kSpacerTiny,
-                Text(competitor.position,
+                    style: StTextStyles.p2.copyWith(color: StColors.coolGray),
+                  ),
+                  kSpacerTiny,
+                },
+                if (competitor.position.isNotEmpty) ...{
+                  Text(
+                    competitor.position,
                     softWrap: true,
                     overflow: TextOverflow.ellipsis,
-                    style: StTextStyles.p2.copyWith(color: StColors.coolGray))
+                    style: StTextStyles.p2.copyWith(color: StColors.coolGray),
+                  ),
+                }
               ],
             ),
           ],
@@ -416,16 +416,12 @@ class CheckAssetType extends StatelessWidget {
                         style: StTextStyles.h5,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        // textScaleFactor: 0.96,
-                        // textWidthBasis: TextWidthBasis.longestLine,
                       ),
                       Text(
                         competitor.subName,
                         style: StTextStyles.p3,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        // textScaleFactor: 0.96,
-                        // textWidthBasis: TextWidthBasis.longestLine,
                       ),
                     ],
                   )
