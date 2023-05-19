@@ -13,7 +13,7 @@ dependencies:
   args: ^2.3.0
   json_annotation: ^4.4.0
   tuple: ^2.0.0
-  riverpod: ^2.3.6
+  riverpod:
   freezed: ^2.0.3+1
   logging: ^1.0.2
   sprintf: "^7.0.0"
