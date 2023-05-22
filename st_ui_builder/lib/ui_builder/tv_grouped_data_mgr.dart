@@ -55,6 +55,20 @@ class GroupedTableDataMgr {
     return List.of(_filteredAssetRows)..sort(sortItemComparator);
   }
 
+  bool _canFilterWatchedAssets = false;
+  bool _canFilterOwnedAssets = false;
+  String _searchQuery = "";
+
+  void updateFilterRules({
+    bool filterWatchedAssets = false,
+    bool filterOwnedAssets = false,
+    String searchQuery = "",
+  }) {
+    _canFilterWatchedAssets = filterWatchedAssets;
+    _canFilterOwnedAssets = filterOwnedAssets;
+    _searchQuery = searchQuery;
+  }
+
   TvGroupCfg? get groupRules => _tableViewCfg.groupByRules;
   TvSortCfg get sortingRules => _tableViewCfg.sortRules;
   TvFilterCfg? get filterRules => _tableViewCfg.filterRules;
@@ -170,9 +184,10 @@ class GroupedTableDataMgr {
   String? _filter3Selection;
 
   Widget columnFilterBarWidget({
-    double totAvailWidth = 360,
+    required double barWidth,
     double barHeight = 46,
     Color backColor = Colors.transparent,
+    Function? callback,
   }) {
     // dont call this method without first checking this.hasColumnFilters
     if (filterRules == null || _disableAllGrouping) {
@@ -187,24 +202,24 @@ class GroupedTableDataMgr {
     Set<String> listItems2 = i2 == null ? {} : _getListItemsByCfgField(i2);
     Set<String> listItems3 = i3 == null ? {} : _getListItemsByCfgField(i3);
 
-    const int _kLstMin = 2;
+    const int kLstMin = 2;
 
     bool has2ndList =
-        i2 != null && listItems2.length > _kLstMin && i2.colName != i1?.colName;
+        i2 != null && listItems2.length > kLstMin && i2.colName != i1?.colName;
     bool has3rdList =
-        i3 != null && listItems3.length > _kLstMin && i3.colName != i2!.colName;
+        i3 != null && listItems3.length > kLstMin && i3.colName != i2!.colName;
 
     int dropLstCount = 1 + (has2ndList ? 1 : 0) + (has3rdList ? 1 : 0);
     // allocate dropdown button width
-    double allocBtnWidth = totAvailWidth / dropLstCount;
+    double dropDownWidth = barWidth / dropLstCount;
     // one list can take 86% of space
-    allocBtnWidth = dropLstCount < 2 ? totAvailWidth * 0.86 : allocBtnWidth;
+    dropDownWidth = dropLstCount < 2 ? barWidth * 0.86 : dropDownWidth;
 
     if (i1 == null) return const SizedBox.shrink();
 
     return Container(
       height: barHeight,
-      width: totAvailWidth,
+      width: barWidth,
       color: backColor,
       padding: const EdgeInsets.symmetric(vertical: 3),
       child: Row(
@@ -216,8 +231,11 @@ class GroupedTableDataMgr {
             titleName: fm1Title,
             curSelection: _filter1Selection,
             valSetter: (s) => _filter1Selection = s,
-            width: allocBtnWidth,
-            doFilteringFor: _doFilteringFor,
+            width: dropDownWidth,
+            doFilteringFor: (fld, s) {
+              _doFilteringFor(fld, s);
+              callback?.call();
+            },
           ),
           if (has2ndList)
             _DropDownMenuList(
@@ -226,8 +244,11 @@ class GroupedTableDataMgr {
               titleName: fm2Title,
               curSelection: _filter2Selection,
               valSetter: (s) => _filter2Selection = s,
-              width: allocBtnWidth,
-              doFilteringFor: _doFilteringFor,
+              width: dropDownWidth,
+              doFilteringFor: (fld, s) {
+                _doFilteringFor(fld, s);
+                callback?.call();
+              },
             ),
           if (has3rdList)
             _DropDownMenuList(
@@ -236,8 +257,11 @@ class GroupedTableDataMgr {
               titleName: fm3Title,
               curSelection: _filter3Selection,
               valSetter: (s) => _filter3Selection = s,
-              width: allocBtnWidth,
-              doFilteringFor: _doFilteringFor,
+              width: dropDownWidth,
+              doFilteringFor: (fld, s) {
+                _doFilteringFor(fld, s);
+                callback?.call();
+              },
             ),
         ],
       ),
@@ -249,12 +273,23 @@ class GroupedTableDataMgr {
   void setFilteredData(
     Iterable<TvRowDataContainer> assetRows, {
     bool redraw = false,
+    bool reapplyFilters = false,
   }) {
     /* external filtering
     used by search (watched or owned) feature
     */
     _hasSetData = true;
+
+    if (_allAssetRows.isEmpty) {
+      _allAssetRows.addAll(assetRows);
+    }
     _filteredAssetRows = assetRows.toList();
+
+    if (reapplyFilters) {
+      _filter(assetRows);
+      return;
+    }
+
     if (redraw && redrawCallback != null) {
       redrawCallback!();
     }
@@ -429,16 +464,17 @@ class GroupedTableDataMgr {
       _currentFilters.removeWhere(
         (selFilter) => selFilter.filterColumn == colName,
       );
-
-      if (_currentFilters.isEmpty) {
-        clearFilters();
-        return;
-      }
     }
+
+    _filter();
+  }
+
+  void _filter([Iterable<TvRowDataContainer>? rows]) {
+    final filterBase = rows ?? _allAssetRows;
 
     List<TvRowDataContainer> filterResults = [];
 
-    for (TvRowDataContainer asset in _allAssetRows) {
+    for (TvRowDataContainer asset in filterBase) {
       bool added = false;
       for (FilterSelection filter in _currentFilters) {
         if (asset.team1.valueExtractor(filter.filterColumn) ==
@@ -456,15 +492,94 @@ class GroupedTableDataMgr {
         }
       }
     }
-    _filteredAssetRows = filterResults;
+
+    if (_currentFilters.isEmpty) filterResults = filterBase.toList();
+
+    _filteredAssetRows = _filterOwnnedAssets(
+      _filterWatchedAssets(
+        _filterAssetsBySearchQuery(
+          filterResults,
+        ),
+      ),
+    ).toList();
+
     // print('you must reload your list after calling this');
     if (redrawCallback != null) redrawCallback!();
   }
 
-  void clearFilters() {
-    _filteredAssetRows = _allAssetRows;
-    // print('you must reload your list after calling this');
-    if (redrawCallback != null) redrawCallback!();
+  Iterable<TvRowDataContainer> _filterWatchedAssets(
+    Iterable<TvRowDataContainer> rows,
+  ) {
+    if (!_canFilterWatchedAssets) return rows;
+
+    List<TvRowDataContainer> filterResults = [];
+
+    for (var row in rows) {
+      if (_isWatched(row)) {
+        filterResults.add(row);
+      }
+    }
+
+    return filterResults;
+  }
+
+  Iterable<TvRowDataContainer> _filterOwnnedAssets(
+    Iterable<TvRowDataContainer> rows,
+  ) {
+    if (!_canFilterOwnedAssets) return rows;
+
+    List<TvRowDataContainer> filterResults = [];
+
+    for (var row in rows) {
+      if (_isOwned(row)) {
+        filterResults.add(row);
+      }
+    }
+
+    return filterResults;
+  }
+
+  Iterable<TvRowDataContainer> _filterAssetsBySearchQuery(
+    Iterable<TvRowDataContainer> rows,
+  ) {
+    if (_searchQuery.isEmpty) return rows;
+
+    List<TvRowDataContainer> filterResults = [];
+
+    for (var row in rows) {
+      if (_doesRowMatchSearchQuery(row)) {
+        filterResults.add(row);
+      }
+    }
+
+    return filterResults;
+  }
+
+  bool _isWatched(TvRowDataContainer row) {
+    final isFirstAssetWatched = row.team1.assetStateUpdates.isWatched;
+    final isSecondAssetWatched =
+        row.team2?.assetStateUpdates.isWatched ?? false;
+
+    return isFirstAssetWatched || isSecondAssetWatched;
+  }
+
+  bool _isOwned(TvRowDataContainer row) {
+    final isFirstAssetOwned = row.team1.assetHoldingsSummary.sharesOwned > 0;
+    final isSecondAssetOwned =
+        ((row.team2?.assetHoldingsSummary.sharesOwned ?? 0) > 0);
+
+    return isFirstAssetOwned || isSecondAssetOwned;
+  }
+
+  bool _doesRowMatchSearchQuery(TvRowDataContainer row) {
+    bool doesMatchSoFar = false;
+
+    if (_searchQuery.isNotEmpty) {
+      var upperSrchVal = _searchQuery.toUpperCase();
+      doesMatchSoFar = ((row.team1.searchText.contains(upperSrchVal)) ||
+          ((row.team2?.searchText ?? '').contains(upperSrchVal)));
+    }
+    return doesMatchSoFar;
   }
 
   void replaceGameStatusForRowRebuildTest(String round) {
@@ -482,9 +597,17 @@ class GroupedTableDataMgr {
     print('ActiveGameDetails replaced on 2 with $round  (did row repaint?)');
   }
 
-  bool get hasNoAsset => topGroupIsCollapsible
+  ///Indicates whether there's no asset to display.
+  ///This doesn't mean that [_allAssetRows].
+  ///Instead, it could be mean that there are no assets
+  ///to show as a result of applying filtering rules.
+  bool get _hasNoAsset => topGroupIsCollapsible
       ? (rowsGroupedByTopConfig ?? []).isEmpty
       : sortedListData.isEmpty;
+
+  ///Truw when [GroupedTableDataMgr] has an empty list of assets.
+  ///Otherwise, false.
+  bool get hasNoSetAsset => _allAssetRows.isEmpty;
 
   ///ListView of rows typically displayed in MarketView.
   ///This is implemented internally as opposed to just exposing
@@ -495,12 +618,12 @@ class GroupedTableDataMgr {
     ScrollController? scrollController,
     void Function(TvRowDataContainer)? onRowTapped,
   }) {
-    if (!_hasSetData && hasNoAsset) {
+    if (!_hasSetData && _hasNoAsset) {
       return const Center(
         child: CircularProgressIndicator(),
       );
     }
-    if (_hasSetData && hasNoAsset) {
+    if (_hasSetData && _hasNoAsset) {
       return Center(
         child: Text(
           "No Assets Available to Trade",

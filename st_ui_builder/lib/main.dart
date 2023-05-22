@@ -176,7 +176,7 @@ class _MarketViewScreenState extends ConsumerState<MarketViewScreen> {
         children: [
           if (hasColumnFilters) ...{
             tvMgr.columnFilterBarWidget(
-              totAvailWidth: MediaQuery.of(context).size.width,
+              barWidth: MediaQuery.of(context).size.width,
               backColor: StColors.primaryDarkGray,
             ),
             if (!tvMgr.disableAllGrouping &&
