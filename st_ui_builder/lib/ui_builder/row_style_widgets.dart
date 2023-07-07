@@ -366,18 +366,19 @@ class AssetVsAssetRowMktResearchView extends StBaseTvRow with ShowsTwoAssets {
                   Align(
                     alignment: Alignment.center,
                     child: Container(
-                      height: 40,
-                      width: 40,
+                      height: 28,
+                      width: 28,
                       decoration: BoxDecoration(
-                        border: Border.all(color: StColors.black, width: 3),
+                        border: Border.all(color: StColors.black, width: 1.5),
                         shape: BoxShape.circle,
                         color: StColors.darkGreen,
                       ),
                       child: Center(
-                          child: Text(
-                        StStrings.versus,
-                        style: StTextStyles.p2,
-                      )),
+                        child: Text(
+                          StStrings.versus,
+                          style: StTextStyles.p4,
+                        ),
+                      ),
                     ),
                   )
                 ],

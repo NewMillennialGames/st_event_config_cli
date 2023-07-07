@@ -672,36 +672,18 @@ class MktRschAsset extends ConsumerWidget {
             height: _sizeHeightImage * .28,
             fit: BoxFit.fitHeight,
           ),
-          // Container(
-          //   height: _sizeHeightImage * .28,
-          //   decoration: BoxDecoration(
-          //     image: DecorationImage(
-          //       image: NetworkImage(competitor.imgUrl),
-          //       fit: BoxFit.fitHeight,
-          //     ),
-          //   ),
-          // ),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                competitor.topName,
-                style: StTextStyles.h4.copyWith(
-                  fontSize: 18.sp,
-                  color: isTradable ? StColors.coolGray : StTextStyles.h4.color,
-                ),
-                textAlign: TextAlign.center,
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.w),
+            child: Text(
+              competitor.topName,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: StTextStyles.h4.copyWith(
+                fontSize: 18.sp,
+                color: isTradable ? StColors.coolGray : StTextStyles.h4.color,
               ),
-              Text(
-                competitor.subName,
-                style: StTextStyles.textFormField.copyWith(
-                  color: isTradable
-                      ? StColors.coolGray
-                      : StTextStyles.textFormField.color,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
+              textAlign: TextAlign.center,
+            ),
           ),
           Icon(
             Icons.star_border,
@@ -737,9 +719,10 @@ class RowControl extends StatelessWidget {
               .toDecimal(scaleOnInfinitePrecision: 2);
     }
     return Container(
-      height: (110 / 1.4) * 0.89,
+      // height: (110 / 1.4) * 0.89,
       padding: const EdgeInsets.only(
         top: (110 / 2) * 0.08,
+        bottom: (110 / 2) * 0.08,
         left: (110 / 1) * 0.08,
       ),
       decoration: BoxDecoration(
