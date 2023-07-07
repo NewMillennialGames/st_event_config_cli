@@ -989,12 +989,27 @@ class _DropDownMenuListState extends State<_DropDownMenuList> {
               .map(
                 (String val) => DropdownMenuItem<String>(
                   value: val,
-                  alignment: AlignmentDirectional.centerStart,
                   child: Container(
                     color: widget.curSelection == val
                         ? StColors.primaryDarkGray
                         : StColors.black,
-                    child: Text(val.toUpperCase()),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          val.toUpperCase(),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        if (val != widget.listItems.first)
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 0.5,
+                            color: StColors.lightGray,
+                          ),
+                      ],
+                    ),
                   ),
                 ),
               )
@@ -1006,6 +1021,8 @@ class _DropDownMenuListState extends State<_DropDownMenuList> {
                 child: Center(
                   child: Text(
                     value.toUpperCase(),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               );
