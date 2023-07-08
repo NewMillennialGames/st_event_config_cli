@@ -175,11 +175,15 @@ class TradeButton extends ConsumerWidget {
   //
   final AssetStateUpdates assetStateUpdts;
   final CompetitionStatus competitionStatus;
+  final double? width;
+  final double? fontSize;
 
   const TradeButton(
     this.assetStateUpdts,
     this.competitionStatus, {
     Key? key,
+    this.width,
+    this.fontSize,
   }) : super(key: key);
 
   @override
@@ -198,7 +202,7 @@ class TradeButton extends ConsumerWidget {
 
     return Container(
       height: UiSizes.tradeBtnHeight,
-      width: 75.w,
+      width: (width ?? 75).w,
       // width: UiSizes.tradeBtnWidthPctScreen * size.width,
       alignment: Alignment.center,
       child: (assetStateUpdts.isTradable)
@@ -220,7 +224,7 @@ class TradeButton extends ConsumerWidget {
                 assetStateUpdts.assetState,
               ),
               style: StTextStyles.h5.copyWith(
-                fontSize: 15.sp,
+                fontSize: (fontSize ?? 15).sp,
                 color: tf.colorForAssetState(competitionStatus),
               ),
               textAlign: TextAlign.center,
@@ -252,131 +256,102 @@ class CheckAssetType extends StatelessWidget {
   final bool isPlayerVsFieldRanked;
   final String? tradeSource;
 
-  const CheckAssetType(
-      {Key? key,
-      required this.competitor,
-      this.isDriverVsField = false,
-      this.isTeamPlayerVsField = false,
-      this.isPlayerVsFieldRanked = false,
-      this.tradeSource})
-      : super(key: key);
+  const CheckAssetType({
+    Key? key,
+    required this.competitor,
+    this.isDriverVsField = false,
+    this.isTeamPlayerVsField = false,
+    this.isPlayerVsFieldRanked = false,
+    this.tradeSource,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     var lst = competitor.topName.split(' ');
     String firstName = lst[0];
     String lastName = lst.length >= 2 ? lst[1] : '';
     if (isDriverVsField) {
-      return Expanded(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              height: 40.h,
-              width: MediaQuery.of(context).size.width * .1,
-              margin: const EdgeInsets.only(right: 8),
-              child: FittedBox(
-                fit: BoxFit.fitHeight,
-                child: Text(
-                  competitor.displayNumberStr,
-                  style: StTextStyles.h3.copyWith(fontWeight: FontWeight.w700),
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            height: competitor.assetNameDisplayStyle.isStacked ? 28.h : 40.h,
+            width: width *
+                (competitor.assetNameDisplayStyle.isStacked ? 0.05 : 0.1),
+            margin: EdgeInsets.only(
+              right: competitor.assetNameDisplayStyle.isStacked ? 4.w : 8.w,
+            ),
+            child: FittedBox(
+              fit: BoxFit.fitHeight,
+              child: Text(
+                competitor.displayNumberStr,
+                style: StTextStyles.h3.copyWith(
+                  fontWeight: FontWeight.w700,
                 ),
               ),
             ),
-            ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width * .26,
-                minHeight: 50.h,
-                maxHeight: 50.h,
-              ),
-              child: competitor.assetNameDisplayStyle ==
-                      EvAssetNameDisplayStyle.showBothStacked
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          competitor.topName,
-                          style: StTextStyles.h5,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          competitor.subName,
-                          style: StTextStyles.p3,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    )
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          firstName.toUpperCase(),
-                          overflow: TextOverflow.ellipsis,
-                          style: StTextStyles.p2.copyWith(
-                              fontWeight: FontWeight.w500, fontSize: 12.sp),
-                          textAlign: TextAlign.center,
-                        ),
-                        Text(
-                          lastName.toUpperCase(),
-                          overflow: TextOverflow.ellipsis,
-                          style: StTextStyles.h3.copyWith(
-                              fontWeight: FontWeight.w800, fontSize: 18.sp),
-                          textAlign: TextAlign.center,
-                        )
-                      ],
-                    ),
+          ),
+          ConstrainedBox(
+            constraints: BoxConstraints.tightFor(
+              width: width * .43,
+              height: 52.h,
             ),
-            if (tradeSource != null) ...[
-              const Spacer(),
-              kSpacerLarge,
-              Text(
-                tradeSource!,
-                style: StTextStyles.p2,
-              ),
-            ],
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  firstName.toUpperCase(),
+                  softWrap: true,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: StTextStyles.p2.copyWith(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12.sp,
+                  ),
+                  textAlign: TextAlign.start,
+                ),
+                Text(
+                  lastName.toUpperCase(),
+                  softWrap: true,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: StTextStyles.h3.copyWith(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 15.sp,
+                  ),
+                  textAlign: TextAlign.start,
+                ),
+              ],
+            ),
+          ),
+          if (tradeSource != null) ...[
+            const Spacer(),
+            Text(
+              tradeSource!,
+              style: StTextStyles.p2,
+            ),
           ],
-        ),
+        ],
       );
     }
     if (isTeamPlayerVsField) {
-      return Expanded(
+      return ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: width * 0.43,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            competitor.assetNameDisplayStyle ==
-                    EvAssetNameDisplayStyle.showBothStacked
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        competitor.topName,
-                        style: StTextStyles.h5,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Text(
-                        competitor.subName,
-                        style: StTextStyles.p3,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  )
-                : Text(
-                    competitor.topName,
-                    softWrap: true,
-                    overflow: TextOverflow.ellipsis,
-                    style: StTextStyles.h4,
-                  ),
-            // Text(
-            //   tradeSource!,
-            //   softWrap: true,
-            //   overflow: TextOverflow.ellipsis,
-            //   style: StTextStyles.h4,
-            // ),
+            Text(
+              competitor.topName,
+              softWrap: true,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: StTextStyles.h4,
+            ),
             Wrap(
               children: [
                 if (competitor.orgNameWhenTradingPlayers.isNotEmpty) ...{
@@ -403,96 +378,59 @@ class CheckAssetType extends StatelessWidget {
       );
     }
     if (isPlayerVsFieldRanked) {
-      return Expanded(
-        child: Row(
-          children: [
-            competitor.assetNameDisplayStyle ==
-                    EvAssetNameDisplayStyle.showBothStacked
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        competitor.topName,
-                        style: StTextStyles.h5,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Text(
-                        competitor.subName,
-                        style: StTextStyles.p3,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  )
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(competitor.topName, style: StTextStyles.h4),
-                      Text(
-                        competitor.rankStr,
-                        style:
-                            StTextStyles.p2.copyWith(color: StColors.coolGray),
-                      ),
-                    ],
-                  ),
-            if (tradeSource != null) ...[
-              const Spacer(),
-              kSpacerLarge,
-              Text(
-                tradeSource!,
-                style: StTextStyles.p2,
-              ),
-            ],
-          ],
-        ),
-      );
-    }
-    return Expanded(
-      child: Row(
+      return Row(
         children: [
-          competitor.assetNameDisplayStyle ==
-                  EvAssetNameDisplayStyle.showBothStacked
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      competitor.topName,
-                      style: StTextStyles.h5,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      // textScaleFactor: 0.96,
-                      // textWidthBasis: TextWidthBasis.longestLine,
-                    ),
-                    Text(
-                      competitor.subName,
-                      style: StTextStyles.p3,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      // textScaleFactor: 0.96,
-                      // textWidthBasis: TextWidthBasis.longestLine,
-                    ),
-                  ],
-                )
-              : ConstrainedBox(
-                  constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width * .4),
-                  child: Text(
-                    competitor.topName,
-                    overflow: TextOverflow.ellipsis,
-                    style: StTextStyles.h4,
-                  ),
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: width * 0.43,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  competitor.topName,
+                  style: StTextStyles.h5,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
+                Text(
+                  competitor.rankStr,
+                  style: StTextStyles.p2.copyWith(color: StColors.coolGray),
+                ),
+              ],
+            ),
+          ),
           if (tradeSource != null) ...[
             const Spacer(),
-            kSpacerLarge,
             Text(
               tradeSource!,
               style: StTextStyles.p2,
             ),
           ],
         ],
-      ),
+      );
+    }
+    return Row(
+      children: [
+        ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width * 0.43,
+          ),
+          child: Text(
+            competitor.topName,
+            maxLines: competitor.assetNameDisplayStyle.isStacked ? 2 : 1,
+            overflow: TextOverflow.ellipsis,
+            style: StTextStyles.h4,
+          ),
+        ),
+        if (tradeSource != null) ...[
+          const Spacer(),
+          Text(
+            tradeSource!,
+            style: StTextStyles.p2,
+          ),
+        ],
+      ],
     );
   }
 }
@@ -565,8 +503,10 @@ class AssetVsAssetHalfRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: competitor.assetNameDisplayStyle.isStacked
+          ? CrossAxisAlignment.start
+          : CrossAxisAlignment.center,
       children: [
         assetHoldingsInterface.sharesOwned > 0
             ? const Icon(Icons.work, color: StColors.green)
@@ -578,7 +518,7 @@ class AssetVsAssetHalfRow extends StatelessWidget {
         CompetitorImage(
           competitor.imgUrl,
           showRank,
-          shrinkRatio: 0.75,
+          shrinkRatio: competitor.assetNameDisplayStyle.isStacked ? 0.7 : 0.75,
         ),
         kSpacerSm,
         if (showRank) ...[
@@ -588,28 +528,29 @@ class AssetVsAssetHalfRow extends StatelessWidget {
           ),
           kSpacerSm,
         ],
-        competitor.assetNameDisplayStyle ==
-                EvAssetNameDisplayStyle.showBothStacked
-            ? Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    competitor.topName,
-                    style: StTextStyles.h5,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    // textScaleFactor: 0.96,
-                    // textWidthBasis: TextWidthBasis.longestLine,
-                  ),
-                  Text(
-                    competitor.subName,
-                    style: StTextStyles.p3,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    // textScaleFactor: 0.96,
-                    // textWidthBasis: TextWidthBasis.longestLine,
-                  ),
-                ],
+        competitor.assetNameDisplayStyle.isStacked
+            ? ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width *
+                      (showRank ? 0.44 : 0.46),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      competitor.topName,
+                      style: StTextStyles.h5,
+                      maxLines: 4,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      competitor.subName,
+                      style: StTextStyles.p3,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
               )
             : Expanded(
                 child: Text(
@@ -617,18 +558,24 @@ class AssetVsAssetHalfRow extends StatelessWidget {
                   style: StTextStyles.h5,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  // textScaleFactor: 0.96,
-                  // textWidthBasis: TextWidthBasis.longestLine,
                 ),
               ),
+        const Spacer(),
         Text(
           competitor.currPriceStr,
           style: StTextStyles.h5,
         ),
-        const SizedBox(
-          width: 4,
+        kSpacerTiny,
+        TradeButton(
+          competitor.assetStateUpdates,
+          competitor.competitionStatus,
+          width: competitor.assetNameDisplayStyle.isStacked
+              ? showRank
+                  ? 48
+                  : 50
+              : 75,
+          fontSize: competitor.assetNameDisplayStyle.isStacked ? 10 : 15,
         ),
-        TradeButton(competitor.assetStateUpdates, competitor.competitionStatus),
       ],
     );
   }

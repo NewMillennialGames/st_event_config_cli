@@ -395,56 +395,6 @@ class AssetVsAssetRowMktResearchView extends StBaseTvRow with ShowsTwoAssets {
   }
 }
 
-// class TeamVsFieldRowMktResearchView extends TeamVsFieldRowMktView {
-//   const TeamVsFieldRowMktResearchView(
-//     TableviewDataRowTuple assets, {
-//     Key? key,
-//   }) : super(assets, key: key);
-// }
-
-// class TeamVsFieldRankedRowMktResearchView extends TeamVsFieldRowMktView {
-//   const TeamVsFieldRankedRowMktResearchView(
-//     TableviewDataRowTuple assets, {
-//     Key? key,
-//   }) : super(assets, key: key);
-// }
-
-// class PlayerVsFieldRankedMktResearchView extends TeamVsFieldRowMktView {
-//   const PlayerVsFieldRankedMktResearchView(
-//     TableviewDataRowTuple assets, {
-//     Key? key,
-//   }) : super(assets, key: key);
-// }
-
-// class PlayerVsFieldRowMktResearchView extends TeamVsFieldRowMktView {
-//   const PlayerVsFieldRowMktResearchView(
-//     TableviewDataRowTuple assets, {
-//     Key? key,
-//   }) : super(assets, key: key);
-// }
-
-// class DriverVsFieldRowMktResearchView extends DriverVsFieldRowMktView {
-//   const DriverVsFieldRowMktResearchView(
-//     TableviewDataRowTuple assets, {
-//     Key? key,
-//   }) : super(assets, key: key);
-// }
-
-// class TeamPlayerVsFieldRowMktResearchView extends TeamPlayerVsFieldRowMktView {
-//   const TeamPlayerVsFieldRowMktResearchView(
-//     TableviewDataRowTuple assets, {
-//     Key? key,
-//   }) : super(assets, key: key);
-// }
-
-// class AssetVsAssetRankedRowMktResearchView
-//     extends AssetVsAssetRowMktResearchView {
-//   const AssetVsAssetRankedRowMktResearchView(
-//     TableviewDataRowTuple assets, {
-//     Key? key,
-//   }) : super(assets, key: key);
-// }
-
 // End Market Research classes
 
 class AssetVsAssetRowRankedPortfolioView extends AssetVsAssetRowPortfolioView {
@@ -559,7 +509,8 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
             ? StColors.green
             : StColors.red;
 
-    //
+    final width = MediaQuery.of(ctx).size.width;
+
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
@@ -567,13 +518,17 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 8.h),
-        width: MediaQuery.of(ctx).size.width,
+        width: width,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            CompetitorImage(comp1.imgUrl, false),
-            const SizedBox(width: 12),
+            CompetitorImage(
+              comp1.imgUrl,
+              false,
+              shrinkRatio: comp1.assetNameDisplayStyle.isStacked ? 0.7 : 1,
+            ),
+            kSpacerSm,
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -581,18 +536,27 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      CheckAssetType(
-                        competitor: comp1,
-                        isDriverVsField: isDriverVsField,
-                        isPlayerVsFieldRanked: isPlayerVsFieldRanked,
-                        isTeamPlayerVsField: isTeamPlayerVsField,
-                        tradeSource: tradeSource,
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: width * (showHoldingsValue ? 0.65 : 0.8),
+                        ),
+                        child: CheckAssetType(
+                          competitor: comp1,
+                          isDriverVsField: isDriverVsField,
+                          isPlayerVsFieldRanked: isPlayerVsFieldRanked,
+                          isTeamPlayerVsField: isTeamPlayerVsField,
+                          tradeSource: tradeSource,
+                        ),
                       ),
                       if (showHoldingsValue)
                         // this is a portfolio positions row; show trade
                         TradeButton(
                           comp1.assetStateUpdates,
                           comp1.competitionStatus,
+                          width:
+                              comp1.assetNameDisplayStyle.isStacked ? 50 : 75,
+                          fontSize:
+                              comp1.assetNameDisplayStyle.isStacked ? 10 : 15,
                         ),
                     ],
                   ),
@@ -617,25 +581,31 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
                               kVerticalSpacerSm,
                               RichText(
                                 text: TextSpan(
-                                    text: '@ ',
-                                    style: StTextStyles.p1
-                                        .copyWith(color: StColors.coolGray),
-                                    children: [
-                                      TextSpan(
-                                        text: sharePrice.replaceAllMapped(
-                                            RegexFunctions()
-                                                .formatNumberStringsWithCommas,
-                                            RegexFunctions().mathFunc),
-                                        style: StTextStyles.p1,
+                                  text: '@ ',
+                                  style: StTextStyles.p1
+                                      .copyWith(color: StColors.coolGray),
+                                  children: [
+                                    TextSpan(
+                                      text: sharePrice.replaceAllMapped(
+                                          RegexFunctions()
+                                              .formatNumberStringsWithCommas,
+                                          RegexFunctions().mathFunc),
+                                      style: StTextStyles.p1,
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          " ${sharePriceChange.replaceAllMapped(
+                                        RegexFunctions()
+                                            .formatNumberStringsWithCommas,
+                                        RegexFunctions().mathFunc,
+                                      )}",
+                                      style: StTextStyles.moneyDeltaPositive
+                                          .copyWith(
+                                        color: sharePriceChangeColor,
                                       ),
-                                      TextSpan(
-                                          text:
-                                              " ${sharePriceChange.replaceAllMapped(RegexFunctions().formatNumberStringsWithCommas, RegexFunctions().mathFunc)}",
-                                          style: StTextStyles.moneyDeltaPositive
-                                              .copyWith(
-                                            color: sharePriceChangeColor,
-                                          ))
-                                    ]),
+                                    )
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -653,9 +623,10 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
                               kVerticalSpacerSm,
                               Text(
                                 positionValue.replaceAllMapped(
-                                    RegexFunctions()
-                                        .formatNumberStringsWithCommas,
-                                    RegexFunctions().mathFunc),
+                                  RegexFunctions()
+                                      .formatNumberStringsWithCommas,
+                                  RegexFunctions().mathFunc,
+                                ),
                                 style: StTextStyles.p1,
                               ),
                             ],
@@ -663,16 +634,20 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Text(StStrings.gainLossAbbrev,
-                                  style: StTextStyles.p1
-                                      .copyWith(color: StColors.coolGray)),
+                              Text(
+                                StStrings.gainLossAbbrev,
+                                style: StTextStyles.p1.copyWith(
+                                  color: StColors.coolGray,
+                                ),
+                              ),
                               kVerticalSpacerSm,
                               Text(
                                 (isPositiveGainLoss ? "+" : "") +
                                     positionGainLossStr.replaceAllMapped(
-                                        RegexFunctions()
-                                            .formatNumberStringsWithCommas,
-                                        RegexFunctions().mathFunc),
+                                      RegexFunctions()
+                                          .formatNumberStringsWithCommas,
+                                      RegexFunctions().mathFunc,
+                                    ),
                                 style: StTextStyles.moneyDeltaPositive.copyWith(
                                   color: priceFluxColor,
                                 ),
@@ -685,7 +660,7 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -845,14 +820,33 @@ class TeamVsFieldRowMktView extends StBaseTvRow
     BuildContext ctx,
     ActiveGameDetails agd,
   ) {
-    //
+    final width = MediaQuery.of(ctx).size.width;
+
+    final rowHeight = isTeamPlayerVsField
+        ? comp1.position.isNotEmpty
+            ? 100
+            : 88
+        : isPlayerVsFieldRanked
+            ? 81
+            : 73;
+
+    final rowWidth = isTeamPlayerVsField
+        ? width * .61
+        : isPlayerVsFieldRanked
+            ? width * .63
+            : (!isDriverVsField &&
+                    !isPlayerVsFieldRanked &&
+                    !isTeamPlayerVsField)
+                ? width * .62
+                : width * .65;
+
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
         onTap?.call(assets);
       },
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           assetHoldingsSummary.sharesOwned > 0
@@ -866,19 +860,21 @@ class TeamVsFieldRowMktView extends StBaseTvRow
             comp1.imgUrl,
             shouldShrinkParticipantImage,
             isTwoAssetRow: this is ShowsTwoAssets,
+            shrinkRatio: comp1.assetNameDisplayStyle.isStacked ? .7 : 1,
           ),
           kSpacerSm,
-          Expanded(
-            // width: size.width * .53,
+          ConstrainedBox(
+            constraints: BoxConstraints.tightFor(
+              height: rowHeight.h,
+              width: rowWidth,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(
-                  height: 4,
-                ),
+                kVerticalSpacerSm,
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     CheckAssetType(
                       competitor: comp1,
@@ -886,6 +882,7 @@ class TeamVsFieldRowMktView extends StBaseTvRow
                       isTeamPlayerVsField: isTeamPlayerVsField,
                       isPlayerVsFieldRanked: isPlayerVsFieldRanked,
                     ),
+                    const Spacer(),
                     Column(
                       children: [
                         Text(
@@ -902,11 +899,8 @@ class TeamVsFieldRowMktView extends StBaseTvRow
                     )
                   ],
                 ),
-                const SizedBox(
-                  height: 4,
-                ),
+                kVerticalSpacerSm,
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
                       StStrings.open,
@@ -942,7 +936,13 @@ class TeamVsFieldRowMktView extends StBaseTvRow
               ],
             ),
           ),
-          TradeButton(comp1.assetStateUpdates, comp1.competitionStatus),
+          kSpacerTiny,
+          TradeButton(
+            comp1.assetStateUpdates,
+            comp1.competitionStatus,
+            width: comp1.assetNameDisplayStyle.isStacked ? 50 : 75,
+            fontSize: comp1.assetNameDisplayStyle.isStacked ? 10 : 15,
+          ),
         ],
       ),
     );

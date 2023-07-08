@@ -77,6 +77,10 @@ enum EvAssetNameDisplayStyle {
   showBothStacked,
 }
 
+extension EvAssetNameDisplayStyleExt on EvAssetNameDisplayStyle {
+  bool get isStacked => this == EvAssetNameDisplayStyle.showBothStacked;
+}
+
 extension EvGameAgeOffRuleExt1 on EvGameAgeOffRule {
   //
   String get prompt {

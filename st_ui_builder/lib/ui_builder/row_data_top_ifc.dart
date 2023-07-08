@@ -78,9 +78,16 @@ abstract class AssetRowPropertyIfc {
 extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
   // sensible defaults if not overridden
   String get searchText =>
-      (topName + '-' + subName + '-' + orgNameWhenTradingPlayers).toUpperCase();
+      "$topName-$subName-$orgNameWhenTradingPlayers".toUpperCase();
 
-  String get rankStr => '$rank';
+  String get rankStr {
+    final value = '$rank';
+    if (!assetNameDisplayStyle.isStacked) return value;
+
+    if (value.length == 1) return ' $rank   ';
+    if (value.length == 2) return ' $rank ';
+    return value;
+  }
 
   String get displayNumberStr => '$displayNumber';
 
@@ -124,9 +131,6 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
   bool get stockIsUp => assetStateUpdates.stockIsUp;
 
   Color get priceFluxColor => assetStateUpdates.priceFluxColor;
-
-  EvAssetNameDisplayStyle get assetNameDisplayStyle =>
-      EvAssetNameDisplayStyle.showShortName;
 
   CompetitionType get competitionType => CompetitionType.game;
 

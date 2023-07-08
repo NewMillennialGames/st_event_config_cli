@@ -257,6 +257,7 @@ class StButtonStyles {
   // keep
   static ButtonStyle tradeButtonCanTrade = TextButton.styleFrom(
     backgroundColor: StColors.darkGreen,
+    padding: EdgeInsets.zero,
     // padding: const EdgeInsets.symmetric(
     //   vertical: 20,
     //   horizontal: 15,
