@@ -638,7 +638,7 @@ class MktRschAsset extends ConsumerWidget {
               overflow: TextOverflow.ellipsis,
               style: StTextStyles.h4.copyWith(
                 fontSize: 18.sp,
-                color: isTradable ? StColors.coolGray : StTextStyles.h4.color,
+                color: StColors.white,
               ),
               textAlign: TextAlign.center,
             ),
