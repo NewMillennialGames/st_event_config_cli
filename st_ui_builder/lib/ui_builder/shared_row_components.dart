@@ -249,14 +249,14 @@ class TradeButton extends ConsumerWidget {
   // }
 }
 
-class CheckAssetType extends StatelessWidget {
+class PortfolioAssetRow extends StatelessWidget {
   final AssetRowPropertyIfc competitor;
   final bool isDriverVsField;
   final bool isTeamPlayerVsField;
   final bool isPlayerVsFieldRanked;
   final String? tradeSource;
 
-  const CheckAssetType({
+  const PortfolioAssetRow({
     Key? key,
     required this.competitor,
     this.isDriverVsField = false,
@@ -277,11 +277,11 @@ class CheckAssetType extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            height: competitor.assetNameDisplayStyle.isStacked ? 28.h : 40.h,
+            height: competitor.assetNameDisplayStyle.shouldWrap ? 28.h : 40.h,
             width: width *
-                (competitor.assetNameDisplayStyle.isStacked ? 0.05 : 0.1),
+                (competitor.assetNameDisplayStyle.shouldWrap ? 0.05 : 0.1),
             margin: EdgeInsets.only(
-              right: competitor.assetNameDisplayStyle.isStacked ? 4.w : 8.w,
+              right: competitor.assetNameDisplayStyle.shouldWrap ? 4.w : 8.w,
             ),
             child: FittedBox(
               fit: BoxFit.fitHeight,
@@ -416,11 +416,23 @@ class CheckAssetType extends StatelessWidget {
           constraints: BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width * 0.43,
           ),
-          child: Text(
-            competitor.topName,
-            maxLines: competitor.assetNameDisplayStyle.isStacked ? 2 : 1,
-            overflow: TextOverflow.ellipsis,
-            style: StTextStyles.h4,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                competitor.topName,
+                maxLines: competitor.assetNameDisplayStyle.shouldWrap ? 2 : 1,
+                overflow: TextOverflow.ellipsis,
+                style: StTextStyles.h4,
+              ),
+              if (competitor.assetNameDisplayStyle.isStacked)
+                Text(
+                  competitor.subName,
+                  style: StTextStyles.p3,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+            ],
           ),
         ),
         if (tradeSource != null) ...[
@@ -469,7 +481,7 @@ class LeaderboardHalfRow extends StatelessWidget {
         kSpacerSm,
         CompetitorImage(competitor.imgUrl, true),
         kSpacerLarge,
-        CheckAssetType(
+        PortfolioAssetRow(
           competitor: competitor,
           isDriverVsField: isDriverVsField ?? false,
           isTeamPlayerVsField: isTeamPlayerVsField ?? false,
@@ -504,9 +516,7 @@ class AssetVsAssetHalfRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: competitor.assetNameDisplayStyle.isStacked
-          ? CrossAxisAlignment.start
-          : CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         assetHoldingsInterface.sharesOwned > 0
             ? const Icon(Icons.work, color: StColors.green)
@@ -518,7 +528,7 @@ class AssetVsAssetHalfRow extends StatelessWidget {
         CompetitorImage(
           competitor.imgUrl,
           showRank,
-          shrinkRatio: competitor.assetNameDisplayStyle.isStacked ? 0.7 : 0.75,
+          shrinkRatio: competitor.assetNameDisplayStyle.shouldWrap ? 0.7 : 0.75,
         ),
         kSpacerSm,
         if (showRank) ...[
@@ -528,7 +538,7 @@ class AssetVsAssetHalfRow extends StatelessWidget {
           ),
           kSpacerSm,
         ],
-        competitor.assetNameDisplayStyle.isStacked
+        competitor.assetNameDisplayStyle.shouldWrap
             ? ConstrainedBox(
                 constraints: BoxConstraints(
                   maxWidth: MediaQuery.of(context).size.width *
@@ -543,12 +553,13 @@ class AssetVsAssetHalfRow extends StatelessWidget {
                       maxLines: 4,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    Text(
-                      competitor.subName,
-                      style: StTextStyles.p3,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    if (competitor.assetNameDisplayStyle.isStacked)
+                      Text(
+                        competitor.subName,
+                        style: StTextStyles.p3,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                   ],
                 ),
               )
@@ -569,12 +580,12 @@ class AssetVsAssetHalfRow extends StatelessWidget {
         TradeButton(
           competitor.assetStateUpdates,
           competitor.competitionStatus,
-          width: competitor.assetNameDisplayStyle.isStacked
+          width: competitor.assetNameDisplayStyle.shouldWrap
               ? showRank
                   ? 48
                   : 50
               : 75,
-          fontSize: competitor.assetNameDisplayStyle.isStacked ? 10 : 15,
+          fontSize: competitor.assetNameDisplayStyle.shouldWrap ? 10 : 15,
         ),
       ],
     );
@@ -604,7 +615,7 @@ class MktRschAsset extends ConsumerWidget {
     //
     final size = MediaQuery.of(context).size;
 
-    bool isTradable = gameDetails.assetId1 == competitor.assetKey
+    bool isTradable = gameDetails.assetId1 == competitor.assetKey.value
         ? gameDetails.isTradableAsset1
         : gameDetails.isTradableAsset2;
     return Container(

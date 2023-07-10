@@ -305,7 +305,7 @@ class AssetVsAssetRowMktResearchView extends StBaseTvRow with ShowsTwoAssets {
       WidgetRef ref,
       Widget? child,
     ) {
-      void _assetTapHandler(
+      void assetTapHandler(
         bool showFirst,
       ) {
         //
@@ -345,7 +345,7 @@ class AssetVsAssetRowMktResearchView extends StBaseTvRow with ShowsTwoAssets {
                             bottomLeft: radius,
                           ),
                         ),
-                        onTap: () => _assetTapHandler(false),
+                        onTap: () => assetTapHandler(false),
                       ),
                       GestureDetector(
                         child: MktRschAsset(
@@ -359,7 +359,7 @@ class AssetVsAssetRowMktResearchView extends StBaseTvRow with ShowsTwoAssets {
                             bottomRight: radius,
                           ),
                         ),
-                        onTap: () => _assetTapHandler(true),
+                        onTap: () => assetTapHandler(true),
                       ),
                     ],
                   ),
@@ -526,7 +526,7 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
             CompetitorImage(
               comp1.imgUrl,
               false,
-              shrinkRatio: comp1.assetNameDisplayStyle.isStacked ? 0.7 : 1,
+              shrinkRatio: comp1.assetNameDisplayStyle.shouldWrap ? 0.75 : 1,
             ),
             kSpacerSm,
             Expanded(
@@ -540,7 +540,7 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
                         constraints: BoxConstraints(
                           maxWidth: width * (showHoldingsValue ? 0.65 : 0.8),
                         ),
-                        child: CheckAssetType(
+                        child: PortfolioAssetRow(
                           competitor: comp1,
                           isDriverVsField: isDriverVsField,
                           isPlayerVsFieldRanked: isPlayerVsFieldRanked,
@@ -554,9 +554,9 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
                           comp1.assetStateUpdates,
                           comp1.competitionStatus,
                           width:
-                              comp1.assetNameDisplayStyle.isStacked ? 50 : 75,
+                              comp1.assetNameDisplayStyle.shouldWrap ? 50 : 75,
                           fontSize:
-                              comp1.assetNameDisplayStyle.isStacked ? 10 : 15,
+                              comp1.assetNameDisplayStyle.shouldWrap ? 10 : 15,
                         ),
                     ],
                   ),
@@ -822,13 +822,15 @@ class TeamVsFieldRowMktView extends StBaseTvRow
   ) {
     final width = MediaQuery.of(ctx).size.width;
 
-    final rowHeight = isTeamPlayerVsField
-        ? comp1.position.isNotEmpty
-            ? 100
-            : 88
-        : isPlayerVsFieldRanked
-            ? 81
-            : 73;
+    final rowHeight = comp1.assetNameDisplayStyle.isStacked
+        ? 92
+        : isTeamPlayerVsField
+            ? comp1.position.isNotEmpty
+                ? 100
+                : 88
+            : isPlayerVsFieldRanked
+                ? 81
+                : 73;
 
     final rowWidth = isTeamPlayerVsField
         ? width * .61
@@ -876,7 +878,7 @@ class TeamVsFieldRowMktView extends StBaseTvRow
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    CheckAssetType(
+                    PortfolioAssetRow(
                       competitor: comp1,
                       isDriverVsField: isDriverVsField,
                       isTeamPlayerVsField: isTeamPlayerVsField,

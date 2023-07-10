@@ -82,7 +82,7 @@ extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {
 
   String get rankStr {
     final value = '$rank';
-    if (!assetNameDisplayStyle.isStacked) return value;
+    if (!assetNameDisplayStyle.shouldWrap) return value;
 
     if (value.length == 1) return ' $rank   ';
     if (value.length == 2) return ' $rank ';
