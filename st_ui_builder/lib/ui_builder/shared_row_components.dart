@@ -214,7 +214,7 @@ class TradeButton extends ConsumerWidget {
                   assetStateUpdts.assetState, competitionStatus),
               child: Text(
                 assetStateUpdts.tradeButtonTitle,
-                style: StTextStyles.h6.copyWith(color: StColors.lightGreen),
+                style: StTextStyles.h6,
                 textAlign: TextAlign.center,
               ),
             )
@@ -470,7 +470,7 @@ class LeaderboardHalfRow extends StatelessWidget {
         SizedBox(
           width: 10,
           child: showLeaderBoardIcon!
-              ? const Icon(
+              ? Icon(
                   Icons.leaderboard,
                   color: StColors.green,
                 )
@@ -519,7 +519,7 @@ class AssetVsAssetHalfRow extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         assetHoldingsInterface.sharesOwned > 0
-            ? const Icon(Icons.work, color: StColors.green)
+            ? Icon(Icons.work, color: StColors.green)
             : WatchButton(
                 assetKey: competitor.assetKey,
                 isWatched: gameDetails.isWatched(competitor.assetKey),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:st_ev_cfg/st_ev_cfg.dart';
 import 'colors.dart';
 
 class StTextStyles {
@@ -256,7 +255,7 @@ class StButtonStyles {
   //
   // keep
   static ButtonStyle tradeButtonCanTrade = TextButton.styleFrom(
-    backgroundColor: StColors.darkGreen,
+    backgroundColor: StColors.green,
     padding: EdgeInsets.zero,
     // padding: const EdgeInsets.symmetric(
     //   vertical: 20,
@@ -265,7 +264,7 @@ class StButtonStyles {
   );
 
   static ButtonStyle tradeBtnWhileGameInProgress = TextButton.styleFrom(
-    backgroundColor: StColors.darkGreen,
+    backgroundColor: StColors.green,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.all(
         Radius.circular(3),
@@ -301,21 +300,21 @@ class StButtonStyles {
   );
 
   static ButtonStyle tradePlayerMarketView = TextButton.styleFrom(
-    backgroundColor: StColors.darkGreen,
+    backgroundColor: StColors.green,
     padding: EdgeInsets.symmetric(
       vertical: 10.h,
       horizontal: 15.w,
     ),
   );
   static ButtonStyle tradeTeamMarketLessWidthView = TextButton.styleFrom(
-    backgroundColor: StColors.darkGreen,
+    backgroundColor: StColors.green,
     padding: EdgeInsets.symmetric(
       vertical: 20.h,
       horizontal: 10.w,
     ),
   );
   static ButtonStyle tradePlayerMarketLessWidthView = TextButton.styleFrom(
-    backgroundColor: StColors.darkGreen,
+    backgroundColor: StColors.green,
     padding: EdgeInsets.symmetric(
       vertical: 10.h,
       horizontal: 10.w,

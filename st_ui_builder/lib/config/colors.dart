@@ -24,8 +24,8 @@ class StColors {
 
   // Shades of Green
   static const lightGreen = Color(0xffccffcc);
-  static const green = Color(0xff08FF6F);
-  static const darkGreen = Color(0xff007230);
+  static final green = const Color(0xff08FF6F).withAlpha(195);
+  // static const darkGreen = Color(0xff007230);
 
   // Shades of Yellow
   static const lightYellow = Color(0xffFFF3B1);

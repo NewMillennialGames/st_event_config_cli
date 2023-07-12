@@ -371,7 +371,7 @@ class AssetVsAssetRowMktResearchView extends StBaseTvRow with ShowsTwoAssets {
                       decoration: BoxDecoration(
                         border: Border.all(color: StColors.black, width: 1.5),
                         shape: BoxShape.circle,
-                        color: StColors.darkGreen,
+                        color: StColors.green,
                       ),
                       child: Center(
                         child: Text(
@@ -852,7 +852,7 @@ class TeamVsFieldRowMktView extends StBaseTvRow
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           assetHoldingsSummary.sharesOwned > 0
-              ? const Icon(Icons.work, color: StColors.green)
+              ? Icon(Icons.work, color: StColors.green)
               : WatchButton(
                   assetKey: comp1.assetKey,
                   isWatched: comp1.assetStateUpdates.isWatched,
@@ -1250,7 +1250,7 @@ class ChysalisAssetRowPortfolioView extends StBaseTvRow
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               assetHoldingsSummary.sharesOwned > 0
-                  ? const Icon(Icons.work, color: StColors.green)
+                  ? Icon(Icons.work, color: StColors.green)
                   : WatchButton(
                       assetKey: comp1.assetKey,
                       isWatched: comp1.assetStateUpdates.isWatched,
@@ -1528,7 +1528,7 @@ class ChysalisAssetRowMktView extends StBaseTvRow
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               assetHoldingsSummary.sharesOwned > 0
-                  ? const Icon(Icons.work, color: StColors.green)
+                  ? Icon(Icons.work, color: StColors.green)
                   : WatchButton(
                       assetKey: comp1.assetKey,
                       isWatched: comp1.assetStateUpdates.isWatched,
