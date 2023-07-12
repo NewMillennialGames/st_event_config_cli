@@ -598,7 +598,7 @@ class MktRschAsset extends ConsumerWidget {
   final ActiveGameDetails gameDetails;
   final Color color;
   final BorderRadiusGeometry borderRadius;
-  final double _sizeHeightImage = 150;
+  final double _sizeHeightImage = 160;
 
   //
   const MktRschAsset(
@@ -642,6 +642,17 @@ class MktRschAsset extends ConsumerWidget {
               textAlign: TextAlign.center,
             ),
           ),
+          if (competitor.assetNameDisplayStyle.isStacked)
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8.w),
+              child: Text(
+                competitor.subName,
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+                style: StTextStyles.p3,
+                textAlign: TextAlign.center,
+              ),
+            ),
           Icon(
             Icons.star_border,
             color: isTradable ? StColors.gray : StColors.blue,
