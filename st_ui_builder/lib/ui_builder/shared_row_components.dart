@@ -585,7 +585,6 @@ class AssetVsAssetHalfRow extends StatelessWidget {
                   ? 48
                   : 50
               : 75,
-          fontSize: competitor.assetNameDisplayStyle.shouldWrap ? 10 : 15,
         ),
       ],
     );
