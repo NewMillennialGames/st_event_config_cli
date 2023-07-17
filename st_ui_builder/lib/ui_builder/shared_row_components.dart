@@ -129,7 +129,7 @@ class CompetitorImage extends StatelessWidget {
     this.isTwoAssetRow = false,
     this.hasBorder = false,
     this.shrinkRatio = 1,
-    this.fit = BoxFit.fitHeight,
+    this.fit = BoxFit.fitWidth,
     Key? key,
   }) : super(key: key);
 
