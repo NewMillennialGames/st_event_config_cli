@@ -211,10 +211,17 @@ class TradeButton extends ConsumerWidget {
                 AssetKey(assetStateUpdts.assetKey),
               ),
               style: _styleForAssetState(
-                  assetStateUpdts.assetState, competitionStatus),
+                assetStateUpdts.assetState,
+                competitionStatus,
+              ),
               child: Text(
                 assetStateUpdts.tradeButtonTitle,
-                style: StTextStyles.h6,
+                style: StTextStyles.h6.copyWith(
+                  fontSize: assetStateUpdts.assetState ==
+                          AssetState.assetTradeMarketGameOn
+                      ? 13.sp
+                      : 14.sp,
+                ),
                 textAlign: TextAlign.center,
               ),
             )
@@ -414,7 +421,7 @@ class PortfolioAssetRow extends StatelessWidget {
       children: [
         ConstrainedBox(
           constraints: BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width * 0.43,
+            maxWidth: MediaQuery.of(context).size.width * 0.42,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -497,7 +504,7 @@ class LeaderboardHalfRow extends StatelessWidget {
   }
 }
 
-class AssetVsAssetHalfRow extends StatelessWidget {
+class AssetVsAssetHalfRow extends StatefulWidget {
   //
   final AssetHoldingsSummaryIfc assetHoldingsInterface;
   final AssetRowPropertyIfc competitor;
@@ -513,49 +520,82 @@ class AssetVsAssetHalfRow extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<AssetVsAssetHalfRow> createState() => _AssetVsAssetHalfRowState();
+}
+
+class _AssetVsAssetHalfRowState extends State<AssetVsAssetHalfRow> {
+  bool _doesTextWrap = false;
+
+  void _computeTextSize() {
+    final width = MediaQuery.of(context).size.width;
+    final painter = TextPainter(
+      textDirection: TextDirection.ltr,
+      maxLines: 4,
+      text: TextSpan(
+        text: widget.competitor.topName,
+        style: StTextStyles.h5,
+      ),
+    );
+
+    painter.layout(maxWidth: width);
+
+    setState(() {
+      _doesTextWrap = painter.size.width >= width * 0.46;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(_computeTextSize);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        assetHoldingsInterface.sharesOwned > 0
+        widget.assetHoldingsInterface.sharesOwned > 0
             ? Icon(Icons.work, color: StColors.green)
             : WatchButton(
-                assetKey: competitor.assetKey,
-                isWatched: gameDetails.isWatched(competitor.assetKey),
+                assetKey: widget.competitor.assetKey,
+                isWatched:
+                    widget.gameDetails.isWatched(widget.competitor.assetKey),
               ),
         kSpacerSm,
         CompetitorImage(
-          competitor.imgUrl,
-          showRank,
-          shrinkRatio: competitor.assetNameDisplayStyle.shouldWrap ? 0.7 : 0.75,
+          widget.competitor.imgUrl,
+          widget.showRank,
+          shrinkRatio:
+              widget.competitor.assetNameDisplayStyle.shouldWrap ? 0.7 : 0.75,
         ),
         kSpacerSm,
-        if (showRank) ...[
+        if (widget.showRank) ...[
           Text(
-            competitor.rankStr,
+            widget.competitor.rankStr,
             style: StTextStyles.h5,
           ),
           kSpacerSm,
         ],
-        competitor.assetNameDisplayStyle.shouldWrap
+        widget.competitor.assetNameDisplayStyle.shouldWrap
             ? ConstrainedBox(
                 constraints: BoxConstraints(
                   maxWidth: MediaQuery.of(context).size.width *
-                      (showRank ? 0.44 : 0.46),
+                      (widget.showRank ? 0.44 : 0.46),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      competitor.topName,
+                      widget.competitor.topName,
                       style: StTextStyles.h5,
                       maxLines: 4,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    if (competitor.assetNameDisplayStyle.isStacked)
+                    if (widget.competitor.assetNameDisplayStyle.isStacked)
                       Text(
-                        competitor.subName,
+                        widget.competitor.subName,
                         style: StTextStyles.p3,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -565,7 +605,7 @@ class AssetVsAssetHalfRow extends StatelessWidget {
               )
             : Expanded(
                 child: Text(
-                  competitor.topName,
+                  widget.competitor.topName,
                   style: StTextStyles.h5,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -573,15 +613,16 @@ class AssetVsAssetHalfRow extends StatelessWidget {
               ),
         const Spacer(),
         Text(
-          competitor.currPriceStr,
+          widget.competitor.currPriceStr,
           style: StTextStyles.h5,
         ),
         kSpacerTiny,
         TradeButton(
-          competitor.assetStateUpdates,
-          competitor.competitionStatus,
-          width: competitor.assetNameDisplayStyle.shouldWrap
-              ? showRank
+          widget.competitor.assetStateUpdates,
+          widget.competitor.competitionStatus,
+          width: (_doesTextWrap &&
+                  widget.competitor.assetNameDisplayStyle.shouldWrap)
+              ? widget.showRank
                   ? 48
                   : 50
               : 75,

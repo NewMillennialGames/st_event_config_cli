@@ -470,7 +470,7 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
     late String sharePriceChange;
     late String sharesOwned;
     late String positionValue;
-    late String tradeSource;
+    String? tradeSource;
     late Decimal positionGainLoss;
     Decimal shareCostBasis = Decimal.zero;
     if (showProceeds) {
@@ -490,7 +490,6 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
       tradeSource = order.tradeSource;
     } else {
       final holdings = comp1.assetHoldingsSummary;
-      tradeSource = '';
       shareCostBasis =
           (holdings.positionCost / Decimal.fromInt(holdings.sharesOwned))
               .toDecimal(scaleOnInfinitePrecision: 2);
@@ -538,7 +537,7 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
                     children: [
                       ConstrainedBox(
                         constraints: BoxConstraints(
-                          maxWidth: width * (showHoldingsValue ? 0.65 : 0.8),
+                          maxWidth: width * (showHoldingsValue ? 0.61 : 0.8),
                         ),
                         child: PortfolioAssetRow(
                           competitor: comp1,
@@ -548,23 +547,23 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
                           tradeSource: tradeSource,
                         ),
                       ),
-                      if (showHoldingsValue)
+                      if (showHoldingsValue) ...{
+                        const Spacer(),
                         // this is a portfolio positions row; show trade
                         TradeButton(
                           comp1.assetStateUpdates,
                           comp1.competitionStatus,
-                          width:
-                              comp1.assetNameDisplayStyle.shouldWrap ? 50 : 75,
-                          fontSize:
-                              comp1.assetNameDisplayStyle.shouldWrap ? 10 : 15,
                         ),
+                      },
                     ],
                   ),
                   kVerticalSpacerSm,
                   Expanded(
                     child: Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
+                      padding: EdgeInsets.symmetric(
+                        vertical: 5.h,
+                        horizontal: 10.w,
+                      ),
                       color: StColors.veryDarkGray,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -839,7 +838,7 @@ class TeamVsFieldRowMktView extends StBaseTvRow
             : (!isDriverVsField &&
                     !isPlayerVsFieldRanked &&
                     !isTeamPlayerVsField)
-                ? width * .62
+                ? width * .52
                 : width * .65;
 
     return GestureDetector(

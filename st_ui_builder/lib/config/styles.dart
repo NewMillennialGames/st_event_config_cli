@@ -270,7 +270,7 @@ class StButtonStyles {
         Radius.circular(3),
       ),
     ),
-    side: const BorderSide(color: Colors.red, width: 4),
+    side: const BorderSide(color: Colors.red, width: 2),
   );
 
   // replace
