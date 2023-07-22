@@ -175,6 +175,9 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
 
   @override
   String? get groupName => null;
+
+  @override
+  bool get isTopNameMultiLine => false;
 }
 
 List<MockAsset> _fakeData = [

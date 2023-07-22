@@ -73,6 +73,20 @@ abstract class AssetRowPropertyIfc {
   void updateDynamicState(ActiveGameDetails agd);
 
   String? get groupName;
+
+  ///Whether [topName] for ANY asset is painted on more than 1 line
+  ///on screen when [assetNameDisplayStyle] is `showLongName` or
+  ///`showBothStacked`.
+  ///
+  ///This is important for `TvAreaRowStyle.assetVsAsset`.
+  ///If ALL assets only need 1 line to paint their [topName], then the
+  ///trade button can take more space. Otherwise, the trade button is shrinked.
+  ///We can achieve this feature without this property but it results in
+  ///non-uniform shrinking of the trade button.
+  ///
+  ///So, this is some top level state that tells all rows
+  ///whether to shrink their buttons or not.
+  bool get isTopNameMultiLine;
 }
 
 extension AssetRowPropertyIfcExt1 on AssetRowPropertyIfc {

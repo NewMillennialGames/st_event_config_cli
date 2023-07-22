@@ -196,10 +196,6 @@ class TradeButton extends ConsumerWidget {
     // final size = MediaQuery.of(context).size;
     TradeFlowBase tf = ref.read(tradeFlowProvider);
 
-    print(
-      'Built trade btn for ${assetStateUpdts.assetKey} with state ${assetStateUpdts.assetState.name}',
-    );
-
     return Container(
       height: UiSizes.tradeBtnHeight,
       width: (width ?? 75).w,
@@ -527,20 +523,10 @@ class _AssetVsAssetHalfRowState extends State<AssetVsAssetHalfRow> {
   bool _doesTextWrap = false;
 
   void _computeTextSize() {
-    final width = MediaQuery.of(context).size.width;
-    final painter = TextPainter(
-      textDirection: TextDirection.ltr,
-      maxLines: 4,
-      text: TextSpan(
-        text: widget.competitor.topName,
-        style: StTextStyles.h5,
-      ),
-    );
-
-    painter.layout(maxWidth: width);
+    if (!widget.competitor.assetNameDisplayStyle.shouldWrap) return;
 
     setState(() {
-      _doesTextWrap = painter.size.width >= width * 0.46;
+      _doesTextWrap = widget.competitor.isTopNameMultiLine;
     });
   }
 

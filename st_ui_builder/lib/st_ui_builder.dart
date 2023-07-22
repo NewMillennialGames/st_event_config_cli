@@ -5,6 +5,7 @@ export 'config/sizes.dart';
 export 'config/assets.dart';
 export 'utils/dates.dart';
 export 'utils/prices.dart';
+export 'utils/text_painting.dart';
 export 'package:st_ev_cfg/st_ev_cfg.dart'
     show
         TvBasisForRow,
