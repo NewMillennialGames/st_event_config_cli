@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of OutputModels;
+part of 'all.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
@@ -35,6 +35,7 @@ TopEventCfg _$TopEventCfgFromJson(Map<String, dynamic> json) => TopEventCfg(
               _$EvAssetNameDisplayStyleEnumMap,
               json['assetNameDisplayStyle']) ??
           EvAssetNameDisplayStyle.showShortName,
+      hideStockTicker: json['hideStockTicker'] as bool? ?? false,
     )..cancelAllRowGroupingLogic =
         json['cancelAllRowGroupingLogic'] as bool? ?? false;
 
@@ -54,6 +55,7 @@ Map<String, dynamic> _$TopEventCfgToJson(TopEventCfg instance) =>
           instance.applyMktViewRowStyleToAllScreens,
       'cancelAllRowGroupingLogic': instance.cancelAllRowGroupingLogic,
       'useAssetShortNameInFilters': instance.useAssetShortNameInFilters,
+      'hideStockTicker': instance.hideStockTicker,
       'assetNameDisplayStyle':
           _$EvAssetNameDisplayStyleEnumMap[instance.assetNameDisplayStyle]!,
     };

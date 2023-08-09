@@ -111,8 +111,8 @@ extension AppScreenExt1 on AppScreen {
       case AppScreen.portfolioPositions:
         return [
           ScreenWidgetArea.header,
-          // ScreenWidgetArea.banner,
           ScreenWidgetArea.tableview,
+          ScreenWidgetArea.footer,
         ];
       case AppScreen.portfolioHistory:
         return [

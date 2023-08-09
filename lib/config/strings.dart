@@ -10,6 +10,7 @@ class DlgStr {
   static String eventDuration = 'How long will event last';
   static String eventEliminationStrategy =
       'How does competitor elimination work';
+  static String hideStockTicker = 'Hide the stock ticker?';
 
   static String useSameRowStyleForAllScreens =
       'Apply 1st selected TblView row style to all other screens?';
@@ -24,7 +25,6 @@ class DlgStr {
   // static String eventName = 'Enter Event Template Name';
   // static String eventName = 'Enter Event Template Name';
   // static String eventName = 'Enter Event Template Name';
-
 }
 
 class RuleTemplStr {
@@ -64,6 +64,7 @@ class QuestionIdStrings {
   static String selectAppScreens = 'selectAppScreens';
   static String useAssetShortNameInFilters = 'useAssetShortNameInFilters';
   static String selectAssetNameDisplayStyle = "selectAssetNameDisplayStyle";
+  static String hideStockTicker = 'hideStockTicker';
 
   static String specAreasToConfigOnScreen = 'specAreasToConfigOnScreen';
   static String specRulesForAreaOnScreen = 'specRulesForAreaOnScreen';

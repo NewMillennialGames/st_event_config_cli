@@ -1,9 +1,9 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of QuestionsLib;
+part of 'all.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -34,7 +34,8 @@ mixin _$QTargetResolution {
 abstract class $QTargetResolutionCopyWith<$Res> {
   factory $QTargetResolutionCopyWith(
           QTargetResolution value, $Res Function(QTargetResolution) then) =
-      _$QTargetResolutionCopyWithImpl<$Res>;
+      _$QTargetResolutionCopyWithImpl<$Res, QTargetResolution>;
+  @useResult
   $Res call(
       {AppScreen appScreen,
       ScreenWidgetArea? screenWidgetArea,
@@ -45,49 +46,51 @@ abstract class $QTargetResolutionCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$QTargetResolutionCopyWithImpl<$Res>
+class _$QTargetResolutionCopyWithImpl<$Res, $Val extends QTargetResolution>
     implements $QTargetResolutionCopyWith<$Res> {
   _$QTargetResolutionCopyWithImpl(this._value, this._then);
 
-  final QTargetResolution _value;
   // ignore: unused_field
-  final $Res Function(QTargetResolution) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? appScreen = freezed,
+    Object? appScreen = null,
     Object? screenWidgetArea = freezed,
     Object? slotInArea = freezed,
     Object? visRuleTypeForAreaOrSlot = freezed,
     Object? behRuleTypeForAreaOrSlot = freezed,
-    Object? precision = freezed,
+    Object? precision = null,
   }) {
     return _then(_value.copyWith(
-      appScreen: appScreen == freezed
+      appScreen: null == appScreen
           ? _value.appScreen
           : appScreen // ignore: cast_nullable_to_non_nullable
               as AppScreen,
-      screenWidgetArea: screenWidgetArea == freezed
+      screenWidgetArea: freezed == screenWidgetArea
           ? _value.screenWidgetArea
           : screenWidgetArea // ignore: cast_nullable_to_non_nullable
               as ScreenWidgetArea?,
-      slotInArea: slotInArea == freezed
+      slotInArea: freezed == slotInArea
           ? _value.slotInArea
           : slotInArea // ignore: cast_nullable_to_non_nullable
               as ScreenAreaWidgetSlot?,
-      visRuleTypeForAreaOrSlot: visRuleTypeForAreaOrSlot == freezed
+      visRuleTypeForAreaOrSlot: freezed == visRuleTypeForAreaOrSlot
           ? _value.visRuleTypeForAreaOrSlot
           : visRuleTypeForAreaOrSlot // ignore: cast_nullable_to_non_nullable
               as VisualRuleType?,
-      behRuleTypeForAreaOrSlot: behRuleTypeForAreaOrSlot == freezed
+      behRuleTypeForAreaOrSlot: freezed == behRuleTypeForAreaOrSlot
           ? _value.behRuleTypeForAreaOrSlot
           : behRuleTypeForAreaOrSlot // ignore: cast_nullable_to_non_nullable
               as BehaviorRuleType?,
-      precision: precision == freezed
+      precision: null == precision
           ? _value.precision
           : precision // ignore: cast_nullable_to_non_nullable
               as TargetPrecision,
-    ));
+    ) as $Val);
   }
 }
 
@@ -98,6 +101,7 @@ abstract class _$$_QTargetResolutionCopyWith<$Res>
           $Res Function(_$_QTargetResolution) then) =
       __$$_QTargetResolutionCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {AppScreen appScreen,
       ScreenWidgetArea? screenWidgetArea,
@@ -109,46 +113,44 @@ abstract class _$$_QTargetResolutionCopyWith<$Res>
 
 /// @nodoc
 class __$$_QTargetResolutionCopyWithImpl<$Res>
-    extends _$QTargetResolutionCopyWithImpl<$Res>
+    extends _$QTargetResolutionCopyWithImpl<$Res, _$_QTargetResolution>
     implements _$$_QTargetResolutionCopyWith<$Res> {
   __$$_QTargetResolutionCopyWithImpl(
       _$_QTargetResolution _value, $Res Function(_$_QTargetResolution) _then)
-      : super(_value, (v) => _then(v as _$_QTargetResolution));
+      : super(_value, _then);
 
-  @override
-  _$_QTargetResolution get _value => super._value as _$_QTargetResolution;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? appScreen = freezed,
+    Object? appScreen = null,
     Object? screenWidgetArea = freezed,
     Object? slotInArea = freezed,
     Object? visRuleTypeForAreaOrSlot = freezed,
     Object? behRuleTypeForAreaOrSlot = freezed,
-    Object? precision = freezed,
+    Object? precision = null,
   }) {
     return _then(_$_QTargetResolution(
-      appScreen == freezed
+      null == appScreen
           ? _value.appScreen
           : appScreen // ignore: cast_nullable_to_non_nullable
               as AppScreen,
-      screenWidgetArea == freezed
+      freezed == screenWidgetArea
           ? _value.screenWidgetArea
           : screenWidgetArea // ignore: cast_nullable_to_non_nullable
               as ScreenWidgetArea?,
-      slotInArea: slotInArea == freezed
+      slotInArea: freezed == slotInArea
           ? _value.slotInArea
           : slotInArea // ignore: cast_nullable_to_non_nullable
               as ScreenAreaWidgetSlot?,
-      visRuleTypeForAreaOrSlot: visRuleTypeForAreaOrSlot == freezed
+      visRuleTypeForAreaOrSlot: freezed == visRuleTypeForAreaOrSlot
           ? _value.visRuleTypeForAreaOrSlot
           : visRuleTypeForAreaOrSlot // ignore: cast_nullable_to_non_nullable
               as VisualRuleType?,
-      behRuleTypeForAreaOrSlot: behRuleTypeForAreaOrSlot == freezed
+      behRuleTypeForAreaOrSlot: freezed == behRuleTypeForAreaOrSlot
           ? _value.behRuleTypeForAreaOrSlot
           : behRuleTypeForAreaOrSlot // ignore: cast_nullable_to_non_nullable
               as BehaviorRuleType?,
-      precision: precision == freezed
+      precision: null == precision
           ? _value.precision
           : precision // ignore: cast_nullable_to_non_nullable
               as TargetPrecision,
@@ -182,6 +184,7 @@ class _$_QTargetResolution extends _QTargetResolution {
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_QTargetResolutionCopyWith<_$_QTargetResolution> get copyWith =>
       __$$_QTargetResolutionCopyWithImpl<_$_QTargetResolution>(
           this, _$identity);

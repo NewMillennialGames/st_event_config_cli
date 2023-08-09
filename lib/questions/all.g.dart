@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of QuestionsLib;
+part of 'all.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

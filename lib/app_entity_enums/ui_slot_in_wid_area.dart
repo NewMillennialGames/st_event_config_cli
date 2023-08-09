@@ -11,7 +11,7 @@ enum ScreenAreaWidgetSlot {
   header,
   footer,
   slot1, // aka menu position 1 on filter-bar
-  slot2,
+  slot2, // or rows on portfolio footer
   slot3,
 
   // data property of the component
@@ -51,16 +51,19 @@ extension ScreenAreaWidgetSlotExt1 on ScreenAreaWidgetSlot {
         return [
           if (forArea == ScreenWidgetArea.filterBar) VisualRuleType.filterCfg,
           if (forArea == ScreenWidgetArea.tableview) VisualRuleType.sortCfg,
+          if (forArea == ScreenWidgetArea.footer) VisualRuleType.showOrHide,
         ];
       case ScreenAreaWidgetSlot.slot2:
         return [
           if (forArea == ScreenWidgetArea.filterBar) VisualRuleType.filterCfg,
           if (forArea == ScreenWidgetArea.tableview) VisualRuleType.sortCfg,
+          if (forArea == ScreenWidgetArea.footer) VisualRuleType.showOrHide,
         ];
       case ScreenAreaWidgetSlot.slot3:
         return [
           if (forArea == ScreenWidgetArea.filterBar) VisualRuleType.filterCfg,
           if (forArea == ScreenWidgetArea.tableview) VisualRuleType.sortCfg,
+          if (forArea == ScreenWidgetArea.footer) VisualRuleType.showOrHide,
         ];
       case ScreenAreaWidgetSlot.title:
         return [
@@ -101,7 +104,7 @@ extension ScreenAreaWidgetSlotExt1 on ScreenAreaWidgetSlot {
     }
   }
 
-  List<VisualRuleType> convertIdxsToRuleList(
+  List<VisualRuleType> convertIdxsToRuleListByArea(
     AppScreen screen,
     ScreenWidgetArea area,
     String commaLstOfInts,

@@ -490,7 +490,9 @@ class ShowHideCfg extends RuleResponseBase {
   @override
   void _castToRealTypes(List<PairedQuestAndResp> userResponses) {
     PairedQuestAndResp resp = userResponses.first;
-    this.shouldShow = resp.userAnswer != '0';
+    // question is always: "do you want to hide this?"
+    // no == "0"
+    this.shouldShow = resp.userAnswer.startsWith('0');
   }
 
   @override

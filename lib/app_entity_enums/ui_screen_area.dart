@@ -59,6 +59,12 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
         return [
           ScreenAreaWidgetSlot.title,
           ScreenAreaWidgetSlot.subtitle,
+          // JR asked to configure footer on portfolio positions
+          if (screen == AppScreen.portfolioPositions) ...[
+            ScreenAreaWidgetSlot.slot1,
+            ScreenAreaWidgetSlot.slot2,
+            ScreenAreaWidgetSlot.slot3,
+          ],
         ];
       // case UiComponent.ticker:
       //   return [VisualRuleType.show];
@@ -126,7 +132,7 @@ extension ScreenWidgetAreaExt1 on ScreenWidgetArea {
   }
 
   //
-  List<VisualRuleType> convertIdxsToRuleList(
+  List<VisualRuleType> convertIdxsToRuleListByScreen(
     AppScreen screen,
     String commaLstOfInts,
   ) {

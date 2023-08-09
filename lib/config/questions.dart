@@ -121,6 +121,14 @@ final List<QuestBase> _initQuestionLst = [
       ),
       questId: QuestionIdStrings.selectAssetNameDisplayStyle,
     ),
+    QuestBase.initialEventConfigRule(
+      QTargetResolution.forEvent(),
+      DlgStr.hideStockTicker,
+      ['no', 'yes'],
+      // cast logic inverted because ShowHideCfg (RuleResponseBase) uses "Show"
+      CaptureAndCast<bool>((QuestBase qb, String ls) => ls.startsWith('1')),
+      questId: QuestionIdStrings.hideStockTicker,
+    ),
   ],
   // ask which screens to configure
   QuestBase.initialEventConfigRule(

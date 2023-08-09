@@ -22,6 +22,7 @@ class TopEventCfg {
   @JsonKey(defaultValue: false)
   bool cancelAllRowGroupingLogic = false;
   bool useAssetShortNameInFilters = true;
+  bool hideStockTicker = false;
   EvAssetNameDisplayStyle assetNameDisplayStyle =
       EvAssetNameDisplayStyle.showShortName;
 
@@ -38,6 +39,7 @@ class TopEventCfg {
     this.applyMktViewRowStyleToAllScreens = true,
     this.useAssetShortNameInFilters = true,
     this.assetNameDisplayStyle = EvAssetNameDisplayStyle.showShortName,
+    this.hideStockTicker = false,
   });
 
   bool get isFantasy => evType == EvType.fantasy;
@@ -118,6 +120,7 @@ class EventCfgTree {
         EvGameAgeOffRule.byEvEliminationStrategy;
     double hoursToWaitAfterGameEnds = 0;
     bool applySameRowStyleToAllScreens = true;
+    bool hideStockTicker = false;
     EvAssetNameDisplayStyle assetNameDisplayStyle =
         EvAssetNameDisplayStyle.showShortName;
     // use try to catch errs and allow easy debugging
@@ -161,6 +164,9 @@ class EventCfgTree {
                 q.questId == QuestionIdStrings.eventAgeOffGameRuleHoursAfter)
             .mainAnswer as double;
       }
+      hideStockTicker = evCfgResponses
+          .firstWhere((q) => q.questId == QuestionIdStrings.hideStockTicker)
+          .mainAnswer as bool;
     } catch (e) {
       ConfigLogger.log(
         Level.WARNING,
@@ -180,6 +186,7 @@ class EventCfgTree {
       hoursToWaitAfterGameEnds: hoursToWaitAfterGameEnds,
       applyMktViewRowStyleToAllScreens: applySameRowStyleToAllScreens,
       assetNameDisplayStyle: assetNameDisplayStyle,
+      hideStockTicker: hideStockTicker,
     );
 
     return EventCfgTree(eventCfg, {});
