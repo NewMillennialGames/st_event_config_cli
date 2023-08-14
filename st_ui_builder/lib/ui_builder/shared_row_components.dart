@@ -173,23 +173,23 @@ class CompetitorImage extends StatelessWidget {
 
 class TradeButton extends ConsumerWidget {
   //
-  final AssetStateUpdates assetStateUpdts;
-  final CompetitionStatus competitionStatus;
+  final AssetRowPropertyIfc asset;
   final double? width;
   final double? fontSize;
   final String? buttonText;
   final Color? textColor;
   final bool disabled;
+  final bool bypass;
 
   const TradeButton(
-    this.assetStateUpdts,
-    this.competitionStatus, {
+    this.asset, {
     Key? key,
     this.width,
     this.fontSize,
     this.buttonText,
     this.textColor,
     this.disabled = true,
+    this.bypass = false,
   }) : super(key: key);
 
   @override
@@ -206,31 +206,27 @@ class TradeButton extends ConsumerWidget {
       height: UiSizes.tradeBtnHeight,
       width: (width ?? 75).w,
       alignment: Alignment.center,
-      child: disabled || !assetStateUpdts.isTradable
+      child: !bypass && (disabled || !asset.isTradable)
           ? Text(
-              buttonText ??
-                  tf.labelForAssetState(
-                    competitionStatus,
-                    assetStateUpdts.assetState,
-                  ),
+              buttonText ?? tf.labelForAsset(asset),
               style: StTextStyles.h5.copyWith(
                 fontSize: (fontSize ?? 15).sp,
-                color: textColor ?? tf.colorForAssetState(competitionStatus),
+                color: textColor ?? tf.colorForAsset(asset),
               ),
               textAlign: TextAlign.center,
             )
           : TextButton(
               onPressed: () => tf.beginTradeFlow(
-                AssetKey(assetStateUpdts.assetKey),
+                AssetKey(asset.assetStateUpdates.assetKey),
               ),
               style: _styleForAssetState(
-                assetStateUpdts.assetState,
-                competitionStatus,
+                asset.assetStateUpdates.assetState,
+                asset.competitionStatus,
               ),
               child: Text(
-                buttonText ?? assetStateUpdts.tradeButtonTitle,
+                buttonText ?? asset.assetStateUpdates.tradeButtonTitle,
                 style: StTextStyles.h6.copyWith(
-                  fontSize: assetStateUpdts.assetState ==
+                  fontSize: asset.assetStateUpdates.assetState ==
                           AssetState.assetTradeMarketGameOn
                       ? 13.sp
                       : 14.sp,
@@ -611,8 +607,7 @@ class _AssetVsAssetHalfRowState extends State<AssetVsAssetHalfRow> {
         ),
         kSpacerTiny,
         TradeButton(
-          widget.competitor.assetStateUpdates,
-          widget.competitor.competitionStatus,
+          widget.competitor,
           width: (_doesTextWrap &&
                   widget.competitor.assetNameDisplayStyle.shouldWrap)
               ? widget.showRank
@@ -764,10 +759,7 @@ class RowControl extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.only(right: 16.w),
-            child: TradeButton(
-              competitor.assetStateUpdates,
-              gameDetails.gameStatus,
-            ),
+            child: TradeButton(competitor),
           ),
         ],
       ),

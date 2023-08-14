@@ -534,10 +534,7 @@ class AssetVsAssetRowPortfolioView extends StBaseTvRow
                       if (showHoldingsValue) ...{
                         const Spacer(),
                         // this is a portfolio positions row; show trade
-                        TradeButton(
-                          comp1.assetStateUpdates,
-                          comp1.competitionStatus,
-                        ),
+                        TradeButton(comp1),
                       },
                     ],
                   ),
@@ -923,8 +920,7 @@ class TeamVsFieldRowMktView extends StBaseTvRow
           ),
           kSpacerTiny,
           TradeButton(
-            comp1.assetStateUpdates,
-            comp1.competitionStatus,
+            comp1,
             width: comp1.assetNameDisplayStyle.isStacked ? 50 : 75,
             fontSize: comp1.assetNameDisplayStyle.isStacked ? 10 : 15,
           ),
@@ -1134,8 +1130,7 @@ class DraftTeamRowMktView extends StBaseTvRow
           if (!isPortfolioHistory) ...{
             kSpacerTiny,
             TradeButton(
-              comp1.assetStateUpdates,
-              comp1.competitionStatus,
+              comp1,
               width: comp1.assetNameDisplayStyle.isStacked ? 50 : 75,
               fontSize: comp1.assetNameDisplayStyle.isStacked ? 10 : 15,
               buttonText: isSoldOutInMarket
@@ -1144,6 +1139,7 @@ class DraftTeamRowMktView extends StBaseTvRow
                       ? StStrings.tradeUc
                       : null,
               disabled: isSoldOutInMarket,
+              bypass: isOpenToTradeInPortfolio,
               textColor: StColors.white,
             ),
           },
@@ -1416,10 +1412,7 @@ class ChysalisAssetRowPortfolioView extends StBaseTvRow
                                 ],
                               ),
                               const Spacer(),
-                              TradeButton(
-                                comp1.assetStateUpdates,
-                                comp1.competitionStatus,
-                              ),
+                              TradeButton(comp1),
                             ],
                           ),
                         ),
@@ -1721,10 +1714,7 @@ class ChysalisAssetRowMktView extends StBaseTvRow
                                   ],
                                 ),
                                 const Spacer(),
-                                TradeButton(
-                                  comp1.assetStateUpdates,
-                                  comp1.competitionStatus,
-                                ),
+                                TradeButton(comp1),
                               ],
                             ),
                           ),
