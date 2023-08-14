@@ -1033,6 +1033,17 @@ class DraftTeamRowMktView extends StBaseTvRow
   ) {
     final width = MediaQuery.of(ctx).size.width;
 
+    bool isSoldOutInMarket = !isPortfolioHistory &&
+        !isPortfolioPosition &&
+        comp1.currentSharesAvailable == Decimal.zero &&
+        assetHoldingsSummary.sharesOwned > 0 &&
+        comp1.assetStateUpdates.assetState == AssetState.assetTradeMarketGameOn;
+
+    bool isOpenToTradeInPortfolio = isPortfolioPosition &&
+        comp1.currentSharesAvailable == Decimal.zero &&
+        assetHoldingsSummary.sharesOwned > 0 &&
+        comp1.assetStateUpdates.assetState == AssetState.assetTradeMarketGameOn;
+
     final rowHeight = comp1.assetNameDisplayStyle.isStacked ? 92 : 73;
 
     final rowWidth = isPortfolioPosition
@@ -1125,6 +1136,13 @@ class DraftTeamRowMktView extends StBaseTvRow
               comp1.competitionStatus,
               width: comp1.assetNameDisplayStyle.isStacked ? 50 : 75,
               fontSize: comp1.assetNameDisplayStyle.isStacked ? 10 : 15,
+              buttonText: isSoldOutInMarket
+                  ? StStrings.soldOut
+                  : isOpenToTradeInPortfolio
+                      ? StStrings.tradeUc
+                      : null,
+              disabled: isSoldOutInMarket,
+              textColor: StColors.white,
             ),
           },
         ],

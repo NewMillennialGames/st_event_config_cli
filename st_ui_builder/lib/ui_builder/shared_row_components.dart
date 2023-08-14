@@ -177,6 +177,9 @@ class TradeButton extends ConsumerWidget {
   final CompetitionStatus competitionStatus;
   final double? width;
   final double? fontSize;
+  final String? buttonText;
+  final Color? textColor;
+  final bool disabled;
 
   const TradeButton(
     this.assetStateUpdts,
@@ -184,6 +187,9 @@ class TradeButton extends ConsumerWidget {
     Key? key,
     this.width,
     this.fontSize,
+    this.buttonText,
+    this.textColor,
+    this.disabled = true,
   }) : super(key: key);
 
   @override
@@ -199,10 +205,21 @@ class TradeButton extends ConsumerWidget {
     return Container(
       height: UiSizes.tradeBtnHeight,
       width: (width ?? 75).w,
-      // width: UiSizes.tradeBtnWidthPctScreen * size.width,
       alignment: Alignment.center,
-      child: (assetStateUpdts.isTradable)
-          ? TextButton(
+      child: disabled || !assetStateUpdts.isTradable
+          ? Text(
+              buttonText ??
+                  tf.labelForAssetState(
+                    competitionStatus,
+                    assetStateUpdts.assetState,
+                  ),
+              style: StTextStyles.h5.copyWith(
+                fontSize: (fontSize ?? 15).sp,
+                color: textColor ?? tf.colorForAssetState(competitionStatus),
+              ),
+              textAlign: TextAlign.center,
+            )
+          : TextButton(
               onPressed: () => tf.beginTradeFlow(
                 AssetKey(assetStateUpdts.assetKey),
               ),
@@ -211,7 +228,7 @@ class TradeButton extends ConsumerWidget {
                 competitionStatus,
               ),
               child: Text(
-                assetStateUpdts.tradeButtonTitle,
+                buttonText ?? assetStateUpdts.tradeButtonTitle,
                 style: StTextStyles.h6.copyWith(
                   fontSize: assetStateUpdts.assetState ==
                           AssetState.assetTradeMarketGameOn
@@ -220,17 +237,6 @@ class TradeButton extends ConsumerWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-            )
-          : Text(
-              tf.labelForAssetState(
-                competitionStatus,
-                assetStateUpdts.assetState,
-              ),
-              style: StTextStyles.h5.copyWith(
-                fontSize: (fontSize ?? 15).sp,
-                color: tf.colorForAssetState(competitionStatus),
-              ),
-              textAlign: TextAlign.center,
             ),
     );
   }

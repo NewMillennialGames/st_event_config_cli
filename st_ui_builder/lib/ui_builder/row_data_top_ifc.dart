@@ -36,6 +36,8 @@ abstract class AssetRowPropertyIfc {
 
   Decimal get openPrice;
 
+  Decimal get currentSharesAvailable;
+
   //
   String get orgNameWhenTradingPlayers;
 

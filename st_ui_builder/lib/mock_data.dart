@@ -178,6 +178,9 @@ class MockAssetWrapper implements AssetRowPropertyIfc {
 
   @override
   bool get isTopNameMultiLine => false;
+
+  @override
+  Decimal get currentSharesAvailable => Decimal.one;
 }
 
 List<MockAsset> _fakeData = [

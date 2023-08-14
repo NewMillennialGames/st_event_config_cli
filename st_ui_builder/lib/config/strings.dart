@@ -302,6 +302,7 @@ class StStrings {
 
   // trade button labels
   static const String tradeUc = 'TRADE';
+  static const String soldOut = 'Sold Out';
   // static const String preTrade = 'Pre-Trade';
   // static const String gameOn = 'Game On';
   // static const String gameOver = 'Game Over';
@@ -312,12 +313,11 @@ class StStrings {
   static const String proceeds = 'Proceeds';
   static const String gainLossAbbrev = 'G/L';
 
-
   // Portfolio History source of trade
   static const String proceedsOnGameOver = 'Proceeds on Game Over';
   static const String liquidatedOnGameOver = 'Liquidated on Game Over';
   static const String sharesSold = 'Shares Sold';
-  
+
   // Portfolio Positions Screen
   static const String positionsUc = 'POSITIONS';
   static const String historyUc = 'HISTORY';
