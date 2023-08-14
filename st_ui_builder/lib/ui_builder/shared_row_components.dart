@@ -413,6 +413,7 @@ class PortfolioAssetRow extends StatelessWidget {
         ],
       );
     }
+
     return Row(
       children: [
         ConstrainedBox(

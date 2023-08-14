@@ -237,28 +237,12 @@ class DraftPlayerRowMktResearchView extends StBaseTvRow with ShowsOneAsset {
   }
 }
 
-class DraftTeamRowMktResearchView extends StBaseTvRow with ShowsOneAsset {
+class DraftTeamRowMktResearchView extends DraftTeamRowMktView {
   const DraftTeamRowMktResearchView(
     TvRowDataContainer assets, {
-    this.onTap,
+    Function(TvRowDataContainer)? onTap,
     Key? key,
-  }) : super(assets, key: key);
-
-  final Function(TvRowDataContainer)? onTap;
-
-  @override
-  Widget rowBody(
-    BuildContext ctx,
-    ActiveGameDetails agd,
-  ) {
-    // paste row widget code here
-    return const SizedBox(
-      child: Text(
-        'Awaiting UX specs for <DraftTeamRowMktResearchView>',
-        textAlign: TextAlign.center,
-      ),
-    );
-  }
+  }) : super(assets, key: key, onTap: onTap);
 }
 
 class TeamLineRowMktResearchView extends StBaseTvRow with ShowsOneAsset {
@@ -1029,7 +1013,8 @@ class DraftPlayerRowMktView extends StBaseTvRow with ShowsOneAsset {
   }
 }
 
-class DraftTeamRowMktView extends StBaseTvRow with ShowsOneAsset {
+class DraftTeamRowMktView extends StBaseTvRow
+    with ShowsOneAsset, RequiresUserPositionProps {
   const DraftTeamRowMktView(
     TvRowDataContainer assets, {
     this.onTap,
@@ -1038,15 +1023,111 @@ class DraftTeamRowMktView extends StBaseTvRow with ShowsOneAsset {
 
   final Function(TvRowDataContainer)? onTap;
 
+  bool get isPortfolioHistory => false;
+  bool get isPortfolioPosition => false;
+
   @override
   Widget rowBody(
     BuildContext ctx,
     ActiveGameDetails agd,
   ) {
-    // paste row widget code here
-    return const SizedBox(
-      child: Text(
-        'Awaiting UX specs for <DraftTeamRow>',
+    final width = MediaQuery.of(ctx).size.width;
+
+    final rowHeight = comp1.assetNameDisplayStyle.isStacked ? 92 : 73;
+
+    final rowWidth = isPortfolioPosition
+        ? width * .59
+        : isPortfolioHistory
+            ? width * .77
+            : width * .54;
+
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () {
+        onTap?.call(assets);
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          if (!isPortfolioHistory && !isPortfolioPosition) ...{
+            assetHoldingsSummary.sharesOwned > 0
+                ? Icon(Icons.work, color: StColors.green)
+                : WatchButton(
+                    assetKey: comp1.assetKey,
+                    isWatched: comp1.assetStateUpdates.isWatched,
+                  ),
+          },
+          kSpacerSm,
+          CompetitorImage(
+            comp1.imgUrl,
+            false,
+            isTwoAssetRow: this is ShowsTwoAssets,
+            shrinkRatio: comp1.assetNameDisplayStyle.isStacked ? .7 : .9,
+          ),
+          kSpacerSm,
+          ConstrainedBox(
+            constraints: BoxConstraints.tightFor(
+              height: rowHeight.h,
+              width: rowWidth,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                kVerticalSpacerSm,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: rowWidth * 0.8,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            comp1.topName,
+                            softWrap: true,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: StTextStyles.h4,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Spacer(),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          comp1.currPriceStr,
+                          style: StTextStyles.h5,
+                        ),
+                        if (isPortfolioHistory)
+                          Text(
+                            comp1.recentDeltaStr,
+                            style: StTextStyles.h5.copyWith(
+                              color: comp1.priceFluxColor,
+                            ),
+                          ),
+                      ],
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ),
+          if (!isPortfolioHistory) ...{
+            kSpacerTiny,
+            TradeButton(
+              comp1.assetStateUpdates,
+              comp1.competitionStatus,
+              width: comp1.assetNameDisplayStyle.isStacked ? 50 : 75,
+              fontSize: comp1.assetNameDisplayStyle.isStacked ? 10 : 15,
+            ),
+          },
+        ],
       ),
     );
   }
@@ -1097,27 +1178,15 @@ class DraftPlayerRowPortfolioView extends StBaseTvRow with ShowsOneAsset {
   }
 }
 
-class DraftTeamRowPortfolioView extends StBaseTvRow with ShowsOneAsset {
+class DraftTeamRowPortfolioView extends DraftTeamRowMktView {
   const DraftTeamRowPortfolioView(
     TvRowDataContainer assets, {
-    this.onTap,
+    Function(TvRowDataContainer)? onTap,
     Key? key,
-  }) : super(assets, key: key);
-
-  final Function(TvRowDataContainer)? onTap;
+  }) : super(assets, key: key, onTap: onTap);
 
   @override
-  Widget rowBody(
-    BuildContext ctx,
-    ActiveGameDetails agd,
-  ) {
-    // paste row widget code here
-    return const SizedBox(
-      child: Text(
-        'Awaiting UX specs for <DraftTeamRow>',
-      ),
-    );
-  }
+  bool get isPortfolioPosition => true;
 }
 
 class TeamLineRowPortfolioView extends StBaseTvRow with ShowsOneAsset {
@@ -1159,6 +1228,12 @@ class DraftTeamRowPortfolioHistoryView extends DraftTeamRowPortfolioView {
     Function(TvRowDataContainer)? onTap,
     Key? key,
   }) : super(assets, key: key, onTap: onTap);
+
+  @override
+  bool get isPortfolioHistory => true;
+
+  @override
+  bool get isPortfolioPosition => false;
 }
 
 class DraftPlayerRowPortfolioHistoryView extends DraftPlayerRowPortfolioView {
