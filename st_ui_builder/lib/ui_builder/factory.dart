@@ -23,6 +23,23 @@ class StUiBuilderFactory {
 
   TopEventCfg get eventCfg => _eConfig!.eventCfg;
 
+  TvAreaRowStyle get appWideRowStyle {
+    bool applyMktViewRowStyleToAllScreens =
+        _eConfig?.eventCfg.applyMktViewRowStyleToAllScreens ?? false;
+
+    assert(
+      applyMktViewRowStyleToAllScreens,
+      'err: _readRowStyleFromMarketViewAndClone called when pref not set?',
+    );
+
+    CfgForAreaAndNestedSlots mktViewTableAreaAndSlotCfg =
+        _eConfig!.screenAreaCfg(
+      AppScreen.marketView,
+      ScreenWidgetArea.tableview,
+    );
+    return mktViewTableAreaAndSlotCfg.rowStyleCfg.selectedRowStyle;
+  }
+
   void setConfigForCurrentEvent(Map<String, dynamic> eCfgJsonMap) {
     /* call this every time user switches events
       send api payload (upon event switching) here
