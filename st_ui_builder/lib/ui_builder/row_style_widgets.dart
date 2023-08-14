@@ -1037,12 +1037,14 @@ class DraftTeamRowMktView extends StBaseTvRow
         !isPortfolioPosition &&
         comp1.currentSharesAvailable == Decimal.zero &&
         assetHoldingsSummary.sharesOwned > 0 &&
-        comp1.assetStateUpdates.assetState == AssetState.assetTradeMarketGameOn;
+        [AssetState.assetTradeMarketGameOn, AssetState.assetTradeMarket]
+            .contains(comp1.assetStateUpdates.assetState);
 
     bool isOpenToTradeInPortfolio = isPortfolioPosition &&
         comp1.currentSharesAvailable == Decimal.zero &&
         assetHoldingsSummary.sharesOwned > 0 &&
-        comp1.assetStateUpdates.assetState == AssetState.assetTradeMarketGameOn;
+        [AssetState.assetTradeMarketGameOn, AssetState.assetTradeMarket]
+            .contains(comp1.assetStateUpdates.assetState);
 
     final rowHeight = comp1.assetNameDisplayStyle.isStacked ? 92 : 73;
 
