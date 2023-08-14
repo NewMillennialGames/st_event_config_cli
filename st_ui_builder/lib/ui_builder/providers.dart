@@ -13,3 +13,5 @@ final currEventProvider = Provider<Event?>((ref) {
 final showMarketResearchSecondAssetProvider = StateProvider<bool>((ref) {
   throw UnimplementedError('should override with selectedEventProvider');
 });
+
+final currentAppScreenNotifier = ValueNotifier<AppScreen>(AppScreen.marketView);

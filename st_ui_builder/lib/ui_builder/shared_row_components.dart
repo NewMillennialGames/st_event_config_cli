@@ -179,7 +179,6 @@ class TradeButton extends ConsumerWidget {
   final String? buttonText;
   final Color? textColor;
   final bool disabled;
-  final bool bypass;
 
   const TradeButton(
     this.asset, {
@@ -189,7 +188,6 @@ class TradeButton extends ConsumerWidget {
     this.buttonText,
     this.textColor,
     this.disabled = true,
-    this.bypass = false,
   }) : super(key: key);
 
   @override
@@ -201,14 +199,16 @@ class TradeButton extends ConsumerWidget {
     // or simple text label if not tradable
     // final size = MediaQuery.of(context).size;
     TradeFlowBase tf = ref.read(tradeFlowProvider);
+    final screen = currentAppScreenNotifier.value;
 
     return Container(
       height: UiSizes.tradeBtnHeight,
       width: (width ?? 75).w,
       alignment: Alignment.center,
-      child: !bypass && (disabled || !asset.isTradable)
+      child: (disabled && screen == AppScreen.marketView) ||
+              !asset.isTradable(screen)
           ? Text(
-              buttonText ?? tf.labelForAsset(asset),
+              buttonText ?? tf.labelForAsset(asset, screen: screen),
               style: StTextStyles.h5.copyWith(
                 fontSize: (fontSize ?? 15).sp,
                 color: textColor ?? tf.colorForAsset(asset),
@@ -245,13 +245,6 @@ class TradeButton extends ConsumerWidget {
         ? StButtonStyles.tradeBtnWhileGameInProgress
         : StButtonStyles.tradeButtonCanTrade;
   }
-
-  // bool _useTradeAndGameOnButton(
-  //   AssetState assetState,
-  //   CompetitionStatus compStatus,
-  // ) {
-  //   return assetState == AssetState.assetTradeMarketGameOn;
-  // }
 }
 
 class PortfolioAssetRow extends StatelessWidget {

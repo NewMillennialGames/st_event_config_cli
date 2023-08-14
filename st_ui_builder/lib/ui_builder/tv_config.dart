@@ -77,6 +77,7 @@ class TableviewConfigPayload {
     );
     // TODO:  lets swap order of the switch to test appScreen first
     // that will let us simplifly and consolidate logic for identical rows
+    currentAppScreenNotifier.value = appScreen;
     switch (appScreen) {
       case AppScreen.marketView:
         switch (rowStyle) {

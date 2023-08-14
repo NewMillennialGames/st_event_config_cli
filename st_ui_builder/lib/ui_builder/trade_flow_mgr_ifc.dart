@@ -3,7 +3,10 @@ part of StUiController;
 class TradeFlowBase {
   // cannot be abstract due to riverpod??
 
-  String labelForAsset(AssetRowPropertyIfc asset) {
+  String labelForAsset(
+    AssetRowPropertyIfc asset, {
+    AppScreen? screen,
+  }) {
     throw UnimplementedError('should call subclass');
   }
 
@@ -21,7 +24,10 @@ class TradeFlowBase {
 class TradeFlowForDemo extends TradeFlowBase {
   //
   @override
-  String labelForAsset(AssetRowPropertyIfc asset) =>
+  String labelForAsset(
+    AssetRowPropertyIfc asset, {
+    AppScreen? screen,
+  }) =>
       asset.assetStateUpdates.assetState.tradeButtonTitle;
 
   @override

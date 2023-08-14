@@ -1139,7 +1139,6 @@ class DraftTeamRowMktView extends StBaseTvRow
                       ? StStrings.tradeUc
                       : null,
               disabled: isSoldOutInMarket,
-              bypass: isOpenToTradeInPortfolio,
               textColor: StColors.white,
             ),
           },
