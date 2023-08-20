@@ -1048,7 +1048,7 @@ class DraftTeamRowMktView extends StBaseTvRow
         ? width * .59
         : isPortfolioHistory
             ? width * .77
-            : width * .54;
+            : width * .5;
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,

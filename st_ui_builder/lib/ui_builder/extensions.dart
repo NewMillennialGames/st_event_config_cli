@@ -16,7 +16,7 @@ extension DisplayJustificationExt1 on DisplayJustification {
 
 extension AssetRowPropertyIfcExt on AssetRowPropertyIfc {
   bool isTradable(AppScreen screen) {
-    if (screen == AppScreen.marketView) {
+    if ([AppScreen.marketView, AppScreen.marketResearch].contains(screen)) {
       return currentSharesAvailable > Decimal.zero &&
           assetStateUpdates.isTradable;
     }

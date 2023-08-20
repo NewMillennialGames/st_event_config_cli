@@ -205,7 +205,9 @@ class TradeButton extends ConsumerWidget {
       height: UiSizes.tradeBtnHeight,
       width: (width ?? 75).w,
       alignment: Alignment.center,
-      child: (disabled && screen == AppScreen.marketView) ||
+      child: (disabled &&
+                  [AppScreen.marketView, AppScreen.marketResearch]
+                      .contains(screen)) ||
               !asset.isTradable(screen)
           ? Text(
               buttonText ?? tf.labelForAsset(asset, screen: screen),
