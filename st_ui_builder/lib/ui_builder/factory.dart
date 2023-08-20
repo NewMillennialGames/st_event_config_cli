@@ -54,6 +54,31 @@ class StUiBuilderFactory {
     */
   }
 
+  bool _showPortfolioFooterForSlot(ScreenAreaWidgetSlot slot) {
+    final slotAreaConfig = (_eConfig!
+            .screenAreaCfg(
+              AppScreen.portfolioPositions,
+              ScreenWidgetArea.footer,
+            )
+            .visCfgForSlotsByRuleType[VisualRuleType.showOrHide] ??
+        <ScreenAreaWidgetSlot, SlotOrAreaRuleCfg>{})[slot];
+
+    if (slotAreaConfig != null) {
+      final rules = slotAreaConfig.visRuleList;
+      if (rules.isNotEmpty && rules.first is ShowHideCfg) {
+        return (rules.first as ShowHideCfg).shouldShow;
+      }
+    }
+
+    return true;
+  }
+
+  bool get showPortfolioFooterSlot1 =>
+      _showPortfolioFooterForSlot(ScreenAreaWidgetSlot.slot1);
+
+  bool get showPortfolioFooterSlot2 =>
+      _showPortfolioFooterForSlot(ScreenAreaWidgetSlot.slot2);
+
   void _readRowStyleFromMarketViewAndClone() {
     // apply row style from market-view (first selected row-style)
     // to all screens, based on config this pref setting:
