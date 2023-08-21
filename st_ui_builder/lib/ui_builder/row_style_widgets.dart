@@ -1048,7 +1048,7 @@ class DraftTeamRowMktView extends StBaseTvRow
         ? width * .59
         : isPortfolioHistory
             ? width * .77
-            : width * .5;
+            : width * .52;
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
@@ -1090,7 +1090,7 @@ class DraftTeamRowMktView extends StBaseTvRow
                   children: [
                     ConstrainedBox(
                       constraints: BoxConstraints(
-                        maxWidth: rowWidth * 0.8,
+                        maxWidth: rowWidth * 0.77,
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
