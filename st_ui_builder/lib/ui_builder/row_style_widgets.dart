@@ -921,7 +921,7 @@ class TeamVsFieldRowMktView extends StBaseTvRow
           kSpacerTiny,
           TradeButton(
             comp1,
-            width: comp1.assetNameDisplayStyle.isStacked ? 50 : 75,
+            width: comp1.assetNameDisplayStyle.isStacked ? 50 : 72,
             fontSize: comp1.assetNameDisplayStyle.isStacked ? 10 : 15,
           ),
         ],
