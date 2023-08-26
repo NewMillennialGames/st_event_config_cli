@@ -187,7 +187,7 @@ class TradeButton extends ConsumerWidget {
     this.fontSize,
     this.buttonText,
     this.textColor,
-    this.disabled = true,
+    this.disabled = false,
   }) : super(key: key);
 
   @override
