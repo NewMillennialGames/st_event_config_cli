@@ -12,6 +12,8 @@ class StCachedNetworkImage extends StatefulWidget {
   final BoxFit? fit;
   final Widget? errorWidget;
   final Widget? loadingWidget;
+  final Color? baseShimmerColor;
+  final Color? highlightShimmerColor;
 
   const StCachedNetworkImage({
     super.key,
@@ -22,6 +24,8 @@ class StCachedNetworkImage extends StatefulWidget {
     this.fit,
     this.errorWidget,
     this.loadingWidget,
+    this.baseShimmerColor,
+    this.highlightShimmerColor,
   });
 
   @override
@@ -36,12 +40,16 @@ class _StCachedNetworkImageState extends State<StCachedNetworkImage> {
 
   Future<void> _getImage() async {
     try {
+      if (!mounted) return;
+
       setState(() {
         _loading = true;
         _hasError = false;
       });
 
       final image = await _imageService.getImage(url: widget.imageUrl);
+
+      if (!mounted) return;
 
       if (image == null) {
         setState(() {
@@ -57,6 +65,7 @@ class _StCachedNetworkImageState extends State<StCachedNetworkImage> {
         });
       }
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         _loading = false;
         _hasError = true;
@@ -87,12 +96,15 @@ class _StCachedNetworkImageState extends State<StCachedNetworkImage> {
         height: widget.height,
         child: widget.loadingWidget ??
             Shimmer.fromColors(
-              baseColor: StColors.black.withOpacity(.7),
-              highlightColor: Colors.blueGrey.shade900,
+              baseColor:
+                  widget.baseShimmerColor ?? StColors.black.withOpacity(.7),
+              highlightColor:
+                  widget.highlightShimmerColor ?? Colors.blueGrey.shade900,
               child: Container(
                 width: widget.width,
                 height: widget.height,
-                color: StColors.black.withOpacity(.7),
+                color:
+                    widget.baseShimmerColor ?? StColors.black.withOpacity(.7),
               ),
             ),
       );
