@@ -415,7 +415,7 @@ class PortfolioAssetRow extends StatelessWidget {
       children: [
         ConstrainedBox(
           constraints: BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width * 0.42,
+            maxWidth: MediaQuery.of(context).size.width * 0.41,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

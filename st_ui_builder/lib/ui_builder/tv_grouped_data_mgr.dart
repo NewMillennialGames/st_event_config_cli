@@ -73,13 +73,8 @@ class GroupedTableDataMgr {
   TvSortCfg get sortingRules => _tableViewCfg.sortRules;
   TvFilterCfg? get filterRules => _tableViewCfg.filterRules;
 
-  bool get disableAllGrouping => _disableAllGrouping
-      ? _disableAllGrouping
-      : (groupRules?.disableGrouping ?? true);
-
-  set disableAllGrouping(bool groupsOff) {
-    _disableAllGrouping = groupsOff;
-  }
+  bool get disableAllGrouping =>
+      _disableAllGrouping || (groupRules?.disableGrouping ?? true);
 
   bool get topGroupIsCollapsible =>
       (groupRules?.isCollapsible ?? false) && !disableAllGrouping;

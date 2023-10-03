@@ -914,7 +914,7 @@ class TeamVsFieldRowMktView extends StBaseTvRow
                       style: StTextStyles.p3,
                     ),
                   ],
-                )
+                ),
               ],
             ),
           ),
