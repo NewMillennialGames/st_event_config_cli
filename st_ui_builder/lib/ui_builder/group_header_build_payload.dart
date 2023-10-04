@@ -120,9 +120,11 @@ class GroupHeaderData
   }
 
   static GetGroupHeaderDataFromAssetRow groupHeaderPayloadConstructor(
-      TvGroupCfg groupingRules,
-      GroupHeaderMetaCfg metaCfg,
-      bool assetTypeIsTeam) {
+    TvGroupCfg groupingRules,
+    TvSortCfg sortingRules,
+    GroupHeaderMetaCfg metaCfg,
+    bool assetTypeIsTeam,
+  ) {
     // returns a func that creates a GroupHeaderData
     // NOT the sort values (comparables) used in sortComparator below
 
@@ -149,20 +151,22 @@ class GroupHeaderData
 
     // sorting functions
     firstValFn(AssetRowPropertyIfc row) {
-      if (groupingRules.item1 == null) return '';
-      return row.sortValueExtractor(groupingRules.item1!.colName);
+      if (sortingRules.item1 == null) return '';
+      return row.sortValueExtractor(sortingRules.item1!.colName);
     }
 
     // CastRowToSortVal
+    SortFilterEntry? col2SortRule = sortingRules.item2;
     secondValFn(AssetRowPropertyIfc row) {
-      if (col2Rule == null) return '';
-      return row.sortValueExtractor(col2Rule.colName);
+      if (col2SortRule == null) return '';
+      return row.sortValueExtractor(col2SortRule.colName);
     }
 
     // CastRowToSortVal
+    SortFilterEntry? col3SortRule = sortingRules.item3;
     thirdValFn(AssetRowPropertyIfc row) {
-      if (col3Rule == null) return '';
-      return row.sortValueExtractor(col3Rule.colName);
+      if (col3SortRule == null) return '';
+      return row.sortValueExtractor(col3SortRule.colName);
     }
 
     // sorting happens from vals on Game or first asset (2nd asset ignored when 2)
@@ -206,7 +210,9 @@ class GroupHeaderData
       Comparable<dynamic> v3 =
           (cd3 is DateTime) ? cd3.truncateTime.microsecondsSinceEpoch : cd3;
 
-      String sortKey = offsetForCollapsible ? '$v2-$v3' : '$v1-$v2-$v3';
+      // Shouldn't we be able to achieve the same result with
+      // String sortKey = '$v1-$v2-$v3'; ???
+      String sortKey = offsetForCollapsible ? '$v1-$v2' : '$v1-$v2-$v3';
 
       // print(
       //   '${cd1.runtimeType} ${cd1 is DateTime}  ${cd1 is Comparable<DateTime>}',

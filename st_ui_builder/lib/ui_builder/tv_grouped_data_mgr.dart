@@ -112,6 +112,7 @@ class GroupedTableDataMgr {
 
     return GroupHeaderData.groupHeaderPayloadConstructor(
       groupRules!,
+      sortingRules,
       headerMetaCfg,
       assetTypeIsTeam,
     );
@@ -734,10 +735,20 @@ class _ExpandableGroupedAssetRowsListViewState
 
   List<TvRowDataContainer> _getAssetsForGroup(String groupTitle) {
     try {
-      return widget.groupedAssets
+      final rows = widget.groupedAssets
           .where((e) => e.groupName == groupTitle)
           .first
           .items;
+
+      // sort assets here if necessary since
+      // sorting is disabled in the GroupedListView
+      if (widget.groupComparator != null) {
+        rows.sort((a, b) => widget.groupComparator!(
+            widget.groupByHeadDataCallback(a),
+            widget.groupByHeadDataCallback(b)));
+      }
+
+      return rows;
     } catch (e) {
       return [];
     }
