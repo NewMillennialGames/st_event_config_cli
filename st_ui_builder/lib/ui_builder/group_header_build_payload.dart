@@ -133,39 +133,48 @@ class GroupHeaderData
       return row.valueExtractor(groupingRules.item1!.colName);
     }
 
-    GroupCfgEntry? col2Rule = groupingRules.item2;
-    assert(col2Rule != null || metaCfg.groupLevelCount < 2, "oops");
+    GroupCfgEntry? col2GroupingRule = groupingRules.item2;
+    assert(col2GroupingRule != null || metaCfg.groupLevelCount < 2, "oops");
     // CastRowToSortVal
     String secondLabelFn(AssetRowPropertyIfc row) {
-      if (col2Rule == null) return 'H2';
-      return row.valueExtractor(col2Rule.colName);
+      if (col2GroupingRule == null) return 'H2';
+      return row.valueExtractor(col2GroupingRule.colName);
     }
 
-    GroupCfgEntry? col3Rule = groupingRules.item3;
-    assert(col3Rule != null || metaCfg.groupLevelCount < 3, "oops");
+    GroupCfgEntry? col3GroupingRule = groupingRules.item3;
+    assert(col3GroupingRule != null || metaCfg.groupLevelCount < 3, "oops");
     // CastRowToSortVal
     String thirdLabelFn(AssetRowPropertyIfc row) {
-      if (col3Rule == null) return 'H3';
-      return row.valueExtractor(col3Rule.colName);
+      if (col3GroupingRule == null) return 'H3';
+      return row.valueExtractor(col3GroupingRule.colName);
     }
 
     // sorting functions
     firstValFn(AssetRowPropertyIfc row) {
-      if (sortingRules.item1 == null) return '';
+      if (sortingRules.item1 == null) {
+        if (groupingRules.item1 == null) return '';
+        return row.sortValueExtractor(groupingRules.item1!.colName);
+      }
       return row.sortValueExtractor(sortingRules.item1!.colName);
     }
 
     // CastRowToSortVal
     SortFilterEntry? col2SortRule = sortingRules.item2;
     secondValFn(AssetRowPropertyIfc row) {
-      if (col2SortRule == null) return '';
+      if (col2SortRule == null) {
+        if (col2GroupingRule == null) return '';
+        return row.sortValueExtractor(col2GroupingRule.colName);
+      }
       return row.sortValueExtractor(col2SortRule.colName);
     }
 
     // CastRowToSortVal
     SortFilterEntry? col3SortRule = sortingRules.item3;
     thirdValFn(AssetRowPropertyIfc row) {
-      if (col3SortRule == null) return '';
+      if (col3SortRule == null) {
+        if (col3GroupingRule == null) return '';
+        return row.sortValueExtractor(col3GroupingRule.colName);
+      }
       return row.sortValueExtractor(col3SortRule.colName);
     }
 
@@ -183,8 +192,8 @@ class GroupHeaderData
       return GroupHeaderData._(
         metaCfg,
         firstHeaderLblFn(assetDataRow.team1),
-        col2Rule == null ? '' : secondLabelFn(assetDataRow.team1),
-        col3Rule == null ? '' : thirdLabelFn(assetDataRow.team1),
+        col2GroupingRule == null ? '' : secondLabelFn(assetDataRow.team1),
+        col3GroupingRule == null ? '' : thirdLabelFn(assetDataRow.team1),
         sortKeyGenFunction(assetDataRow),
       );
     };
